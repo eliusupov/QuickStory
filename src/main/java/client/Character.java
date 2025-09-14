@@ -4985,7 +4985,7 @@ public class Character extends AbstractCharacterObject {
         }
 
         World w = getWorldServer();
-        return w.getExpRate() * w.getQuestRate();
+        return w.getQuestRate();
     }
 
     public int getQuestMesoRate() {
@@ -6381,6 +6381,7 @@ public class Character extends AbstractCharacterObject {
 
         level++;
 
+        this.resetPlayerRates();
         this.setPlayerExpRateByLevel();
 
         if (level >= getMaxClassLevel()) {
