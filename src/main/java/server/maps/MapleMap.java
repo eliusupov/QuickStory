@@ -664,7 +664,32 @@ public class MapleMap {
 
         for (final MonsterDropEntry de : dropEntry) {
             float cardRate = chr.getCardRate(de.itemId);
-            int dropChance = (int) Math.min((float) de.chance * chRate * cardRate, Integer.MAX_VALUE);
+
+            float adjustedChanceMultiplier;
+            if (de.chance > 100000) {
+                adjustedChanceMultiplier = 1f;
+            } else if (de.chance <= 700) {
+                adjustedChanceMultiplier = 40.0f; // 40f
+                if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
+                    adjustedChanceMultiplier = 7.0f; // 7f
+                }
+            } else if (de.chance <= 1500) {
+                adjustedChanceMultiplier = 14.0f; // 14f
+                if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
+                    adjustedChanceMultiplier = 4.5f; // 4.5f
+                }
+            } else {
+                adjustedChanceMultiplier = 0.08f; // 0.08f
+            }
+
+            // mesos drop rate
+            if (de.itemId == 0) {
+                adjustedChanceMultiplier = 1.5f;
+            }
+
+            int modifiedChance = (int) (de.chance * adjustedChanceMultiplier);
+            
+            int dropChance = (int) Math.min((float) modifiedChance * chRate * cardRate, Integer.MAX_VALUE);
 
             if (Randomizer.nextInt(999999) < dropChance) {
                 if (droptype == 3) {

@@ -415,6 +415,9 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             if (YamlConfig.config.server.USE_ADD_RATES_BY_LEVEL) {
                 player.setPlayerRates();
             }
+            if (YamlConfig.config.server.USE_ADD_RATES_BY_ELI) {
+                player.setPlayerExpRateByLevel();
+            }
 
             player.setWorldRates();
             player.updateCouponRates();
