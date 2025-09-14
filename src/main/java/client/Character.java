@@ -6380,6 +6380,9 @@ public class Character extends AbstractCharacterObject {
         }
 
         level++;
+
+        this.setPlayerExpRateByLevel();
+
         if (level >= getMaxClassLevel()) {
             exp.set(0);
 
