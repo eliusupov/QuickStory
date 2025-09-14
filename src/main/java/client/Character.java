@@ -6452,6 +6452,10 @@ public class Character extends AbstractCharacterObject {
                 setPlayerRates();
                 this.yellowMessage("You managed to get level " + level + "! Getting experience and items seems a little easier now, huh?");
             }
+            if (YamlConfig.config.server.USE_ADD_RATES_BY_ELI == true) {
+                revertLastPlayerRates();
+                setPlayerExpRateByLevel();
+            }
         }
 
         if (YamlConfig.config.server.USE_PERFECT_PITCH && level >= 30) {
@@ -6514,6 +6518,12 @@ public class Character extends AbstractCharacterObject {
         this.expRate *= GameConstants.getPlayerBonusExpRate(this.level / 20);
         this.mesoRate *= GameConstants.getPlayerBonusMesoRate(this.level / 20);
         this.dropRate *= GameConstants.getPlayerBonusDropRate(this.level / 20);
+    }
+
+    public void setPlayerExpRateByLevel() {
+        int expRate =  GameConstants.getExpRateForLevel(this.level);
+        this.expRate *= expRate;
+        this.yellowMessage("Exp rate set to" + GameConstants.getExpRateForLevel(level) + "x");
     }
 
     public void revertLastPlayerRates() {

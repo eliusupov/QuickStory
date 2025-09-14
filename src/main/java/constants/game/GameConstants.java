@@ -650,6 +650,26 @@ public class GameConstants {
         }
     }
 
+    public static int getExpRateForLevel(int level) {
+        if (level >= 90) {
+            return 100;
+        } else if (level >= 70) {
+            return 70;
+        } else if (level >= 50) {
+            return 55;
+        } else if (level >= 40) {
+            return 36;
+        } else if (level >= 30) {
+            return 24;
+        } else if (level >= 20) {
+            return 16;
+        } else if (level >= 10) {
+            return 8;
+        } else {
+            return 2;
+        }
+    }
+
     private static int getMaxObstacleMobDamageFromWz() {
         DataProvider mapSource = DataProviderFactory.getDataProvider(WZFiles.MAP);
         int maxMobDmg = 0;

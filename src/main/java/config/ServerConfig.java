@@ -205,6 +205,7 @@ public class ServerConfig {
     //Character Configuration
     public boolean USE_ADD_SLOTS_BY_LEVEL;
     public boolean USE_ADD_RATES_BY_LEVEL;
+    public boolean USE_ADD_RATES_BY_ELI;
     public boolean USE_STACK_COUPON_RATES;
     public boolean USE_PERFECT_PITCH;
 
