@@ -4985,7 +4985,7 @@ public class Character extends AbstractCharacterObject {
         }
 
         World w = getWorldServer();
-        return w.getExpRate() * w.getQuestRate();
+        return w.getQuestRate();
     }
 
     public int getQuestMesoRate() {
@@ -6380,6 +6380,10 @@ public class Character extends AbstractCharacterObject {
         }
 
         level++;
+
+        resetPlayerRates();
+        setPlayerExpRateByLevel();
+
         if (level >= getMaxClassLevel()) {
             exp.set(0);
 
@@ -6453,7 +6457,7 @@ public class Character extends AbstractCharacterObject {
                 this.yellowMessage("You managed to get level " + level + "! Getting experience and items seems a little easier now, huh?");
             }
             if (YamlConfig.config.server.USE_ADD_RATES_BY_ELI == true) {
-                revertLastPlayerRates();
+                resetPlayerRates();
                 setPlayerExpRateByLevel();
             }
         }
