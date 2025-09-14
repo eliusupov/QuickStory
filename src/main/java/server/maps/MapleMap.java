@@ -671,12 +671,12 @@ public class MapleMap {
             } else if (de.chance <= 700) {
                 adjustedChanceMultiplier = 40.0f; // 40f
                 if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
-                    adjustedChanceMultiplier = 7.0f; // 7f
+                    adjustedChanceMultiplier = 6.0f; // 7f
                 }
             } else if (de.chance <= 1500) {
                 adjustedChanceMultiplier = 14.0f; // 14f
                 if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
-                    adjustedChanceMultiplier = 4.5f; // 4.5f
+                    adjustedChanceMultiplier = 4f; // 4f
                 }
             } else {
                 adjustedChanceMultiplier = 0.08f; // 0.08f
