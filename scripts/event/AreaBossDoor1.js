@@ -45,7 +45,7 @@ function start() {
 
     var map = em.getChannelServer().getMapFactory().getMap(bossMapid);
     if (map.getMonsterById(bossMobid) != null) {
-        em.schedule("start", 3 * 60 * 60 * 1000);
+        em.schedule("start", 60000);
         return;
     }
 
@@ -58,7 +58,7 @@ function start() {
     map.spawnMonsterOnGroundBelow(boss, bossPos);
     map.broadcastMessage(PacketCreator.serverNotice(6, bossMsg));
 
-    em.schedule("start", 3 * 60 * 60 * 1000);
+    em.schedule("start", 60000);
 }
 
 // ---------- FILLER FUNCTIONS ----------

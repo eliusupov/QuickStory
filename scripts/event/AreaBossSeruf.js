@@ -48,7 +48,7 @@ function start() {
     var seruf = LifeFactory.getMonster(4220001);
 
     if (theSeaweedTower.getMonsterById(4220001) != null) {
-        em.schedule("start", 3 * 60 * 60 * 1000);
+        em.schedule("start", 60000);
         return;
     }
 
@@ -61,7 +61,7 @@ function start() {
 
     const PacketCreator = Java.type('tools.PacketCreator');
     theSeaweedTower.broadcastMessage(PacketCreator.serverNotice(6, "A strange shell has appeared from a grove of seaweed"));
-    em.schedule("start", 3 * 60 * 60 * 1000);
+    em.schedule("start", 60000);
 }
 
 // ---------- FILLER FUNCTIONS ----------

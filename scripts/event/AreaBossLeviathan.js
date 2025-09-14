@@ -46,7 +46,7 @@ function start() {
     const LifeFactory = Java.type('server.life.LifeFactory');
     var leviathan = LifeFactory.getMonster(8220003);
     if (leviathansCanyon.getMonsterById(8220003) != null) {
-        em.schedule("start", 3 * 60 * 60 * 1000);
+        em.schedule("start", 60000);
         return;
     }
 
@@ -59,7 +59,7 @@ function start() {
 
     const PacketCreator = Java.type('tools.PacketCreator');
     leviathansCanyon.broadcastMessage(PacketCreator.serverNotice(6, "Leviathan emerges from the canyon and the cold icy wind blows."));
-    em.schedule("start", 3 * 60 * 60 * 1000);
+    em.schedule("start", 60000);
 }
 
 // ---------- FILLER FUNCTIONS ----------

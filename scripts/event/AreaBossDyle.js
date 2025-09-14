@@ -44,7 +44,7 @@ function cancelSchedule() {
 function start() {
     var dangeroudCroko1 = em.getChannelServer().getMapFactory().getMap(107000300);
     if (dangeroudCroko1.getMonsterById(6220000) != null) {
-        setupTask = em.schedule("start", 3 * 60 * 60 * 1000);
+        setupTask = em.schedule("start", 60000);
         return;
     }
 
@@ -54,7 +54,7 @@ function start() {
     const spawnpoint = new Point(90, 119);
     dangeroudCroko1.spawnMonsterOnGroundBelow(LifeFactory.getMonster(6220000), spawnpoint);
     dangeroudCroko1.broadcastMessage(PacketCreator.serverNotice(6, "The huge crocodile Dyle has come out from the swamp."));
-    setupTask = em.schedule("start", 3 * 60 * 60 * 1000);
+    setupTask = em.schedule("start", 60000);
 }
 
 // ---------- FILLER FUNCTIONS ----------

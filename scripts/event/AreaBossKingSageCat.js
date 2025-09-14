@@ -47,7 +47,7 @@ function start() {
     var kingSageCat = LifeFactory.getMonster(7220002);
 
     if (goblinForest2.getMonsterById(7220002) != null) {
-        em.schedule("start", 3 * 60 * 60 * 1000);
+        em.schedule("start", 60000);
         return;
     }
     var posX;
@@ -59,7 +59,7 @@ function start() {
 
     const PacketCreator = Java.type('tools.PacketCreator');
     goblinForest2.broadcastMessage(PacketCreator.serverNotice(6, "The ghostly air around here has become stronger. The unpleasant sound of a cat crying can be heard."));
-    em.schedule("start", 3 * 60 * 60 * 1000);
+    em.schedule("start", 60000);
 }
 
 // ---------- FILLER FUNCTIONS ----------

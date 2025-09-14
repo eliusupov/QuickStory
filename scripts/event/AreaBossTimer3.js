@@ -48,7 +48,7 @@ function start() {
     var timer3 = LifeFactory.getMonster(5220003);
 
     if (lostTime2.getMonsterById(5220003) != null) {
-        em.schedule("start", 3 * 60 * 60 * 1000);
+        em.schedule("start", 60000);
         return;
     }
 
@@ -61,7 +61,7 @@ function start() {
 
     const PacketCreator = Java.type('tools.PacketCreator');
     lostTime2.broadcastMessage(PacketCreator.serverNotice(6, "Tick-Tock Tick-Tock! Timer makes it's presence known."));
-    em.schedule("start", 3 * 60 * 60 * 1000);
+    em.schedule("start", 60000);
 }
 
 // ---------- FILLER FUNCTIONS ----------

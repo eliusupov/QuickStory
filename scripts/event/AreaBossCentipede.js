@@ -44,7 +44,7 @@ function start() {
     var herbGarden = em.getChannelServer().getMapFactory().getMap(251010102);
 
     if (herbGarden.getMonsterById(5220004) != null) {
-        em.schedule("start", 3 * 60 * 60 * 1000);
+        em.schedule("start", 60000);
         return;
     }
 
@@ -55,7 +55,7 @@ function start() {
     var gcent = LifeFactory.getMonster(5220004);
     herbGarden.spawnMonsterOnGroundBelow(gcent, new Point(560, 50));
     herbGarden.broadcastMessage(PacketCreator.serverNotice(6, "From the mists surrounding the herb garden, the gargantuous Giant Centipede appears."));
-    em.schedule("start", 3 * 60 * 60 * 1000);
+    em.schedule("start", 60000);
 }
 
 // ---------- FILLER FUNCTIONS ----------
