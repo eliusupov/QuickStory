@@ -47,7 +47,7 @@ function start() {
     var chimera = LifeFactory.getMonster(8220002);
 
     if (labSecretBasementPath.getMonsterById(8220002) != null) {
-        em.schedule("start", 3 * 60 * 60 * 1000);
+        em.schedule("start", 60000);
         return;
     }
 
@@ -60,7 +60,7 @@ function start() {
 
     const PacketCreator = Java.type('tools.PacketCreator');
     labSecretBasementPath.broadcastMessage(PacketCreator.serverNotice(6, "Kimera has appeared out of the darkness of the underground with a glitter in her eyes."));
-    em.schedule("start", 3 * 60 * 60 * 1000);
+    em.schedule("start", 60000);
 }
 
 // ---------- FILLER FUNCTIONS ----------

@@ -49,7 +49,7 @@ function start() {
     var stairwayToTheSky2 = em.getChannelServer().getMapFactory().getMap(200010300);
 
     if (stairwayToTheSky2.getMonsterById(8220000) != null) {
-        em.schedule("start", 3 * 60 * 60 * 1000);
+        em.schedule("start", 60000);
         return;
     }
 
@@ -58,7 +58,7 @@ function start() {
     const spawnpoint = new Point(208, 83);
     stairwayToTheSky2.spawnMonsterOnGroundBelow(eliza, spawnpoint);
     stairwayToTheSky2.broadcastMessage(PacketCreator.serverNotice(6, "Eliza has appeared with a black whirlwind."));
-    em.schedule("start", 3 * 60 * 60 * 1000);
+    em.schedule("start", 60000);
 }
 
 // ---------- FILLER FUNCTIONS ----------

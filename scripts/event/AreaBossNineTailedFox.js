@@ -46,7 +46,7 @@ function start() {
     const LifeFactory = Java.type('server.life.LifeFactory');
     var nineTailedFox = LifeFactory.getMonster(7220001);
     if (moonRidge.getMonsterById(7220001) != null) {
-        em.schedule("start", 3 * 60 * 60 * 1000);
+        em.schedule("start", 60000);
         return;
     }
     var posX;
@@ -58,7 +58,7 @@ function start() {
 
     const PacketCreator = Java.type('tools.PacketCreator');
     moonRidge.broadcastMessage(PacketCreator.serverNotice(6, "As the moon light dims, a long fox cry can be heard and the presence of the old fox can be felt"));
-    em.schedule("start", 3 * 60 * 60 * 1000);
+    em.schedule("start", 60000);
 }
 
 // ---------- FILLER FUNCTIONS ----------

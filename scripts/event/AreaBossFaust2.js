@@ -47,7 +47,7 @@ function start() {
     var faust2 = LifeFactory.getMonster(5220002);
 
     if (theForestOfEvil2.getMonsterById(5220002) != null) {
-        em.schedule("start", 3 * 60 * 60 * 1000);
+        em.schedule("start", 60000);
         return;
     }
 
@@ -57,7 +57,7 @@ function start() {
 
     const PacketCreator = Java.type('tools.PacketCreator');
     theForestOfEvil2.broadcastMessage(PacketCreator.serverNotice(6, "Faust appeared amidst the blue fog."));
-    em.schedule("start", 3 * 60 * 60 * 1000);
+    em.schedule("start", 60000);
 }
 
 // ---------- FILLER FUNCTIONS ----------

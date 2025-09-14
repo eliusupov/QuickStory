@@ -45,7 +45,7 @@ function start() {
     const LifeFactory = Java.type('server.life.LifeFactory');
     var mano = LifeFactory.getMonster(2220000);
     if (thicketAroundTheBeach3.getMonsterById(2220000) != null) {
-        em.schedule("start", 3 * 60 * 60 * 1000);
+        em.schedule("start", 60000);
         return;
     }
 
@@ -55,7 +55,7 @@ function start() {
 
     const PacketCreator = Java.type('tools.PacketCreator');
     thicketAroundTheBeach3.broadcastMessage(PacketCreator.serverNotice(6, "A cool breeze was felt when Mano appeared."));
-    em.schedule("start", 3 * 60 * 60 * 1000);
+    em.schedule("start", 60000);
 }
 
 // ---------- FILLER FUNCTIONS ----------

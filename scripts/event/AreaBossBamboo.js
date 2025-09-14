@@ -46,7 +46,7 @@ function start() {
     var mobObj = LifeFactory.getMonster(6090002);
 
     if (mapObj.getMonsterById(6090002) != null) {
-        em.schedule("start", 3 * 60 * 60 * 1000);
+        em.schedule("start", 60000);
         return;
     }
 
@@ -54,7 +54,7 @@ function start() {
     const PacketCreator = Java.type('tools.PacketCreator');
     mapObj.spawnMonsterOnGroundBelow(mobObj, new Point(560, 50));
     mapObj.broadcastMessage(PacketCreator.serverNotice(6, "From amongst the ruins shrouded by the mists, Bamboo Warrior appears."));
-    em.schedule("start", 3 * 60 * 60 * 1000);
+    em.schedule("start", 60000);
 }
 
 // ---------- FILLER FUNCTIONS ----------

@@ -44,7 +44,7 @@ function start() {
     var royalCatthusDesert = em.getChannelServer().getMapFactory().getMap(260010201);
 
     if (royalCatthusDesert.getMonsterById(3220001) != null) {
-        em.schedule("start", 3 * 60 * 60 * 1000);
+        em.schedule("start", 60000);
         return;
     }
 
@@ -55,7 +55,7 @@ function start() {
     var deo = LifeFactory.getMonster(3220001);
     royalCatthusDesert.spawnMonsterOnGroundBelow(deo, new Point(645, 275));
     royalCatthusDesert.broadcastMessage(PacketCreator.serverNotice(6, "Deo slowly appeared out of the sand dust."));
-    em.schedule("start", 3 * 60 * 60 * 1000);
+    em.schedule("start", 60000);
 }
 
 // ---------- FILLER FUNCTIONS ----------

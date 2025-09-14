@@ -44,7 +44,7 @@ function start() {
     var snackBarMap = em.getChannelServer().getMapFactory().getMap(105090310);
 
     if (snackBarMap.getMonsterById(8220008) != null || snackBarMap.getMonsterById(8220009) != null) {
-        em.schedule("start", 3 * 60 * 60 * 1000);
+        em.schedule("start", 60000);
         return;
     }
 
@@ -58,7 +58,7 @@ function start() {
     var snackBar = LifeFactory.getMonster(8220008);
     snackBarMap.spawnMonsterOnGroundBelow(snackBar, new Point(rndPos[0], rndPos[1]));
     snackBarMap.broadcastMessage(PacketCreator.serverNotice(6, "Slowly, a suspicious food stand opens up on a strangely remote place."));
-    em.schedule("start", 3 * 60 * 60 * 1000);
+    em.schedule("start", 60000);
 }
 
 // ---------- FILLER FUNCTIONS ----------
