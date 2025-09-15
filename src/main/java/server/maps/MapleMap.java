@@ -679,7 +679,7 @@ public class MapleMap {
                     adjustedChanceMultiplier = 4f; // 4f
                 }
             } else {
-                adjustedChanceMultiplier = 0.08f; // 0.08f
+                adjustedChanceMultiplier = 1.0f; // 1f
             }
 
             // mesos drop rate

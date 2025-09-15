@@ -11,7 +11,7 @@ worlds:
     exp_rate: 1
     meso_rate: 2
     drop_rate: 1
-    boss_drop_rate: 100                      #NOTE: Boss drop rate OVERRIDES common drop rate, for bosses-only.
+    boss_drop_rate: 50                      #NOTE: Boss drop rate OVERRIDES common drop rate, for bosses-only.
     quest_rate: 3                           #Multiplier for Exp & Meso gains when completing a quest. Only available when USE_QUEST_RATE is true. Stacks with server Exp & Meso rates.
     fishing_rate: 10                        #Multiplier for success likelihood on meso thrown during fishing.
     travel_rate: 10                         #Means of transportation rides/departs using 1/N of the default time.
@@ -196,9 +196,9 @@ server:
     LOGIN_ATTEMPT_DURATION: 120         #Period in seconds the login attempt remains registered on the system.
 
     #Ip Configuration
-    HOST: 127.0.0.1                 #WAN IPv4 address
-    LANHOST: 127.0.0.1              #LAN IPv4 address
-    LOCALHOST: 127.0.0.1            #Loopback IPv4 address
+    HOST: 192.168.1.109                 #WAN IPv4 address
+    LANHOST: 192.168.1.109              #LAN IPv4 address
+    LOCALHOST: 192.168.1.109            #Loopback IPv4 address
     GMSERVER: false
 
     #Other configuration
@@ -313,7 +313,7 @@ server:
     INSTANT_NAME_CHANGE: false              #Whether or not to wait for server restart to apply name changes. Does on reconnect otherwise (requires queries on every login).
 
     #Dangling Items/Locks Configuration
-    ITEM_EXPIRE_TIME: 30000    # (10 * 1000) Time before items start disappearing. Recommended to be set up to 3 minutes.
+    ITEM_EXPIRE_TIME: 60000    # (10 * 1000) Time before items start disappearing. Recommended to be set up to 3 minutes.
     KITE_EXPIRE_TIME: 3600000   # (60 * 60 * 1000) Time before kites (cash item) disappears.
     ITEM_MONITOR_TIME: 300000    # (5 * 60 * 1000) Interval between item monitoring tasks on maps, which checks for dangling (null) item objects on the map item history.
     LOCK_MONITOR_TIME: 30000        # (30 * 1000) Waiting time for a lock to be released. If it reaches timeout, a critical server deadlock has made present.
