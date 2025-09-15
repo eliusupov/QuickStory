@@ -670,17 +670,17 @@ public class MapleMap {
             if (de.chance > 100000) {
                 adjustedChanceMultiplier = 1f;
             } else if (de.chance <= 700) {
-                adjustedChanceMultiplier = 50.0f; // 50f
+                adjustedChanceMultiplier = 40.0f; // 40f
                 if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
-                    adjustedChanceMultiplier = 6.0f; // 7f
+                    adjustedChanceMultiplier = 6.0f; // 6f
                 }
             } else if (de.chance <= 1500) {
-                adjustedChanceMultiplier = 16.0f; // 16f
+                adjustedChanceMultiplier = 15.0f; // 15f
                 if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
-                    adjustedChanceMultiplier = 4f; // 4f
+                    adjustedChanceMultiplier = 3.0f; // 3.0f
                 }
             } else if (de.chance <= 5000 && mob.isBoss()) {
-                adjustedChanceMultiplier = 5f; // 5f
+                adjustedChanceMultiplier = 4.5f; // 4.5f
                 if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
                     adjustedChanceMultiplier = 0.6f; // 0.6f
                 }
