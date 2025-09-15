@@ -666,17 +666,23 @@ public class MapleMap {
             float cardRate = chr.getCardRate(de.itemId);
 
             float adjustedChanceMultiplier;
+
             if (de.chance > 100000) {
                 adjustedChanceMultiplier = 1f;
             } else if (de.chance <= 700) {
-                adjustedChanceMultiplier = 40.0f; // 40f
+                adjustedChanceMultiplier = 50.0f; // 50f
                 if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
                     adjustedChanceMultiplier = 6.0f; // 7f
                 }
             } else if (de.chance <= 1500) {
-                adjustedChanceMultiplier = 14.0f; // 14f
+                adjustedChanceMultiplier = 16.0f; // 16f
                 if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
                     adjustedChanceMultiplier = 4f; // 4f
+                }
+            } else if (de.chance <= 5000 && mob.isBoss()) {
+                adjustedChanceMultiplier = 5f; // 5f
+                if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
+                    adjustedChanceMultiplier = 0.6f; // 0.6f
                 }
             } else {
                 adjustedChanceMultiplier = 1.0f; // 1f

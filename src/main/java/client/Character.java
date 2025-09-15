@@ -6528,6 +6528,7 @@ public class Character extends AbstractCharacterObject {
         int expRate =  GameConstants.getExpRateForLevel(this.level);
         this.expRate *= expRate;
         this.yellowMessage("Exp rate set to " + GameConstants.getExpRateForLevel(level) + "x");
+        this.updateCouponRates();
     }
 
     public void revertLastPlayerRates() {

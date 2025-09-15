@@ -654,9 +654,9 @@ public class GameConstants {
         if (level >= 90) {
             return 70;
         } else if (level >= 70) {
-            return 35;
+            return 50;
         } else if (level >= 50) {
-            return 30;
+            return 40;
         } else if (level >= 40) {
             return 30;
         } else if (level >= 30) {
