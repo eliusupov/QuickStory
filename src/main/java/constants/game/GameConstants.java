@@ -652,21 +652,21 @@ public class GameConstants {
 
     public static int getExpRateForLevel(int level) {
         if (level >= 90) {
-            return 70;
+            return 100;
         } else if (level >= 70) {
-            return 50;
+            return 70;
         } else if (level >= 50) {
-            return 40;
+            return 50;
         } else if (level >= 40) {
-            return 30;
+            return 36;
         } else if (level >= 30) {
-            return 22;
+            return 27;
         } else if (level >= 20) {
-            return 16;
+            return 22;
         } else if (level >= 10) {
-            return 6;
+            return 12;
         } else {
-            return 2;
+            return 4;
         }
     }
 

@@ -2025,7 +2025,7 @@ public class Character extends AbstractCharacterObject {
                                 this.getMap().pickItemDrop(pickupPacket, mapitem);
                             } else if (ItemId.isNxCard(mapitem.getItemId())) {
                                 // Add NX to account, show effect and make item disappear
-                                int nxGain = mapitem.getItemId() == ItemId.NX_CARD_100 ? 100 : 250;
+                                int nxGain = mapitem.getItemId() == ItemId.NX_CARD_100 ? 1000 : 2500;
                                 this.getCashShop().gainCash(1, nxGain);
 
                                 if (YamlConfig.config.server.USE_ANNOUNCE_NX_COUPON_LOOT) {
@@ -2077,7 +2077,7 @@ public class Character extends AbstractCharacterObject {
                         }
                     } else if (ItemId.isNxCard(mapitem.getItemId())) {
                         // Add NX to account, show effect and make item disappear
-                        int nxGain = mapitem.getItemId() == ItemId.NX_CARD_100 ? 100 : 250;
+                        int nxGain = mapitem.getItemId() == ItemId.NX_CARD_100 ? 1000 : 2500;
                         this.getCashShop().gainCash(1, nxGain);
 
                         if (YamlConfig.config.server.USE_ANNOUNCE_NX_COUPON_LOOT) {
