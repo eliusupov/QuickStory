@@ -246,6 +246,6 @@ public class StorageProcessor {
     }
 
     private static boolean hasGMRestrictions(Character character) {
-        return character.isGM() && character.gmLevel() < YamlConfig.config.server.MINIMUM_GM_LEVEL_TO_USE_STORAGE;
+        return false;
     }
 }

@@ -665,27 +665,36 @@ public class MapleMap {
         for (final MonsterDropEntry de : dropEntry) {
             float cardRate = chr.getCardRate(de.itemId);
 
-            float adjustedChanceMultiplier;
+            float adjustedChanceMultiplier = 1f;
 
-            if (de.chance > 100000) {
-                adjustedChanceMultiplier = 1f;
-            } else if (de.chance <= 700) {
-                adjustedChanceMultiplier = 40.0f; // 40f
-                if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
-                    adjustedChanceMultiplier = 6.0f; // 6f
+            // equips drop rate
+            if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
+                adjustedChanceMultiplier = 5.0f;
+                if (mob.isBoss()) {
+                    adjustedChanceMultiplier = 0.08f;
                 }
-            } else if (de.chance <= 1500) {
-                adjustedChanceMultiplier = 15.0f; // 15f
-                if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
-                    adjustedChanceMultiplier = 3.0f; // 3.0f
+            }
+
+            // etc drop rate
+            if (ItemConstants.getInventoryType(de.itemId) == InventoryType.ETC) {
+                adjustedChanceMultiplier = 2f;
+            }
+
+             // stars/bullets drop rate
+             if (ItemConstants.isThrowingStar(de.itemId) || ItemConstants.isBullet(de.itemId)) {
+                adjustedChanceMultiplier = 15.0f;
+
+                if (mob.isBoss()) {
+                    adjustedChanceMultiplier = 2.0f;
                 }
-            } else if (de.chance <= 5000 && mob.isBoss()) {
-                adjustedChanceMultiplier = 4.5f; // 4.5f
-                if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
-                    adjustedChanceMultiplier = 0.6f; // 0.6f
+            }
+
+            // scroll drop rate
+            if (de.itemId > 2040000 && de.itemId < 2050000) {
+                adjustedChanceMultiplier = 40.0f;
+                if (mob.isBoss()) {
+                    adjustedChanceMultiplier = 1f;
                 }
-            } else {
-                adjustedChanceMultiplier = 1.0f; // 1f
             }
 
             // mesos drop rate

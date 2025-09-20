@@ -4990,7 +4990,7 @@ public class Character extends AbstractCharacterObject {
 
     public int getQuestMesoRate() {
         World w = getWorldServer();
-        return w.getMesoRate() * w.getQuestRate();
+        return w.getQuestRate();
     }
 
     public float getCardRate(int itemid) {
