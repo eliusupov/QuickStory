@@ -5,7 +5,7 @@ worlds:
     #Properties for Scania 0
   - flag: 0
     server_message: Welcome to Scania!
-    event_message: Scania!
+    event_message: Check the new shop at the free market npc Inkwell
     why_am_i_recommended: Welcome to Scania!
     channels: 3
     exp_rate: 1
@@ -425,7 +425,7 @@ server:
     EVENT_LOBBY_DELAY: 10              #Cooldown duration in seconds before reopening an event lobby.
 
     #Dojo Configuration
-    USE_FAST_DOJO_UPGRADE: false     #Reduced Dojo training points amount required for a belt upgrade.
+    USE_FAST_DOJO_UPGRADE: true     #Reduced Dojo training points amount required for a belt upgrade.
     USE_DEADLY_DOJO: true          #Should bosses really use 1HP,1MP attacks in dojo?
     DOJO_ENERGY_ATK: 100                #Dojo energy gain when deal attack
     DOJO_ENERGY_DMG: 20                #Dojo energy gain when recv attack

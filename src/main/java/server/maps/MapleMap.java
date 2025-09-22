@@ -671,7 +671,7 @@ public class MapleMap {
             if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
                 adjustedChanceMultiplier = 5.0f;
                 if (mob.isBoss()) {
-                    adjustedChanceMultiplier = 0.08f;
+                    adjustedChanceMultiplier = 1f;
                 }
             }
 
