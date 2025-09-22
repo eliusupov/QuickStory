@@ -31,5 +31,5 @@ function start() {
 			mapObj.spawnMonsterOnGroundBelow(mobObj, new Packages.java.awt.Point(x[i],y[i]));
 		}
 	}
-	setupTask = em.schedule("start", 30 * 60 * 1000);
+	setupTask = em.schedule("start", 60000);
 }
