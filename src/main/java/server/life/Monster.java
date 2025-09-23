@@ -84,6 +84,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import constants.game.GameConstants;
 
 public class Monster extends AbstractLoadedLife {
     private static final Logger log = LoggerFactory.getLogger(Monster.class);
@@ -114,6 +115,7 @@ public class Monster extends AbstractLoadedLife {
     private ScheduledFuture<?> monsterItemDrop = null;
     private Runnable removeAfterAction = null;
     private boolean availablePuppetUpdate = true;
+    private boolean hpReduced = false;
 
     private final Lock externalLock = new ReentrantLock();
     private final Lock monsterLock = new ReentrantLock(true);
@@ -168,8 +170,65 @@ public class Monster extends AbstractLoadedLife {
         return dropsDisabled;
     }
 
+    private void reduceBossHpForPartySize(MapleMap map) {
+        if (!hpReduced && GameConstants.REDUCED_BOSS_STATS_MOB_IDS.contains(getId())) {
+            int maxPartySize = 0;
+            Set<Integer> uniquePartyIds = new HashSet<>();
+
+            for (Character chr : map.getAllPlayers()) {
+                if (chr.getParty() != null) {
+                    uniquePartyIds.add(chr.getParty().getId());
+                    if (chr.getParty().getMembers().size() > maxPartySize) {
+                        maxPartySize = chr.getParty().getMembers().size();
+                    }
+                }
+            }
+            int playerCount = maxPartySize > 0 ? maxPartySize : map.getAllPlayers().size() > 0 ? 1 : 0; // If no parties, consider solo players as a party of 1 for reduction, otherwise 0
+
+            double multiplier = 1.0;
+            if (GameConstants.LARGE_EXPEDITION_BOSS_MOB_IDS.contains(getId())) {
+                if (playerCount == 1) {
+                    multiplier = 0.03; // 3% HP for 1 player
+                } else if (playerCount == 2) {
+                    multiplier = 0.05; // 5% HP for 2 players
+                } else if (playerCount == 3) {
+                    multiplier = 0.07; // 7% HP for 3 players
+                } else if (playerCount == 4) {
+                    multiplier = 0.10; // 10% HP for 4 players
+                } else if (playerCount == 5) {
+                    multiplier = 0.15; // 15% HP for 5 players
+                } else if (playerCount <= 10) {
+                    multiplier = 0.30; // 20% HP for up to 10 players
+                } else if (playerCount <= 20) {
+                    multiplier = 0.60; // 25% HP for up to 20 players
+                } else {
+                    multiplier = 1.0; // No reduction for 30+ players
+                }
+            } else { // Existing logic for other bosses
+                if (playerCount == 1) {
+                    multiplier = 0.2;
+                } else if (playerCount == 2) {
+                    multiplier = 0.4;
+                } else if (playerCount == 3) {
+                    multiplier = 0.6;
+                }  else if (playerCount == 4) {
+                    multiplier = 0.8;
+                }  else if (playerCount == 5) {
+                    multiplier = 1;
+                }
+                // For 4+ players, multiplier remains 1.0 (no reduction)
+            }
+
+            stats.setHp((int) (stats.getHp() * multiplier));
+            setStartingHp(stats.getHp());
+            hpReduced = true;
+        }
+    }
+
     public void setMap(MapleMap map) {
         this.map = map;
+        // todo check if this logic needs to move somewhere else
+        reduceBossHpForPartySize(map);
     }
 
     public int getParentMobOid() {

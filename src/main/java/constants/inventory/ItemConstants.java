@@ -234,4 +234,12 @@ public final class ItemConstants {
     public static boolean isHair(int itemId) {
         return itemId >= 30000 && itemId < 35000;
     }
+
+    public static boolean isMasteryBook(int itemId) {
+        return itemId >= 2290000 && itemId <= 2290139;
+    }
+
+    public static boolean isMonsterCard(int itemId) {
+        return ItemId.isMonsterCard(itemId);
+    }
 }

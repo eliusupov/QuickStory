@@ -671,7 +671,7 @@ public class MapleMap {
             if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
                 adjustedChanceMultiplier = 5.0f;
                 if (mob.isBoss()) {
-                    adjustedChanceMultiplier = 1f;
+                    adjustedChanceMultiplier = 0.8f;
                 }
             }
 
@@ -697,9 +697,23 @@ public class MapleMap {
                 }
             }
 
+            // mastery book drop rate
+            if (ItemConstants.isMasteryBook(de.itemId)) {
+                adjustedChanceMultiplier = 5.0f;
+
+                if (mob.isBoss()) {
+                    adjustedChanceMultiplier = 0.8f;
+                }
+            }
+
             // mesos drop rate
             if (de.itemId == 0) {
                 adjustedChanceMultiplier = 1.5f;
+            }
+
+            // monster card drop rate
+            if (ItemConstants.isMonsterCard(de.itemId)) {
+                adjustedChanceMultiplier = 1.0f;
             }
 
             int modifiedChance = (int) (de.chance * adjustedChanceMultiplier);

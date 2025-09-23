@@ -24,6 +24,24 @@ public class GameConstants {
     public static final String[] stats = {"tuc", "reqLevel", "reqJob", "reqSTR", "reqDEX", "reqINT", "reqLUK", "reqPOP", "cash", "cursed", "success", "setItemID", "equipTradeBlock", "durability", "randOption", "randStat", "masterLevel", "reqSkillLevel", "elemDefault", "incRMAS", "incRMAF", "incRMAI", "incRMAL", "canLevel", "skill", "charmEXP"};
     public static final int[] CASH_DATA = new int[]{50200004, 50200069, 50200117, 50100008, 50000047};
 
+    public static final Set<Integer> REDUCED_BOSS_STATS_MOB_IDS = new HashSet<>(Arrays.asList(
+            8800000, 8800001, 8800002, // Zakum
+            8810000, 8810001, 8810002, 8810003, 8810004, 8810005, 8810006, 8810007, 8810100, // Horntail
+            8500000, 8500001, 8500002, // Papulatus
+            8180000, // Krexel (assumed)
+            8140000, // Castellan Toad (assumed)
+            8820000, 8820001, 8820002, 8820003, 8820004, 8820005, 8820006, // Pink Bean
+            8220000, // Targa
+            8220001 // Scarlion
+    ));
+
+    public static final Set<Integer> LARGE_EXPEDITION_BOSS_MOB_IDS = new HashSet<>(Arrays.asList(
+            8800000, 8800001, 8800002, // Zakum
+            8810000, 8810001, 8810002, 8810003, 8810004, 8810005, 8810006, 8810007, 8810100, // Horntail
+            8220000, // Targa
+            8220001 // Scarlion
+    ));
+
     // Ronan's rates upgrade system
     private static final int[] DROP_RATE_GAIN = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
     private static final int[] MESO_RATE_GAIN = {1, 3, 6, 10, 15, 21, 28, 36, 45, 55, 66, 78, 91, 105};
