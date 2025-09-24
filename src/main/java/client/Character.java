@@ -237,6 +237,7 @@ public class Character extends AbstractCharacterObject {
     private String linkedName = null;
     private boolean finishedDojoTutorial;
     private boolean usedStorage = false;
+    private boolean etcDropEnabled = true;
     private String name;
     private String chalktext;
     private String commandtext;
@@ -5048,6 +5049,14 @@ public class Character extends AbstractCharacterObject {
 
     public void setUsedStorage() {
         usedStorage = true;
+    }
+
+    public boolean isEtcDropEnabled() {
+        return etcDropEnabled;
+    }
+
+    public void setEtcDropEnabled(boolean etcDropEnabled) {
+        this.etcDropEnabled = etcDropEnabled;
     }
 
     public List<Ring> getFriendshipRings() {

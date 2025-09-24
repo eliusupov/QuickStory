@@ -694,11 +694,11 @@ public class GameConstants {
     // real rates
     public static int getExpRateForLevel(int level) {
         if (level >= 90) {
-            return 40;
+            return 50;
         } else if (level >= 80) {
-            return 40;
+            return 50;
         } else if (level >= 70) {
-            return 40;
+            return 45;
         } else if (level >= 60) {
             return 40;
         } else if (level >= 55) {
@@ -717,9 +717,11 @@ public class GameConstants {
             return 16;
         } else if (level >= 10) {
             return 5;
+        }  else if (level >= 5) {
+            return 2;
         } else {
-            return 4;
-        }
+            return 1;
+        } 
     }
 
     private static int getMaxObstacleMobDamageFromWz() {

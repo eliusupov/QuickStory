@@ -669,31 +669,41 @@ public class MapleMap {
 
             // equips drop rate
             if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
-                adjustedChanceMultiplier = 5.0f;
+                adjustedChanceMultiplier = 4.0f;
                 if (mob.isBoss()) {
-                    adjustedChanceMultiplier = 0.8f;
+                    adjustedChanceMultiplier = 1.0f;
                 }
             }
 
             // etc drop rate
             if (ItemConstants.getInventoryType(de.itemId) == InventoryType.ETC) {
-                adjustedChanceMultiplier = 2f;
+                if (chr.isEtcDropEnabled()) {
+                    adjustedChanceMultiplier = 2f;
+                } else {
+                    adjustedChanceMultiplier = 0.0f;
+                }
+            }
+
+            if (ItemConstants.isArrow(de.itemId)) {
+                adjustedChanceMultiplier = 0f;
             }
 
              // stars/bullets drop rate
              if (ItemConstants.isThrowingStar(de.itemId) || ItemConstants.isBullet(de.itemId)) {
-                adjustedChanceMultiplier = 15.0f;
+                adjustedChanceMultiplier = 5.0f;
 
                 if (mob.isBoss()) {
-                    adjustedChanceMultiplier = 2.0f;
+                    adjustedChanceMultiplier = 1f;
                 }
             }
 
             // scroll drop rate
             if (de.itemId > 2040000 && de.itemId < 2050000) {
-                adjustedChanceMultiplier = 40.0f;
-                if (mob.isBoss()) {
-                    adjustedChanceMultiplier = 1f;
+                if (de.itemId != constants.id.ItemId.CHAOS_SCROll_60) {
+                    adjustedChanceMultiplier = 20.0f;
+                    if (mob.isBoss()) {
+                        adjustedChanceMultiplier = 2f;
+                    }
                 }
             }
 
@@ -713,8 +723,9 @@ public class MapleMap {
 
             // monster card drop rate
             if (ItemConstants.isMonsterCard(de.itemId)) {
-                adjustedChanceMultiplier = 1.0f;
+                adjustedChanceMultiplier = 2.0f;
             }
+            
 
             int modifiedChance = (int) (de.chance * adjustedChanceMultiplier);
             

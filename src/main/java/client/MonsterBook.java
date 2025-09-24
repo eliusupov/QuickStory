@@ -43,6 +43,7 @@ public final class MonsterBook {
     private int bookLevel = 1;
     private final Map<Integer, Integer> cards = new LinkedHashMap<>();
     private final Lock lock = new ReentrantLock();
+    private final Map<Integer, Boolean> isGainedMainStatBuffs = new LinkedHashMap<>();
 
     public Set<Entry<Integer, Integer>> getCardSet() {
         lock.lock();
@@ -64,6 +65,12 @@ public final class MonsterBook {
             if (qty != null) {
                 if (qty < 5) {
                     cards.put(cardid, qty + 1);
+                    if (qty + 1 == 5) { // Card count reached 5
+                        if (!isGainedMainStatBuffs.getOrDefault(cardid, false)) {
+                            applyMainStatBuff(c, cardid);
+                            isGainedMainStatBuffs.put(cardid, true);
+                        }
+                    }
                 }
             } else {
                 cards.put(cardid, 1);
@@ -88,6 +95,62 @@ public final class MonsterBook {
             c.sendPacket(PacketCreator.showGainCard());
         } else {
             c.sendPacket(PacketCreator.addCard(true, cardid, 5));
+            if (!isGainedMainStatBuffs.getOrDefault(cardid, false)) {
+                applyMainStatBuff(c, cardid);
+                isGainedMainStatBuffs.put(cardid, true);
+            }
+        }
+    }
+
+    private void applyMainStatBuff(Client c, int cardid) {
+        Character player = c.getPlayer();
+        Job job = player.getJob();
+        Stat mainStat = null;
+
+        if (job.isA(Job.WARRIOR) || job.isA(Job.ARAN1) || job.isA(Job.DAWNWARRIOR1)) {
+            mainStat = Stat.STR;
+        } else if (job.isA(Job.MAGICIAN) || job.isA(Job.BLAZEWIZARD1)) {
+            mainStat = Stat.INT;
+        } else if (job.isA(Job.BOWMAN) || job.isA(Job.WINDARCHER1)) {
+            mainStat = Stat.DEX;
+        } else if (job.isA(Job.THIEF) || job.isA(Job.NIGHTWALKER1)) {
+            mainStat = Stat.LUK;
+        } else if (job.isA(Job.PIRATE) || job.isA(Job.THUNDERBREAKER1)) {
+            int jobid = job.getId();
+            // Thunder Breakers are STR based (knuckle)
+            if (jobid >= Job.THUNDERBREAKER1.getId() && jobid <= Job.THUNDERBREAKER4.getId()) {
+                mainStat = Stat.STR;
+            } else if (jobid == Job.BRAWLER.getId() || jobid == Job.MARAUDER.getId() || jobid == Job.BUCCANEER.getId()) {
+                mainStat = Stat.STR; // Knuckle Pirates
+            } else if (jobid == Job.GUNSLINGER.getId() || jobid == Job.OUTLAW.getId() || jobid == Job.CORSAIR.getId()) {
+                mainStat = Stat.DEX; // Gun Pirates
+            } else {
+                mainStat = Stat.DEX; // Default for other pirates
+            }
+        } else {
+            // Default to STR for any unhandled jobs, including beginner
+            mainStat = Stat.STR;
+        }
+
+        if (mainStat != null) {
+            // Update the internal stat field directly
+            if (mainStat == Stat.STR) {
+                player.str += 1;
+                player.updateSingleStat(mainStat, player.str); // Send packet to client
+            } else if (mainStat == Stat.DEX) {
+                player.dex += 1;
+                player.updateSingleStat(mainStat, player.dex); // Send packet to client
+            } else if (mainStat == Stat.INT) {
+                player.int_ += 1;
+                player.updateSingleStat(mainStat, player.int_); // Send packet to client
+            } else if (mainStat == Stat.LUK) {
+                player.luk += 1;
+                player.updateSingleStat(mainStat, player.luk); // Send packet to client
+            }
+            player.saveCharToDB(); // Persist the stat change to the database
+            player.dropMessage(5, "You have completed a Monster Card set and gained +1 " + mainStat.toString() + "!");
+        } else {
+            player.dropMessage(5, "You have completed a Monster Card set, but your main stat could not be determined.");
         }
     }
 
@@ -156,7 +219,7 @@ public final class MonsterBook {
     public void loadCards(final int charid) throws SQLException {
         lock.lock();
         try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT cardid, level FROM monsterbook WHERE charid = ? ORDER BY cardid ASC")) {
+             PreparedStatement ps = con.prepareStatement("SELECT cardid, level, isGainedMainStatBuff FROM monsterbook WHERE charid = ? ORDER BY cardid ASC")) {
             ps.setInt(1, charid);
 
             try (ResultSet rs = ps.executeQuery()) {
@@ -165,12 +228,14 @@ public final class MonsterBook {
                 while (rs.next()) {
                     cardid = rs.getInt("cardid");
                     level = rs.getInt("level");
+                    boolean isGainedMainStatBuff = rs.getInt("isGainedMainStatBuff") == 1;
                     if (cardid / 1000 >= 2388) {
                         specialCard++;
                     } else {
                         normalCard++;
                     }
                     cards.put(cardid, level);
+                    isGainedMainStatBuffs.put(cardid, isGainedMainStatBuff);
                 }
             }
         } finally {
@@ -182,21 +247,24 @@ public final class MonsterBook {
 
     public void saveCards(Connection con, int chrId) throws SQLException {
         final String query = """
-                INSERT INTO monsterbook (charid, cardid, level)
-                VALUES (?, ?, ?)
-                ON DUPLICATE KEY UPDATE level = ?;
+                INSERT INTO monsterbook (charid, cardid, level, isGainedMainStatBuff)
+                VALUES (?, ?, ?, ?)
+                ON DUPLICATE KEY UPDATE level = ?, isGainedMainStatBuff = ?;
                 """;
         try (final PreparedStatement ps = con.prepareStatement(query)) {
             for (Map.Entry<Integer, Integer> cardAndLevel : cards.entrySet()) {
                 final int card = cardAndLevel.getKey();
                 final int level = cardAndLevel.getValue();
+                boolean isGainedMainStatBuff = isGainedMainStatBuffs.getOrDefault(card, false);
                 // insert
                 ps.setInt(1, chrId);
                 ps.setInt(2, card);
                 ps.setInt(3, level);
+                ps.setInt(4, isGainedMainStatBuff ? 1 : 0);
 
                 // update
-                ps.setInt(4, level);
+                ps.setInt(5, level);
+                ps.setInt(6, isGainedMainStatBuff ? 1 : 0);
 
                 ps.addBatch();
             }

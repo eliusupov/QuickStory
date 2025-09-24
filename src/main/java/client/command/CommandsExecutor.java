@@ -87,6 +87,7 @@ import client.command.commands.gm2.SetSlotCommand;
 import client.command.commands.gm2.SetStatCommand;
 import client.command.commands.gm2.SpCommand;
 import client.command.commands.gm2.SummonCommand;
+import client.command.commands.gm2.ToggleEtcCommand;
 import client.command.commands.gm2.UnBugCommand;
 import client.command.commands.gm2.UnHideCommand;
 import client.command.commands.gm2.UnJailCommand;
@@ -424,6 +425,7 @@ public class CommandsExecutor {
         addCommand("gachalist", GachaListCommand.class);
         addCommand("loot", LootCommand.class);
         addCommand("mobskill", MobSkillCommand.class);
+        addCommand("toggleetc", ToggleEtcCommand.class);
 
         commandsNameDesc.add(levelCommandsCursor);
     }
