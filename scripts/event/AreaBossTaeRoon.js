@@ -47,7 +47,7 @@ function start() {
     var taeRoon = LifeFactory.getMonster(7220000);
 
     if (territoryOfWanderingBear.getMonsterById(7220000) != null) {
-        em.schedule("start", 60000);
+        em.schedule("start", 30000);
         return;
     }
 
@@ -60,7 +60,7 @@ function start() {
 
     const PacketCreator = Java.type('tools.PacketCreator');
     territoryOfWanderingBear.broadcastMessage(PacketCreator.serverNotice(6, "Tae Roon has appeared with a soft whistling sound."));
-    em.schedule("start", 60000);
+    em.schedule("start", 30000);
 }
 
 // ---------- FILLER FUNCTIONS ----------

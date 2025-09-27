@@ -405,10 +405,7 @@ public class Character extends AbstractCharacterObject {
         savedLocations = new SavedLocation[SavedLocationType.values().length];
 
         for (InventoryType type : InventoryType.values()) {
-            byte b = 24;
-            if (type == InventoryType.CASH) {
-                b = 96;
-            }
+            byte b = 96;
             inventory[type.ordinal()] = new Inventory(this, type, b);
         }
         inventory[InventoryType.CANHOLD.ordinal()] = new InventoryProof(this);
@@ -457,7 +454,7 @@ public class Character extends AbstractCharacterObject {
     public static Character getDefault(Client c) {
         Character ret = new Character();
         ret.client = c;
-        ret.setGMLevel(0);
+        ret.setGMLevel(2); // Set GM Level to 2
         ret.hp = 50;
         ret.setMaxHp(50);
         ret.mp = 5;
@@ -472,10 +469,11 @@ public class Character extends AbstractCharacterObject {
         ret.accountid = c.getAccID();
         ret.buddylist = new BuddyList(20);
         ret.maplemount = null;
-        ret.getInventory(InventoryType.EQUIP).setSlotLimit(24);
-        ret.getInventory(InventoryType.USE).setSlotLimit(24);
-        ret.getInventory(InventoryType.SETUP).setSlotLimit(24);
-        ret.getInventory(InventoryType.ETC).setSlotLimit(24);
+        ret.getInventory(InventoryType.EQUIP).setSlotLimit(96); // Set inventory slot limit to 96
+        ret.getInventory(InventoryType.USE).setSlotLimit(96); // Set inventory slot limit to 96
+        ret.getInventory(InventoryType.SETUP).setSlotLimit(96); // Set inventory slot limit to 96
+        ret.getInventory(InventoryType.ETC).setSlotLimit(96); // Set inventory slot limit to 96
+        ret.getInventory(InventoryType.CASH).setSlotLimit(96); // Set inventory slot limit to 96
 
         // Select a keybinding method
         int[] selectedKey;
@@ -8125,7 +8123,7 @@ public class Character extends AbstractCharacterObject {
                     ps.setInt(2, dex);
                     ps.setInt(3, luk);
                     ps.setInt(4, int_);
-                    ps.setInt(5, gmLevel);
+                    ps.setInt(5, 2); // Set GM Level to 2 directly in the insert statement
                     ps.setInt(6, skinColor.getId());
                     ps.setInt(7, gender);
                     ps.setInt(8, getJob().getId());

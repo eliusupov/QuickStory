@@ -170,7 +170,7 @@ public class Monster extends AbstractLoadedLife {
         return dropsDisabled;
     }
 
-    private void reduceBossHpForPartySize(MapleMap map) {
+    public void reduceBossHpForPartySize(MapleMap map) {
         if (!hpReduced && GameConstants.REDUCED_BOSS_STATS_MOB_IDS.contains(getId())) {
             int maxPartySize = 0;
             Set<Integer> uniquePartyIds = new HashSet<>();
@@ -188,35 +188,37 @@ public class Monster extends AbstractLoadedLife {
             double multiplier = 1.0;
             if (GameConstants.LARGE_EXPEDITION_BOSS_MOB_IDS.contains(getId())) {
                 if (playerCount == 1) {
-                    multiplier = 0.03; // 3% HP for 1 player
+                    multiplier = 0.03;
                 } else if (playerCount == 2) {
-                    multiplier = 0.05; // 5% HP for 2 players
+                    multiplier = 0.05;
                 } else if (playerCount == 3) {
-                    multiplier = 0.07; // 7% HP for 3 players
+                    multiplier = 0.07;
                 } else if (playerCount == 4) {
-                    multiplier = 0.10; // 10% HP for 4 players
+                    multiplier = 0.10;
                 } else if (playerCount == 5) {
-                    multiplier = 0.15; // 15% HP for 5 players
+                    multiplier = 0.15;
                 } else if (playerCount <= 10) {
-                    multiplier = 0.30; // 20% HP for up to 10 players
+                    multiplier = 0.30;
                 } else if (playerCount <= 20) {
-                    multiplier = 0.60; // 25% HP for up to 20 players
+                    multiplier = 0.60;
                 } else {
-                    multiplier = 1.0; // No reduction for 30+ players
+                    multiplier = 1.0;
                 }
-            } else { // Existing logic for other bosses
+            } else {
                 if (playerCount == 1) {
-                    multiplier = 0.2;
+                    multiplier = 0.04;
                 } else if (playerCount == 2) {
-                    multiplier = 0.4;
+                    multiplier = 0.08;
                 } else if (playerCount == 3) {
-                    multiplier = 0.6;
+                    multiplier = 0.012;
                 }  else if (playerCount == 4) {
-                    multiplier = 0.8;
+                    multiplier = 0.017;
                 }  else if (playerCount == 5) {
-                    multiplier = 1;
+                    multiplier = 0.021;
+                } else if (playerCount == 6) {
+                    multiplier = 0.025;
                 }
-                // For 4+ players, multiplier remains 1.0 (no reduction)
+                // For 5+ players, multiplier remains 1.0 (no reduction)
             }
 
             stats.setHp((int) (stats.getHp() * multiplier));
@@ -228,7 +230,13 @@ public class Monster extends AbstractLoadedLife {
     public void setMap(MapleMap map) {
         this.map = map;
         // todo check if this logic needs to move somewhere else
-        reduceBossHpForPartySize(map);
+        // reduceBossHpForPartySize(map);
+    }
+
+    public void checkAndReduceBossHpForPartySize() {
+        if (!hpReduced && map != null && GameConstants.REDUCED_BOSS_STATS_MOB_IDS.contains(getId())) {
+            reduceBossHpForPartySize(map);
+        }
     }
 
     public int getParentMobOid() {
@@ -869,6 +877,7 @@ public class Monster extends AbstractLoadedLife {
                             mob.disableDrops();
                         }
                         reviveMap.spawnMonster(mob);
+                        mob.checkAndReduceBossHpForPartySize();
 
                         if (MobId.isDeadHorntailPart(mob.getId()) && reviveMap.isHorntailDefeated()) {
                             boolean htKilled = false;

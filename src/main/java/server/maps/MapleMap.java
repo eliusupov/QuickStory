@@ -669,9 +669,9 @@ public class MapleMap {
 
             // equips drop rate
             if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
-                adjustedChanceMultiplier = 4.0f;
+                adjustedChanceMultiplier = 5.0f;
                 if (mob.isBoss()) {
-                    adjustedChanceMultiplier = 1.0f;
+                    adjustedChanceMultiplier = 0.8f;
                 }
             }
 
@@ -690,17 +690,17 @@ public class MapleMap {
 
              // stars/bullets drop rate
              if (ItemConstants.isThrowingStar(de.itemId) || ItemConstants.isBullet(de.itemId)) {
-                adjustedChanceMultiplier = 5.0f;
+                adjustedChanceMultiplier = 6.0f;
 
                 if (mob.isBoss()) {
-                    adjustedChanceMultiplier = 1f;
+                    adjustedChanceMultiplier = 1.4f;
                 }
             }
 
             // scroll drop rate
             if (de.itemId > 2040000 && de.itemId < 2050000) {
                 if (de.itemId != constants.id.ItemId.CHAOS_SCROll_60) {
-                    adjustedChanceMultiplier = 20.0f;
+                    adjustedChanceMultiplier = 12.0f;
                     if (mob.isBoss()) {
                         adjustedChanceMultiplier = 2f;
                     }
@@ -712,18 +712,22 @@ public class MapleMap {
                 adjustedChanceMultiplier = 5.0f;
 
                 if (mob.isBoss()) {
-                    adjustedChanceMultiplier = 0.8f;
+                    adjustedChanceMultiplier = 1.0f;
                 }
             }
 
             // mesos drop rate
             if (de.itemId == 0) {
-                adjustedChanceMultiplier = 1.5f;
+                adjustedChanceMultiplier = 1.2f;
             }
 
             // monster card drop rate
             if (ItemConstants.isMonsterCard(de.itemId)) {
-                adjustedChanceMultiplier = 2.0f;
+                adjustedChanceMultiplier = 2.5f;
+
+                if (mob.isBoss()) {
+                    adjustedChanceMultiplier = 0.25f;
+                }
             }
             
 
@@ -1870,6 +1874,7 @@ public class MapleMap {
         spos.y--;
         mob.setPosition(spos);
         spawnMonster(mob);
+        mob.checkAndReduceBossHpForPartySize();
     }
 
     public void spawnCPQMonster(Monster mob, Point pos, int team) {
@@ -1879,6 +1884,7 @@ public class MapleMap {
         mob.setPosition(spos);
         mob.setTeam(team);
         spawnMonster(mob);
+        mob.checkAndReduceBossHpForPartySize();
     }
 
     private void monsterItemDrop(final Monster m, long delay) {
@@ -2069,6 +2075,7 @@ public class MapleMap {
     public void spawnFakeMonster(final Monster monster) {
         monster.setMap(this);
         monster.setFake(true);
+        monster.checkAndReduceBossHpForPartySize();
         spawnAndAddRangedMapObject(monster, c -> c.sendPacket(PacketCreator.spawnFakeMonster(monster, 0)));
 
         spawnedMonstersOnMap.incrementAndGet();
@@ -2405,6 +2412,9 @@ public class MapleMap {
         if (FieldLimit.CANNOTUSEMOUNTS.check(fieldLimit) && chr.getBuffedValue(BuffStat.MONSTER_RIDING) != null) {
             chr.cancelEffectFromBuffStat(BuffStat.MONSTER_RIDING);
             chr.cancelBuffStats(BuffStat.MONSTER_RIDING);
+        }
+        for (Monster monster : getAllMonsters()) {
+            monster.checkAndReduceBossHpForPartySize();
         }
 
         if (mapid == MapId.FROM_LITH_TO_RIEN) { // To Rien

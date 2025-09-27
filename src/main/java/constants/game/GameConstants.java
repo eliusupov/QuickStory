@@ -25,21 +25,20 @@ public class GameConstants {
     public static final int[] CASH_DATA = new int[]{50200004, 50200069, 50200117, 50100008, 50000047};
 
     public static final Set<Integer> REDUCED_BOSS_STATS_MOB_IDS = new HashSet<>(Arrays.asList(
-            8800000, 8800001, 8800002, // Zakum
             8810000, 8810001, 8810002, 8810003, 8810004, 8810005, 8810006, 8810007, 8810100, // Horntail
+            8800000, 8800001, 8800002, 8800003, 8800004, 8800005, 8800006, 8800007, 8800008, 8800009, 8800010, // Zakum
             8500000, 8500001, 8500002, // Papulatus
-            8180000, // Krexel (assumed)
-            8140000, // Castellan Toad (assumed)
-            8820000, 8820001, 8820002, 8820003, 8820004, 8820005, 8820006, // Pink Bean
-            8220000, // Targa
-            8220001 // Scarlion
+            8510000, 8520000, // Pianus
+            8820000, 8820001, 8820010, 8820011, 8820012, 8820013, 8820014, // Pink Bean
+            9420541, 9420542, 9420543, 9420544, // Targa
+            9420546, 9420547, 9420548, 9420549 // Scarlion
     ));
 
     public static final Set<Integer> LARGE_EXPEDITION_BOSS_MOB_IDS = new HashSet<>(Arrays.asList(
-            8800000, 8800001, 8800002, // Zakum
             8810000, 8810001, 8810002, 8810003, 8810004, 8810005, 8810006, 8810007, 8810100, // Horntail
-            8220000, // Targa
-            8220001 // Scarlion
+            9420541, 9420542, 9420543, 9420544, // Targa
+            9420546, 9420547, 9420548, 9420549, // Scarlion
+            8820000, 8820001, 8820010, 8820011, 8820012, 8820013, 8820014 // Pink Bean
     ));
 
     // Ronan's rates upgrade system
@@ -693,18 +692,10 @@ public class GameConstants {
 
     // real rates
     public static int getExpRateForLevel(int level) {
-        if (level >= 90) {
+        if (level >= 120) {
             return 50;
-        } else if (level >= 80) {
-            return 50;
-        } else if (level >= 70) {
+        } else if (level >= 100) {
             return 45;
-        } else if (level >= 60) {
-            return 40;
-        } else if (level >= 55) {
-            return 40;
-        } else if (level >= 50) {
-            return 40;
         } else if (level >= 40) {
             return 40;
         } else if (level >= 35) {

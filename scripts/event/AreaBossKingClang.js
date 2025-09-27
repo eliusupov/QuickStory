@@ -46,7 +46,7 @@ function cancelSchedule() {
 
 function start() {
     if (hotSand.getMonsterById(5220001) != null) {
-        em.schedule("start", 60000);
+        em.schedule("start", 30000);
         return;
     }
 
@@ -61,7 +61,7 @@ function start() {
 
     const PacketCreator = Java.type('tools.PacketCreator');
     hotSand.broadcastMessage(PacketCreator.serverNotice(6, "A strange turban shell has appeared on the beach."));
-    em.schedule("start", 60000);
+    em.schedule("start", 30000);
 }
 
 // ---------- FILLER FUNCTIONS ----------
