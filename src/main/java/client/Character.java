@@ -787,7 +787,6 @@ public class Character extends AbstractCharacterObject {
         }
         return false;
     }
-
     public int calculateMaxBaseDamage(int watk, WeaponType weapon) {
         int mainstat, secondarystat;
         if (getJob().isA(Job.THIEF) && weapon == WeaponType.DAGGER_OTHER) {
@@ -1587,7 +1586,6 @@ public class Character extends AbstractCharacterObject {
 
         updatePartyTownDoors(party, this, partyLeaver, partyMembers);
     }
-
     private static void addPartyPlayerDoor(Character target) {
         Door targetDoor = target.getPlayerDoor();
         if (targetDoor != null) {
@@ -2026,6 +2024,7 @@ public class Character extends AbstractCharacterObject {
                                 // Add NX to account, show effect and make item disappear
                                 int nxGain = mapitem.getItemId() == ItemId.NX_CARD_100 ? 1000 : 2500;
                                 this.getCashShop().gainCash(1, nxGain);
+                                message("You have picked up an NX card and gained " + nxGain + " NX.");
 
                                 if (YamlConfig.config.server.USE_ANNOUNCE_NX_COUPON_LOOT) {
                                     showHint("You have earned #e#b" + nxGain + " NX#k#n. (" + this.getCashShop().getCash(CashShop.NX_CREDIT) + " NX)", 300);
@@ -2078,6 +2077,7 @@ public class Character extends AbstractCharacterObject {
                         // Add NX to account, show effect and make item disappear
                         int nxGain = mapitem.getItemId() == ItemId.NX_CARD_100 ? 1000 : 2500;
                         this.getCashShop().gainCash(1, nxGain);
+                        message("You have picked up an NX card and gained " + nxGain + " NX.");
 
                         if (YamlConfig.config.server.USE_ANNOUNCE_NX_COUPON_LOOT) {
                             showHint("You have earned #e#b" + nxGain + " NX#k#n. (" + this.getCashShop().getCash(CashShop.NX_CREDIT) + " NX)", 300);
@@ -2388,7 +2388,6 @@ public class Character extends AbstractCharacterObject {
             return false;
         }
     }
-
     private static void deleteQuestProgressWhereCharacterId(Connection con, int cid) throws SQLException {
         try (PreparedStatement ps = con.prepareStatement("DELETE FROM medalmaps WHERE characterid = ?")) {
             ps.setInt(1, cid);
@@ -3186,7 +3185,6 @@ public class Character extends AbstractCharacterObject {
             }
         }
     }
-
     private Pair<Integer, Integer> applyFame(int delta) {
         petLock.lock();
         try {
@@ -3981,7 +3979,6 @@ public class Character extends AbstractCharacterObject {
             cancelEffect(effect.effect, false, -1);
         }
     }
-
     public void cancelBuffStats(BuffStat stat) {
         effLock.lock();
         try {
@@ -4781,7 +4778,6 @@ public class Character extends AbstractCharacterObject {
 
         silentPartyUpdateInternal(chrParty);
     }
-
     public Door removePartyDoor(boolean partyUpdate) {
         Door ret = null;
         Party chrParty;
@@ -5577,7 +5573,6 @@ public class Character extends AbstractCharacterObject {
 
         whiteChat = gmLevel >= 4;   // thanks ozanrijen for suggesting default white chat
     }
-
     public void closePartySearchInteractions() {
         this.getWorldServer().getPartySearchCoordinator().unregisterPartyLeader(this);
         if (canRecvPartySearchInvite) {
@@ -6284,7 +6279,6 @@ public class Character extends AbstractCharacterObject {
             gainSp(spGain, GameConstants.getSkillBook(job.getId()), true);
         }
     }
-
     public synchronized void levelUp(boolean takeexp) {
         Skill improvingMaxHP = null;
         Skill improvingMaxMP = null;
@@ -6864,7 +6858,6 @@ public class Character extends AbstractCharacterObject {
     public void updateRemainingSp(int remainingSp) {
         updateRemainingSp(remainingSp, GameConstants.getSkillBook(job.getId()));
     }
-
     public static Character loadCharFromDB(final int charid, Client client, boolean channelserver) throws SQLException {
         Character ret = new Character();
         ret.client = client;
@@ -6951,10 +6944,11 @@ public class Character extends AbstractCharacterObject {
 
                     wserv = Server.getInstance().getWorld(ret.world);
 
-                    ret.getInventory(InventoryType.EQUIP).setSlotLimit(rs.getByte("equipslots"));
-                    ret.getInventory(InventoryType.USE).setSlotLimit(rs.getByte("useslots"));
-                    ret.getInventory(InventoryType.SETUP).setSlotLimit(rs.getByte("setupslots"));
-                    ret.getInventory(InventoryType.ETC).setSlotLimit(rs.getByte("etcslots"));
+                    ret.getInventory(InventoryType.EQUIP).setSlotLimit(96); // Set inventory slot limit to 96
+                    ret.getInventory(InventoryType.USE).setSlotLimit(96); // Set inventory slot limit to 96
+                    ret.getInventory(InventoryType.SETUP).setSlotLimit(96); // Set inventory slot limit to 96
+                    ret.getInventory(InventoryType.ETC).setSlotLimit(96); // Set inventory slot limit to 96
+                    ret.getInventory(InventoryType.CASH).setSlotLimit(96); // Set inventory slot limit to 96
 
                     short sandboxCheck = 0x0;
                     for (Pair<Item, InventoryType> item : ItemFactory.INVENTORY.loadItems(ret.id, !channelserver)) {
@@ -7658,7 +7652,6 @@ public class Character extends AbstractCharacterObject {
         localmagic += equipmagic;
         localwatk += equipwatk;
     }
-
     private void reapplyLocalStats() {
         effLock.lock();
         chrLock.lock();
@@ -8261,7 +8254,6 @@ public class Character extends AbstractCharacterObject {
             saveCharToDB(true);
         }
     }
-
     //ItemFactory saveItems and monsterbook.saveCards are the most time consuming here.
     public synchronized void saveCharToDB(boolean notAutosave) {
         if (!loggedIn) {
@@ -9060,7 +9052,6 @@ public class Character extends AbstractCharacterObject {
     public void setLastUsedCashItem(long time) {
         this.lastUsedCashItem = time;
     }
-
     public void setLevel(int level) {
         this.level = level;
     }
@@ -9859,7 +9850,6 @@ public class Character extends AbstractCharacterObject {
     public boolean isBanned() {
         return isbanned;
     }
-
     public List<Integer> getTrockMaps() {
         return trockmaps;
     }
@@ -9974,14 +9964,14 @@ public class Character extends AbstractCharacterObject {
             pendantOfSpirit = TimerManager.getInstance().register(new Runnable() {
                 @Override
                 public void run() {
-                    if (pendantExp < 3) {
+                    if (pendantExp < 5) {
                         pendantExp++;
-                        message("Pendant of the Spirit has been equipped for " + pendantExp + " hour(s), you will now receive " + pendantExp + "0% bonus exp.");
+                        message("Pendant of the Spirit has been equipped for " + (pendantExp * 30 / 60) + " hour(s), you will now receive " + (pendantExp * 10) + "% bonus exp.");
                     } else {
                         pendantOfSpirit.cancel(false);
                     }
                 }
-            }, 3600000); //1 hour
+            }, 1200000); //20 minutes
         }
     }
 
@@ -10649,7 +10639,6 @@ public class Character extends AbstractCharacterObject {
         }
         return false;
     }
-
     public boolean cancelPendingWorldTranfer() {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("DELETE FROM worldtransfers WHERE characterid=? AND completionTime IS NULL")) {

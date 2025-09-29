@@ -55,6 +55,10 @@ public final class MonsterBook {
     }
 
     public void addCard(final Client c, final int cardid) {
+        if (c.getPlayer().getLevel() < 10 && c.getPlayer().getJob().isA(Job.BEGINNER) && cards.size() >= 4) {
+            c.getPlayer().dropMessage(5, "You cannot collect more than 4 cards until you reach level 10.");
+            return;
+        }
         c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PacketCreator.showForeignCardEffect(c.getPlayer().getId()), false);
 
         Integer qty;

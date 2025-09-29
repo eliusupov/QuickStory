@@ -133,8 +133,6 @@ function action(mode, type, selection) {
                     cm.dispose();
                 } else if (party.getMembers().size() == 1) {
                     cm.sendNext("You're going to take on the challenge as a one-man party?");
-                } else if (!isBetween30) {
-                    cm.sendNext("Your partys level ranges are too broad to enter. Please make sure all of your party members are within #r30 levels#k of each other.");
                 } else {
                     for (var i = 1; i < 39; i++) { //only 32 stages, but 38 maps
                         if (cm.getClient().getChannelServer().getMapFactory().getMap(925020000 + 100 * i).getCharacters().size() > 0) {

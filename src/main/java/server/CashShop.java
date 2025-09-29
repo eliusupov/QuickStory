@@ -183,7 +183,7 @@ public class CashShop {
                     switch (itemId) {
                         case ItemId.DROP_COUPON_2X_4H,
                              ItemId.EXP_COUPON_2X_4H: // 4 Hour 2X coupons, the period is 1, but we don't want them to last a day.
-                            item.setExpiration(Server.getInstance().getCurrentTime() + MINUTES.toMillis(100));
+                            item.setExpiration(Server.getInstance().getCurrentTime() + MINUTES.toMillis(60));
                             /*
                             } else if(itemId == 5211047 || itemId == 5360014) { // 3 Hour 2X coupons, unused as of now
                                     item.setExpiration(Server.getInstance().getCurrentTime() + HOURS.toMillis(3));

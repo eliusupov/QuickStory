@@ -167,11 +167,7 @@ function action(mode, type, selection) {
                             //    cm.sendNext("You're going to take on the challenge as a one-man party?");
                         //}
 
-                        else if (!isBetween(party, 30)) {
-                            cm.sendNext("Your partys level ranges are too broad to enter. Please make sure all of your party members are within #r30 levels#k of each other.");
-                            cm.dispose();
-
-                        } else {
+                        else {
                             var avDojo = cm.getClient().getChannelServer().ingressDojo(true, cm.getParty(), 0);
 
                             if (avDojo < 0) {
@@ -307,12 +303,6 @@ function action(mode, type, selection) {
                                 cm.dispose();
                                 return;
                             }
-
-                            if (!isBetween(cm.getParty(), 35)) {
-                                cm.sendOk("Your partys level ranges are too broad to enter. Please make sure all of your party members are within #r35 levels#k of each other.");
-                                cm.dispose();
-                                return;
-                            }
                         }
 
                         avDojo = cm.getClient().getChannelServer().ingressDojo(hasParty, cm.getParty(), Math.floor((cm.getPlayer().getMap().getId()) / 100) % 100);
@@ -416,3 +406,4 @@ function isBetween(party, range) {
     }
     return (highest - lowest) <= range;
 }
+

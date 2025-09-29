@@ -690,59 +690,63 @@ public class GameConstants {
     //     }
     // }
 
-    // real rates
-    public static float getExpRateForLevel(int level) {
-        if (level >= 120) {
-            return 50.0f;
-        } else if (level >= 100) {
-            return 45.0f;
-        } else if (level >= 40) {
-            return 40.0f;
-        } else if (level >= 35) {
-            return 36.0f;
-        } else if (level > 30) {
-            return 24.0f;
-        } else if (level > 25) {
-            return 20.0f;
-        } else if (level >= 20) {
-            return 16.0f;
-        } else if (level >= 10) {
-            return 5.0f;
-        }  else if (level >= 5) {
-            return 2.0f;
-        } else {
-            return 1.0f;
-        } 
-    }
-
-    // // lower rates
+    // lower rates
     // public static float getExpRateForLevel(int level) {
     //     if (level >= 120) {
     //         return 30.0f;
     //     } else if (level >= 90) {
-    //         return 25.0f;
+    //         return 30.0f;
     //     } else if (level >= 60) {
-    //         return 21.0f;
+    //         return 30.0f;
     //     } else if (level >= 50) {
-    //         return 17.0f;
+    //         return 25.0f;
     //     } else if (level >= 40) {
-    //         return 13.0f;
+    //         return 22.0f;
     //     } else if (level >= 35) {
-    //         return 10.0f;
+    //         return 18.0f;
     //     } else if (level >= 30) {
-    //         return 8.0f;
+    //         return 15.0f;
     //     } else if (level >= 25) {
-    //         return 6.5f;
+    //         return 13.0f;
     //     } else if (level >= 20) {
-    //         return 5.0f;
+    //         return 8.0f;
     //     } else if (level >= 10) {
-    //         return 2.0f;
+    //         return 5.0f;
     //     }  else if (level >= 5) {
-    //         return 1.5f;
+    //         return 2.0f;
     //     } else {
     //         return 1.0f;
-    //     }
+    //     } 
     // }
+
+    // real rates
+    public static float getExpRateForLevel(int level) {
+        if (level >= 120) {
+            return 50.0f * 0.8f; // 40.0f
+        } else if (level >= 100) {
+            return 45.0f * 0.8f; // 36.0f
+        } else if (level >= 50) {
+            return 40.0f * 0.8f; // 32.0f
+        } else if (level >= 40) {
+            return 35.0f * 0.8f; // 28.0f
+        } else if (level >= 35) {
+            return 30.0f * 0.8f; // 24.0f
+        } else if (level >= 30) {
+            return 25.0f * 0.8f; // 20.0f
+        } else if (level >= 25) {
+            return 20.0f * 0.8f; // 16.0f
+        } else if (level >= 20) {
+            return 15.0f * 0.8f; // 12.0f
+        } else if (level >= 15) {
+            return 10.0f * 0.8f; // 8.0f
+        } else if (level >= 10) {
+            return 5.0f * 0.8f; // 4.0f
+        }  else if (level >= 5) {
+            return 2.0f * 0.8f; // 1.6f
+        } else {
+            return 1.0f;
+        } 
+    }
 
     private static int getMaxObstacleMobDamageFromWz() {
         DataProvider mapSource = DataProviderFactory.getDataProvider(WZFiles.MAP);
