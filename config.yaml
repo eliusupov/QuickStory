@@ -12,7 +12,7 @@ worlds:
     meso_rate: 5
     drop_rate: 1
     boss_drop_rate: 10                      #NOTE: Boss drop rate OVERRIDES common drop rate, for bosses-only.
-    quest_rate: 20                           #Multiplier for Exp & Meso gains when completing a quest. Only available when USE_QUEST_RATE is true. Stacks with server Exp & Meso rates.
+    quest_rate: 1                           #Multiplier for Exp & Meso gains when completing a quest. Only available when USE_QUEST_RATE is true. Stacks with server Exp & Meso rates.
     fishing_rate: 10                        #Multiplier for success likelihood on meso thrown during fishing.
     travel_rate: 10                         #Means of transportation rides/departs using 1/N of the default time.
 
@@ -205,7 +205,7 @@ server:
     SHUTDOWNHOOK: true
 
     #Server Flags
-    USE_CUSTOM_KEYSET: true             #Enables auto-setup of the HeavenMS's custom keybindings when creating characters.
+    USE_CUSTOM_KEYSET: false             #Enables auto-setup of the HeavenMS's custom keybindings when creating characters.
     USE_DEBUG: false                    #Will enable some text prints on the client, oriented for debugging purposes.
     USE_DEBUG_SHOW_INFO_EQPEXP: false   #Prints on the cmd all equip exp gain info.
     USE_DEBUG_SHOW_RCVD_PACKET: false   #Prints on the cmd all received packet ids.

@@ -748,6 +748,15 @@ public class GameConstants {
         } 
     }
 
+    // Quest EXP scaling by level: (level / 10) * 2.5
+    public static float getQuestExpRateForLevel(int level) {
+        if (level <= 0) {
+            return 1.0f;
+        }
+        float scaled = (level / 10.0f) * 4.0f;
+        return Math.max(1.0f, scaled);
+    }
+
     private static int getMaxObstacleMobDamageFromWz() {
         DataProvider mapSource = DataProviderFactory.getDataProvider(WZFiles.MAP);
         int maxMobDmg = 0;

@@ -55,24 +55,29 @@ public final class MonsterBook {
     }
 
     public void addCard(final Client c, final int cardid) {
-        if (c.getPlayer().getLevel() < 10 && c.getPlayer().getJob().isA(Job.BEGINNER) && cards.size() >= 4) {
-            c.getPlayer().dropMessage(5, "You cannot collect more than 4 cards until you reach level 10.");
-            return;
-        }
         c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PacketCreator.showForeignCardEffect(c.getPlayer().getId()), false);
 
         Integer qty;
+        boolean blockedSetCompletion = false;
         lock.lock();
         try {
             qty = cards.get(cardid);
 
             if (qty != null) {
                 if (qty < 5) {
-                    cards.put(cardid, qty + 1);
-                    if (qty + 1 == 5) { // Card count reached 5
+                    // Block beginners under level 10 from completing a set (4 -> 5)
+                    if (qty == 4 && c.getPlayer().getLevel() < 10 && c.getPlayer().getJob().isA(Job.BEGINNER)) {
+                        blockedSetCompletion = true;
+                    } else {
+                        cards.put(cardid, qty + 1);
+                    }
+                    if (!blockedSetCompletion && qty + 1 == 5) { // Card count reached 5
                         if (!isGainedMainStatBuffs.getOrDefault(cardid, false)) {
-                            applyMainStatBuff(c, cardid);
-                            isGainedMainStatBuffs.put(cardid, true);
+                            // Prevent beginners under level 10 from receiving the buff
+                            if (!(c.getPlayer().getLevel() < 10 && c.getPlayer().getJob().isA(Job.BEGINNER))) {
+                                applyMainStatBuff(c, cardid);
+                                isGainedMainStatBuffs.put(cardid, true);
+                            }
                         }
                     }
                 }
@@ -90,6 +95,11 @@ public final class MonsterBook {
             lock.unlock();
         }
 
+        if (blockedSetCompletion) {
+            c.getPlayer().dropMessage(5, "[Monster card] You cannot complete a set until you get a job.");
+            return;
+        }
+
         if (qty < 5) {
             if (qty == 0) {     // leveling system only accounts unique cards
                 calculateLevel();
@@ -100,8 +110,11 @@ public final class MonsterBook {
         } else {
             c.sendPacket(PacketCreator.addCard(true, cardid, 5));
             if (!isGainedMainStatBuffs.getOrDefault(cardid, false)) {
-                applyMainStatBuff(c, cardid);
-                isGainedMainStatBuffs.put(cardid, true);
+                // Prevent beginners under level 10 from receiving the buff
+                if (!(c.getPlayer().getLevel() < 10 && c.getPlayer().getJob().isA(Job.BEGINNER))) {
+                    applyMainStatBuff(c, cardid);
+                    isGainedMainStatBuffs.put(cardid, true);
+                }
             }
         }
     }

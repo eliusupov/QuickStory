@@ -4980,7 +4980,10 @@ public class Character extends AbstractCharacterObject {
         }
 
         World w = getWorldServer();
-        return w.getQuestRate();
+        float byLevel = constants.game.GameConstants.getQuestExpRateForLevel(level);
+        // world quest rate is an integer multiplier; combine with level-based scaling
+        float combined = w.getQuestRate() * byLevel;
+        return (int) combined;
     }
 
     public int getQuestMesoRate() {
