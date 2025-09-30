@@ -722,27 +722,27 @@ public class GameConstants {
     // real rates
     public static float getExpRateForLevel(int level) {
         if (level >= 120) {
-            return 50.0f * 0.8f; // 40.0f
+            return 50.0f * 0.7f; // 35.0f
         } else if (level >= 100) {
-            return 45.0f * 0.8f; // 36.0f
+            return 45.0f * 0.7f; // 31.5f
         } else if (level >= 50) {
-            return 40.0f * 0.8f; // 32.0f
+            return 40.0f * 0.7f; // 28.0f
         } else if (level >= 40) {
-            return 35.0f * 0.8f; // 28.0f
+            return 35.0f * 0.7f; // 24.5f
         } else if (level >= 35) {
-            return 30.0f * 0.8f; // 24.0f
+            return 30.0f * 0.7f; // 21.0f
         } else if (level >= 30) {
-            return 25.0f * 0.8f; // 20.0f
+            return 25.0f * 0.7f; // 17.5f
         } else if (level >= 25) {
-            return 20.0f * 0.8f; // 16.0f
+            return 20.0f * 0.7f; // 14.0f
         } else if (level >= 20) {
-            return 15.0f * 0.8f; // 12.0f
+            return 15.0f * 0.7f; // 10.5f
         } else if (level >= 15) {
-            return 10.0f * 0.8f; // 8.0f
+            return 10.0f * 0.7f; // 7.0f
         } else if (level >= 10) {
-            return 5.0f * 0.8f; // 4.0f
+            return 5.0f * 0.7f; // 3.5f
         }  else if (level >= 5) {
-            return 2.0f * 0.8f; // 1.6f
+            return 2.0f * 0.7f; // 1.4f
         } else {
             return 1.0f;
         } 
@@ -753,7 +753,7 @@ public class GameConstants {
         if (level <= 0) {
             return 1.0f;
         }
-        float scaled = (level / 10.0f) * 4.0f;
+        float scaled = (level / 10.0f) * 5.0f;
         return Math.max(1.0f, scaled);
     }
 

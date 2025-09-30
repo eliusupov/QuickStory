@@ -9974,7 +9974,7 @@ public class Character extends AbstractCharacterObject {
                         pendantOfSpirit.cancel(false);
                     }
                 }
-            }, 1200000); //20 minutes
+            }, 900000); //15 minutes
         }
     }
 
