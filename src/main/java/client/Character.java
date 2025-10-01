@@ -9968,9 +9968,9 @@ public class Character extends AbstractCharacterObject {
             pendantOfSpirit = TimerManager.getInstance().register(new Runnable() {
                 @Override
                 public void run() {
-                    if (pendantExp < 8) {
+                    if (pendantExp < 5) {
                         pendantExp++;
-                        message("Pendant of the Spirit has been equipped for " + (pendantExp * 30 / 60) + " hour(s), you will now receive " + (pendantExp * 10) + "% bonus exp.");
+                        message("Pendant of the Spirit has been equipped for " + (pendantExp * 15) + " minutes, you will now receive " + (pendantExp * 10) + "% bonus exp.");
                     } else {
                         pendantOfSpirit.cancel(false);
                     }
