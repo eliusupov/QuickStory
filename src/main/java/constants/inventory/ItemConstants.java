@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.Arrays;
 
 /**
  * @author Jay Estrella
@@ -50,6 +51,155 @@ public final class ItemConstants {
 
     public final static boolean EXPIRING_ITEMS = true;
     public final static Set<Integer> permanentItemids = new HashSet<>();
+
+    public final static Set<Integer> ITEMS_TO_FILTER_OUT = new HashSet<>(Arrays.asList(
+        2040000, // Scroll for Helmet for DEF
+        2040001, // Scroll for Helmet for DEF
+        2040002, // Scroll for Helmet for DEF
+        2040006, // Scroll for Helmet for DEF
+        2040019, // Scroll for Helmet for DEF
+        2040020, // Scroll for Helmet for DEF
+        2040310, // Scroll for Earring for DEF
+        2040311, // Scroll for Earring for DEF
+        2040312, // Scroll for Earring for DEF
+        2040400, // Scroll for Topwear for DEF
+        2040401, // Scroll for Topwear for DEF
+        2040402, // Scroll for Topwear for DEF
+        2040403, // Scroll for Topwear for DEF
+        2040415, // Scroll for Topwear for DEF
+        2040416, // Scroll for Topwear for DEF
+        2040503, // Scroll for Overall Armor for DEF
+        2040504, // Scroll for Overall Armor for DEF
+        2040505, // Scroll for Overall Armor for DEF
+        2040507, // Scroll for Overall Armor for DEF
+        2040600, // Scroll for Bottomwear for DEF
+        2040601, // Scroll for Bottomwear for DEF
+        2040602, // Scroll for Bottomwear for DEF
+        2040603, // Scroll for Bottomwear for DEF
+        2040615, // Scroll for Bottomwear for DEF
+        2040616, // Scroll for Bottomwear for DEF
+        2040900, // Scroll for Shield for DEF
+        2040901, // Scroll for Shield for DEF
+        2040902, // Scroll for Shield for DEF
+        2040903, // Scroll for Shield for DEF
+        2040910, // Scroll for Shield for DEF
+        2040911, // Scroll for Shield for DEF
+        2041042, // Scroll for Cape for Magic DEF
+        2041043, // Scroll for Cape for Magic DEF
+        2041044, // Scroll for Cape for Weapon DEF
+        2041045, // Scroll for Cape for Weapon DEF
+        2040041, // Scroll for Helmet for DEF 100%
+        2040936, // Scroll for Shield for DEF 100%
+        2040630, // Scroll for Bottomwear for DEF 100%
+        2040539, // Scroll for Overall Armor for DEF 100%
+        2040430, // Scroll for Topwear for DEF 100%
+        2041066, // Scroll for Cape for Magic DEF 100%
+        2041067, // Scroll for Cape for Weapon DEF 100%
+        2040943, // Scroll for Shield for DEF 50%
+        2040629, // Scroll for Bottomwear for DEF 50%
+        2040543, // Scroll for Overall Armor for DEF 50%
+        2040429, // Scroll for Topwear for DEF 50%
+        2040045, // Scroll for Helmet for DEF 50%
+        2040003, // Scroll for Helmet for HP
+        2040004, // Scroll for Helmet for HP
+        2040005, // Scroll for Helmet for HP
+        2040007, // Scroll for Helmet for HP
+        2040010, // Scroll for Helmet for HP
+        2040021, // Scroll for Helmet for MaxHP
+        2040022, // Scroll for Helmet for MaxHP
+        2040100, // Scroll for Face Accessory for HP
+        2040101, // Scroll for Face Accessory for HP
+        2040102, // Scroll for Face Accessory for HP
+        2040324, // Scroll for Earring for HP 100%
+        2040325, // Scroll for Earring for HP 70%
+        2040326, // Scroll for Earring for HP 60%
+        2040327, // Scroll for Earring for HP 30%
+        2040328, // Scroll for Earring for HP 10%
+        2040420, // Scroll for Topwear for HP 100%
+        2040421, // Scroll for Topwear for HP 60%
+        2040422, // Scroll for Topwear for HP 10%
+        2040620, // Scroll for Bottomwear for HP 100%
+        2040621, // Scroll for Bottomwear for HP 60%
+        2040622, // Scroll for Bottomwear for HP 10%
+        2040823, // Scroll for Gloves for HP 100%
+        2040824, // Scroll for Gloves for HP 60%
+        2040825, // Scroll for Gloves for HP 10%
+        2040926, // Scroll for Shield for HP 100%
+        2040927, // Scroll for Shield for HP 60%
+        2040928, // Scroll for Shield for HP 10%
+        2041005, // Scroll for Cape for Weapon Def.
+        2041006, // Scroll for Cape for HP
+        2041007, // Scroll for Cape for HP
+        2041008, // Scroll for Cape for HP
+        2041025, // Scroll for Cape for Weapon Def.
+        2041046, // Scroll for Cape for MaxHP
+        2041047, // Scroll for Cape for MaxHP
+        2040042, // Scroll for Helmet for HP 100%
+        2040046, // Scroll for Helmet for HP 50%
+        2040939, // Scroll for Shield for HP 65%
+        2040940, // Scroll for Shield for HP 15%
+        2040831, // Scroll for Gloves for HP 65%
+        2040832, // Scroll for Gloves for HP 15%
+        2040633, // Scroll for Bottomwear for HP 65%
+        2040634, // Scroll for Bottomwear for HP 15%
+        2040433, // Scroll for Topwear for HP 65%
+        2040434, // Scroll for Topwear for HP 15%
+        2040339, // Scroll for Earring for HP 65%
+        2040340, // Scroll for Earring for HP 15%
+        2041002, // Scroll for Cape for Magic Def.
+        2041009, // Scroll for Cape for MP
+        2041010, // Scroll for Cape for MP
+        2041011, // Scroll for Cape for MP
+        2041024, // Scroll for Cape for Magic Def.
+        2041043, // Scroll for Cape for Magic DEF
+        2041048, // Scroll for Cape for MP
+        2041049  // Scroll for Cape for MP
+        ,2040008 // Dark scroll for Helmet for DEF
+        ,2040009 // Dark Scroll for Helmet for DEF
+        ,2040011 // Dark Scroll for Helmet for HP
+        ,2040308 // Dark Scroll for Earring for DEF
+        ,2040309 // Dark Scroll for Earring for DEF
+        ,2040103 // Dark Scroll for Face Accessory for HP
+        ,2040104 // Dark Scroll for Face Accessory for HP
+        ,2040404 // Dark Scroll for Topwear for DEF
+        ,2040405 // Dark Scroll for Topwear for DEF
+        ,2040407 // Dark Scroll for Topwear for HP
+        ,2040408 // Dark Scroll for Topwear for HP
+        ,2040508 // Dark Scroll for Overall Armor for DEF
+        ,2040509 // Dark Scroll for Overall Armor for DEF
+        ,2040510 // Dark Scroll for Overall Armor for HP
+        ,2040511 // Dark Scroll for Overall Armor for HP
+        ,2040604 // Dark Scroll for Bottomwear for DEF
+        ,2040605 // Dark Scroll for Bottomwear for DEF
+        ,2040607 // Dark Scroll for Bottomwear for HP
+        ,2040608 // Dark Scroll for Bottomwear for HP
+        ,2040804 // Dark Scroll for Gloves for DEF
+        ,2040805 // Dark Scroll for Gloves for DEF
+        ,2040807 // Dark Scroll for Gloves for HP
+        ,2040808 // Dark Scroll for Gloves for HP
+        ,2040904 // Dark Scroll for Shield for DEF
+        ,2040905 // Dark Scroll for Shield for DEF
+        ,2040907 // Dark Scroll for Shield for HP
+        ,2040908 // Dark Scroll for Shield for HP
+        ,2041000 // Dark Scroll for Cape for DEF
+        ,2041001 // Dark Scroll for Cape for DEF
+        ,2041003 // Dark Scroll for Cape for Magic Def.
+        ,2041004 // Dark Scroll for Cape for Magic Def.
+        ,2041012 // Dark Scroll for Cape for HP
+        ,2041013 // Dark Scroll for Cape for HP
+        ,2041014 // Dark Scroll for Cape for MP
+        ,2041015  // Dark Scroll for Cape for MP
+        ,2048000 // Scroll for Pet Equip. for Speed
+        ,2048001 // Scroll for Pet Equip. for Speed
+        ,2048002 // Scroll for Pet Equip. for Speed
+        ,2048003 // Scroll for Pet Equip. for Jump
+        ,2048004 // Scroll for Pet Equip. for Jump
+        ,2048005 // Scroll for Pet Equip. for Jump
+        ,2048006 // Scroll for Pet Equip. for Speed
+        ,2048007 // Scroll for Pet Equip. for Speed
+        ,2048008 // Scroll for Pet Equip. for Jump
+        ,2048009 // Scroll for Pet Equip. for Jump
+    ));
 
     static {
         // i ain't going to open one gigantic itemid cache just for 4 perma itemids, no way!

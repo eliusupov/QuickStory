@@ -6529,9 +6529,10 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void setPlayerExpRateByLevel() {
+        setWorldRates();
         float expRate =  GameConstants.getExpRateForLevel(this.level);
         this.expRate *= expRate;
-        this.yellowMessage("Exp rate set to " + GameConstants.getExpRateForLevel(level) + "x");
+        this.yellowMessage("Exp rate set to " + this.expRate + "x");
         this.updateCouponRates();
     }
 
@@ -9967,7 +9968,7 @@ public class Character extends AbstractCharacterObject {
             pendantOfSpirit = TimerManager.getInstance().register(new Runnable() {
                 @Override
                 public void run() {
-                    if (pendantExp < 5) {
+                    if (pendantExp < 8) {
                         pendantExp++;
                         message("Pendant of the Spirit has been equipped for " + (pendantExp * 30 / 60) + " hour(s), you will now receive " + (pendantExp * 10) + "% bonus exp.");
                     } else {

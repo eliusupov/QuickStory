@@ -691,19 +691,19 @@ public class MapleMap {
 
              // stars/bullets drop rate
              if (ItemConstants.isThrowingStar(de.itemId) || ItemConstants.isBullet(de.itemId)) {
-                adjustedChanceMultiplier = 6.0f;
+                adjustedChanceMultiplier = 8.0f;
 
                 if (mob.isBoss()) {
-                    adjustedChanceMultiplier = 1.4f;
+                    adjustedChanceMultiplier = 1.8f;
                 }
             }
 
             // scroll drop rate
             if (de.itemId > 2040000 && de.itemId < 2050000) {
                 if (de.itemId != constants.id.ItemId.CHAOS_SCROll_60) {
-                    adjustedChanceMultiplier = 12.0f;
+                    adjustedChanceMultiplier = 13.0f;
                     if (mob.isBoss()) {
-                        adjustedChanceMultiplier = 2f;
+                        adjustedChanceMultiplier = 2.0f;
                     }
                 }
             }
@@ -717,18 +717,23 @@ public class MapleMap {
                 }
             }
 
-            // mesos drop rate
-            if (de.itemId == 0) {
-                adjustedChanceMultiplier = 1.2f;
-            }
-
             // monster card drop rate
             if (ItemConstants.isMonsterCard(de.itemId)) {
                 adjustedChanceMultiplier = 2.80f;
 
                 if (mob.isBoss()) {
-                    adjustedChanceMultiplier = 5f;
+                    adjustedChanceMultiplier = 0.5f;
                 }
+            }
+
+            // filter out items
+            if (ItemConstants.ITEMS_TO_FILTER_OUT.contains(de.itemId)) {
+                adjustedChanceMultiplier = 0f;
+            }
+
+            // mesos drop rate
+            if (de.itemId == 0) {
+                adjustedChanceMultiplier = 1.5f;
             }
             
 
