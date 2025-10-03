@@ -43,11 +43,6 @@ public final class MesoDropHandler extends AbstractPacketHandler {
         p.skip(4);
         int meso = p.readInt();
 
-        if (player.isGM() && player.gmLevel() < YamlConfig.config.server.MINIMUM_GM_LEVEL_TO_DROP) {
-            player.message("You cannot drop mesos at your GM level.");
-            return;
-        }
-
         if (c.tryacquireClient()) {     // thanks imbee for noticing players not being able to throw mesos too fast
             try {
                 if (meso <= player.getMeso() && meso > 9 && meso < 50001) {

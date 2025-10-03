@@ -5,14 +5,14 @@ worlds:
     #Properties for Scania 0
   - flag: 0
     server_message: Welcome to Scania!
-    event_message: Scania!
+    event_message: Check the new shop at the free market npc Inkwell
     why_am_i_recommended: Welcome to Scania!
-    channels: 3
+    channels: 1
     exp_rate: 1
-    meso_rate: 2
+    meso_rate: 5
     drop_rate: 1
-    boss_drop_rate: 100                      #NOTE: Boss drop rate OVERRIDES common drop rate, for bosses-only.
-    quest_rate: 3                           #Multiplier for Exp & Meso gains when completing a quest. Only available when USE_QUEST_RATE is true. Stacks with server Exp & Meso rates.
+    boss_drop_rate: 10                      #NOTE: Boss drop rate OVERRIDES common drop rate, for bosses-only.
+    quest_rate: 1                           #Multiplier for Exp & Meso gains when completing a quest. Only available when USE_QUEST_RATE is true. Stacks with server Exp & Meso rates.
     fishing_rate: 10                        #Multiplier for success likelihood on meso thrown during fishing.
     travel_rate: 10                         #Means of transportation rides/departs using 1/N of the default time.
 
@@ -196,9 +196,9 @@ server:
     LOGIN_ATTEMPT_DURATION: 120         #Period in seconds the login attempt remains registered on the system.
 
     #Ip Configuration
-    HOST: 127.0.0.1                 #WAN IPv4 address
-    LANHOST: 127.0.0.1              #LAN IPv4 address
-    LOCALHOST: 127.0.0.1            #Loopback IPv4 address
+    HOST: 25.59.156.85                 #WAN IPv4 address
+    LANHOST: 25.59.156.85              #LAN IPv4 address
+    LOCALHOST: 25.59.156.85            #Loopback IPv4 address
     GMSERVER: false
 
     #Other configuration
@@ -211,7 +211,7 @@ server:
     USE_DEBUG_SHOW_RCVD_PACKET: false   #Prints on the cmd all received packet ids.
     USE_DEBUG_SHOW_RCVD_MVLIFE: false   #Prints on the cmd all received move life content.
     USE_DEBUG_SHOW_PACKET: false
-    USE_SUPPLY_RATE_COUPONS: true       #Allows rate coupons to be sold through the Cash Shop.
+    USE_SUPPLY_RATE_COUPONS: false       #Allows rate coupons to be sold through the Cash Shop.
     USE_IP_VALIDATION: false             #Enables IP checking when logging in.
     USE_CHARACTER_ACCOUNT_CHECK: false  #Enables one-character-per-account check when logging in. This might be resource intensive.
 
@@ -219,7 +219,7 @@ server:
     USE_MAXRANGE_ECHO_OF_HERO: true
     USE_MTS: false
     USE_CPQ: true                       #Renders the CPQ available or not.
-    USE_AUTOHIDE_GM: true              #When enabled, GMs are automatically hidden when joining. Thanks to Steven Deblois (steven1152).
+    USE_AUTOHIDE_GM: false              #When enabled, GMs are automatically hidden when joining. Thanks to Steven Deblois (steven1152).
     USE_FIXED_RATIO_HPMP_UPDATE: false   #Enables the HeavenMS-builtin HPMP update based on the current pool to max pool ratio.
     USE_FAMILY_SYSTEM: true
     USE_DUEY: true
@@ -240,12 +240,12 @@ server:
     USE_ENFORCE_ADMIN_ACCOUNT: false    #Forces accounts having GM characters to be treated as a "GM account" by the client (localhost). Some of the GM account perks is the ability to FLY, but unable to TRADE.
     USE_ENFORCE_NOVICE_EXPRATE: false    #Hardsets experience rate 1x for beginners level 10 or under. Ideal for roaming on novice areas without caring too much about losing some stats.
     USE_ENFORCE_HPMP_SWAP: false        #Forces players to reuse stats (via AP Resetting) located on HP/MP pool only inside the HP/MP stats.
-    USE_ENFORCE_MOB_LEVEL_RANGE: true   #Players N levels below the killed mob will gain no experience from defeating it.
+    USE_ENFORCE_MOB_LEVEL_RANGE: false   #Players N levels below the killed mob will gain no experience from defeating it.
     USE_ENFORCE_JOB_LEVEL_RANGE: false  #Caps the player level on the minimum required to advance their current jobs.
     USE_ENFORCE_JOB_SP_RANGE: false     #Caps the player SP level on the total obtainable by their current jobs. After changing jobs, missing SP will be retrieved.
     USE_ENFORCE_ITEM_SUGGESTION: false  #Forces the Owl of Minerva and the Cash Shop to always display the defined item array instead of those featured by the players.
-    USE_ENFORCE_UNMERCHABLE_CASH: true  #Forces players to not sell CASH items via merchants, drops of it disappears.
-    USE_ENFORCE_UNMERCHABLE_PET: true   #Forces players to not sell pets via merchants, drops of it disappears. (since non-named pets gets dirty name and other possible DB-related issues)
+    USE_ENFORCE_UNMERCHABLE_CASH: false  #Forces players to not sell CASH items via merchants, drops of it disappears.
+    USE_ENFORCE_UNMERCHABLE_PET: false   #Forces players to not sell pets via merchants, drops of it disappears. (since non-named pets gets dirty name and other possible DB-related issues)
     USE_ENFORCE_MERCHANT_SAVE: true     #Forces automatic DB save on merchant owners, at every item movement on shop.
     USE_ENFORCE_MDOOR_POSITION: false   #Forces mystic door to be spawned near spawnpoints.
     USE_SPAWN_CLEAN_MDOOR: false         #Makes mystic doors to be spawned without deploy animation. This clears disconnecting issues that may happen when trying to cancel doors a couple seconds after deployment.
@@ -294,7 +294,7 @@ server:
     EXP_SPLIT_LEECH_INTERVAL: 5            #Non-contributing players must be within N level between any contributing party member to receive EXP.
     EXP_SPLIT_MVP_MOD: 0.2
     EXP_SPLIT_COMMON_MOD: 0.8
-    PARTY_BONUS_EXP_RATE: 1.0            #Rate for the party exp bonus reward.
+    PARTY_BONUS_EXP_RATE: 5            #Rate for the party exp bonus reward.
 
     #Miscellaneous Configuration
     TIMEZONE: GMT
@@ -313,7 +313,7 @@ server:
     INSTANT_NAME_CHANGE: false              #Whether or not to wait for server restart to apply name changes. Does on reconnect otherwise (requires queries on every login).
 
     #Dangling Items/Locks Configuration
-    ITEM_EXPIRE_TIME: 30000    # (10 * 1000) Time before items start disappearing. Recommended to be set up to 3 minutes.
+    ITEM_EXPIRE_TIME: 180000    # (10 * 1000) Time before items start disappearing. Recommended to be set up to 3 minutes.
     KITE_EXPIRE_TIME: 3600000   # (60 * 60 * 1000) Time before kites (cash item) disappears.
     ITEM_MONITOR_TIME: 300000    # (5 * 60 * 1000) Interval between item monitoring tasks on maps, which checks for dangling (null) item objects on the map item history.
     LOCK_MONITOR_TIME: 30000        # (30 * 1000) Waiting time for a lock to be released. If it reaches timeout, a critical server deadlock has made present.
@@ -362,7 +362,7 @@ server:
     USE_PERFECT_PITCH: false         #For lvl 30 or above, each lvlup grants player 1 perfect pitch.
 
     #Quest Configuration
-    USE_QUEST_RATE: false           #Exp/Meso gained by quests uses fixed server exp/meso rate times quest rate as multiplier, instead of player rates.
+    USE_QUEST_RATE: true           #Exp/Meso gained by quests uses fixed server exp/meso rate times quest rate as multiplier, instead of player rates.
 
     #Quest Points Configuration
     QUEST_POINT_REPEATABLE_INTERVAL: 25  #Minimum interval between repeatable quest completions for quest points to be awarded.
@@ -425,8 +425,8 @@ server:
     EVENT_LOBBY_DELAY: 10              #Cooldown duration in seconds before reopening an event lobby.
 
     #Dojo Configuration
-    USE_FAST_DOJO_UPGRADE: false     #Reduced Dojo training points amount required for a belt upgrade.
-    USE_DEADLY_DOJO: true          #Should bosses really use 1HP,1MP attacks in dojo?
+    USE_FAST_DOJO_UPGRADE: true     #Reduced Dojo training points amount required for a belt upgrade.
+    USE_DEADLY_DOJO: false          #Should bosses really use 1HP,1MP attacks in dojo?
     DOJO_ENERGY_ATK: 100                #Dojo energy gain when deal attack
     DOJO_ENERGY_DMG: 20                #Dojo energy gain when recv attack
 

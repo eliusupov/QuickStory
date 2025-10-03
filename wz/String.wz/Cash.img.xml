@@ -1302,8 +1302,8 @@
     <string name="desc" value="This coupon allows users to earn #c2x Exp (double experience)#. The coupon will be activated immediately after purchase, and the double experience effect will be available for 24 hours upon purchase."/>
   </imgdir>
   <imgdir name="5211048">
-    <string name="name" value="4 hour 2 x EXP special coupon"/>
-    <string name="desc" value="This coupon allows users to earn #c2x Exp (double experience)#. The coupon will be activated immediately after purchase, and the double experience effect will be available for 4 hour upon purchase."/>
+    <string name="name" value="40 minutes 2 x EXP special coupon"/>
+    <string name="desc" value="This coupon allows users to earn #c2x Exp (double experience)#. The coupon will be activated immediately after purchase, and the double experience effect will be available for 40 minutes upon purchase."/>
   </imgdir>
   <imgdir name="5220000">
     <string name="name" value="Gachapon Ticket"/>
@@ -1512,8 +1512,8 @@
     <string name="desc" value="This coupon #cdoubles the amount of mesos and doubles the rate of items# dropped from monsters. The Double Drop card is immediately activated upon purchase and the double drop effect will be available from 06 am to 10 am (Pacific time) #ceveryday#."/>
   </imgdir>
   <imgdir name="5360042">
-    <string name="name" value="4 hour 2 x Drop special coupon"/>
-    <string name="desc" value="This coupon #cdoubles the amount of mesos and doubles the rate of items# dropped from monsters. The coupon will be immediately activated after purchase and the double drop effect will be available for 4 hour upon purchase."/>
+    <string name="name" value="40 minutes 2 x Drop special coupon"/>
+    <string name="desc" value="This coupon #cdoubles the amount of mesos and doubles the rate of items# dropped from monsters. The coupon will be immediately activated after purchase and the double drop effect will be available for 40 minutes upon purchase."/>
   </imgdir>
   <imgdir name="5370000">
     <string name="name" value="Chalkboard"/>
@@ -1864,8 +1864,8 @@
     <string name="desc" value="Fot Test"/>
   </imgdir>
   <imgdir name="5211060">
-    <string name="name" value="2 hour 3 x EXP special coupon"/>
-    <string name="desc" value="This coupon allows users to earn #c3x Exp (triple experience)#. The coupon will be activated immediately after purchase, and the triple experience effect will be available for 2 hour upon purchase."/>
+    <string name="name" value="20 min 3 x EXP special coupon"/>
+    <string name="desc" value="This coupon allows users to earn #c3x Exp (triple experience)#. The coupon will be activated immediately after purchase, and the triple experience effect will be available for 20 minutes upon purchase."/>
   </imgdir>
   <imgdir name="5610000">
     <string name="name" value="Vega&apos;s Spell(10%)"/>

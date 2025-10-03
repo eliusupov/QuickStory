@@ -87,6 +87,7 @@ import client.command.commands.gm2.SetSlotCommand;
 import client.command.commands.gm2.SetStatCommand;
 import client.command.commands.gm2.SpCommand;
 import client.command.commands.gm2.SummonCommand;
+import client.command.commands.gm2.ToggleEtcCommand;
 import client.command.commands.gm2.UnBugCommand;
 import client.command.commands.gm2.UnHideCommand;
 import client.command.commands.gm2.UnJailCommand;
@@ -387,7 +388,7 @@ public class CommandsExecutor {
     private void registerLv2Commands() {
         levelCommandsCursor = new Pair<>(new ArrayList<String>(), new ArrayList<String>());
 
-        addCommand("recharge", 2, RechargeCommand.class);
+        addCommand("recharge", 3, RechargeCommand.class);
         addCommand("whereami", 2, WhereaMiCommand.class);
         addCommand("hide", 2, HideCommand.class);
         addCommand("unhide", 2, UnHideCommand.class);
@@ -424,6 +425,7 @@ public class CommandsExecutor {
         addCommand("gachalist", GachaListCommand.class);
         addCommand("loot", LootCommand.class);
         addCommand("mobskill", MobSkillCommand.class);
+        addCommand("toggleetc", ToggleEtcCommand.class);
 
         commandsNameDesc.add(levelCommandsCursor);
     }
@@ -440,7 +442,7 @@ public class CommandsExecutor {
         addCommand("reloadevents", 3, ReloadEventsCommand.class);
         addCommand("reloaddrops", 3, ReloadDropsCommand.class);
         addCommand("reloadportals", 3, ReloadPortalsCommand.class);
-        addCommand("reloadmap", 3, ReloadMapCommand.class);
+        addCommand("reloadmap", 2, ReloadMapCommand.class);
         addCommand("reloadshops", 3, ReloadShopsCommand.class);
         addCommand("hpmp", 3, HpMpCommand.class);
         addCommand("maxhpmp", 3, MaxHpMpCommand.class);

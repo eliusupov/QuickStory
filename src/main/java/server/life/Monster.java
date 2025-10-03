@@ -84,6 +84,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import constants.game.GameConstants;
 
 public class Monster extends AbstractLoadedLife {
     private static final Logger log = LoggerFactory.getLogger(Monster.class);
@@ -114,6 +115,7 @@ public class Monster extends AbstractLoadedLife {
     private ScheduledFuture<?> monsterItemDrop = null;
     private Runnable removeAfterAction = null;
     private boolean availablePuppetUpdate = true;
+    private boolean hpReduced = false;
 
     private final Lock externalLock = new ReentrantLock();
     private final Lock monsterLock = new ReentrantLock(true);
@@ -168,8 +170,73 @@ public class Monster extends AbstractLoadedLife {
         return dropsDisabled;
     }
 
+    public void reduceBossHpForPartySize(MapleMap map) {
+        if (!hpReduced && GameConstants.REDUCED_BOSS_STATS_MOB_IDS.contains(getId())) {
+            int maxPartySize = 0;
+            Set<Integer> uniquePartyIds = new HashSet<>();
+
+            for (Character chr : map.getAllPlayers()) {
+                if (chr.getParty() != null) {
+                    uniquePartyIds.add(chr.getParty().getId());
+                    if (chr.getParty().getMembers().size() > maxPartySize) {
+                        maxPartySize = chr.getParty().getMembers().size();
+                    }
+                }
+            }
+            int playerCount = maxPartySize > 0 ? maxPartySize : map.getAllPlayers().size() > 0 ? 1 : 0; // If no parties, consider solo players as a party of 1 for reduction, otherwise 0
+
+            double multiplier = 1.0;
+            if (GameConstants.LARGE_EXPEDITION_BOSS_MOB_IDS.contains(getId())) {
+                if (playerCount == 1) {
+                    multiplier = 0.03;
+                } else if (playerCount == 2) {
+                    multiplier = 0.05;
+                } else if (playerCount == 3) {
+                    multiplier = 0.07;
+                } else if (playerCount == 4) {
+                    multiplier = 0.10;
+                } else if (playerCount == 5) {
+                    multiplier = 0.15;
+                } else if (playerCount <= 10) {
+                    multiplier = 0.30;
+                } else if (playerCount <= 20) {
+                    multiplier = 0.60;
+                } else {
+                    multiplier = 1.0;
+                }
+            } else {
+                if (playerCount == 1) {
+                    multiplier = 0.04;
+                } else if (playerCount == 2) {
+                    multiplier = 0.08;
+                } else if (playerCount == 3) {
+                    multiplier = 0.012;
+                }  else if (playerCount == 4) {
+                    multiplier = 0.017;
+                }  else if (playerCount == 5) {
+                    multiplier = 0.021;
+                } else if (playerCount == 6) {
+                    multiplier = 0.025;
+                }
+                // For 5+ players, multiplier remains 1.0 (no reduction)
+            }
+
+            stats.setHp((int) (stats.getHp() * multiplier));
+            setStartingHp(stats.getHp());
+            hpReduced = true;
+        }
+    }
+
     public void setMap(MapleMap map) {
         this.map = map;
+        // todo check if this logic needs to move somewhere else
+        // reduceBossHpForPartySize(map);
+    }
+
+    public void checkAndReduceBossHpForPartySize() {
+        if (!hpReduced && map != null && GameConstants.REDUCED_BOSS_STATS_MOB_IDS.contains(getId())) {
+            reduceBossHpForPartySize(map);
+        }
     }
 
     public int getParentMobOid() {
@@ -810,6 +877,7 @@ public class Monster extends AbstractLoadedLife {
                             mob.disableDrops();
                         }
                         reviveMap.spawnMonster(mob);
+                        mob.checkAndReduceBossHpForPartySize();
 
                         if (MobId.isDeadHorntailPart(mob.getId()) && reviveMap.isHorntailDefeated()) {
                             boolean htKilled = false;

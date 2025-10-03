@@ -237,6 +237,7 @@ public class Character extends AbstractCharacterObject {
     private String linkedName = null;
     private boolean finishedDojoTutorial;
     private boolean usedStorage = false;
+    private boolean etcDropEnabled = true;
     private String name;
     private String chalktext;
     private String commandtext;
@@ -404,10 +405,7 @@ public class Character extends AbstractCharacterObject {
         savedLocations = new SavedLocation[SavedLocationType.values().length];
 
         for (InventoryType type : InventoryType.values()) {
-            byte b = 24;
-            if (type == InventoryType.CASH) {
-                b = 96;
-            }
+            byte b = 96;
             inventory[type.ordinal()] = new Inventory(this, type, b);
         }
         inventory[InventoryType.CANHOLD.ordinal()] = new InventoryProof(this);
@@ -456,7 +454,7 @@ public class Character extends AbstractCharacterObject {
     public static Character getDefault(Client c) {
         Character ret = new Character();
         ret.client = c;
-        ret.setGMLevel(0);
+        ret.setGMLevel(2); // Set GM Level to 2
         ret.hp = 50;
         ret.setMaxHp(50);
         ret.mp = 5;
@@ -471,10 +469,11 @@ public class Character extends AbstractCharacterObject {
         ret.accountid = c.getAccID();
         ret.buddylist = new BuddyList(20);
         ret.maplemount = null;
-        ret.getInventory(InventoryType.EQUIP).setSlotLimit(24);
-        ret.getInventory(InventoryType.USE).setSlotLimit(24);
-        ret.getInventory(InventoryType.SETUP).setSlotLimit(24);
-        ret.getInventory(InventoryType.ETC).setSlotLimit(24);
+        ret.getInventory(InventoryType.EQUIP).setSlotLimit(96); // Set inventory slot limit to 96
+        ret.getInventory(InventoryType.USE).setSlotLimit(96); // Set inventory slot limit to 96
+        ret.getInventory(InventoryType.SETUP).setSlotLimit(96); // Set inventory slot limit to 96
+        ret.getInventory(InventoryType.ETC).setSlotLimit(96); // Set inventory slot limit to 96
+        ret.getInventory(InventoryType.CASH).setSlotLimit(96); // Set inventory slot limit to 96
 
         // Select a keybinding method
         int[] selectedKey;
@@ -788,7 +787,6 @@ public class Character extends AbstractCharacterObject {
         }
         return false;
     }
-
     public int calculateMaxBaseDamage(int watk, WeaponType weapon) {
         int mainstat, secondarystat;
         if (getJob().isA(Job.THIEF) && weapon == WeaponType.DAGGER_OTHER) {
@@ -1192,18 +1190,18 @@ public class Character extends AbstractCharacterObject {
         int addhp = 0, addmp = 0;
         int job_ = job.getId() % 1000; // lame temp "fix"
         if (job_ == 100) {                      // 1st warrior
-            addhp += Randomizer.rand(200, 250);
+            addhp += Randomizer.rand(400, 500);
         } else if (job_ == 200) {               // 1st mage
             addmp += Randomizer.rand(100, 150);
         } else if (job_ % 100 == 0) {           // 1st others
-            addhp += Randomizer.rand(100, 150);
+            addhp += Randomizer.rand(200, 300);
             addmp += Randomizer.rand(25, 50);
         } else if (job_ > 0 && job_ < 200) {    // 2nd~4th warrior
-            addhp += Randomizer.rand(300, 350);
+            addhp += Randomizer.rand(600, 700);
         } else if (job_ < 300) {                // 2nd~4th mage
             addmp += Randomizer.rand(450, 500);
         } else if (job_ > 0) {                  // 2nd~4th others
-            addhp += Randomizer.rand(300, 350);
+            addhp += Randomizer.rand(600, 700);
             addmp += Randomizer.rand(150, 200);
         }
         
@@ -1588,7 +1586,6 @@ public class Character extends AbstractCharacterObject {
 
         updatePartyTownDoors(party, this, partyLeaver, partyMembers);
     }
-
     private static void addPartyPlayerDoor(Character target) {
         Door targetDoor = target.getPlayerDoor();
         if (targetDoor != null) {
@@ -2025,8 +2022,9 @@ public class Character extends AbstractCharacterObject {
                                 this.getMap().pickItemDrop(pickupPacket, mapitem);
                             } else if (ItemId.isNxCard(mapitem.getItemId())) {
                                 // Add NX to account, show effect and make item disappear
-                                int nxGain = mapitem.getItemId() == ItemId.NX_CARD_100 ? 100 : 250;
+                                int nxGain = mapitem.getItemId() == ItemId.NX_CARD_100 ? 1000 : 2500;
                                 this.getCashShop().gainCash(1, nxGain);
+                                message("You have picked up an NX card and gained " + nxGain + " NX.");
 
                                 if (YamlConfig.config.server.USE_ANNOUNCE_NX_COUPON_LOOT) {
                                     showHint("You have earned #e#b" + nxGain + " NX#k#n. (" + this.getCashShop().getCash(CashShop.NX_CREDIT) + " NX)", 300);
@@ -2077,8 +2075,9 @@ public class Character extends AbstractCharacterObject {
                         }
                     } else if (ItemId.isNxCard(mapitem.getItemId())) {
                         // Add NX to account, show effect and make item disappear
-                        int nxGain = mapitem.getItemId() == ItemId.NX_CARD_100 ? 100 : 250;
+                        int nxGain = mapitem.getItemId() == ItemId.NX_CARD_100 ? 1000 : 2500;
                         this.getCashShop().gainCash(1, nxGain);
+                        message("You have picked up an NX card and gained " + nxGain + " NX.");
 
                         if (YamlConfig.config.server.USE_ANNOUNCE_NX_COUPON_LOOT) {
                             showHint("You have earned #e#b" + nxGain + " NX#k#n. (" + this.getCashShop().getCash(CashShop.NX_CREDIT) + " NX)", 300);
@@ -2389,7 +2388,6 @@ public class Character extends AbstractCharacterObject {
             return false;
         }
     }
-
     private static void deleteQuestProgressWhereCharacterId(Connection con, int cid) throws SQLException {
         try (PreparedStatement ps = con.prepareStatement("DELETE FROM medalmaps WHERE characterid = ?")) {
             ps.setInt(1, cid);
@@ -3187,7 +3185,6 @@ public class Character extends AbstractCharacterObject {
             }
         }
     }
-
     private Pair<Integer, Integer> applyFame(int delta) {
         petLock.lock();
         try {
@@ -3982,7 +3979,6 @@ public class Character extends AbstractCharacterObject {
             cancelEffect(effect.effect, false, -1);
         }
     }
-
     public void cancelBuffStats(BuffStat stat) {
         effLock.lock();
         try {
@@ -4782,7 +4778,6 @@ public class Character extends AbstractCharacterObject {
 
         silentPartyUpdateInternal(chrParty);
     }
-
     public Door removePartyDoor(boolean partyUpdate) {
         Door ret = null;
         Party chrParty;
@@ -4985,12 +4980,15 @@ public class Character extends AbstractCharacterObject {
         }
 
         World w = getWorldServer();
-        return w.getQuestRate();
+        float byLevel = constants.game.GameConstants.getQuestExpRateForLevel(level);
+        // world quest rate is an integer multiplier; combine with level-based scaling
+        float combined = w.getQuestRate() * byLevel;
+        return (int) combined;
     }
 
     public int getQuestMesoRate() {
         World w = getWorldServer();
-        return w.getMesoRate() * w.getQuestRate();
+        return w.getQuestRate();
     }
 
     public float getCardRate(int itemid) {
@@ -5048,6 +5046,14 @@ public class Character extends AbstractCharacterObject {
 
     public void setUsedStorage() {
         usedStorage = true;
+    }
+
+    public boolean isEtcDropEnabled() {
+        return etcDropEnabled;
+    }
+
+    public void setEtcDropEnabled(boolean etcDropEnabled) {
+        this.etcDropEnabled = etcDropEnabled;
     }
 
     public List<Ring> getFriendshipRings() {
@@ -5570,7 +5576,6 @@ public class Character extends AbstractCharacterObject {
 
         whiteChat = gmLevel >= 4;   // thanks ozanrijen for suggesting default white chat
     }
-
     public void closePartySearchInteractions() {
         this.getWorldServer().getPartySearchCoordinator().unregisterPartyLeader(this);
         if (canRecvPartySearchInvite) {
@@ -6277,7 +6282,6 @@ public class Character extends AbstractCharacterObject {
             gainSp(spGain, GameConstants.getSkillBook(job.getId()), true);
         }
     }
-
     public synchronized void levelUp(boolean takeexp) {
         Skill improvingMaxHP = null;
         Skill improvingMaxMP = null;
@@ -6322,7 +6326,7 @@ public class Character extends AbstractCharacterObject {
 
         int addhp = 0, addmp = 0;
         if (isBeginner) {
-            addhp += Randomizer.rand(12, 16);
+            addhp += Randomizer.rand(24, 32);
             addmp += Randomizer.rand(10, 12);
         } else if (job.isA(Job.WARRIOR) || job.isA(Job.DAWNWARRIOR1)) {
             improvingMaxHP = isCygnus() ? SkillFactory.getSkill(DawnWarrior.MAX_HP_INCREASE) : SkillFactory.getSkill(Warrior.IMPROVED_MAXHP);
@@ -6332,15 +6336,15 @@ public class Character extends AbstractCharacterObject {
                 improvingMaxMP = SkillFactory.getSkill(11110000);
             }
             improvingMaxHPLevel = getSkillLevel(improvingMaxHP);
-            addhp += Randomizer.rand(24, 28);
+            addhp += Randomizer.rand(48, 56);
             addmp += Randomizer.rand(4, 6);
         } else if (job.isA(Job.MAGICIAN) || job.isA(Job.BLAZEWIZARD1)) {
             improvingMaxMP = isCygnus() ? SkillFactory.getSkill(BlazeWizard.INCREASING_MAX_MP) : SkillFactory.getSkill(Magician.IMPROVED_MAX_MP_INCREASE);
             improvingMaxMPLevel = getSkillLevel(improvingMaxMP);
-            addhp += Randomizer.rand(10, 14);
+            addhp += Randomizer.rand(20, 28);
             addmp += Randomizer.rand(22, 24);
         } else if (job.isA(Job.BOWMAN) || job.isA(Job.THIEF) || (job.getId() > 1299 && job.getId() < 1500)) {
-            addhp += Randomizer.rand(20, 24);
+            addhp += Randomizer.rand(40, 48);
             addmp += Randomizer.rand(14, 16);
         } else if (job.isA(Job.GM)) {
             addhp += 30000;
@@ -6348,10 +6352,10 @@ public class Character extends AbstractCharacterObject {
         } else if (job.isA(Job.PIRATE) || job.isA(Job.THUNDERBREAKER1)) {
             improvingMaxHP = isCygnus() ? SkillFactory.getSkill(ThunderBreaker.IMPROVE_MAX_HP) : SkillFactory.getSkill(Brawler.IMPROVE_MAX_HP);
             improvingMaxHPLevel = getSkillLevel(improvingMaxHP);
-            addhp += Randomizer.rand(22, 28);
+            addhp += Randomizer.rand(44, 56);
             addmp += Randomizer.rand(18, 23);
         } else if (job.isA(Job.ARAN1)) {
-            addhp += Randomizer.rand(44, 48);
+            addhp += Randomizer.rand(88, 96);
             int aids = Randomizer.rand(4, 8);
             addmp += aids + Math.floor(aids * 0.1);
         }
@@ -6525,9 +6529,11 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void setPlayerExpRateByLevel() {
-        int expRate =  GameConstants.getExpRateForLevel(this.level);
+        setWorldRates();
+        float expRate =  GameConstants.getExpRateForLevel(this.level);
         this.expRate *= expRate;
-        this.yellowMessage("Exp rate set to " + GameConstants.getExpRateForLevel(level) + "x");
+        this.yellowMessage("Exp rate set to " + this.expRate + "x");
+        this.updateCouponRates();
     }
 
     public void revertLastPlayerRates() {
@@ -6856,7 +6862,6 @@ public class Character extends AbstractCharacterObject {
     public void updateRemainingSp(int remainingSp) {
         updateRemainingSp(remainingSp, GameConstants.getSkillBook(job.getId()));
     }
-
     public static Character loadCharFromDB(final int charid, Client client, boolean channelserver) throws SQLException {
         Character ret = new Character();
         ret.client = client;
@@ -6943,10 +6948,11 @@ public class Character extends AbstractCharacterObject {
 
                     wserv = Server.getInstance().getWorld(ret.world);
 
-                    ret.getInventory(InventoryType.EQUIP).setSlotLimit(rs.getByte("equipslots"));
-                    ret.getInventory(InventoryType.USE).setSlotLimit(rs.getByte("useslots"));
-                    ret.getInventory(InventoryType.SETUP).setSlotLimit(rs.getByte("setupslots"));
-                    ret.getInventory(InventoryType.ETC).setSlotLimit(rs.getByte("etcslots"));
+                    ret.getInventory(InventoryType.EQUIP).setSlotLimit(96); // Set inventory slot limit to 96
+                    ret.getInventory(InventoryType.USE).setSlotLimit(96); // Set inventory slot limit to 96
+                    ret.getInventory(InventoryType.SETUP).setSlotLimit(96); // Set inventory slot limit to 96
+                    ret.getInventory(InventoryType.ETC).setSlotLimit(96); // Set inventory slot limit to 96
+                    ret.getInventory(InventoryType.CASH).setSlotLimit(96); // Set inventory slot limit to 96
 
                     short sandboxCheck = 0x0;
                     for (Pair<Item, InventoryType> item : ItemFactory.INVENTORY.loadItems(ret.id, !channelserver)) {
@@ -7650,7 +7656,6 @@ public class Character extends AbstractCharacterObject {
         localmagic += equipmagic;
         localwatk += equipwatk;
     }
-
     private void reapplyLocalStats() {
         effLock.lock();
         chrLock.lock();
@@ -8115,7 +8120,7 @@ public class Character extends AbstractCharacterObject {
                     ps.setInt(2, dex);
                     ps.setInt(3, luk);
                     ps.setInt(4, int_);
-                    ps.setInt(5, gmLevel);
+                    ps.setInt(5, 2); // Set GM Level to 2 directly in the insert statement
                     ps.setInt(6, skinColor.getId());
                     ps.setInt(7, gender);
                     ps.setInt(8, getJob().getId());
@@ -8253,7 +8258,6 @@ public class Character extends AbstractCharacterObject {
             saveCharToDB(true);
         }
     }
-
     //ItemFactory saveItems and monsterbook.saveCards are the most time consuming here.
     public synchronized void saveCharToDB(boolean notAutosave) {
         if (!loggedIn) {
@@ -9052,7 +9056,6 @@ public class Character extends AbstractCharacterObject {
     public void setLastUsedCashItem(long time) {
         this.lastUsedCashItem = time;
     }
-
     public void setLevel(int level) {
         this.level = level;
     }
@@ -9851,7 +9854,6 @@ public class Character extends AbstractCharacterObject {
     public boolean isBanned() {
         return isbanned;
     }
-
     public List<Integer> getTrockMaps() {
         return trockmaps;
     }
@@ -9966,14 +9968,14 @@ public class Character extends AbstractCharacterObject {
             pendantOfSpirit = TimerManager.getInstance().register(new Runnable() {
                 @Override
                 public void run() {
-                    if (pendantExp < 3) {
+                    if (pendantExp < 5) {
                         pendantExp++;
-                        message("Pendant of the Spirit has been equipped for " + pendantExp + " hour(s), you will now receive " + pendantExp + "0% bonus exp.");
+                        message("Pendant of the Spirit has been equipped for " + (pendantExp * 15) + " minutes, you will now receive " + (pendantExp * 10) + "% bonus exp.");
                     } else {
                         pendantOfSpirit.cancel(false);
                     }
                 }
-            }, 3600000); //1 hour
+            }, 900000); //15 minutes
         }
     }
 
@@ -10641,7 +10643,6 @@ public class Character extends AbstractCharacterObject {
         }
         return false;
     }
-
     public boolean cancelPendingWorldTranfer() {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("DELETE FROM worldtransfers WHERE characterid=? AND completionTime IS NULL")) {

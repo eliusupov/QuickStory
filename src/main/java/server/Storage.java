@@ -71,7 +71,7 @@ public class Storage {
 
     private static Storage create(int id, int world) throws SQLException {
         try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("INSERT INTO storages (accountid, world, slots, meso) VALUES (?, ?, 4, 0)")) {
+             PreparedStatement ps = con.prepareStatement("INSERT INTO storages (accountid, world, slots, meso) VALUES (?, ?, 96, 0)")) {
             ps.setInt(1, id);
             ps.setInt(2, world);
             ps.executeUpdate();
@@ -111,7 +111,7 @@ public class Storage {
 
     public boolean canGainSlots(int slots) {
         slots += this.slots;
-        return slots <= 48;
+        return slots <= 96;
     }
 
     public boolean gainSlots(int slots) {

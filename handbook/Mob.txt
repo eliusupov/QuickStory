@@ -351,9 +351,9 @@
 8500002 - Papulatus
 8500003 - High Darkstar
 8500004 - Low Darkstar
-8510000 - Pianus
+8510000 - Left Pianus
 8510100 - Bloody Boom
-8520000 - Pianus
+8520000 - Right Pianus
 8800000 - Zakum1
 8800001 - Zakum2
 8800002 - Zakum3

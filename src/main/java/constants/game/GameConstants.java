@@ -24,6 +24,23 @@ public class GameConstants {
     public static final String[] stats = {"tuc", "reqLevel", "reqJob", "reqSTR", "reqDEX", "reqINT", "reqLUK", "reqPOP", "cash", "cursed", "success", "setItemID", "equipTradeBlock", "durability", "randOption", "randStat", "masterLevel", "reqSkillLevel", "elemDefault", "incRMAS", "incRMAF", "incRMAI", "incRMAL", "canLevel", "skill", "charmEXP"};
     public static final int[] CASH_DATA = new int[]{50200004, 50200069, 50200117, 50100008, 50000047};
 
+    public static final Set<Integer> REDUCED_BOSS_STATS_MOB_IDS = new HashSet<>(Arrays.asList(
+            8810000, 8810001, 8810002, 8810003, 8810004, 8810005, 8810006, 8810007, 8810100, // Horntail
+            8800000, 8800001, 8800002, 8800003, 8800004, 8800005, 8800006, 8800007, 8800008, 8800009, 8800010, // Zakum
+            8500000, 8500001, 8500002, // Papulatus
+            8510000, 8520000, // Pianus
+            8820000, 8820001, 8820010, 8820011, 8820012, 8820013, 8820014, // Pink Bean
+            9420541, 9420542, 9420543, 9420544, // Targa
+            9420546, 9420547, 9420548, 9420549 // Scarlion
+    ));
+
+    public static final Set<Integer> LARGE_EXPEDITION_BOSS_MOB_IDS = new HashSet<>(Arrays.asList(
+            8810000, 8810001, 8810002, 8810003, 8810004, 8810005, 8810006, 8810007, 8810100, // Horntail
+            9420541, 9420542, 9420543, 9420544, // Targa
+            9420546, 9420547, 9420548, 9420549, // Scarlion
+            8820000, 8820001, 8820010, 8820011, 8820012, 8820013, 8820014 // Pink Bean
+    ));
+
     // Ronan's rates upgrade system
     private static final int[] DROP_RATE_GAIN = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
     private static final int[] MESO_RATE_GAIN = {1, 3, 6, 10, 15, 21, 28, 36, 45, 55, 66, 78, 91, 105};
@@ -613,7 +630,7 @@ public class GameConstants {
         }
     }
 
-    public static int getMonsterHP(final int level) {
+    public static float getMonsterHP(final int level) {
         if (level < 0 || level >= mobHpVal.length) {
             return Integer.MAX_VALUE;
         }
@@ -650,24 +667,94 @@ public class GameConstants {
         }
     }
 
-    public static int getExpRateForLevel(int level) {
-        if (level >= 90) {
-            return 70;
-        } else if (level >= 70) {
-            return 30;
+    // test rates
+    // public static int getExpRateForLevel(int level) {
+    //     if (level >= 89) {
+    //         return 250;
+    //     } else if (level >= 69) {
+    //         return 250;
+    //     } else if (level >= 59) {
+    //         return 220;
+    //     } else if (level >= 49) {
+    //         return 165;
+    //     } else if (level >= 39) {
+    //         return 130;
+    //     } else if (level > 29) {
+    //         return 80;
+    //     } else if (level >= 19) {
+    //         return 37;
+    //     } else if (level >= 9) {
+    //         return 18;
+    //     } else {
+    //         return 6;
+    //     }
+    // }
+
+    // lower rates
+    // public static float getExpRateForLevel(int level) {
+    //     if (level >= 120) {
+    //         return 30.0f;
+    //     } else if (level >= 90) {
+    //         return 30.0f;
+    //     } else if (level >= 60) {
+    //         return 30.0f;
+    //     } else if (level >= 50) {
+    //         return 25.0f;
+    //     } else if (level >= 40) {
+    //         return 22.0f;
+    //     } else if (level >= 35) {
+    //         return 18.0f;
+    //     } else if (level >= 30) {
+    //         return 15.0f;
+    //     } else if (level >= 25) {
+    //         return 13.0f;
+    //     } else if (level >= 20) {
+    //         return 8.0f;
+    //     } else if (level >= 10) {
+    //         return 5.0f;
+    //     }  else if (level >= 5) {
+    //         return 2.0f;
+    //     } else {
+    //         return 1.0f;
+    //     } 
+    // }
+
+    // real rates
+    public static float getExpRateForLevel(int level) {
+        if (level >= 120) {
+            return 50.0f * 0.6f; // 30.0f
+        } else if (level >= 100) {
+            return 45.0f * 0.6f; // 27.0f
         } else if (level >= 50) {
-            return 25;
+            return 40.0f * 0.6f; // 24.0f
         } else if (level >= 40) {
-            return 20;
+            return 35.0f * 0.6f; // 21.0f
+        } else if (level >= 35) {
+            return 30.0f * 0.6f; // 18.0f
         } else if (level >= 30) {
-            return 15;
+            return 25.0f * 0.6f; // 15.0f
+        } else if (level >= 25) {
+            return 20.0f * 0.6f; // 12.0f
         } else if (level >= 20) {
-            return 10;
+            return 15.0f * 0.6f; // 9.0f
+        } else if (level >= 15) {
+            return 10.0f * 0.6f; // 6.0f
         } else if (level >= 10) {
-            return 6;
+            return 5.0f * 0.6f; // 3.0f
+        }  else if (level >= 5) {
+            return 2.0f * 0.6f; // 1.2f
         } else {
-            return 2;
+            return 1.0f;
+        } 
+    }
+
+    // Quest EXP scaling by level: (level / 10) * 2.5
+    public static float getQuestExpRateForLevel(int level) {
+        if (level <= 0) {
+            return 1.0f;
         }
+        float scaled = (level / 10.0f) * 3.0f;
+        return Math.max(1.0f, scaled);
     }
 
     private static int getMaxObstacleMobDamageFromWz() {

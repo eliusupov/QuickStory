@@ -651,6 +651,7 @@ public class MapleMap {
         }
     }
 
+    // real rate
     private byte dropItemsFromMonsterOnMap(List<MonsterDropEntry> dropEntry, Point pos, byte index, int chRate,
                                            byte droptype, int mobpos, Character chr, Monster mob, short delay) {
         if (dropEntry.isEmpty()) {
@@ -665,27 +666,76 @@ public class MapleMap {
         for (final MonsterDropEntry de : dropEntry) {
             float cardRate = chr.getCardRate(de.itemId);
 
-            float adjustedChanceMultiplier;
-            if (de.chance > 100000) {
-                adjustedChanceMultiplier = 1f;
-            } else if (de.chance <= 700) {
-                adjustedChanceMultiplier = 40.0f; // 40f
-                if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
-                    adjustedChanceMultiplier = 6.0f; // 7f
+            float adjustedChanceMultiplier = 1f;
+
+            // equips drop rate
+            if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
+                adjustedChanceMultiplier = 5.0f;
+                if (mob.isBoss()) {
+                    adjustedChanceMultiplier = 0.8f;
                 }
-            } else if (de.chance <= 1500) {
-                adjustedChanceMultiplier = 14.0f; // 14f
-                if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
-                    adjustedChanceMultiplier = 4f; // 4f
+            }
+
+            // etc drop rate
+            if (ItemConstants.getInventoryType(de.itemId) == InventoryType.ETC) {
+                if (chr.isEtcDropEnabled()) {
+                    adjustedChanceMultiplier = 2f;
+                } else {
+                    adjustedChanceMultiplier = 0.0f;
                 }
-            } else {
-                adjustedChanceMultiplier = 0.08f; // 0.08f
+            }
+
+            if (ItemConstants.isArrow(de.itemId)) {
+                adjustedChanceMultiplier = 0f;
+            }
+
+             // stars/bullets drop rate
+             if (ItemConstants.isThrowingStar(de.itemId) || ItemConstants.isBullet(de.itemId)) {
+                adjustedChanceMultiplier = 8.0f;
+
+                if (mob.isBoss()) {
+                    adjustedChanceMultiplier = 1.8f;
+                }
+            }
+
+            // scroll drop rate
+            if (de.itemId > 2040000 && de.itemId < 2050000) {
+                if (de.itemId != constants.id.ItemId.CHAOS_SCROll_60) {
+                    adjustedChanceMultiplier = 13.0f;
+                    if (mob.isBoss()) {
+                        adjustedChanceMultiplier = 2.0f;
+                    }
+                }
+            }
+
+            // mastery book drop rate
+            if (ItemConstants.isMasteryBook(de.itemId)) {
+                adjustedChanceMultiplier = 5.0f;
+
+                if (mob.isBoss()) {
+                    adjustedChanceMultiplier = 1.0f;
+                }
+            }
+
+            // monster card drop rate
+            if (ItemConstants.isMonsterCard(de.itemId)) {
+                adjustedChanceMultiplier = 3.5f;
+
+                if (mob.isBoss()) {
+                    adjustedChanceMultiplier = 0.7f;
+                }
+            }
+
+            // filter out items
+            if (ItemConstants.ITEMS_TO_FILTER_OUT.contains(de.itemId)) {
+                adjustedChanceMultiplier = 0f;
             }
 
             // mesos drop rate
             if (de.itemId == 0) {
                 adjustedChanceMultiplier = 1.5f;
             }
+            
 
             int modifiedChance = (int) (de.chance * adjustedChanceMultiplier);
             
@@ -726,6 +776,127 @@ public class MapleMap {
 
         return index;
     }
+
+    // lower rate
+    // private byte dropItemsFromMonsterOnMap(List<MonsterDropEntry> dropEntry, Point pos, byte index, int chRate,
+    //                                        byte droptype, int mobpos, Character chr, Monster mob, short delay) {
+    //     if (dropEntry.isEmpty()) {
+    //         return index;
+    //     }
+
+    //     Collections.shuffle(dropEntry);
+
+    //     Item idrop;
+    //     ItemInformationProvider ii = ItemInformationProvider.getInstance();
+
+    //     for (final MonsterDropEntry de : dropEntry) {
+    //         float cardRate = chr.getCardRate(de.itemId);
+
+    //         float adjustedChanceMultiplier = 1f;
+
+    //         // equips drop rate
+    //         if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
+    //             adjustedChanceMultiplier = 3.0f;
+    //             if (mob.isBoss()) {
+    //                 adjustedChanceMultiplier = 0.8f;
+    //             }
+    //         }
+
+    //         // etc drop rate
+    //         if (ItemConstants.getInventoryType(de.itemId) == InventoryType.ETC) {
+    //             if (chr.isEtcDropEnabled()) {
+    //                 adjustedChanceMultiplier = 2f;
+    //             } else {
+    //                 adjustedChanceMultiplier = 0.0f;
+    //             }
+    //         }
+
+    //         if (ItemConstants.isArrow(de.itemId)) {
+    //             adjustedChanceMultiplier = 0f;
+    //         }
+
+    //          // stars/bullets drop rate
+    //          if (ItemConstants.isThrowingStar(de.itemId) || ItemConstants.isBullet(de.itemId)) {
+    //             adjustedChanceMultiplier = 3.6f;
+
+    //             if (mob.isBoss()) {
+    //                 adjustedChanceMultiplier = 1.4f;
+    //             }
+    //         }
+
+    //         // scroll drop rate
+    //         if (de.itemId > 2040000 && de.itemId < 2050000) {
+    //             if (de.itemId != constants.id.ItemId.CHAOS_SCROll_60) {
+    //                 adjustedChanceMultiplier = 7.2f;
+    //                 if (mob.isBoss()) {
+    //                     adjustedChanceMultiplier = 2f;
+    //                 }
+    //             }
+    //         }
+
+    //         // mastery book drop rate
+    //         if (ItemConstants.isMasteryBook(de.itemId)) {
+    //             adjustedChanceMultiplier = 3.0f;
+
+    //             if (mob.isBoss()) {
+    //                 adjustedChanceMultiplier = 1.0f;
+    //             }
+    //         }
+
+    //         // mesos drop rate
+    //         if (de.itemId == 0) {
+    //             adjustedChanceMultiplier = 1.2f;
+    //         }
+
+    //         // monster card drop rate
+    //         if (ItemConstants.isMonsterCard(de.itemId)) {
+    //             adjustedChanceMultiplier = 3f;
+
+    //             if (mob.isBoss()) {
+    //                 adjustedChanceMultiplier = 1f;
+    //             }
+    //         }
+            
+
+    //         int modifiedChance = (int) (de.chance * adjustedChanceMultiplier);
+            
+    //         int dropChance = (int) Math.min((float) modifiedChance * chRate * cardRate, Integer.MAX_VALUE);
+
+    //         if (Randomizer.nextInt(999999) < dropChance) {
+    //             if (droptype == 3) {
+    //                 pos.x = mobpos + ((index % 2 == 0) ? (40 * ((index + 1) / 2)) : -(40 * (index / 2)));
+    //             } else {
+    //                 pos.x = mobpos + ((index % 2 == 0) ? (25 * ((index + 1) / 2)) : -(25 * (index / 2)));
+    //             }
+    //             if (de.itemId == 0) { // meso
+    //                 int mesos = Randomizer.nextInt(de.Maximum - de.Minimum) + de.Minimum;
+
+    //                 if (mesos > 0) {
+    //                     if (chr.getBuffedValue(BuffStat.MESOUP) != null) {
+    //                         mesos = (int) (mesos * chr.getBuffedValue(BuffStat.MESOUP).doubleValue() / 100.0);
+    //                     }
+    //                     mesos = mesos * chr.getMesoRate();
+    //                     if (mesos <= 0) {
+    //                         mesos = Integer.MAX_VALUE;
+    //                     }
+
+    //                     spawnMesoDrop(mesos, calcDropPos(pos, mob.getPosition()), mob, chr, false, droptype,
+    //                             delay);
+    //                 }
+    //             } else {
+    //                 if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
+    //                     idrop = ii.randomizeStats((Equip) ii.getEquipById(de.itemId));
+    //                 } else {
+    //                     idrop = new Item(de.itemId, (short) 0, (short) (de.Maximum != 1 ? Randomizer.nextInt(de.Maximum - de.Minimum) + de.Minimum : 1));
+    //                 }
+    //                 spawnDrop(idrop, calcDropPos(pos, mob.getPosition()), mob, chr, droptype, de.questid, delay);
+    //             }
+    //             index++;
+    //         }
+    //     }
+
+    //     return index;
+    // }
 
     private byte dropGlobalItemsFromMonsterOnMap(List<MonsterGlobalDropEntry> globalEntry, Point pos, byte d,
                                                  byte droptype, int mobpos, Character chr, Monster mob, short delay) {
@@ -1830,6 +2001,7 @@ public class MapleMap {
         spos.y--;
         mob.setPosition(spos);
         spawnMonster(mob);
+        mob.checkAndReduceBossHpForPartySize();
     }
 
     public void spawnCPQMonster(Monster mob, Point pos, int team) {
@@ -1839,6 +2011,7 @@ public class MapleMap {
         mob.setPosition(spos);
         mob.setTeam(team);
         spawnMonster(mob);
+        mob.checkAndReduceBossHpForPartySize();
     }
 
     private void monsterItemDrop(final Monster m, long delay) {
@@ -2029,6 +2202,7 @@ public class MapleMap {
     public void spawnFakeMonster(final Monster monster) {
         monster.setMap(this);
         monster.setFake(true);
+        monster.checkAndReduceBossHpForPartySize();
         spawnAndAddRangedMapObject(monster, c -> c.sendPacket(PacketCreator.spawnFakeMonster(monster, 0)));
 
         spawnedMonstersOnMap.incrementAndGet();
@@ -2365,6 +2539,9 @@ public class MapleMap {
         if (FieldLimit.CANNOTUSEMOUNTS.check(fieldLimit) && chr.getBuffedValue(BuffStat.MONSTER_RIDING) != null) {
             chr.cancelEffectFromBuffStat(BuffStat.MONSTER_RIDING);
             chr.cancelBuffStats(BuffStat.MONSTER_RIDING);
+        }
+        for (Monster monster : getAllMonsters()) {
+            monster.checkAndReduceBossHpForPartySize();
         }
 
         if (mapid == MapId.FROM_LITH_TO_RIEN) { // To Rien

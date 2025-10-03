@@ -389,7 +389,7 @@
 5360012 - 2X Drop Card - Type 1 - This coupon allows users to earn #c2x Drop (double drop rate)# from monsters. The coupon will be activated immediately after purchase, and the double experience effect will be available for 24 hours upon purchase.
 5360013 - 2X Drop Card - Type 1 - This coupon allows users to earn #c2x Drop (double drop rate)# from monsters. The coupon will be activated immediately after purchase, and the double experience effect will be available for 24 hours upon purchase.
 5360014 - 2x Drop 3 Hours Special Card - This coupon allows users to earn #c2x Drop (double drop)#. The coupon will be activated immediately after purchase, and the double drop effect will be available for 3 hours upon purchase.
-5360042 - 4 hour 2 x Drop special coupon - This coupon #cdoubles the amount of mesos and doubles the rate of items# dropped from monsters. The coupon will be immediately activated after purchase and the double drop effect will be available for 4 hour upon purchase.
+5360042 - 4 hour 2x Drop special coupon - This coupon #cdoubles the amount of mesos and doubles the rate of items# dropped from monsters. The coupon will be immediately activated after purchase and the double drop effect will be available for 4 hour upon purchase.
 5370000 - Chalkboard - Any information entered will be featured on the chalkboard. The item can be used anywhere including #cFree Market Entrance# except for #cFree Market#.
 5370001 - Chalkboard - Any information entered will be featured on the chalkboard. The item can be used anywhere including #cFree Market Entrance# except for #cFree Market#.
 5380000 - The Rock of Evolution - A mysterious rock that enables baby Evolving Pets to grow into full-fledged adult Evolving Pets.
