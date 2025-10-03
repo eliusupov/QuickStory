@@ -753,7 +753,7 @@ public class GameConstants {
         if (level <= 0) {
             return 1.0f;
         }
-        float scaled = (level / 10.0f) * 5.0f;
+        float scaled = (level / 10.0f) * 3.0f;
         return Math.max(1.0f, scaled);
     }
 

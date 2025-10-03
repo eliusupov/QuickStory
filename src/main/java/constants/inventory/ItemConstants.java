@@ -199,6 +199,60 @@ public final class ItemConstants {
         ,2048007 // Scroll for Pet Equip. for Speed
         ,2048008 // Scroll for Pet Equip. for Jump
         ,2048009 // Scroll for Pet Equip. for Jump
+        ,2040018 // Scroll for Helmet for Accuracy 100%
+        ,2040024 // Scroll for Helmet for INT 100%
+        ,2040027 // Scroll for Helmet for DEX 100%
+        ,2040107 // Scroll for Face Accessory for Avoidability 100%
+        ,2040202 // Scroll for Eye Accessory for Accuracy 100%
+        ,2040207 // Scroll for Eye Accessory for INT 100%
+        ,2040300 // Scroll for Earring for INT 100%
+        ,2040312 // Scroll for Earring for DEF 100%
+        ,2040316 // Scroll for Earring for DEX 100%
+        ,2040319 // Scroll for Earring for LUK 100%
+        ,2040324 // Scroll for Earring for HP 100%
+        ,2040414 // Scroll for Topwear for LUK 100%
+        ,2040417 // Scroll for Topwear for STR 100%
+        ,2040420 // Scroll for Topwear for HP 100%
+        ,2040423 // Scroll for Topwear for LUK 100%
+        ,2040500 // Scroll for Overall Armor for DEX 100%
+        ,2040506 // Scroll for Overall Armor for DEX 100%
+        ,2040512 // Scroll for Overall Armor for INT 100%
+        ,2040515 // Scroll for Overall Armor for LUK 100%
+        ,2040530 // Scroll for Overall for STR 100%
+        ,2040614 // Scroll for Bottomwear for DEX 100%
+        ,2040617 // Scroll for Bottomwear for Jump 100%
+        ,2040623 // Scroll for Bottomwear for DEX 100%
+        ,2040700 // Scroll for Shoes for DEX 100%
+        ,2040703 // Scroll for Shoes for Jump 100%
+        ,2040706 // Scroll for Shoes for Speed 100%
+        ,2040709 // Scroll for Shoes for DEX 100%
+        ,2040710 // Scroll for Shoes for Jump 100%
+        ,2040711 // Scroll for Shoes for Speed 100%
+        ,2040800 // Scroll for Gloves for DEX 100%
+        ,2040803 // Scroll for Gloves for ATT 100%
+        ,2040806 // Scroll for Gloves for DEX 100%
+        ,2040807 // Scroll for Gloves for ATT 100%
+        ,2040818 // Scroll for Gloves for Magic Att. 100%
+        ,2040900 // Scroll for Shield for DEF 100%
+        ,2040903 // Scroll for Shield for DEF 100%
+        ,2040918 // Scroll for Shield for Magic Att. 100%
+        ,2040923 // Scroll for Shield for LUK 100%
+        ,2040929 // Scroll for Shield for STR 100%
+        ,2041000 // Scroll for Cape for Magic Def. 100%
+        ,2041003 // Scroll for Cape for Weapon Def. 100%
+        ,2041006 // Scroll for Cape for HP 100%
+        ,2041009 // Scroll for Cape for MP 100%
+        ,2041012 // Scroll for Cape for STR 100%
+        ,2041015 // Scroll for Cape for INT 100%
+        ,2041018 // Scroll for Cape for DEX 100%
+        ,2041021 // Scroll for Cape for LUK 100%
+        ,2041024 // Scroll for Cape for Magic Def. 100%
+        ,2041025 // Scroll for Cape for Weapon Def. 100%
+        ,2043015 // Scroll for One-Handed Sword for Accuracy 100%
+        ,2043110 // Scroll for One-Handed Axe for Accuracy 100%
+        ,2043210 // Scroll for One-Handed BW for Accuracy 100%
+        ,2044010 // Scroll for Two-Handed Sword for Accuracy 100%
+        ,2044110 // Scroll for Two-Handed Axe for Accuracy 100%
     ));
 
     static {
