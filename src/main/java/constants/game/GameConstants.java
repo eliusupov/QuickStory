@@ -722,27 +722,27 @@ public class GameConstants {
     // real rates
     public static float getExpRateForLevel(int level) {
         if (level >= 120) {
-            return 50.0f * 0.6f; // 30.0f
+            return 50.0f * 0.4f; // 20.0f
         } else if (level >= 100) {
-            return 45.0f * 0.6f; // 27.0f
+            return 45.0f * 0.4f; // 18.0f
         } else if (level >= 50) {
-            return 40.0f * 0.6f; // 24.0f
+            return 40.0f * 0.4f; // 16.0f
         } else if (level >= 40) {
-            return 35.0f * 0.6f; // 21.0f
+            return 35.0f * 0.4f; // 14.0f
         } else if (level >= 35) {
-            return 30.0f * 0.6f; // 18.0f
+            return 30.0f * 0.4f; // 12.0f
         } else if (level >= 30) {
-            return 25.0f * 0.6f; // 15.0f
+            return 25.0f * 0.4f; // 10.0f
         } else if (level >= 25) {
-            return 20.0f * 0.6f; // 12.0f
+            return 20.0f * 0.4f; // 8.0f
         } else if (level >= 20) {
-            return 15.0f * 0.6f; // 9.0f
+            return 15.0f * 0.4f; // 6.0f
         } else if (level >= 15) {
-            return 10.0f * 0.6f; // 6.0f
+            return 10.0f * 0.4f; // 4.0f
         } else if (level >= 10) {
-            return 5.0f * 0.6f; // 3.0f
+            return 5.0f * 0.4f; // 2.0f
         }  else if (level >= 5) {
-            return 2.0f * 0.6f; // 1.2f
+            return 2.0f * 0.4f; // 0.8f
         } else {
             return 1.0f;
         } 
