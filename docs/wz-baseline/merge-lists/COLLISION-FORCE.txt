@@ -1,0 +1,68 @@
+# Force-list: node paths the operator EXPLICITLY authorises the merge to overwrite in the
+# live client, contrary to the additive-only rule. Produced by ticket 03c; rationale and the
+# full 735-row triage are in COLLISION-TRIAGE.md next to this file.
+#
+# FORMAT (stable contract for a future `WzMerge merge --force-list <file>`):
+#   <path>\t# <reason>
+# - blank lines and lines whose first non-space char is '#' are ignored
+# - <path> is the same "Wz.wz/rest/of/path" form the add-lists and conflicts.txt use
+# - a listed path is a force ROOT: everything under it is overwritten too
+# - a path NOT listed here keeps its live value; there is no "deny" syntax and none is needed
+#
+# Every row below was verified three ways (v83-stock / v84 / live client) before listing.
+# The whole list is one rule: the live value is the string literal "MISSING NAME" /
+# "MISSING INFO", i.e. a Cosmic name-table stub, and v84 has the real text.
+# Nothing here is Cosmic custom content. 37 rows.
+
+String.wz/Cash.img/5500005	# live "MISSING NAME" -> v84 "[50days] Magical Sandglass"
+String.wz/Cash.img/5500006	# live "MISSING NAME" -> v84 "[99days] Magical Sandglass"
+String.wz/Cash.img/5530001	# live "MISSING NAME" -> v84 "DS Medal Basket"
+String.wz/Cash.img/5530002	# live "MISSING NAME" -> v84 "5 Golden Compasses"
+String.wz/Cash.img/5530003	# live "MISSING NAME" -> v84 "10 Gaga Transformation Potions"
+String.wz/Cash.img/5530004	# live "MISSING NAME" -> v84 "100 Elixirs"
+String.wz/Cash.img/5530005	# live "MISSING NAME" -> v84 "200 Elixirs"
+String.wz/Cash.img/5530006	# live "MISSING NAME" -> v84 "100 Power Elixirs"
+String.wz/Cash.img/5530007	# live "MISSING NAME" -> v84 "150 Power Elixirs"
+String.wz/Cash.img/5530008	# live "MISSING NAME" -> v84 "200 Power Elixirs"
+String.wz/Consume.img/2100166	# live "MISSING NAME" -> v84 "Free Spirit Summoning Sack"
+String.wz/Eqp.img/Eqp/Accessory/1142143	# live "MISSING NAME" -> v84 name is untranslated KMS text; still better than a stub
+String.wz/Eqp.img/Eqp/Accessory/1142144	# live "MISSING NAME" -> v84 "DS Mania Medal"
+String.wz/Eqp.img/Eqp/Accessory/1142145	# live "MISSING NAME" -> v84 name is untranslated KMS text
+String.wz/Eqp.img/Eqp/Accessory/1142149	# live "MISSING NAME" -> v84 name is untranslated KMS text
+String.wz/Eqp.img/Eqp/Accessory/1142150	# live "MISSING NAME" -> v84 name is untranslated KMS text
+String.wz/Eqp.img/Eqp/Accessory/1142151	# live "MISSING NAME" -> v84 name is untranslated KMS text
+String.wz/Eqp.img/Eqp/Dragon	# 12 Evan dragon-equip names, all live "MISSING NAME" -> Silver/Gold/Reverse Mask,Pendant,Wings,Tail. Ticket 04-09 blocker.
+String.wz/Eqp.img/Eqp/Glove/1082262	# live "MISSING NAME" -> v84 "Dragon Master's Proof"
+String.wz/Eqp.img/Eqp/Longcoat/1051176	# live "MISSING NAME" -> v84 name is untranslated KMS text
+String.wz/Eqp.img/Eqp/Longcoat/1052217	# live "MISSING NAME" -> v84 "Cloud Robe"
+String.wz/Eqp.img/Eqp/Longcoat/1052224	# live "MISSING NAME" -> v84 "Strawberry Baby"
+String.wz/Eqp.img/Eqp/Longcoat/1052228	# live "MISSING NAME" -> v84 "Layered Long Skull Tee"
+String.wz/Eqp.img/Eqp/PetEquip/1802039	# live "MISSING NAME" -> v84 "Golden Pig Lucky Sack"
+String.wz/Eqp.img/Eqp/Shield/1092067	# live "MISSING NAME" -> v84 "Transparent Shield"
+String.wz/Eqp.img/Eqp/Taming/1902040	# live "MISSING NAME" -> v84 "Stage 1 Dragon". Evan mount, ticket 04-09 blocker.
+String.wz/Eqp.img/Eqp/Taming/1902041	# live "MISSING NAME" -> v84 "Stage 2 Dragon"
+String.wz/Eqp.img/Eqp/Taming/1902042	# live "MISSING NAME" -> v84 "Stage 3 Dragon"
+String.wz/Eqp.img/Eqp/Taming/1912033	# live "MISSING NAME" -> v84 "Stage 1 Dragon Saddle"
+String.wz/Eqp.img/Eqp/Taming/1912034	# live "MISSING NAME" -> v84 "Stage 2 Dragon Saddle"
+String.wz/Eqp.img/Eqp/Taming/1912035	# live "MISSING NAME" -> v84 "Stage 3 Dragon Saddle"
+String.wz/Eqp.img/Eqp/Weapon/1452058	# live "MISSING NAME" -> v84 "Barisetter"
+String.wz/Etc.img/Etc/4161049	# live "MISSING NAME" -> v84 "Dragon Types and Characteristics (Vol.I)". Evan quest item.
+String.wz/Etc.img/Etc/4161050	# live "MISSING NAME" -> v84 "Dragon Types and Characteristics (Vol.II)". Evan quest item.
+String.wz/Etc.img/Etc/4161051	# live "MISSING NAME" -> v84 "Crew Member's Voyage Log". Evan quest item.
+String.wz/Ins.img/3994179	# live "MISSING NAME" -> v84 name is untranslated KMS text
+String.wz/Ins.img/3994180	# live "MISSING NAME" -> v84 name is untranslated KMS text
+
+# ---------------------------------------------------------------------------------------
+# NOT AUTHORISED — the 10 ambiguous rows. Default is keep-local (absent from the list above).
+# Uncomment a row only after the owner rules on it; see COLLISION-TRIAGE.md "Ambiguous".
+#
+# Character.wz/Dragon/01942002.img/info/level	# adopt = real Evan dragon growth curve; keep = Cosmic's flat 10000-exp table
+# Character.wz/Dragon/01952002.img/info/level	# ditto
+# Character.wz/Dragon/01962002.img/info/level	# ditto
+# Character.wz/Dragon/01972002.img/info/level	# ditto
+# Etc.wz/Commodity.img/8941	# adopt = stock v84 listing; keep = Cosmic cash-shop SN 60001000 (pet 5000013)
+# Etc.wz/Commodity.img/8942	# keep = Cosmic SN 60001001 (pet 5000039)
+# Etc.wz/Commodity.img/8943	# keep = Cosmic SN 60001002 (pet 5000044)
+# Etc.wz/Commodity.img/8944	# keep = Cosmic SN 60001003 (pet 5000045)
+# Etc.wz/Commodity.img/8945	# keep = Cosmic SN 60001004 (pet 5000034)
+# Etc.wz/Commodity.img/8946	# keep = Cosmic SN 60001005 (pet 5000060)
