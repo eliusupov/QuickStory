@@ -208,6 +208,11 @@ automatic, but a hand-cut subset can break it.
 - **XML more than one level below a `.img`.** The add-list manifests expand images exactly one
   level, so no manifest row needs it. `WzMerge xml` refuses loudly instead of guessing; add a real
   XML walker if a hand-written list ever needs it.
+- **`String.wz/Eqp.img` and `String.wz/Etc.img` are not covered by any manifest.** Their ids sit at
+  `Eqp.img/Eqp/<category>/<id>` and `Etc.img/Etc/<id>`, below the one level the diff tool expands,
+  so only the unchanging wrapper is visible and the add-list reports nothing. Measured on one
+  category: **`Eqp/Hair` goes 1,504 → 1,553 names, 49 new, 9 of them already taken in the live
+  client.** Ticket 04 needs that enumeration built before it can claim "names resolve correctly".
 - **Sound / TamingMob / Effect / Morph / Base.** No stock baseline exists for these, so there is no
   add-list to feed the tool (ticket 05's mounts need `TamingMob.wz` extracted first).
 - **`live Sound.wz/BgmGL.img` is unreadable by MapleLib** (`WZ extended property exceeds its
