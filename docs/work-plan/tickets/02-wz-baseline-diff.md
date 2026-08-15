@@ -100,7 +100,14 @@ budget. Sub-property byte sizes aren't tracked by the tool (only whole-`.img` si
 byte totals read as 0 for String/Quest/parts of UI/Item/Etc even where real content exists —
 cross-checked against raw file-size deltas instead where it mattered.
 
-## Follow-up (2026-08-15): Map.wz 754-node drop — verdict
+## Follow-up (2026-08-15): Map.wz 754-node drop — verdict [SUPERSEDED — see 02c below]
+
+> **This section's conclusion is wrong.** Ticket 02c re-acquired v84 from the official installer
+> and proved `wz-data/v84/Map.wz` is byte-identical to Nexon's own file. The archive is not
+> damaged; v84 really did delete those maps. The reasoning below is preserved because the
+> *evidence* (the 832-path list, the name resolution) is correct and still useful — only the
+> "damaged/partial copy" inference from it is not.
+
 
 Orchestrator flagged the Map.wz v83(5,616)→v84(4,862) net node drop as a possible source-integrity
 problem, not a bookkeeping one, since it contradicts README.md's "v84 removed zero nodes" premise
@@ -157,3 +164,97 @@ Map.wz import source. Every other WZ file's v83/v84 copies were not re-verified 
 leaf-name-anywhere test in this pass — only Map.wz was in scope per the orchestrator's ask — so a
 quick repeat of the same `MapAudit` check against the other nine files before ticket 03 starts
 would be cheap insurance, not yet done here.
+
+## 02c (2026-08-15): source-integrity repair — verdict **(b)**
+
+**`porting-resources/wz-data/v84/` is authentic and safe to import from. Do not re-acquire it.
+But `docs/work-plan/README.md`'s founding premise — "v84 removed zero nodes, so every import is
+purely additive" — is false, and must be corrected.**
+
+### Provenance
+
+`wz-data/v84/` was extracted from `clients/GMSSetupv84.exe` by carving its two spanned MSZip CAB
+volumes (`EVAN-DUALBLADE-SCOPE.md` §8 says so; the byte layout confirms it). The installer is a
+PE with a 1,839,733,200-byte appended blob at file offset 6,553,600; `MSCF` magic sits at
+6,553,734 (vol 1, 1,048,576,000 B) and 1,055,129,734 (vol 2, 791,157,066 B). Carved back out with
+both volumes present, `7z` reports **52 files, "Everything is Ok"** — no volume-span error, no
+CRC error.
+
+Neither hypothesis in the brief holds:
+
+- **Not a partial/interrupted extraction.** All 11 `.wz` files in `wz-data/v84/` are
+  **SHA256-identical** to a fresh extraction from the installer. Not just size — full hash.
+  `Map.wz` = `38B9AEBA8E585F1EDDDD9C53BB4DC4713A83BF4F0010069505409774E6D5CF99`, 628,959,453 B in
+  both. The CAB *directory itself* declares `Map.wz` as 628,959,453 B, so that is the size Nexon
+  shipped; there is nothing to truncate.
+- **Not a stripped private-server distribution.** It came out of the retail
+  `GMSSetupv84.exe` (NGMSetup / "Nexon Game Manager", signed, `SECURITY` data dir present).
+
+The **v83 baseline was verified the same way** and is also authentic: `v83-stock/Map.wz` is
+SHA256-identical (`A0657907C42962D5B8A38E007DEFBCB9BA4F8A61BC32884E9F8C2BC1CB0EBEBE`) to
+`GMSSetupv83.exe`'s copy, and all ten `v83-stock` file sizes match that installer's CAB directory.
+`UI.wz`'s odd Feb 21 timestamp (vs Feb 17 for everything else) is genuine — Nexon rebuilt `UI.wz`
+and `Patcher.exe` on Feb 21 and shipped both in the v83 installer.
+
+Two incidental facts, both harmless: the v84 installer ships `TamingMob.wz` at **797 bytes**, and
+so does the live Ezorsia client and the v83 installer — that is normal for this era, not a stub.
+And `Base.wz` is 6,540 B in both builds.
+
+### Verdict: (b) — the fresh copy lacks the 832 paths too
+
+Since the fresh extraction is bit-for-bit the same file, it necessarily lacks them. Confirmed
+independently of both our local copies **and** our WZ reader, via maplestory.io's own GMS dumps:
+
+| id | name (v83) | GMS/83 | GMS/84 | GMS/92 |
+|---|---|---|---|---|
+| `970030100` | Stage 1 &lt;Mano&gt; | full map data | **404** | **404** |
+| `925020610` | Mu Lung Dojo 6th Floor | — | **404** | — |
+| `109090001` | Sheep Ranch Lobby | — | **404** | — |
+| `100000000` | Henesys (control) | — | 200 OK | 200 OK |
+
+The control proves the GMS/84 and GMS/92 datasets are live, so the 404s are absence, not an
+outage. **GMS v0.84 genuinely deleted ~832 map images, and they were still gone in v0.92** — a
+permanent removal, not a one-patch blip and not a repack.
+
+This also settles the reader question: `map-v83-only-audit.txt` is *correct*. It was the inference
+drawn from it that was wrong.
+
+Byte accounting corroborates: v84's `Map.wz` is 6,485,442 B smaller than v83's while adding
+2,772,832 B of new images — so ~9.3 MB removed across 832 images, ~11 KB each, exactly the weight
+of small instance rooms.
+
+### What this changes
+
+1. **README.md's "removed zero nodes / purely additive" premise is false and should be edited.**
+   It was derived from maplestory.io id-list *counts*, which evidently did not surface map
+   removals. Everything built on "v84 ⊇ v83" needs re-reading with that in mind.
+2. **Tickets 04–09 are not blocked.** They import v84's *additions* into the live client and never
+   delete — so maps v84 dropped simply stay in Ezorsia's tree, which is the desired outcome. The
+   operational rule was already "merge, never swap whole WZ files"; this is one more reason for it,
+   not a new constraint. Wholesale-replacing `Map.wz` with v84's would now provably destroy ~832
+   working maps (Mu Lung Dojo, the Stage/boss series, Sheep Ranch) on top of Ezorsia's 2.9 MB.
+3. **`v83-stock/` is missing `Reactor.wz`** — the v83 installer ships it (54,133,811 B) but the
+   baseline tree never got it, which is why `SUMMARY.md` reads `MISSING` / `add=0` for Reactor and
+   why that row's add-list is unusable. Extracted to
+   `porting-resources/wz-data/v83-reactor/Reactor.wz`; move it into `v83-stock/` and re-run the
+   diff to get a real Reactor add-list. Left outside `v83-stock/` deliberately so it could not
+   perturb another agent's in-flight run.
+
+### Not done
+
+- **Only `Map.wz` removals were characterised.** The other ten files each have a *net* node gain,
+  but net gain does not rule out removals. The tool has no per-file "v83-only" list (`MapAudit` is
+  `Map.wz`-only), so this is unmeasured, not measured-clean.
+- **`ManualPatcherv84.exe` was not run.** It was the fallback route and became unnecessary once
+  the full installer gave a byte-exact match; it is also GUI-driven, so per the destructive-action
+  limits it was not clicked through. It would only re-confirm bytes already confirmed against the
+  official full installer.
+
+### Reproducing this
+
+`wz-data/v84-clean/` was created, hash-compared 11/11 against `wz-data/v84/`, and then **deleted**
+— keeping 1.4 GB of provably identical bytes would only create ambiguity about which tree is
+authoritative. `wz-data/v84/` is the one. The carved CAB scratch dirs were deleted too. To
+regenerate any of it: carve `MapleStory_1.cab` / `MapleStory_2.cab` from the offsets above into
+one directory (both volumes must be siblings and carry those exact names, or spanned files break),
+then `7z x MapleStory_1.cab -oDEST <files...>`.
