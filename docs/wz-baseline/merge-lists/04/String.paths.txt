@@ -1,6 +1,6 @@
 # RESULT (2026-08-16, WzMerge, deny=COLLISION-DENY.txt, force=COLLISION-FORCE.txt):
-#   binary  393 rows -> added 384 (forced 30), refused 9   (pre sha 9437DEB8... -> out sha 79EA03DE...)
-#   XML     393 rows -> added 383 (forced 30), refused 10  (+Consume.img/2001500, ticket 03 tracer)
+#   binary  394 rows -> added 385 (forced 30), refused 9   (pre sha 9437DEB8... -> out sha 19B472A5...)
+#   XML     394 rows -> added 384 (forced 30), refused 10  (+Consume.img/2001500, ticket 03 tracer)
 #   FORCE: 30 of COLLISION-FORCE.txt's 37 rows apply here - every one is an id whose live value is
 #     the literal "MISSING NAME"/"MISSING INFO". The other 7 rows (Eqp/Dragon, Eqp/Taming x6) are
 #     excluded from this path list and belong to ticket 05, so --force cannot reach them.
@@ -9,7 +9,8 @@
 #
 # Ticket 04 - v84 cosmetic items. String.wz merge path list (AUTHORITATIVE DELIVERABLE).
 # Source: docs/wz-baseline/add-list/String.txt, restricted to the five .img ticket 04 owns:
-#   Eqp.img, Etc.img, Consume.img, Ins.img, Cash.img
+#   Eqp.img, Etc.img, Consume.img, Ins.img, Cash.img — plus the single Pet.img row, which nobody
+#   else owns and which names Item.wz/Pet/5000067.img, an item this ticket adds.
 # EXCLUDED - owned by ticket 05 (mounts): String.wz/Eqp.img/Eqp/Dragon (collapsed root, 12 names)
 #   and Eqp/Taming/{1902040,1902041,1902042,1912033,1912034,1912035} (Mir + saddles).
 # EXCLUDED - owned by ticket 06: Map.img, Mob.img, Npc.img. Not claimed by 04: MonsterBook.img, Skill.img, ToolTipHelp.img, Pet.img.
@@ -406,3 +407,4 @@ String.wz/Ins.img/3994184
 String.wz/Ins.img/3994185
 String.wz/Ins.img/3994186
 String.wz/Ins.img/3994187
+String.wz/Pet.img/5000067

@@ -42,10 +42,14 @@ the staged `.wz` exist only to prove the lists are correct.
 |---|---:|---|---|
 | `docs/wz-baseline/merge-lists/04/Character.paths.txt` | 246 | added **240**, refused 6 | added **237**, refused 9 |
 | `docs/wz-baseline/merge-lists/04/Item.paths.txt` | 391 | added **391**, refused 0 | added **390**, refused 1 |
-| `docs/wz-baseline/merge-lists/04/String.paths.txt` | 393 | added **384** (forced 30), refused 9 | added **383** (forced 30), refused 10 |
+| `docs/wz-baseline/merge-lists/04/String.paths.txt` | 394 | added **385** (forced 30), refused 9 | added **384** (forced 30), refused 10 |
 
 Composition order: **04 before 05** for `Character.wz` (05 adds `TamingMob/**`, which this list
 excludes); `String.wz` is shared with 05 and 06 and the three lists are disjoint by `.img`.
+`String.paths.txt` also carries the single `String.wz/Pet.img/5000067` row: `Pet.img` is outside
+the file grant this ticket was given, but it is the name for `Item.wz/Pet/5000067.img`, which this
+ticket adds, and shipping an item without its name row makes it unobtainable — every route filters
+on `getName != null`. Nobody else claimed `Pet.img`.
 
 `Etc.wz` — **deliberately not merged**, though ticket 04 owns it. Its 10,638 add-list rows are
 ~8,900 `Commodity.img/<sn>/Bonus` (a field nobody should bulk-import), 1,518 new cash-shop SNs
@@ -142,7 +146,7 @@ characters and manufactures hundreds of phantom losses.)
 |---|---|---|---|
 | `Character.wz` | `ED787285951C1388F3CF2A515999AB1C45307265BA9B9D01F2BA3F75F81C371C` | same | `F4ABA39499BD31797C40D84DE117CD6B59F4707FDD9E432732885D78BCE6A75F` (211,078,085 B) |
 | `Item.wz` | `33D7E2D8416A6523935E9FC933107CA3B66F6DDE869667FFB0551746A36C5E44` | same | `5F407FABFF677FB321996278AD104CC7D05B7F2A165A352D85B9F3A628850EC6` (19,086,553 B) |
-| `String.wz` | `9437DEB8CE481DAE4909097EBFB366D24BACCD73D55D3ED00FA3198603CAE499` | same | `79EA03DE0CE77CB526D403C55F8647331EF1E8A1A032E4957F61A47EF84FAEBA` (3,604,475 B) |
+| `String.wz` | `9437DEB8CE481DAE4909097EBFB366D24BACCD73D55D3ED00FA3198603CAE499` | same | `19B472A598118A8DABE536E0EA801454E33B49F676A1529C65F248B2E379508E` (3,604,797 B) |
 
 **After the ticket: all 18 live `.wz` still SHA-256-match the backup**, and no `.partial` / `.TEMP` /
 `.merged` exists beside the client. Nothing was installed.
@@ -159,9 +163,11 @@ Two routes already exist and both now work for this content:
   `pushIfItemExists → NPCConversationManager.getCosmeticItem` (`:539-556`), which is the same
   `getName` check. `scripts/npc/1012103.js` (Natalie, Henesys VIP) gained the **five named v84 hair
   families' base ids** — male `33030` Babish, `33050` Spiky Shag, `33150` Evan Hair (M); female
-  `31990` Evan Hair (F), `34060` Bow Hair. Two lines. The existing loop adds the player's current
-  colour digit, so all 8 colours of each family are offered, and `pushIfItemExists` silently drops
-  them if the WZ merge is not installed — so the edit is safe to land ahead of the client copy.
+  `31990` Evan Hair (F), `34060` Bow Hair. Two lines. The existing loop adds the player's *current*
+  colour digit, so the haircut menu gains one entry per family, in the colour the character already
+  wears; the eight colours come from the salon's separate dye branch. `pushIfItemExists` drops the
+  ids entirely while the WZ merge is not installed, so the edit is safe to land ahead of the client
+  copy.
 
 Not done, on purpose: no `shops`/`shopitems` rows and no `Etc.wz/Commodity.img` cash-shop entries
 for the ~150 new equips. Pricing ~150 v84 cosmetics is a balance decision this ticket was not asked
@@ -178,19 +184,22 @@ arrays. Extending them is a one-line-each copy of the same edit if wanted.
    be selected. The art is merged (it costs nothing and a later ticket may want it); names were
    **not invented**. `V84TracerNodeTest.unnamedV84HairFamilyIsPresentButUnnamed` asserts the current
    state and says what to do if someone names them.
-2. **`String.wz/Pet.img/5000067`** pairs with `Item.wz/Pet/5000067.img`, which this ticket adds, but
-   `Pet.img` is outside ticket 04's file grant. A 5-line insert from the earlier run is still in the
-   working tree and was left alone; it is additive and correct. Somebody should own `Pet.img`.
+2. ~~`String.wz/Pet.img/5000067` left uncommitted.~~ **Closed.** It was going to ship an item
+   whose name only existed in someone's working tree — unobtainable on a clean checkout. The row is
+   now on `String.paths.txt` and both sides were re-run. `Pet.img` still has no formal owner.
 
 ## Server-load verification — real output
 
-`src/test/java/server/V84TracerNodeTest.java` extended with six ticket-04 tests, reading through
-`XMLWZFile` / `XMLDomMapleData` — the classes the running server uses — with the explicit
-`Path.of("wz", …)` construction the class comment requires.
+`src/test/java/server/V84CosmeticNodeTest.java` — six tests reading through `XMLWZFile` /
+`XMLDomMapleData`, the classes the running server uses, with the explicit `Path.of("wz", …)`
+construction `V84TracerNodeTest`'s class comment requires. It is a **sibling** of that class rather
+than more methods inside it, because tickets 04 and 05 were both in flight and 05's edits to
+`V84TracerNodeTest` (and to `StatEffect.java`, which they need to compile) are still uncommitted;
+committing that file would have dragged their half-finished work in. Same harness, not a second one.
 
 ```
-./mvnw -o test -Dtest=V84TracerNodeTest -DfailIfNoTests=true
-[INFO] Tests run: 12, Failures: 0, Errors: 0, Skipped: 0 -- in server.V84TracerNodeTest
+./mvnw -o test -Dtest=V84CosmeticNodeTest -DfailIfNoTests=true
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0 -- in server.V84CosmeticNodeTest
 [INFO] BUILD SUCCESS
 
 ./mvnw -o test
@@ -237,7 +246,7 @@ certutil -hashfile D:\games\MapleStory\Character.wz SHA256
 copy D:\games\MapleStory\Server\wz-merge\04-r2\Item.wz      D:\games\MapleStory\Item.wz
 dir  D:\games\MapleStory\Item.wz            :: expect 19,086,553
 copy D:\games\MapleStory\Server\wz-merge\04-r2\String.wz    D:\games\MapleStory\String.wz
-dir  D:\games\MapleStory\String.wz          :: expect 3,604,475
+dir  D:\games\MapleStory\String.wz          :: expect 3,604,797
 copy D:\games\MapleStory\Server\wz-merge\04-r2\Character.wz D:\games\MapleStory\Character.wz
 dir  D:\games\MapleStory\Character.wz       :: expect 211,078,085
 ```

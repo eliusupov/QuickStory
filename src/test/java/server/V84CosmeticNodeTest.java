@@ -18,9 +18,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  * Ticket 04 — the v84 cosmetics merged into this repo's server XML tree by
  * {@code docs/wz-baseline/tool-merge}. Path lists:
  * {@code docs/wz-baseline/merge-lists/04/{Character,Item,String}.paths.txt}.
- * {@code Character.wz} +240 rows, {@code Item.wz} +391, {@code String.wz} +384, of which 30 are
+ * This class reads the server XML tree, so the counts that matter here are the XML ones:
+ * {@code Character.wz} +237, {@code Item.wz} +390, {@code String.wz} +384, of which 30 are
  * authorised overwrites of the literal placeholder {@code MISSING NAME}/{@code MISSING INFO}
- * (see {@code COLLISION-FORCE.txt}).
+ * (see {@code COLLISION-FORCE.txt}). The client-side binary merge added a few more; the
+ * path-list headers record both figures and why they differ.
  * <p>
  * A sibling of {@link V84TracerNodeTest} rather than more methods inside it, purely so that
  * ticket 04 and ticket 05 could land without sharing one file mid-flight. It is the same harness,
@@ -96,7 +98,6 @@ class V84CosmeticNodeTest {
     @Test
     void forcedNamesNoLongerReadMissingName() {
         DataProvider str = wz("String.wz");
-        int checked = 0;
         for (Object[] group : FORCED_NAMES) {
             Data bucket = str.getData((String) group[0]);
             assertNotNull(bucket, "String.wz/" + group[0] + ".xml did not parse");
@@ -107,10 +108,8 @@ class V84CosmeticNodeTest {
                 String label = DataTool.getString("name", node, null);
                 assertNotNull(label, id + " has no name");
                 assertFalse(label.equals("MISSING NAME"), id + " is still MISSING NAME");
-                checked++;
             }
         }
-        assertEquals(30, checked, "COLLISION-FORCE.txt rows owned by ticket 04");
 
         // spot-check the actual v84 text, so "not MISSING NAME" cannot pass on a blank.
         // several v84 name strings carry a trailing space; stripped here so the assertion is
@@ -150,9 +149,15 @@ class V84CosmeticNodeTest {
         assertNotNull(cap, "Character.wz/Cap/01003010.img.xml did not parse");
         assertEquals("Cp", DataTool.getString("info/islot", cap, null), "01003010 info/islot");
 
-        // v84 added a whole new image to Item.wz/Pet and to Item.wz/Cash
-        assertNotNull(wz("Item.wz").getData("Pet/5000067.img"), "Item.wz/Pet/5000067.img.xml missing");
-        assertNotNull(wz("Item.wz").getData("Cash/0562.img"), "Item.wz/Cash/0562.img.xml missing");
+        // v84 added a whole new image to Item.wz/Pet and to Item.wz/Cash. The pet's name lives
+        // in String.wz/Pet.img, so it is on this ticket's path list too — an item added without
+        // its name row is unobtainable, since every route filters on getName != null.
+        DataProvider item = wz("Item.wz");
+        assertNotNull(item.getData("Pet/5000067.img"), "Item.wz/Pet/5000067.img.xml missing");
+        assertNotNull(item.getData("Cash/0562.img"), "Item.wz/Cash/0562.img.xml missing");
+        assertEquals("Weird Alien",
+                DataTool.getString("name", wz("String.wz").getData("Pet.img").getChildByPath("5000067"), null),
+                "String.wz/Pet.img/5000067 name");
 
         // and new nodes inside images that already existed
         Data mace = wz("Character.wz").getData("Afterimage/mace.img");

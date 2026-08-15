@@ -28,10 +28,12 @@ var status = 0;
 var beauty = 0;
 var hairprice = 1000000;
 var haircolorprice = 1000000;
-// ticket 04: the five named v84 hair families are appended here (base id = colour 0; the
-// loop below adds the player's current colour digit, and pushIfItemExists drops any id that
-// String.wz/Eqp.img does not name, so this stays safe if the WZ merge is not installed).
-// Male 33xxx / female 31xxx,34xxx, matching the existing entries.
+// ticket 04: the five named v84 hair families are appended here. Base id = colour 0; the loop
+// below adds the player's current colour digit, so the haircut menu offers one entry per family
+// (the dye branch is what walks the eight colours). Male 33xxx / female 31xxx,34xxx, matching
+// the existing entries. If the WZ merge is not installed the family is unnamed, so
+// getCosmeticItem (NPCConversationManager.java:543-556) returns -1 and pushIfItemExists drops
+// it — note that for an unnamed *colour* of a named family it falls back to colour 0 instead.
 var mhair_v = Array(30060, 30140, 30200, 30210, 30310, 33040, 33100, 33030, 33050, 33150);
 var fhair_v = Array(31150, 31300, 31350, 31700, 31740, 34050, 34110, 31990, 34060);
 var hairnew = Array();

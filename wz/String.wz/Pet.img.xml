@@ -248,6 +248,11 @@
     <string name="desc" value="A short and chubby pet summoned through the Goddess&apos; mirror. It is temperamental.\n#cA pet whose life will never expire.#"/>
     <string name="descD" value="A pet whose life will never expire."/>
   </imgdir>
+  <imgdir name="5000067">
+    <string name="name" value="Weird Alien"/>
+    <string name="desc" value="A strange alien that crash landed in the Maple World. It can&apos;t speak, but it is affectionate and deeply curious."/>
+    <string name="descD" value="It was a strange alien, but with the &quot;Water of Life&quot; all dried up, it turned back into a doll. A little magic can bring it back to life, however..."/>
+  </imgdir>
   <imgdir name="5000100">
     <string name="name" value="Kino"/>
     <string name="desc" value="A happy-go-lucky, orange mushroom that loves shiny stones.\n#cA pet whose life will never expire.#"/>
