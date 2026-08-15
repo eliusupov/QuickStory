@@ -1,0 +1,17 @@
+# Ticket 06 — Crimson Sky playable. Npc.wz merge path list.
+# 6 rows. Every id below is placed by a map `life` node in scope, except 2085003.
+#   2085000 Matada                  -> 240080000
+#   2085001 Crimson Sky Doorway     -> 240080000, 240080100
+#   2085002 Crimson Sky Doorway     -> 240080800
+#   2085003 Dragon Rider            -> not placed by any map in scope; merged so the
+#                                      sprite exists for the boss/quest flow
+#   9201144 (v84: Shadow Knight Rene) -> 683010000
+#   9201145 Giant Twin Dragon's Egg   -> 683010000
+# NOTE: String.wz/Npc.img/9201144 already exists in the live client as Cosmic's
+# "Steward" and is NOT on the String path list — see String.paths.txt.
+Npc.wz/2085000.img
+Npc.wz/2085001.img
+Npc.wz/2085002.img
+Npc.wz/2085003.img
+Npc.wz/9201144.img
+Npc.wz/9201145.img

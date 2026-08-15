@@ -4593,6 +4593,58 @@
       <string name="streetName" value="Cave of Life"/>
       <string name="mapName" value="Horntail&apos;s Cave"/>
     </imgdir>
+    <imgdir name="240080000">
+      <string name="streetName" value="Leafre"/>
+      <string name="mapName" value="Crimson Sky Dock"/>
+    </imgdir>
+    <imgdir name="240080040">
+      <string name="streetName" value="Leafre"/>
+      <string name="mapName" value="Crimson Sky Resurrection Site "/>
+    </imgdir>
+    <imgdir name="240080041">
+      <string name="streetName" value="Leafre"/>
+      <string name="mapName" value="Crimson Sky Resurrection Site "/>
+    </imgdir>
+    <imgdir name="240080050">
+      <string name="streetName" value="Leafre"/>
+      <string name="mapName" value="Cave of the Deceased"/>
+    </imgdir>
+    <imgdir name="240080051">
+      <string name="streetName" value="Leafre"/>
+      <string name="mapName" value="Cave of the Deceased"/>
+    </imgdir>
+    <imgdir name="240080100">
+      <string name="streetName" value="Leafre"/>
+      <string name="mapName" value="Crimson Sky 1 "/>
+    </imgdir>
+    <imgdir name="240080200">
+      <string name="streetName" value="Leafre"/>
+      <string name="mapName" value="Crimson Sky 2"/>
+    </imgdir>
+    <imgdir name="240080300">
+      <string name="streetName" value="Leafre"/>
+      <string name="mapName" value="Crimson Sky 3 "/>
+    </imgdir>
+    <imgdir name="240080400">
+      <string name="streetName" value="Leafre"/>
+      <string name="mapName" value="Crimson Sky 4"/>
+    </imgdir>
+    <imgdir name="240080500">
+      <string name="streetName" value="Leafre"/>
+      <string name="mapName" value="Crimson Sky 5"/>
+    </imgdir>
+    <imgdir name="240080600">
+      <string name="streetName" value="Leafre"/>
+      <string name="mapName" value="Crimson Sky Edge "/>
+    </imgdir>
+    <imgdir name="240080700">
+      <string name="streetName" value="Leafre"/>
+      <string name="mapName" value="Crimson Sky Nest Entrance"/>
+    </imgdir>
+    <imgdir name="240080800">
+      <string name="streetName" value="Leafre"/>
+      <string name="mapName" value="Crimson Sky Nest "/>
+    </imgdir>
     <imgdir name="250000000">
       <string name="streetName" value="Mu Lung"/>
       <string name="mapName" value="Mu Lung"/>

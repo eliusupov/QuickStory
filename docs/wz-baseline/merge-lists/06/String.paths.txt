@@ -1,0 +1,53 @@
+# Ticket 06 — Crimson Sky playable. String.wz merge path list.
+# 35 rows, confined to Map.img / Mob.img / Npc.img (ticket 04 owns Eqp/Etc/Consume/
+# Ins/Cash.img). No row here is at or beneath a COLLISION-DENY root — the 17 denied
+# MonsterBook `reward` parents are not in this list.
+#
+# NOT LISTED, deliberately: String.wz/Npc.img/9201144. v84 calls it "Shadow Knight
+# Rene"; the live client already has that id as Cosmic's "Steward". Additive-only
+# refuses it and that is the right answer — taking v84's value would rename a
+# server-owned NPC. The 683010000 NPC therefore reads "Steward" in game.
+#
+# NOT LISTED, nothing to take: 240080101/201/301/401/501/601/701/801 (link stubs)
+# and 683010000 have no String.wz/Map.img entry in either v83 or v84.
+
+# --- map names (String.wz/Map.img/ossyria) ------------------------------------
+String.wz/Map.img/ossyria/240080000
+String.wz/Map.img/ossyria/240080040
+String.wz/Map.img/ossyria/240080041
+String.wz/Map.img/ossyria/240080050
+String.wz/Map.img/ossyria/240080051
+String.wz/Map.img/ossyria/240080100
+String.wz/Map.img/ossyria/240080200
+String.wz/Map.img/ossyria/240080300
+String.wz/Map.img/ossyria/240080400
+String.wz/Map.img/ossyria/240080500
+String.wz/Map.img/ossyria/240080600
+String.wz/Map.img/ossyria/240080700
+String.wz/Map.img/ossyria/240080800
+
+# --- mob names ----------------------------------------------------------------
+String.wz/Mob.img/8300000
+String.wz/Mob.img/8300001
+String.wz/Mob.img/8300002
+String.wz/Mob.img/8300003
+String.wz/Mob.img/8300004
+String.wz/Mob.img/8300005
+String.wz/Mob.img/8300006
+String.wz/Mob.img/8300007
+String.wz/Mob.img/9500374
+String.wz/Mob.img/9500375
+String.wz/Mob.img/9500376
+String.wz/Mob.img/9500377
+String.wz/Mob.img/9500378
+String.wz/Mob.img/9500379
+String.wz/Mob.img/9500380
+String.wz/Mob.img/9500381
+String.wz/Mob.img/9500382
+
+# --- npc names ----------------------------------------------------------------
+String.wz/Npc.img/2085000
+String.wz/Npc.img/2085001
+String.wz/Npc.img/2085002
+String.wz/Npc.img/2085003
+String.wz/Npc.img/9201145

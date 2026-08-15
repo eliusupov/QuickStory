@@ -1,0 +1,31 @@
+# Ticket 06 — Crimson Sky playable. Mob.wz merge path list.
+# 17 rows.
+#
+# 8300000-8300006 are the mobs the Crimson Sky maps actually place in their `life`
+# nodes (verified by dumping life/ for all 22 maps): Soaring Hawk, Soaring Eagle,
+# Soaring Red/Blue/Black Wyvern, Soaring Griffey, Dragonica. Without these the
+# merged maps spawn ids the live client has no sprite for.
+# 8300007 (Dragon Rider) is not placed by any map in scope and no v84 mob-skill
+# summon list names it; merged for completeness, no drop table (see 153-crimson-sky-drop-data).
+#
+# 9500374-9500382 are the nine mobs the ticket names (Green/Dark Cornian, Jr.
+# Newtie, Nest Golem, Blue/Red Dragon Turtle, Skelegon, Skelosaurus, Leviathan).
+# They are summonType=1 clones of live Leafre mobs and are NOT placed in any map
+# `life` node in this ticket's scope — see the ticket report.
+Mob.wz/8300000.img
+Mob.wz/8300001.img
+Mob.wz/8300002.img
+Mob.wz/8300003.img
+Mob.wz/8300004.img
+Mob.wz/8300005.img
+Mob.wz/8300006.img
+Mob.wz/8300007.img
+Mob.wz/9500374.img
+Mob.wz/9500375.img
+Mob.wz/9500376.img
+Mob.wz/9500377.img
+Mob.wz/9500378.img
+Mob.wz/9500379.img
+Mob.wz/9500380.img
+Mob.wz/9500381.img
+Mob.wz/9500382.img

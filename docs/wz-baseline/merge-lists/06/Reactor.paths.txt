@@ -1,0 +1,6 @@
+# Ticket 06 — Crimson Sky playable. Reactor.wz merge path list.
+# 2 rows. Both are named by `reactor/0/id` in maps in scope:
+#   2408006 "damage" -> 240080100, 240080200, 240080300, 240080400, 240080500, 240080600
+#   2408005 "heal"   -> 240080800
+Reactor.wz/2408005.img
+Reactor.wz/2408006.img

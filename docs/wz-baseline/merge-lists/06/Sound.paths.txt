@@ -1,0 +1,5 @@
+# Ticket 06 — Crimson Sky playable. Sound.wz merge path list.
+# 1 row. Cross-file dependency reported by `WzMerge deps` for 240080700/701/800/801
+# (`info/bgm = Bgm14/DragonRider`). 240080000-240080601 use Bgm14/DragonLoad and
+# 683010000 uses BgmGL/Courtyard; both are already in the live v83 client.
+Sound.wz/Bgm14.img/DragonRider

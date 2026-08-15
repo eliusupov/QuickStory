@@ -3500,6 +3500,25 @@
   <imgdir name="2084010">
     <string name="name" value="Gold Key Box"/>
   </imgdir>
+  <imgdir name="2085000">
+    <string name="name" value="Matada "/>
+    <string name="func" value="Halflinger Adventurer "/>
+    <string name="d0" value="It&apos;s been a long time since I&apos;ve been home."/>
+    <string name="d1" value="Adventures are always enjoyable."/>
+    <string name="n0" value="Doesn&apos;t just the thought of flying excite you?"/>
+    <string name="n1" value="If I had the chance, I&apos;d love to soar through the sky."/>
+  </imgdir>
+  <imgdir name="2085001">
+    <string name="name" value="Crimson Sky Doorway"/>
+  </imgdir>
+  <imgdir name="2085002">
+    <string name="name" value="Crimson Sky Doorway"/>
+  </imgdir>
+  <imgdir name="2085003">
+    <string name="name" value="Dragon Rider"/>
+    <string name="d0" value="I deeply regret my actions..."/>
+    <string name="d1" value="Please accept my apology..."/>
+  </imgdir>
   <imgdir name="2090000">
     <string name="name" value="Mr. Pan"/>
     <string name="func" value="Storage Keeper"/>
@@ -6572,6 +6591,10 @@
     <string name="d0" value="Kekeke... Tricking people is simply amusing. Muhaha! Hey, who are you? Go away! I have no business with you!"/>
     <string name="n0" value="Oh, what to do, I have to collect a lot of Dark Tokens to make Baba Yaga happy...what to do..."/>
     <string name="n1" value="Just wait &apos;til I get my hands on those deplorable cats and frogs."/>
+  </imgdir>
+  <imgdir name="9201145">
+    <string name="name" value="Giant Twin Dragon&apos;s Egg"/>
+    <string name="d0" value="Vooooooooooom!"/>
   </imgdir>
   <imgdir name="9209000">
     <string name="name" value="Abdula"/>

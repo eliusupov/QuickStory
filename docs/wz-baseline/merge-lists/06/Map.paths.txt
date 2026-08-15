@@ -1,0 +1,50 @@
+# Ticket 06 — Crimson Sky playable. Map.wz merge path list.
+# 34 rows. DEPENDENCIES FIRST, then the map images that reference them.
+# Derived from `WzMerge deps <v84>\Map.wz <id> <add-list>` run over all 22 map ids;
+# raw per-map output in D:\games\MapleStory\Server\wz-merge\06-r2\<id>.deps.txt.
+#
+# Cross-file dependency, NOT in this file: Sound.wz/Bgm14.img/DragonRider
+# (240080700/701/800/801 info/bgm) -> see Sound.paths.txt.
+# Sound.wz/BgmGL.img/Courtyard (683010000) and Map.wz/MapHelper.img/mark/Leafre
+# are already in the live v83 client; nothing owed.
+
+# --- dependencies: Back frames drawn by 9 of the maps (dragonRoad exists in v83,
+# --- these 10 frames do not) -------------------------------------------------
+Map.wz/Back/dragonRoad.img/ani/20
+Map.wz/Back/dragonRoad.img/ani/21
+Map.wz/Back/dragonRoad.img/ani/22
+Map.wz/Back/dragonRoad.img/ani/23
+Map.wz/Back/dragonRoad.img/ani/24
+Map.wz/Back/dragonRoad.img/back/42
+Map.wz/Back/dragonRoad.img/back/43
+Map.wz/Back/dragonRoad.img/back/44
+Map.wz/Back/dragonRoad.img/back/45
+Map.wz/Back/dragonRoad.img/back/46
+
+# --- dependencies: object / tile sets absent from v83 ------------------------
+Map.wz/Obj/dungeon3.img/skyValley
+Map.wz/Tile/blackTileFly.img
+
+# --- the maps -----------------------------------------------------------------
+Map.wz/Map/Map2/240080000.img
+Map.wz/Map/Map2/240080040.img
+Map.wz/Map/Map2/240080041.img
+Map.wz/Map/Map2/240080050.img
+Map.wz/Map/Map2/240080051.img
+Map.wz/Map/Map2/240080100.img
+Map.wz/Map/Map2/240080101.img
+Map.wz/Map/Map2/240080200.img
+Map.wz/Map/Map2/240080201.img
+Map.wz/Map/Map2/240080300.img
+Map.wz/Map/Map2/240080301.img
+Map.wz/Map/Map2/240080400.img
+Map.wz/Map/Map2/240080401.img
+Map.wz/Map/Map2/240080500.img
+Map.wz/Map/Map2/240080501.img
+Map.wz/Map/Map2/240080600.img
+Map.wz/Map/Map2/240080601.img
+Map.wz/Map/Map2/240080700.img
+Map.wz/Map/Map2/240080701.img
+Map.wz/Map/Map2/240080800.img
+Map.wz/Map/Map2/240080801.img
+Map.wz/Map/Map6/683010000.img

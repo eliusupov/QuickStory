@@ -75,6 +75,57 @@
   <imgdir name="2100102">
     <string name="name" value="Jr. Cactus"/>
   </imgdir>
+  <imgdir name="8300000">
+    <string name="name" value="Soaring Hawk "/>
+  </imgdir>
+  <imgdir name="8300001">
+    <string name="name" value="Soaring Eagle"/>
+  </imgdir>
+  <imgdir name="8300002">
+    <string name="name" value="Soaring Red Wyvern "/>
+  </imgdir>
+  <imgdir name="8300003">
+    <string name="name" value="Soaring Blue Wyvern "/>
+  </imgdir>
+  <imgdir name="8300004">
+    <string name="name" value="Soaring Black Wyvern "/>
+  </imgdir>
+  <imgdir name="8300005">
+    <string name="name" value="Soaring Griffey"/>
+  </imgdir>
+  <imgdir name="8300006">
+    <string name="name" value="Dragonica"/>
+  </imgdir>
+  <imgdir name="8300007">
+    <string name="name" value="Dragon Rider"/>
+  </imgdir>
+  <imgdir name="9500374">
+    <string name="name" value="Green Cornian"/>
+  </imgdir>
+  <imgdir name="9500375">
+    <string name="name" value="Dark Cornian"/>
+  </imgdir>
+  <imgdir name="9500376">
+    <string name="name" value="Jr. Newtie"/>
+  </imgdir>
+  <imgdir name="9500377">
+    <string name="name" value="Nest Golem"/>
+  </imgdir>
+  <imgdir name="9500378">
+    <string name="name" value="Blue Dragon Turtle"/>
+  </imgdir>
+  <imgdir name="9500379">
+    <string name="name" value="Red Dragon Turtle "/>
+  </imgdir>
+  <imgdir name="9500380">
+    <string name="name" value="Skelegon"/>
+  </imgdir>
+  <imgdir name="9500381">
+    <string name="name" value="Skelosaurus"/>
+  </imgdir>
+  <imgdir name="9500382">
+    <string name="name" value="Leviathan"/>
+  </imgdir>
   <imgdir name="9501018">
     <string name="name" value="Stat Change Test"/>
   </imgdir>
