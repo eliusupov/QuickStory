@@ -534,6 +534,14 @@ those six is reachable today, so nothing hits it, but it is the noise a GM warp 
 - **Ticket 09 (quests).** `910060100` becomes reachable the moment quests `22515`–`22518` exist —
   the NPC script is already written and live. Eleven portal/map scripts named in the table above are
   the rest of the Slumbering Dragon Island flow.
+- **Ticket 03f / the composed install — action required, this one is concrete.**
+  `docs/wz-baseline/merge-lists/composed/` was built while this ticket ran and its `compose.ps1`
+  reads `..\{04,05,06,07,03f}` — **`08` is not in that list**, so none of this ticket's 174 rows is
+  in the composed manifests today (checked: `composed/*.paths.txt` contains no `08` id at all).
+  Two edits are owed there: add `08` to the source list, and add
+  `08/String.force.txt`'s three roots to `composed/FORCE.txt`, which currently carries 38 (37 from
+  `COLLISION-FORCE.txt` + 03f's `Npc.img/9201144`). Not done here because `composed/` is 03f's
+  directory and `compose.ps1` says nothing in it is hand-edited.
 - **Composed install pass.** `String.wz/Map.img/{victoria,ossyria}/<town>/{help0,help1,help2,mapDesc}`
   (≈20 rows of new v84 town help text) and ≈60 `String.wz/Npc.img/<id>/{d0,d1,n0,n1,quest,func}`
   rows for NPCs outside every ticket's area are real v84 content with no owner. Also the nine unowed

@@ -1,6 +1,6 @@
 ﻿# Ticket 08 - Misc v84 areas. Map.wz merge path list.
-# Order matters: asset rows first, then the 22 new map images, then the three route rows
-# that append onto EXISTING v83 maps.
+# Order matters: asset rows first, then the 22 new map images, then the six route rows
+# (three routes) that append onto EXISTING v83 maps.
 #
 # 67 asset rows - the union of `WzMerge deps <v84>\Map.wz <id> add-list` over all 22 map ids
 #                (all 22 exit 0; raw output in D:\games\MapleStory\Server\wz-merge\08\<id>.deps.txt).
