@@ -11,7 +11,24 @@
     <RootNamespace>WzMerge</RootNamespace>
 
     <!-- same override as the sibling WzDump project:
-           dotnet build -p:MapleLibProject=<path>\MapleLib.csproj -->
+           dotnet build -p:MapleLibProject=<path>\MapleLib.csproj
+
+         M4: this points at a checkout OUTSIDE the repo, and every safety property this tool
+         claims is a property of THAT source: the additive-only gate relies on WzDirectory /
+         WzImage lookups being OrdinalIgnoreCase; the merge relies on DeepClone setting
+         bIsImageChanged so added content is re-serialized under the target's IV; the staging
+         rules exist because SaveToDisk truncates its destination up front (WzFile.cs:675),
+         streams unchanged images verbatim out of the target's own reader (WzDirectory.cs:353-357)
+         and writes a CWD-relative .TEMP scratch file (WzFile.cs:664).
+
+         Revision this was read and verified against:
+           HaRepacker-src  a7c38edf7c58e8a8b272af490c51113db76bff08  (2026-08-11,
+           "Merge pull request #350 from lastbattle/staging-no-mapsimulator")
+
+         Check before trusting a merge on a machine that is not this one:
+           git -C <HaRepacker-src> rev-parse HEAD
+         A different revision does not mean it is broken; it means the file/line references
+         above and in docs/wz-baseline/merge-lists/03-verification/ need re-reading. -->
     <MapleLibProject Condition="'$(MapleLibProject)' == ''">D:\games\MapleStory\Server\porting-resources\reference-sources\HaRepacker-src\MapleLib\MapleLib\MapleLib.csproj</MapleLibProject>
   </PropertyGroup>
 

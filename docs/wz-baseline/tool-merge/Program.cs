@@ -210,7 +210,11 @@ static class Program
     // tool's own output — the first reader was the user's game client.
     static bool VerifyFile(string wzPath, string wzName, IReadOnlyList<string> expect)
     {
-        var (f, ver) = Open(wzPath);   // throws (-> exit 1) if the file is unparseable at all
+        WzFile f; WzMapleVersion ver;
+        // A badly truncated file fails at the header, before any image — that is still a
+        // verification failure, not a tool crash, so it must exit 4 like every other one.
+        try { (f, ver) = Open(wzPath); }
+        catch (Exception ex) { Console.Error.WriteLine($"  UNREADABLE: {ex.Message}"); return false; }
         using var _ = f;
         Console.WriteLine($"verify {wzPath}  iv={ver} patchVersion={f.Version}  re-resolving {expect.Count} paths");
         int missing = 0;
@@ -246,7 +250,11 @@ static class Program
     static int VerifyCmd(string[] args)
     {
         if (args.Length < 3) { Usage(); return 2; }
-        return VerifyFile(Path.GetFullPath(args[1]), Path.GetFileName(args[1]), ReadPaths(args[2])) ? 0 : 4;
+        var expect = ReadPaths(args[2]);
+        // The manifest declares its own "<Name>.wz" root, so a renamed or .partial copy of
+        // the output still verifies. Falls back to the filename for an empty manifest.
+        string wzName = expect.Count > 0 ? expect[0].Split('/')[0] : Path.GetFileName(args[1]);
+        return VerifyFile(Path.GetFullPath(args[1]), wzName, expect) ? 0 : 4;
     }
 
     // ---------- hash (B3: content check for the one image that is re-serialized) ----------
