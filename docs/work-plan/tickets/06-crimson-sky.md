@@ -4,6 +4,8 @@
 
 **Status:** ready-for-agent
 
+**Merge procedure: [`../WZ-MERGE-PROCEDURE.md`](../WZ-MERGE-PROCEDURE.md)** — established by ticket 03 and proven end to end. Use its tool (`docs/wz-baseline/tool-merge/`); do not invent a second way. Start with a dry run (`WzMerge merge <v84>/X.wz <live>/X.wz - <add-list> <conflicts>`) and read the conflicts before merging anything.
+
 ## What to build
 
 The Crimson Sky area is reachable, populated, and rewarding: you can travel there, fight the dragons, and get drops.

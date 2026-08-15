@@ -4,6 +4,8 @@
 
 **Status:** ready-for-agent
 
+**Merge procedure: [`../WZ-MERGE-PROCEDURE.md`](../WZ-MERGE-PROCEDURE.md)** — established by ticket 03 and proven end to end. Use its tool (`docs/wz-baseline/tool-merge/`); do not invent a second way. Start with a dry run (`WzMerge merge <v84>/X.wz <live>/X.wz - <add-list> <conflicts>`) and read the conflicts before merging anything.
+
 ## What to build
 
 The remaining v84 maps and NPCs, working: Golem's Temple Entrance, Abandoned Hideout, Abandoned Cave, Temporary Harbor, Snowy Forest, Cave of Silence, Frog House, Power B. Fore's training centers, and the NPCs General Mau, Glowing Stele, Potter, Keroben, Olaf and the Christmas NPCs.

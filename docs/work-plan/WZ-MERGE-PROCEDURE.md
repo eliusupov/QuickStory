@@ -33,8 +33,13 @@ This matters because the proof people reach for does not work: a presence-only r
 merge cannot show that nothing pre-existing *changed*, since a destructive overwrite preserves
 paths too. See "Verification" below for what to run instead.
 
-The same gate guards the XML side: `WzMerge xml` refuses a path whose `name="…"` already appears
-in the target `.img.xml`, and refuses to overwrite an existing `.xml` file.
+The XML side has a gate with the same **intent** but a different **mechanism**, and the difference
+matters: it is a line-text scan, so it only recognises elements written the way Cosmic's serializer
+writes them (indent 2, `name="…"` on the opening line). It refuses a path whose name already
+appears at the root of the target `.img.xml`, and refuses to overwrite an existing `.xml` file.
+It also refuses outright if the target file has a UTF-8 BOM or is not CRLF throughout — the splice
+rewrites the whole file, and silently normalising someone else's line endings while adding one node
+is not additive in any sense that matters. Both refusals are tested (`03-verification/`).
 
 ### conflicts.txt is a deliverable, not a log
 
@@ -51,7 +56,13 @@ Read the file before shipping. Two real examples from the tracer sweep, one per 
 
 Full dry run of every add-list against the live client (`docs/wz-baseline/merge-lists/addlist-dryrun-*.conflicts.txt`).
 **41 of the 2,172 add-list roots collide** (every `.wz` with an add-list except `UI.wz`, which is
-out of scope). Nothing else in the v84 add surface does.
+out of scope).
+
+Read that precisely: it covers **manifest roots only**. A v84 change that lives *below* an existing
+image — an edited property inside a `.img` that both trees have — is not an add-list row at all and
+so cannot appear here. That class of change is what `modified-list/*.txt` is for, and it is a
+separate read. This table says "of the things v84 adds, these are the ones whose id is already
+taken"; it does not say "these are the only v84 changes additive-only will drop".
 
 | file | refused | what |
 |---|---|---|
@@ -63,8 +74,11 @@ out of scope). Nothing else in the v84 add surface does.
 | `Base.wz`, `Effect.wz`, `Morph.wz`, `Sound.wz`, `TamingMob.wz` | 0 | clean (02f's new baselines; `Base`/`TamingMob` add nothing at all) |
 
 The sweep also found the one shape the tool could not handle: `Skill.wz/Dragon`, a whole new
-**directory** (Evan's dragon animations). Now supported via `WzDirectory.DeepClone()`; it is
-memory-bound, since cloning a directory materialises every image beneath it.
+**directory** (Evan's dragon animations). Now supported via `WzDirectory.DeepClone()`, and the
+dry run does exercise it — a dry run skips only `SaveToDisk`, so the clone itself really runs.
+It is memory-bound, since cloning a directory materialises every image beneath it; a dry run of
+`Skill.wz` now reports `added 14, refused 0`. What is **not** yet exercised is writing a cloned
+directory back out; ticket 12 will be the first to do that.
 
 Re-run any of these in seconds — pass `-` as `<outWz>` for a dry run (nothing is repacked, and
 only the images a listed path actually touches get parsed).
@@ -148,6 +162,12 @@ One image changed per file — the one the node was inserted into — and it gre
 content. Every other image in both files came through a **full MapleLib repack** byte-for-byte the
 same size. Nothing pre-existing was disturbed.
 
+The verbatim tool output behind that table is committed at
+`docs/wz-baseline/merge-lists/03-verification/blocksize-invariance.md`, so the numbers are
+checkable rather than quoted. Note it covers the **binary** trees only; the server XML has no
+BlockSize equivalent, and its guarantee comes from the splice being a text insert
+(`19 insertions(+), 0 deletions(-)`) plus the BOM/CRLF refusals above.
+
 **Known limit, stated rather than papered over:** `BlockSize` is a change detector, not a hash. A
 replacement that happens to compress to the identical length is a false negative. Escalation if a
 specific merge is ever disputed: hash each image's canonical re-serialization (not its raw block
@@ -160,6 +180,11 @@ path now exists, so a working gate refuses all of them and `conflicts.txt` fills
   SKIP  Item.wz/Consume/0200.img/02001500  (already exists in target)
   added 0, refused 1
 ```
+
+Committed verbatim, for both the binary and the XML side, at
+`docs/wz-baseline/merge-lists/03-verification/gate-fires.md` — along with the SHA-256 of every
+merge input and output, which is how "the live client was never modified" is *checked* rather than
+asserted.
 
 Third: **the merge is deterministic.** Running it twice from the same pre-merge copy produced
 byte-identical output (`Item.wz` `115feac1…`, `String.wz` `d5721de2…`), and the XML splice is
@@ -187,10 +212,14 @@ Two landmines it already works around, both worth knowing:
   `wz-path` at a `@TempDir` before it. Whichever test class runs first wins for the entire surefire
   fork. Any test reading the real tree through `WZFiles`/`DataProviderFactory` is therefore
   order-dependent — construct `new XMLWZFile(Path.of("wz", "Item.wz"))` explicitly instead.
-- **`ItemInformationProvider`'s constructor reads the `monstercarddata` table** and
-  `DatabaseConnection.getConnection()` throws `IllegalStateException` (not `SQLException`, which is
-  the only thing it catches) when the pool is uninitialised. Guard that test with
-  `assumeTrue(DatabaseConnection.initializeConnectionPool())`.
+- **Do not put `ItemInformationProvider` in the committed suite.** Its constructor reads the
+  `monstercarddata` table, and `DatabaseConnection.getConnection()` throws `IllegalStateException`
+  — not `SQLException`, the only thing it catches — when the pool is uninitialised. Initialising it
+  costs `INIT_CONNECTION_POOL_TIMEOUT` (90 s in `config.yaml`) on a machine without a database
+  before it can even be skipped, and on a machine with one it leaves the static `dataSource` set
+  for the rest of the fork. The provider-layer assertions cover the same nodes through the same
+  reader. Ticket 03 ran the `ItemInformationProvider` path once by hand against a live MySQL and
+  recorded the result; the rationale and the re-run recipe are in the test file's closing comment.
 
 ---
 

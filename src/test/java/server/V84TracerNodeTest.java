@@ -6,15 +6,11 @@ import provider.DataProvider;
 import provider.DataTool;
 import provider.wz.WZFiles;
 import provider.wz.XMLWZFile;
-import tools.DatabaseConnection;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 /**
  * Ticket 03 tracer bullet: item 2001500 ("Red Potion", the untradeable v84 variant) was
@@ -78,21 +74,24 @@ class V84TracerNodeTest {
                 "String.wz/Consume.img/2023000 disappeared");
     }
 
-    /**
-     * The real consumer, end to end: name from String.wz, usable effect from Item.wz spec.
-     * Needs the real {@code wz-path} (see the class comment) and a database, because
-     * {@link ItemInformationProvider}'s constructor reads the monster-card table. Skipped,
-     * not failed, when either is missing.
-     */
-    @Test
-    void itemInformationProviderResolvesTracer() {
-        assumeTrue(Files.exists(WZFiles.ITEM.getFile().resolve("Consume/0200.img.xml")),
-                "wz-path was redirected by another test class in this fork - skipping");
-        assumeTrue(DatabaseConnection.initializeConnectionPool(), "no database reachable - skipping");
-
-        ItemInformationProvider ii = ItemInformationProvider.getInstance();
-        assertEquals("Red Potion", ii.getName(TRACER_ITEM_ID));
-        assertEquals(50, ii.getItemEffect(TRACER_ITEM_ID).getHp(), "the item must actually heal 50 HP");
-        assertTrue(ii.isUntradeableRestricted(TRACER_ITEM_ID), "v84 marks 2001500 tradeBlock=1");
-    }
 }
+
+/*
+ * Deliberately NOT a test here: the ItemInformationProvider path. It was run once during
+ * ticket 03 against a live MySQL and passed —
+ *
+ *     ii.getName(2001500)                  -> "Red Potion"
+ *     ii.getItemEffect(2001500).getHp()    -> 50
+ *     ii.isUntradeableRestricted(2001500)  -> true
+ *
+ * — but it does not belong in the committed suite. Its constructor reads the monstercarddata
+ * table, so it needs DatabaseConnection.initializeConnectionPool(), which on a machine without
+ * a database burns INIT_CONNECTION_POOL_TIMEOUT (90 s in config.yaml) before it can be skipped,
+ * and on a machine with one leaves the static dataSource set for the rest of the surefire fork.
+ * A 90-second CI stall and cross-test global state are too high a price for an assertion the
+ * provider-layer tests above already cover: ItemInformationProvider reads these same nodes
+ * through the same XMLWZFile.
+ *
+ * To re-run it by hand, add a test that calls initializeConnectionPool() first and invoke it
+ * with -Dtest=... so it gets its own fork.
+ */

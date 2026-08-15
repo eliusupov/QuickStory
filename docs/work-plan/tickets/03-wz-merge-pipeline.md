@@ -39,9 +39,18 @@ Two nodes, one per file, both taken verbatim from ticket 02's committed manifest
 Why this one: it is eight leaf properties and two 27×30 icons; it needs no `Character.wz`,
 no `Map.wz`, no `UI.wz` — the three dangerous files; it exercises **both** halves of an item
 (art in `Item.wz`, label in `String.wz`), which is the shape every ticket-04 cosmetic has; and it
-is *usable*, not merely present, so the in-game check is unambiguous. Its icon is byte-identical to
-stock v83's Red Potion `2000000`, which gives the human a side-by-side reference in one inventory
-window. It was absent from the live client and from `wz/` before the merge — confirmed, not assumed.
+is *usable*, not merely present, so the in-game check is unambiguous. Its icon has the same
+dimensions and the same compressed payload size (27×30 / 358 bytes, 27×27 / 283 bytes) as stock
+v83's Red Potion `2000000`, which gives the human a side-by-side reference in one inventory window.
+It was absent from the live client and from `wz/` before the merge — confirmed, not assumed.
+
+All of that is re-checkable in one command each, with the committed tool:
+
+```
+WzMerge dump <v84>/Item.wz Consume/0200.img/02001500 3      # the source node, with png byte counts
+WzMerge dump D:/games/MapleStory/Item.wz Consume/0200.img/02000000 3   # stock v83 Red Potion
+WzMerge dump D:/games/MapleStory/Item.wz Consume/0200.img/02001500 3   # NOT FOUND, exit 1
+```
 
 **Tool: `docs/wz-baseline/tool-merge/`** (C# + MapleLib), sibling of ticket 02's diff tool.
 `merge` writes the client `.wz`, `xml` writes the server tree, `dump` inspects a node.
@@ -56,13 +65,23 @@ Additive-only is a gate in `Merge()` before any mutation, not an audit afterward
 | server XML | committed: `wz/Item.wz/Consume/0200.img.xml`, `wz/String.wz/Consume.img.xml` (+19 lines, −0) |
 | merge input lists | `docs/wz-baseline/merge-lists/03-tracer-*.txt` |
 | conflicts | `docs/wz-baseline/merge-lists/*.conflicts.txt` |
+| **verbatim verification output** | `docs/wz-baseline/merge-lists/03-verification/` — `blocksize-invariance.md` and `gate-fires.md`, so every number below is checkable rather than quoted |
 | server-side check | `src/test/java/server/V84TracerNodeTest.java` |
 
+Only the merged `.wz` and the pristine copies live outside the repo (they are 22 MB of binary).
+Everything that constitutes *evidence* is committed, including the SHA-256 of both, so a `git clean`
+cannot erase the proof — only the artefacts, which the tool regenerates deterministically.
+
 **conflicts.txt.** The tracer's own four conflict files are empty — both nodes were genuinely new,
-which is what an empty conflicts file is supposed to mean. The gate was proven two ways instead:
-re-running the merge against its own output refuses the path (`added 0, refused 1`), and a **dry run
-of every add-list against the live client** produced the real thing — **41 collisions across
-2,065 add-list roots**, tabulated in the procedure doc. The headline: `Npc.wz/9901910`–`9901919`,
+which is what an empty conflicts file is supposed to mean. That makes them a deliverable that
+demonstrates nothing, so the gate was proven two other ways: re-running the merge against its own
+output refuses the path (`added 0, refused 1`, committed verbatim in `03-verification/gate-fires.md`,
+binary **and** XML side), and a **dry run of every add-list against the live client** produced the
+real thing — **41 collisions across 2,172 add-list roots**, tabulated in the procedure doc. That
+sweep is more than this ticket strictly needed; it is here because a conflicts file nobody can act
+on is not a deliverable, and because it costs one command per file once the dry-run flag exists.
+Its scope is narrow and stated: manifest roots only, so v84 edits *below* an existing image are a
+separate question that `modified-list/` answers. The headline: `Npc.wz/9901910`–`9901919`,
 where v84's new NPCs land inside Cosmic's injected `99xxxxx` block. Ticket 08 must re-id or drop
 them. Conversely `String.wz/Cash.img/5530001` is a case where the rule *cost* us something — the
 live client has the placeholder `MISSING NAME` and v84 has "DS Medal Basket".
@@ -70,23 +89,30 @@ live client has the placeholder `MISSING NAME` and v84 has "DS Medal Basket".
 **BlockSize invariance: no pre-existing node changed.** `Item.wz` 7,361 → 7,362 paths,
 `String.wz` 12,859 → 12,860; exactly one image per file changed size (the one inserted into, by
 exactly the added bytes); `removed-list` empty in both. Every other image survived a full MapleLib
-repack byte-for-byte the same size. Limit: a same-size replacement would be a false negative.
+repack byte-for-byte the same size. Full tool output in `03-verification/blocksize-invariance.md`.
+Limit: a same-size replacement would be a false negative. It covers the binary trees only — the
+server XML has no BlockSize analogue, and its guarantee is that the splice is a text insert
+(`+19, −0`) that refuses to touch a file with a BOM or non-CRLF endings.
 
 **Server load, real output** (`./mvnw -o test -Dtest=V84TracerNodeTest`):
 
 ```
 [INFO] Running server.V84TracerNodeTest
-[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.942 s
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.168 s
 [INFO] BUILD SUCCESS
 ```
 
-That includes the full `ItemInformationProvider` path against a live MySQL:
-`getName(2001500)` → `"Red Potion"`, `getItemEffect(2001500).getHp()` → `50`,
-`isUntradeableRestricted(2001500)` → `true`. Negative control: reverting just the two XML files
-turns the same run into `Tests run: 3, Failures: 2` with
-`Item.wz/Consume/0200.img/02001500 missing from the server XML tree` — the test is not vacuous.
-Full suite: `Tests run: 1890, Failures: 0, Errors: 0, Skipped: 1` (the IIP case skips under
-surefire because `MobSkillFactoryTest` redirects `wz-path` for the whole fork — see the procedure).
+Negative control: reverting just the two XML files turns the same run into
+`Tests run: 3, Failures: 2` with `Item.wz/Consume/0200.img/02001500 missing from the server XML
+tree` — the test is not vacuous. Full suite: `Tests run: 1889, Failures: 0, Errors: 0, Skipped: 0`.
+
+The real consumer was checked too, once, by hand: with a temporary fourth case against a live
+MySQL, `ItemInformationProvider.getName(2001500)` → `"Red Potion"`,
+`getItemEffect(2001500).getHp()` → `50`, `isUntradeableRestricted(2001500)` → `true` (4/4 pass).
+That case is **deliberately not committed** — `ItemInformationProvider`'s constructor needs a
+database, which costs a 90-second connection-pool timeout on a machine without one and leaks static
+state into the rest of the surefire fork on a machine with one. The reasoning and the re-run recipe
+are in the closing comment of `V84TracerNodeTest.java`.
 
 The server itself also boots clean on the modified tree:
 

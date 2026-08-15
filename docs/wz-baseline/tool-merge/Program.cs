@@ -222,6 +222,10 @@ static class Program
                 case (WzDirectory pd2, WzDirectory sd):
                     pd2.AddDirectory(sd.DeepClone());
                     break;
+                // The AddProperty below only lands because the gate above already walked
+                // through `WzImage img => img[s]`, whose indexer parses the image on demand.
+                // Short-circuit or reorder that gate and adds are silently dropped onto an
+                // unparsed image. The coupling is real; do not "optimise" the gate away.
                 case (WzImage pi, WzImageProperty sp):
                     pi.AddProperty(sp.DeepClone());
                     pi.Changed = true;
@@ -248,7 +252,8 @@ static class Program
         // repacking 600 MB. Resolve() only parses the images a listed path touches, so a
         // dry run over a whole add-list is seconds, not minutes. Run this BEFORE a real
         // merge on every file — conflicts.txt is the point, the .wz is the by-product.
-        if (outPath == "-")
+        bool dry = outPath == "-";
+        if (dry)
         {
             Console.WriteLine("dry run: not saving");
         }
@@ -259,7 +264,6 @@ static class Program
             tgt.SaveToDisk(outPath);
         }
 
-        bool dry = outPath == "-";
         WriteConflicts(args[5], $"{wzName}: additive-only merge{(dry ? " — DRY RUN, nothing was written" : "")}," +
             $" {srcPath} -> {tgtPath}, {added} nodes {(dry ? "would be added" : "added")}, {Conflicts.Count} refused");
         Console.WriteLine($"added {added}, refused {Conflicts.Count}");
@@ -329,16 +333,36 @@ static class Program
             if (!File.Exists(xmlFile)) { Conflict(manifestPath, "target xml file missing: " + xmlFile); continue; }
             if (srcObj is not WzImageProperty sp) { Conflict(manifestPath, "expected a WzImageProperty"); continue; }
 
-            var lines = File.ReadAllLines(xmlFile).ToList();
+            // The splice rewrites the whole file, so assert the shape it assumes rather than
+            // silently normalising 500 KB of someone else's XML: no BOM, CRLF throughout.
+            // Both are true of every file Cosmic ships; a violation means this is not a tree
+            // this tool wrote and must not be reformatted as a side effect of adding one node.
+            byte[] raw = File.ReadAllBytes(xmlFile);
+            if (raw.Length >= 3 && raw[0] == 0xEF && raw[1] == 0xBB && raw[2] == 0xBF)
+            { Conflict(manifestPath, "target xml has a UTF-8 BOM — refusing to rewrite it: " + xmlFile); continue; }
+            string text = Encoding.UTF8.GetString(raw);
+            if (text.Replace("\r\n", "").Contains('\n'))
+            { Conflict(manifestPath, "target xml is not CRLF throughout — refusing to rewrite it: " + xmlFile); continue; }
+
+            var lines = text.Split("\r\n").ToList();
+            if (lines.Count > 0 && lines[^1].Length == 0) lines.RemoveAt(lines.Count - 1); // trailing CRLF
             string name = inImg[0];
-            // additive-only, same gate as the binary side
+            // additive-only. Same INTENT as the binary gate, different MECHANISM: this is a
+            // line-text scan, so it only sees elements written the way Cosmic's serializer
+            // writes them (indent 2, name="…" on the opening line). OrdinalIgnoreCase to match
+            // the binary side — WZ node lookup is case-insensitive, and an Ordinal compare here
+            // would let a case-differing id past the gate and duplicate it into the file.
             if (lines.Any(l => IsTopLevelNamed(l, name))) { Conflict(manifestPath, "already exists in " + xmlFile); continue; }
 
+            // Insert in sorted position purely so the git diff reads naturally — the server
+            // looks nodes up by name, so position is never load-bearing. CompareOrdinal only
+            // orders correctly for equal-length ids (true of zero-padded Item.wz ids, not of
+            // ragged String.wz ones); when it misjudges, the node still lands somewhere valid.
             int insertAt = lines.FindIndex(l => TopLevelName(l) is string n && string.CompareOrdinal(n, name) > 0);
             if (insertAt < 0) insertAt = lines.FindLastIndex(l => l.StartsWith("</imgdir>", StringComparison.Ordinal));
             if (insertAt < 0) { Conflict(manifestPath, "no closing </imgdir> in " + xmlFile); continue; }
 
-            // Fragment() already emits CRLF line breaks; File.WriteAllLines re-adds them, so split.
+            // Fragment() emits its own CRLF line breaks, so split them back out before splicing.
             var frag = ser.Fragment(sp, "  ", xmlFile).Split("\r\n", StringSplitOptions.RemoveEmptyEntries);
             lines.InsertRange(insertAt, frag);
             File.WriteAllText(xmlFile, string.Join("\r\n", lines) + "\r\n", new UTF8Encoding(false));
@@ -364,5 +388,5 @@ static class Program
     }
 
     static bool IsTopLevelNamed(string line, string name) =>
-        string.Equals(TopLevelName(line), name, StringComparison.Ordinal);
+        string.Equals(TopLevelName(line), name, StringComparison.OrdinalIgnoreCase);
 }
