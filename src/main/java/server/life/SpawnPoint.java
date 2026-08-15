@@ -30,16 +30,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class SpawnPoint {
-    // Field bosses respawn on a flat cooldown instead of their wz mobTime, matching the AreaBoss*.js
-    // spawners (King Clang, Mano, Dyle, ...) which poll every 30s and respawn as soon as the boss is
-    // gone. ponytail: one constant, per-boss timers if they ever need to differ.
-    private static final long BOSS_RESPAWN_MILLIS = SECONDS.toMillis(30);
+    /** How long a field boss stays dead, matching the AreaBoss*.js spawners (King Clang, Mano, ...). */
+    private static final long FIELD_BOSS_RESPAWN_MILLIS = SECONDS.toMillis(30);
 
-    // ...but only for bosses on a real timer. Plenty of PQ/event mobs carry the wz boss flag with
-    // mobTimes of 1-50s by design (Monster Carnival's Buffy/Rombot at 1s, Watermelon Guard at 3-8s,
-    // P Junior at 1s). Rerouting those to 30s would slow them down and break the content, so anything
-    // under this stays on its own mobTime. Every genuinely starved field boss is >= 600s.
-    private static final int BOSS_MIN_MOB_TIME = 60;
+    /**
+     * Shortest mobTime we treat as a real respawn timer. Below this the wz boss flag belongs to a
+     * PQ/event mob whose timing is encounter design, not a spawn timer - Monster Carnival's Buffy
+     * and Rombot sit at 1s, Watermelon Guard at 3-8s. Every field boss is 600s or longer.
+     */
+    private static final int FIELD_BOSS_MIN_MOB_TIME = 60;
 
     private final int monster;
     private final int mobTime;
@@ -51,14 +50,14 @@ public class SpawnPoint {
     private int mobInterval = 5000;
     private final AtomicInteger spawnedMonsters = new AtomicInteger(0);
     private final boolean immobile;
-    private final boolean boss;
+    private final boolean timedBoss;
     private boolean denySpawn = false;
 
     public SpawnPoint(final Monster monster, Point pos, boolean immobile, int mobTime, int mobInterval, int team) {
         this.monster = monster.getId();
         this.pos = new Point(pos);
         this.mobTime = mobTime;
-        this.boss = monster.isBoss();
+        this.timedBoss = monster.isBoss() && mobTime >= FIELD_BOSS_MIN_MOB_TIME;
         this.team = team;
         this.fh = monster.getFh();
         this.f = monster.getF();
@@ -102,7 +101,8 @@ public class SpawnPoint {
             public void monsterKilled(int aniTime) {
                 nextPossibleSpawn = Server.getInstance().getCurrentTime();
                 if (mobTime > 0) {
-                    nextPossibleSpawn += isTimedBoss() ? BOSS_RESPAWN_MILLIS : SECONDS.toMillis(mobTime);
+                    boolean fieldBoss = timedBoss && mob.getMap().getEventInstance() == null;
+                    nextPossibleSpawn += fieldBoss ? FIELD_BOSS_RESPAWN_MILLIS : SECONDS.toMillis(mobTime);
                 } else {
                     nextPossibleSpawn += aniTime;
                 }
@@ -142,7 +142,7 @@ public class SpawnPoint {
     }
 
     public boolean isTimedBoss() {
-        return boss && mobTime >= BOSS_MIN_MOB_TIME;
+        return timedBoss;
     }
 
     public int getTeam() {
