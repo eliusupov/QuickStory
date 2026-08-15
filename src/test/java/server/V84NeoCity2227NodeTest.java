@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static server.V84Wz.wz;
 
 /**
  * Ticket 07 - Neo City Year 2227. Sibling of {@link V84TracerNodeTest} and
@@ -47,9 +48,7 @@ class V84NeoCity2227NodeTest {
     /** The existing v83 Neo City hub the area hangs off. Merged by nobody; it already exists. */
     private static final int NEO_CITY_HUB = 240070000;
 
-    private static DataProvider wz(String wzFile) {
-        return new XMLWZFile(Path.of("wz", wzFile));
-    }
+    // wz(String) lives in V84Wz - one copy for all the v84 node tests (ticket 03f, F8).
 
     /** Asserts rather than returns null, so a missing map fails with its id instead of an NPE. */
     private static Data map(int mapId) {

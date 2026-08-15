@@ -1,0 +1,53 @@
+# COMPOSED FORCE-LIST. Pass this as --force for the composed String.wz merge and for the
+# composed String.wz xml run. 38 roots: COLLISION-FORCE.txt's 37 verbatim, plus one row
+# ticket 03f adds. Same format and same parser as COLLISION-FORCE.txt / COLLISION-DENY.txt.
+#
+# Why a separate file instead of a row appended to COLLISION-FORCE.txt: that file is one rule
+# end to end - "the live value is the literal MISSING NAME / MISSING INFO stub" - and its 37
+# rows are consumed exactly once by tickets 04 (30) and 05 (7). 9201144 is not that rule: its
+# live value is a real name. Mixing it in would make the file's own stated invariant false and
+# would silently change what every other ticket's --force means.
+#
+# Nothing else in the composed set needs --force: all 38 roots are String.wz.
+
+# ---- COLLISION-FORCE.txt, 37 roots, verbatim (ticket 03c) ----
+String.wz/Cash.img/5500005	# live "MISSING NAME" -> v84 "[50days] Magical Sandglass"
+String.wz/Cash.img/5500006	# live "MISSING NAME" -> v84 "[99days] Magical Sandglass"
+String.wz/Cash.img/5530001	# live "MISSING NAME" -> v84 "DS Medal Basket"
+String.wz/Cash.img/5530002	# live "MISSING NAME" -> v84 "5 Golden Compasses"
+String.wz/Cash.img/5530003	# live "MISSING NAME" -> v84 "10 Gaga Transformation Potions"
+String.wz/Cash.img/5530004	# live "MISSING NAME" -> v84 "100 Elixirs"
+String.wz/Cash.img/5530005	# live "MISSING NAME" -> v84 "200 Elixirs"
+String.wz/Cash.img/5530006	# live "MISSING NAME" -> v84 "100 Power Elixirs"
+String.wz/Cash.img/5530007	# live "MISSING NAME" -> v84 "150 Power Elixirs"
+String.wz/Cash.img/5530008	# live "MISSING NAME" -> v84 "200 Power Elixirs"
+String.wz/Consume.img/2100166	# live "MISSING NAME" -> v84 "Free Spirit Summoning Sack"
+String.wz/Eqp.img/Eqp/Accessory/1142143	# live "MISSING NAME" -> v84 name is untranslated KMS text; still better than a stub
+String.wz/Eqp.img/Eqp/Accessory/1142144	# live "MISSING NAME" -> v84 "DS Mania Medal"
+String.wz/Eqp.img/Eqp/Accessory/1142145	# live "MISSING NAME" -> v84 name is untranslated KMS text
+String.wz/Eqp.img/Eqp/Accessory/1142149	# live "MISSING NAME" -> v84 name is untranslated KMS text
+String.wz/Eqp.img/Eqp/Accessory/1142150	# live "MISSING NAME" -> v84 name is untranslated KMS text
+String.wz/Eqp.img/Eqp/Accessory/1142151	# live "MISSING NAME" -> v84 name is untranslated KMS text
+String.wz/Eqp.img/Eqp/Dragon	# 12 Evan dragon-equip names, all live "MISSING NAME" -> Silver/Gold/Reverse Mask,Pendant,Wings,Tail. Ticket 04-09 blocker.
+String.wz/Eqp.img/Eqp/Glove/1082262	# live "MISSING NAME" -> v84 "Dragon Master's Proof"
+String.wz/Eqp.img/Eqp/Longcoat/1051176	# live "MISSING NAME" -> v84 name is untranslated KMS text
+String.wz/Eqp.img/Eqp/Longcoat/1052217	# live "MISSING NAME" -> v84 "Cloud Robe"
+String.wz/Eqp.img/Eqp/Longcoat/1052224	# live "MISSING NAME" -> v84 "Strawberry Baby"
+String.wz/Eqp.img/Eqp/Longcoat/1052228	# live "MISSING NAME" -> v84 "Layered Long Skull Tee"
+String.wz/Eqp.img/Eqp/PetEquip/1802039	# live "MISSING NAME" -> v84 "Golden Pig Lucky Sack"
+String.wz/Eqp.img/Eqp/Shield/1092067	# live "MISSING NAME" -> v84 "Transparent Shield"
+String.wz/Eqp.img/Eqp/Taming/1902040	# live "MISSING NAME" -> v84 "Stage 1 Dragon". Evan mount, ticket 04-09 blocker.
+String.wz/Eqp.img/Eqp/Taming/1902041	# live "MISSING NAME" -> v84 "Stage 2 Dragon"
+String.wz/Eqp.img/Eqp/Taming/1902042	# live "MISSING NAME" -> v84 "Stage 3 Dragon"
+String.wz/Eqp.img/Eqp/Taming/1912033	# live "MISSING NAME" -> v84 "Stage 1 Dragon Saddle"
+String.wz/Eqp.img/Eqp/Taming/1912034	# live "MISSING NAME" -> v84 "Stage 2 Dragon Saddle"
+String.wz/Eqp.img/Eqp/Taming/1912035	# live "MISSING NAME" -> v84 "Stage 3 Dragon Saddle"
+String.wz/Eqp.img/Eqp/Weapon/1452058	# live "MISSING NAME" -> v84 "Barisetter"
+String.wz/Etc.img/Etc/4161049	# live "MISSING NAME" -> v84 "Dragon Types and Characteristics (Vol.I)". Evan quest item.
+String.wz/Etc.img/Etc/4161050	# live "MISSING NAME" -> v84 "Dragon Types and Characteristics (Vol.II)". Evan quest item.
+String.wz/Etc.img/Etc/4161051	# live "MISSING NAME" -> v84 "Crew Member's Voyage Log". Evan quest item.
+String.wz/Ins.img/3994179	# live "MISSING NAME" -> v84 name is untranslated KMS text
+String.wz/Ins.img/3994180	# live "MISSING NAME" -> v84 name is untranslated KMS text
+
+# ---- ticket 03f, 1 root ----
+String.wz/Npc.img/9201144	# live "Steward" -> v84 "Shadow Knight Rene". NOT Cosmic content: v83-stock ships the identical Steward node, so v84 renamed a stock GMS npc. Placed only by 683010000 (the life node 06 added), no script, no other reference. 06 merged the blackKnight_GL sprite under the old name.

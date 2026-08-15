@@ -9,7 +9,7 @@ using MapleLib.WzLib.Serializer;
 //                  --deny <denyList> [--force <forceList>] [--live <liveWz>]
 //   WzMerge xml    <sourceWz> <xmlRoot>            <pathsFile> <conflictsTxt>
 //                  --deny <denyList> [--force <forceList>] [-]
-//   WzMerge verify <wz> <pathsFile>
+//   WzMerge verify <wz> <pathsFile> [--baseline <targetWz>]
 //   WzMerge hash   <wz> <path/under/wz>
 //   WzMerge deps   <mapWz> <mapId|Map/MapN/<id>.img> <addListDir>
 //   WzMerge guard  <outWz>
@@ -101,7 +101,7 @@ static class Program
         "WzMerge dump   <wz> <path/under/wz> [depth]\n" +
         "WzMerge merge  <sourceWz> <targetWz> <outWz|-> <pathsFile> <conflictsTxt> --deny <denyList> [--force <forceList>] [--live <liveWz>]\n" +
         "WzMerge xml    <sourceWz> <xmlRoot> <pathsFile> <conflictsTxt> --deny <denyList> [--force <forceList>] [-]\n" +
-        "WzMerge verify <wz> <pathsFile>\n" +
+        "WzMerge verify <wz> <pathsFile> [--baseline <targetWz>]\n" +
         "WzMerge hash   <wz> <path/under/wz>\n" +
         "WzMerge deps   <mapWz> <mapId|Map/MapN/<id>.img> <addListDir>\n" +
         "WzMerge guard  <outWz>\n" +
@@ -355,8 +355,16 @@ static class Program
     // comparing is the only thing in this pipeline that would notice a corrupted 4 KB canvas
     // payload — path re-resolution and ParseImage both pass straight over one. The machinery
     // (`Canon`/`Sha`) already existed for the `hash` subcommand and was never wired into a merge.
+    // `baselineWzPath` is the merge TARGET — the pre-merge file the output was built from. It is
+    // used for one thing: an image MapleLib cannot parse in the target cannot have been broken by
+    // this merge. Without it, Sound.wz/BgmGL.img (unreadable in all three trees, procedure §11)
+    // made EVERY Sound.wz merge fail verification, stay .partial and exit 4 no matter how correct
+    // the data was — ticket 06 hit exactly that and discarded a good file. The discount is
+    // per-image and one-directional on purpose: an image that parses in the target and fails in
+    // the output is the corruption this check exists to catch, and still fails.
     static bool VerifyFile(string wzPath, string wzName, IReadOnlyList<string> expect,
-                           IReadOnlyDictionary<string, string>? digests = null)
+                           IReadOnlyDictionary<string, string>? digests = null,
+                           string? baselineWzPath = null)
     {
         WzFile f; WzMapleVersion ver;
         // A badly truncated file fails at the header, before any image — that is still a
@@ -385,8 +393,12 @@ static class Program
         // invisible to a path lookup that never reaches it; ParseImage throws or returns
         // false on a short/garbled block, which is exactly the failure a half-written .wz has.
         // Unparsing keeps this bounded on Map.wz (629 MB) instead of materialising the file.
-        int bad = 0, imgs = 0;
-        void Walk(WzDirectory d)
+        int imgs = 0;
+        // Keyed on the path RELATIVE to the .wz root, never FullPath: the output is opened as
+        // "<Name>.wz.partial", so its FullPath root differs from the target's and nothing would
+        // ever match the baseline.
+        var badMsg = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        void Walk(WzDirectory d, string prefix)
         {
             foreach (var img in d.WzImages)
             {
@@ -396,14 +408,63 @@ static class Program
                     if (!img.Parsed && !img.ParseImage()) throw new Exception("ParseImage returned false");
                     img.UnparseImage();
                 }
-                catch (Exception ex) { Console.Error.WriteLine($"  UNPARSEABLE image {img.FullPath}: {ex.GetType().Name} {ex.Message}"); bad++; }
+                catch (Exception ex) { badMsg[prefix + img.Name] = $"{ex.GetType().Name} {ex.Message}"; }
             }
-            foreach (var sub in d.WzDirectories) Walk(sub);
+            foreach (var sub in d.WzDirectories) Walk(sub, prefix + sub.Name + "/");
         }
-        Walk(f.WzDirectory);
-        Console.WriteLine($"verify: {imgs} images parsed, {bad} unparseable, {missing} requested paths missing, " +
+        Walk(f.WzDirectory, "");
+
+        var alreadyBad = badMsg.Count > 0 && baselineWzPath != null
+            ? UnparseableIn(baselineWzPath, badMsg.Keys)
+            : new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        int bad = 0, preExisting = 0;
+        foreach (var (p, msg) in badMsg)
+        {
+            if (alreadyBad.Contains(p))
+            {
+                preExisting++;
+                Console.WriteLine($"  pre-existing UNPARSEABLE {p}: {msg} — unreadable in the merge target too, so NOT damage from this merge; discounted");
+            }
+            else { Console.Error.WriteLine($"  UNPARSEABLE image {p}: {msg}"); bad++; }
+        }
+        Console.WriteLine($"verify: {imgs} images parsed, {bad} unparseable" +
+                          (preExisting > 0 ? $" ({preExisting} pre-existing, discounted)" : "") +
+                          $", {missing} requested paths missing, " +
                           $"{(digests?.Count ?? 0)} images content-checked, {drift} drifted");
         return missing == 0 && bad == 0 && drift == 0;
+    }
+
+    // Which of `candidates` (paths relative to the .wz root) are ALSO unparseable in `wzPath`?
+    // Called only when the output already has at least one bad image, and it parses only the
+    // candidates, so a clean merge pays nothing for this.
+    static HashSet<string> UnparseableIn(string wzPath, IEnumerable<string> candidates)
+    {
+        var want = new HashSet<string>(candidates, StringComparer.OrdinalIgnoreCase);
+        var found = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        WzFile bf;
+        // A baseline we cannot open discounts nothing — the output's failures stand. Failing
+        // open is the safe direction here; the alternative is suppressing a real corruption
+        // because the check itself broke.
+        try { (bf, var _ver) = Open(wzPath); }
+        catch (Exception ex) { Console.Error.WriteLine($"  (baseline {wzPath} would not open, so nothing is discounted: {ex.Message})"); return found; }
+        using var _bf = bf;
+        void Walk(WzDirectory d, string prefix)
+        {
+            foreach (var img in d.WzImages)
+            {
+                string p = prefix + img.Name;
+                if (!want.Contains(p)) continue;
+                try
+                {
+                    if (!img.Parsed && !img.ParseImage()) throw new Exception("ParseImage returned false");
+                    img.UnparseImage();
+                }
+                catch { found.Add(p); }
+            }
+            foreach (var sub in d.WzDirectories) Walk(sub, prefix + sub.Name + "/");
+        }
+        Walk(bf.WzDirectory, "");
+        return found;
     }
 
     static int VerifyCmd(string[] args)
@@ -413,7 +474,16 @@ static class Program
         // The manifest declares its own "<Name>.wz" root, so a renamed or .partial copy of
         // the output still verifies. Falls back to the filename for an empty manifest.
         string wzName = expect.Count > 0 ? expect[0].Split('/')[0] : Path.GetFileName(args[1]);
-        return VerifyFile(Path.GetFullPath(args[1]), wzName, expect) ? 0 : 4;
+        // Optional --baseline <targetWz>: same discount the merge applies (see VerifyFile).
+        // Without it nothing is discounted, which is what a bare `verify` always did.
+        string? baseline = null;
+        for (int i = 3; i < args.Length - 1; i++)
+            if (args[i] == "--baseline") baseline = Path.GetFullPath(args[i + 1]);
+        // A typo'd or value-less flag would otherwise just not discount anything, which looks
+        // identical to a genuine failure. Say so rather than let someone debug the wrong thing.
+        if (args.Length > 3 && baseline == null)
+            Console.Error.WriteLine($"  note: trailing arguments ignored ({string.Join(' ', args[3..])}); only --baseline <targetWz> is recognised here");
+        return VerifyFile(Path.GetFullPath(args[1]), wzName, expect, null, baseline) ? 0 : 4;
     }
 
     // ---------- hash (B3: content check for the one image that is re-serialized) ----------
@@ -1007,7 +1077,7 @@ static class Program
             // re-resolve every path we claim to have added. Nothing else in this pipeline ever
             // re-read the tool's own output; the first reader used to be the game client.
             var expect = paths.Where(p => !Conflicts.Any(c => c.StartsWith(p + "\t", StringComparison.Ordinal))).ToList();
-            verified = VerifyFile(partial, wzName, expect, digests);
+            verified = VerifyFile(partial, wzName, expect, digests, tgtPath);
             if (verified)
             {
                 File.Move(partial, outPath, true);

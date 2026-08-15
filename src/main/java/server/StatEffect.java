@@ -164,6 +164,13 @@ public class StatEffect {
         // String.wz/Skill.img. (2001 = Evan; its Skill.wz/2001.img is ticket 13's to merge, so the
         // row is inert until then.) Sprite ids corroborated against two reimplementations of this
         // client era: Rebirth95 BuffSkill.cs:310-323 and HaRepacker SkillManager.cs:8762-8774.
+        //
+        // HAZARD for ticket 13 (recorded by 03f, review finding F4): the 2001 rows are
+        // SPECULATIVE — they come from add-list naming, not from node-level data, because
+        // Skill.wz/2001.img is unmerged. If 13 merges a 2001.img where 20011025 (or 27-30, 37-39)
+        // is a REAL Evan skill, it silently becomes a mount: casting it applies MONSTER_RIDING and
+        // draws a wooden pony, with no error and no failing test. Dump those nine ids before
+        // merging that image, and drop 2001 from the loop below if any of them is taken.
         int[][] v84 = {
                 {1025, 1932006},    // Charge! Wooden Pony
                 {1027, 1932007},    // Croco

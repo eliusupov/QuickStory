@@ -18,6 +18,28 @@ Three gaps found during the audit that this ticket closes, none of which the Eva
 
 Cosmic already ships 13 Evan quest scripts (`22000-22008`, `22500-22507`) that are inert until the WZ data lands.
 
+## ⚠ Inherited hazard — read before merging `Skill.wz/2001.img`
+
+*Recorded by ticket 03f, 2026-08-16, from the 04/05/06 code review (F4). Nothing is broken today;
+this is a trap laid for whoever merges Evan's skill image.*
+
+`StatEffect.java:147-181` (`buildSkillMounts`) generates the eight v84 mount rows for **four** job
+prefixes — `0`, `1000`, `2000` and **`2001` (Evan)** — so the table already claims
+`20011025`, `20011027`–`20011030` and `20011037`–`20011039` are mounts. Ticket 05 wrote those rows
+from `add-list/Skill.txt`'s naming, and **nothing corroborates them at node level**:
+`Skill.wz/2001.img` is this ticket's and is unmerged, so `SkillFactory` never resolves those ids
+and the rows are inert.
+
+**If 13 merges a `2001.img` in which `20011025` (or any of the other eight) is a real Evan skill,
+it silently becomes a mount** — casting it applies `MONSTER_RIDING` and draws a wooden pony.
+There is no error and no test failure; the map lookup just starts hitting.
+
+**So: before merging `2001.img`, dump those nine ids from it.** If any is a genuine Evan skill,
+delete `2001` from the job-prefix loop in `buildSkillMounts` in the same commit. If v84 really does
+ship Evan copies of the mount skills at those ids, the rows are correct and this note can be
+deleted. Related and separate: `isMonsterRidingSkill`'s `sourceid % 10000000 == 1004` does not
+match `Evan.MONSTER_RIDER` (`20011004 % 10000000 = 11004`) — pre-existing, also 13's.
+
 ## Acceptance criteria
 
 - [ ] Evan maps merged into client WZ and server XML, and reachable

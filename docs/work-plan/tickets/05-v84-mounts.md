@@ -53,9 +53,12 @@ id sets before building anything.
 - [ ] Each can be obtained, mounted, ridden across a map, and dismounted — **human**
 - [ ] Riding buff applies and expires correctly — **human**
 - [ ] Existing mounts still work — no regression to the shared riding path — **human in game.**
-      Server side: proven by `V84MountNodeTest.v84MountSkillsMapToTheirSprites`, which asserts the
-      three pre-existing sprite mappings the deleted if-chain had (`20001017 -> 1932003`,
-      `10001019 -> 1932005`, `1031 -> 1932010`) still hold.
+      Server side: guarded by `V84MountNodeTest.v83MountsStillMapToTheSameSprites`, written against
+      the `constants.skills` constants. (This line used to name
+      `v84MountSkillsMapToTheirSprites` and the literals `20001017 -> 1932003` /
+      `10001019 -> 1932005`; §3 shows both literals are wrong — `20001017` is not a skill and
+      `10001019` is Cygnus's Yeti, not a broomstick — and §6 explains why the other test is a
+      change-detector rather than evidence. Corrected by 03f.)
 
 ---
 
@@ -231,12 +234,21 @@ Seven force roots, 18 ids, every one of them reading the literal `MISSING NAME` 
   and the container is id-for-id identical live vs v84 (12 ids, dumped both sides), so forcing the
   whole root is lossless. **Ticket 13 must not re-add this row** — it is on the force list once and
   a second force would be an overlap.
-- **Left, and not mine: the 27 `String.wz/Skill.img` mount-skill names.** Without them the nine
-  skills show in the client's skill window with no name or description. They are pure additions,
+- **Left, and not mine: the 27 `String.wz/Skill.img` mount-skill names.** They are pure additions,
   zero collisions, no `--force` needed. 05's ownership was scoped to `Eqp/Taming` + `Eqp/Dragon`, so
-  they are listed ready-to-paste in the header of `05/String.paths.txt` rather than merged. **This
-  is a real remaining gap** — cosmetic only (the server reads skills from `Skill.wz`, never
-  `String.wz`), but visible.
+  they were listed ready-to-paste in the header of `05/String.paths.txt` rather than merged.
+  **TAKEN BY TICKET 03f, 2026-08-16** — `docs/wz-baseline/merge-lists/03f/String.paths.txt`.
+
+  > **Correction, made by 03f.** This section originally called the gap "cosmetic only (the server
+  > reads skills from `Skill.wz`, never `String.wz`)". **That is wrong, and it under-rated a
+  > blocker as a nicety.** The server does read `String.wz/Skill.img` — as the **enumeration
+  > source it grants skills from**. `MaxSkillCommand.java:44` iterates
+  > `getDataProvider(WZFiles.STRING).getData("Skill.img").getChildren()` and feeds each child name
+  > to `SkillFactory.getSkill(Integer.parseInt(...))` → `changeSkillLevel(max)`; the same loop is
+  > at `ResetSkillCommand.java:44` and `NPCConversationManager.java:395`. A skill absent from
+  > `Skill.img` is never visited, so `!maxskill` silently skipped exactly these nine. Combined with
+  > §7's note that nothing in this ticket grants them, the eight mounts were **unobtainable by any
+  > route on this server** until 03f merged these rows.
 
 ## 6. Verification — real output
 
@@ -248,6 +260,10 @@ backup's, for all four files.
 merge Morph      added  25 (forced 0), refused 0   verify: 46 images, 0 unparseable, 11 content-checked, 0 drifted   exit 0
 merge Skill      added  27 (forced 0), refused 0   verify: 76 images, 0 unparseable,  3 content-checked, 0 drifted   exit 0
 merge Character  added   8 (forced 0), refused 0   verify: 7215 images, 0 unparseable, 8 content-checked, 0 drifted  exit 0
+                 (7215 = the live client's 7,207 images + these 8. Ticket 04's "7,241
+                  Character.wz image digests" is a wc -l of a hash file, not an image
+                  count - 7,207 + 17 subdir rollups + 17 TOTAL lines. Reconciled by 03f;
+                  both tickets' coverage was complete, only 04's label was wrong.)
 merge String     added   7 (forced 7), refused 0   verify: 20 images, 0 unparseable,  1 content-checked, 0 drifted   exit 0
 ```
 
@@ -294,11 +310,23 @@ these path lists exactly. `git diff wz/String.wz/Eqp.img.xml` is **18 insertions
 two places** — an in-place replacement, no reformat noise. (The extra 6 deletions are the six
 `desc="MISSING INFO"` lines: v84 ships `name` only for those ids.)
 
-**Tests.** New sibling `src/test/java/server/V84MountNodeTest.java` (7 tests) — a sibling of
-`V84TracerNodeTest` for the same reason ticket 04's `V84CosmeticNodeTest` is. It reads the server's
-own `XMLWZFile`/`XMLDomMapleData`, including a negative control (`Eqp/Taming/1932000` must still
-read `MISSING NAME`, so a blanket rewrite would fail rather than pass everything). The previous
-attempt's edits to `V84TracerNodeTest.java` were reverted; that file is back at HEAD.
+**Tests.** New sibling `src/test/java/server/V84MountNodeTest.java` (7 tests, **8 after 03f added
+`v84MountSkillsAreNamedSoTheServerCanGrantThem`**) — a sibling of `V84TracerNodeTest` for the same
+reason ticket 04's `V84CosmeticNodeTest` is. It reads the server's own `XMLWZFile`/`XMLDomMapleData`,
+including a negative control (`Eqp/Taming/1932000` must still read `MISSING NAME`, so a blanket
+rewrite would fail rather than pass everything). The previous attempt's edits to
+`V84TracerNodeTest.java` were reverted; that file is back at HEAD. (03f also moved the two-line
+`wz(String)` helper out to `V84Wz`, which five node-test classes each held a verbatim copy of.)
+
+> **What `v84MountSkillsMapToTheirSprites` is, honestly (review finding F5, written up by 03f).**
+> It **copies `StatEffect.buildSkillMounts()` verbatim and asserts itself**, so it is a
+> **change-detector, not evidence**: it tells you the table changed, never that the table is right.
+> That is not a defect to delete, because the pairing is **hardcoded in the client and provable
+> from no WZ node** — no test in this repo can be evidence for it; §1's two reference
+> implementations and the in-game check are the evidence. Read it as a tripwire and nothing more.
+> The parts of the class that **do** earn their place on their own: the negative controls, and
+> `v83MountsStillMapToTheSameSprites`, which is written against `constants.skills` rather than
+> literals and is what caught the `% 10000` regression.
 
 ```
 ./mvnw -o test  ->  Tests run: 1928, Failures: 0, Errors: 0, Skipped: 0   BUILD SUCCESS
@@ -318,8 +346,10 @@ this branch while 05 was in flight.)
 - Prove the skill→sprite pairing from the WZ — it is not in the WZ. Two reference implementations
   agree; the in-game check is the real one.
 - Say whether the eight mount skills are **obtainable** by a player. Nothing in this ticket grants
-  them; a GM `!skill` is how the human test starts. Whether v84 intends a quest or cash-shop route
-  is unresearched and out of scope here.
+  them. Whether v84 intends a quest or cash-shop route is unresearched and out of scope here.
+  (This line originally said "a GM `!skill` is how the human test starts". **There is no `!skill`
+  command in this codebase.** The GM route is `!maxskill`, and it only reaches these nine once
+  ticket 03f's 27 `String.wz/Skill.img` rows are installed — see §5.)
 - Judge whether the 184 Mir animation rows render correctly when half-merged (§4). Deferred to 13.
 
 ## Human steps — staged, not performed
@@ -335,8 +365,11 @@ the same tree.
 05's 8 rows and **none of ticket 04's 240**. Same for `String.wz` (05's 7 forced rows, not 04's
 385). Installing 05's copies silently reverts 04. Two ways forward:
 
-- *Correct:* wait for the composed install pass (STATUS "batch D"), which consumes
-  `merge-lists/04/*.paths.txt` and `merge-lists/05/*.paths.txt` together against one live base.
+- *Correct:* use the composed install pass. **It exists now** —
+  `docs/wz-baseline/merge-lists/composed/`, built and run end to end by ticket 03f, which consumes
+  04, 05, 06, 07 and 03f's own rows against one live base. Read its `README.md` first: the
+  composed `Character.wz` and `String.wz` merges exit **3**, and that is the correct result, not a
+  failure.
 - *If testing 05 alone right now:* install only `Morph.wz` and `Skill.wz` from `05-r2\` — neither is
   touched by any other ticket — and accept that the eight mount **sprites** and the Mir/Dragon
   **names** will be missing until the composed pass runs. The mounts will still be castable and
@@ -354,14 +387,14 @@ patch in makes any failure ambiguous.
 
 | # | do | pass | fail signature |
 |---|---|---|---|
-| 1 | `!skill 1025 1 1` on a Beginner-tier character (or `10001025` on a Noblesse, `20001025` on an Aran) | the skill appears in the skill window | not learnable → check `Skill.wz` installed; blank name is **expected and known**, see §5 |
+| 1 | `!maxskill` on a Beginner-tier character (and again on a Noblesse and on an Aran) | all nine mount skills appear in the skill window, **named** | **`!skill` does not exist** — the only skill commands `CommandsExecutor` registers anywhere are `maxskill` (`:417`), `resetskill` (`:418`) and `mobskill` (`:427`), so the original `!skill 1025 1 1` here was uncastable. `!maxskill` enumerates `String.wz/Skill.img`, which is why ticket 03f's 27 name rows are what makes this step work at all. Not learnable → check the composed `String.wz` **and** `Skill.wz` are installed |
 | 2 | cast it | character mounts a wooden pony, speed/jump rise | mounts but renders as nothing → `Character.wz` not composed yet, §0 |
 | 3 | walk, jump, climb a ladder, change map | mount persists across all four | mount vanishes on map change → regression in the shared riding path, **stop and report** |
 | 4 | cast the skill again / take the buff to expiry | dismounts cleanly, stats return | stuck mounted → `cancelEffectFromBuffStat` path |
 | 5 | repeat 2–4 for `1027`, `1028`, `1029`, `1030`, `1037`, `1038`, `1039` | each shows its **own** sprite: Croco, Black Scooter, Pink Scooter, Nimbus Cloud, Unicorn, Low Rider, Red Truck | **two skills showing the same sprite = the mapping in §1 is wrong**; record which pair and report |
-| 6 | **regression:** `!skill 1017 1 1`, cast — Yeti Rider | rides the Yeti as before | a pre-existing mount broken = `StatEffect` refactor regression, **stop and report** |
+| 6 | **regression:** cast `1017` — Yeti Rider (granted by step 1's `!maxskill`) | rides the Yeti as before | a pre-existing mount broken = `StatEffect` refactor regression, **stop and report** |
 | 7 | **regression:** an equip mount — equip a saddle in slot -18 and cast `1004` | rides the equipped mount | as above |
-| 8 | `!skill 1026 1 1`, cast — "Soaring" | character flies; check flight animation is not visibly broken | wrong-looking flight → `Morph.wz` `fly2` states |
+| 8 | cast `1026` — "Soaring" | character flies; check flight animation is not visibly broken | wrong-looking flight → `Morph.wz` `fly2` states |
 | 9 | after the composed install pass only: inspect Mir `1902040` and any `Eqp/Dragon` equip in the item window | real names, not "MISSING NAME" | still MISSING NAME → the force did not reach the binary side |
 
 Steps 6 and 7 are the ones that matter most — they cover the fourth acceptance criterion, and they

@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static server.V84Wz.wz;
 
 /**
  * Ticket 05 — the eight v84 mounts, merged into this repo's server XML tree by
@@ -35,9 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class V84MountNodeTest {
 
-    private static DataProvider wz(String wzFile) {
-        return new XMLWZFile(Path.of("wz", wzFile));
-    }
+    // wz(String) lives in V84Wz — one copy for all the v84 node tests (ticket 03f, F8).
 
     /**
      * The reconciled mount list: {@code {beginner skill id, TamingMob sprite id}}.
@@ -116,6 +115,38 @@ class V84MountNodeTest {
             String soaring = String.format("%07d", jobPrefix * 10000 + SOARING);
             assertNotNull(bucket.getChildByPath("skill/" + soaring), "Soaring " + soaring + " missing");
         }
+    }
+
+    /**
+     * Ticket 03f, Edit A. {@code String.wz/Skill.img} is not cosmetic here — it is the
+     * ENUMERATION SOURCE the server grants skills from. {@code MaxSkillCommand:44},
+     * {@code ResetSkillCommand:44} and {@code NPCConversationManager:395} all iterate
+     * {@code getData("Skill.img").getChildren()} and feed each child name to
+     * {@code SkillFactory.getSkill(int)}. A skill absent from this image is never visited, so
+     * before these 27 rows landed {@code !maxskill} skipped exactly these nine skills and there
+     * was no other route to them: this codebase registers no {@code !skill} command
+     * (the only skill commands {@code CommandsExecutor} registers anywhere are {@code maxskill}
+     * at {@code :417}, {@code resetskill} at {@code :418} and {@code mobskill} at {@code :427}).
+     */
+    @Test
+    void v84MountSkillsAreNamedSoTheServerCanGrantThem() {
+        Data skillNames = wz("String.wz").getData("Skill.img");
+        assertNotNull(skillNames, "String.wz/Skill.img.xml did not parse");
+        for (int jobPrefix : BEGINNER_JOBS) {
+            for (int[] mount : V84_MOUNTS) {
+                String id = String.format("%07d", jobPrefix * 10000 + mount[0]);
+                Data node = skillNames.getChildByPath(id);
+                assertNotNull(node, "String.wz/Skill.img/" + id + " missing — !maxskill will skip it");
+                assertFalse(DataTool.getString("name", node, "").isBlank(), id + " has no name");
+            }
+            String soaring = String.format("%07d", jobPrefix * 10000 + SOARING);
+            assertEquals("Soaring", DataTool.getString("name", skillNames.getChildByPath(soaring), "").trim(),
+                    soaring + " name");
+        }
+        // Negative control: Evan's copies are ticket 12/13's, with Skill.wz/2001.img. If a
+        // blanket import ever pulls them in ahead of that ticket, this fails rather than passing.
+        assertNull(skillNames.getChildByPath("20011025"),
+                "20011025 is Evan's and belongs to ticket 12/13, not here");
     }
 
     /**

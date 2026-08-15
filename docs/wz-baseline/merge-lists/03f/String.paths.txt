@@ -1,0 +1,67 @@
+# Ticket 03f - install prep. String.wz merge path list (AUTHORITATIVE DELIVERABLE).
+# 28 rows: 27 plain additions + 1 force row. Consumed by ..\composed\String.paths.txt.
+#
+# Merge: WzMerge merge <v84>\String.wz <pre>\String.wz <out>\String.wz THIS <conflicts> --deny <lists>\COLLISION-DENY.txt --force <lists>\composed\FORCE.txt --live D:\games\MapleStory\String.wz
+# XML:   WzMerge xml   <v84>\String.wz wz THIS <conflicts> --deny <lists>\COLLISION-DENY.txt --force <lists>\composed\FORCE.txt
+#
+# ---------------------------------------------------------------------------------------------
+# EDIT A - the 27 mount-skill names. 05 left these ready-to-paste in the header of
+# 05\String.paths.txt (:31-37) because 05 scoped itself to Eqp/Taming + Eqp/Dragon. Pure
+# additions, absent from the live client, ZERO COLLISIONS - do not pass --force for them.
+#
+# 05 called the gap "cosmetic only (the server reads skills from Skill.wz, never String.wz)".
+# That is wrong. String.wz/Skill.img is the ENUMERATION SOURCE the server grants skills from:
+#   MaxSkillCommand.java:44    for (Data s : getDataProvider(WZFiles.STRING).getData("Skill.img").getChildren())
+#                              -> SkillFactory.getSkill(parseInt(s.getName())) -> changeSkillLevel(max)
+#   ResetSkillCommand.java:44          same loop
+#   NPCConversationManager.java:395    same loop
+# A skill absent from Skill.img is never visited, so !maxskill silently skips exactly these nine.
+# And there is NO !skill command in this codebase - the only skill commands CommandsExecutor
+# registers anywhere are maxskill (:417), resetskill (:418) and mobskill (:427). Without these 28
+# rows the eight new mounts cannot be obtained by any route on this server: a blocker, not a
+# cosmetic gap.
+#
+# Evan's copies 20011025-20011039 and the Aran/Dragon rows on the same add-list are ticket
+# 12/13's (they need Skill.wz\2001.img, unmerged) and are deliberately NOT listed here.
+# ---------------------------------------------------------------------------------------------
+String.wz/Skill.img/0001025
+String.wz/Skill.img/0001026
+String.wz/Skill.img/0001027
+String.wz/Skill.img/0001028
+String.wz/Skill.img/0001029
+String.wz/Skill.img/0001030
+String.wz/Skill.img/0001037
+String.wz/Skill.img/0001038
+String.wz/Skill.img/0001039
+String.wz/Skill.img/10001025
+String.wz/Skill.img/10001026
+String.wz/Skill.img/10001027
+String.wz/Skill.img/10001028
+String.wz/Skill.img/10001029
+String.wz/Skill.img/10001030
+String.wz/Skill.img/10001037
+String.wz/Skill.img/10001038
+String.wz/Skill.img/10001039
+String.wz/Skill.img/20001025
+String.wz/Skill.img/20001026
+String.wz/Skill.img/20001027
+String.wz/Skill.img/20001028
+String.wz/Skill.img/20001029
+String.wz/Skill.img/20001030
+String.wz/Skill.img/20001037
+String.wz/Skill.img/20001038
+String.wz/Skill.img/20001039
+# ---------------------------------------------------------------------------------------------
+# F2 - Npc.img/9201144. THE ONE FORCE ROW. Needs --force <lists>\composed\FORCE.txt.
+#
+# 06 merged the sprite (Npc.wz\9201144.img, info/script = blackKnight_GL) and the Dragon's Nest
+# life placement but kept the live name "Steward" over v84's "Shadow Knight Rene", to "protect
+# Cosmic's custom content". It is not Cosmic's: v83-stock\String.wz carries the identical Steward
+# node - same name, same d0/n0/n1 - so v84 RENAMED a stock GMS npc and rewrote its lines to match
+# the black-knight sprite. 9201144 is referenced by exactly one thing in this repo,
+# wz\Map.wz\Map\Map6\683010000.img.xml:280, the life node 06 itself added; there is no
+# scripts\npc\9201144.js, no other placement, no Java or SQL reference. Its live entry sits at
+# wz\String.wz\Npc.img.xml:7598, appended out of sort order after 9201145 - an orphan row.
+# So the player sees a black knight labelled "Steward". Adopt v84's node.
+# ---------------------------------------------------------------------------------------------
+String.wz/Npc.img/9201144

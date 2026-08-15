@@ -11,6 +11,7 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static server.V84Wz.wz;
 
 /**
  * Ticket 03 tracer bullet: item 2001500 ("Red Potion", the untradeable v84 variant) was
@@ -32,9 +33,7 @@ class V84TracerNodeTest {
 
     private static final int TRACER_ITEM_ID = 2001500;
 
-    private static DataProvider wz(String wzFile) {
-        return new XMLWZFile(Path.of("wz", wzFile));
-    }
+    // wz(String) lives in V84Wz - one copy for all the v84 node tests (ticket 03f, F8).
 
     @Test
     void itemWzTracerNodeParses() {

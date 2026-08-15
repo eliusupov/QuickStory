@@ -50,6 +50,51 @@
     <string name="name" value="Space Beam"/>
     <string name="desc" value="[Master Level : 1]\nChanges the condition of the Krypto found at the Space Mine. #cAvailable until: 06-08-2009 at 00 hour# "/>
   </imgdir>
+  <imgdir name="0001025">
+    <string name="name" value="Charge! Wooden Pony"/>
+    <string name="desc" value="[Master Level: 1]\nAllows you to ride a Wooden Pony."/>
+    <string name="h1" value="MP -10, Weapon and Magic Attack +10, Speed +120, Jump +120"/>
+  </imgdir>
+  <imgdir name="0001026">
+    <string name="name" value="Soaring"/>
+    <string name="desc" value="[Master Level: 1]\nBorrows the mysterious powers of the Dragon race to let you fly through the sky. However, the damage you take if you fall is substantial.\nConsumes 90 MP when activated and continues to consume 3 MP per second while in the flight."/>
+    <string name="h1" value="MP -90 upon activation, MP -3/sec during flight"/>
+  </imgdir>
+  <imgdir name="0001027">
+    <string name="name" value="Croco "/>
+    <string name="desc" value="[Master Level: 1]\nAllows you to ride a Croco."/>
+    <string name="h1" value="MP -10, Weapon and Magic Attack +10, Speed +140, Jump +120"/>
+  </imgdir>
+  <imgdir name="0001028">
+    <string name="name" value="Black Scooter"/>
+    <string name="desc" value="[Master Level: 1]\nAllows you to ride a Black Scooter."/>
+    <string name="h1" value="MP -10, Weapon and Magic Attack +10, Speed +140, Jump +120"/>
+  </imgdir>
+  <imgdir name="0001029">
+    <string name="name" value="Pink Scooter"/>
+    <string name="desc" value="[Master Level: 1]\nAllows you to ride a Pink Scooter."/>
+    <string name="h1" value="MP -10, Weapon and Magic Attack +10, Speed +140, Jump +120"/>
+  </imgdir>
+  <imgdir name="0001030">
+    <string name="name" value="Nimbus Cloud"/>
+    <string name="desc" value="[Master Level: 1]\nAllows you to ride a Nimbus Cloud."/>
+    <string name="h1" value="MP -10, Weapon and Magic Attack +10, Speed +140, Jump +120"/>
+  </imgdir>
+  <imgdir name="0001037">
+    <string name="name" value="Unicorn"/>
+    <string name="desc" value="[Master Level : 1]\nLets you travel while mounted on a Unicorn."/>
+    <string name="h1" value="Consumes 10 MP, WEAPON and MAGIC DEF +10, SPEED 140, JUMP 120"/>
+  </imgdir>
+  <imgdir name="0001038">
+    <string name="name" value="Low Rider"/>
+    <string name="desc" value="[Master Level : 1]\nLets you travel while mounted on a Low Rider."/>
+    <string name="h1" value="Consumes 10 MP, WEAPON and MAGIC DEF +10, SPEED 140, JUMP 120"/>
+  </imgdir>
+  <imgdir name="0001039">
+    <string name="name" value="Red Truck"/>
+    <string name="desc" value="[Master Level : 1]\nLets you travel while mounted on a Red Truck."/>
+    <string name="h1" value="Consumes 10 MP, WEAPON and MAGIC DEF +10, SPEED 140, JUMP 120"/>
+  </imgdir>
   <imgdir name="100">
     <string name="bookName" value="Warrior Basics"/>
   </imgdir>
@@ -98,6 +143,51 @@
     <string name="h6" value="Recover HP every 16 sec."/>
     <string name="h7" value="Recover HP every 13 sec."/>
     <string name="h8" value="Recover HP every 10 sec."/>
+  </imgdir>
+  <imgdir name="10001025">
+    <string name="name" value="Charge! Wooden Pony"/>
+    <string name="desc" value="[Master Level: 1]\nAllows you to ride a Wooden Pony."/>
+    <string name="h1" value="MP -10, Weapon and Magic Attack +10, Speed +120, Jump +120"/>
+  </imgdir>
+  <imgdir name="10001026">
+    <string name="name" value="Soaring"/>
+    <string name="desc" value="[Master Level: 1]\nBorrows the mysterious powers of the Dragon race to let you fly through the sky. However, the damage you take if you fall is substantial.\nConsumes 90 MP when activated and continues to consume 3 MP per second while in the flight."/>
+    <string name="h1" value="MP -90 upon activation, MP -3/sec during flight"/>
+  </imgdir>
+  <imgdir name="10001027">
+    <string name="name" value="Croco "/>
+    <string name="desc" value="[Master Level: 1]\nAllows you to ride a Croco."/>
+    <string name="h1" value="MP -10, Weapon and Magic Attack +10, Speed +140, Jump +120"/>
+  </imgdir>
+  <imgdir name="10001028">
+    <string name="name" value="Black Scooter"/>
+    <string name="desc" value="[Master Level: 1]\nAllows you to ride a Black Scooter."/>
+    <string name="h1" value="MP -10, Weapon and Magic Attack +10, Speed +140, Jump +120"/>
+  </imgdir>
+  <imgdir name="10001029">
+    <string name="name" value="Pink Scooter"/>
+    <string name="desc" value="[Master Level: 1]\nAllows you to ride a Pink Scooter."/>
+    <string name="h1" value="MP -10, Weapon and Magic Attack +10, Speed +140, Jump +120"/>
+  </imgdir>
+  <imgdir name="10001030">
+    <string name="name" value="Nimbus Cloud"/>
+    <string name="desc" value="[Master Level: 1]\nAllows you to ride a Nimbus Cloud."/>
+    <string name="h1" value="MP -10, Weapon and Magic Attack +10, Speed +140, Jump +120"/>
+  </imgdir>
+  <imgdir name="10001037">
+    <string name="name" value="Unicorn"/>
+    <string name="desc" value="[Master Level : 1]\nLets you travel while mounted on a Unicorn."/>
+    <string name="h1" value="Consumes 10 MP, WEAPON and MAGIC DEF +10, SPEED 140, JUMP 120"/>
+  </imgdir>
+  <imgdir name="10001038">
+    <string name="name" value="Low Rider"/>
+    <string name="desc" value="[Master Level : 1]\nLets you travel while mounted on a Low Rider."/>
+    <string name="h1" value="Consumes 10 MP, WEAPON and MAGIC DEF +10, SPEED 140, JUMP 120"/>
+  </imgdir>
+  <imgdir name="10001039">
+    <string name="name" value="Red Truck"/>
+    <string name="desc" value="[Master Level : 1]\nLets you travel while mounted on a Red Truck."/>
+    <string name="h1" value="Consumes 10 MP, WEAPON and MAGIC DEF +10, SPEED 140, JUMP 120"/>
   </imgdir>
   <imgdir name="1001003">
     <string name="name" value="Iron Body"/>
@@ -207,6 +297,51 @@
     <string name="h8" value="If Level UP, +16 more; if AP applied, +8 more on top on MaxMP"/>
     <string name="h9" value="If Level UP, +18 more; if AP applied, +9 more on top on MaxMP"/>
     <string name="h10" value="If Level UP, +20 more; if AP applied, +10 more on top on MaxMP"/>
+  </imgdir>
+  <imgdir name="20001025">
+    <string name="name" value="Charge! Wooden Pony"/>
+    <string name="desc" value="[Master Level: 1]\nAllows you to ride a Wooden Pony."/>
+    <string name="h1" value="MP -10, Weapon and Magic Attack +10, Speed +120, Jump +120"/>
+  </imgdir>
+  <imgdir name="20001026">
+    <string name="name" value="Soaring"/>
+    <string name="desc" value="[Master Level: 1]\nBorrows the mysterious powers of the Dragon race to let you fly through the sky. However, the damage you take if you fall is substantial.\nConsumes 90 MP when activated and continues to consume 3 MP per second while in the flight."/>
+    <string name="h1" value="MP -90 upon activation, MP -3/sec during flight"/>
+  </imgdir>
+  <imgdir name="20001027">
+    <string name="name" value="Croco "/>
+    <string name="desc" value="[Master Level: 1]\nAllows you to ride a Croco."/>
+    <string name="h1" value="MP -10, Weapon and Magic Attack +10, Speed +140, Jump +120"/>
+  </imgdir>
+  <imgdir name="20001028">
+    <string name="name" value="Black Scooter"/>
+    <string name="desc" value="[Master Level: 1]\nAllows you to ride a Black Scooter."/>
+    <string name="h1" value="MP -10, Weapon and Magic Attack +10, Speed +140, Jump +120"/>
+  </imgdir>
+  <imgdir name="20001029">
+    <string name="name" value="Pink Scooter"/>
+    <string name="desc" value="[Master Level: 1]\nAllows you to ride a Pink Scooter."/>
+    <string name="h1" value="MP -10, Weapon and Magic Attack +10, Speed +140, Jump +120"/>
+  </imgdir>
+  <imgdir name="20001030">
+    <string name="name" value="Nimbus Cloud"/>
+    <string name="desc" value="[Master Level: 1]\nAllows you to ride a Nimbus Cloud."/>
+    <string name="h1" value="MP -10, Weapon and Magic Attack +10, Speed +140, Jump +120"/>
+  </imgdir>
+  <imgdir name="20001037">
+    <string name="name" value="Unicorn"/>
+    <string name="desc" value="[Master Level : 1]\nLets you travel while mounted on a Unicorn."/>
+    <string name="h1" value="Consumes 10 MP, WEAPON and MAGIC DEF +10, SPEED 140, JUMP 120"/>
+  </imgdir>
+  <imgdir name="20001038">
+    <string name="name" value="Low Rider"/>
+    <string name="desc" value="[Master Level : 1]\nLets you travel while mounted on a Low Rider."/>
+    <string name="h1" value="Consumes 10 MP, WEAPON and MAGIC DEF +10, SPEED 140, JUMP 120"/>
+  </imgdir>
+  <imgdir name="20001039">
+    <string name="name" value="Red Truck"/>
+    <string name="desc" value="[Master Level : 1]\nLets you travel while mounted on a Red Truck."/>
+    <string name="h1" value="Consumes 10 MP, WEAPON and MAGIC DEF +10, SPEED 140, JUMP 120"/>
   </imgdir>
   <imgdir name="2001002">
     <string name="name" value="Magic Guard"/>

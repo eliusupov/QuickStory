@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static server.V84Wz.wz;
 
 /**
  * Ticket 06 - Crimson Sky. Sibling of {@link V84TracerNodeTest}, same technique and same
@@ -66,9 +67,7 @@ class V84CrimsonSkyNodeTest {
 
     private static final int[] REACTORS = {2408005, 2408006};
 
-    private static DataProvider wz(String wzFile) {
-        return new XMLWZFile(Path.of("wz", wzFile));
-    }
+    // wz(String) lives in V84Wz - one copy for all the v84 node tests (ticket 03f, F8).
 
     /** Asserts rather than returns null, so a missing map fails with its id instead of an NPE. */
     private static Data map(int mapId) {
@@ -299,9 +298,13 @@ class V84CrimsonSkyNodeTest {
                 DataTool.getString("name", npcNames.getChildByPath("2085001"), "").trim());
         assertEquals("Giant Twin Dragon's Egg",
                 DataTool.getString("name", npcNames.getChildByPath("9201145"), "").trim());
-        // deliberately NOT taken from v84: live 9201144 is Cosmic's own "Steward"
-        assertEquals("Steward", DataTool.getString("name", npcNames.getChildByPath("9201144"), "").trim(),
-                "v84's 'Shadow Knight Rene' overwrote Cosmic's Steward");
+        // Ticket 03f, F2: taken from v84 after all, by force. 06 kept the live "Steward" to
+        // protect Cosmic custom content, but v83-stock ships the identical Steward node - so
+        // v84 renamed a STOCK npc, and 9201144 is placed by exactly one thing in this repo,
+        // the 683010000 life node 06 itself added. Keeping the old name left a black knight
+        // (Npc.wz/9201144.img info/script = blackKnight_GL) labelled "Steward".
+        assertEquals("Shadow Knight Rene", DataTool.getString("name", npcNames.getChildByPath("9201144"), "").trim(),
+                "9201144 should carry v84's name; it is forced via merge-lists/composed/FORCE.txt");
     }
 
     // ---- the drop tables ----------------------------------------------------------------

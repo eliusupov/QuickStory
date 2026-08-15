@@ -1,0 +1,40 @@
+# COMPOSED INSTALL LIST - Mob.wz. Built by ticket 03f from the committed per-ticket
+# lists under ..\{04,05,06,07,03f}\ - those are the source of truth, this file is a
+# concatenation of them in ticket order with each block's internal order preserved.
+# Every row is unique across the whole composed set and no row is an ancestor of
+# another (checked, all ten files). Regenerate rather than hand-edit.
+#
+# 21 rows. 06's 17 + 07's 4. Expect exit 0.
+#
+# Ticket 08 is in flight and owns Map.wz, Mob.wz, Npc.wz, Reactor.wz, Sound.wz and the
+# String.wz/{Map,Mob,Npc}.img path lists. It appends its own '# ==== ticket 08 ====' block
+# at the foot of the relevant files; nothing above it needs to move.
+#
+# Run book: ..\..\..\work-plan\WZ-MERGE-PROCEDURE.md section 5, one file at a time.
+
+# ==== ticket 06 (17 rows, order preserved from 06\Mob.paths.txt) ====
+Mob.wz/8300000.img
+Mob.wz/8300001.img
+Mob.wz/8300002.img
+Mob.wz/8300003.img
+Mob.wz/8300004.img
+Mob.wz/8300005.img
+Mob.wz/8300006.img
+Mob.wz/8300007.img
+Mob.wz/9500374.img
+Mob.wz/9500375.img
+Mob.wz/9500376.img
+Mob.wz/9500377.img
+Mob.wz/9500378.img
+Mob.wz/9500379.img
+Mob.wz/9500380.img
+Mob.wz/9500381.img
+Mob.wz/9500382.img
+
+# ==== ticket 07 (4 rows, order preserved from 07\Mob.paths.txt) ====
+Mob.wz/9400658.img
+Mob.wz/9400659.img
+Mob.wz/9400660.img
+Mob.wz/9400661.img
+
+# ==== ticket 08 appends here ====

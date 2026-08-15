@@ -128,7 +128,12 @@ Mob / NPC / reactor ids are outside what `deps` resolves. Checked by hand agains
 | `Reactor.paths.txt` | 2 | `2408005` (heal), `2408006` (damage) |
 | `Sound.paths.txt` | 1 | `Bgm14.img/DragonRider` |
 | `String.paths.txt` | 35 | 13 `Map.img/ossyria`, 17 `Mob.img`, 5 `Npc.img` |
-| **total** | **95** | |
+| **total** | **95** | requested |
+
+**95 is the XML total. The binary side installed 94.** `Sound.wz`'s single row merged correctly
+but its output was discarded for the verifier reason below, so the staged client is 94 and the
+server tree is 95. Ticket 03f fixed the verifier and the composed install gets all 95 on both
+sides. (Added by 03f — "95 added" read as a single figure for both halves and it never was.)
 
 ## Dry runs, conflicts, force decisions
 
@@ -150,10 +155,21 @@ staging directory is empty. None of the 28 deny roots intersects this ticket's 9
 ticket never touches `MonsterBook.img`, `NpcLocation.img` or `Npc.wz/9000021.img`.
 
 **One collision decided by *not* listing it.** v84 renames `String.wz/Npc.img/9201144` to "Shadow
-Knight Rene"; the live client has that id as Cosmic's **"Steward"**. Adopting v84's value would
-rename a server-owned NPC, so the row is absent from `String.paths.txt` by choice rather than
-refused by the gate. `683010000`'s NPC therefore reads "Steward" in game. Asserted in the test so it
-cannot be silently reverted later.
+Knight Rene"; the live client has that id as **"Steward"**. Adopting v84's value looked like
+renaming a server-owned NPC, so the row was absent from `String.paths.txt` by choice rather than
+refused by the gate.
+
+> **REVERSED by ticket 03f, 2026-08-16 (review finding F2). The premise did not survive checking.**
+> `Steward` is **not** Cosmic's: `porting-resources/wz-data/v83-stock/String.wz` carries the
+> identical node — same name, same `d0`/`n0`/`n1` — so v84 **renamed a stock GMS npc** and rewrote
+> its lines to match the sprite. And `9201144` is referenced by exactly one thing in this repo:
+> `wz/Map.wz/Map/Map6/683010000.img.xml:280`, the `life` node **this ticket added**. There is no
+> `scripts/npc/9201144.js`, no other placement, no Java or SQL reference; the live `String.wz`
+> entry sits at `Npc.img.xml:7598`, appended out of sort order after `9201145` — an orphan row.
+> Meanwhile this ticket merged the *sprite* (`Npc.wz/9201144.img`, `info/script = blackKnight_GL`),
+> so the player saw a black knight labelled "Steward". 03f forces v84's node on both sides;
+> `String.wz/Npc.img/9201144` is on `merge-lists/composed/FORCE.txt` and in
+> `merge-lists/03f/String.paths.txt`, and `V84CrimsonSkyNodeTest` now pins "Shadow Knight Rene".
 
 ## Merge results
 
@@ -197,6 +213,16 @@ Cost: `240080700`/`701`/`800`/`801` play no BGM **in the client**. Cosmetic, non
 row stays in `Sound.paths.txt` and **was applied to the server XML tree**, so only the client half
 is outstanding; a composed install can take it once the verifier learns to ignore an image that was
 already unparseable in the target.
+
+> **Fixed by ticket 03f, 2026-08-16.** `VerifyFile` now pre-scans the merge target and discounts,
+> **per image**, only those that were already unparseable there — so `BgmGL.img` no longer counts
+> as damage this merge caused, while an image that parses in the target and fails in the output
+> still fails, which is the corruption the check exists for. Re-run with `06/Sound.paths.txt`
+> against the same live base: `added 1 (forced 0), refused 0`,
+> `verify: 44 images parsed, 0 unparseable (1 pre-existing, discounted)`, `verified OK`, **exit 0**.
+> Output is `D:\games\MapleStory\Server\wz-merge\03f\Sound.wz`,
+> SHA-256 `6FF56D43138DDDADAB0FEE24E1DF718EA913134B827E1FBD2CB3CB9A0F41B678`. Discarding the
+> `.partial` was still the right call at the time.
 
 ## Verification
 
@@ -259,7 +285,8 @@ the `WZFiles.DIRECTORY` static-init reason the tracer test documents. What it pr
 - every reactor id any map places is merged
 - all 10 `dragonRoad` frames, `dungeon3/skyValley` and `blackTileFly` are present, **and** the v83
   nodes beside them (`dragonRoad back/0`, `dungeon3/dragonValley`) still are
-- names read back and none is blank or `MISSING NAME`; `9201144` still reads "Steward"
+- names read back and none is blank or `MISSING NAME`; `9201144` read "Steward" — **now
+  "Shadow Knight Rene"**, see the reversal above
 - the drop SQL parses as one well-formed statement, 776 rows, 16 dropperids, exactly one `;` in the
   whole file and no apostrophe in any comment — the two ways the header could split the INSERT
 - **every one of the 776 rows exists verbatim under its declared analogue in `152-drop-data.sql`,
@@ -403,7 +430,9 @@ Windows will not replace a `.wz` the client holds open.
    **Coordination:** ticket 04 also stages a `String.wz` from the same v83 base. Staged merges from
    the same base do **not** compose — installing both loses one set. Compose from the path lists
    under `docs/wz-baseline/merge-lists/{04,06}/` instead of copying two `String.wz`.
-2. **Run the DB migration.** Liquibase changeSet `153` inserts the 790 drop rows. Confirm:
+2. **Run the DB migration.** Liquibase changeSet `153` inserts the **776** drop rows (this step
+   said 790; the ticket's own acceptance criterion, its verification section and the SQL header
+   all say 776 — corrected by ticket 03f). Confirm:
    `SELECT dropperid, COUNT(*) FROM drop_data WHERE dropperid IN (8300000,8300005,9500380,9500382) GROUP BY dropperid;`
    → `8300000`=54, `8300005`=75, `9500380`=54, `9500382`=63.
 3. **Reach the area.** No player route exists yet (see "Travel route"). Use `!warp 240080000`.

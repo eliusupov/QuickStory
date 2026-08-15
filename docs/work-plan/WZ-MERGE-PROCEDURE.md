@@ -102,7 +102,7 @@ Sibling of ticket 02's diff tool (`docs/wz-baseline/tool/`), same `MapleLibProje
 WzMerge dump   <wz> <path/under/wz> [depth]
 WzMerge merge  <sourceWz> <targetWz> <outWz|-> <pathsFile> <conflictsTxt> --deny <denyList> [--force <forceList>] [--live <liveWz>]
 WzMerge xml    <sourceWz> <xmlRoot>            <pathsFile> <conflictsTxt> --deny <denyList> [--force <forceList>] [-]
-WzMerge verify <wz> <pathsFile>
+WzMerge verify <wz> <pathsFile> [--baseline <targetWz>]
 WzMerge hash   <wz> <path/under/wz>
 WzMerge deps   <mapWz> <mapId|Map/MapN/<id>.img> <addListDir>
 WzMerge guard  <outWz>
@@ -439,6 +439,11 @@ half-rollback, which is why 5.0 is mandatory.
 `XMLDomMapleData` — the exact classes the running server uses. **Extend that class with your own
 ids rather than building a second harness.**
 
+Tickets 04–08 each landed a sibling class instead, to avoid four agents editing one file
+mid-flight. That is a defensible call for the test *bodies*; it was not one for the two-line
+`wz(String)` helper, which ended up copied verbatim five times. **It now lives once, in
+`src/test/java/server/V84Wz.java`** — `import static server.V84Wz.wz;` and do not re-copy it.
+
 ```
 ./mvnw -o test -Dtest=V84TracerNodeTest
 ```
@@ -688,6 +693,13 @@ ticket 12 will be the first to do that, and it is the case most likely to hit th
 - **`Sound.wz/BgmGL.img` is unreadable by MapleLib in ALL THREE trees** (`WZ extended property
   exceeds its declared block`) — a library limitation, not a live-client defect, and symmetric, so
   it biases no manifest. Avoid; `deps` will name a `BgmGL` track it cannot help you with.
+  **Since ticket 03f this no longer fails the merge**: post-write verification pre-scans the merge
+  target and discounts, per image, only images that were *already* unparseable there, so a
+  `Sound.wz` merge exits 0 instead of 4. An image that parses in the target and fails in the
+  output still fails — that is the corruption the check exists for, and the discount is
+  one-directional on purpose. `WzMerge verify <wz> <paths> --baseline <targetWz>` applies the same
+  discount by hand. Before 03f, **every** `Sound.wz` merge stayed `.partial` and exited 4 no
+  matter how correct the data was; ticket 06 hit it and correctly discarded the output.
   (`Base`/`Effect`/`Morph`/`Sound`/`TamingMob` **do** have stock baselines and add-lists now — 02f
   completed them. `Base.txt` and `TamingMob.txt` are 0-row files, which is why a 0-row manifest is
   a hard error rather than a silent success.)

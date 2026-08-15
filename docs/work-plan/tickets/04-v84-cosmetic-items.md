@@ -94,13 +94,50 @@ Coco"). No-op refusals; keeping local costs nothing and forcing them would be po
   client animation frames; the server reads no sprite frames from `Character.wz`, so the divergence
   is inert server-side. The three frames **are** present in the staged client `.wz`.
 
+## ⚠ OPEN DECISION ITEM — four live-modified weapons gained v84 combat stats. Owner call.
+
+*Raised by the 04/05/06 code review (F1), written up here by ticket 03f, 2026-08-16. **Not
+decided, not reverted** — it deserves the same explicit treatment `Dragon/…/info/level` got above,
+and this ticket's own §"Proof that nothing pre-existing moved" table lists it as an accepted
+change without ever flagging it as a decision.*
+
+| item | live `info` before | what v84's rows add |
+|---|---|---|
+| `01382058` "… for Transformation" | cosmetic fields only | `incPAD 77`, `tuc 7`, and the rest of a real weapon's stat block |
+| `01452058` Barisetter | cosmetic fields only | ditto |
+| `01472069` "… for Transformation" | cosmetic fields only | ditto |
+| `01492024` "… for Transformation" | cosmetic fields only | ditto |
+
+All four are **live-customised content** and three are morph props — "… for Transformation" items
+whose `info` node previously held nothing but cosmetics. The merge added children into that node,
+which is additive and correct by the rule, but the *effect* is that three morph props become real
+weapons with 7 upgrade slots.
+
+**Practical risk is low, and that is why this is a note rather than a stop:** none has a drop-table
+row, none has a shop row, all four are `cash=1`, and `Etc.wz` (`Commodity.img`) was declined
+wholesale by 03c, so there is no cash-shop route either. Nothing today hands a player one.
+
+**The decision to make:** keep v84's stats (a morph prop that is also a 77-attack weapon if anyone
+ever grants one), or drop these four rows from `04/Character.paths.txt` and re-run. Either is
+cheap. It is an owner call because it is a *game-design* question about Cosmic's own content, not
+a merge-correctness question.
+
 ## Proof that nothing pre-existing moved
 
 `WzMerge hash` over **every image in the file**, pre vs post — not a presence check, a SHA-256 of
 each image's decoded content (canvases by the digest of their compressed pixel bytes).
 
-**`Character.wz`: 7,241 image digests compared. Exactly 12 changed, and all 12 are the 12 images
-this ticket's path list names sub-image rows for.** Nothing else in a 206 MB file moved.
+**`Character.wz`: all 7,207 images digested, pre vs post. Exactly 12 changed, and all 12 are the
+12 images this ticket's path list names sub-image rows for.** Nothing else in a 206 MB file moved.
+
+> **Label corrected by ticket 03f, 2026-08-16.** This said "7,241 image digests". 7,241 is a
+> `wc -l` of the hash file, not an image count: 7,207 images + 17 subdirectory rollup lines + 17
+> `TOTAL` lines. The **coverage was complete and the finding stands** — only the number was
+> mislabelled. Measured directly: `WzMerge verify` over the pristine live `Character.wz` reports
+> `7207 images parsed`. Ticket 05's §6 line `verify: 7215 images` is the same file **after** 05's
+> 8 mount sprites (7,207 + 8) and does not contradict this. The composed merge (03f) reports
+> `7361 images parsed` = 7,207 + 154: the composed list holds 156 whole-image rows and the two
+> medal images are refused.
 
 | image | my rows | what changed |
 |---|---:|---|
@@ -117,8 +154,17 @@ changed** — `Cap/01002728`, the 4 `Dragon`, `Glove/01082262`, the 4 `Weapon` �
 gaining a child, with **zero children lost or altered** (child-level digest diff, above). The other
 **5,110 are digest-identical**. Ezorsia's 18.6 MB of HD art is untouched.
 
-`String.wz`: of 20 root images, exactly the 5 ticket 04 owns changed. `Map.img`, `Mob.img`,
-`Npc.img` (ticket 06), `MonsterBook.img`, `Skill.img`, `Pet.img`, `ToolTipHelp.img` — **byte-identical**.
+`String.wz`: of 20 root images, exactly the **6** ticket 04 owns changed. `Map.img`, `Mob.img`,
+`Npc.img` (ticket 06), `MonsterBook.img`, `ToolTipHelp.img` — **byte-identical**.
+
+> **Corrected by ticket 03f, 2026-08-16.** This sentence said "the 5", and its byte-identical list
+> included `Pet.img`. `Pet.img` is **not** byte-identical: commit `c3bc7d20d` ("04: review fixes —
+> ship Pet 5000067's name") added `String.wz/Pet.img/5000067`, and this ticket's own "Item.wz"
+> paragraph two sections down names `Pet/5000067.img` as one of its two brand-new images. **The
+> merge is right; the doc contradicted itself two sections apart** — 6 root images, not 5.
+> `Skill.img` was byte-identical when 04 ran and is dropped from the list for a different reason:
+> ticket 03f has since added the 27 mount-skill names to it.
+
 Inside `Eqp.img`: `Eqp/Hair` 1,518 → 1,558 children with **0 overwritten**; `Eqp/Taming` 47 → 47 and
 `Eqp/Dragon` 12 → 12, **0 changed, 0 added** — ticket 05's territory provably untouched. The 30
 forced ids are the only overwrites anywhere, and they are exactly the intended ids.

@@ -26,15 +26,25 @@
 # XML:   WzMerge xml   <v84>\String.wz wz THIS <conflicts> --deny <lists>\COLLISION-DENY.txt --force <lists>\COLLISION-FORCE.txt
 #
 # ---------------------------------------------------------------------------------------------
-# NOT MERGED - NOT OWNED BY 05. The 27 String.wz/Skill.img rows that name these mount skills.
-# Without them the nine skills in Skill.paths.txt appear in the client skill window with no name
-# and no description. They are pure additions (absent from the live client, zero collisions), so
-# whoever takes them needs no --force. 05's ownership was scoped to Eqp/Taming + Eqp/Dragon, so
-# they are left here ready to paste rather than merged. Evan's copies (20011025-20011039) and the
-# Aran/Dragon rows on the same add-list are ticket 12/13's and are NOT listed here.
+# TAKEN BY TICKET 03f, 2026-08-16 -> ..\03f\String.paths.txt (27 rows, expanded and merged).
+# They are ALSO on ..\composed\String.paths.txt. Do not paste them anywhere a third time.
+#
+# The 27 String.wz/Skill.img rows that name these mount skills. Pure additions (absent from the
+# live client, zero collisions), so no --force. 05's ownership was scoped to Eqp/Taming +
+# Eqp/Dragon, so they were left here ready to paste rather than merged. Evan's copies
+# (20011025-20011039) and the Aran/Dragon rows on the same add-list are ticket 12/13's and are
+# still NOT listed - keep that exclusion.
 #   String.wz/Skill.img/{0001025,0001026,0001027,0001028,0001029,0001030,0001037,0001038,0001039}
 #   String.wz/Skill.img/{10001025,10001026,10001027,10001028,10001029,10001030,10001037,10001038,10001039}
 #   String.wz/Skill.img/{20001025,20001026,20001027,20001028,20001029,20001030,20001037,20001038,20001039}
+#
+# CORRECTION (03f). This header used to describe the gap as cosmetic - "the nine skills appear in
+# the client skill window with no name and no description". It is worse than that:
+# String.wz/Skill.img is the ENUMERATION SOURCE the server grants skills from
+# (MaxSkillCommand.java:44, ResetSkillCommand.java:44, NPCConversationManager.java:395 all iterate
+# getData("Skill.img").getChildren() -> SkillFactory.getSkill(parseInt(name))). A skill absent
+# from Skill.img is never visited, so !maxskill skipped exactly these nine - and there is no
+# !skill command in this codebase. Without these rows the eight mounts were unobtainable.
 # ---------------------------------------------------------------------------------------------
 String.wz/Eqp.img/Eqp/Dragon
 String.wz/Eqp.img/Eqp/Taming/1902040

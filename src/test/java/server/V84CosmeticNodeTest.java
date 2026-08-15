@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static server.V84Wz.wz;
 
 /**
  * Ticket 04 — the v84 cosmetics merged into this repo's server XML tree by
@@ -34,9 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  */
 class V84CosmeticNodeTest {
 
-    private static DataProvider wz(String wzFile) {
-        return new XMLWZFile(Path.of("wz", wzFile));
-    }
+    // wz(String) lives in V84Wz - one copy for all the v84 node tests (ticket 03f, F8).
 
     /** base id of each named v84 hair family; all eight colour digits 0-7 exist for each. */
     private static final int[] V84_HAIR_FAMILIES = {31990, 33030, 33050, 33150, 34060};
