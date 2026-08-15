@@ -187,5 +187,132 @@ static class Program
 
         File.WriteAllLines(Path.Combine(outRoot, "SUMMARY.md"), summary);
         Console.WriteLine("Done. Summary at " + Path.Combine(outRoot, "SUMMARY.md"));
+
+        // ponytail: one-off follow-up audit for the Map.wz v83->v84 node-count drop
+        // (orchestrator asked: genuine removal, structural repack, or damaged copy?).
+        // Reuses OpenAndWalk rather than a new tool.
+        var absentMapIds = MapAudit(v83Dir, v84Dir, outRoot);
+        NpcSpotCheck(v83Dir);
+        MapNameLookup(v83Dir, outRoot, absentMapIds);
+    }
+
+    // ponytail: identify what the "missing" map ids actually are, by name, so we can
+    // tell "seasonal event maps genuinely dropped" from "damaged archive". Map.img is
+    // organized by world/region name (maple, event, jp, singapore...), not by leading
+    // digit, so this recursively searches for id-shaped keys anywhere under it rather
+    // than guessing the region layout.
+    static void MapNameLookup(string v83Dir, string outRoot, List<string> absentPaths)
+    {
+        Console.WriteLine("=== missing-map name lookup ===");
+        var wantedIds = absentPaths
+            .Select(p => Path.GetFileNameWithoutExtension(p[(p.LastIndexOf('/') + 1)..]))
+            .ToHashSet(StringComparer.Ordinal);
+
+        string path = Path.Combine(v83Dir, "String.wz");
+        var (file, ver, err) = TryOpen(path);
+        if (file == null) { Console.WriteLine("  could not open v83 String.wz: " + err); return; }
+
+        var mapImg = file.WzDirectory.WzImages.FirstOrDefault(i => i.Name.Equals("Map.img", StringComparison.OrdinalIgnoreCase));
+        var found = new Dictionary<string, (string region, string street, string name)>();
+        if (mapImg != null)
+        {
+            void Walk(MapleLib.WzLib.WzPropertyCollection props, string region, int depth)
+            {
+                if (depth > 6) return;
+                foreach (var p in props)
+                {
+                    if (wantedIds.Contains(p.Name) && p.WzProperties != null)
+                    {
+                        string name = p.WzProperties.FirstOrDefault(c => c.Name.Equals("mapName", StringComparison.OrdinalIgnoreCase))?.ToString() ?? "";
+                        string street = p.WzProperties.FirstOrDefault(c => c.Name.Equals("streetName", StringComparison.OrdinalIgnoreCase))?.ToString() ?? "";
+                        found[p.Name] = (region, street, name);
+                    }
+                    if (p.WzProperties != null)
+                        Walk(p.WzProperties, region == "" ? p.Name : region, depth + 1);
+                }
+            }
+            Walk(mapImg.WzProperties, "", 0);
+        }
+
+        var lines = new List<string>
+        {
+            "# missing map id -> name lookup (from v83-stock String.wz/Map.img, recursive)",
+            "",
+            $"{wantedIds.Count} ids searched for, {found.Count} names found",
+            ""
+        };
+        foreach (var id in wantedIds.OrderBy(x => x, StringComparer.Ordinal))
+        {
+            lines.Add(found.TryGetValue(id, out var v)
+                ? $"{id}\tregion={v.region}\tstreet={v.street}\tname={v.name}"
+                : $"{id}\t(no String.wz entry found)");
+        }
+        File.WriteAllLines(Path.Combine(outRoot, "map-missing-names-v83.txt"), lines);
+        file.Dispose();
+        Console.WriteLine($"  {found.Count}/{wantedIds.Count} names resolved, wrote " + Path.Combine(outRoot, "map-missing-names-v83.txt"));
+    }
+
+    static List<string> MapAudit(string v83Dir, string v84Dir, string outRoot)
+    {
+        Console.WriteLine("=== Map.wz audit ===");
+        var s83 = OpenAndWalk(v83Dir, "Map.wz", out var st83);
+        var s84 = OpenAndWalk(v84Dir, "Map.wz", out var st84);
+        if (s83 == null || s84 == null) { Console.WriteLine("  could not open both trees"); return new(); }
+
+        var v84Sizes = s84.ImageSizes; // image paths only, no directory placeholders
+        var v84Leaves = new HashSet<string>(v84Sizes.Keys.Select(p => p[(p.LastIndexOf('/') + 1)..]), StringComparer.OrdinalIgnoreCase);
+
+        var missing = s83.ImageSizes.Keys.Where(p => !v84Sizes.ContainsKey(p)).ToList();
+        int relocated = 0, absent = 0;
+        var byContainer = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        var absentSamples = new List<string>();
+        foreach (var p in missing)
+        {
+            string leaf = p[(p.LastIndexOf('/') + 1)..];
+            bool foundElsewhere = v84Leaves.Contains(leaf);
+            if (foundElsewhere) relocated++; else { absent++; if (absentSamples.Count < 20) absentSamples.Add(p); }
+
+            // group by path segment right after "Map.wz/" (Map, Back, Obj, Tile, WorldMap...),
+            // and one level further for Map/MapN buckets.
+            var parts = p.Split('/');
+            string container = parts.Length > 2 ? string.Join("/", parts.Skip(1).Take(2)) : parts.ElementAtOrDefault(1) ?? "?";
+            byContainer[container] = byContainer.GetValueOrDefault(container) + 1;
+        }
+
+        Console.WriteLine($"  v83 image nodes: {s83.ImageSizes.Count}, v84 image nodes: {v84Sizes.Count}");
+        Console.WriteLine($"  missing from v84 (by exact path): {missing.Count}");
+        Console.WriteLine($"  -> same leaf name found somewhere else in v84 (relocated/structural): {relocated}");
+        Console.WriteLine($"  -> leaf name not found anywhere in v84 (genuinely absent): {absent}");
+
+        var lines = new List<string>
+        {
+            "# Map.wz v83->v84 node-count drop audit",
+            "",
+            $"v83 image nodes: {s83.ImageSizes.Count}, v84 image nodes: {v84Sizes.Count}",
+            $"missing from v84 by exact path: {missing.Count}",
+            $"  relocated (leaf name exists elsewhere in v84): {relocated}",
+            $"  genuinely absent (leaf name not found anywhere in v84): {absent}",
+            "",
+            "## missing paths grouped by container (top 30 by count)",
+            ""
+        };
+        foreach (var kv in byContainer.OrderByDescending(kv => kv.Value).Take(30))
+            lines.Add($"{kv.Value,6}  {kv.Key}");
+        lines.Add("");
+        lines.Add("## all genuinely-absent paths");
+        var absentPaths = missing.Where(p => !v84Leaves.Contains(p[(p.LastIndexOf('/') + 1)..])).OrderBy(p => p, StringComparer.OrdinalIgnoreCase).ToList();
+        lines.AddRange(absentPaths);
+        File.WriteAllLines(Path.Combine(outRoot, "map-v83-only-audit.txt"), lines);
+        Console.WriteLine("  wrote " + Path.Combine(outRoot, "map-v83-only-audit.txt"));
+        return absentPaths;
+    }
+
+    static void NpcSpotCheck(string v83Dir)
+    {
+        Console.WriteLine("=== Npc.wz 9000071 (Keroben) spot check ===");
+        var s83 = OpenAndWalk(v83Dir, "Npc.wz", out var st83);
+        if (s83 == null) { Console.WriteLine("  could not open v83 Npc.wz"); return; }
+        bool found = s83.Paths.Contains("Npc.wz/9000071.img");
+        Console.WriteLine($"  Npc.wz/9000071.img present in v83-stock: {found}");
     }
 }

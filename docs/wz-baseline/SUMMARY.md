@@ -1,6 +1,6 @@
 # WZ baseline diff — machine-generated summary
 
-Generated 2026-08-15 22:18:37
+Generated 2026-08-15 22:29:34
 
 | wz | v83-stock | v84 | live client | add (v84-v83) | protect (live - (v83 u v84)) | add bytes (BlockSize sum) | protect bytes (BlockSize sum) |
 |---|---|---|---|---|---|---|---|

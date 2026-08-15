@@ -1,0 +1,836 @@
+# missing map id -> name lookup (from v83-stock String.wz/Map.img, recursive)
+
+832 ids searched for, 815 names found
+
+000000001	(no String.wz entry found)
+000000002	(no String.wz entry found)
+000000003	(no String.wz entry found)
+000020001	(no String.wz entry found)
+000040001	(no String.wz entry found)
+000040002	(no String.wz entry found)
+000050001	(no String.wz entry found)
+000060000	(no String.wz entry found)
+000060001	(no String.wz entry found)
+001000004	(no String.wz entry found)
+001000005	(no String.wz entry found)
+001000006	(no String.wz entry found)
+001010001	(no String.wz entry found)
+001010002	(no String.wz entry found)
+001010003	(no String.wz entry found)
+001010004	(no String.wz entry found)
+001020001	(no String.wz entry found)
+109090001	region=victoria	street=Hidden Street  	name=Sheep Ranch Lobby  
+109090002	region=victoria	street=Hidden Street 	name=Sheep Ranch Lobby  
+109090003	region=victoria	street=Hidden Street  	name=Sheep Ranch Lobby 
+109090004	region=victoria	street=Hidden Street  	name=Sheep Ranch Lobby 
+925020610	region=etc	street=Mu Lung Dojo	name=Mu Lung Dojo 6th Floor
+970030100	region=etc	street=Hidden Street	name=Stage 1 <Mano>
+970030101	region=etc	street=Hidden Street	name=Stage 1 <Mano>
+970030102	region=etc	street=Hidden Street	name=Stage 1 <Mano>
+970030103	region=etc	street=Hidden Street	name=Stage 1 <Mano>
+970030104	region=etc	street=Hidden Street	name=Stage 1 <Mano>
+970030105	region=etc	street=Hidden Street	name=Stage 1 <Mano>
+970030106	region=etc	street=Hidden Street	name=Stage 1 <Mano>
+970030107	region=etc	street=Hidden Street	name=Stage 1 <Mano>
+970030108	region=etc	street=Hidden Street	name=Stage 1 <Mano>
+970030109	region=etc	street=Hidden Street	name=Stage 1 <Mano>
+970030110	region=etc	street=Hidden Street	name=Stage 1 <Mano>
+970030111	region=etc	street=Hidden Street	name=Stage 1 <Mano>
+970030200	region=etc	street=Hidden Street	name=Stage 2 <Stumpy>
+970030201	region=etc	street=Hidden Street	name=Stage 2 <Stumpy>
+970030202	region=etc	street=Hidden Street	name=Stage 2 <Stumpy>
+970030203	region=etc	street=Hidden Street	name=Stage 2 <Stumpy>
+970030204	region=etc	street=Hidden Street	name=Stage 2 <Stumpy>
+970030205	region=etc	street=Hidden Street	name=Stage 2 <Stumpy>
+970030206	region=etc	street=Hidden Street	name=Stage 2 <Stumpy>
+970030207	region=etc	street=Hidden Street	name=Stage 2 <Stumpy>
+970030208	region=etc	street=Hidden Street	name=Stage 2 <Stumpy>
+970030209	region=etc	street=Hidden Street	name=Stage 2 <Stumpy>
+970030210	region=etc	street=Hidden Street	name=Stage 2 <Stumpy>
+970030211	region=etc	street=Hidden Street	name=Stage 2 <Stumpy>
+970030300	region=etc	street=Hidden Street	name=Stage 3 <Deo>
+970030301	region=etc	street=Hidden Street	name=Stage 3 <Deo>
+970030302	region=etc	street=Hidden Street	name=Stage 3 <Deo>
+970030303	region=etc	street=Hidden Street	name=Stage 3 <Deo>
+970030304	region=etc	street=Hidden Street	name=Stage 3 <Deo>
+970030305	region=etc	street=Hidden Street	name=Stage 3 <Deo>
+970030306	region=etc	street=Hidden Street	name=Stage 3 <Deo>
+970030307	region=etc	street=Hidden Street	name=Stage 3 <Deo>
+970030308	region=etc	street=Hidden Street	name=Stage 3 <Deo>
+970030309	region=etc	street=Hidden Street	name=Stage 3 <Deo>
+970030310	region=etc	street=Hidden Street	name=Stage 3 <Deo>
+970030311	region=etc	street=Hidden Street	name=Stage 3 <Deo>
+970030400	region=etc	street=Hidden Street	name=Stage 4 <King Slime>
+970030401	region=etc	street=Hidden Street	name=Stage 4 <King Slime>
+970030402	region=etc	street=Hidden Street	name=Stage 4 <King Slime>
+970030403	region=etc	street=Hidden Street	name=Stage 4 <King Slime>
+970030404	region=etc	street=Hidden Street	name=Stage 4 <King Slime>
+970030405	region=etc	street=Hidden Street	name=Stage 4 <King Slime>
+970030406	region=etc	street=Hidden Street	name=Stage 4 <King Slime>
+970030407	region=etc	street=Hidden Street	name=Stage 4 <King Slime>
+970030408	region=etc	street=Hidden Street	name=Stage 4 <King Slime>
+970030409	region=etc	street=Hidden Street	name=Stage 4 <King Slime>
+970030410	region=etc	street=Hidden Street	name=Stage 4 <King Slime>
+970030411	region=etc	street=Hidden Street	name=Stage 4 <King Slime>
+970030500	region=etc	street=Hidden Street	name=Stage 5 <Faust>
+970030501	region=etc	street=Hidden Street	name=Stage 5 <Faust>
+970030502	region=etc	street=Hidden Street	name=Stage 5 <Faust>
+970030503	region=etc	street=Hidden Street	name=Stage 5 <Faust>
+970030504	region=etc	street=Hidden Street	name=Stage 5 <Faust>
+970030505	region=etc	street=Hidden Street	name=Stage 5 <Faust>
+970030506	region=etc	street=Hidden Street	name=Stage 5 <Faust>
+970030507	region=etc	street=Hidden Street	name=Stage 5 <Faust>
+970030508	region=etc	street=Hidden Street	name=Stage 5 <Faust>
+970030509	region=etc	street=Hidden Street	name=Stage 5 <Faust>
+970030510	region=etc	street=Hidden Street	name=Stage 5 <Faust>
+970030511	region=etc	street=Hidden Street	name=Stage 5 <Faust>
+970030600	region=etc	street=Hidden Street	name=Stage 6 <King Clang>
+970030601	region=etc	street=Hidden Street	name=Stage 6 <King Clang>
+970030602	region=etc	street=Hidden Street	name=Stage 6 <King Clang>
+970030603	region=etc	street=Hidden Street	name=Stage 6 <King Clang>
+970030604	region=etc	street=Hidden Street	name=Stage 6 <King Clang>
+970030605	region=etc	street=Hidden Street	name=Stage 6 <King Clang>
+970030606	region=etc	street=Hidden Street	name=Stage 6 <King Clang>
+970030607	region=etc	street=Hidden Street	name=Stage 6 <King Clang>
+970030608	region=etc	street=Hidden Street	name=Stage 6 <King Clang>
+970030609	region=etc	street=Hidden Street	name=Stage 6 <King Clang>
+970030610	region=etc	street=Hidden Street	name=Stage 6 <King Clang>
+970030611	region=etc	street=Hidden Street	name=Stage 6 <King Clang>
+970030700	region=etc	street=Hidden Street	name=Stage 7 <Alishar>
+970030701	region=etc	street=Hidden Street	name=Stage 7 <Alishar>
+970030702	region=etc	street=Hidden Street	name=Stage 7 <Alishar>
+970030703	region=etc	street=Hidden Street	name=Stage 7 <Alishar>
+970030704	region=etc	street=Hidden Street	name=Stage 7 <Alishar>
+970030705	region=etc	street=Hidden Street	name=Stage 7 <Alishar>
+970030706	region=etc	street=Hidden Street	name=Stage 7 <Alishar>
+970030707	region=etc	street=Hidden Street	name=Stage 7 <Alishar>
+970030708	region=etc	street=Hidden Street	name=Stage 7 <Alishar>
+970030709	region=etc	street=Hidden Street	name=Stage 7 <Alishar>
+970030710	region=etc	street=Hidden Street	name=Stage 7 <Alishar>
+970030711	region=etc	street=Hidden Street	name=Stage 7 <Alishar>
+970030800	region=etc	street=Hidden Street	name=Stage 8 <Timer>
+970030801	region=etc	street=Hidden Street	name=Stage 8 <Timer>
+970030802	region=etc	street=Hidden Street	name=Stage 8 <Timer>
+970030803	region=etc	street=Hidden Street	name=Stage 8 <Timer>
+970030804	region=etc	street=Hidden Street	name=Stage 8 <Timer>
+970030805	region=etc	street=Hidden Street	name=Stage 8 <Timer>
+970030806	region=etc	street=Hidden Street	name=Stage 8 <Timer>
+970030807	region=etc	street=Hidden Street	name=Stage 8 <Timer>
+970030808	region=etc	street=Hidden Street	name=Stage 8 <Timer>
+970030809	region=etc	street=Hidden Street	name=Stage 8 <Timer>
+970030810	region=etc	street=Hidden Street	name=Stage 8 <Timer>
+970030811	region=etc	street=Hidden Street	name=Stage 8 <Timer>
+970030900	region=etc	street=Hidden Street	name=Stage 9 <Mushmom>
+970030901	region=etc	street=Hidden Street	name=Stage 9 <Mushmom>
+970030902	region=etc	street=Hidden Street	name=Stage 9 <Mushmom>
+970030903	region=etc	street=Hidden Street	name=Stage 9 <Mushmom>
+970030904	region=etc	street=Hidden Street	name=Stage 9 <Mushmom>
+970030905	region=etc	street=Hidden Street	name=Stage 9 <Mushmom>
+970030906	region=etc	street=Hidden Street	name=Stage 9 <Mushmom>
+970030907	region=etc	street=Hidden Street	name=Stage 9 <Mushmom>
+970030908	region=etc	street=Hidden Street	name=Stage 9 <Mushmom>
+970030909	region=etc	street=Hidden Street	name=Stage 9 <Mushmom>
+970030910	region=etc	street=Hidden Street	name=Stage 9 <Mushmom>
+970030911	region=etc	street=Hidden Street	name=Stage 9 <Mushmom>
+970031000	region=etc	street=Hidden Street	name=Stage 10 <Dyle>
+970031001	region=etc	street=Hidden Street	name=Stage 10 <Dyle>
+970031002	region=etc	street=Hidden Street	name=Stage 10 <Dyle>
+970031003	region=etc	street=Hidden Street	name=Stage 10 <Dyle>
+970031004	region=etc	street=Hidden Street	name=Stage 10 <Dyle>
+970031005	region=etc	street=Hidden Street	name=Stage 10 <Dyle>
+970031006	region=etc	street=Hidden Street	name=Stage 10 <Dyle>
+970031007	region=etc	street=Hidden Street	name=Stage 10 <Dyle>
+970031008	region=etc	street=Hidden Street	name=Stage 10 <Dyle>
+970031009	region=etc	street=Hidden Street	name=Stage 10 <Dyle>
+970031010	region=etc	street=Hidden Street	name=Stage 10 <Dyle>
+970031011	region=etc	street=Hidden Street	name=Stage 10 <Dyle>
+970031100	region=etc	street=Hidden Street	name=Stage 11 <Zeno>
+970031101	region=etc	street=Hidden Street	name=Stage 11 <Zeno>
+970031102	region=etc	street=Hidden Street	name=Stage 11 <Zeno>
+970031103	region=etc	street=Hidden Street	name=Stage 11 <Zeno>
+970031104	region=etc	street=Hidden Street	name=Stage 11 <Zeno>
+970031105	region=etc	street=Hidden Street	name=Stage 11 <Zeno>
+970031106	region=etc	street=Hidden Street	name=Stage 11 <Zeno>
+970031107	region=etc	street=Hidden Street	name=Stage 11 <Zeno>
+970031108	region=etc	street=Hidden Street	name=Stage 11 <Zeno>
+970031109	region=etc	street=Hidden Street	name=Stage 11 <Zeno>
+970031110	region=etc	street=Hidden Street	name=Stage 11 <Zeno>
+970031111	region=etc	street=Hidden Street	name=Stage 11 <Zeno>
+970031200	region=etc	street=Hidden Street	name=Stage 12 <Nona-Tailed Fox>
+970031201	region=etc	street=Hidden Street	name=Stage 12 <Nona-Tailed Fox>
+970031202	region=etc	street=Hidden Street	name=Stage 12 <Nona-Tailed Fox>
+970031203	region=etc	street=Hidden Street	name=Stage 12 <Nona-Tailed Fox>
+970031204	region=etc	street=Hidden Street	name=Stage 12 <Nona-Tailed Fox>
+970031205	region=etc	street=Hidden Street	name=Stage 12 <Nona-Tailed Fox>
+970031206	region=etc	street=Hidden Street	name=Stage 12 <Nona-Tailed Fox>
+970031207	region=etc	street=Hidden Street	name=Stage 12 <Nona-Tailed Fox>
+970031208	region=etc	street=Hidden Street	name=Stage 12 <Nona-Tailed Fox>
+970031209	region=etc	street=Hidden Street	name=Stage 12 <Nona-Tailed Fox>
+970031210	region=etc	street=Hidden Street	name=Stage 12 <Nona-Tailed Fox>
+970031211	region=etc	street=Hidden Street	name=Stage 12 <Nona-Tailed Fox>
+970031300	region=etc	street=Hidden Street	name=Stage 13 <Lord Pirate>
+970031301	region=etc	street=Hidden Street	name=Stage 13 <Lord Pirate>
+970031302	region=etc	street=Hidden Street	name=Stage 13 <Lord Pirate>
+970031303	region=etc	street=Hidden Street	name=Stage 13 <Lord Pirate>
+970031304	region=etc	street=Hidden Street	name=Stage 13 <Lord Pirate>
+970031305	region=etc	street=Hidden Street	name=Stage 13 <Lord Pirate>
+970031306	region=etc	street=Hidden Street	name=Stage 13 <Lord Pirate>
+970031307	region=etc	street=Hidden Street	name=Stage 13 <Lord Pirate>
+970031308	region=etc	street=Hidden Street	name=Stage 13 <Lord Pirate>
+970031309	region=etc	street=Hidden Street	name=Stage 13 <Lord Pirate>
+970031310	region=etc	street=Hidden Street	name=Stage 13 <Lord Pirate>
+970031311	region=etc	street=Hidden Street	name=Stage 13 <Lord Pirate>
+970031400	region=etc	street=Hidden Street	name=Stage 14 <Tae Roon>
+970031401	region=etc	street=Hidden Street	name=Stage 14 <Tae Roon>
+970031402	region=etc	street=Hidden Street	name=Stage 14 <Tae Roon>
+970031403	region=etc	street=Hidden Street	name=Stage 14 <Tae Roon>
+970031404	region=etc	street=Hidden Street	name=Stage 14 <Tae Roon>
+970031405	region=etc	street=Hidden Street	name=Stage 14 <Tae Roon>
+970031406	region=etc	street=Hidden Street	name=Stage 14 <Tae Roon>
+970031407	region=etc	street=Hidden Street	name=Stage 14 <Tae Roon>
+970031408	region=etc	street=Hidden Street	name=Stage 14 <Tae Roon>
+970031409	region=etc	street=Hidden Street	name=Stage 14 <Tae Roon>
+970031410	region=etc	street=Hidden Street	name=Stage 14 <Tae Roon>
+970031411	region=etc	street=Hidden Street	name=Stage 14 <Tae Roon>
+970031500	region=etc	street=Hidden Street	name=Stage 15 <Papa Pixie>
+970031501	region=etc	street=Hidden Street	name=Stage 15 <Papa Pixie>
+970031502	region=etc	street=Hidden Street	name=Stage 15 <Papa Pixie>
+970031503	region=etc	street=Hidden Street	name=Stage 15 <Papa Pixie>
+970031504	region=etc	street=Hidden Street	name=Stage 15 <Papa Pixie>
+970031505	region=etc	street=Hidden Street	name=Stage 15 <Papa Pixie>
+970031506	region=etc	street=Hidden Street	name=Stage 15 <Papa Pixie>
+970031507	region=etc	street=Hidden Street	name=Stage 15 <Papa Pixie>
+970031508	region=etc	street=Hidden Street	name=Stage 15 <Papa Pixie>
+970031509	region=etc	street=Hidden Street	name=Stage 15 <Papa Pixie>
+970031510	region=etc	street=Hidden Street	name=Stage 15 <Papa Pixie>
+970031511	region=etc	street=Hidden Street	name=Stage 15 <Papa Pixie>
+970031600	region=etc	street=Hidden Street	name=Stage 16 <Priest Cat>
+970031601	region=etc	street=Hidden Street	name=Stage 16 <Priest Cat>
+970031602	region=etc	street=Hidden Street	name=Stage 16 <Priest Cat>
+970031603	region=etc	street=Hidden Street	name=Stage 16 <Priest Cat>
+970031604	region=etc	street=Hidden Street	name=Stage 16 <Priest Cat>
+970031605	region=etc	street=Hidden Street	name=Stage 16 <Priest Cat>
+970031606	region=etc	street=Hidden Street	name=Stage 16 <Priest Cat>
+970031607	region=etc	street=Hidden Street	name=Stage 16 <Priest Cat>
+970031608	region=etc	street=Hidden Street	name=Stage 16 <Priest Cat>
+970031609	region=etc	street=Hidden Street	name=Stage 16 <Priest Cat>
+970031610	region=etc	street=Hidden Street	name=Stage 16 <Priest Cat>
+970031611	region=etc	street=Hidden Street	name=Stage 16 <Priest Cat>
+970031700	region=etc	street=Hidden Street	name=Stage 17 <Jr. Balrog>
+970031701	region=etc	street=Hidden Street	name=Stage 17 <Jr. Balrog>
+970031702	region=etc	street=Hidden Street	name=Stage 17 <Jr. Balrog>
+970031703	region=etc	street=Hidden Street	name=Stage 17 <Jr. Balrog>
+970031704	region=etc	street=Hidden Street	name=Stage 17 <Jr. Balrog>
+970031705	region=etc	street=Hidden Street	name=Stage 17 <Jr. Balrog>
+970031706	region=etc	street=Hidden Street	name=Stage 17 <Jr. Balrog>
+970031707	region=etc	street=Hidden Street	name=Stage 17 <Jr. Balrog>
+970031708	region=etc	street=Hidden Street	name=Stage 17 <Jr. Balrog>
+970031709	region=etc	street=Hidden Street	name=Stage 17 <Jr. Balrog>
+970031710	region=etc	street=Hidden Street	name=Stage 17 <Jr. Balrog>
+970031711	region=etc	street=Hidden Street	name=Stage 17 <Jr. Balrog>
+970031800	region=etc	street=Hidden Street	name=Stage 18 <Frankenroid>
+970031801	region=etc	street=Hidden Street	name=Stage 18 <Frankenroid>
+970031802	region=etc	street=Hidden Street	name=Stage 18 <Frankenroid>
+970031803	region=etc	street=Hidden Street	name=Stage 18 <Frankenroid>
+970031804	region=etc	street=Hidden Street	name=Stage 18 <Frankenroid>
+970031805	region=etc	street=Hidden Street	name=Stage 18 <Frankenroid>
+970031806	region=etc	street=Hidden Street	name=Stage 18 <Frankenroid>
+970031807	region=etc	street=Hidden Street	name=Stage 18 <Frankenroid>
+970031808	region=etc	street=Hidden Street	name=Stage 18 <Frankenroid>
+970031809	region=etc	street=Hidden Street	name=Stage 18 <Frankenroid>
+970031810	region=etc	street=Hidden Street	name=Stage 18 <Frankenroid>
+970031811	region=etc	street=Hidden Street	name=Stage 18 <Frankenroid>
+970031900	region=etc	street=Hidden Street	name=Stage 19 <Eliza>
+970031901	region=etc	street=Hidden Street	name=Stage 19 <Eliza>
+970031902	region=etc	street=Hidden Street	name=Stage 19 <Eliza>
+970031903	region=etc	street=Hidden Street	name=Stage 19 <Eliza>
+970031904	region=etc	street=Hidden Street	name=Stage 19 <Eliza>
+970031905	region=etc	street=Hidden Street	name=Stage 19 <Eliza>
+970031906	region=etc	street=Hidden Street	name=Stage 19 <Eliza>
+970031907	region=etc	street=Hidden Street	name=Stage 19 <Eliza>
+970031908	region=etc	street=Hidden Street	name=Stage 19 <Elliza>
+970031909	region=etc	street=Hidden Street	name=Stage 19 <Elliza>
+970031910	region=etc	street=Hidden Street	name=Stage 19 <Elliza>
+970031911	region=etc	street=Hidden Street	name=Stage 19 <Elliza>
+970032000	region=etc	street=Hidden Street	name=Stage 20 <Chimera>
+970032001	region=etc	street=Hidden Street	name=Stage 20 <Chimera>
+970032002	region=etc	street=Hidden Street	name=Stage 20 <Chimera>
+970032003	region=etc	street=Hidden Street	name=Stage 20 <Chimera>
+970032004	region=etc	street=Hidden Street	name=Stage 20 <Chimera>
+970032005	region=etc	street=Hidden Street	name=Stage 20 <Chimera>
+970032006	region=etc	street=Hidden Street	name=Stage 20 <Chimera>
+970032007	region=etc	street=Hidden Street	name=Stage 20 <Chimera>
+970032008	region=etc	street=Hidden Street	name=Stage 20 <Chimera>
+970032009	region=etc	street=Hidden Street	name=Stage 20 <Chimera>
+970032010	region=etc	street=Hidden Street	name=Stage 20 <Chimera>
+970032011	region=etc	street=Hidden Street	name=Stage 20 <Chimera>
+970032100	region=etc	street=Hidden Street	name=Stage 21 <Snowman>
+970032101	region=etc	street=Hidden Street	name=Stage 21 <Snowman>
+970032102	region=etc	street=Hidden Street	name=Stage 21 <Snowman>
+970032103	region=etc	street=Hidden Street	name=Stage 21 <Snowman>
+970032104	region=etc	street=Hidden Street	name=Stage 21 <Snowman>
+970032105	region=etc	street=Hidden Street	name=Stage 21 <Snowman>
+970032106	region=etc	street=Hidden Street	name=Stage 21 <Snowman>
+970032107	region=etc	street=Hidden Street	name=Stage 21 <Snowman>
+970032108	region=etc	street=Hidden Street	name=Stage 21 <Snowman>
+970032109	region=etc	street=Hidden Street	name=Stage 21 <Snowman>
+970032110	region=etc	street=Hidden Street	name=Stage 21 <Snowman>
+970032111	region=etc	street=Hidden Street	name=Stage 21 <Snowman>
+970032200	region=etc	street=Hidden Street	name=Stage 22 <Crimson Balrog>
+970032201	region=etc	street=Hidden Street	name=Stage 22 <Crimson Balrog>
+970032202	region=etc	street=Hidden Street	name=Stage 22 <Crimson Balrog>
+970032203	region=etc	street=Hidden Street	name=Stage 22 <Crimson Balrog>
+970032204	region=etc	street=Hidden Street	name=Stage 22 <Crimson Balrog>
+970032205	region=etc	street=Hidden Street	name=Stage 22 <Crimson Balrog>
+970032206	region=etc	street=Hidden Street	name=Stage 22 <Crimson Balrog>
+970032207	region=etc	street=Hidden Street	name=Stage 22 <Crimson Balrog>
+970032208	region=etc	street=Hidden Street	name=Stage 22 <Crimson Balrog>
+970032209	region=etc	street=Hidden Street	name=Stage 22 <Crimson Balrog>
+970032210	region=etc	street=Hidden Street	name=Stage 22 <Crimson Balrog>
+970032211	region=etc	street=Hidden Street	name=Stage 22 <Crimson Balrog>
+970032300	region=etc	street=Hidden Street	name=Stage 23 <Manon>
+970032301	region=etc	street=Hidden Street	name=Stage 23 <Manon>
+970032302	region=etc	street=Hidden Street	name=Stage 23 <Manon>
+970032303	region=etc	street=Hidden Street	name=Stage 23 <Manon>
+970032304	region=etc	street=Hidden Street	name=Stage 23 <Manon>
+970032305	region=etc	street=Hidden Street	name=Stage 23 <Manon>
+970032306	region=etc	street=Hidden Street	name=Stage 23 <Manon>
+970032307	region=etc	street=Hidden Street	name=Stage 23 <Manon>
+970032308	region=etc	street=Hidden Street	name=Stage 23 <Manon>
+970032309	region=etc	street=Hidden Street	name=Stage 23 <Manon>
+970032310	region=etc	street=Hidden Street	name=Stage 23 <Manon>
+970032311	region=etc	street=Hidden Street	name=Stage 23 <Manon>
+970032400	region=etc	street=Hidden Street	name=Stage 24 <Griffey>
+970032401	region=etc	street=Hidden Street	name=Stage 24 <Griffey>
+970032402	region=etc	street=Hidden Street	name=Stage 24 <Griffey>
+970032403	region=etc	street=Hidden Street	name=Stage 24 <Griffey>
+970032404	region=etc	street=Hidden Street	name=Stage 24 <Griffey>
+970032405	region=etc	street=Hidden Street	name=Stage 24 <Griffey>
+970032406	region=etc	street=Hidden Street	name=Stage 24 <Griffey>
+970032407	region=etc	street=Hidden Street	name=Stage 24 <Griffey>
+970032408	region=etc	street=Hidden Street	name=Stage 24 <Griffey>
+970032409	region=etc	street=Hidden Street	name=Stage 24 <Griffey>
+970032410	region=etc	street=Hidden Street	name=Stage 24 <Griffey>
+970032411	region=etc	street=Hidden Street	name=Stage 24 <Griffey>
+970032500	region=etc	street=Hidden Street	name=Stage 25 <Leviathan>
+970032501	region=etc	street=Hidden Street	name=Stage 25 <Leviathan>
+970032502	region=etc	street=Hidden Street	name=Stage 25 <Leviathan>
+970032503	region=etc	street=Hidden Street	name=Stage 25 <Leviathan>
+970032504	region=etc	street=Hidden Street	name=Stage 25 <Leviathan>
+970032505	region=etc	street=Hidden Street	name=Stage 25 <Leviathan>
+970032506	region=etc	street=Hidden Street	name=Stage 25 <Leviathan>
+970032507	region=etc	street=Hidden Street	name=Stage 25 <Leviathan>
+970032508	region=etc	street=Hidden Street	name=Stage 25 <Leviathan>
+970032509	region=etc	street=Hidden Street	name=Stage 25 <Leviathan>
+970032510	region=etc	street=Hidden Street	name=Stage 25 <Leviathan>
+970032511	region=etc	street=Hidden Street	name=Stage 25 <Leviathan>
+970032600	region=etc	street=Hidden Street	name=Stage 26 <Papulatus>
+970032601	region=etc	street=Hidden Street	name=Stage 26 <Papulatus>
+970032602	region=etc	street=Hidden Street	name=Stage 26 <Papulatus>
+970032603	region=etc	street=Hidden Street	name=Stage 26 <Papulatus>
+970032604	region=etc	street=Hidden Street	name=Stage 26 <Papulatus>
+970032605	region=etc	street=Hidden Street	name=Stage 26 <Papulatus>
+970032606	region=etc	street=Hidden Street	name=Stage 26 <Papulatus>
+970032607	region=etc	street=Hidden Street	name=Stage 26 <Papulatus>
+970032608	region=etc	street=Hidden Street	name=Stage 26 <Papulatus>
+970032609	region=etc	street=Hidden Street	name=Stage 26 <Papulatus>
+970032610	region=etc	street=Hidden Street	name=Stage 26 <Papulatus>
+970032611	region=etc	street=Hidden Street	name=Stage 26 <Papulatus>
+970032700	region=etc	street=Hidden Street	name=Stage 27 <Pianus>
+970032701	region=etc	street=Hidden Street	name=Stage 27 <Pianus>
+970032702	region=etc	street=Hidden Street	name=Stage 27 <Pianus>
+970032703	region=etc	street=Hidden Street	name=Stage 27 <Pianus>
+970032704	region=etc	street=Hidden Street	name=Stage 27 <Pianus>
+970032705	region=etc	street=Hidden Street	name=Stage 27 <Pianus>
+970032706	region=etc	street=Hidden Street	name=Stage 27 <Pianus>
+970032707	region=etc	street=Hidden Street	name=Stage 27 <Pianus>
+970032708	region=etc	street=Hidden Street	name=Stage 27 <Pianus>
+970032709	region=etc	street=Hidden Street	name=Stage 27 <Pianus>
+970032710	region=etc	street=Hidden Street	name=Stage 27 <Pianus>
+970032711	region=etc	street=Hidden Street	name=Stage 27 <Pianus>
+970040100	region=etc	street=Hidden Street	name=Stage 1 <Mano>
+970040101	region=etc	street=Hidden Street	name=Stage 1 <Mano>
+970040102	region=etc	street=Hidden Street	name=Stage 1 <Mano>
+970040103	region=etc	street=Hidden Street	name=Stage 1 <Mano>
+970040104	region=etc	street=Hidden Street	name=Stage 1 <Mano>
+970040105	region=etc	street=Hidden Street	name=Stage 1 <Mano>
+970040106	region=etc	street=Hidden Street	name=Stage 1 <Mano>
+970040107	region=etc	street=Hidden Street	name=Stage 1 <Mano>
+970040108	region=etc	street=Hidden Street	name=Stage 1 <Mano>
+970040109	region=etc	street=Hidden Street	name=Stage 1 <Mano>
+970040110	region=etc	street=Hidden Street	name=Stage 1 <Mano>
+970040111	region=etc	street=Hidden Street	name=Stage 1 <Mano>
+970040112	region=etc	street=Hidden Street	name=Stage 1 <Mano>
+970040113	region=etc	street=Hidden Street	name=Stage 1 <Mano>
+970040114	region=etc	street=Hidden Street	name=Stage 1 <Mano>
+970040115	region=etc	street=Hidden Street	name=Stage 1 <Mano>
+970040116	region=etc	street=Hidden Street	name=Stage 1 <Mano>
+970040117	region=etc	street=Hidden Street	name=Stage 1 <Mano>
+970040200	region=etc	street=Hidden Street	name=Stage 2 <Stumpy>
+970040201	region=etc	street=Hidden Street	name=Stage 2 <Stumpy>
+970040202	region=etc	street=Hidden Street	name=Stage 2 <Stumpy>
+970040203	region=etc	street=Hidden Street	name=Stage 2 <Stumpy>
+970040204	region=etc	street=Hidden Street	name=Stage 2 <Stumpy>
+970040205	region=etc	street=Hidden Street	name=Stage 2 <Stumpy>
+970040206	region=etc	street=Hidden Street	name=Stage 2 <Stumpy>
+970040207	region=etc	street=Hidden Street	name=Stage 2 <Stumpy>
+970040208	region=etc	street=Hidden Street	name=Stage 2 <Stumpy>
+970040209	region=etc	street=Hidden Street	name=Stage 2 <Stumpy>
+970040210	region=etc	street=Hidden Street	name=Stage 2 <Stumpy>
+970040211	region=etc	street=Hidden Street	name=Stage 2 <Stumpy>
+970040212	region=etc	street=Hidden Street	name=Stage 2 <Stumpy>
+970040213	region=etc	street=Hidden Street	name=Stage 2 <Stumpy>
+970040214	region=etc	street=Hidden Street	name=Stage 2 <Stumpy>
+970040215	region=etc	street=Hidden Street	name=Stage 2 <Stumpy>
+970040216	region=etc	street=Hidden Street	name=Stage 2 <Stumpy>
+970040217	region=etc	street=Hidden Street	name=Stage 2 <Stumpy>
+970040300	region=etc	street=Hidden Street	name=Stage 3 <Deo>
+970040301	region=etc	street=Hidden Street	name=Stage 3 <Deo>
+970040302	region=etc	street=Hidden Street	name=Stage 3 <Deo>
+970040303	region=etc	street=Hidden Street	name=Stage 3 <Deo>
+970040304	region=etc	street=Hidden Street	name=Stage 3 <Deo>
+970040305	region=etc	street=Hidden Street	name=Stage 3 <Deo>
+970040306	region=etc	street=Hidden Street	name=Stage 3 <Deo>
+970040307	region=etc	street=Hidden Street	name=Stage 3 <Deo>
+970040308	region=etc	street=Hidden Street	name=Stage 3 <Deo>
+970040309	region=etc	street=Hidden Street	name=Stage 3 <Deo>
+970040310	region=etc	street=Hidden Street	name=Stage 3 <Deo>
+970040311	region=etc	street=Hidden Street	name=Stage 3 <Deo>
+970040312	region=etc	street=Hidden Street	name=Stage 3 <Deo>
+970040313	region=etc	street=Hidden Street	name=Stage 3 <Deo>
+970040314	region=etc	street=Hidden Street	name=Stage 3 <Deo>
+970040315	region=etc	street=Hidden Street	name=Stage 3 <Deo>
+970040316	region=etc	street=Hidden Street	name=Stage 3 <Deo>
+970040317	region=etc	street=Hidden Street	name=Stage 3 <Deo>
+970040400	region=etc	street=Hidden Street	name=Stage 4 <King Slime>
+970040401	region=etc	street=Hidden Street	name=Stage 4 <King Slime>
+970040402	region=etc	street=Hidden Street	name=Stage 4 <King Slime>
+970040403	region=etc	street=Hidden Street	name=Stage 4 <King Slime>
+970040404	region=etc	street=Hidden Street	name=Stage 4 <King Slime>
+970040405	region=etc	street=Hidden Street	name=Stage 4 <King Slime>
+970040406	region=etc	street=Hidden Street	name=Stage 4 <King Slime>
+970040407	region=etc	street=Hidden Street	name=Stage 4 <King Slime>
+970040408	region=etc	street=Hidden Street	name=Stage 4 <King Slime>
+970040409	region=etc	street=Hidden Street	name=Stage 4 <King Slime>
+970040410	region=etc	street=Hidden Street	name=Stage 4 <King Slime>
+970040411	region=etc	street=Hidden Street	name=Stage 4 <King Slime>
+970040412	region=etc	street=Hidden Street	name=Stage 4 <King Slime>
+970040413	region=etc	street=Hidden Street	name=Stage 4 <King Slime>
+970040414	region=etc	street=Hidden Street	name=Stage 4 <King Slime>
+970040415	region=etc	street=Hidden Street	name=Stage 4 <King Slime>
+970040416	region=etc	street=Hidden Street	name=Stage 4 <King Slime>
+970040417	region=etc	street=Hidden Street	name=Stage 4 <King Slime>
+970040500	region=etc	street=Hidden Street	name=Stage 5 <Faust>
+970040501	region=etc	street=Hidden Street	name=Stage 5 <Faust>
+970040502	region=etc	street=Hidden Street	name=Stage 5 <Faust>
+970040503	region=etc	street=Hidden Street	name=Stage 5 <Faust>
+970040504	region=etc	street=Hidden Street	name=Stage 5 <Faust>
+970040505	region=etc	street=Hidden Street	name=Stage 5 <Faust>
+970040506	region=etc	street=Hidden Street	name=Stage 5 <Faust>
+970040507	region=etc	street=Hidden Street	name=Stage 5 <Faust>
+970040508	region=etc	street=Hidden Street	name=Stage 5 <Faust>
+970040509	region=etc	street=Hidden Street	name=Stage 5 <Faust>
+970040510	region=etc	street=Hidden Street	name=Stage 5 <Faust>
+970040511	region=etc	street=Hidden Street	name=Stage 5 <Faust>
+970040512	region=etc	street=Hidden Street	name=Stage 5 <Faust>
+970040513	region=etc	street=Hidden Street	name=Stage 5 <Faust>
+970040514	region=etc	street=Hidden Street	name=Stage 5 <Faust>
+970040515	region=etc	street=Hidden Street	name=Stage 5 <Faust>
+970040516	region=etc	street=Hidden Street	name=Stage 5 <Faust>
+970040517	region=etc	street=Hidden Street	name=Stage 5 <Faust>
+970040600	region=etc	street=Hidden Street	name=Stage 6 <King Clang>
+970040601	region=etc	street=Hidden Street	name=Stage 6 <King Clang>
+970040602	region=etc	street=Hidden Street	name=Stage 6 <King Clang>
+970040603	region=etc	street=Hidden Street	name=Stage 6 <King Clang>
+970040604	region=etc	street=Hidden Street	name=Stage 6 <King Clang>
+970040605	region=etc	street=Hidden Street	name=Stage 6 <King Clang>
+970040606	region=etc	street=Hidden Street	name=Stage 6 <King Clang>
+970040607	region=etc	street=Hidden Street	name=Stage 6 <King Clang>
+970040608	region=etc	street=Hidden Street	name=Stage 6 <King Clang>
+970040609	region=etc	street=Hidden Street	name=Stage 6 <King Clang>
+970040610	region=etc	street=Hidden Street	name=Stage 6 <King Clang>
+970040611	region=etc	street=Hidden Street	name=Stage 6 <King Clang>
+970040612	region=etc	street=Hidden Street	name=Stage 6 <King Clang>
+970040613	region=etc	street=Hidden Street	name=Stage 6 <King Clang>
+970040614	region=etc	street=Hidden Street	name=Stage 6 <King Clang>
+970040615	region=etc	street=Hidden Street	name=Stage 6 <King Clang>
+970040616	region=etc	street=Hidden Street	name=Stage 6 <King Clang>
+970040617	region=etc	street=Hidden Street	name=Stage 6 <King Clang>
+970040700	region=etc	street=Hidden Street	name=Stage 7 <Alishar>
+970040701	region=etc	street=Hidden Street	name=Stage 7 <Alishar>
+970040702	region=etc	street=Hidden Street	name=Stage 7 <Alishar>
+970040703	region=etc	street=Hidden Street	name=Stage 7 <Alishar>
+970040704	region=etc	street=Hidden Street	name=Stage 7 <Alishar>
+970040705	region=etc	street=Hidden Street	name=Stage 7 <Alishar>
+970040706	region=etc	street=Hidden Street	name=Stage 7 <Alishar>
+970040707	region=etc	street=Hidden Street	name=Stage 7 <Alishar>
+970040708	region=etc	street=Hidden Street	name=Stage 7 <Alishar>
+970040709	region=etc	street=Hidden Street	name=Stage 7 <Alishar>
+970040710	region=etc	street=Hidden Street	name=Stage 7 <Alishar>
+970040711	region=etc	street=Hidden Street	name=Stage 7 <Alishar>
+970040712	region=etc	street=Hidden Street	name=Stage 7 <Alishar>
+970040713	region=etc	street=Hidden Street	name=Stage 7 <Alishar>
+970040714	region=etc	street=Hidden Street	name=Stage 7 <Alishar>
+970040715	region=etc	street=Hidden Street	name=Stage 7 <Alishar>
+970040716	region=etc	street=Hidden Street	name=Stage 7 <Alishar>
+970040717	region=etc	street=Hidden Street	name=Stage 7 <Alishar>
+970040800	region=etc	street=Hidden Street	name=Stage 8 <Timer>
+970040801	region=etc	street=Hidden Street	name=Stage 8 <Timer>
+970040802	region=etc	street=Hidden Street	name=Stage 8 <Timer>
+970040803	region=etc	street=Hidden Street	name=Stage 8 <Timer>
+970040804	region=etc	street=Hidden Street	name=Stage 8 <Timer>
+970040805	region=etc	street=Hidden Street	name=Stage 8 <Timer>
+970040806	region=etc	street=Hidden Street	name=Stage 8 <Timer>
+970040807	region=etc	street=Hidden Street	name=Stage 8 <Timer>
+970040808	region=etc	street=Hidden Street	name=Stage 8 <Timer>
+970040809	region=etc	street=Hidden Street	name=Stage 8 <Timer>
+970040810	region=etc	street=Hidden Street	name=Stage 8 <Timer>
+970040811	region=etc	street=Hidden Street	name=Stage 8 <Timer>
+970040812	region=etc	street=Hidden Street	name=Stage 8 <Timer>
+970040813	region=etc	street=Hidden Street	name=Stage 8 <Timer>
+970040814	region=etc	street=Hidden Street	name=Stage 8 <Timer>
+970040815	region=etc	street=Hidden Street	name=Stage 8 <Timer>
+970040816	region=etc	street=Hidden Street	name=Stage 8 <Timer>
+970040817	region=etc	street=Hidden Street	name=Stage 8 <Timer>
+970040900	region=etc	street=Hidden Street	name=Stage 9 <Mushmom>
+970040901	region=etc	street=Hidden Street	name=Stage 9 <Mushmom>
+970040902	region=etc	street=Hidden Street	name=Stage 9 <Mushmom>
+970040903	region=etc	street=Hidden Street	name=Stage 9 <Mushmom>
+970040904	region=etc	street=Hidden Street	name=Stage 9 <Mushmom>
+970040905	region=etc	street=Hidden Street	name=Stage 9 <Mushmom>
+970040906	region=etc	street=Hidden Street	name=Stage 9 <Mushmom>
+970040907	region=etc	street=Hidden Street	name=Stage 9 <Mushmom>
+970040908	region=etc	street=Hidden Street	name=Stage 9 <Mushmom>
+970040909	region=etc	street=Hidden Street	name=Stage 9 <Mushmom>
+970040910	region=etc	street=Hidden Street	name=Stage 9 <Mushmom>
+970040911	region=etc	street=Hidden Street	name=Stage 9 <Mushmom>
+970040912	region=etc	street=Hidden Street	name=Stage 9 <Mushmom>
+970040913	region=etc	street=Hidden Street	name=Stage 9 <Mushmom>
+970040914	region=etc	street=Hidden Street	name=Stage 9 <Mushmom>
+970040915	region=etc	street=Hidden Street	name=Stage 9 <Mushmom>
+970040916	region=etc	street=Hidden Street	name=Stage 9 <Mushmom>
+970040917	region=etc	street=Hidden Street	name=Stage 9 <Mushmom>
+970041000	region=etc	street=Hidden Street	name=Stage 10 <Dyle>
+970041001	region=etc	street=Hidden Street	name=Stage 10 <Dyle>
+970041002	region=etc	street=Hidden Street	name=Stage 10 <Dyle>
+970041003	region=etc	street=Hidden Street	name=Stage 10 <Dyle>
+970041004	region=etc	street=Hidden Street	name=Stage 10 <Dyle>
+970041005	region=etc	street=Hidden Street	name=Stage 10 <Dyle>
+970041006	region=etc	street=Hidden Street	name=Stage 10 <Dyle>
+970041007	region=etc	street=Hidden Street	name=Stage 10 <Dyle>
+970041008	region=etc	street=Hidden Street	name=Stage 10 <Dyle>
+970041009	region=etc	street=Hidden Street	name=Stage 10 <Dyle>
+970041010	region=etc	street=Hidden Street	name=Stage 10 <Dyle>
+970041011	region=etc	street=Hidden Street	name=Stage 10 <Dyle>
+970041012	region=etc	street=Hidden Street	name=Stage 10 <Dyle>
+970041013	region=etc	street=Hidden Street	name=Stage 10 <Dyle>
+970041014	region=etc	street=Hidden Street	name=Stage 10 <Dyle>
+970041015	region=etc	street=Hidden Street	name=Stage 10 <Dyle>
+970041016	region=etc	street=Hidden Street	name=Stage 10 <Dyle>
+970041017	region=etc	street=Hidden Street	name=Stage 10 <Dyle>
+970041100	region=etc	street=Hidden Street	name=Stage 11 <Zeno>
+970041101	region=etc	street=Hidden Street	name=Stage 11 <Zeno>
+970041102	region=etc	street=Hidden Street	name=Stage 11 <Zeno>
+970041103	region=etc	street=Hidden Street	name=Stage 11 <Zeno>
+970041104	region=etc	street=Hidden Street	name=Stage 11 <Zeno>
+970041105	region=etc	street=Hidden Street	name=Stage 11 <Zeno>
+970041106	region=etc	street=Hidden Street	name=Stage 11 <Zeno>
+970041107	region=etc	street=Hidden Street	name=Stage 11 <Zeno>
+970041108	region=etc	street=Hidden Street	name=Stage 11 <Zeno>
+970041109	region=etc	street=Hidden Street	name=Stage 11 <Zeno>
+970041110	region=etc	street=Hidden Street	name=Stage 11 <Zeno>
+970041111	region=etc	street=Hidden Street	name=Stage 11 <Zeno>
+970041112	region=etc	street=Hidden Street	name=Stage 11 <Zeno>
+970041113	region=etc	street=Hidden Street	name=Stage 11 <Zeno>
+970041114	region=etc	street=Hidden Street	name=Stage 11 <Zeno>
+970041115	region=etc	street=Hidden Street	name=Stage 11 <Zeno>
+970041116	region=etc	street=Hidden Street	name=Stage 11 <Zeno>
+970041117	region=etc	street=Hidden Street	name=Stage 11 <Zeno>
+970041200	region=etc	street=Hidden Street	name=Stage 12 <Nona-Tailed Fox>
+970041201	region=etc	street=Hidden Street	name=Stage 12 <Nona-Tailed Fox>
+970041202	region=etc	street=Hidden Street	name=Stage 12 <Nona-Tailed Fox>
+970041203	region=etc	street=Hidden Street	name=Stage 12 <Nona-Tailed Fox>
+970041204	region=etc	street=Hidden Street	name=Stage 12 <Nona-Tailed Fox>
+970041205	region=etc	street=Hidden Street	name=Stage 12 <Nona-Tailed Fox>
+970041206	region=etc	street=Hidden Street	name=Stage 12 <Nona-Tailed Fox>
+970041207	region=etc	street=Hidden Street	name=Stage 12 <Nona-Tailed Fox>
+970041208	region=etc	street=Hidden Street	name=Stage 12 <Nona-Tailed Fox>
+970041209	region=etc	street=Hidden Street	name=Stage 12 <Nona-Tailed Fox>
+970041210	region=etc	street=Hidden Street	name=Stage 12 <Nona-Tailed Fox>
+970041211	region=etc	street=Hidden Street	name=Stage 12 <Nona-Tailed Fox>
+970041212	region=etc	street=Hidden Street	name=Stage 12 <Nona-Tailed Fox>
+970041213	region=etc	street=Hidden Street	name=Stage 12 <Nona-Tailed Fox>
+970041214	region=etc	street=Hidden Street	name=Stage 12 <Nona-Tailed Fox>
+970041215	region=etc	street=Hidden Street	name=Stage 12 <Nona-Tailed Fox>
+970041216	region=etc	street=Hidden Street	name=Stage 12 <Nona-Tailed Fox>
+970041217	region=etc	street=Hidden Street	name=Stage 12 <Nona-Tailed Fox>
+970041300	region=etc	street=Hidden Street	name=Stage 13 <Lord Pirate>
+970041301	region=etc	street=Hidden Street	name=Stage 13 <Lord Pirate>
+970041302	region=etc	street=Hidden Street	name=Stage 13 <Lord Pirate>
+970041303	region=etc	street=Hidden Street	name=Stage 13 <Lord Pirate>
+970041304	region=etc	street=Hidden Street	name=Stage 13 <Lord Pirate>
+970041305	region=etc	street=Hidden Street	name=Stage 13 <Lord Pirate>
+970041306	region=etc	street=Hidden Street	name=Stage 13 <Lord Pirate>
+970041307	region=etc	street=Hidden Street	name=Stage 13 <Lord Pirate>
+970041308	region=etc	street=Hidden Street	name=Stage 13 <Lord Pirate>
+970041309	region=etc	street=Hidden Street	name=Stage 13 <Lord Pirate>
+970041310	region=etc	street=Hidden Street	name=Stage 13 <Lord Pirate>
+970041311	region=etc	street=Hidden Street	name=Stage 13 <Lord Pirate>
+970041312	region=etc	street=Hidden Street	name=Stage 13 <Lord Pirate>
+970041313	region=etc	street=Hidden Street	name=Stage 13 <Lord Pirate>
+970041314	region=etc	street=Hidden Street	name=Stage 13 <Lord Pirate>
+970041315	region=etc	street=Hidden Street	name=Stage 13 <Lord Pirate>
+970041316	region=etc	street=Hidden Street	name=Stage 13 <Lord Pirate>
+970041317	region=etc	street=Hidden Street	name=Stage 13 <Lord Pirate>
+970041400	region=etc	street=Hidden Street	name=Stage 14 <Tae Roon>
+970041401	region=etc	street=Hidden Street	name=Stage 14 <Tae Roon>
+970041402	region=etc	street=Hidden Street	name=Stage 14 <Tae Roon>
+970041403	region=etc	street=Hidden Street	name=Stage 14 <Tae Roon>
+970041404	region=etc	street=Hidden Street	name=Stage 14 <Tae Roon>
+970041405	region=etc	street=Hidden Street	name=Stage 14 <Tae Roon>
+970041406	region=etc	street=Hidden Street	name=Stage 14 <Tae Roon>
+970041407	region=etc	street=Hidden Street	name=Stage 14 <Tae Roon>
+970041408	region=etc	street=Hidden Street	name=Stage 14 <Tae Roon>
+970041409	region=etc	street=Hidden Street	name=Stage 14 <Tae Roon>
+970041410	region=etc	street=Hidden Street	name=Stage 14 <Tae Roon>
+970041411	region=etc	street=Hidden Street	name=Stage 14 <Tae Roon>
+970041412	region=etc	street=Hidden Street	name=Stage 14 <Tae Roon>
+970041413	region=etc	street=Hidden Street	name=Stage 14 <Tae Roon>
+970041414	region=etc	street=Hidden Street	name=Stage 14 <Tae Roon>
+970041415	region=etc	street=Hidden Street	name=Stage 14 <Tae Roon>
+970041416	region=etc	street=Hidden Street	name=Stage 14 <Tae Roon>
+970041417	region=etc	street=Hidden Street	name=Stage 14 <Tae Roon>
+970041500	region=etc	street=Hidden Street	name=Stage 15 <Papa Pixie>
+970041501	region=etc	street=Hidden Street	name=Stage 15 <Papa Pixie>
+970041502	region=etc	street=Hidden Street	name=Stage 15 <Papa Pixie>
+970041503	region=etc	street=Hidden Street	name=Stage 15 <Papa Pixie>
+970041504	region=etc	street=Hidden Street	name=Stage 15 <Papa Pixie>
+970041505	region=etc	street=Hidden Street	name=Stage 15 <Papa Pixie>
+970041506	region=etc	street=Hidden Street	name=Stage 15 <Papa Pixie>
+970041507	region=etc	street=Hidden Street	name=Stage 15 <Papa Pixie>
+970041508	region=etc	street=Hidden Street	name=Stage 15 <Papa Pixie>
+970041509	region=etc	street=Hidden Street	name=Stage 15 <Papa Pixie>
+970041510	region=etc	street=Hidden Street	name=Stage 15 <Papa Pixie>
+970041511	region=etc	street=Hidden Street	name=Stage 15 <Papa Pixie>
+970041512	region=etc	street=Hidden Street	name=Stage 15 <Papa Pixie>
+970041513	region=etc	street=Hidden Street	name=Stage 15 <Papa Pixie>
+970041514	region=etc	street=Hidden Street	name=Stage 15 <Papa Pixie>
+970041515	region=etc	street=Hidden Street	name=Stage 15 <Papa Pixie>
+970041516	region=etc	street=Hidden Street	name=Stage 15 <Papa Pixie>
+970041517	region=etc	street=Hidden Street	name=Stage 15 <Papa Pixie>
+970041600	region=etc	street=Hidden Street	name=Stage 16 <Priest Cat>
+970041601	region=etc	street=Hidden Street	name=Stage 16 <Priest Cat>
+970041602	region=etc	street=Hidden Street	name=Stage 16 <Priest Cat>
+970041603	region=etc	street=Hidden Street	name=Stage 16 <Priest Cat>
+970041604	region=etc	street=Hidden Street	name=Stage 16 <Priest Cat>
+970041605	region=etc	street=Hidden Street	name=Stage 16 <Priest Cat>
+970041606	region=etc	street=Hidden Street	name=Stage 16 <Priest Cat>
+970041607	region=etc	street=Hidden Street	name=Stage 16 <Priest Cat>
+970041608	region=etc	street=Hidden Street	name=Stage 16 <Priest Cat>
+970041609	region=etc	street=Hidden Street	name=Stage 16 <Priest Cat>
+970041610	region=etc	street=Hidden Street	name=Stage 16 <Priest Cat>
+970041611	region=etc	street=Hidden Street	name=Stage 16 <Priest Cat>
+970041612	region=etc	street=Hidden Street	name=Stage 16 <Priest Cat>
+970041613	region=etc	street=Hidden Street	name=Stage 16 <Priest Cat>
+970041614	region=etc	street=Hidden Street	name=Stage 16 <Priest Cat>
+970041615	region=etc	street=Hidden Street	name=Stage 16 <Priest Cat>
+970041616	region=etc	street=Hidden Street	name=Stage 16 <Priest Cat>
+970041617	region=etc	street=Hidden Street	name=Stage 16 <Priest Cat>
+970041700	region=etc	street=Hidden Street	name=Stage 17 <Jr. Balrog>
+970041701	region=etc	street=Hidden Street	name=Stage 17 <Jr. Balrog>
+970041702	region=etc	street=Hidden Street	name=Stage 17 <Jr. Balrog>
+970041703	region=etc	street=Hidden Street	name=Stage 17 <Jr. Balrog>
+970041704	region=etc	street=Hidden Street	name=Stage 17 <Jr. Balrog>
+970041705	region=etc	street=Hidden Street	name=Stage 17 <Jr. Balrog>
+970041706	region=etc	street=Hidden Street	name=Stage 17 <Jr. Balrog>
+970041707	region=etc	street=Hidden Street	name=Stage 17 <Jr. Balrog>
+970041708	region=etc	street=Hidden Street	name=Stage 17 <Jr. Balrog>
+970041709	region=etc	street=Hidden Street	name=Stage 17 <Jr. Balrog>
+970041710	region=etc	street=Hidden Street	name=Stage 17 <Jr. Balrog>
+970041711	region=etc	street=Hidden Street	name=Stage 17 <Jr. Balrog>
+970041712	region=etc	street=Hidden Street	name=Stage 17 <Jr. Balrog>
+970041713	region=etc	street=Hidden Street	name=Stage 17 <Jr. Balrog>
+970041714	region=etc	street=Hidden Street	name=Stage 17 <Jr. Balrog>
+970041715	region=etc	street=Hidden Street	name=Stage 17 <Jr. Balrog>
+970041716	region=etc	street=Hidden Street	name=Stage 17 <Jr. Balrog>
+970041717	region=etc	street=Hidden Street	name=Stage 17 <Jr. Balrog>
+970041800	region=etc	street=Hidden Street	name=Stage 18 <Frankenroid>
+970041801	region=etc	street=Hidden Street	name=Stage 18 <Frankenroid>
+970041802	region=etc	street=Hidden Street	name=Stage 18 <Frankenroid>
+970041803	region=etc	street=Hidden Street	name=Stage 18 <Frankenroid>
+970041804	region=etc	street=Hidden Street	name=Stage 18 <Frankenroid>
+970041805	region=etc	street=Hidden Street	name=Stage 18 <Frankenroid>
+970041806	region=etc	street=Hidden Street	name=Stage 18 <Frankenroid>
+970041807	region=etc	street=Hidden Street	name=Stage 18 <Frankenroid>
+970041808	region=etc	street=Hidden Street	name=Stage 18 <Frankenroid>
+970041809	region=etc	street=Hidden Street	name=Stage 18 <Frankenroid>
+970041810	region=etc	street=Hidden Street	name=Stage 18 <Frankenroid>
+970041811	region=etc	street=Hidden Street	name=Stage 18 <Frankenroid>
+970041812	region=etc	street=Hidden Street	name=Stage 18 <Frankenroid>
+970041813	region=etc	street=Hidden Street	name=Stage 18 <Frankenroid>
+970041814	region=etc	street=Hidden Street	name=Stage 18 <Frankenroid>
+970041815	region=etc	street=Hidden Street	name=Stage 18 <Frankenroid>
+970041816	region=etc	street=Hidden Street	name=Stage 18 <Frankenroid>
+970041817	region=etc	street=Hidden Street	name=Stage 18 <Frankenroid>
+970041900	region=etc	street=Hidden Street	name=Stage 19 <Eliza>
+970041901	region=etc	street=Hidden Street	name=Stage 19 <Eliza>
+970041902	region=etc	street=Hidden Street	name=Stage 19 <Eliza>
+970041903	region=etc	street=Hidden Street	name=Stage 19 <Eliza>
+970041904	region=etc	street=Hidden Street	name=Stage 19 <Eliza>
+970041905	region=etc	street=Hidden Street	name=Stage 19 <Eliza>
+970041906	region=etc	street=Hidden Street	name=Stage 19 <Eliza>
+970041907	region=etc	street=Hidden Street	name=Stage 19 <Eliza>
+970041908	region=etc	street=Hidden Street	name=Stage 19 <Eliza>
+970041909	region=etc	street=Hidden Street	name=Stage 19 <Eliza>
+970041910	region=etc	street=Hidden Street	name=Stage 19 <Eliza>
+970041911	region=etc	street=Hidden Street	name=Stage 19 <Eliza>
+970041912	region=etc	street=Hidden Street	name=Stage 19 <Eliza>
+970041913	region=etc	street=Hidden Street	name=Stage 19 <Eliza>
+970041914	region=etc	street=Hidden Street	name=Stage 19 <Eliza>
+970041915	region=etc	street=Hidden Street	name=Stage 19 <Eliza>
+970041916	region=etc	street=Hidden Street	name=Stage 19 <Eliza>
+970041917	region=etc	street=Hidden Street	name=Stage 19 <Eliza>
+970042000	region=etc	street=Hidden Street	name=Stage 20 <Chimera>
+970042001	region=etc	street=Hidden Street	name=Stage 20 <Chimera>
+970042002	region=etc	street=Hidden Street	name=Stage 20 <Chimera>
+970042003	region=etc	street=Hidden Street	name=Stage 20 <Chimera>
+970042004	region=etc	street=Hidden Street	name=Stage 20 <Chimera>
+970042005	region=etc	street=Hidden Street	name=Stage 20 <Chimera>
+970042006	region=etc	street=Hidden Street	name=Stage 20 <Chimera>
+970042007	region=etc	street=Hidden Street	name=Stage 20 <Chimera>
+970042008	region=etc	street=Hidden Street	name=Stage 20 <Chimera>
+970042009	region=etc	street=Hidden Street	name=Stage 20 <Chimera>
+970042010	region=etc	street=Hidden Street	name=Stage 20 <Chimera>
+970042011	region=etc	street=Hidden Street	name=Stage 20 <Chimera>
+970042012	region=etc	street=Hidden Street	name=Stage 20 <Chimera>
+970042013	region=etc	street=Hidden Street	name=Stage 20 <Chimera>
+970042014	region=etc	street=Hidden Street	name=Stage 20 <Chimera>
+970042015	region=etc	street=Hidden Street	name=Stage 20 <Chimera>
+970042016	region=etc	street=Hidden Street	name=Stage 20 <Chimera>
+970042017	region=etc	street=Hidden Street	name=Stage 20 <Chimera>
+970042100	region=etc	street=Hidden Street	name=Stage 21 <Snowman>
+970042101	region=etc	street=Hidden Street	name=Stage 21 <Snowman>
+970042102	region=etc	street=Hidden Street	name=Stage 21 <Snowman>
+970042103	region=etc	street=Hidden Street	name=Stage 21 <Snowman>
+970042104	region=etc	street=Hidden Street	name=Stage 21 <Snowman>
+970042105	region=etc	street=Hidden Street	name=Stage 21 <Snowman>
+970042106	region=etc	street=Hidden Street	name=Stage 21 <Snowman>
+970042107	region=etc	street=Hidden Street	name=Stage 21 <Snowman>
+970042108	region=etc	street=Hidden Street	name=Stage 21 <Snowman>
+970042109	region=etc	street=Hidden Street	name=Stage 21 <Snowman>
+970042110	region=etc	street=Hidden Street	name=Stage 21 <Snowman>
+970042111	region=etc	street=Hidden Street	name=Stage 21 <Snowman>
+970042112	region=etc	street=Hidden Street	name=Stage 21 <Snowman>
+970042113	region=etc	street=Hidden Street	name=Stage 21 <Snowman>
+970042114	region=etc	street=Hidden Street	name=Stage 21 <Snowman>
+970042115	region=etc	street=Hidden Street	name=Stage 21 <Snowman>
+970042116	region=etc	street=Hidden Street	name=Stage 21 <Snowman>
+970042117	region=etc	street=Hidden Street	name=Stage 21 <Snowman>
+970042200	region=etc	street=Hidden Street	name=Stage 22 <Crimson Balrog>
+970042201	region=etc	street=Hidden Street	name=Stage 22 <Crimson Balrog>
+970042202	region=etc	street=Hidden Street	name=Stage 22 <Crimson Balrog>
+970042203	region=etc	street=Hidden Street	name=Stage 22 <Crimson Balrog>
+970042204	region=etc	street=Hidden Street	name=Stage 22 <Crimson Balrog>
+970042205	region=etc	street=Hidden Street	name=Stage 22 <Crimson Balrog>
+970042206	region=etc	street=Hidden Street	name=Stage 22 <Crimson Balrog>
+970042207	region=etc	street=Hidden Street	name=Stage 22 <Crimson Balrog>
+970042208	region=etc	street=Hidden Street	name=Stage 22 <Crimson Balrog>
+970042209	region=etc	street=Hidden Street	name=Stage 22 <Crimson Balrog>
+970042210	region=etc	street=Hidden Street	name=Stage 22 <Crimson Balrog>
+970042211	region=etc	street=Hidden Street	name=Stage 22 <Crimson Balrog>
+970042212	region=etc	street=Hidden Street	name=Stage 22 <Crimson Balrog>
+970042213	region=etc	street=Hidden Street	name=Stage 22 <Crimson Balrog>
+970042214	region=etc	street=Hidden Street	name=Stage 22 <Crimson Balrog>
+970042215	region=etc	street=Hidden Street	name=Stage 22 <Crimson Balrog>
+970042216	region=etc	street=Hidden Street	name=Stage 22 <Crimson Balrog>
+970042217	region=etc	street=Hidden Street	name=Stage 22 <Crimson Balrog>
+970042300	region=etc	street=Hidden Street	name=Stage 23 <Manon>
+970042301	region=etc	street=Hidden Street	name=Stage 23 <Manon>
+970042302	region=etc	street=Hidden Street	name=Stage 23 <Manon>
+970042303	region=etc	street=Hidden Street	name=Stage 23 <Manon>
+970042304	region=etc	street=Hidden Street	name=Stage 23 <Manon>
+970042305	region=etc	street=Hidden Street	name=Stage 23 <Manon>
+970042306	region=etc	street=Hidden Street	name=Stage 23 <Manon>
+970042307	region=etc	street=Hidden Street	name=Stage 23 <Manon>
+970042308	region=etc	street=Hidden Street	name=Stage 23 <Manon>
+970042309	region=etc	street=Hidden Street	name=Stage 23 <Manon>
+970042310	region=etc	street=Hidden Street	name=Stage 23 <Manon>
+970042311	region=etc	street=Hidden Street	name=Stage 23 <Manon>
+970042312	region=etc	street=Hidden Street	name=Stage 23 <Manon>
+970042313	region=etc	street=Hidden Street	name=Stage 23 <Manon>
+970042314	region=etc	street=Hidden Street	name=Stage 23 <Manon>
+970042315	region=etc	street=Hidden Street	name=Stage 23 <Manon>
+970042316	region=etc	street=Hidden Street	name=Stage 23 <Manon>
+970042317	region=etc	street=Hidden Street	name=Stage 23 <Manon>
+970042400	region=etc	street=Hidden Street	name=Stage 24 <Griffey>
+970042401	region=etc	street=Hidden Street	name=Stage 24 <Griffey>
+970042402	region=etc	street=Hidden Street	name=Stage 24 <Griffey>
+970042403	region=etc	street=Hidden Street	name=Stage 24 <Griffey>
+970042404	region=etc	street=Hidden Street	name=Stage 24 <Griffey>
+970042405	region=etc	street=Hidden Street	name=Stage 24 <Griffey>
+970042406	region=etc	street=Hidden Street	name=Stage 24 <Griffey>
+970042407	region=etc	street=Hidden Street	name=Stage 24 <Griffey>
+970042408	region=etc	street=Hidden Street	name=Stage 24 <Griffey>
+970042409	region=etc	street=Hidden Street	name=Stage 24 <Griffey>
+970042410	region=etc	street=Hidden Street	name=Stage 24 <Griffey>
+970042411	region=etc	street=Hidden Street	name=Stage 24 <Griffey>
+970042412	region=etc	street=Hidden Street	name=Stage 24 <Griffey>
+970042413	region=etc	street=Hidden Street	name=Stage 24 <Griffey>
+970042414	region=etc	street=Hidden Street	name=Stage 24 <Griffey>
+970042415	region=etc	street=Hidden Street	name=Stage 24 <Griffey>
+970042416	region=etc	street=Hidden Street	name=Stage 24 <Griffey>
+970042417	region=etc	street=Hidden Street	name=Stage 24 <Griffey>
+970042500	region=etc	street=Hidden Street	name=Stage 25 <Leviathan>
+970042501	region=etc	street=Hidden Street	name=Stage 25 <Leviathan>
+970042502	region=etc	street=Hidden Street	name=Stage 25 <Leviathan>
+970042503	region=etc	street=Hidden Street	name=Stage 25 <Leviathan>
+970042504	region=etc	street=Hidden Street	name=Stage 25 <Leviathan>
+970042505	region=etc	street=Hidden Street	name=Stage 25 <Leviathan>
+970042506	region=etc	street=Hidden Street	name=Stage 25 <Leviathan>
+970042507	region=etc	street=Hidden Street	name=Stage 25 <Leviathan>
+970042508	region=etc	street=Hidden Street	name=Stage 25 <Leviathan>
+970042509	region=etc	street=Hidden Street	name=Stage 25 <Leviathan>
+970042510	region=etc	street=Hidden Street	name=Stage 25 <Leviathan>
+970042511	region=etc	street=Hidden Street	name=Stage 25 <Leviathan>
+970042512	region=etc	street=Hidden Street	name=Stage 25 <Leviathan>
+970042513	region=etc	street=Hidden Street	name=Stage 25 <Leviathan>
+970042514	region=etc	street=Hidden Street	name=Stage 25 <Leviathan>
+970042515	region=etc	street=Hidden Street	name=Stage 25 <Leviathan>
+970042516	region=etc	street=Hidden Street	name=Stage 25 <Leviathan>
+970042517	region=etc	street=Hidden Street	name=Stage 25 <Leviathan>
+970042600	region=etc	street=Hidden Street	name=Stage 26 <Papulatus>
+970042601	region=etc	street=Hidden Street	name=Stage 26 <Papulatus>
+970042602	region=etc	street=Hidden Street	name=Stage 26 <Papulatus>
+970042603	region=etc	street=Hidden Street	name=Stage 26 <Papulatus>
+970042604	region=etc	street=Hidden Street	name=Stage 26 <Papulatus>
+970042605	region=etc	street=Hidden Street	name=Stage 26 <Papulatus>
+970042606	region=etc	street=Hidden Street	name=Stage 26 <Papulatus>
+970042607	region=etc	street=Hidden Street	name=Stage 26 <Papulatus>
+970042608	region=etc	street=Hidden Street	name=Stage 26 <Papulatus>
+970042609	region=etc	street=Hidden Street	name=Stage 26 <Papulatus>
+970042610	region=etc	street=Hidden Street	name=Stage 26 <Papulatus>
+970042611	region=etc	street=Hidden Street	name=Stage 26 <Papulatus>
+970042612	region=etc	street=Hidden Street	name=Stage 26 <Papulatus>
+970042613	region=etc	street=Hidden Street	name=Stage 26 <Papulatus>
+970042614	region=etc	street=Hidden Street	name=Stage 26 <Papulatus>
+970042615	region=etc	street=Hidden Street	name=Stage 26 <Papulatus>
+970042616	region=etc	street=Hidden Street	name=Stage 26 <Papulatus>
+970042617	region=etc	street=Hidden Street	name=Stage 26 <Papulatus>
+970042700	region=etc	street=Hidden Street	name=Stage 27 <Pianus>
+970042701	region=etc	street=Hidden Street	name=Stage 27 <Pianus>
+970042702	region=etc	street=Hidden Street	name=Stage 27 <Pianus>
+970042703	region=etc	street=Hidden Street	name=Stage 27 <Pianus>
+970042704	region=etc	street=Hidden Street	name=Stage 27 <Pianus>
+970042705	region=etc	street=Hidden Street	name=Stage 27 <Pianus>
+970042706	region=etc	street=Hidden Street	name=Stage 27 <Pianus>
+970042707	region=etc	street=Hidden Street	name=Stage 27 <Pianus>
+970042708	region=etc	street=Hidden Street	name=Stage 27 <Pianus>
+970042709	region=etc	street=Hidden Street	name=Stage 27 <Pianus>
+970042710	region=etc	street=Hidden Street	name=Stage 27 <Pianus>
+970042711	region=etc	street=Hidden Street	name=Stage 27 <Pianus>
+970042712	region=etc	street=Hidden Street	name=Stage 27 <Pianus>
+970042713	region=etc	street=Hidden Street	name=Stage 27 <Pianus>
+970042714	region=etc	street=Hidden Street	name=Stage 27 <Pianus>
+970042715	region=etc	street=Hidden Street	name=Stage 27 <Pianus>
+970042716	region=etc	street=Hidden Street	name=Stage 27 <Pianus>
+970042717	region=etc	street=Hidden Street	name=Stage 27 <Pianus>

@@ -99,3 +99,61 @@ named-without-data/data-without-name pattern seen elsewhere, not proven id-by-id
 budget. Sub-property byte sizes aren't tracked by the tool (only whole-`.img` size), so add/protect
 byte totals read as 0 for String/Quest/parts of UI/Item/Etc even where real content exists —
 cross-checked against raw file-size deltas instead where it mattered.
+
+## Follow-up (2026-08-15): Map.wz 754-node drop — verdict
+
+Orchestrator flagged the Map.wz v83(5,616)→v84(4,862) net node drop as a possible source-integrity
+problem, not a bookkeeping one, since it contradicts README.md's "v84 removed zero nodes" premise
+and `wz-data/v84/` is the literal import source for tickets 04-09. Extended the same tool
+(`docs/wz-baseline/tool/Program.cs`, `MapAudit`/`NpcSpotCheck`/`MapNameLookup`) rather than building
+anything new.
+
+**Verdict: option 3 — `porting-resources/wz-data/v84/Map.wz` is a damaged/partial copy. Not safe
+to import from as-is.**
+
+Evidence:
+- 833 `Map.wz` image paths exist in v83-stock but not v84 (image-node count: v83 5,602, v84 4,848 —
+  matches the 754 net drop). Cross-checked by leaf filename against the *entire* v84 tree
+  (not just same-path): only 1 of 833 is found relocated elsewhere; **832 are genuinely absent
+  from v84 anywhere.** Rules out option 2 (structural repack/renesting) — a renested file would
+  still turn up somewhere in v84 by leaf name.
+- Grouped by container: **811 of 832 are under `Map/Map9`**, 17 under `Map/Map0`, 4 under
+  `Map/Map1`, 1 stray (`Obj/tutorial_jp.img`).
+- Looked up all 832 ids by name in v83-stock's `String.wz/Map.img` (recursive search, not a
+  region-layout guess — `Map.img` turned out to be organized by world name: `maple`, `victoria`,
+  `ossyria`, `event`, `etc`, `jp`, `singapore`, etc, not by leading digit). **815 of 832 resolve
+  to real, named GMS content**, e.g. `970030100` "Stage 1 &lt;Mano&gt;" through `970042717`
+  "Stage 27 &lt;Pianus&gt;" (the full **Monster Carnival / Ola Ola battlefield stage series**, ~17
+  instance rooms × ~28 boss stages), `925020610` "Mu Lung Dojo 6th Floor", and `109090001-4`
+  "Sheep Ranch Lobby". These are long-lived, well-known pre-Big-Bang GMS minigame instance maps —
+  not internal/test content, not plausible as a real single-patch removal. Only 17 (all tiny ids
+  under `Map0`, e.g. `000000001`) have no String.wz entry at all, consistent with those being
+  genuine internal/QA placeholder maps rather than evidence of damage.
+- **Decisive cross-check against the project's own independent source:** `docs/work-plan/README.md`
+  and the 771-node manifest's own headline table (built from maplestory.io's v83/v84 id lists, a
+  source independent of our local WZ copies) states map removed=0 for the real v83→v84 patch —
+  every v83 map id is claimed to still exist in real v84. Our local `wz-data/v84/Map.wz` is
+  missing 815 *named, real* v83 map ids. Since an independent source says those ids exist in the
+  real v84 and our local copy disagrees, **the local copy, not the historical record, is wrong.**
+  This also revises the scope doc's earlier "Nexon repacked/recompressed the archive" explanation
+  for Map.wz's size anomaly (606.0→599.8 MB) — recompression doesn't delete named nodes; the size
+  drop is better explained by this same missing content.
+
+Files: `docs/wz-baseline/map-v83-only-audit.txt` (full 832-path list, grouped counts),
+`docs/wz-baseline/map-missing-names-v83.txt` (all 832 ids resolved against v83 String.wz).
+
+This also closes the 93-vs-79 map add-list gap opened earlier: it does not fall out for free from
+this audit (the gap is on the *add* side, v83 vs v84 union of new ids; this audit is about the
+*missing* side, v84 vs v83). Left open as before — not force-explained.
+
+**Npc `9000071` (Keroben) spot check:** confirmed **not present** in v83-stock's `Npc.wz` at all
+(`Npc.wz/9000071.img` absent). This is a real "manifest-only, no v83 data" entry, not a
+"named-but-no-data" case — Keroben is genuinely new in v84, not an overcount artifact.
+
+**Action needed before ticket 03 touches Map.wz:** re-extract or re-download
+`porting-resources/wz-data/v84/Map.wz` from `GMSSetupv84.exe` (already on disk at
+`porting-resources/clients/`) and re-run this diff before treating it as the authoritative
+Map.wz import source. Every other WZ file's v83/v84 copies were not re-verified against this same
+leaf-name-anywhere test in this pass — only Map.wz was in scope per the orchestrator's ask — so a
+quick repeat of the same `MapAudit` check against the other nine files before ticket 03 starts
+would be cheap insurance, not yet done here.
