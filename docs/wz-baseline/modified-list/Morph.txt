@@ -1,0 +1,9 @@
+# Morph.wz: images present in BOTH v83-stock and v84 whose WzImage.BlockSize differs (edited, not added). Columns: path, v83 bytes, v84 bytes.
+
+Morph.wz/1000.img	938996	939911
+Morph.wz/1001.img	999711	1000626
+Morph.wz/1002.img	38780	38939
+Morph.wz/1003.img	372143	372309
+Morph.wz/1100.img	932110	933025
+Morph.wz/1101.img	987320	988235
+Morph.wz/1103.img	363285	363451

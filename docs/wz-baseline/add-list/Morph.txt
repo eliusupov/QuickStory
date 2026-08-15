@@ -1,0 +1,29 @@
+# Morph.wz: nodes present in v84 and absent from v83-stock (25 copy roots, 57 paths)
+# each path is a copy root: no listed path is an ancestor of another, so copying
+# a listed path already covers everything under it. Do not re-copy children.
+
+Morph.wz/0050.img
+Morph.wz/0051.img
+Morph.wz/0052.img
+Morph.wz/0053.img
+Morph.wz/1000.img/fly2
+Morph.wz/1000.img/fly2Move
+Morph.wz/1000.img/fly2Skill
+Morph.wz/1001.img/fly2
+Morph.wz/1001.img/fly2Move
+Morph.wz/1001.img/fly2Skill
+Morph.wz/1002.img/fly2
+Morph.wz/1002.img/fly2Move
+Morph.wz/1002.img/fly2Skill
+Morph.wz/1003.img/fly2
+Morph.wz/1003.img/fly2Move
+Morph.wz/1003.img/fly2Skill
+Morph.wz/1100.img/fly2
+Morph.wz/1100.img/fly2Move
+Morph.wz/1100.img/fly2Skill
+Morph.wz/1101.img/fly2
+Morph.wz/1101.img/fly2Move
+Morph.wz/1101.img/fly2Skill
+Morph.wz/1103.img/fly2
+Morph.wz/1103.img/fly2Move
+Morph.wz/1103.img/fly2Skill

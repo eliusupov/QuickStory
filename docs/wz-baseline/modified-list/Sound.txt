@@ -1,0 +1,8 @@
+# Sound.wz: images present in BOTH v83-stock and v84 whose WzImage.BlockSize differs (edited, not added). Columns: path, v83 bytes, v84 bytes.
+
+Sound.wz/Bgm00.img	7430599	8691907
+Sound.wz/Bgm14.img	20756763	22883037
+Sound.wz/BgmJp.img	18126660	10237035
+Sound.wz/Item.img	164314	164402
+Sound.wz/Mob.img	16460529	16756009
+Sound.wz/Skill.img	2084109	2312908

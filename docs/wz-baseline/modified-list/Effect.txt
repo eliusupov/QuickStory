@@ -1,0 +1,7 @@
+# Effect.wz: images present in BOTH v83-stock and v84 whose WzImage.BlockSize differs (edited, not added). Columns: path, v83 bytes, v84 bytes.
+
+Effect.wz/BasicEff.img	3992670	4266060
+Effect.wz/CharacterEff.img	75838	77977
+Effect.wz/OnUserEff.img	100259	164925
+Effect.wz/SetEff.img	3577908	3688390
+Effect.wz/Summon.img	1987228	2142107

@@ -250,9 +250,126 @@ of small instance rooms.
   limits it was not clicked through. It would only re-confirm bytes already confirmed against the
   official full installer.
 
-### Reproducing this
+## 02f (2026-08-15): the seven unbaselined WZ files — acquired and baselined
 
-`wz-data/v84-clean/` was created, hash-compared 11/11 against `wz-data/v84/`, and then **deleted**
+`v83-stock/` and `v84/` held only 10 / 11 `.wz` files. Both retail installers actually ship **17**.
+The seven missing ones are now carved out of the installers and added — **new files only, nothing
+existing was touched or overwritten**.
+
+### CAB offsets (v83 derived here; v84 confirms §02c)
+
+| installer | vol 1 offset | vol 1 size | vol 2 offset | vol 2 size |
+|---|---|---|---|---|
+| `GMSSetupv83.exe` (1,763,606,856 B) | 3,371,141 | 1,048,576,000 | 1,051,947,141 | 711,654,917 |
+| `GMSSetupv84.exe` (1,846,289,344 B) | 6,553,734 | 1,048,576,000 | 1,055,129,734 | 791,157,066 |
+
+Both volumes must be carved as siblings named `MapleStory_1.cab` / `MapleStory_2.cab` — the name is
+in vol 1's `szCabinetNext` field (flags=2 NEXT_CABINET; vol 2 has flags=1 PREV_CABINET, iCabinet=1).
+`7z l` reports 51 files (v83) / 52 files (v84), "Everything is Ok", no span or CRC error. The exe was
+**never executed**; only carved.
+
+### Files added
+
+| path | bytes | SHA256 |
+|---|---|---|
+| `wz-data/v83-stock/Base.wz` | 6,540 | `83FA0A8C2E11F8CBC4E92F46B5F9E8137FB1D0F7DD4B6CDC7EA337087C854CF4` |
+| `wz-data/v83-stock/Effect.wz` | 63,334,965 | `3504500E6891895F747CBAC9BD707F8FAF0815C9D0DF79ECD468C6B15B33D660` |
+| `wz-data/v83-stock/List.wz` | 13,336 | `7F9B67D010D8901F81B541B4C611F2FFA0B166001E4762D44FEDAB6AB7DFAD8B` |
+| `wz-data/v83-stock/Morph.wz` | 6,204,606 | `9BF57995EFCD331F23E8FD0FF818E00EC159AB1995F8D9BCA7EF856E301F6782` |
+| `wz-data/v83-stock/Reactor.wz` | 54,133,811 | `BE1573DC3461298906A35AAA8736C4097F0AB81055CFADA640DE72FA6774AD94` |
+| `wz-data/v83-stock/Sound.wz` | 363,261,964 | `BC6570D39AE1C021AF433616ED4EC5F0C8917513B63D28536D116AAC74BDFD76` |
+| `wz-data/v83-stock/TamingMob.wz` | 797 | `D23604F70C25CABD83E5C30A2ED9390BA1078C0966FD7D76A4ADFC03CB2CAE0D` |
+| `wz-data/v84/Base.wz` | 6,540 | `08112B086BE4131756341B569D2059DA6D00B2F75D1BEEBDCBE3B8F73E7E661E` |
+| `wz-data/v84/Effect.wz` | 78,068,632 | `4E42789E5C8E2224A49D1C79B97C8E7FF4C98A89DF9AB92672757766E3058C3A` |
+| `wz-data/v84/List.wz` | 13,336 | `7F9B67D010D8901F81B541B4C611F2FFA0B166001E4762D44FEDAB6AB7DFAD8B` |
+| `wz-data/v84/Morph.wz` | 6,322,806 | `F4E0CA1026153B08BB0A547B21DDC1C947B2E93EC20442156F37C23DD6C16C1E` |
+| `wz-data/v84/Sound.wz` | 359,284,288 | `947139F27B85A6F9C0C680F59F974289AFA7BEC03C688F7C443B8A5DD4E9A2BD` |
+| `wz-data/v84/TamingMob.wz` | 797 | `20F06862CF1E420EC8E0096BF58E7343EA538673BE5F0BEE653431AA671EE72C` |
+
+Every size matches the installer's own CAB directory entry. **No hash mismatch against any
+pre-existing file** — nothing pre-existing was compared-and-replaced, because nothing pre-existing
+collided except `Reactor.wz`, handled below. `v84/Reactor.wz` (54,769,939 B,
+`0FCBC377…A304C098FC`) was already present and was left alone.
+
+`v83-reactor/Reactor.wz` (parked by 02c) is **SHA256-identical** to the installer's copy, so it was
+moved into `v83-stock/` and the `v83-reactor/` directory removed. The diff tool's default v83 root
+no longer needs the `;`-separated second directory.
+
+### Re-run of the diff tool
+
+Full 3-tree × 18-file sweep re-run in place; `SUMMARY.md` regenerated. 55,343 images parsed,
+3 parse failures. New rows are all real, no `MISSING`:
+
+| wz | v83-stock | v84 | live | add | removed | protect | mod v83→v84 |
+|---|---|---|---|---|---|---|---|
+| Base.wz | 322 | 322 | 322 | 0 | 0 | 0 | 0 |
+| Effect.wz | 400 | 428 | 400 | 20 | 0 | 0 | 5 |
+| Morph.wz | 508 | 565 | 508 | 25 | 0 | 0 | 7 |
+| Reactor.wz | 2,560 | 2,594 | 2,565 | 6 | 0 | 7 | 0 |
+| Sound.wz | 2,480 | 2,540 | 2,480 | 62 | 2 | 0 | 6 |
+| TamingMob.wz | 14 | 14 | 14 | 0 | 0 | 0 | 0 |
+| List.wz | OPEN-FAILED | OPEN-FAILED | OPEN-FAILED | — | — | — | — |
+
+- **`List.wz` is not a WZ archive.** All three trees fail identically (`WZ header FStart is outside
+  the file`) — it is a flat 13 KB plain-list file, and v83 and v84 ship byte-identical copies
+  (same SHA256). Nothing to diff; the row is left visible rather than suppressed.
+- **`Sound.wz/BgmGL.img` fails to parse in all three trees** (`InvalidDataException: WZ extended
+  property exceeds its declared block`) — a MapleLib limitation, not a damaged file, and it fails
+  symmetrically so it biases nothing. Left visible in `SUMMARY.md`.
+- Sound.wz removals: `BgmJp.img/FirstStepMaster`, `BgmJp.img/Hana` — JP-only tracks, harmless.
+- New-area content confirmed present: `Sound.wz/Bgm00.img/DragonDream`, `Bgm14.img/DragonRider`;
+  `Effect.wz/BasicEff.img/DragonChanged`, `dragonFury`, `Direction4.img`, `SetEff.img/101`-`115`;
+  `Morph.wz/0050`-`0053.img` plus a `fly2`/`fly2Move`/`fly2Skill` triple added to every existing
+  morph image (Evan's flying-mount morph states).
+
+### Mounts: `TamingMob.wz` is NOT where mounts live — ticket 05's premise is wrong
+
+`TamingMob.wz` is **797 bytes in v83, v84 and the live client** — seven near-empty placeholder
+images `0001.img`-`0007.img`. It carries no mount definitions in this era and diffs to `add=0`.
+(v83's and live's copies are byte-identical; v84's differs only in header/offset bytes.)
+
+Mounts actually live in **`Character.wz/TamingMob/`**, cross-referenced by an `info/tamingMob`
+integer that indexes into `TamingMob.wz`'s placeholder images.
+
+| tree | `Character.wz/TamingMob` images | `String.wz/Eqp.img/Eqp/Taming` names |
+|---|---|---|
+| v83-stock | 47 | 33 |
+| v84 | **55** | **39** |
+| live client | 47 | 47 (14 of them literal `MISSING NAME` placeholders) |
+
+**v84 adds 8 mounts over v83**, all in the `1932xxx` block, all absent from the live client:
+`01932006`, `01932007`, `01932008`, `01932009`, `01932011`, `01932018`, `01932019`, `01932020`.
+Verified as real mount equips, not stubs — e.g. `01932006.img/info` = `islot=Tm, vslot=Tm,
+reqLevel=13, tamingMob=6, tradeBlock=1, notSale=1, only=1`, with the full
+`walk1/walk2/stand1/stand2/tired/jump/prone/ladder/rope/fly` animation set. They have **no
+`String.wz` name entry in either stock tree** — unnamed/GM-side mounts.
+
+Separately, v84 **names 6 mount ids whose sprites already existed in v83**: `1902040`/`1902041`/
+`1902042` = "Stage 1/2/3 Dragon" and `1912033`/`1912034`/`1912035` = their saddles. That is
+**Evan's Mir**, the player-facing new mount of this patch — the art shipped early in v83, only the
+`String.wz` naming is new. A presence-only Character.wz diff cannot see it; the `String.wz` add-list
+can.
+
+**Where ticket 05 should look:**
+1. `Character.wz/TamingMob/019320{06,07,08,09,11,18,19,20}.img` — the 8 genuinely new sprites
+   (`docs/wz-baseline/add-list/Character.txt`, lines 140-147).
+2. `String.wz/Eqp.img/Eqp/Taming` — import the 6 new Evan/Mir names; the sprites are already there.
+3. `Morph.wz` `fly2`/`fly2Move`/`fly2Skill` on every morph image — the flying-mount morph states.
+4. **Not** `TamingMob.wz`. Copying it would achieve nothing.
+
+### Not done
+
+- Did not diff `Sound.wz/BgmGL.img` (unparseable by MapleLib in every tree).
+- Did not chase what the 8 unnamed `1932xxx` mounts *are* in-game — they have no `String.wz` entry
+  in v83, v84, or the live client's stock rows, so there is no name to recover from WZ data alone.
+
+### Reproducing this (recipe shared by 02c and 02f)
+
+Carve both `MapleStory_1.cab` / `MapleStory_2.cab` from the offsets in the 02f table into one
+directory (both volumes must be siblings and carry those exact names, or spanned files break),
+then `7z x MapleStory_1.cab -oDEST <files...>`. 02f's scratch dir was deleted after use.
+
+From 02c: `wz-data/v84-clean/` was created, hash-compared 11/11 against `wz-data/v84/`, and then **deleted**
 — keeping 1.4 GB of provably identical bytes would only create ambiguity about which tree is
 authoritative. `wz-data/v84/` is the one. The carved CAB scratch dirs were deleted too. To
 regenerate any of it: carve `MapleStory_1.cab` / `MapleStory_2.cab` from the offsets above into

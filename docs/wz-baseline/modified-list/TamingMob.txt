@@ -1,0 +1,2 @@
+# TamingMob.wz: images present in BOTH v83-stock and v84 whose WzImage.BlockSize differs (edited, not added). Columns: path, v83 bytes, v84 bytes.
+

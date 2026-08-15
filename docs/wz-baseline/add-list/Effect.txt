@@ -1,0 +1,24 @@
+# Effect.wz: nodes present in v84 and absent from v83-stock (20 copy roots, 28 paths)
+# each path is a copy root: no listed path is an ancestor of another, so copying
+# a listed path already covers everything under it. Do not re-copy children.
+
+Effect.wz/BasicEff.img/DragonChanged
+Effect.wz/BasicEff.img/dragonFury
+Effect.wz/CharacterEff.img/1102232
+Effect.wz/Direction4.img
+Effect.wz/SetEff.img/101
+Effect.wz/SetEff.img/102
+Effect.wz/SetEff.img/103
+Effect.wz/SetEff.img/104
+Effect.wz/SetEff.img/105
+Effect.wz/SetEff.img/106
+Effect.wz/SetEff.img/107
+Effect.wz/SetEff.img/108
+Effect.wz/SetEff.img/109
+Effect.wz/SetEff.img/110
+Effect.wz/SetEff.img/111
+Effect.wz/SetEff.img/112
+Effect.wz/SetEff.img/113
+Effect.wz/SetEff.img/114
+Effect.wz/SetEff.img/115
+Effect.wz/Summon.img/30
