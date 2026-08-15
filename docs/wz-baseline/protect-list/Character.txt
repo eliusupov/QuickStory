@@ -1,0 +1,4 @@
+Character.wz/Face/00020816.img
+Character.wz/Face/00020817.img
+Character.wz/Face/00021817.img
+Character.wz/Face/00021820.img

@@ -1,0 +1,11 @@
+UI.wz/Basic.img/KeyDownBar2
+UI.wz/Basic.img/KeyDownBar3
+UI.wz/Basic.img/Tab8
+UI.wz/Login.img/NewCharEvan
+UI.wz/tutorial.img/evan
+UI.wz/UIWindow.img/GachaCopy
+UI.wz/UIWindow.img/ImageFrame
+UI.wz/UIWindow.img/PartySearch2
+UI.wz/UIWindow.img/Repair
+UI.wz/UIWindow.img/SkillEx
+UI.wz/UIWindow.img/SkillMacroEx

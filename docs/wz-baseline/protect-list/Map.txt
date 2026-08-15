@@ -1,0 +1,7 @@
+Map.wz/Map/Map7/777777777.img
+Map.wz/WorldMap/WorldMap014.img
+Map.wz/WorldMap/WorldMap032.img
+Map.wz/WorldMap/WorldMap210.img
+Map.wz/WorldMap/WorldMap211.img
+Map.wz/WorldMap/WorldMap220.img
+Map.wz/WorldMap/WorldMap230.img

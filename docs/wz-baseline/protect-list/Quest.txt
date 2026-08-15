@@ -1,0 +1,4 @@
+Quest.wz/Act.img/7778
+Quest.wz/Check.img/7778
+Quest.wz/QuestInfo.img/7778
+Quest.wz/Say.img/7778
