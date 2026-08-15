@@ -17,8 +17,84 @@
       <vector name="origin" x="400" y="103"/>
       <int name="z" value="0"/>
     </canvas>
+    <canvas name="30" width="614" height="322">
+      <vector name="origin" x="307" y="161"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="31" width="1363" height="560">
+      <vector name="origin" x="681" y="280"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="32" width="267" height="195">
+      <vector name="origin" x="133" y="97"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="33" width="270" height="213">
+      <vector name="origin" x="135" y="106"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="34" width="316" height="220">
+      <vector name="origin" x="158" y="110"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="35" width="301" height="212">
+      <vector name="origin" x="150" y="106"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="36" width="238" height="194">
+      <vector name="origin" x="119" y="97"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="37" width="292" height="235">
+      <vector name="origin" x="146" y="117"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="38" width="255" height="561">
+      <vector name="origin" x="127" y="280"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="39" width="268" height="151">
+      <vector name="origin" x="134" y="75"/>
+      <int name="z" value="0"/>
+    </canvas>
     <canvas name="4" width="800" height="134">
       <vector name="origin" x="400" y="67"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="40" width="468" height="528">
+      <vector name="origin" x="234" y="264"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="41" width="569" height="182">
+      <vector name="origin" x="284" y="91"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="42" width="341" height="128">
+      <vector name="origin" x="170" y="64"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="43" width="534" height="145">
+      <vector name="origin" x="267" y="72"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="44" width="302" height="172">
+      <vector name="origin" x="151" y="86"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="45" width="1262" height="283">
+      <vector name="origin" x="631" y="141"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="46" width="237" height="515">
+      <vector name="origin" x="118" y="257"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="47" width="942" height="152">
+      <vector name="origin" x="471" y="76"/>
+      <int name="z" value="0"/>
+    </canvas>
+    <canvas name="48" width="184" height="515">
+      <vector name="origin" x="92" y="257"/>
       <int name="z" value="0"/>
     </canvas>
     <canvas name="5" width="800" height="161">

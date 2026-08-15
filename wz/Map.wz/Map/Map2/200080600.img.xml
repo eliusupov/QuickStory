@@ -1931,6 +1931,30 @@
         <int name="zM" value="52"/>
         <int name="reactor" value="0"/>
       </imgdir>
+      <imgdir name="25">
+        <string name="oS" value="tower"/>
+        <string name="l0" value="marineTower"/>
+        <string name="l1" value="gate"/>
+        <string name="l2" value="13"/>
+        <int name="x" value="-41"/>
+        <int name="y" value="-1538"/>
+        <int name="z" value="10"/>
+        <int name="f" value="0"/>
+        <int name="zM" value="0"/>
+        <int name="r" value="0"/>
+      </imgdir>
+      <imgdir name="26">
+        <string name="oS" value="tower"/>
+        <string name="l0" value="marineTower"/>
+        <string name="l1" value="gate"/>
+        <string name="l2" value="11"/>
+        <int name="x" value="-48"/>
+        <int name="y" value="-1612"/>
+        <int name="z" value="9"/>
+        <int name="f" value="0"/>
+        <int name="zM" value="48"/>
+        <int name="r" value="0"/>
+      </imgdir>
       <imgdir name="3">
         <string name="oS" value="tower"/>
         <string name="l0" value="skyStation"/>
@@ -4640,6 +4664,16 @@
       <int name="tm" value="200080500"/>
       <string name="tn" value="under00"/>
       <string name="script" value=""/>
+    </imgdir>
+    <imgdir name="6">
+      <string name="pn" value="in00"/>
+      <int name="pt" value="8"/>
+      <int name="x" value="-50"/>
+      <int name="y" value="-1475"/>
+      <int name="tm" value="999999999"/>
+      <string name="tn" value=""/>
+      <int name="horizontalImpact" value="0"/>
+      <string name="script" value="enterBlackRoom"/>
     </imgdir>
   </imgdir>
 </imgdir>

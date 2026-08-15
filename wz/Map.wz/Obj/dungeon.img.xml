@@ -32,6 +32,29 @@
           <int name="z" value="0"/>
         </canvas>
       </imgdir>
+      <imgdir name="41">
+        <canvas name="0" width="257" height="195">
+          <vector name="origin" x="128" y="97"/>
+          <int name="z" value="0"/>
+          <extended name="foothold">
+            <vector name="foothold" x="-113" y="11"/>
+            <vector name="foothold" x="-63" y="9"/>
+            <vector name="foothold" x="42" y="8"/>
+          </extended>
+        </canvas>
+      </imgdir>
+      <imgdir name="42">
+        <canvas name="0" width="45" height="250">
+          <vector name="origin" x="22" y="125"/>
+          <int name="z" value="0"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="43">
+        <canvas name="0" width="66" height="310">
+          <vector name="origin" x="33" y="155"/>
+          <int name="z" value="0"/>
+        </canvas>
+      </imgdir>
       <imgdir name="5">
         <canvas name="0" width="93" height="133">
           <vector name="origin" x="46" y="66"/>

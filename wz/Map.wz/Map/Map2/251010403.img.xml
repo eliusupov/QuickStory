@@ -671,6 +671,19 @@
       </imgdir>
     </imgdir>
     <imgdir name="obj">
+      <imgdir name="33">
+        <string name="oS" value="effect"/>
+        <string name="l0" value="quest"/>
+        <string name="l1" value="gate"/>
+        <string name="l2" value="7"/>
+        <int name="x" value="-867"/>
+        <int name="y" value="73"/>
+        <int name="z" value="9"/>
+        <int name="f" value="0"/>
+        <int name="zM" value="0"/>
+        <int name="r" value="0"/>
+        <string name="tags" value="22408"/>
+      </imgdir>
       <imgdir name="6">
         <string name="oS" value="acc7"/>
         <string name="l0" value="backchoField"/>
@@ -2128,6 +2141,16 @@
       <int name="y" value="76"/>
       <int name="tm" value="251010402"/>
       <string name="tn" value="east00"/>
+    </imgdir>
+    <imgdir name="4">
+      <string name="pn" value="in00"/>
+      <int name="pt" value="8"/>
+      <int name="x" value="-867"/>
+      <int name="y" value="77"/>
+      <int name="tm" value="999999999"/>
+      <string name="tn" value=""/>
+      <int name="horizontalImpact" value="0"/>
+      <string name="script" value="enterPottery"/>
     </imgdir>
   </imgdir>
 </imgdir>

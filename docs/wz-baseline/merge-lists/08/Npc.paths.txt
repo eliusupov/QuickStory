@@ -1,0 +1,37 @@
+# Ticket 08 - Misc v84 areas. Npc.wz merge path list.
+# 9 rows. Six are placed by a `life` node in a map this ticket ships; three are named by the
+# ticket and placed by nothing in either tree (staged-but-unreachable, see the ticket).
+#
+#   1013203 Hiver          -> 922030000 Frog House
+#   1013207 Olaf           -> 200090080, 200090090, 914100000
+#   1063018 Doll Left Behind -> 910050300 Abandoned Cave
+#   1205000 Afrien         -> 914100021 Cave of Silence
+#   2012034 Hidden Brick   -> 200080601 Orbis Tower <Secret Room>
+#   2092101 Potter         -> 925110000 Pirate Treasure Vault
+#   1011101 General Mau    -> placed by no map in either tree (ticket names it)
+#   1013106 Glowing Stele  -> placed only by 100030301, an Evan world map (ticket 13).
+#                             Taken here because ticket 08 names it; TICKET 13 MUST NOT RE-ADD IT.
+#   2092100 Potter         -> placed by no map in either tree; 2092101's sibling sprite
+#
+# NOT taken, with reasons:
+#   Npc.wz/9901910.img - 9901919.img  DROPPED. 03c's verdict, confirmed: 9901910 is the base of
+#     the runtime allocator range in PlayerNPC.java:66, and the live client is a strict superset
+#     of v84 there. These ten ARE placed - by 100030301, which is ticket 13's map. Ticket 13
+#     inherits the decision: drop them, and expect ten empty `life` slots in that map.
+#   Npc.wz/9000021.img  DENIED by COLLISION-DENY.txt (v84 rebuilt it around UOL links).
+#   Npc.wz/1013000-1013002, 1013100-1013105, 1013200-1013202, 1013204-1013206  Evan world NPCs
+#     (Mir, Anna, Utah, Gustav, Piglet, Camila, Afrien, Hiver variants) -> ticket 13.
+#   Npc.wz/1022106 Christopher, 1022107 Perion Warning Post, 2030015 Hidden Rock  new v84 images
+#     that no map in either tree places. Left unclaimed rather than staged.
+#   Npc.wz/{1002101/info/script, 1012108/condition*, 1032104/info/default, 9000054/info/reg/event,
+#     9900000+9900001/info/reg/name*, 9901000/say+stand} - property additions to NPCs that already
+#     work; nothing in scope needs them.
+Npc.wz/1011101.img
+Npc.wz/1013106.img
+Npc.wz/1013203.img
+Npc.wz/1013207.img
+Npc.wz/1063018.img
+Npc.wz/1205000.img
+Npc.wz/2012034.img
+Npc.wz/2092100.img
+Npc.wz/2092101.img

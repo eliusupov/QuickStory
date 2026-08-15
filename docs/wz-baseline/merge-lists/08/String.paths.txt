@@ -1,0 +1,70 @@
+# Ticket 08 - Misc v84 areas. String.wz merge path list (Map.img / Mob.img / Npc.img only).
+# 36 additive rows. Three more rows are FORCED - see String.force.txt in this directory.
+# Checked path by path against 06/String.paths.txt (ossyria/240080xxx + 8300xxx/95003xx mobs +
+# 5 Npc ids) and 07/String.paths.txt (ossyria/683070400-402 + 94006xx mobs): DISJOINT.
+# Overlap with 04/05 is structurally impossible - they own Eqp/Etc/Consume/Ins/Cash/Skill.img.
+
+# --- Map.img: 19 names, one per new map that has no name in the live client ---
+String.wz/Map.img/etc/910050300
+String.wz/Map.img/etc/910060100
+String.wz/Map.img/etc/910060101
+String.wz/Map.img/etc/910600000
+String.wz/Map.img/etc/910600010
+String.wz/Map.img/etc/914100000
+String.wz/Map.img/etc/914100010
+String.wz/Map.img/etc/914100020
+String.wz/Map.img/etc/914100021
+String.wz/Map.img/etc/914100022
+String.wz/Map.img/etc/914100023
+String.wz/Map.img/etc/922030000
+String.wz/Map.img/etc/922030001
+String.wz/Map.img/etc/922030010
+String.wz/Map.img/etc/922030011
+String.wz/Map.img/etc/922030020
+String.wz/Map.img/etc/922030021
+String.wz/Map.img/etc/922030022
+String.wz/Map.img/etc/925110000
+# 200080601 needs no row: the live client already reads "Orbis Tower <Secret Room>", byte-equal
+# to v84. 200090080 and 200090090 DO need one but the id already exists - see String.force.txt.
+
+# --- Mob.img: 2 names. 9300386/87/89/90/92 already read correctly in the live client
+#     ("Trainee Spore", "Enraged Golem", "Safe Guard", "Door Block", "Black Wing Henchman").
+String.wz/Mob.img/9300395
+String.wz/Mob.img/9300396
+
+# --- Npc.img: 15 rows ---
+String.wz/Npc.img/1011101
+String.wz/Npc.img/1013106
+String.wz/Npc.img/1013207
+String.wz/Npc.img/2080007
+String.wz/Npc.img/2092101
+String.wz/Npc.img/9000071
+String.wz/Npc.img/1063018/d0
+String.wz/Npc.img/1063018/d1
+String.wz/Npc.img/1205000/d0
+String.wz/Npc.img/1205000/d1
+String.wz/Npc.img/2012034/d0
+String.wz/Npc.img/2012034/d1
+# The three Christmas NPCs. Placed by 920010300, an existing live map, and currently nameless
+# there. FLAG: v84's own strings for these three are UNTRANSLATED KOREAN
+# (2001006 "-----" Rudolph, 2001007/2001008 Christmas Tree). Importing them replaces "no name"
+# with a Korean name. Taken because the ticket names them and the rows are pure additions with
+# zero collisions; deleting these three lines is the whole fix if that is not wanted.
+String.wz/Npc.img/2001006
+String.wz/Npc.img/2001007
+String.wz/Npc.img/2001008
+
+# --- 3 FORCED rows. Authorised by String.force.txt, which must be passed as --force on BOTH
+#     the binary and the XML run. Each live value is untranslated Korean; v84 is the English
+#     translation of the same node. Without --force the additive gate refuses all three and the
+#     two ship maps + Hiver render with Korean names.
+String.wz/Map.img/ossyria/200090080
+String.wz/Map.img/ossyria/200090090
+String.wz/Npc.img/1013203
+
+# NOT taken: ~60 String.wz/Npc.img/<id>/{d0,d1,n0,n1,quest,func} rows for NPCs unrelated to this
+# ticket's areas, and the ~20 String.wz/Map.img/{victoria,ossyria}/<town>/{help0,help1,help2,
+# mapDesc} rows v84 adds to existing towns. Real v84 content, no owner; folded into the composed
+# install pass rather than smuggled in here.
+# NOT taken: String.wz/Map.img/etc/{900*,923020*,924900*,980000*,910510300,922231001} - names for
+# Evan world maps (ticket 13) and for maps neither tree ships an image for.

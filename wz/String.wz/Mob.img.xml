@@ -99,6 +99,12 @@
   <imgdir name="8300007">
     <string name="name" value="Dragon Rider"/>
   </imgdir>
+  <imgdir name="9300395">
+    <string name="name" value="Watchmen Crew"/>
+  </imgdir>
+  <imgdir name="9300396">
+    <string name="name" value="Watchmen Captain"/>
+  </imgdir>
   <imgdir name="9400658">
     <string name="name" value="Imperial Guard Type A"/>
   </imgdir>

@@ -1,0 +1,115 @@
+﻿# Ticket 08 - Misc v84 areas. Map.wz merge path list.
+# Order matters: asset rows first, then the 22 new map images, then the three route rows
+# that append onto EXISTING v83 maps.
+#
+# 67 asset rows - the union of `WzMerge deps <v84>\Map.wz <id> add-list` over all 22 map ids
+#                (all 22 exit 0; raw output in D:\games\MapleStory\Server\wz-merge\08\<id>.deps.txt).
+# 22 new map images.
+#  6 route rows - see ROUTE-ROWS.md in this directory. These are the ONLY rows here that write
+#                into a positional array on a map the live client already has, and each was
+#                verified to be a pure append (live child count == v84 index).
+#
+# NOT taken, deliberately: Map/Map1/106010101.img/portal/5/{horizontalImpact,script},
+# Map/Map2/220000300.img/portal/15, Map/Map2/220011000.img/portal/4/{horizontalImpact,script}.
+# v84 REINDEXED those portal arrays, so the add-list index names a different portal in the live
+# client than it does in v84. Merging them corrupts three working v83 portals. See ROUTE-ROWS.md.
+
+Map.wz/Back/grassySoil.img/ani/1
+Map.wz/Back/grassySoil.img/ani/2
+Map.wz/Back/grassySoil.img/ani/3
+Map.wz/Back/grassySoil.img/ani/4
+Map.wz/Back/grassySoil.img/ani/5
+Map.wz/Back/grassySoil.img/ani/6
+Map.wz/Back/grassySoil.img/ani/7
+Map.wz/Back/grassySoil.img/back/10
+Map.wz/Back/grassySoil.img/back/11
+Map.wz/Back/grassySoil.img/back/12
+Map.wz/Back/grassySoil.img/back/13
+Map.wz/Back/grassySoil.img/back/14
+Map.wz/Back/grassySoil.img/back/15
+Map.wz/Back/grassySoil.img/back/16
+Map.wz/Back/grassySoil.img/back/17
+Map.wz/Back/grassySoil.img/back/18
+Map.wz/Back/grassySoil.img/back/19
+Map.wz/Back/grassySoil.img/back/20
+Map.wz/Back/grassySoil.img/back/21
+Map.wz/Back/grassySoil.img/back/22
+Map.wz/Back/grassySoil.img/back/23
+Map.wz/Back/grassySoil.img/back/24
+Map.wz/Back/grassySoil.img/back/25
+Map.wz/Back/grassySoil.img/back/26
+Map.wz/Back/grassySoil.img/back/27
+Map.wz/Back/grassySoil.img/back/28
+Map.wz/Back/grassySoil.img/back/9
+Map.wz/Back/Rien.img/back/30
+Map.wz/Back/Rien.img/back/31
+Map.wz/Back/Rien.img/back/32
+Map.wz/Back/Rien.img/back/33
+Map.wz/Back/Rien.img/back/34
+Map.wz/Back/Rien.img/back/35
+Map.wz/Back/Rien.img/back/36
+Map.wz/Back/Rien.img/back/37
+Map.wz/Back/Rien.img/back/38
+Map.wz/Back/Rien.img/back/39
+Map.wz/Back/Rien.img/back/40
+Map.wz/Back/Rien.img/back/41
+Map.wz/Back/Rien.img/back/42
+Map.wz/Back/Rien.img/back/43
+Map.wz/Back/Rien.img/back/44
+Map.wz/Back/Rien.img/back/45
+Map.wz/Back/Rien.img/back/46
+Map.wz/Back/Rien.img/back/47
+Map.wz/Back/Rien.img/back/48
+Map.wz/Back/toyCastleB1.img/back/10
+Map.wz/Back/toyCastleB1.img/back/8
+Map.wz/Back/toyCastleB1.img/back/9
+Map.wz/MapHelper.img/mark/SnowDragon
+Map.wz/Obj/acc1.img/grassySoil/golem/20
+Map.wz/Obj/acc1.img/grassySoil/golem/21
+Map.wz/Obj/acc12.img/dragon
+Map.wz/Obj/dungeon.img/darkCave/acc/41
+Map.wz/Obj/dungeon.img/darkCave/acc/42
+Map.wz/Obj/dungeon.img/darkCave/acc/43
+Map.wz/Obj/effect.img/quest/gate/7
+Map.wz/Obj/insideTC.img/inside0/blackroom
+Map.wz/Obj/tower.img/marineTower/gate/11
+Map.wz/Obj/tower.img/marineTower/gate/12
+Map.wz/Tile/grassySoil.img/edD/1
+Map.wz/Tile/grassySoil.img/enH0/2
+Map.wz/Tile/grassySoil.img/enH0/3
+Map.wz/Tile/grassySoil.img/enH1/2
+Map.wz/Tile/grassySoil.img/enH1/3
+Map.wz/Tile/grassySoil.img/enV0/2
+Map.wz/Tile/grassySoil.img/enV1/2
+
+# --- the 22 new map images ---
+Map.wz/Map/Map2/200080601.img
+Map.wz/Map/Map2/200090080.img
+Map.wz/Map/Map2/200090090.img
+Map.wz/Map/Map9/910050300.img
+Map.wz/Map/Map9/910060100.img
+Map.wz/Map/Map9/910060101.img
+Map.wz/Map/Map9/910600000.img
+Map.wz/Map/Map9/910600010.img
+Map.wz/Map/Map9/914100000.img
+Map.wz/Map/Map9/914100010.img
+Map.wz/Map/Map9/914100020.img
+Map.wz/Map/Map9/914100021.img
+Map.wz/Map/Map9/914100022.img
+Map.wz/Map/Map9/914100023.img
+Map.wz/Map/Map9/922030000.img
+Map.wz/Map/Map9/922030001.img
+Map.wz/Map/Map9/922030010.img
+Map.wz/Map/Map9/922030011.img
+Map.wz/Map/Map9/922030020.img
+Map.wz/Map/Map9/922030021.img
+Map.wz/Map/Map9/922030022.img
+Map.wz/Map/Map9/925110000.img
+
+# --- route rows onto existing v83 maps (verified pure appends) ---
+Map.wz/Map/Map2/200080600.img/1/obj/25
+Map.wz/Map/Map2/200080600.img/1/obj/26
+Map.wz/Map/Map2/200080600.img/portal/6
+Map.wz/Map/Map2/251010403.img/4/obj/33
+Map.wz/Map/Map2/251010403.img/portal/4
+Map.wz/Map/Map1/106010102.img/portal/8

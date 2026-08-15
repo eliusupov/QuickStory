@@ -6517,12 +6517,12 @@
       <string name="mapName" value="Orbis Tower &lt;Secret Room&gt;"/>
     </imgdir>
     <imgdir name="200090080">
-      <string name="streetName" value="쿤의 항해"/>
-      <string name="mapName" value="용이 잠든 섬으로"/>
+      <string name="streetName" value="Olaf&apos;s Voyage"/>
+      <string name="mapName" value="To the Slumbering Dragon Island "/>
     </imgdir>
     <imgdir name="200090090">
-      <string name="streetName" value="쿤의 항해"/>
-      <string name="mapName" value="리스항구행"/>
+      <string name="streetName" value="Olaf&apos;s Voyage"/>
+      <string name="mapName" value="To Lith Harbor"/>
     </imgdir>
     <imgdir name="240070000">
       <string name="streetName" value="Tera Forest  "/>
@@ -7632,6 +7632,82 @@
     </imgdir>
   </imgdir>
   <imgdir name="etc">
+    <imgdir name="910050300">
+      <string name="streetName" value="Hidden Street"/>
+      <string name="mapName" value="Abandoned Cave "/>
+    </imgdir>
+    <imgdir name="910060100">
+      <string name="streetName" value="Victoria Road"/>
+      <string name="mapName" value="Power B. Fore&apos;s Spore Training Center"/>
+    </imgdir>
+    <imgdir name="910060101">
+      <string name="streetName" value="Victoria Road"/>
+      <string name="mapName" value="Power B. Fore&apos;s Borrowed Training Center "/>
+    </imgdir>
+    <imgdir name="910600000">
+      <string name="streetName" value="Hidden Street"/>
+      <string name="mapName" value="Golem&apos;s Temple Entrance "/>
+    </imgdir>
+    <imgdir name="910600010">
+      <string name="streetName" value="Hidden Street"/>
+      <string name="mapName" value="Abandoned Hideout"/>
+    </imgdir>
+    <imgdir name="914100000">
+      <string name="streetName" value="Slumbering Dragon Island "/>
+      <string name="mapName" value="Temporary Harbor "/>
+    </imgdir>
+    <imgdir name="914100010">
+      <string name="streetName" value="Slumbering Dragon Island "/>
+      <string name="mapName" value="Snowy Forest"/>
+    </imgdir>
+    <imgdir name="914100020">
+      <string name="streetName" value="Slumbering Dragon Island "/>
+      <string name="mapName" value="Cave of Silence"/>
+    </imgdir>
+    <imgdir name="914100021">
+      <string name="streetName" value="Slumbering Dragon Island "/>
+      <string name="mapName" value="Cave of Silence"/>
+    </imgdir>
+    <imgdir name="914100022">
+      <string name="streetName" value="Slumbering Dragon Island "/>
+      <string name="mapName" value="Cave of Silence"/>
+    </imgdir>
+    <imgdir name="914100023">
+      <string name="streetName" value="Slumbering Dragon Island "/>
+      <string name="mapName" value="Cave of Silence"/>
+    </imgdir>
+    <imgdir name="922030000">
+      <string name="streetName" value="Hidden Street"/>
+      <string name="mapName" value="Frog House "/>
+    </imgdir>
+    <imgdir name="922030001">
+      <string name="streetName" value="Hidden Street"/>
+      <string name="mapName" value="Frog House "/>
+    </imgdir>
+    <imgdir name="922030010">
+      <string name="streetName" value="Hidden Street"/>
+      <string name="mapName" value="Sky Terrace"/>
+    </imgdir>
+    <imgdir name="922030011">
+      <string name="streetName" value="Hidden Street"/>
+      <string name="mapName" value="Safe - 1st Entrance"/>
+    </imgdir>
+    <imgdir name="922030020">
+      <string name="streetName" value="Hidden Street"/>
+      <string name="mapName" value="Sky Terrace"/>
+    </imgdir>
+    <imgdir name="922030021">
+      <string name="streetName" value="Hidden Street"/>
+      <string name="mapName" value="Safe - 1st Entrance"/>
+    </imgdir>
+    <imgdir name="922030022">
+      <string name="streetName" value="Hidden Street"/>
+      <string name="mapName" value="Safe - 2nd Entrance "/>
+    </imgdir>
+    <imgdir name="925110000">
+      <string name="streetName" value="Hidden Street"/>
+      <string name="mapName" value="Pirate Treasure Vault "/>
+    </imgdir>
     <imgdir name="926100000">
       <string name="streetName" value="Hidden Street"/>
       <string name="mapName" value="Mysterious Lab"/>

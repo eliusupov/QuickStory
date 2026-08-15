@@ -2774,5 +2774,15 @@
       <int name="tm" value="106010101"/>
       <string name="tn" value="in00"/>
     </imgdir>
+    <imgdir name="8">
+      <string name="pn" value="scr00"/>
+      <int name="pt" value="8"/>
+      <int name="x" value="1453"/>
+      <int name="y" value="252"/>
+      <int name="tm" value="999999999"/>
+      <string name="tn" value=""/>
+      <int name="horizontalImpact" value="0"/>
+      <string name="script" value="evanDollGR"/>
+    </imgdir>
   </imgdir>
 </imgdir>

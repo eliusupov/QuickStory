@@ -1,0 +1,24 @@
+# Ticket 08 - Misc v84 areas. Mob.wz merge path list.
+# 7 rows. Every id below is placed by a `life` node in a map this ticket ships:
+#   9300386 Trainee Spore        Lv.12  200 HP   exp 24  -> 910060100 x19
+#   9300387 Enraged Golem        Lv.55  4,000    exp 0   -> 910600000 x1, 910600010 x3
+#   9300389 Safe Guard           Lv.12  200      exp 0   -> 922030011 x1
+#   9300390 Door Block           Lv.68  108,000  exp 0  boss=1 -> 922030022 x1
+#   9300392 Black Wing Henchman  Lv.70  15,000   exp 0   -> 914100023 x10
+#   9300395 Watchmen Crew        Lv.68  12,500   exp 0   -> 925110000 x10
+#   9300396 Watchmen Captain     Lv.70  15,000   exp 0   -> 925110000 x10
+#
+# NOT taken: 9300388 "Free Spirit", 9300391 "Ice Wall", 9300393 "Gentleman",
+# 9300394 "Delinquent Rudolph". No `life` node in ANY of v84's 76 new map images places them
+# (measured, not assumed). 9300385 "Treacherous Fox" is placed only by 100030103, an Evan
+# world map -> ticket 13.
+#
+# No drop tables are delivered for these ids and that is deliberate: six of the seven have
+# exp = 0, i.e. they are scripted obstacle/PQ mobs, not huntable content.
+Mob.wz/9300386.img
+Mob.wz/9300387.img
+Mob.wz/9300389.img
+Mob.wz/9300390.img
+Mob.wz/9300392.img
+Mob.wz/9300395.img
+Mob.wz/9300396.img

@@ -1896,6 +1896,8 @@
     </imgdir>
   </imgdir>
   <imgdir name="mark">
+    <canvas name="SnowDragon" width="38" height="38">
+    </canvas>
     <canvas name="shouwa" width="38" height="38">
     </canvas>
     <canvas name="jipangu" width="38" height="38">

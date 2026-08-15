@@ -1,0 +1,6 @@
+# Ticket 08 - Misc v84 areas. Reactor.wz merge path list.
+# 1 row. Named by `reactor/0/id` in 914100022 Cave of Silence.
+#   1409000 -> 914100022
+# Checked path by path against 06/Reactor.paths.txt (2408005, 2408006): DISJOINT.
+# The remaining new v84 reactors (1002008, 2302006, 2409000) are placed by no map in scope.
+Reactor.wz/1409000.img

@@ -1,0 +1,573 @@
+package server;
+
+import org.junit.jupiter.api.Test;
+import provider.Data;
+import provider.DataTool;
+import provider.wz.WZFiles;
+import provider.wz.XMLWZFile;
+
+import static server.V84Wz.wz;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+/**
+ * Ticket 08 - the tail of the v84 map delta. Sibling of {@link V84TracerNodeTest},
+ * {@link V84CrimsonSkyNodeTest} and {@link V84NeoCity2227NodeTest}, for the same reason they are
+ * siblings of each other: {@link WZFiles#DIRECTORY} is a {@code static final} resolved once per
+ * JVM and another test class redirects {@code wz-path} at a {@code @TempDir}, so the real tree has
+ * to be opened through an explicitly constructed {@link XMLWZFile}.
+ * <p>
+ * Merge inputs are the path lists under {@code docs/wz-baseline/merge-lists/08/}; the ids asserted
+ * here are exactly those lists. This ticket ships no drop SQL, so it adds no third copy of the
+ * drop-file assertions 06 and 07 share - see the ticket for why that extraction was declined.
+ */
+class V84MiscAreasNodeTest {
+
+    /** The 22 maps this ticket merges. */
+    private static final int[] MAPS = {
+            200080601,                                                   // Orbis Tower <Secret Room>
+            200090080, 200090090,                                        // Olaf's Voyage, both ships
+            910050300,                                                   // Abandoned Cave
+            910060100, 910060101,                                        // Power B. Fore's centers
+            910600000, 910600010,                                        // Golem's Temple Entrance / Abandoned Hideout
+            914100000, 914100010,                                        // Temporary Harbor / Snowy Forest
+            914100020, 914100021, 914100022, 914100023,                  // Cave of Silence x4
+            922030000, 922030001,                                        // Frog House x2
+            922030010, 922030011, 922030020, 922030021, 922030022,       // Sky Terrace / Safe
+            925110000};                                                  // Pirate Treasure Vault
+
+    /** The seven mobs. Every one is genuinely placed by a {@code life} node - checked below. */
+    private static final int[] MOBS = {9300386, 9300387, 9300389, 9300390, 9300392, 9300395, 9300396};
+
+    /** The nine NPC images. Six are placed; three are named by the ticket and placed by nothing. */
+    private static final int[] NPCS = {1011101, 1013106, 1013203, 1013207, 1063018, 1205000,
+            2012034, 2092100, 2092101};
+
+    /** Placed by no map in either tree - staged deliberately, so assert the gap rather than hide it. */
+    private static final Set<Integer> UNPLACED_NPCS = Set.of(1011101, 1013106, 2092100);
+
+    /** 1012118 Power B. Fore is placed by 910060101 but already ships in v83 - nothing merged it. */
+    private static final int PRE_EXISTING_NPC = 1012118;
+
+    // wz(String) lives in V84Wz - one copy for all the v84 node tests (ticket 03f, F8).
+
+    /** Asserts rather than returns null, so a missing map fails with its id instead of an NPE. */
+    private static Data map(int mapId) {
+        String bucket = "Map" + String.valueOf(mapId).charAt(0);
+        String path = String.format("Map/%s/%d.img", bucket, mapId);
+        Data node = wz("Map.wz").getData(path);
+        assertNotNull(node, "Map.wz/" + path + ".xml did not parse");
+        return node;
+    }
+
+    private static Data portal(int mapId, String name) {
+        for (Data p : map(mapId).getChildByPath("portal").getChildren()) {
+            if (name.equals(DataTool.getString("pn", p, null))) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    private static int portalCount(int mapId) {
+        return map(mapId).getChildByPath("portal").getChildren().size();
+    }
+
+    /** Korean is the tell for a v83 GMS placeholder string that v84 translated. */
+    private static boolean hasHangul(String s) {
+        return s.chars().anyMatch(c -> (c >= 0xAC00 && c <= 0xD7A3) || (c >= 0x3130 && c <= 0x318F));
+    }
+
+    // ---- maps ---------------------------------------------------------------------------
+
+    @Test
+    void everyMiscAreaMapParses() {
+        for (int mapId : MAPS) {
+            Data node = map(mapId);
+            assertNotNull(node.getChildByPath("info"), mapId + " has no info");
+            assertNotNull(node.getChildByPath("portal/0"), mapId + " has no portals");
+            assertNotNull(node.getChildByPath("foothold"), mapId + " has no footholds");
+            assertNotNull(DataTool.getString("info/bgm", node, null), mapId + " has no info/bgm");
+            assertNotNull(DataTool.getString("info/mapMark", node, null), mapId + " has no mapMark");
+            assertNotNull(portal(mapId, "sp"), mapId + " has no spawn point");
+        }
+    }
+
+    /**
+     * The Slumbering Dragon Island maps are the only ones here that need a world-map marker v83
+     * lacks. Nine of the ten new {@code MapHelper.img/mark/*} entries are NOT merged by this
+     * ticket, so this pins which one is.
+     */
+    @Test
+    void snowDragonIsTheOnlyNewMapMarkThisTicketNeeds() {
+        Data marks = wz("Map.wz").getData("MapHelper.img").getChildByPath("mark");
+        assertNotNull(marks.getChildByPath("SnowDragon"), "MapHelper.img/mark/SnowDragon");
+        for (int mapId : MAPS) {
+            String mark = DataTool.getString("info/mapMark", map(mapId), "");
+            assertTrue("None".equals(mark) || marks.getChildByPath(mark) != null,
+                    mapId + " names mapMark '" + mark + "' which is not in MapHelper.img");
+        }
+        // pre-existing marks must survive; the merge inserted a sibling into this node
+        assertNotNull(marks.getChildByPath("Henesys"), "MapHelper.img/mark/Henesys (v83) was lost");
+        assertNotNull(marks.getChildByPath("Ludibrium"), "MapHelper.img/mark/Ludibrium (v83) was lost");
+    }
+
+    /**
+     * The check {@code WzMerge deps} explicitly does not make: every mob and NPC id a merged map
+     * places must itself have been merged, or the client has no sprite for it. The per-mob-per-map
+     * matrix is asserted rather than the per-map total, which is the mistake ticket 07's review
+     * caught in its own numbers.
+     */
+    @Test
+    void everyLifeIdInEveryMapWasMergedAndTheMatrixIsTheStatedOne() {
+        Map<Integer, Map<String, Integer>> perMap = new HashMap<>();
+        Set<Integer> placedMobs = new TreeSet<>();
+        Set<Integer> placedNpcs = new TreeSet<>();
+        for (int mapId : MAPS) {
+            Data life = map(mapId).getChildByPath("life");
+            if (life == null) {
+                continue;   // six of the 22 place nothing at all
+            }
+            for (Data entry : life.getChildren()) {
+                String type = DataTool.getString("type", entry, "");
+                int id = Integer.parseInt(DataTool.getString("id", entry, "-1"));
+                assertTrue("m".equals(type) || "n".equals(type),
+                        mapId + " life entry of unexpected type '" + type + "'");
+                perMap.computeIfAbsent(mapId, k -> new HashMap<>()).merge(type + id, 1, Integer::sum);
+                if ("m".equals(type)) {
+                    placedMobs.add(id);
+                } else {
+                    placedNpcs.add(id);
+                }
+            }
+        }
+
+        assertEquals(Map.ofEntries(
+                        Map.entry(200080601, Map.of("n2012034", 1)),
+                        Map.entry(200090080, Map.of("n1013207", 1)),
+                        Map.entry(200090090, Map.of("n1013207", 1)),
+                        Map.entry(910050300, Map.of("n1063018", 1)),
+                        Map.entry(910060100, Map.of("m9300386", 19)),
+                        Map.entry(910060101, Map.of("m210100", 7, "m1210101", 13, "n1012118", 1)),
+                        Map.entry(910600000, Map.of("m9300387", 1)),
+                        Map.entry(910600010, Map.of("m9300387", 3)),
+                        Map.entry(914100000, Map.of("n1013207", 1)),
+                        Map.entry(914100021, Map.of("n1205000", 1)),
+                        Map.entry(914100023, Map.of("m9300392", 10)),
+                        Map.entry(922030000, Map.of("n1013203", 1)),
+                        Map.entry(922030011, Map.of("m9300389", 1)),
+                        Map.entry(922030022, Map.of("m9300390", 1)),
+                        Map.entry(925110000, Map.of("m9300395", 10, "m9300396", 10, "n2092101", 1))),
+                perMap, "life entries per id per map, read off the v84 data");
+
+        // 210100 and 1210101 are v83 mobs the training center reuses; 1012118 likewise.
+        assertEquals(new TreeSet<>(List.of(210100, 1210101, 9300386, 9300387, 9300389, 9300390,
+                9300392, 9300395, 9300396)), placedMobs, "the set of mobs these maps place");
+        assertEquals(new TreeSet<>(List.of(1012118, 1013203, 1013207, 1063018, 1205000, 2012034,
+                2092101)), placedNpcs, "the set of NPCs these maps place");
+
+        for (int id : placedMobs) {
+            // %07d, because LifeFactory:100 resolves mob images through
+            // StringUtil.getLeftPaddedStr(mid + ".img", '0', 11) - the training centre reuses
+            // v83's 0210100, whose image really is stored with the leading zero.
+            assertNotNull(wz("Mob.wz").getData(String.format("%07d.img", id)),
+                    "map life spawns mob " + id + " but Mob.wz/" + id + ".img.xml is absent");
+        }
+        for (int id : placedNpcs) {
+            assertNotNull(wz("Npc.wz").getData(String.format("%d.img", id)),
+                    "map life places npc " + id + " but Npc.wz/" + id + ".img.xml is absent");
+        }
+        assertNotNull(wz("Npc.wz").getData(PRE_EXISTING_NPC + ".img"),
+                PRE_EXISTING_NPC + " is placed by 910060101 and was expected to ship in v83 already");
+    }
+
+    /** Exactly one reactor across all 22 maps, and it is the only Reactor.wz row on the list. */
+    @Test
+    void theOnlyReactorIs1409000InTheCaveOfSilence() {
+        Set<String> placed = new TreeSet<>();
+        for (int mapId : MAPS) {
+            Data reactors = map(mapId).getChildByPath("reactor");
+            if (reactors == null) {
+                continue;
+            }
+            for (Data r : reactors.getChildren()) {
+                placed.add(mapId + ":" + DataTool.getString("id", r, "?"));
+            }
+        }
+        assertEquals(Set.of("914100022:1409000"), placed, "reactors placed by maps in scope");
+        assertNotNull(wz("Reactor.wz").getData("1409000.img"), "Reactor.wz/1409000.img.xml");
+        // ticket 06's two rows must still be there and must not have been re-added by this ticket
+        assertNotNull(wz("Reactor.wz").getData("2408005.img"), "ticket 06's Reactor row 2408005");
+        assertNotNull(wz("Reactor.wz").getData("2408006.img"), "ticket 06's Reactor row 2408006");
+    }
+
+    /**
+     * The 67 dependency rows {@code deps} said were owed, spot-checked one per source image, plus
+     * the v83 siblings beside them. A missing dependency row is the failure mode that renders a map
+     * with a black background, and it is invisible to every other check here.
+     */
+    @Test
+    void mapAssetDependenciesAreInTheTreeAndTheV83SiblingsSurvived() {
+        Data backGrassy = wz("Map.wz").getData("Back/grassySoil.img");
+        assertNotNull(backGrassy.getChildByPath("ani/7"), "Back/grassySoil.img/ani/7 (merged)");
+        assertNotNull(backGrassy.getChildByPath("back/28"), "Back/grassySoil.img/back/28 (merged)");
+        assertNotNull(backGrassy.getChildByPath("back/0"), "Back/grassySoil.img/back/0 (v83) was lost");
+
+        Data backRien = wz("Map.wz").getData("Back/Rien.img");
+        assertNotNull(backRien.getChildByPath("back/48"), "Back/Rien.img/back/48 (merged)");
+        assertNotNull(backRien.getChildByPath("back/0"), "Back/Rien.img/back/0 (v83) was lost");
+
+        assertNotNull(wz("Map.wz").getData("Back/toyCastleB1.img").getChildByPath("back/10"),
+                "Back/toyCastleB1.img/back/10 (merged)");
+        assertNotNull(wz("Map.wz").getData("Tile/grassySoil.img").getChildByPath("edD/1"),
+                "Tile/grassySoil.img/edD/1 (merged)");
+        assertNotNull(wz("Map.wz").getData("Obj/insideTC.img").getChildByPath("inside0/blackroom"),
+                "Obj/insideTC.img/inside0/blackroom - the Orbis secret room object set");
+        assertNotNull(wz("Map.wz").getData("Obj/acc12.img").getChildByPath("dragon"),
+                "Obj/acc12.img/dragon - Slumbering Dragon Island scenery");
+        assertNotNull(wz("Map.wz").getData("Obj/dungeon.img").getChildByPath("darkCave/acc/43"),
+                "Obj/dungeon.img/darkCave/acc/43");
+        assertNotNull(wz("Map.wz").getData("Obj/effect.img").getChildByPath("quest/gate/7"),
+                "Obj/effect.img/quest/gate/7");
+        assertNotNull(wz("Map.wz").getData("Obj/tower.img").getChildByPath("marineTower/gate/12"),
+                "Obj/tower.img/marineTower/gate/12");
+        assertNotNull(wz("Map.wz").getData("Obj/acc1.img").getChildByPath("grassySoil/golem/21"),
+                "Obj/acc1.img/grassySoil/golem/21");
+        assertNotNull(wz("Map.wz").getData("Obj/acc1.img").getChildByPath("grassySoil/nature/0"),
+                "Obj/acc1.img/grassySoil/nature/0 (v83) was lost");
+    }
+
+    // ---- the routes in ---------------------------------------------------------------------
+
+    /**
+     * The three route rows this ticket merged onto maps the live client already has. Each is a
+     * write into a POSITIONAL array, which is the hazard class 03c named, so each is checked two
+     * ways: the new portal is there AND every pre-existing portal still has its original target.
+     */
+    @Test
+    void theThreeMergedRoutePortalsWereAppendedWithoutDisturbingTheV83Ones() {
+        assertEquals(7, portalCount(200080600), "200080600 had 6 portals; the merge appends one");
+        Data blackRoom = portal(200080600, "in00");
+        assertNotNull(blackRoom, "200080600/in00 - the route into the Orbis Tower secret room");
+        assertEquals(8, DataTool.getInt("pt", blackRoom, -1), "in00 is a script portal");
+        assertEquals("enterBlackRoom", DataTool.getString("script", blackRoom, null));
+        assertEquals(200080700, DataTool.getInt("tm", portal(200080600, "under00"), -1),
+                "200080600/under00 (v83) was disturbed");
+        assertEquals(200080500, DataTool.getInt("tm", portal(200080600, "top00"), -1),
+                "200080600/top00 (v83) was disturbed");
+
+        assertEquals(5, portalCount(251010403), "251010403 had 4 portals; the merge appends one");
+        Data pottery = portal(251010403, "in00");
+        assertNotNull(pottery, "251010403/in00 - the route into the Pirate Treasure Vault");
+        assertEquals("enterPottery", DataTool.getString("script", pottery, null));
+        assertEquals(251010402, DataTool.getInt("tm", portal(251010403, "west00"), -1),
+                "251010403/west00 (v83) was disturbed");
+
+        assertEquals(9, portalCount(106010102), "106010102 had 8 portals; the merge appends one");
+        Data dollGR = portal(106010102, "scr00");
+        assertNotNull(dollGR, "106010102/scr00 - the route into the Abandoned Hideout");
+        assertEquals("evanDollGR", DataTool.getString("script", dollGR, null));
+        assertEquals(106010101, DataTool.getInt("tm", portal(106010102, "out00"), -1),
+                "106010102/out00 (v83) was disturbed");
+        for (String pn : List.of("in03", "in04", "in05", "in06")) {
+            assertNotNull(portal(106010102, pn), "106010102/" + pn + " (v83) was lost");
+        }
+    }
+
+    /**
+     * The three route rows this ticket deliberately REFUSED, because v84 reindexed those portal
+     * arrays and the add-list index names a different portal in the live client than it does in
+     * v84. Merging them would have attached a script to a working v83 portal or duplicated one.
+     * Asserted so a later ticket cannot merge them by accident and call it an improvement.
+     */
+    @Test
+    void theThreeUnsafeRoutePortalRowsWereNotMerged() {
+        // 106010101/portal/5 is out00 in the live client and in00 in v84.
+        assertEquals(6, portalCount(106010101), "106010101 must still have exactly 6 portals");
+        assertNull(DataTool.getString("script", portal(106010101, "out00"), null),
+                "106010101/out00 gained v84's evanGolemDoor script - that row is at index 5 in BOTH "
+                        + "trees but names a different portal in each");
+        assertEquals(106010102, DataTool.getInt("tm", portal(106010101, "in00"), -1),
+                "106010101/in00 must still lead to Golem's Temple 2");
+
+        // 220000300/portal/15 is in06 in v84 because v84 INSERTED scr00 at index 4.
+        assertEquals(15, portalCount(220000300), "220000300 must still have exactly 15 portals");
+        long in06 = map(220000300).getChildByPath("portal").getChildren().stream()
+                .filter(p -> "in06".equals(DataTool.getString("pn", p, null))).count();
+        assertEquals(1, in06, "220000300 gained a duplicate in06 portal");
+        assertNull(portal(220000300, "scr00"),
+                "220000300/scr00 cannot be merged - v84 inserted it at index 4, and the add-list "
+                        + "only offers index 15, which is a duplicate of the existing in06");
+
+        // 220011000/portal/4 is a working v83 portal in the live client.
+        assertNull(DataTool.getString("script", portal(220011000, "in00"), null),
+                "220011000/in00 gained v84's enterBlackBC script over a working portal");
+        assertEquals(220011001, DataTool.getInt("tm", portal(220011000, "in00"), -1),
+                "220011000/in00 must still lead to 220011001");
+    }
+
+    /**
+     * A script portal with no server-side script is inert - {@code PortalScriptManager} returns
+     * false and the portal simply does nothing. These four are the whole reachability story of
+     * this ticket, so assert they exist and warp where the docs say.
+     */
+    @Test
+    void thePortalScriptsExistAndWarpToTheMergedMaps() throws IOException {
+        Map<String, Integer> expected = Map.of(
+                "enterBlackRoom", 200080601,
+                "enterPottery", 925110000,
+                "evanDollGR", 910600010);
+        for (Map.Entry<String, Integer> e : expected.entrySet()) {
+            Path p = Path.of("scripts", "portal", e.getKey() + ".js");
+            assertTrue(Files.exists(p), "missing portal script " + p);
+            String js = Files.readString(p, StandardCharsets.UTF_8);
+            assertTrue(js.contains("pi.warp(" + e.getValue() + ","),
+                    e.getKey() + ".js does not warp to " + e.getValue());
+            assertTrue(js.contains("function enter(pi)"),
+                    e.getKey() + ".js does not implement the PortalScript interface");
+        }
+    }
+
+    /**
+     * 910050300 Abandoned Cave looks routable and is not. Its {@code returnMap} is 105070300, whose
+     * {@code in00} is a {@code pt=8} script portal named {@code enterDollcave} - but Cosmic ALREADY
+     * ships {@code scripts/portal/enterDollcave.js}, warping to 105040201 behind quests 20730 /
+     * 21734 with an NPC password fallback. That script name is taken by working v83 content, so
+     * the cave cannot be hung off it. Asserted, because the shape of the data invites exactly this
+     * mistake and it was made once already while writing this ticket.
+     */
+    @Test
+    void theAbandonedCaveDoesNotStealTheExistingEnterDollcaveScript() throws IOException {
+        Data dollCave = portal(105070300, "in00");
+        assertNotNull(dollCave, "105070300/in00 - the v83 script portal");
+        assertEquals("enterDollcave", DataTool.getString("script", dollCave, null));
+        assertEquals(4, portalCount(105070300), "105070300 was not supposed to be touched at all");
+
+        String js = Files.readString(Path.of("scripts", "portal", "enterDollcave.js"),
+                StandardCharsets.UTF_8);
+        assertTrue(js.contains("pi.warp(105040201,"),
+                "enterDollcave.js no longer warps to 105040201 - a ticket has repurposed a working "
+                        + "v83 portal script");
+        assertFalse(js.contains("910050300"),
+                "enterDollcave.js was repointed at the Abandoned Cave, which breaks the Sleepywood "
+                        + "puppeteer route it already serves");
+    }
+
+    /** Each of the three routed maps has a return portal at the name its script warps to. */
+    @Test
+    void everyRoutedMapReturnsTheWayItCameIn() {
+        assertEquals(200080600, DataTool.getInt("tm", portal(200080601, "out00"), -1));
+        assertEquals(251010403, DataTool.getInt("tm", portal(925110000, "out00"), -1));
+        assertEquals(106010102, DataTool.getInt("tm", portal(910600010, "out00"), -1));
+        assertEquals("scr00", DataTool.getString("tn", portal(910600010, "out00"), null));
+    }
+
+    // ---- names ------------------------------------------------------------------------------
+
+    @Test
+    void mapNamesAreReadable() {
+        Data etc = wz("String.wz").getData("Map.img").getChildByPath("etc");
+        Map<Integer, String> expected = Map.ofEntries(
+                Map.entry(910050300, "Abandoned Cave"),
+                Map.entry(910060100, "Power B. Fore's Spore Training Center"),
+                Map.entry(910060101, "Power B. Fore's Borrowed Training Center"),
+                Map.entry(910600000, "Golem's Temple Entrance"),
+                Map.entry(910600010, "Abandoned Hideout"),
+                Map.entry(914100000, "Temporary Harbor"),
+                Map.entry(914100010, "Snowy Forest"),
+                Map.entry(914100020, "Cave of Silence"),
+                Map.entry(914100023, "Cave of Silence"),
+                Map.entry(922030000, "Frog House"),
+                Map.entry(922030022, "Safe - 2nd Entrance"),
+                Map.entry(925110000, "Pirate Treasure Vault"));
+        for (Map.Entry<Integer, String> e : expected.entrySet()) {
+            Data node = etc.getChildByPath(String.valueOf(e.getKey()));
+            assertNotNull(node, "String.wz/Map.img/etc/" + e.getKey() + " missing");
+            // .trim(): several v84 strings ship with a trailing space; the merge carries them
+            // verbatim, which is correct - do not "fix" the data.
+            assertEquals(e.getValue(), DataTool.getString("mapName", node, "").trim());
+        }
+    }
+
+    /**
+     * The three forced rows. Their live values were untranslated Korean placeholders that the
+     * additive-only gate refused; {@code 08/String.force.txt} authorised the overwrite. Assert
+     * the English is there AND that no Hangul survived, on both sides of each node.
+     */
+    @Test
+    void theThreeForcedStringRowsAreNowEnglish() {
+        Data ossyria = wz("String.wz").getData("Map.img").getChildByPath("ossyria");
+        for (int mapId : new int[]{200090080, 200090090}) {
+            Data node = ossyria.getChildByPath(String.valueOf(mapId));
+            assertNotNull(node, "String.wz/Map.img/ossyria/" + mapId + " missing");
+            String street = DataTool.getString("streetName", node, "").trim();
+            String name = DataTool.getString("mapName", node, "").trim();
+            assertEquals("Olaf's Voyage", street, mapId + " streetName");
+            assertFalse(hasHangul(name), mapId + " mapName is still Korean: " + name);
+        }
+        assertEquals("To the Slumbering Dragon Island",
+                DataTool.getString("mapName", ossyria.getChildByPath("200090080"), "").trim());
+        assertEquals("To Lith Harbor",
+                DataTool.getString("mapName", ossyria.getChildByPath("200090090"), "").trim());
+
+        Data hiver = wz("String.wz").getData("Npc.img").getChildByPath("1013203");
+        assertNotNull(hiver, "String.wz/Npc.img/1013203 missing");
+        assertEquals("Hiver", DataTool.getString("name", hiver, "").trim());
+        assertEquals("Black Wing Captain", DataTool.getString("func", hiver, "").trim());
+        for (String field : List.of("n0", "n1", "d0", "d1")) {
+            String v = DataTool.getString(field, hiver, "");
+            assertFalse(v.isBlank(), "1013203/" + field + " was lost by the forced overwrite");
+            assertFalse(hasHangul(v), "1013203/" + field + " is still Korean: " + v);
+        }
+    }
+
+    @Test
+    void mobsAndNpcsParseAndAreNamed() {
+        Data mobNames = wz("String.wz").getData("Mob.img");
+        for (int id : MOBS) {
+            Data node = wz("Mob.wz").getData(id + ".img");
+            assertNotNull(node, "Mob.wz/" + id + ".img.xml did not parse");
+            assertTrue(DataTool.getInt("info/maxHP", node, -1) > 0, id + " info/maxHP");
+            String name = DataTool.getString("name", mobNames.getChildByPath(String.valueOf(id)), "");
+            assertFalse(name.isBlank(), id + " has a blank name");
+            assertFalse("MISSING NAME".equals(name), id + " name is the placeholder");
+        }
+        assertEquals("Watchmen Captain",
+                DataTool.getString("name", mobNames.getChildByPath("9300396"), "").trim());
+        assertEquals("Trainee Spore",
+                DataTool.getString("name", mobNames.getChildByPath("9300386"), "").trim());
+
+        Data npcNames = wz("String.wz").getData("Npc.img");
+        for (int id : NPCS) {
+            assertNotNull(wz("Npc.wz").getData(id + ".img"), "Npc.wz/" + id + ".img.xml did not parse");
+            String name = DataTool.getString("name", npcNames.getChildByPath(String.valueOf(id)), "");
+            assertFalse(name.isBlank(), "npc " + id + " has a blank name");
+        }
+        assertEquals("Olaf", DataTool.getString("name", npcNames.getChildByPath("1013207"), "").trim());
+        assertEquals("General Mau",
+                DataTool.getString("name", npcNames.getChildByPath("1011101"), "").trim());
+        assertEquals("Glowing Stele",
+                DataTool.getString("name", npcNames.getChildByPath("1013106"), "").trim());
+        // 9000071 Keroben: the sprite already shipped in v83, only the name was new in v84
+        assertEquals("Keroben",
+                DataTool.getString("name", npcNames.getChildByPath("9000071"), "").trim());
+        assertEquals("General Mau",
+                DataTool.getString("name", npcNames.getChildByPath("2080007"), "").trim());
+    }
+
+    /**
+     * The three NPCs the ticket names that no map in either tree places. Merged deliberately, so
+     * the gap is asserted rather than left to be rediscovered as a bug.
+     */
+    @Test
+    void theUnplacedNpcsAreMergedAndKnownToBeUnplaced() {
+        for (int id : UNPLACED_NPCS) {
+            assertNotNull(wz("Npc.wz").getData(id + ".img"), "Npc.wz/" + id + ".img.xml");
+        }
+        for (int mapId : MAPS) {
+            Data life = map(mapId).getChildByPath("life");
+            if (life == null) {
+                continue;
+            }
+            for (Data entry : life.getChildren()) {
+                int id = Integer.parseInt(DataTool.getString("id", entry, "-1"));
+                assertFalse(UNPLACED_NPCS.contains(id),
+                        mapId + " places " + id + ", which this ticket documents as unplaced");
+            }
+        }
+    }
+
+    /**
+     * The ten {@code 99019xx} NPCs are dropped, not merged: {@code 9901910} is the base of the
+     * range {@code PlayerNPC.java} allocates from at runtime, and Cosmic already ships its own
+     * images there (commit {@code fca7b2ada}, "Implemented Kites, PlayerNPCs..."). They are placed
+     * by 100030301, an Evan world map ticket 13 owns, so this is the assertion that stops v84's
+     * versions arriving by the back door. v84's {@code 9901910.img} is a strict SUBSET of the live
+     * one - it has no {@code info/speak} - so the live node's presence is the discriminator.
+     */
+    @Test
+    void theServerOwnedNpcIdRangeIsStillCosmicsOwn() {
+        Data npc = wz("Npc.wz").getData("9901910.img");
+        assertNotNull(npc, "Cosmic's own 9901910.img.xml disappeared");
+        assertNotNull(npc.getChildByPath("info/speak"),
+                "9901910 lost info/speak - that is v84's node, which must never be merged here");
+        assertNull(wz("Npc.wz").getData("9000021.img").getChildByPath("say/2/delay"),
+                "Npc.wz/9000021.img is on the deny-list and must stay wholly v83");
+    }
+
+    // ---- sound, and the absence of drop SQL --------------------------------------------------
+
+    /**
+     * The {@code Sound.wz} binary merge cannot be promoted (BgmGL.img is unparseable by MapleLib in
+     * all three trees), but the server XML half was applied and the path list is the deliverable.
+     * This asserts the XML half landed - all 23 rows, including ticket 07's four-row handoff and
+     * ticket 06's twelve unclaimed mob banks.
+     */
+    @Test
+    void theSoundXmlRowsWereApplied() {
+        Data mob = wz("Sound.wz").getData("Mob.img");
+        assertNotNull(mob, "wz/Sound.wz/Mob.img.xml did not parse");
+        int[] ids = {9300386, 9300387, 9300389, 9300390, 9300392, 9300395, 9300396,   // this ticket
+                9400658, 9400659, 9400660, 9400661,                                    // ticket 07's handoff
+                8300005, 8300006, 8300007, 9500374, 9500375, 9500376, 9500377,
+                9500378, 9500379, 9500380, 9500381, 9500382};                          // ticket 06's mobs
+        assertEquals(23, ids.length, "the Sound path list is 23 rows");
+        for (int id : ids) {
+            assertNotNull(mob.getChildByPath(String.valueOf(id)), "Sound.wz/Mob.img/" + id);
+        }
+        // ticket 06's own Sound row must still be there and must not have been re-added
+        assertNotNull(wz("Sound.wz").getData("Bgm14.img").getChildByPath("DragonRider"),
+                "ticket 06's Sound.wz/Bgm14.img/DragonRider");
+    }
+
+    /**
+     * This ticket ships no drop SQL, and the reason is in the data rather than in the prose: six of
+     * the seven mobs give zero exp, i.e. they are scripted obstacles, not huntable content. If a
+     * later edit gives one of them real exp this fails and the decision gets revisited.
+     */
+    @Test
+    void theseMobsAreObstaclesNotHuntableContentSoNoDropTablesAreOwed() {
+        int withExp = 0;
+        for (int id : MOBS) {
+            int exp = DataTool.getInt("info/exp", wz("Mob.wz").getData(id + ".img"), -1);
+            assertTrue(exp >= 0, id + " has no info/exp");
+            if (exp > 0) {
+                withExp++;
+                assertEquals(9300386, id, "an unexpected mob in this ticket gives exp: " + id);
+            }
+        }
+        assertEquals(1, withExp, "only Trainee Spore gives exp");
+
+        for (String file : List.of("152-drop-data.sql", "153-crimson-sky-drop-data.sql",
+                "154-neo-city-2227-drop-data.sql")) {
+            Path p = Path.of("src", "main", "resources", "db", "data", file);
+            String sql = readOrFail(p);
+            for (int id : MOBS) {
+                assertFalse(sql.contains("(" + id + ", "),
+                        "dropperid " + id + " appears in " + file + ", which this ticket never edits");
+            }
+        }
+    }
+
+    private static String readOrFail(Path p) {
+        try {
+            return Files.readString(p, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new AssertionError("cannot read " + p, e);
+        }
+    }
+}

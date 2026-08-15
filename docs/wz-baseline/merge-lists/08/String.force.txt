@@ -1,0 +1,18 @@
+﻿# Ticket 08 - Misc v84 areas. FORCE list, 3 rows. Same format/parser as COLLISION-FORCE.txt.
+#
+# This is a SEPARATE file, not an edit of COLLISION-FORCE.txt. That file's 37 rows are fully
+# consumed (04 took 30, 05 took 7) and this ticket must not re-apply them, so `--force` here
+# points at this file only.
+#
+# All three follow the same rule COLLISION-FORCE.txt uses: the LIVE value is a Nexon
+# placeholder, not server content. Here the placeholder is untranslated Korean shipped in the
+# GMS v83 client for content that had not been released yet; v84 is the English translation of
+# the same node, same shape, no field lost. Checked per the review's lesson on 9201144: nothing
+# in src/, scripts/ or wz/ references any of these three live values - the only consumer is the
+# client's own name display.
+#
+# Forced on BOTH sides (binary .wz and server wz/ XML), per procedure section 5.6.
+
+String.wz/Map.img/ossyria/200090080	# live is Korean; v84 = 'Olaf's Voyage' / 'To the Slumbering Dragon Island'
+String.wz/Map.img/ossyria/200090090	# live is Korean; v84 = 'Olaf's Voyage' / 'To Lith Harbor'
+String.wz/Npc.img/1013203	# live is Korean; v84 = 'Hiver' / 'Black Wing Captain' + 4 dialogue lines

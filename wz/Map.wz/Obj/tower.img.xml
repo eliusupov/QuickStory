@@ -763,6 +763,18 @@
           </extended>
         </canvas>
       </imgdir>
+      <imgdir name="11">
+        <canvas name="0" width="57" height="40">
+          <vector name="origin" x="28" y="20"/>
+          <int name="z" value="0"/>
+        </canvas>
+      </imgdir>
+      <imgdir name="12">
+        <canvas name="0" width="176" height="179">
+          <vector name="origin" x="88" y="89"/>
+          <int name="z" value="0"/>
+        </canvas>
+      </imgdir>
       <imgdir name="2">
         <canvas name="0" width="57" height="40">
           <vector name="origin" x="28" y="20"/>

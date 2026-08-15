@@ -130,6 +130,12 @@
     <string name="func" value="Grocer"/>
     <string name="n0" value="Yawn, I&apos;m tired... just go choose an item you want ..."/>
   </imgdir>
+  <imgdir name="1011101">
+    <string name="name" value="General Mau"/>
+    <string name="func" value="Street Vendor"/>
+    <string name="n0" value="Warriors, Magicians, Bowman, Thieves, Pirates! All come look at my fabulous weapons and armor!"/>
+    <string name="n1" value="Wow! There really are a lot of people in Henesys! It&apos;s perfect for business!"/>
+  </imgdir>
   <imgdir name="1012000">
     <string name="name" value="Regular Cab"/>
   </imgdir>
@@ -304,6 +310,14 @@
     <string name="func" value="Prince"/>
     <string name="n0" value="Actually, I...was the prince of Big Head Kingdom. "/>
     <string name="n1" value="No extra charge even if you have a big head!"/>
+  </imgdir>
+  <imgdir name="1013106">
+    <string name="name" value="Glowing Stele"/>
+  </imgdir>
+  <imgdir name="1013207">
+    <string name="name" value="Olaf"/>
+    <string name="s0" value="Just let me know if you decide you want to return."/>
+    <string name="s1" value="What a great location for practicing. I should come here alone sometime."/>
   </imgdir>
   <imgdir name="1020000">
     <string name="name" value="Blackbull"/>
@@ -1676,6 +1690,19 @@
     <string name="name" value="Rupert"/>
     <string name="n0" value="Do you want to make the 3rd job advancement? If so, then talk to me..."/>
     <string name="n1" value="To those that want a 3rd job advancement, here..."/>
+  </imgdir>
+  <imgdir name="2001006">
+    <string name="name" value="빨간코 루돌프"/>
+    <string name="n0" value="메리 크리스마스~"/>
+    <string name="n1" value="루돌프 사슴코는~ 매우 반짝이는 코~"/>
+    <string name="d0" value="루돌프 사슴코는~ 매우 반짝이는 코~"/>
+    <string name="d1" value="루돌프 사슴코는~ 매우 반짝이는 코~"/>
+  </imgdir>
+  <imgdir name="2001007">
+    <string name="name" value="크리스마스 트리"/>
+  </imgdir>
+  <imgdir name="2001008">
+    <string name="name" value="크리스마스 트리"/>
   </imgdir>
   <imgdir name="2002">
     <string name="name" value="Peter"/>
@@ -3254,6 +3281,12 @@
     <string name="name" value="Dolphin"/>
     <string name="n0" value="I&apos;m the fastest &amp; the safest option to reach Aquarium."/>
   </imgdir>
+  <imgdir name="2080007">
+    <string name="name" value="General Mau"/>
+    <string name="func" value="Street Vendor"/>
+    <string name="n0" value="Warriors, Magicians, Bowman, Thieves, Pirates! All come look at my fabulous weapons and armor!"/>
+    <string name="n1" value="Wow! There really are a lot of people in Henesys! It&apos;s perfect for business!"/>
+  </imgdir>
   <imgdir name="2081000">
     <string name="name" value="Chief Tatamo"/>
     <string name="s0" value="We Hafrings prefer peace and love. Haha..."/>
@@ -3655,6 +3688,9 @@
     <string name="n1" value="Apparently there&apos;s a Pirate Lair just past the herb field..."/>
     <string name="d0" value="Hmmm... where did I place that sword I used to use back in the day? I wonder if I can fight as well as I used to... but in order to protect this town, I may have no choice but to fight those evil Red-Nosed Pirates."/>
     <string name="d1" value="Lord Pirate may be powerful, and so are its disciples, but I will do whatever it takes to protect this beautiful town!"/>
+  </imgdir>
+  <imgdir name="2092101">
+    <string name="name" value="Potter"/>
   </imgdir>
   <imgdir name="2093000">
     <string name="name" value="Mu Tan"/>
@@ -4870,6 +4906,10 @@
     <string name="name" value="Ice Piece"/>
     <string name="d0" value=".."/>
     <string name="d1" value="Cursed piece of ice that has yet to melt"/>
+  </imgdir>
+  <imgdir name="9000071">
+    <string name="name" value="Keroben"/>
+    <string name="func" value="Forest of Confrontation Gatekeeper "/>
   </imgdir>
   <imgdir name="9001000">
     <string name="name" value="Cokebear operator"/>
@@ -7596,10 +7636,10 @@
     <string name="n0" value="Wait &apos;til they see my latest invention yet!"/>
   </imgdir>
   <imgdir name="9201144">
-    <string name="name" value="Steward"/>
-    <string name="d0" value="Oh, sweet mother of Maple! What in the world is going on here?"/>
-    <string name="n0" value="Here at your request, dear adventurer."/>
-    <string name="n1" value="At your service, friend."/>
+    <string name="name" value="Shadow Knight Rene"/>
+    <string name="d0" value="I&apos;m going to get ridiculously rich from stealing Dragon eggs!"/>
+    <string name="n0" value="The dragons were strong, but not as strong as me, haha."/>
+    <string name="n1" value="You must get the egg before the mother dragon returns."/>
   </imgdir>
   <imgdir name="2007">
     <string name="name" value="Maple Administrator"/>
@@ -8189,12 +8229,12 @@
     <string name="name" value="검은 그림자"/>
   </imgdir>
   <imgdir name="1013203">
-    <string name="name" value="이베흐"/>
-    <string name="func" value="블랙윙 간부"/>
-    <string name="n0" value="무릉 쪽 일은 순조로운데..."/>
-    <string name="n1" value="휴우... 제대로 일 처리 하는 녀석이 너무 적단 말이야/"/>
-    <string name="d0" value="모든 것은 그 분을 부활시키기 위해."/>
-    <string name="d1" value="모든 것은 그 분을 부활시키기 위해."/>
+    <string name="name" value="Hiver"/>
+    <string name="func" value="Black Wing Captain"/>
+    <string name="n0" value="Things seem to be going smoothly in Mu Lung..."/>
+    <string name="n1" value="I need more follower who can do a good job!"/>
+    <string name="d0" value="All of this is so that we can resurrect him."/>
+    <string name="d1" value="All of this is so that we can resurrect him."/>
   </imgdir>
   <imgdir name="1013200">
     <string name="name" value="Baby Pig"/>
@@ -8289,12 +8329,18 @@
     <string name="s1" value="What&apos;s it like inside?"/>
   </imgdir>
   <imgdir name="1063018">
+    <string name="d0" value="(A strange puppet.)"/>
+    <string name="d1" value="Woohoo, I&apos;m so happy that I can help my master!"/>
     <string name="name" value="Doll Left Behind"/>
   </imgdir>
   <imgdir name="1205000">
+    <string name="d0" value="..."/>
+    <string name="d1" value="..."/>
     <string name="name" value="Afrien"/>
   </imgdir>
   <imgdir name="2012034">
+    <string name="d0" value="(A brick that blends into the background. It bulges out just slightly, as if it can be dislodged.)"/>
+    <string name="d1" value="(A brick that blends into the background. It bulges out just slightly, as if it can be dislodged.)"/>
     <string name="name" value="Hidden Brick"/>
   </imgdir>
   <imgdir name="2030015">

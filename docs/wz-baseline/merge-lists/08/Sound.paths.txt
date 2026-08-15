@@ -1,0 +1,48 @@
+# Ticket 08 - Misc v84 areas. Sound.wz merge path list.
+# 23 rows, all `Mob.img/<id>` SFX banks (attack/hit/die). Checked path by path against
+# 06/Sound.paths.txt (`Bgm14.img/DragonRider`): DISJOINT, no row is re-added.
+#
+# Nothing in this ticket DEPENDS on any of it. `WzMerge deps` reported zero cross-file rows for
+# all 22 maps: every BGM track those maps name (Bgm01/CavaBien, Bgm06/ComeWithMe,
+# Bgm06/FantasticThinking, Bgm15/Pirate, Bgm18/BlackWing, Bgm19/CrystalCave, Bgm19/SnowDrop)
+# is already in the live v83 client. The only cost of not shipping this file is silent mobs.
+#
+# KNOWN LIMIT: every Sound.wz merge exits 4 on `BgmGL.img`, which MapleLib cannot parse in ANY
+# of the three trees (procedure section 11). The write itself is clean; the post-write verifier
+# counts the pre-existing unreadable image. Measured again here - see the ticket. The `.partial`
+# was deleted, never installed. This list is still the deliverable; the composed install pass
+# consumes it once the verifier learns to discount an image already unparseable in the target.
+
+# --- this ticket's seven mobs ---
+Sound.wz/Mob.img/9300386
+Sound.wz/Mob.img/9300387
+Sound.wz/Mob.img/9300389
+Sound.wz/Mob.img/9300390
+Sound.wz/Mob.img/9300392
+Sound.wz/Mob.img/9300395
+Sound.wz/Mob.img/9300396
+
+# --- ticket 07's handoff: merged there, then reverted because Sound.wz was not 07's file ---
+Sound.wz/Mob.img/9400658
+Sound.wz/Mob.img/9400659
+Sound.wz/Mob.img/9400660
+Sound.wz/Mob.img/9400661
+
+# --- ticket 06's mobs. Never on 06/Sound.paths.txt; picked up here because Sound.wz has no
+#     other owner and 06's mobs are otherwise silent. Zero risk, zero collisions.
+Sound.wz/Mob.img/8300005
+Sound.wz/Mob.img/8300006
+Sound.wz/Mob.img/8300007
+Sound.wz/Mob.img/9500374
+Sound.wz/Mob.img/9500375
+Sound.wz/Mob.img/9500376
+Sound.wz/Mob.img/9500377
+Sound.wz/Mob.img/9500378
+Sound.wz/Mob.img/9500379
+Sound.wz/Mob.img/9500380
+Sound.wz/Mob.img/9500381
+Sound.wz/Mob.img/9500382
+
+# NOT taken, no owner yet: Sound.wz/Bgm00.img/DragonDream (Evan's Dream World maps -> ticket 13),
+# Sound.wz/Item.img/0202262{1,2}, Sound.wz/Mob.img/2220110, /9300385, /9300388, /9300391, /9300393,
+# and 31 Sound.wz/Skill.img rows for the Aran/Evan skill sets (tickets 12/13).
