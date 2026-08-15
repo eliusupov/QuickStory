@@ -352,6 +352,10 @@
     <string name="name" value="Tiki Torch Store"/>
     <string name="desc" value="Set up this special store on the Free Market, and this Granny, working as the Hired Merchant, will sell the items for the owner, even if the owner does not log on to the game."/>
   </imgdir>
+  <imgdir name="5030015">
+    <string name="name" value="Homely Coffeehouse: 4 days"/>
+    <string name="desc" value="Set up this special store in the Free Market! This Coffehouse, which doubles as a Hired Merchant, will sell your items, even if you do not log into the game. #cIf an item is sold, you will be notified through the chat window.#"/>
+  </imgdir>
   <imgdir name="5040000">
     <string name="name" value="The Teleport Rock"/>
     <string name="desc" value="Remembers 5 maps of your choice. This rock will enable you to #cteleport to the map you remembered#. It can even allow you to #cmove to the map where a certain character is#, provided that the person is in the same channel at the same world. This item cannot be used to teleport in between continents."/>
@@ -383,6 +387,26 @@
   <imgdir name="5050004">
     <string name="name" value="SP Reset (4th job)"/>
     <string name="desc" value="This scroll allows you to #creset 1 SP from a 4th-level skill#. The 1st, 2nd, and 3rd job SP raised AFTER the 4th job adv. can also be reset and applied to a 3rd job skill. The SP that&apos;s been reset may NOT be applied to 1st, 2nd or 3rd job skills."/>
+  </imgdir>
+  <imgdir name="5050005">
+    <string name="name" value="Evan SP Reset (1st/2nd Skill) "/>
+    <string name="desc" value="Only for Evan. This scroll allows you to #creset 1 SP from a 1st or 2nd Job Skill.#"/>
+  </imgdir>
+  <imgdir name="5050006">
+    <string name="name" value="Evan SP Reset (3rd/4th Skill) "/>
+    <string name="desc" value="Only for Evan. This scroll allows you to #creset 1 SP from a 3rd or 4th Job Skill.#"/>
+  </imgdir>
+  <imgdir name="5050007">
+    <string name="name" value="Evan SP Reset (5th/6th Skill) "/>
+    <string name="desc" value="Only for Evan. This scroll allows you to #creset 1 SP from a 5th or 6th Job Skill.#"/>
+  </imgdir>
+  <imgdir name="5050008">
+    <string name="name" value="Evan SP Reset (7th/8th Skill) "/>
+    <string name="desc" value="Only for Evan. This scroll allows you to #creset 1 SP from a 7th or 8th Job Skill.#"/>
+  </imgdir>
+  <imgdir name="5050009">
+    <string name="name" value="Evan SP Reset (9th/10th Skill) "/>
+    <string name="desc" value="Only for Evan. This scroll allows you to #creset 1 SP from a 9th or 10th Job Skill.#"/>
   </imgdir>
   <imgdir name="5060000">
     <string name="name" value="Item Tag"/>
@@ -1197,6 +1221,14 @@
     <string name="name" value="Gold Sack of Mesos"/>
     <string name="desc" value="Contains lots and lots of mesos. User must be above level 15 to purchase sacks."/>
   </imgdir>
+  <imgdir name="5200009">
+    <string name="name" value="1 Million Maple Points Chip"/>
+    <string name="desc" value="Double-click on this item to receive 1 Million Maple Points."/>
+  </imgdir>
+  <imgdir name="5200010">
+    <string name="name" value="10,000 Maple Points Chip"/>
+    <string name="desc" value="Double-click on this item to receive 10,000 Maple Points."/>
+  </imgdir>
   <imgdir name="5211000">
     <string name="name" value="2x EXP Card"/>
     <string name="desc" value="This coupon allows users to earn #c2x Exp (double experience)#. The coupon will be activated immediately after purchase, and the double experience effect will be available from 6pm ~ 8pm (Pacific time) for #c7 days#."/>
@@ -1316,6 +1348,10 @@
   <imgdir name="5220010">
     <string name="name" value="Gachapon for slot machines"/>
   </imgdir>
+  <imgdir name="5220012">
+    <string name="name" value="Twin Dragon&apos;s Egg Incubator"/>
+    <string name="desc" value="An incubator specially designed for Twin Dragon&apos;s Eggs. Use it to obtain treasures."/>
+  </imgdir>
   <imgdir name="5220020">
     <string name="name" value="Gachapon for Net Cafe"/>
   </imgdir>
@@ -1398,6 +1434,10 @@
   <imgdir name="5240020">
     <string name="name" value="Caviar"/>
     <string name="desc" value="Only eligible for the pet Skunk. \nIncrease 100 Closeness."/>
+  </imgdir>
+  <imgdir name="5240028">
+    <string name="name" value="Dynamite"/>
+    <string name="desc" value="A dynamite that can only be eaten by the Weird Alien Pet. Satiates the pet alien.#cRaises Closeness by 100#."/>
   </imgdir>
   <imgdir name="5251000">
     <string name="name" value="Wedding Ticket (Cathedral)"/>
@@ -1523,6 +1563,10 @@
     <string name="name" value="Chalkboard"/>
     <string name="desc" value="Any information entered will be featured on the chalkboard. The item can be used anywhere including #cFree Market Entrance# except for #cFree Market#."/>
   </imgdir>
+  <imgdir name="5370002">
+    <string name="name" value="Chalkboard: 3 Days"/>
+    <string name="desc" value="Any information entered will be featured on the chalkboard. The item can be used anywhere including #cFree Market Entrance# except for #cFree Market#."/>
+  </imgdir>
   <imgdir name="5380000">
     <string name="name" value="The Rock of Evolution"/>
     <string name="desc" value="A mysterious rock that enables baby Evolving Pets to grow into full-fledged adult Evolving Pets."/>
@@ -1598,6 +1642,58 @@
   <imgdir name="5470000">
     <string name="name" value="Store Remote Controller"/>
     <string name="desc" value="Can control the Hired Merchant anywhere, as long as the merchant is on the same channel."/>
+  </imgdir>
+  <imgdir name="5520001">
+    <string name="name" value="Platinum Scissors of Karma "/>
+    <string name="desc" value="This cuts the ties that bind an item to its master, allowing you to trade once. Applicable to only certain items."/>
+  </imgdir>
+  <imgdir name="5530009">
+    <string name="name" value="DS Box (Bronze)"/>
+    <string name="desc" value="Double-click on this item to exchange it for 3 DS Eggs."/>
+  </imgdir>
+  <imgdir name="5530010">
+    <string name="name" value="DS Box (Silver)"/>
+    <string name="desc" value="Double-click on this item to exchange it for 5 DS Eggs"/>
+  </imgdir>
+  <imgdir name="5530011">
+    <string name="name" value="DS Box (Gold)"/>
+    <string name="desc" value="Double-click on this item to exchange it for 10 DS Eggs."/>
+  </imgdir>
+  <imgdir name="5530012">
+    <string name="name" value="DS Box (Diamond)"/>
+    <string name="desc" value="Double-click on this item to exchange it for 15 DS Eggs."/>
+  </imgdir>
+  <imgdir name="5530027">
+    <string name="name" value="[Lv. 30] Circle-Winded Staff Trade Coupon"/>
+    <string name="desc" value="Double-click on this coupon to trade it for a Circle-Winded Staff."/>
+  </imgdir>
+  <imgdir name="5530028">
+    <string name="name" value="[Lv. 45] Arc Staff Coupon"/>
+    <string name="desc" value="Double-click on this coupon to trade it for an Arc Staff."/>
+  </imgdir>
+  <imgdir name="5530029">
+    <string name="name" value="Wand Magic Scroll 60% Coupon"/>
+    <string name="desc" value="Double-click on this coupon to trade it for a Wand Magic Scroll 60%."/>
+  </imgdir>
+  <imgdir name="5530030">
+    <string name="name" value="Staff Magic Scroll 60% Coupon"/>
+    <string name="desc" value="Double-click on this coupon to trade it for a Staff Magic Scroll 60%."/>
+  </imgdir>
+  <imgdir name="5550001">
+    <string name="name" value="Add Pendant Slots: 7 Days"/>
+    <string name="desc" value="Allows you to equip 1 additional pendant for 7 days. #cHowever, you may still only equip 1 of any unique-equip item.#"/>
+  </imgdir>
+  <imgdir name="5620006">
+    <string name="name" value="Magic Guard Mastery Book"/>
+    <string name="desc" value="Has a 100% chance of raising the Master Level of the #cMagic Guard# skill to 20.\nJob: Evan\nCondition: Skill must be at least level 5"/>
+  </imgdir>
+  <imgdir name="5620007">
+    <string name="name" value="Magic Booster Mastery Book"/>
+    <string name="desc" value="Has a 100% chance of raising the Master Level of the #cMagic Booster# skill to 15.\nJob: Evan\nCondition: Skill must be at least level 5\n#cOnly usable once per character"/>
+  </imgdir>
+  <imgdir name="5620008">
+    <string name="name" value="Critical Magic Mastery Book"/>
+    <string name="desc" value="Has a 100% chance of raising the Master Level of the #cCritical Magic# skill to 15.\nJob: Evan\nCondition: Skill must be at least level 5\n#cOnly usable once per character"/>
   </imgdir>
   <imgdir name="5990000">
     <string name="name" value="MTS sale"/>
@@ -1951,43 +2047,43 @@
     <string name="desc" value="MISSING INFO"/>
   </imgdir>
   <imgdir name="5500005">
-    <string name="name" value="MISSING NAME"/>
-    <string name="desc" value="MISSING INFO"/>
+    <string name="name" value="[50days] Magical Sandglass"/>
+    <string name="desc" value="Drag-and-drop this onto a piece of equipment that has a time limit to extend the time limit by #c50days#. #This cannot be used on cash items, and the time limit cannot be extended past 100 days, starting from today.#"/>
   </imgdir>
   <imgdir name="5500006">
-    <string name="name" value="MISSING NAME"/>
-    <string name="desc" value="MISSING INFO"/>
+    <string name="name" value="[99days] Magical Sandglass"/>
+    <string name="desc" value="Drag-and-drop this onto a piece of equipment that has a time limit to extend the time limit by #c99days#. #This cannot be used on cash items, and the time limit cannot be extended past 100 days, starting from today.# "/>
   </imgdir>
   <imgdir name="5530001">
-    <string name="name" value="MISSING NAME"/>
-    <string name="desc" value="MISSING INFO"/>
+    <string name="name" value="DS Medal Basket "/>
+    <string name="desc" value="Double-click on it to exchange it for a DS Mania Medal. "/>
   </imgdir>
   <imgdir name="5530002">
-    <string name="name" value="MISSING NAME"/>
-    <string name="desc" value="MISSING INFO"/>
+    <string name="name" value="5 Golden Compasses "/>
+    <string name="desc" value="Double-click on this item to receive 5 Golden Compasses that will allow you to enter Gold Richie&apos;s Treasure Vault."/>
   </imgdir>
   <imgdir name="5530003">
-    <string name="name" value="MISSING NAME"/>
-    <string name="desc" value="MISSING INFO"/>
+    <string name="name" value="10 Gaga Transformation Potions"/>
+    <string name="desc" value="Double-click on this item to be transformed into Gaga, the most famous star in all of Maple World."/>
   </imgdir>
   <imgdir name="5530004">
-    <string name="name" value="MISSING NAME"/>
-    <string name="desc" value="MISSING INFO"/>
+    <string name="name" value="100 Elixirs"/>
+    <string name="desc" value="Double-click on this item to receive 100 Elixirs."/>
   </imgdir>
   <imgdir name="5530005">
-    <string name="name" value="MISSING NAME"/>
-    <string name="desc" value="MISSING INFO"/>
+    <string name="name" value="200 Elixirs"/>
+    <string name="desc" value="Double-click on this item to receive 200 Elixirs."/>
   </imgdir>
   <imgdir name="5530006">
-    <string name="name" value="MISSING NAME"/>
-    <string name="desc" value="MISSING INFO"/>
+    <string name="name" value="100 Power Elixirs"/>
+    <string name="desc" value="Double-click on this item to receive 100 Power Elixirs."/>
   </imgdir>
   <imgdir name="5530007">
-    <string name="name" value="MISSING NAME"/>
-    <string name="desc" value="MISSING INFO"/>
+    <string name="name" value="150 Power Elixirs"/>
+    <string name="desc" value="Double-click on this item to receive 150 Power Elixirs."/>
   </imgdir>
   <imgdir name="5530008">
-    <string name="name" value="MISSING NAME"/>
-    <string name="desc" value="MISSING INFO"/>
+    <string name="name" value="200 Power Elixirs"/>
+    <string name="desc" value="Double-click on this item to receive 200 Power Elixirs."/>
   </imgdir>
 </imgdir>

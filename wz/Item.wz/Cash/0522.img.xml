@@ -33,6 +33,17 @@
       <int name="pachinko" value="1"/>
     </imgdir>
   </imgdir>
+  <imgdir name="05220012">
+    <imgdir name="info">
+      <canvas name="icon" width="36" height="39">
+        <vector name="origin" x="1" y="34"/>
+      </canvas>
+      <canvas name="iconRaw" width="36" height="39">
+        <vector name="origin" x="1" y="34"/>
+      </canvas>
+      <int name="cash" value="1"/>
+    </imgdir>
+  </imgdir>
   <imgdir name="05220020">
     <imgdir name="info">
       <canvas name="icon" width="32" height="27">

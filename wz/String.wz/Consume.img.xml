@@ -4,6 +4,182 @@
     <string name="name" value="Red Potion"/>
     <string name="desc" value="A potion made out of red herbs.\nRecovers 50 HP."/>
   </imgdir>
+  <imgdir name="2001501">
+    <string name="name" value="Orange Potion"/>
+    <string name="desc" value="A concentrated potion made out of red herbs.\nRecovers 150 HP."/>
+  </imgdir>
+  <imgdir name="2001502">
+    <string name="name" value="White Potion"/>
+    <string name="desc" value="A highly-concentrated potion made out of red herbs.\nRecovers 300 HP."/>
+  </imgdir>
+  <imgdir name="2001503">
+    <string name="name" value="Blue Potion"/>
+    <string name="desc" value="A potion made out of blue herbs.\nRecovers 100 MP."/>
+  </imgdir>
+  <imgdir name="2001504">
+    <string name="name" value="Elixir"/>
+    <string name="desc" value="A legendary potion.\nRecovers 50%  HP and 50% MP."/>
+  </imgdir>
+  <imgdir name="2001505">
+    <string name="name" value="Power Elixir"/>
+    <string name="desc" value="A legendary potion.\nRecovers all HP and MP."/>
+  </imgdir>
+  <imgdir name="2001506">
+    <string name="name" value="Mana Elixir"/>
+    <string name="desc" value="A legendary potion.\nRecovers around 300 MP."/>
+  </imgdir>
+  <imgdir name="2001507">
+    <string name="name" value="Red Pill"/>
+    <string name="desc" value="A pill of concentrated red potion, which restores 50 HP. You can carry more pills than potions because they&apos;re smaller."/>
+  </imgdir>
+  <imgdir name="2001508">
+    <string name="name" value="Orange Pill"/>
+    <string name="desc" value="A pill of concentrated orange potion, which restores 150 HP. You can carry more pills than potions because they&apos;re smaller."/>
+  </imgdir>
+  <imgdir name="2001509">
+    <string name="name" value="White Pill"/>
+    <string name="desc" value="A pill of concentrated white potion, which restores 300 HP. You can carry more pills than potions because they&apos;re smaller."/>
+  </imgdir>
+  <imgdir name="2001510">
+    <string name="name" value="Blue Pill"/>
+    <string name="desc" value="A pill of concentrated blue potion, which restores 100 MP. You can carry more pills than potions because they&apos;re smaller."/>
+  </imgdir>
+  <imgdir name="2001511">
+    <string name="name" value="Mana Elixir Pill"/>
+    <string name="desc" value="A pill of concentrated Mana Elixir, which restores 300 MP. You can carry more pills than potions because they&apos;re smaller."/>
+  </imgdir>
+  <imgdir name="2001512">
+    <string name="name" value="Watermelon"/>
+    <string name="desc" value="A very ripe watermelon.\nRecovers about 1000 HP and 1000 MP."/>
+  </imgdir>
+  <imgdir name="2001513">
+    <string name="name" value="Ice Cream Pop"/>
+    <string name="desc" value="A tasty ice cream pop.\nRecovers around 2000 HP."/>
+  </imgdir>
+  <imgdir name="2001514">
+    <string name="name" value="Red Bean Sundae"/>
+    <string name="desc" value="Definitely lets you forget about the hot hot summer. \nRecovers around 2000 MP."/>
+  </imgdir>
+  <imgdir name="2001515">
+    <string name="name" value="Dexterity Potion"/>
+    <string name="desc" value="Adds quickness.\nAvoidability +5 for 3 min."/>
+  </imgdir>
+  <imgdir name="2001516">
+    <string name="name" value="Speed Potion"/>
+    <string name="desc" value="Increases speed.\nSpeed +8 for 3 min."/>
+  </imgdir>
+  <imgdir name="2001517">
+    <string name="name" value="Magic Potion"/>
+    <string name="desc" value="Increases magic attack.\nMagic Attack +5 for 3 min."/>
+  </imgdir>
+  <imgdir name="2001518">
+    <string name="name" value="Wizard Potion"/>
+    <string name="desc" value="Increases magic attack.\nMagic Attack +10 for 3 min."/>
+  </imgdir>
+  <imgdir name="2001519">
+    <string name="name" value="Warrior Potion"/>
+    <string name="desc" value="Increases attacking ability.\nAttack +5 for 3 min."/>
+  </imgdir>
+  <imgdir name="2001520">
+    <string name="name" value="Sniper Potion"/>
+    <string name="desc" value="Increases accuracy.\nAccuracy +5 for 5 min."/>
+  </imgdir>
+  <imgdir name="2001521">
+    <string name="name" value="Warrior Pill"/>
+    <string name="desc" value="A pill of concentrated warrior potion. Att. + 5 for 10 minutes."/>
+  </imgdir>
+  <imgdir name="2001522">
+    <string name="name" value="Magic Pill"/>
+    <string name="desc" value="A pill of concentrated magic potion. Magic Att. + 5 for 10 minutes"/>
+  </imgdir>
+  <imgdir name="2001523">
+    <string name="name" value="Sniper Pill"/>
+    <string name="desc" value="A pill of concentrated sniper potion. Accuracy + 10 for 10 minutes"/>
+  </imgdir>
+  <imgdir name="2001524">
+    <string name="name" value="Dexterity Pill"/>
+    <string name="desc" value="A pill of concentrated dexterity potion. Avoidablity + 10 for 10 minutes"/>
+  </imgdir>
+  <imgdir name="2001525">
+    <string name="name" value="Speed Pill"/>
+    <string name="desc" value="A pill of concentrated speed potion. Increased speed for 10 minutes."/>
+  </imgdir>
+  <imgdir name="2020033">
+    <string name="name" value="Gingerbread Man Cookie"/>
+    <string name="desc" value="A tasty Gingerbread Man Cookie made with Black Tea.\nRecovers around 500 HP."/>
+  </imgdir>
+  <imgdir name="2020034">
+    <string name="name" value="Gingerbread Woman Cookie"/>
+    <string name="desc" value="A tasty Gingerbread Woman Cookie made with Black Tea.\nRecovers around 1200 HP."/>
+  </imgdir>
+  <imgdir name="2020035">
+    <string name="name" value="Candy Cane"/>
+    <string name="desc" value="A cane-shaped treat with red and white stripes.\nRecovers around 800 MP."/>
+  </imgdir>
+  <imgdir name="2022469">
+    <string name="name" value="Cassandra&apos;s Gag"/>
+    <string name="desc" value="You are temporarily unable to move due to Cassandra&apos;s Gag."/>
+  </imgdir>
+  <imgdir name="2022470">
+    <string name="name" value="Cassandra&apos;s Gag"/>
+    <string name="desc" value="You are temporarily poisoned due to Cassandra&apos;s Gag."/>
+  </imgdir>
+  <imgdir name="2022637">
+    <string name="name" value="Dragon&apos;s Blessing"/>
+    <string name="desc" value="A blessing given by a GM that contains the power of a Dragon. Att +5, Magic +10, Weapon Defense +20, Magic Defense +20, and Speed +10 for 30 minutes."/>
+  </imgdir>
+  <imgdir name="2022642">
+    <string name="name" value="Christmas Blessing"/>
+    <string name="desc" value="A blessing that contains the joy of Christmas. Attack +5 and Magic +10 for 10 minutes."/>
+  </imgdir>
+  <imgdir name="2022652">
+    <string name="name" value="Dragon Rider&apos;s Warrior Box"/>
+    <string name="desc" value="A box dropped by the Dragon Rider. Contains a Warrior weapon. #cYou can open it by double-clicking on it."/>
+  </imgdir>
+  <imgdir name="2022653">
+    <string name="name" value="Dragon Rider&apos;s Magician Box"/>
+    <string name="desc" value="A box dropped by the Dragon Rider. Contains a Magician weapon. #cYou can open it by double-clicking on it."/>
+  </imgdir>
+  <imgdir name="2022654">
+    <string name="name" value="Dragon Rider&apos;s Thief Box"/>
+    <string name="desc" value="A box dropped by the Dragon Rider. Contains a Thief weapon. #cYou can open it by double-clicking on it."/>
+  </imgdir>
+  <imgdir name="2022655">
+    <string name="name" value="Dragon Rider&apos;s Bowman Box"/>
+    <string name="desc" value="A box dropped by the Dragon Rider. Contains a Bowman weapon. #cYou can open it by double-clicking on it."/>
+  </imgdir>
+  <imgdir name="2022656">
+    <string name="name" value="Dragon Rider&apos;s Pirate Box"/>
+    <string name="desc" value="A box dropped by the Dragon Rider. Contains a Pirate weapon. #cYou can open it by double-clicking on it."/>
+  </imgdir>
+  <imgdir name="2022657">
+    <string name="name" value="Cheap Guitar Case"/>
+    <string name="desc" value="A Cheap Guitar Case. You can open it by double-clicking on it. If you don&apos;t open it and let it expire, it will turn into an Expensive Guitar Case."/>
+  </imgdir>
+  <imgdir name="2022658">
+    <string name="name" value="Expensive Guitar Case"/>
+    <string name="desc" value="An Expensive Guitar Case. You can open it by double-clicking on it. If you don&apos;t open it and let it expire, it will turn into a Legendary Guitar Case."/>
+  </imgdir>
+  <imgdir name="2022659">
+    <string name="name" value="Legendary Guitar Case"/>
+    <string name="desc" value="A Legendary Guitar Case. You can open it by double-clicking on it. You should open it before it expires and disappears."/>
+  </imgdir>
+  <imgdir name="2022660">
+    <string name="name" value="Dragon Rider Buff Zone Recovery Item "/>
+    <string name="desc" value="Recovers 400 HP and 200 MP."/>
+  </imgdir>
+  <imgdir name="2022661">
+    <string name="name" value="Dragon Rider Buff Zone Recovery Item"/>
+    <string name="desc" value="HP -550"/>
+  </imgdir>
+  <imgdir name="2022662">
+    <string name="name" value="Evan&apos;s Paper Box "/>
+    <string name="desc" value="A paper box containing a gift celebrating Evan&apos;s launch. You can open it by double-clicking on it."/>
+  </imgdir>
+  <imgdir name="2022695">
+    <string name="name" value="Onyx Dragon Treasure Chest"/>
+    <string name="desc" value="A chest with a guardian dragon carved on it. According to legend, this belonged to an ancient dragon master.\nDouble-click to acquire the dragon master&apos;s treasures."/>
+  </imgdir>
   <imgdir name="2023000">
     <string name="name" value="Sharenian Grounds : Fortitude"/>
     <string name="desc" value="From the ancient remains, an unknown blessing grants you fortitude. Increases Weapon Attack &amp; Weapon Defense."/>
@@ -1679,6 +1855,10 @@
     <string name="name" value="Dark Scroll for Face Accessory for Avoidability"/>
     <string name="desc" value="Improves avoidability on face accessories.\nSuccess rate:70%, avoidability+1, DEX+1.\nIf failed, the item will be destroyed at a 50% rate."/>
   </imgdir>
+  <imgdir name="2040120">
+    <string name="name" value="Shiny Nose Bandage 30%"/>
+    <string name="desc" value="Improves weapon attack on Rudolph&apos;s Shiny Nose.\nSuccess Rate: 30%, Attack +1."/>
+  </imgdir>
   <imgdir name="2040200">
     <string name="name" value="Scroll for Eye Accessory for Accuracy"/>
     <string name="desc" value="Improves accuracy on eye accessories.\nSuccess rate:10%, accuracy+3, DEX+1. The success rate of this scroll can be enhanced by Vega&apos;s Spell."/>
@@ -1718,6 +1898,30 @@
   <imgdir name="2040209">
     <string name="name" value="Dark Scroll for Eye Accessory for INT"/>
     <string name="desc" value="Improves INT on eye accessories.\nSuccess rate:70%, INT+1, magic def.+1.\nIf failed, the item will be destroyed at a 50% rate."/>
+  </imgdir>
+  <imgdir name="2040211">
+    <string name="name" value="Dragon Glasses Scroll"/>
+    <string name="desc" value="Improves STR, DEX, INT, and LUK on Dragon Glasses.\nSuccess Rate: 100%, STR+1, DEX+1, INT+1, LUK+1"/>
+  </imgdir>
+  <imgdir name="2040212">
+    <string name="name" value="Dragon Glasses Special Scroll"/>
+    <string name="desc" value="Improves Attack and Magic Attack on Dragon Glasses. Can only be used when the number of times the equipment can be upgraded is 3 or fewer. \nSuccess Rate: 100%, Att +1, Magic Attack +2."/>
+  </imgdir>
+  <imgdir name="2040227">
+    <string name="name" value="Dragon Glasses Scroll 60%"/>
+    <string name="desc" value="Improves STR, DEX, INT, and LUK on Dragon Glasses.\nSuccess Rate: 60%, STR+1, DEX+1, INT+1, LUK+1"/>
+  </imgdir>
+  <imgdir name="2040228">
+    <string name="desc" value="Improves STR, DEX, INT, and LUK on Dragon Glasses.\nSuccess Rate: 80%, STR+1, DEX+1, INT+1, LUK+1"/>
+    <string name="name" value="Dragon Glasses Scroll 80%"/>
+  </imgdir>
+  <imgdir name="2040229">
+    <string name="name" value="Dragon Glasses Special Scroll 30%"/>
+    <string name="desc" value="Improves Attack and Magic Attack on Dragon Glasses. \nSuccess Rate: 30%, Att +1, Magic Attack +2."/>
+  </imgdir>
+  <imgdir name="2040230">
+    <string name="name" value="Dragon Glasses Special Scroll 50%"/>
+    <string name="desc" value="Improves Attack and Magic Attack on Dragon Glasses. \nSuccess Rate: 50%, Att +1, Magic Attack +2."/>
   </imgdir>
   <imgdir name="2040300">
     <string name="name" value="Scroll for Earring for INT"/>
@@ -3055,6 +3259,10 @@
     <string name="name" value="[4yrAnniv]Scroll for Wand for Magic Att."/>
     <string name="desc" value="Improves magic attack on the Maple Shine Wand.\nSuccess rate:40%, magic attack+3, INT+2.\nIf failed, the item will be destroyed at a 30% rate."/>
   </imgdir>
+  <imgdir name="2043714">
+    <string name="name" value="Scroll for Wand for Magic ATT 60%"/>
+    <string name="desc" value="Improves Magic ATT on Wands.\nSuccess Rate: 60%, Magic ATT +2, INT +1"/>
+  </imgdir>
   <imgdir name="2043800">
     <string name="name" value="Scroll for Staff for Magic Att."/>
     <string name="desc" value="Improves magic attack on staffs.\nSuccess rate:100%, magic attack+1"/>
@@ -3090,6 +3298,10 @@
   <imgdir name="2043808">
     <string name="name" value="[4yrAnniv]Scroll for Staff for Magic Att."/>
     <string name="desc" value="Improves magic attack on the Maple Wisdom Staff.\nSuccess rate:40%, magic attack+3, INT+2.\nIf failed, the item will be destroyed at a 30% rate."/>
+  </imgdir>
+  <imgdir name="2043814">
+    <string name="name" value="Scroll for Staff for Magic ATT 60%"/>
+    <string name="desc" value="Improves Magic Attack on a Staff.\nSuccess Rate: 60%, Magic ATT +2, INT +1"/>
   </imgdir>
   <imgdir name="2044000">
     <string name="name" value="Scroll for Two-handed Sword for ATT"/>
@@ -3546,6 +3758,106 @@
   <imgdir name="2044905">
     <string name="name" value="[4yrAnniv] Gun for Attack 40%"/>
     <string name="desc" value="Improves weapon attack on the Maple Canon Shooter.\nSuccess rate:40%, weapon attack+3, accuracy+2.\nIf failed, the item will be destroyed at a 30% rate."/>
+  </imgdir>
+  <imgdir name="2047000">
+    <string name="name" value="Tablet for One-Handed Weapon for ATT"/>
+    <string name="desc" value="Improves Weapon ATT on a One-Handed Weapon with durability. If it fails, there is a 60% chance the item will be destroyed. \nWeapon ATT+2\n#cThe success rate will decrease each time the Tablet is used.#"/>
+  </imgdir>
+  <imgdir name="2047001">
+    <string name="name" value="Tablet for One-Handed Weapon for Accuracy"/>
+    <string name="desc" value="Improves Accuracy on a One-Handed Weapon with durability. If it fails, there is a 60% chance the item will be destroyed.\nAccuracy +3\n#cThe success rate will decrease each time the Tablet is used.#"/>
+  </imgdir>
+  <imgdir name="2047002">
+    <string name="name" value="Tablet for One-Handed Weapon for Magic Attack"/>
+    <string name="desc" value="Improves Magic ATT on a One-Handed Weapon with durability. If it fails, there is a 60% chance the item will be destroyed.\nMagic ATT+2\n#cThe success rate will decrease each time the Tablet is used.#"/>
+  </imgdir>
+  <imgdir name="2047100">
+    <string name="name" value="Tablet for Two-Handed Weapon for ATT"/>
+    <string name="desc" value="Improves Weapon ATT on a Two-Handed Weapon with durability. If it fails, there is a 60% chance the item will be destroyed.\nWeapon ATT+2\n#cThe success rate will decrease each time the Tablet is used.#"/>
+  </imgdir>
+  <imgdir name="2047101">
+    <string name="name" value="Tablet for Two-Handed Weapon for Accuracy "/>
+    <string name="desc" value="Improves Accuracy on a Two-Handed Weapon with durability. If it fails, there is a 60% chance the item will be destroyed.\nAccuracy+3\n#cThe success rate will decrease each time the Tablet is used.#"/>
+  </imgdir>
+  <imgdir name="2047102">
+    <string name="name" value="Tablet for Two-Handed Weapon for Magic Attack"/>
+    <string name="desc" value="Improves Magic ATT on a Two-Handed Weapon with durability. If it fails, there is a 60% chance the item will be destroyed.\nMagic ATT +2\n#cThe success rate will decrease each time the Tablet is used.#"/>
+  </imgdir>
+  <imgdir name="2047200">
+    <string name="name" value="Tablet for Armor for STR"/>
+    <string name="desc" value="Improves STR on Armor with durability. If it fails, there is a 60% chance the item will be destroyed.\nSTR +2\n#cThe success rate will decrease each time the Tablet is used.#"/>
+  </imgdir>
+  <imgdir name="2047201">
+    <string name="name" value="Tablet for Armor for INT"/>
+    <string name="desc" value="Improves INT on Armor with durability. If it fails, there is a 60% chance the item will be destroyed.\nINT +2\n#cThe success rate will decrease each time the Tablet is used.#"/>
+  </imgdir>
+  <imgdir name="2047202">
+    <string name="name" value="Tablet for Armor for DEX"/>
+    <string name="desc" value="Improves DEX on Armor with durability. If it fails, there is a 60% chance the item will be destroyed.\nDEX +2\n#cThe success rate will decrease each time the Tablet is used.#"/>
+  </imgdir>
+  <imgdir name="2047203">
+    <string name="name" value="Tablet for Armor for LUK"/>
+    <string name="desc" value="Improves LUK on Armor with durability. If it fails, there is a 60% chance the item will be destroyed.\nLUK +2\n#cThe success rate will decrease each time the Tablet is used.#"/>
+  </imgdir>
+  <imgdir name="2047204">
+    <string name="name" value="Tablet for Armor for HANDS"/>
+    <string name="desc" value="Improves HANDS on Armor with durability. If it fails, there is a 60% chance the item will be destroyed.\nHANDS+2\n#cThe success rate will decrease each time the Tablet is used.#"/>
+  </imgdir>
+  <imgdir name="2047205">
+    <string name="name" value="Tablet for Armor for HP"/>
+    <string name="desc" value="Improves MaxHP on Armor with durability. If it fails, there is a 60% chance the item will be destroyed.\nMaxHP +20\n#cThe success rate will decrease each time the Tablet is used.#"/>
+  </imgdir>
+  <imgdir name="2047206">
+    <string name="name" value="Tablet for Armor for MP"/>
+    <string name="desc" value="Improves MaxMP on Armor with durability. If it fails, there is a 60% chance the item will be destroyed.\nMaxMP +20\n#cThe success rate will decrease each time the Tablet is used.#"/>
+  </imgdir>
+  <imgdir name="2047207">
+    <string name="name" value="Tablet for Armor for DEF"/>
+    <string name="desc" value="Improves DEF on Armor with durability. If it fails, there is a 60% chance the item will be destroyed.\nWeapon DEF+3, Magic DEF+3\n#cThe success rate will decrease each time the Tablet is used.#"/>
+  </imgdir>
+  <imgdir name="2047208">
+    <string name="name" value="Tablet for Armor for Accuracy"/>
+    <string name="desc" value="Improves Accuracy on Armor with durability. If it fails, there is a 60% chance the item will be destroyed.\nAccuracy+2\n#cThe success rate will decrease each time the Tablet is used.#"/>
+  </imgdir>
+  <imgdir name="2047300">
+    <string name="name" value="Tablet for Accessory for STR"/>
+    <string name="desc" value="Improves STR on Accessories with durability. If it fails, there is a 60% chance the item will be destroyed.\nSTR+2\n#cThe success rate will decrease each time the Tablet is used.#"/>
+  </imgdir>
+  <imgdir name="2047301">
+    <string name="name" value="Tablet for Accessory for INT"/>
+    <string name="desc" value="Improves INT on Accessories with Durability. If it fails, there is a 60% chance the item will be destroyed.\nINT+2\n#cThe success rate will decrease each time the Tablet is used.#"/>
+  </imgdir>
+  <imgdir name="2047302">
+    <string name="name" value="Tablet for Accessory for DEX"/>
+    <string name="desc" value="Improves DEX on Accessories with durability. If it fails, there is a 60% chance the item will be destroyed.\nDEX+2\n#cThe success rate will decrease each time the Tablet is used.#"/>
+  </imgdir>
+  <imgdir name="2047303">
+    <string name="name" value="Tablet for Accessory for LUK"/>
+    <string name="desc" value="Improves LUK on Accessories with durability. If it fails, there is a 60% chance the item will be destroyed.\nLUK+2\n#cThe success rate will decrease each time the Tablet is used.#"/>
+  </imgdir>
+  <imgdir name="2047304">
+    <string name="name" value="Tablet for Accessory for HANDS"/>
+    <string name="desc" value="Improves HANDS on Accessories with durability. If it fails, there is a 60% chance the item will be destroyed.\nHANDS+2\n#cThe success rate will decrease each time the Tablet is used.#"/>
+  </imgdir>
+  <imgdir name="2047305">
+    <string name="name" value="Tablet for Accessory for JUMP"/>
+    <string name="desc" value="Improves JUMP on Accessories with durability. If it fails, there is a 60% chance the item will be destroyed.\nJUMP+2\n#cThe success rate will decrease each time the Tablet is used.#"/>
+  </imgdir>
+  <imgdir name="2047306">
+    <string name="name" value="Tablet for Accessory for Accuracy"/>
+    <string name="desc" value="Improves Accuracy on Accessories with durability. If it fails, there is a 60% chance the item will be destroyed.\nAccuracy+2\n#cThe success rate will decrease each time the Tablet is used.#"/>
+  </imgdir>
+  <imgdir name="2047307">
+    <string name="name" value="Tablet for Accessory for Avoidability"/>
+    <string name="desc" value="Improves Avoidability on Accessories with durability. If it fails, there is a 60% chance the item will be destroyed.\nAvoidability+2\n#cThe success rate will decrease each time the Tablet is used.#"/>
+  </imgdir>
+  <imgdir name="2047308">
+    <string name="name" value="Tablet for Accessory for HP"/>
+    <string name="desc" value="Improves MaxHP on Accessories with durability. If it fails, there is a 60% chance the item will be destroyed.\nMaxHP+10\n#cThe success rate will decrease each time the Tablet is used.#"/>
+  </imgdir>
+  <imgdir name="2047309">
+    <string name="name" value="Tablet for Accessory for MP"/>
+    <string name="desc" value="Improves MP on Acccessories with durability. If it fails, there is a 60% chance the item will be destroyed.\nMaxMP+10\n#cThe success rate will decrease each time the Tablet is used.#"/>
   </imgdir>
   <imgdir name="2048000">
     <string name="name" value="Scroll for Pet Equip. for Speed"/>
@@ -4079,6 +4391,14 @@
     <string name="name" value="Mu Lung Dojo Summon Package2_Stumpy"/>
     <string name="desc" value="Summon Stumpy."/>
   </imgdir>
+  <imgdir name="2100167">
+    <string name="name" value="Ice Wall Summoning Sack"/>
+    <string name="desc" value="Summons an Ice Wall"/>
+  </imgdir>
+  <imgdir name="2100168">
+    <string name="name" value="Dragon Rider Summoning Sack"/>
+    <string name="desc" value="Summons a Dragon Rider"/>
+  </imgdir>
   <imgdir name="2101000">
     <string name="name" value="Summoning Mushmom"/>
     <string name="desc" value="Summons a Mushmom."/>
@@ -4510,6 +4830,30 @@
     <string name="name" value="Cake Picture"/>
     <string name="desc" value="A picture of a delicious cake that Cody gave as a gift. I get a feeling something funny will happen when I use it."/>
   </imgdir>
+  <imgdir name="2210044">
+    <string name="name" value="Snowman Transformation"/>
+    <string name="desc" value="Transforms you into a little Snowman."/>
+  </imgdir>
+  <imgdir name="2210045">
+    <string name="name" value="Gustav Transformation"/>
+    <string name="desc" value="Transforms you into Gustav from Henesys Farm."/>
+  </imgdir>
+  <imgdir name="2210046">
+    <string name="name" value="Anna Transformation"/>
+    <string name="desc" value="Transforms you into Anna from Henesys Farm."/>
+  </imgdir>
+  <imgdir name="2210047">
+    <string name="name" value="Utah Transformation"/>
+    <string name="desc" value="Transforms you into Utah from Henesys Farm."/>
+  </imgdir>
+  <imgdir name="2210048">
+    <string name="name" value="Orange Mushroom Transformation"/>
+    <string name="desc" value="Transforms you into an Orange Mushroom from Henesys."/>
+  </imgdir>
+  <imgdir name="2210049">
+    <string name="name" value="Pig Transformation "/>
+    <string name="desc" value="Transforms you into a Pig from Henesys."/>
+  </imgdir>
   <imgdir name="2211000">
     <string name="name" value="Cliff&apos;s Special Potion"/>
     <string name="desc" value="No one knows what you&apos;ll transform into when you drink this, but something WILL happen for one hour. It&apos;s all about the risk..."/>
@@ -4621,6 +4965,86 @@
   <imgdir name="2280012">
     <string name="name" value="[Skill Book] Rush"/>
     <string name="desc" value="You can learn #cRush# with this book.\nJob: 4th Advancement Warrior.\nCondition : #cRush# not acquired."/>
+  </imgdir>
+  <imgdir name="2280026">
+    <string name="name" value="[Skill Book] Flame Wheel"/>
+    <string name="desc" value="Skill Book from which you can learn the #cFlame Wheel# skill.\nJob: Evan\nCondition: #cFlame Wheel# not available"/>
+  </imgdir>
+  <imgdir name="2280027">
+    <string name="name" value="[Skill Book] Magic Mastery"/>
+    <string name="desc" value="Skill Book from which you can learn the #cMagic Mastery# skill.\nJob: Evan\nCondition: #cMagic Mastery# not available"/>
+  </imgdir>
+  <imgdir name="2280028">
+    <string name="name" value="[Skill Book] Dark Fog"/>
+    <string name="desc" value="Skill Book from which you can learn the #cDark Fog# skill.\nJob: Evan\nCondition: #cDark Fog# not available"/>
+  </imgdir>
+  <imgdir name="2280029">
+    <string name="name" value="[Skill Book] Soul Stone "/>
+    <string name="desc" value="Skill Book from which you can learn the #cSoul Stone# skill.\nJob: Evan\nCondition: #cSoul Stone# not available"/>
+  </imgdir>
+  <imgdir name="2290140">
+    <string name="name" value="[Mastery Book] Illusion 20"/>
+    <string name="desc" value="This book grants a 70% chance to raise the Mastery Level of #cIllusion# to 20.\nJob: Evan\nCondition: Min Skill Lv. 5"/>
+  </imgdir>
+  <imgdir name="2290141">
+    <string name="name" value="[Mastery Book] Illusion 30"/>
+    <string name="desc" value="This book grants a 50% change to raise the Mastery Level of #cIllusion# to 30.\nJob: Evan\nCondition: Min Skill Lv. 15"/>
+  </imgdir>
+  <imgdir name="2290142">
+    <string name="name" value="[Mastery Book] Flame Wheel 20"/>
+    <string name="desc" value="This book grants a 70% chance to raise the Mastery Level of #cFlame Wheel# to 20.\nJob: Evan\nCondition: Min Skill Lv. 5"/>
+  </imgdir>
+  <imgdir name="2290143">
+    <string name="name" value="[Mastery Book] Flame Wheel 30"/>
+    <string name="desc" value="This book grants a 50% chance to raise the Mastery Level of #cFlame Wheel# to 30.\nJob: Evan\nCondition: Min Skill Lv. 15"/>
+  </imgdir>
+  <imgdir name="2290144">
+    <string name="name" value="[Mastery Book] Magic Mastery 20"/>
+    <string name="desc" value="This book grants a 70% chance to raise the Mastery Level of #cMagic Mastery# to 20.\nJob: Evan\nCondition: Min Skill Lv. 5"/>
+  </imgdir>
+  <imgdir name="2290145">
+    <string name="name" value="[Mastery Book] Magic Mastery 30"/>
+    <string name="desc" value="This book grants a 50% chance to raise the Mastery Level of #cMagic Mastery# to 30.\nJob: Evan\nCondition: Min Skill Lv. 15"/>
+  </imgdir>
+  <imgdir name="2290146">
+    <string name="name" value="[Mastery Book] Blaze 20"/>
+    <string name="desc" value="This book grants a 70% chance to raise the Mastery Level of #cBlaze# to 20.\nJob: Evan\nCondition: Min Skill Lv. 5"/>
+  </imgdir>
+  <imgdir name="2290147">
+    <string name="name" value="[Mastery Book] Blaze 30"/>
+    <string name="desc" value="This book grants a 50% chance to raise the Mastery Level of #cBlaze# to 30.\nJob: Evan\nCondition: Min Skill Lv. 15"/>
+  </imgdir>
+  <imgdir name="2290148">
+    <string name="name" value="[Mastery Book] Dark Fog 20"/>
+    <string name="desc" value="This book grants a 70% chance to raise the Mastery Level of #cDark Fog# to 20.\nJob: Evan\nCondition: Min Skill Lv. 5"/>
+  </imgdir>
+  <imgdir name="2290149">
+    <string name="name" value="[Mastery Book] Dark Fog 30"/>
+    <string name="desc" value="This book grants a 50% chance to raise the Mastery Level of #cDark Fog# to 30.\nJob: Evan\nCondition: Min Skill Lv. 15"/>
+  </imgdir>
+  <imgdir name="2290150">
+    <string name="name" value="[Mastery Book] Soul Stone 20"/>
+    <string name="desc" value="This book grants a 70% chance to raise the Mastery Level of #cSoul Stone# to 20.\nJob: Evan\nCondition: Min Skill Lv. 5"/>
+  </imgdir>
+  <imgdir name="2290151">
+    <string name="name" value="[Mastery Book] Blessing of the Onyx 20"/>
+    <string name="desc" value="This book grants a 70% chance to raise the Mastery Level of #cBlessing of the Onyx# to 20.\nJob: Evan\nCondition: Min Skill Lv. 5"/>
+  </imgdir>
+  <imgdir name="2290152">
+    <string name="name" value="[Mastery Book] Blessing of the Onyx 30"/>
+    <string name="desc" value="This book grants a 50% chance to raise the Mastery Level of #cBlessing of the Onyx# to 30.\nJob: Evan\nCondition: Min Skill Lv. 15"/>
+  </imgdir>
+  <imgdir name="2290162">
+    <string name="name" value="[Mastery Book] Magic Guard 20"/>
+    <string name="desc" value="Has a 70% chance of raising the Master Level of the #cMagic Guard# skill to 20.\nJob: Evan\nCondition: Skill must be at least level 5"/>
+  </imgdir>
+  <imgdir name="2290163">
+    <string name="name" value="[Mastery Book] Magic Booster 20"/>
+    <string name="desc" value="Has a 70% chance of raising the Master Level of the #cMagic Booster# skill to 15.\nJob: Evan\nCondition: Skill must be at least level 5"/>
+  </imgdir>
+  <imgdir name="2290164">
+    <string name="name" value="[Mastery Book] Critical Magic 10"/>
+    <string name="desc" value="Has a 70% chance of raising the Master Level of the #cCritical Magic# skill to 15.\nJob: Evan\nCondition: Skill must be at least level 5"/>
   </imgdir>
   <imgdir name="2310000">
     <string name="name" value="The Owl of Minerva"/>
@@ -4795,6 +5219,10 @@
     <string name="name" value="Bubbling Card"/>
     <string name="desc" value="A card that features Bubbling."/>
   </imgdir>
+  <imgdir name="2380020">
+    <string name="name" value="Strange Pig Card"/>
+    <string name="desc" value="A card featuring the Strange Pig."/>
+  </imgdir>
   <imgdir name="2381000">
     <string name="name" value="Axe Stump Card"/>
     <string name="desc" value="A card that features Axe Stump."/>
@@ -4950,6 +5378,14 @@
   <imgdir name="2381038">
     <string name="name" value="Fire Sentinel Card"/>
     <string name="desc" value="A card that features Fire Sentinel."/>
+  </imgdir>
+  <imgdir name="2381084">
+    <string name="name" value="Crying Blue Mushroom Card "/>
+    <string name="desc" value="A card featuring the Crying Blue Mushroom."/>
+  </imgdir>
+  <imgdir name="2381085">
+    <string name="name" value="Terrified Wild Boar Card"/>
+    <string name="desc" value="A card featuring the Terrified Wild Boar."/>
   </imgdir>
   <imgdir name="2382000">
     <string name="name" value="Chirppy Card"/>
@@ -5246,6 +5682,70 @@
   <imgdir name="2382076">
     <string name="name" value="Mossy Snail Card"/>
     <string name="desc" value="A picture of Mossy Snail is on this card.\n#cWhile hunting in Ellin Forest, Accuracy+1"/>
+  </imgdir>
+  <imgdir name="2382097">
+    <string name="name" value="Cherry Bubble Tea Card "/>
+    <string name="desc" value="A card featuring the Cherry Bubble Tea.\n\cSTR +1 when hunting in Kerning Square.#"/>
+  </imgdir>
+  <imgdir name="2382098">
+    <string name="name" value="Melon Bubble Tea Card"/>
+    <string name="desc" value="A card featuring the Melon Bubble Tea.\n\cLUK +1 when hunting in Kerning Square#"/>
+  </imgdir>
+  <imgdir name="2382099">
+    <string name="name" value="Mango Bubble Tea Card"/>
+    <string name="desc" value="A card featuring the Mango Bubble Tea.\n\cINT +1 when hunting in Kerning Square#"/>
+  </imgdir>
+  <imgdir name="2382100">
+    <string name="name" value="Yeti Doll Claw Game Card"/>
+    <string name="desc" value="A card featuring the Yeti Doll Claw Game Card.\n\cDEX +1 when hunting in Kerning Square#"/>
+  </imgdir>
+  <imgdir name="2382101">
+    <string name="name" value="Pepe Doll Claw Game Card "/>
+    <string name="desc" value="A card featuring the Jr. Pepe Doll Claw Game.\n\cSpeed +1 when hunting in Kerning Square#"/>
+  </imgdir>
+  <imgdir name="2382102">
+    <string name="name" value="Transformed Doll Claw Game Card "/>
+    <string name="desc" value="A card featuring the Transformed Doll Claw Game.\n\cJump +1 when hunting in Kerning Square#"/>
+  </imgdir>
+  <imgdir name="2382103">
+    <string name="name" value="Blue Perfume Card "/>
+    <string name="desc" value="A card featuring the Blue Perfume.\n\cAvoidability +1 when hunting in Kerning Square#"/>
+  </imgdir>
+  <imgdir name="2382104">
+    <string name="name" value="Yellow Perfume Card"/>
+    <string name="desc" value="A card featuring the Yellow Perfume Card.\n\cAccuracy +1 when hunting in Kerning Square#"/>
+  </imgdir>
+  <imgdir name="2382105">
+    <string name="name" value="Pink Perfume Card"/>
+    <string name="desc" value="A card featuring the Pink Perfume.\n\cWeapon DEF +1 when hunting in Kerning Square#"/>
+  </imgdir>
+  <imgdir name="2382106">
+    <string name="name" value="Kid Mannequin Card"/>
+    <string name="desc" value="A card featuring the Kid Mannequin.\n\cMagic DEF +1 when hunting in Kerning Square#"/>
+  </imgdir>
+  <imgdir name="2382107">
+    <string name="name" value="Female Mannequin Card "/>
+    <string name="desc" value="A card featuring the Female Mannequin.\n\cSTR +1 when hunting in Kerning Square#"/>
+  </imgdir>
+  <imgdir name="2382108">
+    <string name="name" value="Male Mannequin Card"/>
+    <string name="desc" value="A card featuring the Male Mannequin.\n\cINT +1 when hunting in Kerning Square#"/>
+  </imgdir>
+  <imgdir name="2382109">
+    <string name="name" value="Latest Hits Compilation Card"/>
+    <string name="desc" value="A card featuring the Latest Hits Compilation.\n\cDEX +1 when hunting in Kerning Square#"/>
+  </imgdir>
+  <imgdir name="2382110">
+    <string name="name" value="Greatest Oldies Card"/>
+    <string name="desc" value="A card featuring the Greatest Oldies.\n\cLUK +1 when hunting in Kerning Square#"/>
+  </imgdir>
+  <imgdir name="2382111">
+    <string name="name" value="Cheap Amplifier Card"/>
+    <string name="desc" value="A card featuring the Cheap Amplifier.\n\cJump +1 when hunting in Kerning Square#"/>
+  </imgdir>
+  <imgdir name="2382112">
+    <string name="name" value="Fancy Amplifier Card"/>
+    <string name="desc" value="A card featuring the Fancy Amplifier.\n\cSpeed +1 when hunting in Kerning Square#"/>
   </imgdir>
   <imgdir name="2383000">
     <string name="name" value="Mecateon Card"/>
@@ -5627,6 +6127,26 @@
     <string name="name" value="Rurumo Card"/>
     <string name="desc" value="A card that features Rurumo.\n#cIf hunting at the Alcadno Institute, Item drop rate increased#"/>
   </imgdir>
+  <imgdir name="2384058">
+    <string name="name" value="Red Slime Card"/>
+    <string name="desc" value="A card featuring the Red Slime.\n\cLUK +3 when hunting in Year 2030 Neo City#"/>
+  </imgdir>
+  <imgdir name="2384059">
+    <string name="name" value="Silver Slime Card"/>
+    <string name="desc" value="A card featuring the Silver Slime.\n\cWeapon DEF +3 when hunting in Year 2030 Neo City#"/>
+  </imgdir>
+  <imgdir name="2384060">
+    <string name="name" value="Gold Slime Card"/>
+    <string name="desc" value="A card featuring the Gold Slime.\n\cINT +3 when hunting in Year 2030 Neo City#"/>
+  </imgdir>
+  <imgdir name="2384061">
+    <string name="name" value="Overlord A Card"/>
+    <string name="desc" value="A card featuring Overlord A.\n\cDEX +3 when hunting in Year 2099 Neo City#"/>
+  </imgdir>
+  <imgdir name="2384062">
+    <string name="name" value="Overlord B Card"/>
+    <string name="desc" value="A card featuring the Overlord B.\n\cSTR +3 when hunting in Year 2099 Neo City#"/>
+  </imgdir>
   <imgdir name="2385000">
     <string name="name" value="Dark Klock Card"/>
     <string name="desc" value="A card that features Dark Klock.\n#cIf hunting at the lower levels of the Clocktower, Avoidability+4#"/>
@@ -5727,6 +6247,34 @@
     <string name="name" value="Eye of Time Card"/>
     <string name="desc" value="A card with a picture of the Eye of Time.\nWhen hunting on the Temple of Time, Speed+4#"/>
   </imgdir>
+  <imgdir name="2385038">
+    <string name="name" value="Robby Card"/>
+    <string name="desc" value="A card featuring Robby.\n\cMagic DEF +4 when hunting in Year 2215 Neo City.#"/>
+  </imgdir>
+  <imgdir name="2385039">
+    <string name="name" value="Iruvata Card "/>
+    <string name="desc" value="A card featuring Iruvata.\n\cWeapon DEF +4 when hunting in Year 2215 Neo City#"/>
+  </imgdir>
+  <imgdir name="2385040">
+    <string name="name" value="Maverick Type A Card "/>
+    <string name="desc" value="A card featuring Maverick Type A.\n\cINT +4 when hunting in Year 2230 Neo City#"/>
+  </imgdir>
+  <imgdir name="2385041">
+    <string name="name" value="Maverick Type S Card"/>
+    <string name="desc" value="A card featuring Maverick Type S.\n\cLUK +4 when hunting in Year 2230 Neo City#"/>
+  </imgdir>
+  <imgdir name="2385042">
+    <string name="name" value="Maverick Type D Card"/>
+    <string name="desc" value="A card featuring Maverick Type D.\n\cAvoidability +4 when hunting in Year 2230 Neo City#"/>
+  </imgdir>
+  <imgdir name="2385043">
+    <string name="name" value="Afterlord Card "/>
+    <string name="desc" value="A card featuring the Afterlord.\n\cAccuracy +4 when hunting in Year 2216 Neo City#"/>
+  </imgdir>
+  <imgdir name="2385044">
+    <string name="name" value="Prototype Lord Card "/>
+    <string name="desc" value="A card featuring the Prototype Lord.\n\cSpeed +4 when hunting in Year 2216 Neo City#"/>
+  </imgdir>
   <imgdir name="2386000">
     <string name="name" value="Bone Fish Card"/>
     <string name="desc" value="A card that features Bone Fish.\n#cIf hunting at Aqua Road, 30% chance of breaking through monster&apos;s weapon defense#"/>
@@ -5814,6 +6362,14 @@
   <imgdir name="2386024">
     <string name="name" value="Chief Memory Guardian Card"/>
     <string name="desc" value="A card with a picture of the Chief Memory Guardian.\n#cWhen hunting on Memory Lane, Speed+5#"/>
+  </imgdir>
+  <imgdir name="2386033">
+    <string name="name" value="Imperial Guard Card"/>
+    <string name="desc" value="A card featuring the Imperial Guard.\n\cDEX +5 when hunting in Year 2503 Neo City#"/>
+  </imgdir>
+  <imgdir name="2386034">
+    <string name="name" value="Royal Guard Card"/>
+    <string name="desc" value="A card featuring the Royal Guard.\n\cSTR +5 when hunting in Year 2503 Neo City#"/>
   </imgdir>
   <imgdir name="2387000">
     <string name="name" value="Gatekeeper Card"/>
@@ -6022,6 +6578,38 @@
   <imgdir name="2388043">
     <string name="name" value="Pink Bean"/>
     <string name="desc" value="A card with a picture of Pink Bean.\n#cWhen hunting at the Temple of Time, Item/Meso Drop rate increase#"/>
+  </imgdir>
+  <imgdir name="2388075">
+    <string name="name" value="Rock Spirit Card"/>
+    <string name="desc" value="A card featuring the Rock Spirit.\n\cIncreases the item drop rate when used inside Kerning Square#"/>
+  </imgdir>
+  <imgdir name="2388076">
+    <string name="name" value="Bergamot Card"/>
+    <string name="desc" value="A card featuring the Bergamot.\n\cIncreases the item and meso drop rate when used inside Neo City#"/>
+  </imgdir>
+  <imgdir name="2388077">
+    <string name="name" value="Dunas Card "/>
+    <string name="desc" value="A card featuring Dunas.\n\cIncreases the item and meso drop rate when used inside Neo City#"/>
+  </imgdir>
+  <imgdir name="2388078">
+    <string name="name" value="Aufheben Card"/>
+    <string name="desc" value="A card featuring Aufheben.\n\cIncreases the item and meso drop rate when used inside Neo City#"/>
+  </imgdir>
+  <imgdir name="2388079">
+    <string name="name" value="Oberon Card "/>
+    <string name="desc" value="A card featuring Oberon.\n\cIncreases the item and meso drop rate when used inside Neo City#"/>
+  </imgdir>
+  <imgdir name="2388080">
+    <string name="name" value="Nibelung Card"/>
+    <string name="desc" value="A card featuring the Nibelung.\n\cIncreases the item and meso drop rate when used inside Neo City#"/>
+  </imgdir>
+  <imgdir name="2388081">
+    <string name="name" value="Dragonica Card"/>
+    <string name="desc" value="A card featuring the Dragonica.\n\cIncreases the meso drop rate when used inside Leafre#"/>
+  </imgdir>
+  <imgdir name="2388082">
+    <string name="name" value="Dragon Rider Card"/>
+    <string name="desc" value="A card featuring the Dragon Rider.\n\cWeapon ATT +1 and Magic ATT +1 when hunting in Leafre#"/>
   </imgdir>
   <imgdir name="2430000">
     <string name="name" value="Torn Cygnus&apos; Book Volume 1"/>
@@ -6742,6 +7330,90 @@
   <imgdir name="2430005">
     <string name="name" value="Memorial Map"/>
     <string name="desc" value="Allows you to check your current position, along with the spot of the Gold Key Room."/>
+  </imgdir>
+  <imgdir name="2430033">
+    <string name="name" value="Christmas Gift Box"/>
+    <string name="desc" value="A gift box that Cliff has prepared for the children of Maple World. Double-click to find out what&apos;s inside. "/>
+  </imgdir>
+  <imgdir name="2430034">
+    <string name="name" value="G-star Reset Item"/>
+    <string name="desc" value="An item that can be used to reset during an emergency."/>
+  </imgdir>
+  <imgdir name="2430035">
+    <string name="name" value="Cassandra&apos;s Strange Slushie "/>
+    <string name="desc" value="If you&apos;re really curious about how it tastes, muster up your courage and take a sip."/>
+  </imgdir>
+  <imgdir name="2430036">
+    <string name="name" value="Croco 1 Day Use Coupon"/>
+    <string name="desc" value="Double-click to use the mount [Croco] for 1 day starting today."/>
+  </imgdir>
+  <imgdir name="2430037">
+    <string name="name" value="Black Scooter 1 Day Use Coupon"/>
+    <string name="desc" value="Double-Click to use the mount [Black Scooter] for 1 day starting today."/>
+  </imgdir>
+  <imgdir name="2430038">
+    <string name="name" value="Pink Scooter 1 Day Use Coupon "/>
+    <string name="desc" value="Double-click to use the mount [Pink Scooter] for 1 day starting today."/>
+  </imgdir>
+  <imgdir name="2430039">
+    <string name="name" value="Nimbus Cloud 1 Day Use Coupon "/>
+    <string name="desc" value="Double-click to use the mount [Nimbus Cloud] for 1 day starting today."/>
+  </imgdir>
+  <imgdir name="2430040">
+    <string name="name" value="Balrog 1 Day Use Coupon "/>
+    <string name="desc" value="Double-click to use the mount [Balrog] for 1 day starting today."/>
+  </imgdir>
+  <imgdir name="2430041">
+    <string name="name" value="Gift Box "/>
+    <string name="desc" value="Evan&apos;s reward for raising the Dragon to stage 1."/>
+  </imgdir>
+  <imgdir name="2430042">
+    <string name="name" value="Gift Box "/>
+    <string name="desc" value="Evan&apos;s reward for raising the Dragon to stage 2."/>
+  </imgdir>
+  <imgdir name="2430043">
+    <string name="name" value="Gift Box "/>
+    <string name="desc" value="Evan&apos;s reward for raising the Dragon to stage 3."/>
+  </imgdir>
+  <imgdir name="2430044">
+    <string name="name" value="Gift Box "/>
+    <string name="desc" value="Evan&apos;s reward for raising the Dragon to stage 4."/>
+  </imgdir>
+  <imgdir name="2430045">
+    <string name="name" value="Gift Box "/>
+    <string name="desc" value="Evan&apos;s reward for raising the Dragon to stage 5."/>
+  </imgdir>
+  <imgdir name="2430046">
+    <string name="name" value="Gift Box "/>
+    <string name="desc" value="Evan&apos;s reward for raising the Dragon to stage 6."/>
+  </imgdir>
+  <imgdir name="2430047">
+    <string name="name" value="Cassandra&apos;s Gift Box"/>
+    <string name="desc" value="A gift box containing gifts that Cassandra has prepared."/>
+  </imgdir>
+  <imgdir name="2430048">
+    <string name="name" value="Candy Twirl "/>
+    <string name="desc" value="A Candy Twirl received from Cassandra. Seems like eating it might transform you into something or someone else."/>
+  </imgdir>
+  <imgdir name="2430073">
+    <string name="name" value="Lion (15-Day)"/>
+    <string name="desc" value="Double-click to use the [Lion] mount skill for 15 days starting today."/>
+  </imgdir>
+  <imgdir name="2430074">
+    <string name="name" value="Unicorn (15-Day)"/>
+    <string name="desc" value="Double-click to use the [Unicorn] mount skill for 15 days starting today"/>
+  </imgdir>
+  <imgdir name="2430075">
+    <string name="name" value="Low Rider (15-Day)"/>
+    <string name="desc" value="Double-click to use the [Low Rider] mount skill for 15 days starting today."/>
+  </imgdir>
+  <imgdir name="2430076">
+    <string name="name" value="Red Truck (15-Day)"/>
+    <string name="desc" value="Double-click to use the [Red Truck] mount skill for 15 days starting today."/>
+  </imgdir>
+  <imgdir name="2430077">
+    <string name="name" value="Gargoyle (15-Day)"/>
+    <string name="desc" value="Double-click to use the [Gargoyle] mount skill for 15 days starting today."/>
   </imgdir>
   <imgdir name="2440000">
     <string name="name" value="Richie Gold&apos;s Fake Lead"/>
@@ -9120,8 +9792,8 @@
     <string name="desc" value="MISSING INFO"/>
   </imgdir>
   <imgdir name="2100166">
-    <string name="name" value="MISSING NAME"/>
-    <string name="desc" value="MISSING INFO"/>
+    <string name="name" value="Free Spirit Summoning Sack"/>
+    <string name="desc" value="Summons a Free Spirit"/>
   </imgdir>
   <imgdir name="2100901">
     <string name="name" value="MISSING NAME"/>

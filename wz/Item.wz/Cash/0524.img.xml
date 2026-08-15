@@ -391,4 +391,20 @@
       <int name="0" value="5000066"/>
     </imgdir>
   </imgdir>
+  <imgdir name="05240028">
+    <imgdir name="info">
+      <canvas name="icon" width="27" height="31">
+        <vector name="origin" x="-3" y="31"/>
+      </canvas>
+      <canvas name="iconRaw" width="21" height="30">
+        <vector name="origin" x="-6" y="31"/>
+      </canvas>
+      <int name="slotMax" value="200"/>
+      <int name="cash" value="1"/>
+    </imgdir>
+    <imgdir name="spec">
+      <int name="inc" value="100"/>
+      <int name="0" value="5000067"/>
+    </imgdir>
+  </imgdir>
 </imgdir>

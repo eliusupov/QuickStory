@@ -2622,6 +2622,78 @@
       <int name="expireOnLogout" value="1"/>
     </imgdir>
   </imgdir>
+  <imgdir name="03994184">
+    <imgdir name="info">
+      <canvas name="icon" width="26" height="28">
+        <vector name="origin" x="-4" y="28"/>
+      </canvas>
+      <canvas name="iconRaw" width="20" height="26">
+        <vector name="origin" x="-5" y="28"/>
+      </canvas>
+      <int name="price" value="1"/>
+      <int name="tradeBlock" value="1"/>
+      <int name="slotMax" value="1"/>
+      <int name="expireOnLogout" value="1"/>
+      <int name="timeLimited" value="1"/>
+      <imgdir name="replace">
+        <int name="itemid" value="3994185"/>
+        <string name="msg" value="카산드라의 이상한 물약이 추운날씨 때문에  얼어 슬러쉬로 바뀝니다."/>
+        <int name="period" value="60"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="03994185">
+    <imgdir name="info">
+      <canvas name="icon" width="31" height="31">
+        <vector name="origin" x="-1" y="31"/>
+      </canvas>
+      <canvas name="iconRaw" width="31" height="30">
+        <vector name="origin" x="-1" y="31"/>
+      </canvas>
+      <int name="price" value="1"/>
+      <int name="tradeBlock" value="1"/>
+      <int name="slotMax" value="1"/>
+      <int name="timeLimited" value="1"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="03994186">
+    <imgdir name="info">
+      <canvas name="icon" width="26" height="30">
+        <vector name="origin" x="-4" y="30"/>
+      </canvas>
+      <canvas name="iconRaw" width="22" height="28">
+        <vector name="origin" x="-5" y="30"/>
+      </canvas>
+      <int name="price" value="1"/>
+      <int name="slotMax" value="1"/>
+      <int name="only" value="1"/>
+      <int name="timeLimited" value="1"/>
+      <int name="max" value="1"/>
+      <int name="quest" value="1"/>
+      <int name="expireOnLogout" value="1"/>
+      <int name="notExtend" value="1"/>
+      <imgdir name="replace">
+        <int name="itemid" value="3994187"/>
+        <string name="msg" value="알에서 미니 드래곤이 깨어났다."/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="03994187">
+    <imgdir name="info">
+      <canvas name="icon" width="32" height="32">
+        <vector name="origin" x="0" y="32"/>
+      </canvas>
+      <canvas name="iconRaw" width="32" height="32">
+        <vector name="origin" x="0" y="32"/>
+      </canvas>
+      <int name="price" value="1"/>
+      <int name="slotMax" value="1"/>
+      <int name="only" value="1"/>
+      <int name="expireOnLogout" value="1"/>
+      <int name="quest" value="1"/>
+      <int name="max" value="1"/>
+    </imgdir>
+  </imgdir>
   <imgdir name="03995000">
     <imgdir name="info">
       <canvas name="icon" width="4" height="4">

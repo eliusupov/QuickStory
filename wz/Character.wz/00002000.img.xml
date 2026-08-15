@@ -1,9 +1,815 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <imgdir name="00002000.img">
+  <imgdir name="Awakening">
+    <imgdir name="0">
+      <string name="action" value="alert"/>
+      <int name="frame" value="2"/>
+      <int name="delay" value="120"/>
+      <vector name="move" x="1" y="0"/>
+    </imgdir>
+    <imgdir name="1">
+      <string name="action" value="alert"/>
+      <int name="frame" value="1"/>
+      <vector name="move" x="1" y="0"/>
+      <int name="delay" value="120"/>
+    </imgdir>
+    <imgdir name="2">
+      <string name="action" value="alert"/>
+      <int name="frame" value="0"/>
+      <vector name="move" x="1" y="0"/>
+      <int name="delay" value="840"/>
+    </imgdir>
+    <imgdir name="3">
+      <string name="action" value="alert"/>
+      <int name="frame" value="2"/>
+      <int name="delay" value="960"/>
+      <vector name="move" x="1" y="0"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="Earthquake">
+    <imgdir name="0">
+      <string name="action" value="alert"/>
+      <int name="frame" value="1"/>
+      <int name="delay" value="-180"/>
+      <vector name="move" x="-3" y="0"/>
+    </imgdir>
+    <imgdir name="1">
+      <string name="action" value="alert"/>
+      <int name="frame" value="0"/>
+      <vector name="move" x="-3" y="0"/>
+      <int name="delay" value="-360"/>
+    </imgdir>
+    <imgdir name="2">
+      <string name="action" value="swingO2"/>
+      <int name="frame" value="1"/>
+      <vector name="move" x="-1" y="0"/>
+      <int name="delay" value="-90"/>
+    </imgdir>
+    <imgdir name="3">
+      <string name="action" value="swingO2"/>
+      <int name="frame" value="0"/>
+      <vector name="move" x="-4" y="0"/>
+      <int name="delay" value="-450"/>
+    </imgdir>
+    <imgdir name="4">
+      <string name="action" value="swingO2"/>
+      <int name="frame" value="2"/>
+      <vector name="move" x="-12" y="0"/>
+      <int name="delay" value="-90"/>
+    </imgdir>
+    <imgdir name="5">
+      <string name="action" value="swingO2"/>
+      <int name="frame" value="2"/>
+      <vector name="move" x="-15" y="0"/>
+      <int name="delay" value="90"/>
+    </imgdir>
+    <imgdir name="6">
+      <string name="action" value="swingO2"/>
+      <int name="frame" value="2"/>
+      <vector name="move" x="-16" y="0"/>
+      <int name="delay" value="180"/>
+    </imgdir>
+    <imgdir name="7">
+      <string name="action" value="swingO2"/>
+      <int name="frame" value="2"/>
+      <vector name="move" x="-12" y="0"/>
+      <int name="delay" value="90"/>
+    </imgdir>
+    <imgdir name="8">
+      <string name="action" value="alert"/>
+      <int name="frame" value="0"/>
+      <int name="delay" value="180"/>
+      <vector name="move" x="-7" y="0"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="OnixBlessing">
+    <imgdir name="0">
+      <string name="action" value="stand1"/>
+      <int name="frame" value="0"/>
+      <int name="delay" value="-120"/>
+    </imgdir>
+    <imgdir name="1">
+      <string name="action" value="alert"/>
+      <int name="frame" value="2"/>
+      <int name="delay" value="-840"/>
+      <vector name="move" x="1" y="0"/>
+    </imgdir>
+    <imgdir name="2">
+      <string name="action" value="alert"/>
+      <int name="frame" value="1"/>
+      <int name="delay" value="120"/>
+    </imgdir>
+    <imgdir name="3">
+      <string name="action" value="alert"/>
+      <int name="frame" value="0"/>
+      <int name="delay" value="240"/>
+    </imgdir>
+    <imgdir name="4">
+      <string name="action" value="stand1"/>
+      <int name="frame" value="0"/>
+      <int name="delay" value="840"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="blaze">
+    <imgdir name="0">
+      <string name="action" value="alert"/>
+      <int name="frame" value="1"/>
+      <int name="delay" value="-120"/>
+    </imgdir>
+    <imgdir name="1">
+      <string name="action" value="stabO1"/>
+      <int name="frame" value="0"/>
+      <vector name="move" x="4" y="0"/>
+      <int name="delay" value="-120"/>
+    </imgdir>
+    <imgdir name="2">
+      <string name="action" value="stabO1"/>
+      <int name="frame" value="0"/>
+      <vector name="move" x="6" y="0"/>
+      <int name="delay" value="-120"/>
+    </imgdir>
+    <imgdir name="3">
+      <string name="action" value="stabO1"/>
+      <int name="frame" value="0"/>
+      <vector name="move" x="7" y="0"/>
+      <int name="delay" value="-120"/>
+    </imgdir>
+    <imgdir name="4">
+      <string name="action" value="stabO1"/>
+      <int name="frame" value="1"/>
+      <vector name="move" x="-2" y="0"/>
+      <int name="delay" value="120"/>
+    </imgdir>
+    <imgdir name="5">
+      <string name="action" value="stabO1"/>
+      <int name="frame" value="1"/>
+      <vector name="move" x="-6" y="0"/>
+      <int name="delay" value="120"/>
+    </imgdir>
+    <imgdir name="6">
+      <string name="action" value="stabO1"/>
+      <int name="frame" value="1"/>
+      <vector name="move" x="-8" y="0"/>
+      <int name="delay" value="120"/>
+    </imgdir>
+    <imgdir name="7">
+      <string name="action" value="stabO1"/>
+      <int name="frame" value="1"/>
+      <vector name="move" x="-9" y="0"/>
+      <int name="delay" value="120"/>
+    </imgdir>
+    <imgdir name="8">
+      <string name="action" value="stabO1"/>
+      <int name="frame" value="1"/>
+      <vector name="move" x="-9" y="0"/>
+      <int name="delay" value="120"/>
+    </imgdir>
+    <imgdir name="9">
+      <string name="action" value="alert"/>
+      <int name="frame" value="0"/>
+      <int name="delay" value="240"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="darkFog">
+    <imgdir name="0">
+      <string name="action" value="alert"/>
+      <int name="frame" value="1"/>
+      <int name="delay" value="-360"/>
+      <vector name="move" x="8" y="0"/>
+    </imgdir>
+    <imgdir name="1">
+      <string name="action" value="alert"/>
+      <int name="frame" value="2"/>
+      <vector name="move" x="8" y="0"/>
+      <int name="delay" value="-90"/>
+    </imgdir>
+    <imgdir name="2">
+      <string name="action" value="swingO2"/>
+      <int name="frame" value="0"/>
+      <vector name="move" x="10" y="0"/>
+      <int name="delay" value="-90"/>
+    </imgdir>
+    <imgdir name="3">
+      <string name="action" value="swingO2"/>
+      <int name="frame" value="0"/>
+      <vector name="move" x="11" y="0"/>
+      <int name="delay" value="-1800"/>
+    </imgdir>
+    <imgdir name="4">
+      <string name="action" value="swingO2"/>
+      <int name="frame" value="1"/>
+      <vector name="move" x="9" y="0"/>
+      <int name="delay" value="90"/>
+    </imgdir>
+    <imgdir name="5">
+      <string name="action" value="swingO2"/>
+      <int name="frame" value="2"/>
+      <vector name="move" x="10" y="0"/>
+      <int name="delay" value="630"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="dragonThrust">
+    <imgdir name="0">
+      <string name="action" value="alert"/>
+      <int name="frame" value="2"/>
+      <int name="delay" value="-90"/>
+    </imgdir>
+    <imgdir name="1">
+      <string name="action" value="alert"/>
+      <int name="frame" value="1"/>
+      <int name="delay" value="-90"/>
+    </imgdir>
+    <imgdir name="2">
+      <string name="action" value="alert"/>
+      <int name="frame" value="0"/>
+      <int name="delay" value="-540"/>
+    </imgdir>
+    <imgdir name="3">
+      <string name="action" value="stabO1"/>
+      <int name="frame" value="1"/>
+      <vector name="move" x="-23" y="0"/>
+      <int name="delay" value="-90"/>
+    </imgdir>
+    <imgdir name="4">
+      <string name="action" value="stabO1"/>
+      <int name="frame" value="1"/>
+      <vector name="move" x="-40" y="0"/>
+      <int name="delay" value="90"/>
+    </imgdir>
+    <imgdir name="5">
+      <string name="action" value="stabO1"/>
+      <int name="frame" value="1"/>
+      <vector name="move" x="-43" y="0"/>
+      <int name="delay" value="90"/>
+    </imgdir>
+    <imgdir name="6">
+      <string name="action" value="stabO1"/>
+      <int name="frame" value="1"/>
+      <vector name="move" x="-44" y="0"/>
+      <int name="delay" value="90"/>
+    </imgdir>
+    <imgdir name="7">
+      <string name="action" value="stabO1"/>
+      <int name="frame" value="1"/>
+      <vector name="move" x="-45" y="0"/>
+      <int name="delay" value="90"/>
+    </imgdir>
+    <imgdir name="8">
+      <string name="action" value="stabO1"/>
+      <int name="frame" value="0"/>
+      <int name="delay" value="90"/>
+      <vector name="move" x="-11" y="0"/>
+    </imgdir>
+    <imgdir name="9">
+      <string name="action" value="alert"/>
+      <int name="frame" value="2"/>
+      <int name="delay" value="450"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="fireCircle">
+    <imgdir name="0">
+      <string name="action" value="walk1"/>
+      <int name="frame" value="1"/>
+      <vector name="move" x="1" y="0"/>
+      <int name="delay" value="-120"/>
+    </imgdir>
+    <imgdir name="1">
+      <string name="action" value="stabO1"/>
+      <int name="frame" value="0"/>
+      <vector name="move" x="10" y="0"/>
+      <int name="delay" value="-120"/>
+    </imgdir>
+    <imgdir name="2">
+      <string name="action" value="stabO1"/>
+      <int name="frame" value="0"/>
+      <vector name="move" x="11" y="0"/>
+      <int name="delay" value="240"/>
+    </imgdir>
+    <imgdir name="3">
+      <string name="action" value="swingO3"/>
+      <int name="frame" value="1"/>
+      <vector name="move" x="-9" y="0"/>
+      <int name="delay" value="120"/>
+    </imgdir>
+    <imgdir name="4">
+      <string name="action" value="swingO3"/>
+      <int name="frame" value="2"/>
+      <vector name="move" x="-8" y="0"/>
+      <int name="delay" value="120"/>
+    </imgdir>
+    <imgdir name="5">
+      <string name="action" value="swingO3"/>
+      <int name="frame" value="2"/>
+      <vector name="move" x="-9" y="0"/>
+      <int name="delay" value="120"/>
+    </imgdir>
+    <imgdir name="6">
+      <string name="action" value="alert"/>
+      <int name="frame" value="0"/>
+      <int name="delay" value="90"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="flameWheel">
+    <imgdir name="0">
+      <string name="action" value="alert"/>
+      <int name="frame" value="0"/>
+      <int name="delay" value="-90"/>
+      <vector name="move" x="8" y="0"/>
+    </imgdir>
+    <imgdir name="1">
+      <string name="action" value="stabO1"/>
+      <int name="frame" value="0"/>
+      <vector name="move" x="25" y="0"/>
+      <int name="delay" value="-90"/>
+    </imgdir>
+    <imgdir name="2">
+      <string name="action" value="stabO1"/>
+      <int name="frame" value="0"/>
+      <vector name="move" x="27" y="0"/>
+      <int name="delay" value="-90"/>
+    </imgdir>
+    <imgdir name="3">
+      <string name="action" value="stabO1"/>
+      <int name="frame" value="0"/>
+      <vector name="move" x="28" y="0"/>
+      <int name="delay" value="-90"/>
+    </imgdir>
+    <imgdir name="4">
+      <string name="action" value="stabO1"/>
+      <int name="frame" value="0"/>
+      <vector name="move" x="29" y="0"/>
+      <int name="delay" value="-450"/>
+    </imgdir>
+    <imgdir name="5">
+      <string name="action" value="swingO3"/>
+      <int name="frame" value="0"/>
+      <vector name="move" x="16" y="0"/>
+      <int name="delay" value="-90"/>
+    </imgdir>
+    <imgdir name="6">
+      <string name="action" value="stabO2"/>
+      <int name="frame" value="1"/>
+      <vector name="move" x="-5" y="0"/>
+      <int name="delay" value="-90"/>
+    </imgdir>
+    <imgdir name="7">
+      <string name="action" value="stabO2"/>
+      <int name="frame" value="1"/>
+      <vector name="move" x="-11" y="0"/>
+      <int name="delay" value="90"/>
+    </imgdir>
+    <imgdir name="8">
+      <string name="action" value="stabO2"/>
+      <int name="frame" value="1"/>
+      <int name="delay" value="90"/>
+      <vector name="move" x="-13" y="0"/>
+    </imgdir>
+    <imgdir name="9">
+      <string name="action" value="stabO2"/>
+      <int name="frame" value="1"/>
+      <int name="delay" value="270"/>
+      <vector name="move" x="-14" y="0"/>
+    </imgdir>
+    <imgdir name="10">
+      <string name="action" value="alert"/>
+      <int name="frame" value="2"/>
+      <int name="delay" value="360"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="fly2">
+    <imgdir name="0">
+      <string name="action" value="fly"/>
+      <int name="frame" value="1"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="fly2Move">
+    <imgdir name="0">
+      <string name="action" value="fly"/>
+      <int name="frame" value="0"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="fly2Skill">
+    <imgdir name="0">
+      <string name="action" value="alert"/>
+      <int name="frame" value="0"/>
+      <int name="delay" value="-150"/>
+    </imgdir>
+    <imgdir name="1">
+      <string name="action" value="stabTF"/>
+      <int name="frame" value="1"/>
+      <int name="delay" value="-210"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="ghostLettering">
+    <imgdir name="0">
+      <string name="action" value="alert"/>
+      <int name="frame" value="2"/>
+      <int name="delay" value="-180"/>
+      <vector name="move" x="1" y="0"/>
+    </imgdir>
+    <imgdir name="1">
+      <string name="action" value="alert"/>
+      <int name="frame" value="1"/>
+      <vector name="move" x="1" y="0"/>
+      <int name="delay" value="-90"/>
+    </imgdir>
+    <imgdir name="2">
+      <string name="action" value="alert"/>
+      <int name="frame" value="0"/>
+      <vector name="move" x="1" y="0"/>
+      <int name="delay" value="-630"/>
+    </imgdir>
+    <imgdir name="3">
+      <string name="action" value="swingO1"/>
+      <int name="frame" value="2"/>
+      <vector name="move" x="4" y="0"/>
+      <int name="delay" value="90"/>
+    </imgdir>
+    <imgdir name="4">
+      <string name="action" value="swingO1"/>
+      <int name="frame" value="2"/>
+      <vector name="move" x="-2" y="0"/>
+      <int name="delay" value="90"/>
+    </imgdir>
+    <imgdir name="5">
+      <string name="action" value="swingO1"/>
+      <int name="frame" value="2"/>
+      <vector name="move" x="-3" y="0"/>
+      <int name="delay" value="90"/>
+    </imgdir>
+    <imgdir name="6">
+      <string name="action" value="swingO1"/>
+      <int name="frame" value="2"/>
+      <vector name="move" x="-4" y="0"/>
+      <int name="delay" value="90"/>
+    </imgdir>
+    <imgdir name="7">
+      <string name="action" value="alert"/>
+      <int name="frame" value="2"/>
+      <int name="delay" value="360"/>
+      <vector name="move" x="1" y="0"/>
+    </imgdir>
+  </imgdir>
   <imgdir name="info">
     <string name="islot" value="Bd"/>
     <string name="vslot" value="Bd"/>
     <int name="cash" value="0"/>
+  </imgdir>
+  <imgdir name="killingWing">
+    <imgdir name="0">
+      <string name="action" value="stand1"/>
+      <int name="frame" value="0"/>
+      <int name="delay" value="-270"/>
+    </imgdir>
+    <imgdir name="1">
+      <string name="action" value="swingO3"/>
+      <int name="frame" value="1"/>
+      <int name="delay" value="-90"/>
+      <vector name="move" x="10" y="0"/>
+    </imgdir>
+    <imgdir name="2">
+      <string name="action" value="stabO1"/>
+      <int name="frame" value="1"/>
+      <vector name="move" x="-11" y="0"/>
+      <int name="delay" value="-90"/>
+    </imgdir>
+    <imgdir name="3">
+      <string name="action" value="stabO1"/>
+      <int name="frame" value="1"/>
+      <vector name="move" x="-13" y="0"/>
+      <int name="delay" value="-90"/>
+    </imgdir>
+    <imgdir name="4">
+      <string name="action" value="stabO1"/>
+      <int name="frame" value="1"/>
+      <vector name="move" x="-13" y="0"/>
+      <int name="delay" value="-90"/>
+    </imgdir>
+    <imgdir name="5">
+      <string name="action" value="swingO1"/>
+      <int name="frame" value="2"/>
+      <vector name="move" x="22" y="0"/>
+      <int name="delay" value="90"/>
+    </imgdir>
+    <imgdir name="6">
+      <string name="action" value="swingO1"/>
+      <int name="frame" value="2"/>
+      <vector name="move" x="28" y="0"/>
+      <int name="delay" value="90"/>
+    </imgdir>
+    <imgdir name="7">
+      <string name="action" value="swingO1"/>
+      <int name="frame" value="2"/>
+      <vector name="move" x="29" y="0"/>
+      <int name="delay" value="90"/>
+    </imgdir>
+    <imgdir name="8">
+      <string name="action" value="swingO2"/>
+      <int name="frame" value="2"/>
+      <vector name="move" x="12" y="0"/>
+      <int name="delay" value="450"/>
+    </imgdir>
+    <imgdir name="9">
+      <string name="action" value="alert"/>
+      <int name="frame" value="0"/>
+      <int name="delay" value="90"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="lightingBolt">
+    <imgdir name="0">
+      <string name="action" value="alert"/>
+      <int name="frame" value="0"/>
+      <int name="delay" value="-240"/>
+    </imgdir>
+    <imgdir name="1">
+      <string name="action" value="stabO1"/>
+      <int name="frame" value="0"/>
+      <vector name="move" x="9" y="0"/>
+      <int name="delay" value="-120"/>
+    </imgdir>
+    <imgdir name="2">
+      <string name="action" value="swingO2"/>
+      <int name="frame" value="2"/>
+      <vector name="move" x="4" y="0"/>
+      <int name="delay" value="-120"/>
+    </imgdir>
+    <imgdir name="3">
+      <string name="action" value="swingO2"/>
+      <int name="frame" value="1"/>
+      <vector name="move" x="2" y="0"/>
+      <int name="delay" value="-120"/>
+    </imgdir>
+    <imgdir name="4">
+      <string name="action" value="swingO2"/>
+      <int name="frame" value="0"/>
+      <int name="delay" value="120"/>
+    </imgdir>
+    <imgdir name="5">
+      <string name="action" value="swingO2"/>
+      <int name="frame" value="0"/>
+      <int name="delay" value="120"/>
+    </imgdir>
+    <imgdir name="6">
+      <string name="action" value="swingO2"/>
+      <int name="frame" value="0"/>
+      <int name="delay" value="120"/>
+    </imgdir>
+    <imgdir name="7">
+      <string name="action" value="alert"/>
+      <int name="frame" value="0"/>
+      <int name="delay" value="240"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="magicRegistance">
+    <imgdir name="0">
+      <string name="action" value="stand1"/>
+      <int name="frame" value="0"/>
+      <int name="delay" value="-120"/>
+    </imgdir>
+    <imgdir name="1">
+      <string name="action" value="alert"/>
+      <int name="frame" value="2"/>
+      <int name="delay" value="-120"/>
+      <vector name="move" x="1" y="0"/>
+    </imgdir>
+    <imgdir name="2">
+      <string name="action" value="alert"/>
+      <int name="frame" value="1"/>
+      <int name="delay" value="-120"/>
+      <vector name="move" x="1" y="0"/>
+    </imgdir>
+    <imgdir name="3">
+      <string name="action" value="alert"/>
+      <int name="frame" value="0"/>
+      <int name="delay" value="-600"/>
+      <vector name="move" x="1" y="0"/>
+    </imgdir>
+    <imgdir name="4">
+      <string name="action" value="swingO2"/>
+      <int name="frame" value="1"/>
+      <string name="delay" value="-120"/>
+      <vector name="move" x="3" y="0"/>
+    </imgdir>
+    <imgdir name="5">
+      <string name="action" value="swingO1"/>
+      <int name="frame" value="2"/>
+      <int name="delay" value="120"/>
+      <vector name="move" x="7" y="0"/>
+    </imgdir>
+    <imgdir name="6">
+      <string name="action" value="swingO1"/>
+      <int name="frame" value="2"/>
+      <int name="delay" value="120"/>
+      <vector name="move" x="4" y="0"/>
+    </imgdir>
+    <imgdir name="7">
+      <string name="action" value="swingO1"/>
+      <int name="frame" value="2"/>
+      <int name="delay" value="120"/>
+      <vector name="move" x="3" y="0"/>
+    </imgdir>
+    <imgdir name="8">
+      <string name="action" value="alert"/>
+      <int name="frame" value="2"/>
+      <int name="delay" value="480"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="magicShield">
+    <imgdir name="0">
+      <string name="action" value="stand1"/>
+      <int name="frame" value="0"/>
+      <int name="delay" value="120"/>
+    </imgdir>
+    <imgdir name="1">
+      <string name="action" value="alert"/>
+      <int name="frame" value="2"/>
+      <int name="delay" value="840"/>
+      <vector name="move" x="1" y="0"/>
+    </imgdir>
+    <imgdir name="2">
+      <string name="action" value="alert"/>
+      <int name="frame" value="1"/>
+      <int name="delay" value="120"/>
+    </imgdir>
+    <imgdir name="3">
+      <string name="action" value="alert"/>
+      <int name="frame" value="0"/>
+      <int name="delay" value="120"/>
+    </imgdir>
+    <imgdir name="4">
+      <string name="action" value="stand1"/>
+      <int name="frame" value="0"/>
+      <int name="delay" value="960"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="mapleHero">
+    <imgdir name="0">
+      <string name="action" value="alert"/>
+      <int name="frame" value="2"/>
+      <int name="delay" value="90"/>
+      <vector name="move" x="1" y="0"/>
+    </imgdir>
+    <imgdir name="1">
+      <string name="action" value="alert"/>
+      <int name="frame" value="1"/>
+      <vector name="move" x="1" y="0"/>
+      <int name="delay" value="90"/>
+    </imgdir>
+    <imgdir name="2">
+      <string name="action" value="alert"/>
+      <int name="frame" value="0"/>
+      <vector name="move" x="1" y="0"/>
+      <int name="delay" value="1350"/>
+    </imgdir>
+    <imgdir name="3">
+      <string name="action" value="alert"/>
+      <int name="frame" value="2"/>
+      <int name="delay" value="720"/>
+      <vector name="move" x="1" y="0"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="recoveryAura">
+    <imgdir name="0">
+      <string name="action" value="alert"/>
+      <int name="frame" value="2"/>
+      <int name="delay" value="-120"/>
+      <vector name="move" x="1" y="0"/>
+    </imgdir>
+    <imgdir name="1">
+      <string name="action" value="alert"/>
+      <int name="frame" value="1"/>
+      <int name="delay" value="-120"/>
+      <vector name="move" x="1" y="0"/>
+    </imgdir>
+    <imgdir name="2">
+      <string name="action" value="alert"/>
+      <int name="frame" value="0"/>
+      <int name="delay" value="-360"/>
+      <vector name="move" x="1" y="0"/>
+    </imgdir>
+    <imgdir name="3">
+      <string name="action" value="jump"/>
+      <int name="frame" value="0"/>
+      <int name="delay" value="-120"/>
+      <vector name="move" x="1" y="-42"/>
+    </imgdir>
+    <imgdir name="4">
+      <string name="action" value="jump"/>
+      <int name="frame" value="0"/>
+      <int name="delay" value="-120"/>
+      <vector name="move" x="1" y="-44"/>
+    </imgdir>
+    <imgdir name="5">
+      <string name="action" value="swingO3"/>
+      <int name="frame" value="1"/>
+      <int name="delay" value="-120"/>
+      <vector name="move" x="22" y="-38"/>
+    </imgdir>
+    <imgdir name="6">
+      <string name="action" value="swingO2"/>
+      <int name="frame" value="2"/>
+      <int name="delay" value="-480"/>
+      <vector name="move" x="8" y="0"/>
+    </imgdir>
+    <imgdir name="7">
+      <string name="action" value="alert"/>
+      <int name="frame" value="2"/>
+      <int name="delay" value="360"/>
+      <vector name="move" x="1" y="0"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="slow">
+    <imgdir name="0">
+      <string name="action" value="alert"/>
+      <int name="frame" value="2"/>
+      <int name="delay" value="120"/>
+      <vector name="move" x="1" y="0"/>
+    </imgdir>
+    <imgdir name="1">
+      <string name="action" value="alert"/>
+      <int name="frame" value="1"/>
+      <vector name="move" x="1" y="0"/>
+      <int name="delay" value="120"/>
+    </imgdir>
+    <imgdir name="2">
+      <string name="action" value="alert"/>
+      <int name="frame" value="0"/>
+      <vector name="move" x="1" y="0"/>
+      <int name="delay" value="600"/>
+    </imgdir>
+    <imgdir name="3">
+      <string name="action" value="swingO2"/>
+      <int name="frame" value="1"/>
+      <vector name="move" x="3" y="0"/>
+      <int name="delay" value="120"/>
+    </imgdir>
+    <imgdir name="4">
+      <string name="action" value="swingO1"/>
+      <int name="frame" value="2"/>
+      <vector name="move" x="6" y="0"/>
+      <int name="delay" value="120"/>
+    </imgdir>
+    <imgdir name="5">
+      <string name="action" value="swingO1"/>
+      <int name="frame" value="2"/>
+      <vector name="move" x="3" y="0"/>
+      <int name="delay" value="120"/>
+    </imgdir>
+    <imgdir name="6">
+      <string name="action" value="swingO1"/>
+      <int name="frame" value="2"/>
+      <vector name="move" x="2" y="0"/>
+      <int name="delay" value="120"/>
+    </imgdir>
+    <imgdir name="7">
+      <string name="action" value="alert"/>
+      <int name="frame" value="2"/>
+      <int name="delay" value="480"/>
+      <vector name="move" x="1" y="0"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="soulStone">
+    <imgdir name="0">
+      <string name="action" value="alert"/>
+      <int name="frame" value="2"/>
+      <int name="delay" value="120"/>
+      <vector name="move" x="1" y="0"/>
+    </imgdir>
+    <imgdir name="1">
+      <string name="action" value="alert"/>
+      <int name="frame" value="1"/>
+      <vector name="move" x="1" y="0"/>
+      <int name="delay" value="120"/>
+    </imgdir>
+    <imgdir name="2">
+      <string name="action" value="alert"/>
+      <int name="frame" value="1"/>
+      <vector name="move" x="1" y="0"/>
+      <int name="delay" value="600"/>
+    </imgdir>
+    <imgdir name="3">
+      <string name="action" value="swingO1"/>
+      <int name="frame" value="2"/>
+      <vector name="move" x="1" y="0"/>
+      <int name="delay" value="120"/>
+    </imgdir>
+    <imgdir name="4">
+      <string name="action" value="swingO1"/>
+      <int name="frame" value="2"/>
+      <vector name="move" x="-2" y="0"/>
+      <int name="delay" value="120"/>
+    </imgdir>
+    <imgdir name="5">
+      <string name="action" value="swingO1"/>
+      <int name="frame" value="2"/>
+      <vector name="move" x="-3" y="0"/>
+      <int name="delay" value="240"/>
+    </imgdir>
+    <imgdir name="6">
+      <string name="action" value="alert"/>
+      <int name="frame" value="2"/>
+      <int name="delay" value="360"/>
+    </imgdir>
   </imgdir>
   <imgdir name="walk1">
     <imgdir name="0">

@@ -8,6 +8,7 @@
       <vector name="origin" x="0" y="33"/>
     </canvas>
     <string name="islot" value="Cp"/>
+    <int name="notExtend" value="1"/>
     <string name="vslot" value="CpH5"/>
     <int name="reqJob" value="0"/>
     <int name="reqLevel" value="10"/>

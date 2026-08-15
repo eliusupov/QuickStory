@@ -4740,6 +4740,48 @@
       </imgdir>
     </imgdir>
   </imgdir>
+  <imgdir name="02100167">
+    <imgdir name="info">
+      <canvas name="icon" width="31" height="32">
+        <vector name="origin" x="-1" y="32"/>
+        <int name="z" value="0"/>
+      </canvas>
+      <canvas name="iconRaw" width="31" height="31">
+        <vector name="origin" x="-1" y="32"/>
+        <int name="z" value="0"/>
+      </canvas>
+      <int name="slotMax" value="100"/>
+      <int name="type" value="12"/>
+      <int name="tradeBlock" value="1"/>
+    </imgdir>
+    <imgdir name="mob">
+      <imgdir name="0">
+        <int name="id" value="9300391"/>
+        <int name="prob" value="100"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02100168">
+    <imgdir name="info">
+      <canvas name="icon" width="31" height="32">
+        <vector name="origin" x="-1" y="32"/>
+        <int name="z" value="0"/>
+      </canvas>
+      <canvas name="iconRaw" width="31" height="31">
+        <vector name="origin" x="-1" y="32"/>
+        <int name="z" value="0"/>
+      </canvas>
+      <int name="slotMax" value="100"/>
+      <int name="type" value="30"/>
+      <int name="tradeBlock" value="1"/>
+    </imgdir>
+    <imgdir name="mob">
+      <imgdir name="0">
+        <int name="id" value="8300007"/>
+        <int name="prob" value="100"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
   <imgdir name="02100900">
     <imgdir name="info">
       <canvas name="icon" width="31" height="32">

@@ -84,6 +84,22 @@
     <string name="name" value="Under the Maple Tree..."/>
     <string name="desc" value="A white chair commemorating the 4th anniversary of MapleStory. Sit on it to recover HP 35 and MP 10 every 10 seconds."/>
   </imgdir>
+  <imgdir name="3010097">
+    <string name="name" value="Strong Wooden Chair"/>
+    <string name="desc" value="A strong wooden chair personally crafted by Gustav. Recovers 50 HP every 10 seconds."/>
+  </imgdir>
+  <imgdir name="3010107">
+    <string name="name" value="Dragon Egg"/>
+    <string name="desc" value="A broken egg. You can sit on it when you need to rest."/>
+  </imgdir>
+  <imgdir name="3010108">
+    <string name="name" value="Baby Swing "/>
+    <string name="desc" value="A swinging seat that&apos;s rocked by a baby dragon."/>
+  </imgdir>
+  <imgdir name="3010120">
+    <string name="name" value="Easter Egg Basket"/>
+    <string name="desc" value="Sit on this Easter Egg Basket for a sweet thrill of happiness.\nRecovers 40 HP and 30 MP every 10 seconds while resting."/>
+  </imgdir>
   <imgdir name="3011000">
     <string name="name" value="Fishing Chair"/>
     <string name="desc" value="The perfect chair for fishing."/>
@@ -679,6 +695,22 @@
     <string name="name" value="Birthday Cake Candle"/>
     <string name="desc" value="A candle used on the birthday cake for the 4th anniversary of Maplestory. The flame will be blown out when the player exits the game and lit again upon returning to the game."/>
   </imgdir>
+  <imgdir name="3994184">
+    <string name="name" value="Cassandra&apos;s Strange Potion "/>
+    <string name="desc" value="Hold onto this for 30 minutes and the cold weather will turn it into slush. It&apos;s so delicate it will disappear if you log out."/>
+  </imgdir>
+  <imgdir name="3994185">
+    <string name="name" value="Cassandra&apos;s Strange Slush "/>
+    <string name="desc" value="Give it to Cassandra before it disappears!"/>
+  </imgdir>
+  <imgdir name="3994186">
+    <string name="name" value="Mini Dragon Egg "/>
+    <string name="desc" value="A Mini Dragon Egg that Cassandra has left in your care. You must hold it close and keep it warm for one hour for it to hatch. Logging out will cause it to be destroyed."/>
+  </imgdir>
+  <imgdir name="3994187">
+    <string name="name" value="Mini Dragon"/>
+    <string name="desc" value="A Mini Dragon that hatched from the egg Cassandra left with you. Return it to Cassandra to receive a reward!"/>
+  </imgdir>
   <imgdir name="3995000">
     <string name="name" value="."/>
   </imgdir>
@@ -1167,11 +1199,11 @@
     <string name="desc" value="MISSING INFO"/>
   </imgdir>
   <imgdir name="3994179">
-    <string name="name" value="MISSING NAME"/>
-    <string name="desc" value="MISSING INFO"/>
+    <string name="name" value="카산드라의 별상자"/>
+    <string name="desc" value="카산드라의 PC방 왕별이 들어있는 상자다. 90분 동안 잘 가지고 있으면, 카산드라의 PC방 왕별로 변한다. 접속종료하면 사라져 버린다."/>
   </imgdir>
   <imgdir name="3994180">
-    <string name="name" value="MISSING NAME"/>
-    <string name="desc" value="MISSING INFO"/>
+    <string name="name" value="카산드라의 PC방 왕별"/>
+    <string name="desc" value="카산드라가 찾고 있는 PC방 왕별이다. 접속종료하면 사라져버린다."/>
   </imgdir>
 </imgdir>

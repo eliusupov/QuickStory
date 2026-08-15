@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <imgdir name="Etc.img">
   <imgdir name="Etc">
+    <imgdir name="4000566">
+      <string name="name" value="Onyx Dragon Footprint"/>
+      <string name="desc" value="A footprint left behind by an Onyx Dragon."/>
+    </imgdir>
+    <imgdir name="4000567">
+      <string name="name" value="Adolescent Onyx Dragon Horn "/>
+      <string name="desc" value="A piece of an Adolescent Onyx Dragon&apos;s horn."/>
+    </imgdir>
+    <imgdir name="4000568">
+      <string name="name" value="Onyx Dragon Footprint"/>
+      <string name="desc" value="A footprint left behind by an Onyx Dragon."/>
+    </imgdir>
+    <imgdir name="4000569">
+      <string name="name" value="Onyx Dragon Scale "/>
+      <string name="desc" value="A scale from an Onyx Dragon."/>
+    </imgdir>
+    <imgdir name="4000570">
+      <string name="name" value="Onyx Dragon Footprint"/>
+      <string name="desc" value="A footprint left behind by an Onyx Dragon."/>
+    </imgdir>
+    <imgdir name="4000571">
+      <string name="name" value="Onyx Dragon Horn"/>
+      <string name="desc" value="A piece of a fully matured Onyx Dragon&apos;s horn."/>
+    </imgdir>
     <imgdir name="4001257">
       <string name="name" value="Staff of First Magic"/>
       <string name="desc" value="A symbolic weapon of Mage mastery.  Although it can&apos;t be equipped, its power is palpable.  This item must be placed in the Altar of Mastery to activate it."/>
@@ -19,6 +43,26 @@
     </imgdir>
     <imgdir name="4000488">
       <string name="name" value="MasteriaPQ Mob Summon"/>
+    </imgdir>
+    <imgdir name="4001395">
+      <string name="name" value="크리스마스 양말선물"/>
+      <string name="desc" value="크리스마스 선물이 가득 들어있는 도톰한 빨간색 양모 양말이다."/>
+    </imgdir>
+    <imgdir name="4001399">
+      <string name="name" value="Balrog&apos;s Seal Stone "/>
+      <string name="desc" value="Balrog&apos;s Seal Stone. You can almost feel its powerful magic."/>
+    </imgdir>
+    <imgdir name="4001401">
+      <string name="name" value="Dragonica&apos;s Horn "/>
+      <string name="desc" value="The horn of Dragonica, who lives in the Crimson Sky area."/>
+    </imgdir>
+    <imgdir name="4001402">
+      <string name="name" value="Dragon&apos;s Essence "/>
+      <string name="desc" value="Essence of a dragon. It contains the energy of a dragon."/>
+    </imgdir>
+    <imgdir name="4001435">
+      <string name="name" value="Evan Sweat Droplet"/>
+      <string name="desc" value="The sweat drops of Evan. An item required for the #cEvan Trailblazer event.#"/>
     </imgdir>
     <imgdir name="4032234">
       <string name="name" value="Piece of Courage"/>
@@ -47,6 +91,73 @@
     <imgdir name="4001250">
       <string name="name" value="Maple Necklace Pendant"/>
       <string name="desc" value="This can be used to create the Mind of Maple Necklace."/>
+    </imgdir>
+    <imgdir name="4032527">
+      <string name="name" value="Strange Pig "/>
+    </imgdir>
+    <imgdir name="4032528">
+      <string name="name" value="크리스마스 요정"/>
+      <string name="desc" value="선물을 포장하다가 상자 안으로 빨려들어가 버린 크리스마스 요정이다. 산타 클리프가 애타게 찾고 있으니, 행복한 마을에 있는 클리프에게 데려다 주자."/>
+    </imgdir>
+    <imgdir name="4032529">
+      <string name="name" value="빨간코 선물상자"/>
+      <string name="desc" value="불량 루돌프 &apos;빨간코&apos;가 몰래 훔쳐 간 선물상자다."/>
+    </imgdir>
+    <imgdir name="4032530">
+      <string name="name" value="Leviathan&apos;s Tear "/>
+      <string name="desc" value="G-Star Clear "/>
+    </imgdir>
+    <imgdir name="4032531">
+      <string name="name" value="Dragon Moss Extract "/>
+      <string name="desc" value="An extract of moss gathered from the dragon habitat. It is an effective treatment for various illness suffered by the Halflingers and is also used in the production of a potion used for flying. "/>
+    </imgdir>
+    <imgdir name="4032532">
+      <string name="name" value="Thermal Fabric "/>
+      <string name="desc" value="Red fabric that is great at insulating heat. "/>
+    </imgdir>
+    <imgdir name="4032533">
+      <string name="name" value="Baby Onyx Dragon Horn "/>
+      <string name="desc" value="A piece of a Baby Onyx Dragon&apos;s horn. "/>
+    </imgdir>
+    <imgdir name="4032534">
+      <string name="name" value="Onyx Dragon Footprint"/>
+      <string name="desc" value="A footprint left behind by an Onyx Dragon."/>
+    </imgdir>
+    <imgdir name="4032535">
+      <string name="name" value="Adolescent Onyx Dragon Horn "/>
+      <string name="desc" value="A piece of an Adolescent Onyx Dragon&apos;s horn."/>
+    </imgdir>
+    <imgdir name="4032536">
+      <string name="name" value="Onyx Dragon Footprint"/>
+      <string name="desc" value="A footprint left behind by an Onyx Dragon."/>
+    </imgdir>
+    <imgdir name="4032537">
+      <string name="name" value="Onyx Dragon Scale "/>
+      <string name="desc" value="A scale from an Onyx Dragon."/>
+    </imgdir>
+    <imgdir name="4032538">
+      <string name="name" value="Onyx Dragon Footprint"/>
+      <string name="desc" value="A footprint left behind by an Onyx Dragon."/>
+    </imgdir>
+    <imgdir name="4032539">
+      <string name="name" value="Onyx Dragon Horn"/>
+      <string name="desc" value="A piece of a fully matured Onyx Dragon&apos;s horn."/>
+    </imgdir>
+    <imgdir name="4032557">
+      <string name="name" value="Shipwreck Treasure Chest"/>
+      <string name="desc" value="A treasure chest from a shipwreck."/>
+    </imgdir>
+    <imgdir name="4032632">
+      <string name="name" value="Baby Onyx Dragon Horn "/>
+      <string name="desc" value="A piece of a Baby Onyx Dragon&apos;s horn. "/>
+    </imgdir>
+    <imgdir name="4032639">
+      <string name="name" value="Twin Dragon&apos;s Egg"/>
+      <string name="desc" value="A solid-looking dragon egg that apparently holds legendary treasures, according to the Shadow Knight Rene. It can only be opened using the Twin Dragon&apos;s Egg Incubator."/>
+    </imgdir>
+    <imgdir name="4161052">
+      <string name="name" value="Evan Guide "/>
+      <string name="desc" value="A guide for Evan. \n#cYou can open the book by double-clicking onit.#"/>
     </imgdir>
     <imgdir name="4220147">
       <string name="name" value="Mind of Maple Necklace"/>
@@ -9412,20 +9523,24 @@
       <string name="desc" value="Use this coupon on a Gachapon machine to het a veriety of food. "/>
     </imgdir>
     <imgdir name="4161049">
-      <string name="name" value="MISSING NAME"/>
-      <string name="desc" value="MISSING INFO"/>
+      <string name="name" value="Dragon Types and Characteristics (Vol.I) "/>
+      <string name="desc" value="A book that describes the different types of dragons and their characteristics. It appears that there is a second volume as well. \n#cYou can open the book by double-clicking on it.#"/>
     </imgdir>
     <imgdir name="4161050">
-      <string name="name" value="MISSING NAME"/>
-      <string name="desc" value="MISSING INFO"/>
+      <string name="name" value="Dragon Types and Characteristics (Vol.II)"/>
+      <string name="desc" value="A book that describes the different types of dragons and their characteristics. It continues from the first volume. \n#cYou can open the book by double-clicking on it.#"/>
     </imgdir>
     <imgdir name="4161051">
-      <string name="name" value="MISSING NAME"/>
-      <string name="desc" value="MISSING INFO"/>
+      <string name="name" value="Crew Member&apos;s Voyage Log"/>
+      <string name="desc" value="A Voyage Log written by a Crew Member. It&apos;s said to contain information about dragons... \n#cYou can open the book by double-clicking it.#"/>
     </imgdir>
     <imgdir name="4161999">
       <string name="name" value="MISSING NAME"/>
       <string name="desc" value="MISSING INFO"/>
+    </imgdir>
+    <imgdir name="4310001">
+      <string name="name" value="Gold Pick "/>
+      <string name="desc" value="A guitar pick made of gold that can be traded for an item when Inkwell returns from his performance. "/>
     </imgdir>
   </imgdir>
 </imgdir>

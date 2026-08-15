@@ -2004,6 +2004,13 @@
     <string name="name" value="Janus Package (F)"/>
     <uol name="icon" value="../9101391/icon"/>
   </imgdir>
+  <imgdir name="9101608">
+    <string name="name" value="Rainbow Package"/>
+    <string name="desc" value="Hat that #cchanges its color depending on a day of the week#"/>
+    <canvas name="icon" width="28" height="29">
+      <vector name="origin" x="-2" y="30"/>
+    </canvas>
+  </imgdir>
   <imgdir name="9101613">
     <string name="name" value="Red School Package"/>
     <canvas name="icon" width="29" height="29">
@@ -2637,18 +2644,21 @@
     </canvas>
   </imgdir>
   <imgdir name="9102065">
+    <string name="desc" value="In order to use this item, Explorers must be over level 70 and other classes must be over level 50. Must have an in-game mount (Hog, Silver Mane, Red Draco, and etc) to use this mount cover."/>
     <string name="name" value="Pink Scooter"/>
     <canvas name="icon" width="32" height="32">
       <vector name="origin" x="0" y="32"/>
     </canvas>
   </imgdir>
   <imgdir name="9102066">
+    <string name="desc" value="In order to use this item, Explorers must be over level 70 and other classes must be over level 50. Must have an in-game mount (Hog, Silver Mane, Red Draco, and etc) to use this mount cover."/>
     <string name="name" value="Black Scooter"/>
     <canvas name="icon" width="32" height="32">
       <vector name="origin" x="0" y="32"/>
     </canvas>
   </imgdir>
   <imgdir name="9101925">
+    <string name="desc" value="In order to use this item, Explorers must be over level 70 and other classes must be over level 50. Must have an in-game mount (Hog, Silver Mane, Red Draco, and etc) to use this mount cover."/>
     <canvas name="icon" width="32" height="32">
       <vector name="origin" x="0" y="32"/>
     </canvas>
@@ -3022,6 +3032,68 @@
     <string name="name" value="Baby Tiger Package"/>
     <canvas name="icon" width="36" height="36">
       <vector name="origin" x="0" y="30"/>
+    </canvas>
+  </imgdir>
+  <imgdir name="9102282">
+    <string name="name" value="Strawberry Package"/>
+    <canvas name="icon" width="37" height="38">
+      <vector name="origin" x="5" y="38"/>
+    </canvas>
+  </imgdir>
+  <imgdir name="9102283">
+    <string name="name" value="Green Leaf Package"/>
+    <canvas name="icon" width="35" height="31">
+      <vector name="origin" x="2" y="32"/>
+    </canvas>
+  </imgdir>
+  <imgdir name="9102287">
+    <string name="name" value="Evan Package (M)"/>
+    <string name="desc" value="When you equip all Evan cash items except a Wand, a special Evan effect will appear behind the character."/>
+    <canvas name="icon" width="32" height="32">
+      <vector name="origin" x="0" y="32"/>
+    </canvas>
+  </imgdir>
+  <imgdir name="9102288">
+    <string name="name" value="Evan Package (F)"/>
+    <string name="desc" value="When you equip all Evan cash items except a Wand, a special Evan effect will appear behind the character."/>
+    <canvas name="icon" width="32" height="32">
+      <vector name="origin" x="0" y="32"/>
+    </canvas>
+  </imgdir>
+  <imgdir name="9102289">
+    <string name="name" value="Magic Guard Package 1"/>
+    <canvas name="icon" width="36" height="36">
+      <vector name="origin" x="2" y="34"/>
+    </canvas>
+  </imgdir>
+  <imgdir name="9102290">
+    <string name="name" value="Magic Guard Package 2"/>
+    <canvas name="icon" width="36" height="36">
+      <vector name="origin" x="2" y="34"/>
+    </canvas>
+  </imgdir>
+  <imgdir name="9102291">
+    <string name="name" value="Magic Booster Package"/>
+    <canvas name="icon" width="36" height="36">
+      <vector name="origin" x="2" y="34"/>
+    </canvas>
+  </imgdir>
+  <imgdir name="9102292">
+    <string name="name" value="Critical Magic Package"/>
+    <canvas name="icon" width="36" height="36">
+      <vector name="origin" x="2" y="34"/>
+    </canvas>
+  </imgdir>
+  <imgdir name="9102293">
+    <string name="name" value="Critical Booster Package 1"/>
+    <canvas name="icon" width="36" height="36">
+      <vector name="origin" x="2" y="34"/>
+    </canvas>
+  </imgdir>
+  <imgdir name="9102294">
+    <string name="name" value="Critical Booster Package 2"/>
+    <canvas name="icon" width="36" height="36">
+      <vector name="origin" x="2" y="34"/>
     </canvas>
   </imgdir>
 </imgdir>

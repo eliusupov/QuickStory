@@ -5916,6 +5916,112 @@
       </imgdir>
     </imgdir>
   </imgdir>
+  <imgdir name="04161052">
+    <imgdir name="info">
+      <canvas name="icon" width="30" height="32">
+        <vector name="origin" x="-1" y="32"/>
+      </canvas>
+      <canvas name="iconRaw" width="30" height="31">
+        <vector name="origin" x="-1" y="32"/>
+      </canvas>
+      <int name="price" value="1"/>
+      <int name="only" value="1"/>
+      <int name="tradeBlock" value="1"/>
+      <int name="notSale" value="1"/>
+    </imgdir>
+    <imgdir name="book">
+      <imgdir name="0">
+        <imgdir name="0">
+          <string name="text" value="#eEvan Guide#n"/>
+          <int name="align" value="1"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value="Table of Contents\n#L1##b1. Basic Controls#k#l\n#L7##b2. What is an item?#k#l"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="1">
+        <imgdir name="0">
+          <string name="text" value="1-1. Basic Controls"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value="#eLeft, Right Arrows#n: Move left and right\n#eUp, Down Arrows#n: Climb a rope or ladder, use portal\n#eAlt#n: Jump\n#eCtrl#n: Attack\n#eZ or 0 on NumPad#n: Pick up items\n#eE#n: Open Equipment window\n#eI#n: Open Item Inventory window\n#eS#n: Open Character Stat window\n#eK#n: Open Skill window"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="2">
+        <imgdir name="0">
+          <string name="text" value="#bTip.#k You can easily access Use items and Skills by assigning them to hotkeys located at the bottom right of the screen."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="3">
+        <imgdir name="0">
+          <string name="text" value="1-2. Commands"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value="Perform various functions by entering the commands provided below into the chat window."/>
+        </imgdir>
+        <imgdir name="2">
+          <string name="text" value="(1) #eChat#n\n"/>
+        </imgdir>
+        <imgdir name="3">
+          <string name="text" value="#e/all#n: Talk in regular chat mode.\n#e/buddy#n: Talk in buddy chat mode.\n#e/party#n: Talk in party chat mode.\n#e/Guild#n: Talk in guild chat mode.\n#e/whisper [character name]#n: Talk to a particular person."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="4">
+        <imgdir name="0">
+          <string name="text" value="(2) #eAction#n\n"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value="#e/find [character name]#n: Check whether a character is online and the character&apos;s current location.\n#e/trade [character name]#n: Request a trade."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="5">
+        <imgdir name="0">
+          <string name="text" value="(3) #eParty#n\n"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value="#e/partyinfo#n: Display information about current party members.\n#e/makeparty#n: Create a new party.\n#e/leaveparty#n: Leave the current party."/>
+        </imgdir>
+        <imgdir name="2">
+          <string name="text" value="#e/partyinvite#n: Invite a new party member.#b(Party Leader)#k\n#e/partyexpell#n: Kick a party member out of the party.#b(Party Leader)#k"/>
+        </imgdir>
+        <imgdir name="3">
+          <string name="text" value="#L1##bReturn to the Table of Contents#k#l"/>
+          <string name="align" value="2"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="6">
+        <imgdir name="0">
+          <string name="text" value="2. What is an item?"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value="(1) #eEquipment Items#n\n  These items can be equipped on characters to boost abilities. You can also equip your purchased cash items, which customize the look of a character."/>
+        </imgdir>
+        <imgdir name="2">
+          <string name="text" value="To equip an item, open the Equipment window and drag the item to the corresponding equipment inventory slot, or simply double-click on the item you want to equip."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="7">
+        <imgdir name="0">
+          <string name="text" value="(2) #eUse Items#n\n  These items consist of potions that recover HP/MP, scrolls that upgrade equipment, and other consumable items. Double-click on an item to use it. The effects of the item will be applied and then the item will disappear."/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value="(3)#e Etc Items#n\n  These include items dropped by monsters, quest items, ores, jewels, and other miscellaneous items."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="8">
+        <imgdir name="0">
+          <string name="text" value="These items don&apos;t do much by themselves but can be used to complete quests and/or interact with NPCs."/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value="(4)#e Cash Items#n\n  Items that can be purchased in the Cash Shop, primarily to customize the look of a character and create other visual effects. #rCash items can be purchased by charging your account with cash. #k"/>
+        </imgdir>
+        <imgdir name="2">
+          <string name="text" value="\n#L1##bReturn to the Table of Contents#k#l"/>
+          <int name="align" value="2"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
   <imgdir name="04161999">
     <imgdir name="info">
       <canvas name="icon" width="34" height="30">
@@ -6037,6 +6143,7 @@
       </canvas>
       <int name="price" value="1"/>
       <int name="only" value="1"/>
+      <int name="quest" value="1"/>
       <int name="tradeBlock" value="1"/>
       <int name="notSale" value="1"/>
     </imgdir>
@@ -6048,6 +6155,142 @@
         </imgdir>
         <imgdir name="1">
           <string name="text" value="  목  차\n#L1##b1. 노블레스란?#k#l\n#L3##b2. 간단한 조작 방법#k#l\n#L9##b3. 아이템이란?#k#l\n#L11##b4. AP와 SP#k#l\n#L14##b5. 전직이란?#k#l\n#L15##b6. 1차 전직 조건과 방법#k#l"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="1">
+        <imgdir name="0">
+          <string name="text" value="#e1. Prologue#n"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value="Travelers of Maple World, what do you think of when you hear the word &quot;Dragon&quot;?"/>
+        </imgdir>
+        <imgdir name="2">
+          <string name="text" value=" Do you think of the three-headed incarnation of evil, the vicious Horntail? Do you get the ticklish urge even this moment to go hunt that monster, since Dragons yield such high EXP?"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="10">
+        <imgdir name="0">
+          <string name="text" value="  c. Green Dragons"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" Dragons with green scales generally have the wind attribute. They are playful and outgoing. They love forests and do not permit the destruction of nature."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="11">
+        <imgdir name="0">
+          <string name="text" value="  d. Gold Dragons"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" Dragons with gold scales generally have the holy attribute. They can be overly carefree, as they are calm and peaceful by nature."/>
+        </imgdir>
+        <imgdir name="2">
+          <string name="text" value=" Gold Dragons will fulfill your requests no matter what, but no one can tell how long it will take."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="12">
+        <imgdir name="0">
+          <string name="text" value="  e. Black Dragons"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" These Dragons have black scales and black horns. While most dragons have horns that are a different color from their scales, #bBlack Dragons are entirely black, including their horns#k."/>
+        </imgdir>
+        <imgdir name="2">
+          <string name="text" value=" These Dragons generally have the darkness attribute, and although they are quiet and considerate, they can be insidious."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="13">
+        <imgdir name="0">
+          <string name="text" value=" Now please note that this is not the only way to categorize Dragons. There are many Dragons that have scale colors that were not mentioned. Also, some Dragons may look like one of the Dragons mentioned above, yet have completely different personalities and characteristics."/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" If you wish to find out more about Dragons not mentioned above, please refer to Dragon Types and Characteristics (Vol. II)."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="14">
+        <imgdir name="0">
+          <string name="text" value="\n\n\n\n\n\n\n\n\n\n\n\n\n\nContinued in\nDragon Types and Characteristics (Vol. II)."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="2">
+        <imgdir name="0">
+          <string name="text" value=" Ah, but Dragons are not monsters. They are another race of creatures, both wise and intelligent."/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" Granted, there are evil monsters that resemble Dragons. But don&apos;t write off all Dragons simply because of that. Good and evil exist in every species. Surely, there are some Dragons that can live in peace with us."/>
+        </imgdir>
+        <imgdir name="2">
+          <string name="text" value=" Sadly, some people don&apos;t recognize that, and think of all"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="3">
+        <imgdir name="0">
+          <string name="text" value="Dragons as monsters that ought to be eliminated."/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" This book will provide detailed and practical information pertaining to Dragon types and characteristics, allowing you to know which Dragons to avoid and which to befriend."/>
+        </imgdir>
+        <imgdir name="2">
+          <string name="text" value=" Our hope is that this will help prevent misunderstandings and allow all races to live in peace with Dragons."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="4">
+        <imgdir name="0">
+          <string name="text" value="#e2. Definition of a Dragon#n"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" First, we must understand: What is a Dragon? Lizards have short limbs and over-sized bodies, but are they Dragons? Definitely not."/>
+        </imgdir>
+        <imgdir name="2">
+          <string name="text" value=" You see, unlike lizards, Dragons have feelings and rationality, and they can communicate with humans."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="5">
+        <imgdir name="0">
+          <string name="text" value="People often mistake wyverns, drakes, dragon turtles, and newts as Dragons because they look similar. Other creatures with sturdy horns, scales, and tails and that eject fire are also commonly mistaken as Dragons. But they are actually called quasi dragons, because they lack the intelligence of Dragons. Quasi dragons are monsters, though they often serve under real Dragons since they have the tendency to obey stronger creatures."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="6">
+        <imgdir name="0">
+          <string name="text" value="#e3. Dragon Types and Characteristics#n"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" There are many ways to categorize Dragons, such as scale color, horn shape, physical build, habitat, and Dragon personality."/>
+        </imgdir>
+        <imgdir name="2">
+          <string name="text" value=" However, since this book is meant for the general population, it will only cover the major types of common and special Dragons."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="7">
+        <imgdir name="0">
+          <string name="text" value=" A. Common Dragons"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" Categorizing Dragons by their scale color is the most basic and convenient method of distinguishing Dragon types."/>
+        </imgdir>
+        <imgdir name="2">
+          <string name="text" value=" In Leafre, this method is used to cateogorize and breed dragons. "/>
+        </imgdir>
+        <imgdir name="3">
+          <string name="text" value=" Knowing a Dragon&apos;s personality can easily help you establish good rapport with the Dragon."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="8">
+        <imgdir name="0">
+          <string name="text" value="  a. Red Dragons"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" Dragons with red scales generally have the fire attribute. They must be approached with caution as they tend to be volatile, although they are just and loyal."/>
+        </imgdir>
+        <imgdir name="2">
+          <string name="text" value=" If you have irritated a Red Dragon, beware! The dragon may attack with Fire Breath."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="9">
+        <imgdir name="0">
+          <string name="text" value="  b. Blue Dragons"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" Dragons with blue scales generally have the ice attribute. They are perceptive and cold-hearted. They can be petty, so do not get on their bad side."/>
         </imgdir>
       </imgdir>
     </imgdir>
@@ -6062,6 +6305,7 @@
       </canvas>
       <int name="price" value="1"/>
       <int name="only" value="1"/>
+      <int name="quest" value="1"/>
       <int name="tradeBlock" value="1"/>
       <int name="notSale" value="1"/>
     </imgdir>
@@ -6073,6 +6317,104 @@
         </imgdir>
         <imgdir name="1">
           <string name="text" value="  목  차\n#L1##b1. 레전드란?#k#l\n#L3##b2. 간단한 조작 방법#k#l\n#L9##b3. 아이템이란?#k#l\n#L11##b4. AP와 SP#k#l\n#L14##b5. 전직이란?#k#l\n#L15##b6. 1차 전직 조건과 방법#k#l"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="1">
+        <imgdir name="0">
+          <string name="text" value=" A. Special Dragons"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" Sometimes, a dragon may physically appear to be a colored dragon yet have completely different characteristics."/>
+        </imgdir>
+        <imgdir name="2">
+          <string name="text" value=" These are known as special dragons."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="10">
+        <imgdir name="0">
+          <string name="text" value=" Horntail may be an intelligent Dragon, but it is currently regarded as a monster in Maple World due to its vicious personality. Leafre is constantly recruiting members to join its expeditionary team to defeat Horntail, who has betrayed Nine Spirit and put Minar Forest in danger."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="11">
+        <imgdir name="0">
+          <string name="text" value=" Of course, it is not easy to challenge Horntail. Currently, Horntail is the most powerful Dragon in Maple World. Of the three Dragon kings, Afrien went missing and Nine Spirit is in the process of recuperating from Horntail&apos;s betrayal, so Horntail stands unchallenged in Maple World."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="12">
+        <imgdir name="0">
+          <string name="text" value="#e4. Conclusion#n"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" Dragons in Maple World have their own thoughts, feelings, and will. Not all Dragons are good, but that isn&apos;t a good enough reason to regard all Dragons as monsters."/>
+        </imgdir>
+        <imgdir name="2">
+          <string name="text" value=" We can befriend Dragons, with the right mindset and diplomacy. So study them, and then give it a shot! Your life will surely be enriched."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="13">
+        <imgdir name="0">
+          <string name="text" value="\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n&lt;The End&gt;"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="2">
+        <imgdir name="0">
+          <string name="text" value="  a. Serpent Dragons"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" While common Dragons have plump bodies and long tails, a Serpent Dragon resembles a snake, with a long body and distinctive facial features. Serpent Dragons live near the sea and feed on small fish."/>
+        </imgdir>
+        <imgdir name="2">
+          <string name="text" value=" The personality of a Serpent Dragon can be simply described as neutral. It does not attack unless threatened, and it allows others entry into its territory if -- "/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="3">
+        <imgdir name="0">
+          <string name="text" value="and only if -- they pay the proper fee."/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value="Serpent Dragons do not have a specific attribute. They use both Ice Breath and Fire Breath, and have resistances to both. It is said they are proficient in magic, although they seldom use it."/>
+        </imgdir>
+        <imgdir name="2">
+          <string name="text" value=" Although it is hard to find Serpent Dragons in Victoria Island and Ossyria, it has been reported that a Serpent Dragon named Leviathan has appeared near Minar Forest."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="4">
+        <imgdir name="0">
+          <string name="text" value="  b. Onyx Dragons"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" At first glance, Onyx Dragons look like Black Dragons because they both have black scales, but Onyx Dragons have gold horns and their scales have a clear and mysterious glow."/>
+        </imgdir>
+        <imgdir name="2">
+          <string name="text" value=" They have the most unique growth process of any Dragon. "/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="5">
+        <imgdir name="0">
+          <string name="text" value=" Onyx Dragons grow physically depending on their mental growth. A newborn Onyx Dragon has unstable mental and physical abilities. Even after time passes, it will not develop if left alone. The only way for an Onyx Dragon to grow is to enter a Spirit Pact with another race."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="6">
+        <imgdir name="0">
+          <string name="text" value=" An Onyx Dragon that enters a Spirit Pact will be spiritually linked to that person for eternity. Once that happens, the Onyx Dragon will finally recognize itself as a being and begin to develop intelligence. When its master grows, the Onyx Dragon will grow accordingly."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="7">
+        <imgdir name="0">
+          <string name="text" value=" A spirit can develop endlessly, so an Onyx Dragon&apos;s growth potential is also endless. Onyx Dragons with good masters can acquire unrivaled amounts of power. Unfortunately, Onyx Dragons are said to be extinct."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="8">
+        <imgdir name="0">
+          <string name="text" value="  c. Mutant Dragons"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" Who is the most famous Dragon in all of Maple World? Ask a hundred people and every single one will say, &quot;Horntail&quot;! However, only a handful of people have ever seen Horntail and thus, only a handful of people know that Horntail is a Mutant Dragon."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="9">
+        <imgdir name="0">
+          <string name="text" value=" Horntail can be categorized as a Black Dragon by its scale color. But because it is a three-headed Dragon, it is recognized as a special Dragon instead of a common Dragon. Each of Horntail&apos;s three heads has different abilities, and one of the heads is said to use a powerful luring skill."/>
         </imgdir>
       </imgdir>
     </imgdir>
@@ -6087,6 +6429,7 @@
       </canvas>
       <int name="price" value="1"/>
       <int name="only" value="1"/>
+      <int name="quest" value="1"/>
       <int name="tradeBlock" value="1"/>
       <int name="notSale" value="1"/>
     </imgdir>
@@ -6098,6 +6441,167 @@
         </imgdir>
         <imgdir name="1">
           <string name="text" value="  목  차\n#L1##b1. 레전드란?#k#l\n#L3##b2. 간단한 조작 방법#k#l\n#L9##b3. 아이템이란?#k#l\n#L11##b4. AP와 SP#k#l\n#L14##b5. 전직이란?#k#l\n#L15##b6. 1차 전직 조건과 방법#k#l"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="1">
+        <imgdir name="0">
+          <string name="text" value="#ePrologue#n"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value="  This book is a collection of my experiences while out to sea as a crew member. My experiences reveal the thrilling life of a man of the sea, so read it if you wish to live vicariously through my adventures."/>
+        </imgdir>
+        <imgdir name="2">
+          <string name="text" value=" But remember: a true adventurer is someone who has firsthand experience of the world, and not a person who merely reads someone else&apos;s voyage log."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="10">
+        <imgdir name="0">
+          <string name="text" value="July 7th - Sunny"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" I&apos;m so relaxed. I&apos;ve been fishing. Something isn&apos;t quite right, though. The sea gulls have stopped visiting. Are we too far from their home now?"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="11">
+        <imgdir name="0">
+          <string name="text" value="July 8th - Sunny"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" This sea is much too quiet. I&apos;m uneasy. I mentioned this to one of the guys and he just laughed. I don&apos;t know whether I&apos;m being mocked or not. I just hope I&apos;m wrong..."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="12">
+        <imgdir name="0">
+          <string name="text" value="July 9th - Sunny"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" I asked Captain Alpha if he thought anything felt strange to him. He laughed and said I worry too much. I hope he&apos;s right. He does have more experience than I do."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="13">
+        <imgdir name="0">
+          <string name="text" value="July 10th - A sudden storm!"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" We were hit by a ferocious storm! Thunder Bolt happened to be in the eye of the storm, which explains why the weather was so calm. No wonder those sea gulls stopped visiting. The storm will most likely get stronger. Will we survive this calamity?"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="14">
+        <imgdir name="0">
+          <string name="text" value="July 11th - Overcast"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" When I opened my eyes, I was lying on the shore of a strange island. Thunder Bolt must be completely wrecked. I wonder if Captain Alpha and the others are okay, but right now, I must worry about myself. This island is covered in ice. I&apos;m freezing! I wrapped myself in a tattered sail I found floating nearby. I still have my harpoon on me, so I can hunt fish. I&apos;m glad I didn&apos;t lose my voyage log in the midst of all this."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="15">
+        <imgdir name="0">
+          <string name="text" value="July 12th - Overcast, then rainy"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" The island is covered in snow. I see some animals and plants but no sign of human life. Could this be a deserted island? I hope not. Anyway, it looks like rain. I should head inland and look for shelter of some sort."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="16">
+        <imgdir name="0">
+          <string name="text" value="July 13th - Rainy"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" I almost fainted! I hid myself in a cave, but as I wandered deeper, I found a monster. A Dragon! I&apos;ve only heard of such creatures in fairy tales... Now, before my very eyes, there is a Dragon, frozen in ice."/>
+        </imgdir>
+        <imgdir name="2">
+          <string name="text" value=" It has #bblack scales and four golden horns#k. Quite intimidating. I&apos;m huddled in a nook near the entrance of the cave because I&apos;m scared to go too close. If it awakens, I can flee outside."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="17">
+        <imgdir name="0">
+          <string name="text" value="July 14th - Rainy, then sunny"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" Luckily, the Dragon hasn&apos;t woken up. I was visited by some friendly faces today. The sea gulls! They recognized me, I think. I fed them some fish, and then a brilliant idea came to me. I ripped a piece of my clothing and wrote a note to whomever, asking them to rescue me. Then I tied it around one of the sea gull&apos;s legs. I hope someone finds it."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="18">
+        <imgdir name="0">
+          <string name="text" value="July 15th - Overcast, then rainy"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" Constant rain. I waited all day by the shore but didn&apos;t see a single ship. No one sails through the Karibbean Triangle, so I only have one hope. The sea gulls..."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="19">
+        <imgdir name="0">
+          <string name="text" value="July 16th - Sunny"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value="   I saw a ship! It reached the shore within seconds. The sea gulls had surrounded the ship and guided it to me. It is indeed a rescue ship! I&apos;m saved! My sea gulls saved my life!"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="2">
+        <imgdir name="0">
+          <string name="text" value="June 29th - Sunny"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" I have been on dry land for too long! Soon, I embark on a new voyage. This time, I board the Thunder Bolt under the command of Captain Alpha. He is well known, so I have high hopes for this voyage."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="3">
+        <imgdir name="0">
+          <string name="text" value="June 30th - Sunny"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" A lovely day. The voyage is off to a smooth start."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="4">
+        <imgdir name="0">
+          <string name="text" value="July 1st - Sunny"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value="The wind is favorable. We&apos;re sailing faster than expected. Captain Alpha suggested we take a shortcut and sail through the Karibbean Triangle."/>
+        </imgdir>
+        <imgdir name="2">
+          <string name="text" value="I&apos;m sure the path is shorter, but that part of the sea is known for its atrocious weather and deadly reefs. That worries me."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="5">
+        <imgdir name="0">
+          <string name="text" value="July 2nd - Sunny"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" We agreed to enter Karibbean Triangle as Captain Alpha suggested. I was nervous, but we haven&apos;t encountered any problems thanks to the proficient crew members. Actually, it&apos;s going extremely well."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="6">
+        <imgdir name="0">
+          <string name="text" value="July 3rd - Sunny"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" Everything seems peaceful. I worried for nothing."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="7">
+        <imgdir name="0">
+          <string name="text" value="July 4th - Sunny"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" The sea is never this calm here. We must have luck on our side. Many crew members, including the Captain, have taken to napping on the deck to bask in the lovely weather."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="8">
+        <imgdir name="0">
+          <string name="text" value="July 5th - Sunny"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" I&apos;ve been feeding the sea gulls. Now, they visit me. On land, I scare people with my threatening appearance, but the sea gulls don&apos;t care. It&apos;s so peaceful, being here with the gulls. And pirates aren&apos;t foolish enough to attack a huge ship like ours, so I don&apos;t have to worry about that, either.."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="9">
+        <imgdir name="0">
+          <string name="text" value="July 6th - Sunny"/>
+        </imgdir>
+        <imgdir name="1">
+          <string name="text" value=" We&apos;re about to pass leave the Karibbean Triangle. The expected 20 day voyage has been shortened to 10. I&apos;m glad we followed Captain Alpha&apos;s instincts."/>
         </imgdir>
       </imgdir>
     </imgdir>

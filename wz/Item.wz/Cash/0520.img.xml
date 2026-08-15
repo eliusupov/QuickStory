@@ -36,4 +36,28 @@
       <int name="cash" value="1"/>
     </imgdir>
   </imgdir>
+  <imgdir name="05200009">
+    <imgdir name="info">
+      <canvas name="icon" width="29" height="29">
+        <vector name="origin" x="-2" y="29"/>
+      </canvas>
+      <canvas name="iconRaw" width="29" height="29">
+        <vector name="origin" x="-2" y="29"/>
+      </canvas>
+      <int name="cash" value="1"/>
+      <int name="maplepoint" value="1000000"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="05200010">
+    <imgdir name="info">
+      <canvas name="icon" width="29" height="30">
+        <vector name="origin" x="-2" y="29"/>
+      </canvas>
+      <canvas name="iconRaw" width="29" height="29">
+        <vector name="origin" x="-2" y="29"/>
+      </canvas>
+      <int name="cash" value="1"/>
+      <int name="maplepoint" value="10000"/>
+    </imgdir>
+  </imgdir>
 </imgdir>

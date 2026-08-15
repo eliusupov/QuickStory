@@ -1,13 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <imgdir name="01472069.img">
   <imgdir name="info">
+    <imgdir name="addition">
+      <imgdir name="mobcategory">
+        <int name="category" value="6"/>
+        <int name="damage" value="20"/>
+      </imgdir>
+      <imgdir name="skill">
+        <imgdir name="con">
+          <int name="craft" value="475"/>
+        </imgdir>
+        <int name="id" value="90001003"/>
+        <int name="level" value="1"/>
+      </imgdir>
+      <imgdir name="critical">
+        <imgdir name="con">
+          <int name="job" value="412"/>
+        </imgdir>
+        <int name="prob" value="5"/>
+        <int name="damage" value="20"/>
+      </imgdir>
+    </imgdir>
+    <int name="durability" value="25000"/>
     <canvas name="icon" width="28" height="30">
       <vector name="origin" x="-1" y="30"/>
     </canvas>
     <canvas name="iconRaw" width="28" height="29">
       <vector name="origin" x="-1" y="30"/>
     </canvas>
+    <int name="incDEX" value="1"/>
     <string name="islot" value="Wp"/>
+    <int name="tradeAvailable" value="2"/>
+    <int name="tradeBlock" value="1"/>
     <string name="vslot" value="Wp"/>
     <int name="walk" value="1"/>
     <int name="stand" value="1"/>

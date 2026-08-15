@@ -7356,7 +7356,455 @@
       <int name="cash" value="1"/>
     </imgdir>
     <imgdir name="effect">
+      <imgdir name="Awakening">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="Earthquake">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="OnixBlessing">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="blaze">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="breathe_prepare">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="darkFog">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
       <imgdir name="default">
+      </imgdir>
+      <imgdir name="dragonBreathe">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="dragonIceBreathe">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="dragonThrust">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="elementalReset">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="fireCircle">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="flameWheel">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="fly2">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="fly2Move">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="ghostLettering">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="icebreathe_prepare">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="illusion">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="killingWing">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="lightingBolt">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="magicBooster">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="magicFlare">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="magicRegistance">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="magicShield">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="magicmissile">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="mapleHero">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="recoveryAura">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="slow">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="soulStone">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
       </imgdir>
       <imgdir name="stand1">
         <canvas name="0" width="183" height="70">
@@ -9368,7 +9816,455 @@
       <int name="cash" value="1"/>
     </imgdir>
     <imgdir name="effect">
+      <imgdir name="Awakening">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="Earthquake">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="OnixBlessing">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="blaze">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="breathe_prepare">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="darkFog">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
       <imgdir name="default">
+      </imgdir>
+      <imgdir name="dragonBreathe">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="dragonIceBreathe">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="dragonThrust">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="elementalReset">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="fireCircle">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="flameWheel">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="fly2">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="fly2Move">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="ghostLettering">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="icebreathe_prepare">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="illusion">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="killingWing">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="lightingBolt">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="magicBooster">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="magicFlare">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="magicRegistance">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="magicShield">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="magicmissile">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="mapleHero">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="recoveryAura">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="slow">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="soulStone">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
       </imgdir>
       <imgdir name="stand1">
         <canvas name="0" width="194" height="93">
@@ -11417,7 +12313,455 @@
       <int name="cash" value="1"/>
     </imgdir>
     <imgdir name="effect">
+      <imgdir name="Awakening">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="Earthquake">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="OnixBlessing">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="blaze">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="breathe_prepare">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="darkFog">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
       <imgdir name="default">
+      </imgdir>
+      <imgdir name="dragonBreathe">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="dragonIceBreathe">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="dragonThrust">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="elementalReset">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="fireCircle">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="flameWheel">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="fly2">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="fly2move">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="ghostLettering">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="icebreathe_prepare">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="illusion">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="killingWing">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="lightingBolt">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="magicBooster">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="magicFlare">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="magicRegistance">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="magicShield">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="magicmissile">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="mapleHero">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="recoveryAura">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="slow">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
+      </imgdir>
+      <imgdir name="soulStone">
+        <uol name="0" value="../stand1/0"/>
+        <uol name="1" value="../stand1/1"/>
+        <uol name="2" value="../stand1/2"/>
+        <uol name="3" value="../stand1/3"/>
+        <uol name="4" value="../stand1/4"/>
+        <uol name="5" value="../stand1/5"/>
+        <uol name="6" value="../stand1/6"/>
+        <uol name="7" value="../stand1/7"/>
+        <uol name="8" value="../stand1/8"/>
+        <uol name="9" value="../stand1/9"/>
+        <uol name="10" value="../stand1/10"/>
+        <uol name="11" value="../stand1/11"/>
+        <int name="z" value="-1"/>
+        <int name="pos" value="1"/>
       </imgdir>
       <imgdir name="stand1">
         <canvas name="0" width="88" height="82">

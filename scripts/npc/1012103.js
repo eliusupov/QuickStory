@@ -28,8 +28,12 @@ var status = 0;
 var beauty = 0;
 var hairprice = 1000000;
 var haircolorprice = 1000000;
-var mhair_v = Array(30060, 30140, 30200, 30210, 30310, 33040, 33100);
-var fhair_v = Array(31150, 31300, 31350, 31700, 31740, 34050, 34110);
+// ticket 04: the five named v84 hair families are appended here (base id = colour 0; the
+// loop below adds the player's current colour digit, and pushIfItemExists drops any id that
+// String.wz/Eqp.img does not name, so this stays safe if the WZ merge is not installed).
+// Male 33xxx / female 31xxx,34xxx, matching the existing entries.
+var mhair_v = Array(30060, 30140, 30200, 30210, 30310, 33040, 33100, 33030, 33050, 33150);
+var fhair_v = Array(31150, 31300, 31350, 31700, 31740, 34050, 34110, 31990, 34060);
 var hairnew = Array();
 
 function start() {

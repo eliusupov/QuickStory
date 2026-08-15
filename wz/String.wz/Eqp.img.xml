@@ -2,6 +2,13 @@
 <imgdir name="Eqp.img">
   <imgdir name="Eqp">
     <imgdir name="Accessory">
+      <imgdir name="1012161">
+        <string name="name" value="루돌프의 빛나는 코"/>
+      </imgdir>
+      <imgdir name="1022097">
+        <string name="name" value="Dragon Glasses "/>
+        <string name="desc" value="Glasses containing the power of the Dragon."/>
+      </imgdir>
       <imgdir name="1122040">
         <string name="name" value="Bronze Maple Necklace"/>
         <string name="desc" value="A light-weight bronze Maple Necklace."/>
@@ -1525,32 +1532,71 @@
         <string name="desc" value="MISSING INFO"/>
       </imgdir>
       <imgdir name="1142143">
-        <string name="name" value="MISSING NAME"/>
-        <string name="desc" value="MISSING INFO"/>
+        <string name="name" value="류호 이주민의 훈장"/>
       </imgdir>
       <imgdir name="1142144">
-        <string name="name" value="MISSING NAME"/>
-        <string name="desc" value="MISSING INFO"/>
+        <string name="name" value="DS Mania Medal"/>
       </imgdir>
       <imgdir name="1142145">
-        <string name="name" value="MISSING NAME"/>
-        <string name="desc" value="MISSING INFO"/>
+        <string name="name" value="프리미엄 PC방"/>
       </imgdir>
       <imgdir name="1142149">
-        <string name="name" value="MISSING NAME"/>
-        <string name="desc" value="MISSING INFO"/>
+        <string name="name" value="류호 도전자의 훈장"/>
       </imgdir>
       <imgdir name="1142150">
-        <string name="name" value="MISSING NAME"/>
-        <string name="desc" value="MISSING INFO"/>
+        <string name="name" value="류호 정착자의 훈장"/>
       </imgdir>
       <imgdir name="1142151">
-        <string name="name" value="MISSING NAME"/>
-        <string name="desc" value="MISSING INFO"/>
+        <string name="name" value="류호 개척자의 훈장"/>
+      </imgdir>
+      <imgdir name="1142156">
+        <string name="name" value="Dragon Master "/>
+      </imgdir>
+      <imgdir name="1142157">
+        <string name="name" value="Dragon Master "/>
+      </imgdir>
+      <imgdir name="1142158">
+        <string name="name" value="Hero&apos;s Successor "/>
       </imgdir>
       <imgdir name="1142165">
         <string name="name" value="MISSING NAME"/>
         <string name="desc" value="MISSING INFO"/>
+      </imgdir>
+      <imgdir name="1142166">
+        <string name="name" value="2009루돌프의 훈장"/>
+      </imgdir>
+      <imgdir name="1142170">
+        <string name="name" value="The 3rd Honorable Mesoranger "/>
+      </imgdir>
+      <imgdir name="1142171">
+        <string name="name" value="Honorable Mesoranger"/>
+      </imgdir>
+      <imgdir name="1142172">
+        <string name="name" value="Honorable Mesoranger"/>
+      </imgdir>
+      <imgdir name="1142198">
+        <string name="name" value="Confused Evan"/>
+        <string name="desc" value="Receive #cextra 5% EXP# while hunting and a #c5% discount on potions# for 3 days."/>
+      </imgdir>
+      <imgdir name="1142199">
+        <string name="name" value="Beginner Evan"/>
+        <string name="desc" value="Receive #cextra 6% EXP# while hunting and a #c6% discount on potions# for 7 days."/>
+      </imgdir>
+      <imgdir name="1142200">
+        <string name="name" value="Confident Evan"/>
+        <string name="desc" value="Receive #cextra 7% EXP# while hunting and a #c7% discount on potions# for 14 days."/>
+      </imgdir>
+      <imgdir name="1142201">
+        <string name="name" value="Elite Evan"/>
+        <string name="desc" value="Receive #cextra 8% EXP# while hunting and a #c8% discount on potions# for 21 days."/>
+      </imgdir>
+      <imgdir name="1142202">
+        <string name="name" value="Trailblazer Evan"/>
+        <string name="desc" value="Receive #cextra 10% EXP# while hunting and a #c10% discount on potions# for 60 days."/>
+      </imgdir>
+      <imgdir name="1142203">
+        <string name="name" value="Eternal Trailblazer Evan"/>
+        <string name="desc" value="A medal that proves that #cyou are the greatest Evan# in the history of all Evans in Maple World."/>
       </imgdir>
     </imgdir>
     <imgdir name="Cap">
@@ -4151,6 +4197,9 @@
         <string name="name" value="Archaeologist Hat"/>
         <string name="desc" value="An archaeologist hat received for finishing Top 10 in the Artifact Hunt."/>
       </imgdir>
+      <imgdir name="1003010">
+        <string name="name" value="Dancing Blue Butterfly "/>
+      </imgdir>
       <imgdir name="1003023">
         <string name="name" value="Targar Hat(INT)"/>
       </imgdir>
@@ -4309,9 +4358,36 @@
       <imgdir name="1003057">
         <string name="name" value="Mini Crown"/>
       </imgdir>
+      <imgdir name="1003058">
+        <string name="name" value="Christmas Hairpin "/>
+      </imgdir>
+      <imgdir name="1003070">
+        <string name="name" value="Tiger-print Cap"/>
+      </imgdir>
+      <imgdir name="1003072">
+        <string name="name" value="Black-lace Ribbon"/>
+      </imgdir>
       <imgdir name="1003073">
         <string name="name" value="Archaeologist Hat"/>
         <string name="desc" value="An archaeologist hat received for participating in the Artifact Hunt."/>
+      </imgdir>
+      <imgdir name="1003074">
+        <string name="name" value="Strawberry Hat"/>
+        <string name="desc" value="This item was designed by a Taiwanese Mapler."/>
+      </imgdir>
+      <imgdir name="1003077">
+        <string name="name" value="Knitted Corsage Hat"/>
+      </imgdir>
+      <imgdir name="1003079">
+        <string name="name" value="Green Leaf Hat"/>
+        <string name="desc" value="This item was designed by a Taiwanese Mapler."/>
+      </imgdir>
+      <imgdir name="1003089">
+        <string name="name" value="Evan Headband"/>
+        <string name="desc" value="When you equip all Evan cash items except a Wand, a special Evan effect will appear behind the character."/>
+      </imgdir>
+      <imgdir name="1003090">
+        <string name="name" value="Pink Bean Hairband"/>
       </imgdir>
     </imgdir>
     <imgdir name="Cape">
@@ -4848,6 +4924,14 @@
       </imgdir>
       <imgdir name="1102224">
         <string name="name" value="Lamby Cape"/>
+      </imgdir>
+      <imgdir name="1102231">
+        <string name="name" value="Sirius Cape "/>
+        <string name="desc" value="\n Only specifically designated scrolls can be used on it. "/>
+      </imgdir>
+      <imgdir name="1102232">
+        <string name="name" value="Little Prince Star"/>
+        <string name="desc" value="The star follows you around where ever you go."/>
       </imgdir>
       <imgdir name="1102236">
         <string name="name" value="Cupid&apos;s Wings Cape"/>
@@ -6152,6 +6236,9 @@
       </imgdir>
       <imgdir name="1042149">
         <string name="name" value="80&apos;s Knit Pullover"/>
+      </imgdir>
+      <imgdir name="1042184">
+        <string name="name" value="Tiger-print Scarf &amp; Top"/>
       </imgdir>
       <imgdir name="1049000">
         <string name="name" value="Friendship Shirt"/>
@@ -8597,8 +8684,20 @@
         <string name="name" value="Mushking Leather Glove"/>
       </imgdir>
       <imgdir name="1082262">
-        <string name="name" value="MISSING NAME"/>
-        <string name="desc" value="MISSING INFO"/>
+        <string name="name" value="Dragon Master&apos;s Proof "/>
+      </imgdir>
+      <imgdir name="1082263">
+        <string name="name" value="Bunny Gloves"/>
+      </imgdir>
+      <imgdir name="1082270">
+        <string name="name" value="Lita&apos;s Ocean Gloves"/>
+      </imgdir>
+      <imgdir name="1082271">
+        <string name="name" value="Lita&apos;s Hero Gloves"/>
+      </imgdir>
+      <imgdir name="1082272">
+        <string name="name" value="Evan Gloves"/>
+        <string name="desc" value="When you equip all Evan cash items except a Wand, a special Evan effect will appear behind the character."/>
       </imgdir>
     </imgdir>
     <imgdir name="Hair">
@@ -12901,6 +13000,30 @@
       <imgdir name="30997">
         <string name="name" value="Brown Tentacle Hair"/>
       </imgdir>
+      <imgdir name="31990">
+        <string name="name" value="Black Evan Hair (F)"/>
+      </imgdir>
+      <imgdir name="31991">
+        <string name="name" value="Red Evan Hair (F)"/>
+      </imgdir>
+      <imgdir name="31992">
+        <string name="name" value="Orange Evan Hair (F)"/>
+      </imgdir>
+      <imgdir name="31993">
+        <string name="name" value="Blond Evan Hair (F)"/>
+      </imgdir>
+      <imgdir name="31994">
+        <string name="name" value="Silver Evan Hair (F)"/>
+      </imgdir>
+      <imgdir name="31995">
+        <string name="name" value="Blue Evan Hair (F)"/>
+      </imgdir>
+      <imgdir name="31996">
+        <string name="name" value="Purple Evan Hair (F)"/>
+      </imgdir>
+      <imgdir name="31997">
+        <string name="name" value="Brown Evan Hair (F)"/>
+      </imgdir>
       <imgdir name="33000">
         <string name="name" value="Black Prince Cut"/>
       </imgdir>
@@ -12924,6 +13047,78 @@
       </imgdir>
       <imgdir name="33007">
         <string name="name" value="Brown Prince Cut"/>
+      </imgdir>
+      <imgdir name="33030">
+        <string name="name" value="Black Babish Hair"/>
+      </imgdir>
+      <imgdir name="33031">
+        <string name="name" value="Red Babish Hair"/>
+      </imgdir>
+      <imgdir name="33032">
+        <string name="name" value="Orange Babish Hair"/>
+      </imgdir>
+      <imgdir name="33033">
+        <string name="name" value="Blonde Babish Hair"/>
+      </imgdir>
+      <imgdir name="33034">
+        <string name="name" value="Green Babish Hair"/>
+      </imgdir>
+      <imgdir name="33035">
+        <string name="name" value="Blue Babish Hair"/>
+      </imgdir>
+      <imgdir name="33036">
+        <string name="name" value="Purple Babish Hair"/>
+      </imgdir>
+      <imgdir name="33037">
+        <string name="name" value="Brown Babish Hair"/>
+      </imgdir>
+      <imgdir name="33050">
+        <string name="name" value="Black Spiky Shag"/>
+      </imgdir>
+      <imgdir name="33051">
+        <string name="name" value="Red Spiky Shag"/>
+      </imgdir>
+      <imgdir name="33052">
+        <string name="name" value="Orange Spiky Shag"/>
+      </imgdir>
+      <imgdir name="33053">
+        <string name="name" value="Blonde Spiky Shag"/>
+      </imgdir>
+      <imgdir name="33054">
+        <string name="name" value="Green Spiky Shag"/>
+      </imgdir>
+      <imgdir name="33055">
+        <string name="name" value="Blue Spiky Shag"/>
+      </imgdir>
+      <imgdir name="33056">
+        <string name="name" value="Purple Spiky Shag"/>
+      </imgdir>
+      <imgdir name="33057">
+        <string name="name" value="Brown Spiky Shag"/>
+      </imgdir>
+      <imgdir name="33150">
+        <string name="name" value="Black Evan Hair (M)"/>
+      </imgdir>
+      <imgdir name="33151">
+        <string name="name" value="Red Evan Hair (M)"/>
+      </imgdir>
+      <imgdir name="33152">
+        <string name="name" value="Orange Evan Hair (M)"/>
+      </imgdir>
+      <imgdir name="33153">
+        <string name="name" value="Blond Evan Hair (M)"/>
+      </imgdir>
+      <imgdir name="33154">
+        <string name="name" value="Silver Evan Hair (M)"/>
+      </imgdir>
+      <imgdir name="33155">
+        <string name="name" value="Blue Evan Hair (M)"/>
+      </imgdir>
+      <imgdir name="33156">
+        <string name="name" value="Purple Evan Hair (M)"/>
+      </imgdir>
+      <imgdir name="33157">
+        <string name="name" value="Brown Evan Hair (M)"/>
       </imgdir>
       <imgdir name="34000">
         <string name="name" value="Black Palm Tree Hair"/>
@@ -13086,6 +13281,30 @@
       </imgdir>
       <imgdir name="33106">
         <string name="name" value="Purple The CoCo"/>
+      </imgdir>
+      <imgdir name="34060">
+        <string name="name" value="Black Bow Hair"/>
+      </imgdir>
+      <imgdir name="34061">
+        <string name="name" value="Red Bow Hair"/>
+      </imgdir>
+      <imgdir name="34062">
+        <string name="name" value="Orange Bow Hair"/>
+      </imgdir>
+      <imgdir name="34063">
+        <string name="name" value="Blonde Bow Hair"/>
+      </imgdir>
+      <imgdir name="34064">
+        <string name="name" value="Green Bow Hair"/>
+      </imgdir>
+      <imgdir name="34065">
+        <string name="name" value="Blue Bow Hair"/>
+      </imgdir>
+      <imgdir name="34066">
+        <string name="name" value="Purple Bow Hair"/>
+      </imgdir>
+      <imgdir name="34067">
+        <string name="name" value="Brown Bow Hair"/>
       </imgdir>
       <imgdir name="34110">
         <string name="name" value="Black Full Bangs"/>
@@ -13589,6 +13808,13 @@
       </imgdir>
       <imgdir name="1050152">
         <string name="name" value="Sailor Outfit"/>
+      </imgdir>
+      <imgdir name="1050161">
+        <string name="name" value="Bunny Boy"/>
+      </imgdir>
+      <imgdir name="1050168">
+        <string name="name" value="Evan Outfit (M)"/>
+        <string name="desc" value="When you equip all Evan cash items except a Wand, a special Evan effect will appear behind the character."/>
       </imgdir>
       <imgdir name="1051000">
         <string name="name" value="Steel Fitted Mail"/>
@@ -14095,6 +14321,17 @@
       </imgdir>
       <imgdir name="1051180">
         <string name="name" value="Sailor Outfit"/>
+      </imgdir>
+      <imgdir name="1051200">
+        <string name="name" value="Bunny Girl"/>
+      </imgdir>
+      <imgdir name="1051208">
+        <string name="name" value="Strawberry Girl"/>
+        <string name="desc" value="This item was designed by a Taiwanese Mapler."/>
+      </imgdir>
+      <imgdir name="1051209">
+        <string name="name" value="Evan Outfit (F)"/>
+        <string name="desc" value="When you equip all Evan cash items except a Wand, a special Evan effect will appear behind the character."/>
       </imgdir>
       <imgdir name="1052000">
         <string name="name" value="Recycled Box"/>
@@ -14633,6 +14870,9 @@
       <imgdir name="1052137">
         <string name="name" value="Tomato Suit"/>
       </imgdir>
+      <imgdir name="1052231">
+        <string name="name" value="Little Prince"/>
+      </imgdir>
       <imgdir name="1052234">
         <string name="name" value="Stylish Layered Plaid"/>
       </imgdir>
@@ -14645,24 +14885,24 @@
         <string name="desc" value="MISSING INFO"/>
       </imgdir>
       <imgdir name="1051176">
-        <string name="name" value="MISSING NAME"/>
-        <string name="desc" value="MISSING INFO"/>
+        <string name="name" value="신화고 교복"/>
       </imgdir>
       <imgdir name="1052186">
         <string name="name" value="MISSING NAME"/>
         <string name="desc" value="MISSING INFO"/>
       </imgdir>
       <imgdir name="1052217">
-        <string name="name" value="MISSING NAME"/>
-        <string name="desc" value="MISSING INFO"/>
+        <string name="name" value="Cloud Robe"/>
       </imgdir>
       <imgdir name="1052224">
-        <string name="name" value="MISSING NAME"/>
-        <string name="desc" value="MISSING INFO"/>
+        <string name="name" value="Strawberry Baby"/>
       </imgdir>
       <imgdir name="1052228">
-        <string name="name" value="MISSING NAME"/>
-        <string name="desc" value="MISSING INFO"/>
+        <string name="name" value="Layered Long Skull Tee"/>
+      </imgdir>
+      <imgdir name="1052245">
+        <string name="name" value="Green Leaf Overall"/>
+        <string name="desc" value="This item was designed by a Taiwanese Mapler."/>
       </imgdir>
     </imgdir>
     <imgdir name="Pants">
@@ -15879,6 +16119,12 @@
       <imgdir name="1062118">
         <string name="name" value="Stone Washed Jeans"/>
       </imgdir>
+      <imgdir name="1062121">
+        <string name="name" value="Tiger-print Leggings"/>
+      </imgdir>
+      <imgdir name="1062122">
+        <string name="name" value="Plaid-cuffed Jeans"/>
+      </imgdir>
     </imgdir>
     <imgdir name="PetEquip">
       <imgdir name="1802000">
@@ -16075,6 +16321,10 @@
         <string name="name" value="Gas Mask"/>
         <string name="desc" value="A gas Mask specially made for Skunk."/>
       </imgdir>
+      <imgdir name="1802064">
+        <string name="name" value="Alien&apos;s Pet"/>
+        <string name="desc" value="A sidekick that can only be used by the Weird Alien Pet."/>
+      </imgdir>
       <imgdir name="1802100">
         <string name="name" value="Pet Collar"/>
       </imgdir>
@@ -16139,8 +16389,8 @@
         <string name="desc" value="A wing accessory exclusively for #cBaby Tiger#."/>
       </imgdir>
       <imgdir name="1802039">
-        <string name="name" value="MISSING NAME"/>
-        <string name="desc" value="MISSING INFO"/>
+        <string name="name" value="Golden Pig Lucky Sack"/>
+        <string name="desc" value="A sack that&apos;s full of luck! It can only be equipped by a #cGolden Pig#."/>
       </imgdir>
       <imgdir name="1802056">
         <string name="name" value="MISSING NAME"/>
@@ -16576,6 +16826,14 @@
       <imgdir name="1112812">
         <string name="name" value="Shared Umbrella Ring"/>
       </imgdir>
+      <imgdir name="1112909">
+        <string name="name" value="Aura Ring"/>
+        <string name="desc" value="When you walk around with this ring on, the power of the Aura gem on the ring is triggered and gives a #c+3 boost for every stat#."/>
+      </imgdir>
+      <imgdir name="1112910">
+        <string name="name" value="Aura Ring"/>
+        <string name="desc" value="When you walk around with this ring on, the power of the Aura gem on the ring is triggered and gives a #c+5 boost for every stat#."/>
+      </imgdir>
       <imgdir name="1112916">
         <string name="name" value="Solo Ring"/>
       </imgdir>
@@ -16757,8 +17015,7 @@
         <string name="name" value="Leaf Fall"/>
       </imgdir>
       <imgdir name="1092067">
-        <string name="name" value="MISSING NAME"/>
-        <string name="desc" value="MISSING INFO"/>
+        <string name="name" value="Transparent Shield"/>
       </imgdir>
     </imgdir>
     <imgdir name="Shoes">
@@ -18033,6 +18290,18 @@
       <imgdir name="1072437">
         <string name="name" value="Pink Bean Shoes"/>
       </imgdir>
+      <imgdir name="1072438">
+        <string name="name" value="Green Leaf Shoes"/>
+        <string name="desc" value="This item was designed by a Taiwanese Mapler."/>
+      </imgdir>
+      <imgdir name="1072439">
+        <string name="name" value="Strawberry Shoes"/>
+        <string name="desc" value="This item was designed by a Taiwanese Mapler."/>
+      </imgdir>
+      <imgdir name="1072443">
+        <string name="name" value="Evan Boots"/>
+        <string name="desc" value="When you equip all Evan cash items except a Wand, a special Evan effect will appear behind the character."/>
+      </imgdir>
     </imgdir>
     <imgdir name="Taming">
       <imgdir name="1902000">
@@ -18490,6 +18759,60 @@
       <imgdir name="1302101">
         <string name="name" value="Lunch box (Lv 120)"/>
         <string name="desc" value="A special lunchbox given to hold roughly 2 weeks&apos; worth of lunch.  Hits hard, hits fast!"/>
+      </imgdir>
+      <imgdir name="1302132">
+        <string name="name" value="Pig Herding Stick"/>
+      </imgdir>
+      <imgdir name="1302900">
+        <string name="name" value="One Shot Kill Sword "/>
+      </imgdir>
+      <imgdir name="1302901">
+        <string name="name" value="Knock Down Sword "/>
+      </imgdir>
+      <imgdir name="1302902">
+        <string name="name" value="Slow Sword "/>
+      </imgdir>
+      <imgdir name="1302903">
+        <string name="name" value="Poison Sword"/>
+      </imgdir>
+      <imgdir name="1302904">
+        <string name="name" value="Dark Sword "/>
+      </imgdir>
+      <imgdir name="1302905">
+        <string name="name" value="Seal Sword "/>
+      </imgdir>
+      <imgdir name="1302906">
+        <string name="name" value="Ice Sword "/>
+      </imgdir>
+      <imgdir name="1302907">
+        <string name="name" value="Reinforced Attribute Sword (F) "/>
+      </imgdir>
+      <imgdir name="1302908">
+        <string name="name" value="Boss Kill Sword "/>
+      </imgdir>
+      <imgdir name="1302909">
+        <string name="name" value="Recovery Sword "/>
+      </imgdir>
+      <imgdir name="1302910">
+        <string name="name" value="Sickly Sword "/>
+      </imgdir>
+      <imgdir name="1302911">
+        <string name="name" value="Critical Sword "/>
+      </imgdir>
+      <imgdir name="1302912">
+        <string name="name" value="Monster Death Sword "/>
+      </imgdir>
+      <imgdir name="1302913">
+        <string name="name" value="Reinforced Attribute Sword (I) "/>
+      </imgdir>
+      <imgdir name="1302914">
+        <string name="name" value="Reinforced Attribute Sword (S) "/>
+      </imgdir>
+      <imgdir name="1302915">
+        <string name="name" value="Reinforced Attribute Sword (H)"/>
+      </imgdir>
+      <imgdir name="1302916">
+        <string name="name" value="Reinforced Attribute Sword (L)"/>
       </imgdir>
       <imgdir name="1312000">
         <string name="name" value="Double Axe"/>
@@ -19015,6 +19338,10 @@
       <imgdir name="1332080">
         <string name="name" value="Dusk Raven&apos;s Beak"/>
       </imgdir>
+      <imgdir name="1332100">
+        <string name="name" value="Nageling"/>
+        <string name="desc" value="\n Only specifically designated scrolls can be used on it."/>
+      </imgdir>
       <imgdir name="1372000">
         <string name="name" value="Fairy Wand"/>
       </imgdir>
@@ -19144,6 +19471,13 @@
       </imgdir>
       <imgdir name="1372043">
         <string name="name" value="Beginner Magician&apos;s wand"/>
+      </imgdir>
+      <imgdir name="1372059">
+        <string name="name" value="Neo Phoenix Wand"/>
+        <string name="desc" value="\n Only specifically designated scrolls can be used on it."/>
+      </imgdir>
+      <imgdir name="1372070">
+        <string name="name" value="Circle-Winded Staff"/>
       </imgdir>
       <imgdir name="1382000">
         <string name="name" value="Wooden Staff"/>
@@ -19316,6 +19650,9 @@
       <imgdir name="1382060">
         <string name="name" value="Crimson Arcanon"/>
       </imgdir>
+      <imgdir name="1382092">
+        <string name="name" value="Circle-Winded Staff"/>
+      </imgdir>
       <imgdir name="1402000">
         <string name="name" value="Two-Handed Sword"/>
       </imgdir>
@@ -19465,6 +19802,14 @@
       </imgdir>
       <imgdir name="1402051">
         <string name="name" value="Dusk Raven&apos;s Wing"/>
+      </imgdir>
+      <imgdir name="1402073">
+        <string name="name" value="Askaron"/>
+        <string name="desc" value="\n Only specifically designated scrolls can be used on it."/>
+      </imgdir>
+      <imgdir name="1402074">
+        <string name="name" value="Neo Heaven&apos;s Gate"/>
+        <string name="desc" value="\n Only specifically designated scrolls can be used on it."/>
       </imgdir>
       <imgdir name="1412000">
         <string name="name" value="Two-Handed Axe"/>
@@ -19822,6 +20167,10 @@
       <imgdir name="1432048">
         <string name="name" value="Pooh Pooh Shovel"/>
       </imgdir>
+      <imgdir name="1432066">
+        <string name="name" value="Bellum Spear"/>
+        <string name="desc" value="\n Only specifically designated scrolls can be used on it."/>
+      </imgdir>
       <imgdir name="1442000">
         <string name="name" value="Pole Arm"/>
       </imgdir>
@@ -20020,6 +20369,15 @@
       <imgdir name="1442068">
         <string name="name" value="Crimson Arcglaive"/>
       </imgdir>
+      <imgdir name="1442090">
+        <string name="name" value="Machlear"/>
+        <string name="desc" value="\n Only specifically designated scrolls can be used on it."/>
+      </imgdir>
+      <imgdir name="1442091">
+        <string name="name" value="Neo Eclipse"/>
+        <string name="desc" value="\n Only specifically designated scrolls can be used on it.
+"/>
+      </imgdir>
       <imgdir name="1452000">
         <string name="name" value="Battle Bow"/>
       </imgdir>
@@ -20188,6 +20546,10 @@
       <imgdir name="1452060">
         <string name="name" value="Crimson Arclancer"/>
       </imgdir>
+      <imgdir name="1452090">
+        <string name="name" value="Neo Dark Arund"/>
+        <string name="desc" value="\n Only specifically designated scrolls can be used on it."/>
+      </imgdir>
       <imgdir name="1462000">
         <string name="name" value="Mountain Crossbow"/>
       </imgdir>
@@ -20340,6 +20702,10 @@
       </imgdir>
       <imgdir name="1462055">
         <string name="name" value="Dusk Raven&apos;s Eye"/>
+      </imgdir>
+      <imgdir name="1462076">
+        <string name="name" value="Inferna"/>
+        <string name="desc" value="\n Only specifically designated scrolls can be used on it."/>
       </imgdir>
       <imgdir name="1472000">
         <string name="name" value="Garnier"/>
@@ -20552,6 +20918,10 @@
       <imgdir name="1472075">
         <string name="name" value="Dusk Raven&apos;s Claw"/>
       </imgdir>
+      <imgdir name="1472101">
+        <string name="name" value="Neo Black Mamba"/>
+        <string name="desc" value="\n Only specifically designated scrolls can be used on it."/>
+      </imgdir>
       <imgdir name="1482000">
         <string name="name" value="Steel Knuckler"/>
       </imgdir>
@@ -20629,6 +20999,15 @@
       <imgdir name="1482023">
         <string name="name" value="Timeless Equinox"/>
         <string name="h1" value="#c+1 level on Barrage#"/>
+      </imgdir>
+      <imgdir name="1482051">
+        <string name="name" value="Crusio"/>
+        <string name="desc" value="\n Only specifically designated scrolls can be used on it."/>
+      </imgdir>
+      <imgdir name="1482052">
+        <string name="name" value="Neo Steel Renault"/>
+        <string name="desc" value="\n Only specifically designated scrolls can be used on it.
+"/>
       </imgdir>
       <imgdir name="1492000">
         <string name="name" value="Pistol"/>
@@ -22217,8 +22596,8 @@
         <string name="desc" value="MISSING INFO"/>
       </imgdir>
       <imgdir name="1452058">
-        <string name="name" value="MISSING NAME"/>
-        <string name="desc" value="MISSING INFO"/>
+        <string name="name" value="Barisetter"/>
+        <string name="desc" value="\n Only specifically designated scrolls can be used on it."/>
       </imgdir>
       <imgdir name="1452077">
         <string name="name" value="MISSING NAME"/>
@@ -22283,6 +22662,30 @@
       <imgdir name="1492044">
         <string name="name" value="MISSING NAME"/>
         <string name="desc" value="MISSING INFO"/>
+      </imgdir>
+      <imgdir name="1702253">
+        <string name="name" value="Bunny Umbrella"/>
+        <string name="desc" value="A weapon that can be equipped on #call weapons#."/>
+      </imgdir>
+      <imgdir name="1702261">
+        <string name="name" value="Cherry Blossom Weapon"/>
+        <string name="desc" value="This weapon can be equipped over #ca staff, wand, one-handed sword, one-handed axe, one-handed mace, or dagger.#"/>
+      </imgdir>
+      <imgdir name="1702262">
+        <string name="name" value="Green Leaf Guards"/>
+        <string name="desc" value="A weapon that can be equipped on #cClaw#. This item was designed by a Taiwanese Mapler."/>
+      </imgdir>
+      <imgdir name="1702263">
+        <string name="desc" value="A weapon that can be equipped on #call weapons#. This item was designed by a Taiwanese Mapler."/>
+        <string name="name" value="Kitty Spirit Weapon"/>
+      </imgdir>
+      <imgdir name="1702264">
+        <string name="desc" value="A weapon that can be equipped on #call weapons#. This item was designed by a Taiwanese Mapler."/>
+        <string name="name" value="Strawberry Basket"/>
+      </imgdir>
+      <imgdir name="1702268">
+        <string name="name" value="Evan Wand"/>
+        <string name="desc" value="A weapon that can be equipped on #a Wand or a Staff#. When you equip all 4 Evan cash items except this item, a special Evan effect will appear behind the character."/>
       </imgdir>
     </imgdir>
     <imgdir name="Dragon">

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <imgdir name="01972002.img">
   <imgdir name="info">
+    <int name="equipTradeBlock" value="1"/>
     <canvas name="icon" width="31" height="25">
       <vector name="origin" x="-1" y="25"/>
     </canvas>

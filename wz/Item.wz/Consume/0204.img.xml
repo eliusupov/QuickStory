@@ -766,6 +766,27 @@
       <int name="9" value="1012020"/>
     </imgdir>
   </imgdir>
+  <imgdir name="02040120">
+    <imgdir name="info">
+      <canvas name="icon" width="32" height="31">
+        <vector name="origin" x="0" y="31"/>
+        <int name="z" value="0"/>
+      </canvas>
+      <canvas name="iconRaw" width="32" height="28">
+        <vector name="origin" x="0" y="31"/>
+        <int name="z" value="0"/>
+      </canvas>
+      <int name="price" value="1"/>
+      <int name="incPAD" value="1"/>
+      <int name="success" value="30"/>
+      <int name="timeLimited" value="1"/>
+      <int name="slotMax" value="1"/>
+      <int name="tradeBlock" value="1"/>
+    </imgdir>
+    <imgdir name="req">
+      <int name="0" value="1012161"/>
+    </imgdir>
+  </imgdir>
   <imgdir name="02040200">
     <imgdir name="info">
       <canvas name="icon" width="30" height="29">
@@ -880,6 +901,125 @@
       <int name="cursed" value="50"/>
       <int name="incINT" value="1"/>
       <int name="incMDD" value="1"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02040211">
+    <imgdir name="info">
+      <canvas name="icon" width="30" height="28">
+        <vector name="origin" x="-1" y="28"/>
+      </canvas>
+      <canvas name="iconRaw" width="30" height="26">
+        <vector name="origin" x="-1" y="28"/>
+      </canvas>
+      <int name="price" value="1"/>
+      <int name="success" value="100"/>
+      <int name="incSTR" value="1"/>
+      <int name="incDEX" value="1"/>
+      <int name="incINT" value="1"/>
+      <int name="incLUK" value="1"/>
+      <int name="slotMax" value="1"/>
+      <int name="tradeBlock" value="1"/>
+    </imgdir>
+    <imgdir name="req">
+      <int name="0" value="1022097"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02040212">
+    <imgdir name="info">
+      <canvas name="icon" width="30" height="28">
+        <vector name="origin" x="-1" y="28"/>
+      </canvas>
+      <canvas name="iconRaw" width="30" height="26">
+        <vector name="origin" x="-1" y="28"/>
+      </canvas>
+      <int name="price" value="1"/>
+      <int name="success" value="100"/>
+      <int name="incPAD" value="1"/>
+      <int name="incMAD" value="2"/>
+      <int name="slotMax" value="1"/>
+      <int name="tradeBlock" value="1"/>
+      <int name="reqCUC" value="2"/>
+    </imgdir>
+    <imgdir name="req">
+      <int name="0" value="1022097"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02040227">
+    <imgdir name="info">
+      <canvas name="icon" width="30" height="28">
+        <vector name="origin" x="-1" y="28"/>
+      </canvas>
+      <canvas name="iconRaw" width="30" height="26">
+        <vector name="origin" x="-1" y="28"/>
+      </canvas>
+      <int name="price" value="1"/>
+      <int name="success" value="60"/>
+      <int name="incSTR" value="1"/>
+      <int name="incDEX" value="1"/>
+      <int name="incINT" value="1"/>
+      <int name="incLUK" value="1"/>
+      <int name="slotMax" value="1"/>
+      <int name="tradeBlock" value="1"/>
+    </imgdir>
+    <imgdir name="req">
+      <int name="0" value="1022097"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02040228">
+    <imgdir name="info">
+      <canvas name="icon" width="30" height="28">
+        <vector name="origin" x="-1" y="28"/>
+      </canvas>
+      <canvas name="iconRaw" width="30" height="26">
+        <vector name="origin" x="-1" y="28"/>
+      </canvas>
+      <int name="price" value="1"/>
+      <int name="success" value="80"/>
+      <int name="incSTR" value="1"/>
+      <int name="incDEX" value="1"/>
+      <int name="incINT" value="1"/>
+      <int name="incLUK" value="1"/>
+      <int name="slotMax" value="1"/>
+    </imgdir>
+    <imgdir name="req">
+      <int name="0" value="1022097"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02040229">
+    <imgdir name="info">
+      <canvas name="icon" width="30" height="28">
+        <vector name="origin" x="-1" y="28"/>
+      </canvas>
+      <canvas name="iconRaw" width="30" height="26">
+        <vector name="origin" x="-1" y="28"/>
+      </canvas>
+      <int name="price" value="1"/>
+      <int name="success" value="30"/>
+      <int name="incPAD" value="1"/>
+      <int name="incMAD" value="2"/>
+      <int name="slotMax" value="1"/>
+      <int name="tradeBlock" value="1"/>
+    </imgdir>
+    <imgdir name="req">
+      <int name="0" value="1022097"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02040230">
+    <imgdir name="info">
+      <canvas name="icon" width="30" height="28">
+        <vector name="origin" x="-1" y="28"/>
+      </canvas>
+      <canvas name="iconRaw" width="30" height="26">
+        <vector name="origin" x="-1" y="28"/>
+      </canvas>
+      <int name="price" value="1"/>
+      <int name="success" value="50"/>
+      <int name="incPAD" value="1"/>
+      <int name="incMAD" value="2"/>
+      <int name="slotMax" value="1"/>
+    </imgdir>
+    <imgdir name="req">
+      <int name="0" value="1022097"/>
     </imgdir>
   </imgdir>
   <imgdir name="02040300">
@@ -5624,6 +5764,17 @@
       <int name="success" value="50"/>
     </imgdir>
   </imgdir>
+  <imgdir name="02043714">
+    <imgdir name="info">
+      <uol name="icon" value="../../02040001/info/icon"/>
+      <uol name="iconRaw" value="../../02040001/info/iconRaw"/>
+      <int name="price" value="1"/>
+      <int name="incMAD" value="2"/>
+      <int name="incINT" value="1"/>
+      <int name="success" value="60"/>
+      <int name="tradeBlock" value="1"/>
+    </imgdir>
+  </imgdir>
   <imgdir name="02043800">
     <imgdir name="info">
       <uol name="icon" value="../../02040000/info/icon"/>
@@ -5763,6 +5914,17 @@
       <int name="incINT" value="3"/>
       <int name="incLUK" value="1"/>
       <int name="success" value="50"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02043814">
+    <imgdir name="info">
+      <uol name="icon" value="../../02040001/info/icon"/>
+      <uol name="iconRaw" value="../../02040001/info/iconRaw"/>
+      <int name="price" value="1"/>
+      <int name="incMAD" value="2"/>
+      <int name="incINT" value="1"/>
+      <int name="success" value="60"/>
+      <int name="tradeBlock" value="1"/>
     </imgdir>
   </imgdir>
   <imgdir name="02044000">
@@ -7459,6 +7621,712 @@
     </imgdir>
     <imgdir name="req">
       <int name="0" value="1492038"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02047000">
+    <imgdir name="info">
+      <canvas name="icon" width="31" height="30">
+        <vector name="origin" x="-1" y="30"/>
+        <int name="z" value="0"/>
+      </canvas>
+      <canvas name="iconRaw" width="31" height="28">
+        <vector name="origin" x="-1" y="30"/>
+        <int name="z" value="0"/>
+      </canvas>
+      <int name="price" value="1"/>
+      <int name="incPAD" value="2"/>
+      <imgdir name="successRates">
+        <int name="0" value="70"/>
+        <int name="1" value="50"/>
+        <int name="2" value="36"/>
+        <int name="3" value="26"/>
+        <int name="4" value="19"/>
+        <int name="5" value="14"/>
+        <int name="6" value="10"/>
+        <int name="7" value="7"/>
+      </imgdir>
+      <imgdir name="cursedRates">
+        <int name="0" value="10"/>
+        <int name="1" value="14"/>
+        <int name="2" value="19"/>
+        <int name="3" value="26"/>
+        <int name="4" value="36"/>
+        <int name="5" value="50"/>
+        <int name="6" value="70"/>
+        <int name="7" value="100"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02047001">
+    <imgdir name="info">
+      <uol name="icon" value="../../02047000/info/icon"/>
+      <uol name="iconRaw" value="../../02047000/info/iconRaw"/>
+      <int name="price" value="1"/>
+      <int name="incACC" value="3"/>
+      <imgdir name="successRates">
+        <int name="0" value="70"/>
+        <int name="1" value="50"/>
+        <int name="2" value="36"/>
+        <int name="3" value="26"/>
+        <int name="4" value="19"/>
+        <int name="5" value="14"/>
+        <int name="6" value="10"/>
+        <int name="7" value="7"/>
+      </imgdir>
+      <imgdir name="cursedRates">
+        <int name="0" value="10"/>
+        <int name="1" value="14"/>
+        <int name="2" value="19"/>
+        <int name="3" value="26"/>
+        <int name="4" value="36"/>
+        <int name="5" value="50"/>
+        <int name="6" value="70"/>
+        <int name="7" value="100"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02047002">
+    <imgdir name="info">
+      <uol name="icon" value="../../02047000/info/icon"/>
+      <uol name="iconRaw" value="../../02047000/info/iconRaw"/>
+      <int name="price" value="1"/>
+      <int name="incMAD" value="2"/>
+      <imgdir name="successRates">
+        <int name="0" value="70"/>
+        <int name="1" value="50"/>
+        <int name="2" value="36"/>
+        <int name="3" value="26"/>
+        <int name="4" value="19"/>
+        <int name="5" value="14"/>
+        <int name="6" value="10"/>
+        <int name="7" value="7"/>
+      </imgdir>
+      <imgdir name="cursedRates">
+        <int name="0" value="10"/>
+        <int name="1" value="14"/>
+        <int name="2" value="19"/>
+        <int name="3" value="26"/>
+        <int name="4" value="36"/>
+        <int name="5" value="50"/>
+        <int name="6" value="70"/>
+        <int name="7" value="100"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02047100">
+    <imgdir name="info">
+      <canvas name="icon" width="31" height="30">
+        <vector name="origin" x="-1" y="30"/>
+        <int name="z" value="0"/>
+      </canvas>
+      <canvas name="iconRaw" width="31" height="28">
+        <vector name="origin" x="-1" y="30"/>
+        <int name="z" value="0"/>
+      </canvas>
+      <int name="price" value="1"/>
+      <int name="incPAD" value="2"/>
+      <imgdir name="successRates">
+        <int name="0" value="70"/>
+        <int name="1" value="50"/>
+        <int name="2" value="36"/>
+        <int name="3" value="26"/>
+        <int name="4" value="19"/>
+        <int name="5" value="14"/>
+        <int name="6" value="10"/>
+        <int name="7" value="7"/>
+      </imgdir>
+      <imgdir name="cursedRates">
+        <int name="0" value="10"/>
+        <int name="1" value="14"/>
+        <int name="2" value="19"/>
+        <int name="3" value="26"/>
+        <int name="4" value="36"/>
+        <int name="5" value="50"/>
+        <int name="6" value="70"/>
+        <int name="7" value="100"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02047101">
+    <imgdir name="info">
+      <uol name="icon" value="../../02047100/info/icon"/>
+      <uol name="iconRaw" value="../../02047100/info/iconRaw"/>
+      <int name="price" value="1"/>
+      <int name="incACC" value="3"/>
+      <imgdir name="successes">
+        <int name="0" value="70"/>
+        <int name="1" value="50"/>
+        <int name="2" value="36"/>
+        <int name="3" value="26"/>
+        <int name="4" value="19"/>
+        <int name="5" value="14"/>
+        <int name="6" value="10"/>
+        <int name="7" value="7"/>
+      </imgdir>
+      <imgdir name="cursedRates">
+        <int name="0" value="10"/>
+        <int name="1" value="14"/>
+        <int name="2" value="19"/>
+        <int name="3" value="26"/>
+        <int name="4" value="36"/>
+        <int name="5" value="50"/>
+        <int name="6" value="70"/>
+        <int name="7" value="100"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02047102">
+    <imgdir name="info">
+      <uol name="icon" value="../../02047100/info/icon"/>
+      <uol name="iconRaw" value="../../02047100/info/iconRaw"/>
+      <int name="price" value="1"/>
+      <int name="incMAD" value="2"/>
+      <imgdir name="successRates">
+        <int name="0" value="70"/>
+        <int name="1" value="50"/>
+        <int name="2" value="36"/>
+        <int name="3" value="26"/>
+        <int name="4" value="19"/>
+        <int name="5" value="14"/>
+        <int name="6" value="10"/>
+        <int name="7" value="7"/>
+      </imgdir>
+      <imgdir name="cursedRates">
+        <int name="0" value="10"/>
+        <int name="1" value="14"/>
+        <int name="2" value="19"/>
+        <int name="3" value="26"/>
+        <int name="4" value="36"/>
+        <int name="5" value="50"/>
+        <int name="6" value="70"/>
+        <int name="7" value="100"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02047200">
+    <imgdir name="info">
+      <canvas name="icon" width="31" height="30">
+        <vector name="origin" x="-1" y="30"/>
+        <int name="z" value="0"/>
+      </canvas>
+      <canvas name="iconRaw" width="31" height="28">
+        <vector name="origin" x="-1" y="30"/>
+        <int name="z" value="0"/>
+      </canvas>
+      <int name="price" value="1"/>
+      <int name="incSTR" value="2"/>
+      <imgdir name="successRates">
+        <int name="0" value="70"/>
+        <int name="1" value="55"/>
+        <int name="2" value="43"/>
+        <int name="3" value="33"/>
+        <int name="4" value="26"/>
+        <int name="5" value="20"/>
+        <int name="6" value="16"/>
+        <int name="7" value="12"/>
+        <int name="8" value="10"/>
+        <int name="9" value="7"/>
+      </imgdir>
+      <imgdir name="cursedRates">
+        <int name="0" value="10"/>
+        <int name="1" value="12"/>
+        <int name="2" value="16"/>
+        <int name="3" value="20"/>
+        <int name="4" value="26"/>
+        <int name="5" value="33"/>
+        <int name="6" value="43"/>
+        <int name="7" value="55"/>
+        <int name="8" value="70"/>
+        <int name="9" value="100"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02047201">
+    <imgdir name="info">
+      <uol name="icon" value="../../02047200/info/icon"/>
+      <uol name="iconRaw" value="../../02047200/info/iconRaw"/>
+      <int name="price" value="1"/>
+      <int name="incINT" value="2"/>
+      <imgdir name="successRates">
+        <int name="0" value="70"/>
+        <int name="1" value="55"/>
+        <int name="2" value="43"/>
+        <int name="3" value="33"/>
+        <int name="4" value="26"/>
+        <int name="5" value="20"/>
+        <int name="6" value="16"/>
+        <int name="7" value="12"/>
+        <int name="8" value="10"/>
+        <int name="9" value="7"/>
+      </imgdir>
+      <imgdir name="cursedRates">
+        <int name="0" value="10"/>
+        <int name="1" value="12"/>
+        <int name="2" value="16"/>
+        <int name="3" value="20"/>
+        <int name="4" value="26"/>
+        <int name="5" value="33"/>
+        <int name="6" value="43"/>
+        <int name="7" value="55"/>
+        <int name="8" value="70"/>
+        <int name="9" value="100"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02047202">
+    <imgdir name="info">
+      <uol name="icon" value="../../02047200/info/icon"/>
+      <uol name="iconRaw" value="../../02047200/info/iconRaw"/>
+      <int name="price" value="1"/>
+      <int name="incDEX" value="2"/>
+      <imgdir name="successRates">
+        <int name="0" value="70"/>
+        <int name="1" value="55"/>
+        <int name="2" value="43"/>
+        <int name="3" value="33"/>
+        <int name="4" value="26"/>
+        <int name="5" value="20"/>
+        <int name="6" value="16"/>
+        <int name="7" value="12"/>
+        <int name="8" value="10"/>
+        <int name="9" value="7"/>
+      </imgdir>
+      <imgdir name="cursedRates">
+        <int name="0" value="10"/>
+        <int name="1" value="12"/>
+        <int name="2" value="16"/>
+        <int name="3" value="20"/>
+        <int name="4" value="26"/>
+        <int name="5" value="33"/>
+        <int name="6" value="43"/>
+        <int name="7" value="55"/>
+        <int name="8" value="70"/>
+        <int name="9" value="100"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02047203">
+    <imgdir name="info">
+      <uol name="icon" value="../../02047200/info/icon"/>
+      <uol name="iconRaw" value="../../02047200/info/iconRaw"/>
+      <int name="price" value="1"/>
+      <int name="incLUK" value="2"/>
+      <imgdir name="successRates">
+        <int name="0" value="70"/>
+        <int name="1" value="55"/>
+        <int name="2" value="43"/>
+        <int name="3" value="33"/>
+        <int name="4" value="26"/>
+        <int name="5" value="20"/>
+        <int name="6" value="16"/>
+        <int name="7" value="12"/>
+        <int name="8" value="10"/>
+        <int name="9" value="7"/>
+      </imgdir>
+      <imgdir name="cursedRates">
+        <int name="0" value="10"/>
+        <int name="1" value="12"/>
+        <int name="2" value="16"/>
+        <int name="3" value="20"/>
+        <int name="4" value="26"/>
+        <int name="5" value="33"/>
+        <int name="6" value="43"/>
+        <int name="7" value="55"/>
+        <int name="8" value="70"/>
+        <int name="9" value="100"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02047204">
+    <imgdir name="info">
+      <uol name="icon" value="../../02047200/info/icon"/>
+      <uol name="iconRaw" value="../../02047200/info/iconRaw"/>
+      <int name="price" value="1"/>
+      <int name="incCraft" value="2"/>
+      <imgdir name="successRates">
+        <int name="0" value="70"/>
+        <int name="1" value="55"/>
+        <int name="2" value="43"/>
+        <int name="3" value="33"/>
+        <int name="4" value="26"/>
+        <int name="5" value="20"/>
+        <int name="6" value="16"/>
+        <int name="7" value="12"/>
+        <int name="8" value="10"/>
+        <int name="9" value="7"/>
+      </imgdir>
+      <imgdir name="cursedRates">
+        <int name="0" value="10"/>
+        <int name="1" value="12"/>
+        <int name="2" value="16"/>
+        <int name="3" value="20"/>
+        <int name="4" value="26"/>
+        <int name="5" value="33"/>
+        <int name="6" value="43"/>
+        <int name="7" value="55"/>
+        <int name="8" value="70"/>
+        <int name="9" value="100"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02047205">
+    <imgdir name="info">
+      <uol name="icon" value="../../02047200/info/icon"/>
+      <uol name="iconRaw" value="../../02047200/info/iconRaw"/>
+      <int name="price" value="1"/>
+      <int name="incMHP" value="20"/>
+      <imgdir name="successRates">
+        <int name="0" value="70"/>
+        <int name="1" value="55"/>
+        <int name="2" value="43"/>
+        <int name="3" value="33"/>
+        <int name="4" value="26"/>
+        <int name="5" value="20"/>
+        <int name="6" value="16"/>
+        <int name="7" value="12"/>
+        <int name="8" value="10"/>
+        <int name="9" value="7"/>
+      </imgdir>
+      <imgdir name="cursedRates">
+        <int name="0" value="10"/>
+        <int name="1" value="12"/>
+        <int name="2" value="16"/>
+        <int name="3" value="20"/>
+        <int name="4" value="26"/>
+        <int name="5" value="33"/>
+        <int name="6" value="43"/>
+        <int name="7" value="55"/>
+        <int name="8" value="70"/>
+        <int name="9" value="100"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02047206">
+    <imgdir name="info">
+      <uol name="icon" value="../../02047200/info/icon"/>
+      <uol name="iconRaw" value="../../02047200/info/iconRaw"/>
+      <int name="price" value="1"/>
+      <int name="incMMP" value="20"/>
+      <imgdir name="successRates">
+        <int name="0" value="70"/>
+        <int name="1" value="55"/>
+        <int name="2" value="43"/>
+        <int name="3" value="33"/>
+        <int name="4" value="26"/>
+        <int name="5" value="20"/>
+        <int name="6" value="16"/>
+        <int name="7" value="12"/>
+        <int name="8" value="10"/>
+        <int name="9" value="7"/>
+      </imgdir>
+      <imgdir name="cursedRates">
+        <int name="0" value="10"/>
+        <int name="1" value="12"/>
+        <int name="2" value="16"/>
+        <int name="3" value="20"/>
+        <int name="4" value="26"/>
+        <int name="5" value="33"/>
+        <int name="6" value="43"/>
+        <int name="7" value="55"/>
+        <int name="8" value="70"/>
+        <int name="9" value="100"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02047207">
+    <imgdir name="info">
+      <uol name="icon" value="../../02047200/info/icon"/>
+      <uol name="iconRaw" value="../../02047200/info/iconRaw"/>
+      <int name="price" value="1"/>
+      <int name="incPDD" value="3"/>
+      <int name="incMDD" value="3"/>
+      <imgdir name="successRates">
+        <int name="0" value="70"/>
+        <int name="1" value="55"/>
+        <int name="2" value="43"/>
+        <int name="3" value="33"/>
+        <int name="4" value="26"/>
+        <int name="5" value="20"/>
+        <int name="6" value="16"/>
+        <int name="7" value="12"/>
+        <int name="8" value="10"/>
+        <int name="9" value="7"/>
+      </imgdir>
+      <imgdir name="cursedRates">
+        <int name="0" value="10"/>
+        <int name="1" value="12"/>
+        <int name="2" value="16"/>
+        <int name="3" value="20"/>
+        <int name="4" value="26"/>
+        <int name="5" value="33"/>
+        <int name="6" value="43"/>
+        <int name="7" value="55"/>
+        <int name="8" value="70"/>
+        <int name="9" value="100"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02047208">
+    <imgdir name="info">
+      <uol name="icon" value="../../02047200/info/icon"/>
+      <uol name="iconRaw" value="../../02047200/info/iconRaw"/>
+      <int name="price" value="1"/>
+      <int name="incACC" value="2"/>
+      <imgdir name="successRates">
+        <int name="0" value="70"/>
+        <int name="1" value="55"/>
+        <int name="2" value="43"/>
+        <int name="3" value="33"/>
+        <int name="4" value="26"/>
+        <int name="5" value="20"/>
+        <int name="6" value="16"/>
+        <int name="7" value="12"/>
+        <int name="8" value="10"/>
+        <int name="9" value="7"/>
+      </imgdir>
+      <imgdir name="cursedRates">
+        <int name="0" value="10"/>
+        <int name="1" value="12"/>
+        <int name="2" value="16"/>
+        <int name="3" value="20"/>
+        <int name="4" value="26"/>
+        <int name="5" value="33"/>
+        <int name="6" value="43"/>
+        <int name="7" value="55"/>
+        <int name="8" value="70"/>
+        <int name="9" value="100"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02047300">
+    <imgdir name="info">
+      <canvas name="icon" width="31" height="30">
+        <vector name="origin" x="-1" y="30"/>
+        <int name="z" value="0"/>
+      </canvas>
+      <canvas name="iconRaw" width="31" height="28">
+        <vector name="origin" x="-1" y="30"/>
+        <int name="z" value="0"/>
+      </canvas>
+      <int name="price" value="1"/>
+      <int name="incSTR" value="2"/>
+      <imgdir name="successRates">
+        <int name="0" value="70"/>
+        <int name="1" value="35"/>
+        <int name="2" value="18"/>
+        <int name="3" value="12"/>
+        <int name="4" value="7"/>
+      </imgdir>
+      <imgdir name="cursedRates">
+        <int name="0" value="12"/>
+        <int name="1" value="18"/>
+        <int name="2" value="35"/>
+        <int name="3" value="70"/>
+        <int name="4" value="100"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02047301">
+    <imgdir name="info">
+      <uol name="icon" value="../../02047300/info/icon"/>
+      <uol name="iconRaw" value="../../02047300/info/iconRaw"/>
+      <int name="price" value="1"/>
+      <int name="incINT" value="2"/>
+      <imgdir name="successRates">
+        <int name="0" value="70"/>
+        <int name="1" value="35"/>
+        <int name="2" value="18"/>
+        <int name="3" value="12"/>
+        <int name="4" value="7"/>
+      </imgdir>
+      <imgdir name="cursedRates">
+        <int name="0" value="12"/>
+        <int name="1" value="18"/>
+        <int name="2" value="35"/>
+        <int name="3" value="70"/>
+        <int name="4" value="100"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02047302">
+    <imgdir name="info">
+      <uol name="icon" value="../../02047300/info/icon"/>
+      <uol name="iconRaw" value="../../02047300/info/iconRaw"/>
+      <int name="price" value="1"/>
+      <int name="incDEX" value="2"/>
+      <imgdir name="successRates">
+        <int name="0" value="70"/>
+        <int name="1" value="35"/>
+        <int name="2" value="18"/>
+        <int name="3" value="12"/>
+        <int name="4" value="7"/>
+      </imgdir>
+      <imgdir name="cursedRates">
+        <int name="0" value="12"/>
+        <int name="1" value="18"/>
+        <int name="2" value="35"/>
+        <int name="3" value="70"/>
+        <int name="4" value="100"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02047303">
+    <imgdir name="info">
+      <uol name="icon" value="../../02047300/info/icon"/>
+      <uol name="iconRaw" value="../../02047300/info/iconRaw"/>
+      <int name="price" value="1"/>
+      <int name="incLUK" value="2"/>
+      <imgdir name="successRates">
+        <int name="0" value="70"/>
+        <int name="1" value="35"/>
+        <int name="2" value="18"/>
+        <int name="3" value="12"/>
+        <int name="4" value="7"/>
+      </imgdir>
+      <imgdir name="cursedRates">
+        <int name="0" value="12"/>
+        <int name="1" value="18"/>
+        <int name="2" value="35"/>
+        <int name="3" value="70"/>
+        <int name="4" value="100"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02047304">
+    <imgdir name="info">
+      <uol name="icon" value="../../02047300/info/icon"/>
+      <uol name="iconRaw" value="../../02047300/info/iconRaw"/>
+      <int name="price" value="1"/>
+      <int name="incCraft" value="2"/>
+      <imgdir name="successRates">
+        <int name="0" value="70"/>
+        <int name="1" value="35"/>
+        <int name="2" value="18"/>
+        <int name="3" value="12"/>
+        <int name="4" value="7"/>
+      </imgdir>
+      <imgdir name="cursedRates">
+        <int name="0" value="12"/>
+        <int name="1" value="18"/>
+        <int name="2" value="35"/>
+        <int name="3" value="70"/>
+        <int name="4" value="100"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02047305">
+    <imgdir name="info">
+      <uol name="icon" value="../../02047300/info/icon"/>
+      <uol name="iconRaw" value="../../02047300/info/iconRaw"/>
+      <int name="price" value="1"/>
+      <int name="incJump" value="2"/>
+      <imgdir name="successRates">
+        <int name="0" value="70"/>
+        <int name="1" value="35"/>
+        <int name="2" value="18"/>
+        <int name="3" value="12"/>
+        <int name="4" value="7"/>
+      </imgdir>
+      <imgdir name="cursedRates">
+        <int name="0" value="12"/>
+        <int name="1" value="18"/>
+        <int name="2" value="35"/>
+        <int name="3" value="70"/>
+        <int name="4" value="100"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02047306">
+    <imgdir name="info">
+      <uol name="icon" value="../../02047300/info/icon"/>
+      <uol name="iconRaw" value="../../02047300/info/iconRaw"/>
+      <int name="price" value="1"/>
+      <int name="incACC" value="2"/>
+      <imgdir name="successRates">
+        <int name="0" value="70"/>
+        <int name="1" value="35"/>
+        <int name="2" value="18"/>
+        <int name="3" value="12"/>
+        <int name="4" value="7"/>
+      </imgdir>
+      <imgdir name="cursedRates">
+        <int name="0" value="12"/>
+        <int name="1" value="18"/>
+        <int name="2" value="35"/>
+        <int name="3" value="70"/>
+        <int name="4" value="100"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02047307">
+    <imgdir name="info">
+      <uol name="icon" value="../../02047300/info/icon"/>
+      <uol name="iconRaw" value="../../02047300/info/iconRaw"/>
+      <int name="price" value="1"/>
+      <int name="incEVA" value="2"/>
+      <imgdir name="successRates">
+        <int name="0" value="70"/>
+        <int name="1" value="35"/>
+        <int name="2" value="18"/>
+        <int name="3" value="12"/>
+        <int name="4" value="7"/>
+      </imgdir>
+      <imgdir name="cursedRates">
+        <int name="0" value="12"/>
+        <int name="1" value="18"/>
+        <int name="2" value="35"/>
+        <int name="3" value="70"/>
+        <int name="4" value="100"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02047308">
+    <imgdir name="info">
+      <uol name="icon" value="../../02047300/info/icon"/>
+      <uol name="iconRaw" value="../../02047300/info/iconRaw"/>
+      <int name="price" value="1"/>
+      <int name="incMHP" value="10"/>
+      <imgdir name="successRates">
+        <int name="0" value="70"/>
+        <int name="1" value="55"/>
+        <int name="2" value="43"/>
+        <int name="3" value="33"/>
+        <int name="4" value="26"/>
+        <int name="5" value="20"/>
+        <int name="6" value="16"/>
+        <int name="7" value="12"/>
+        <int name="8" value="10"/>
+        <int name="9" value="7"/>
+      </imgdir>
+      <imgdir name="cursedRates">
+        <int name="0" value="12"/>
+        <int name="1" value="18"/>
+        <int name="2" value="35"/>
+        <int name="3" value="70"/>
+        <int name="4" value="100"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="02047309">
+    <imgdir name="info">
+      <uol name="icon" value="../../02047300/info/icon"/>
+      <uol name="iconRaw" value="../../02047300/info/iconRaw"/>
+      <int name="price" value="1"/>
+      <int name="incMMP" value="10"/>
+      <imgdir name="successRates">
+        <int name="0" value="70"/>
+        <int name="1" value="35"/>
+        <int name="2" value="18"/>
+        <int name="3" value="12"/>
+        <int name="4" value="7"/>
+      </imgdir>
+      <imgdir name="cursedRates">
+        <int name="0" value="12"/>
+        <int name="1" value="18"/>
+        <int name="2" value="35"/>
+        <int name="3" value="70"/>
+        <int name="4" value="100"/>
+      </imgdir>
     </imgdir>
   </imgdir>
   <imgdir name="02048000">
