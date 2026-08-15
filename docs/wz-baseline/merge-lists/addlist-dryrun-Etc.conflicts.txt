@@ -1,4 +1,4 @@
-# Etc.wz: additive-only merge — DRY RUN, nothing was written, D:/games/MapleStory/Server/porting-resources/wz-data/v84/Etc.wz -> D:/games/MapleStory/Etc.wz, 223 nodes would be added, 6 refused
+# Etc.wz: additive-only merge — DRY RUN, nothing was written, D:/games/MapleStory/Server/porting-resources/wz-data/v84/Etc.wz -> D:/games/MapleStory/Etc.wz, 10628 nodes would be added, 6 refused
 # Every row is a v84 node this merge REFUSED to write because the path already
 # existed in the target. Additive-only is enforced in the write path, so this file
 # is the exhaustive list of v84 changes that were dropped. Read it before shipping:

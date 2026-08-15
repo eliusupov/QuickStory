@@ -1,8 +1,10 @@
-# Etc.wz: nodes in the live client present in neither stock tree (4 copy roots).
+# Etc.wz: nodes in the live client present in neither stock tree (6 copy roots).
 # each path is a copy root: no listed path is an ancestor of another, so copying
 # a listed path already covers everything under it. Do not re-copy children.
 
 Etc.wz/DeveloperNpc.img
+Etc.wz/ItemMake.img/0/04260007
+Etc.wz/ItemMake.img/0/04260008
 Etc.wz/MapNeighbors.img
 Etc.wz/VegaSpell.img/199
 Etc.wz/VegaSpell.img/200

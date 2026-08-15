@@ -62,15 +62,43 @@ Do not re-copy children. (This is why counts differ from the first committed man
 
 ## Design decisions
 
-**Every image is expanded one level, always.** The old per-file allowlist
-(`String/Quest/Skill/Item/Etc/UI`) was a guess about which files hold "bucket" images, and it
-put `Map.wz` on the wrong side. You cannot tell a bucket image from an entity image without
-parsing it, so the rule is now structural in the only honest sense: parse everything, then
-`UnparseImage()` immediately so memory stays flat across ~55k images. Cost is CPU (~5 min),
-not RAM. There is no allowlist left to get wrong.
+**Every image is expanded three levels, always, in every file** (`EXPAND_DEPTH` in
+`tool/Program.cs`). The original per-file allowlist (`String/Quest/Skill/Item/Etc/UI`) was a guess
+about which files hold "bucket" images and it put `Map.wz` on the wrong side; deleting it fixed
+that but left the depth at one, which turned out to be too shallow for every bucket that **nests**:
 
-What that bought, all previously invisible: 5 new `Map.wz/Obj/*` sub-sets, `Map.wz/Effect.img/evan`,
-`Map.wz/Map/Map2/220011001.img/miniMap`, and 6 `Character.wz/Afterimage/mace.img/*` entries.
+| shape | where its ids really live | invisible at depth 1 |
+|---|---|---|
+| `String.wz/Eqp.img/Eqp/<category>/<id>` | 3 levels | all 154 new equip names |
+| `String.wz/Etc.img/Etc/<id>` | 2 | all 32 new etc-item names |
+| `String.wz/Map.img/<region>/<mapid>` | 2 | all 125 new **map** names |
+| `Skill.wz/<job>.img/skill/<id>` | 2 | skills added to an existing job |
+| `Etc.wz/Commodity.img/<sn>/<field>` | 2 | v84's new `Bonus` field (10,459 rows) |
+
+The rule stays structural: you cannot know how deep an image's entities sit without parsing it, so
+parse them all and `UnparseImage()` immediately to keep memory flat. There is no allowlist to get
+wrong, and no image is treated differently from any other.
+
+**Why 3 and not "all the way down".** 3 is where entity ids bottom out in this era — the deepest is
+`Eqp.img/Eqp/<category>/<id>`. Below 3 you are into animation frames, foothold vertices and canvas
+origins: intra-image detail that `modified-list/*.txt` already reports via `BlockSize`, and that no
+manifest row should ever be a copy root for. Measured, not assumed — a full 3-tree sweep at depth 3
+costs **~9 minutes and ~2 GB peak RSS** (depth 1 was ~5 min). Path counts rise about 10×
+(`Character.wz` 212k → 2.0M, `Map.wz` 57k → 2.06M); the manifests themselves grow only by real
+differences. Full expansion was not attempted: `Map.wz` and `Character.wz` would multiply again for
+frame- and vertex-level rows nobody would ever import. **Ceiling: an id nested 4+ deep is invisible
+again — raise the constant and re-measure.**
+
+What depth 1 bought over the allowlist, all previously invisible: 5 new `Map.wz/Obj/*` sub-sets,
+`Map.wz/Effect.img/evan`, `Map.wz/Map/Map2/220011001.img/miniMap`, 6 `Character.wz/Afterimage/mace.img/*`.
+What depth 3 buys on top: the whole table above, plus `Item.wz` protect-list 4 → 106 (live-only
+sub-nodes under stock item ids) and `Npc.wz` protect 5,333 → 5,981.
+
+**The merge tool had to move with it.** `WzMerge xml` refused anything more than one level below a
+`.img`; deepening the manifests without deepening it would have produced rows that import nothing.
+It now walks the ancestor chain in the XML text and splices at the right indent. Proof, verbatim:
+`merge-lists/02g-deep-xml-proof.md`. The binary `WzMerge merge` needed no change — it resolves
+segment by segment and adds through `IPropertyContainer.AddProperty`.
 
 **Parse failures are hard errors.** `WzImage.ParseImage()` reports failure by *returning false*,
 not throwing (`WzImage.cs:466,473,481`), and the `WzProperties` getter throws that bool away and
@@ -118,5 +146,17 @@ specific merge dispute needs it.
   `Sound.wz` the same way.
 - **`List.wz` is not a WZ archive** (`WZ header FStart is outside the file` under all three IVs).
   Expected — it is a legacy flat list file. Row kept so the failure is visible.
+- **A collapsed copy root hides whatever is inside it.** `Collapse()` keeps only the topmost new
+  path, so if a whole container is new the ids beneath it are never compared against the live client
+  and never appear in a conflicts file. Real case: `String.wz/Eqp.img/Eqp/Dragon` is absent from
+  v83-stock, so it is one add-list row — but the live client **has** that category, with all 12 ids,
+  every one of them named `MISSING NAME`. The dry run reports one collision and says nothing about
+  the twelve names it is hiding. When a category-level row collides, open it by hand.
+- **Depth 3 can cross a UOL.** `Npc.wz/9000021.img/say/<n>` is a real sub-property in v84 and a
+  `WzUOLProperty` (an alias) in the live client, so 24 add-list rows land under a parent that cannot
+  hold properties and the dry run refuses them as `unsupported shape: parent=WzUOLProperty`. The
+  rows are not wrong — v84 really does define those nodes — but importing them means resolving the
+  alias first. Ticket 08's problem, recorded here so it is not rediscovered as a tool bug.
+
 - **Sub-property byte sizes are not tracked** — only whole-`.img` `BlockSize`. Add/protect byte
   totals read 0 for files whose deltas are all sub-node-level (String, Quest, parts of UI/Item/Etc).

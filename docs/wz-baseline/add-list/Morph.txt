@@ -1,4 +1,4 @@
-# Morph.wz: nodes present in v84 and absent from v83-stock (25 copy roots, 57 paths)
+# Morph.wz: nodes present in v84 and absent from v83-stock (25 copy roots, 1349 paths)
 # each path is a copy root: no listed path is an ancestor of another, so copying
 # a listed path already covers everything under it. Do not re-copy children.
 

@@ -35,8 +35,9 @@ paths too. See "Verification" below for what to run instead.
 
 The XML side has a gate with the same **intent** but a different **mechanism**, and the difference
 matters: it is a line-text scan, so it only recognises elements written the way Cosmic's serializer
-writes them (indent 2, `name="…"` on the opening line). It refuses a path whose name already
-appears at the root of the target `.img.xml`, and refuses to overwrite an existing `.xml` file.
+writes them (2 spaces per level, `name="…"` on the opening line). It walks the ancestor chain by
+indentation and refuses a path whose name already exists **inside that parent** — so the gate holds
+at `Eqp.img/Eqp/Hair/30000`, not just at the root — and refuses to overwrite an existing `.xml` file.
 It also refuses outright if the target file has a UTF-8 BOM or is not CRLF throughout — the splice
 rewrites the whole file, and silently normalising someone else's line endings while adding one node
 is not additive in any sense that matters. Both refusals are tested (`03-verification/`).
@@ -55,8 +56,13 @@ Read the file before shipping. Two real examples from the tracer sweep, one per 
 ### The collision map for 04–09 — already measured
 
 Full dry run of every add-list against the live client (`docs/wz-baseline/merge-lists/addlist-dryrun-*.conflicts.txt`).
-**41 of the 2,172 add-list roots collide** (every `.wz` with an add-list except `UI.wz`, which is
+**759 of the 16,052 add-list roots collide** (every `.wz` with an add-list except `UI.wz`, which is
 out of scope).
+
+> Re-measured by ticket 02g after the diff tool's expansion went from 1 level to 3. The old figures
+> — 41 collisions across 2,172 roots — were computed over manifests that could not see any node
+> nested more than one level below a `.img`, which is where all of `String.wz/{Eqp,Etc,Map}.img`
+> lives. Nothing about the merge rule changed; the manifests got bigger and truthful.
 
 Read that precisely: it covers **manifest roots only**. A v84 change that lives *below* an existing
 image — an edited property inside a `.img` that both trees have — is not an add-list row at all and
@@ -64,14 +70,24 @@ so cannot appear here. That class of change is what `modified-list/*.txt` is for
 separate read. This table says "of the things v84 adds, these are the ones whose id is already
 taken"; it does not say "these are the only v84 changes additive-only will drop".
 
-| file | refused | what |
-|---|---|---|
-| `Npc.wz` | 10 | `9901910.img`–`9901919.img` — v84's new NPCs land **inside Cosmic's injected `99xxxxx` block**. Ticket 08's biggest landmine: these cannot be imported at their native ids without destroying server NPCs. Re-id or drop. |
-| `String.wz` | 23 | the same ten `Npc.img/990191x` names, plus `Cash.img/5500005–6`, `Cash.img/5530001–8`, `Consume.img/2100166`, `Ins.img/3994179–80` |
-| `Etc.wz` | 6 | `Commodity.img/8941`–`8946` — cash-shop SNs already taken |
-| `Character.wz` | 2 | `Accessory/01142153.img`, `01142154.img` |
-| `Item.wz`, `Map.wz`, `Mob.wz`, `Quest.wz`, `Reactor.wz`, `Skill.wz` | 0 | clean |
-| `Base.wz`, `Effect.wz`, `Morph.wz`, `Sound.wz`, `TamingMob.wz` | 0 | clean (02f's new baselines; `Base`/`TamingMob` add nothing at all) |
+| file | roots | refused | what |
+|---|---|---|---|
+| `String.wz` | 1,579 | 711 | 654 are `MonsterBook.img/<id>/reward/<n>` — the live client's monster-book rewards differ from v84's, so nearly every new reward slot is already occupied. The rest: **30 in `Eqp.img`**, 11 `Npc.img` (the ten `990191x` names + 1), 10 `Cash.img`, 3 `Etc.img`, 2 `Ins.img`, 1 `Consume.img`. **`Map.img`: 125 new map names, 0 collisions — all importable.** |
+| `Npc.wz` | 98 | 34 | `9901910.img`–`9901919.img` land **inside Cosmic's injected `99xxxxx` block** — ticket 08's biggest landmine, re-id or drop. The other 24 are `9000021.img/say|stand/<n>/{delay,origin,z}` refused as `unsupported shape: parent=WzUOLProperty`: the live client aliases those frames, v84 defines them. Not a collision in the ordinary sense — resolve the alias first. |
+| `Character.wz` | 438 | 6 | `Accessory/01142153.img`, `01142154.img`, plus `Dragon/019{4,5,6,7}2002.img/info/level` — the live client already ships Evan's dragon equips and v84 adds a `level` field to four of them. |
+| `Etc.wz` | 10,634 | 6 | `Commodity.img/8941`–`8946`, cash-shop SNs already taken. **10,459 of the roots are `Commodity.img/<sn>/Bonus`** — a field v84 adds to existing cash-shop entries. Real v84 data, but nobody should bulk-import it. |
+| `Map.wz` | 601 | 2 | `WorldMap/WorldMap010.img/MapList/93`, `/94` — already present in the live world map. |
+| `Item.wz`, `Mob.wz`, `Quest.wz`, `Reactor.wz`, `Skill.wz` | 2,592 | 0 | clean |
+| `Base.wz`, `Effect.wz`, `Morph.wz`, `Sound.wz`, `TamingMob.wz` | 110 | 0 | clean (02f's baselines; `Base`/`TamingMob` add nothing at all) |
+
+**A refused row is not automatically a row you should force.** Ticket 02g compared every shared
+`Eqp.img` id between the live client and v84: **589 names differ, and in all but 18 the live name is
+the better one** (Ezorsia renamed all 507 faces; v84 calls them "Male Face 19"). The 18 that matter
+are the ones where the live value is the literal placeholder `MISSING NAME`: all twelve
+`Eqp/Dragon` ids (`1942000`–`1972002`, v84 "Silver/Gold/Reverse Mask/Pendant/Wings/Tail") and
+`Accessory/1142143`–`1142151`. Same shape in `Eqp/Taming`: `1902040`–`1902042` and `1912033`–`1912035`
+(Evan's Mir and its saddles) exist locally as `MISSING NAME` / `MISSING INFO`. **Those are ticket 04
+and 13's blank labels, and additive-only will not fix them — they need a deliberate overwrite.**
 
 The sweep also found the one shape the tool could not handle: `Skill.wz/Dragon`, a whole new
 **directory** (Evan's dragon animations). Now supported via `WzDirectory.DeepClone()`, and the
@@ -234,14 +250,9 @@ automatic, but a hand-cut subset can break it.
 
 - **`UI.wz`.** Out of scope by ticket-03 decree and still is. Take `SkillEx` / `SkillMacroEx` only,
   never bulk.
-- **XML more than one level below a `.img`.** The add-list manifests expand images exactly one
-  level, so no manifest row needs it. `WzMerge xml` refuses loudly instead of guessing; add a real
-  XML walker if a hand-written list ever needs it.
-- **`String.wz/Eqp.img` and `String.wz/Etc.img` are not covered by any manifest.** Their ids sit at
-  `Eqp.img/Eqp/<category>/<id>` and `Etc.img/Etc/<id>`, below the one level the diff tool expands,
-  so only the unchanging wrapper is visible and the add-list reports nothing. Measured on one
-  category: **`Eqp/Hair` goes 1,504 → 1,553 names, 49 new, 9 of them already taken in the live
-  client.** Ticket 04 needs that enumeration built before it can claim "names resolve correctly".
+- **Nodes nested 4+ levels below a `.img`.** The manifests expand 3 levels — deep enough for every
+  id in this era, not deep enough for animation frames or foothold vertices. `WzMerge xml` itself
+  has no depth limit any more (02g); the limit is what the manifests contain.
 - **Sound / TamingMob / Effect / Morph / Base.** No stock baseline exists for these, so there is no
   add-list to feed the tool (ticket 05's mounts need `TamingMob.wz` extracted first).
 - **`live Sound.wz/BgmGL.img` is unreadable by MapleLib** (`WZ extended property exceeds its

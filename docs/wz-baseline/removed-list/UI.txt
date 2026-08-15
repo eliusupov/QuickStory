@@ -1,2 +1,9 @@
-# UI.wz: nodes present in v83-stock and absent from v84 — deleted by the patch (0 roots, 0 paths). A wholesale file swap destroys any of these the live client still has. Each row is a root: everything under it went too.
+# UI.wz: nodes present in v83-stock and absent from v84 — deleted by the patch (7 roots, 28 paths). A wholesale file swap destroys any of these the live client still has. Each row is a root: everything under it went too.
 
+UI.wz/Login.img/RaceSelect/aran
+UI.wz/Login.img/RaceSelect/aran1
+UI.wz/Login.img/RaceSelect/BtSelect
+UI.wz/Login.img/RaceSelect/knight
+UI.wz/Login.img/RaceSelect/normal
+UI.wz/Login.img/RaceSelect/textGL
+UI.wz/UIWindow.img/FadeYesNo/icon7/icon5

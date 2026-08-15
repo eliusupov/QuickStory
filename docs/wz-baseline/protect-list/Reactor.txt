@@ -1,11 +1,53 @@
-# Reactor.wz: nodes in the live client present in neither stock tree (7 copy roots).
+# Reactor.wz: nodes in the live client present in neither stock tree (49 copy roots).
 # each path is a copy root: no listed path is an ancestor of another, so copying
 # a listed path already covers everything under it. Do not re-copy children.
 
+Reactor.wz/2006000.img/0/event
+Reactor.wz/2006001.img/0/event
+Reactor.wz/2406000.img/0/event
+Reactor.wz/2406000.img/info/activateByTouch
+Reactor.wz/2408001.img/1/repeat
 Reactor.wz/2519002.img/0
 Reactor.wz/2519002.img/1
 Reactor.wz/2519003.img/0
 Reactor.wz/2519003.img/1
+Reactor.wz/2618000.img/7/1
+Reactor.wz/2618000.img/7/event/1
+Reactor.wz/2618000.img/7/event/timeOut
+Reactor.wz/2618000.img/7/hit/1
+Reactor.wz/2618000.img/7/hit/2
+Reactor.wz/2618000.img/7/hit/3
+Reactor.wz/2618000.img/7/hit/4
+Reactor.wz/2618000.img/7/hit/5
+Reactor.wz/2618000.img/7/hit/6
 Reactor.wz/2618000.img/8
+Reactor.wz/2618003.img/0/event
+Reactor.wz/2618004.img/0/event
+Reactor.wz/2618005.img/0/event
+Reactor.wz/2618006.img/0/event
+Reactor.wz/2618006.img/0/hit
+Reactor.wz/2618006.img/1/1
+Reactor.wz/2618006.img/1/10
+Reactor.wz/2618006.img/1/11
+Reactor.wz/2618006.img/1/2
+Reactor.wz/2618006.img/1/3
+Reactor.wz/2618006.img/1/4
+Reactor.wz/2618006.img/1/5
+Reactor.wz/2618006.img/1/6
+Reactor.wz/2618006.img/1/7
+Reactor.wz/2618006.img/1/8
+Reactor.wz/2618006.img/1/9
+Reactor.wz/2618006.img/1/repeat
+Reactor.wz/2618007.img/0/event
+Reactor.wz/9202005.img/5/event
+Reactor.wz/9202005.img/5/hit
+Reactor.wz/9208003.img/0/event
+Reactor.wz/9208004.img/0/event
+Reactor.wz/9208004.img/0/hit
+Reactor.wz/9208004.img/1/event
+Reactor.wz/9208004.img/1/hit
+Reactor.wz/9208004.img/2/event
+Reactor.wz/9208004.img/2/hit
+Reactor.wz/9208004.img/3/event
 Reactor.wz/9400300.img
 Reactor.wz/9400301.img

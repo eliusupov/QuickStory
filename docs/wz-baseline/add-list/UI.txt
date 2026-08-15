@@ -1,15 +1,65 @@
-# UI.wz: nodes present in v84 and absent from v83-stock (11 copy roots, 11 paths)
+# UI.wz: nodes present in v84 and absent from v83-stock (61 copy roots, 690 paths)
 # each path is a copy root: no listed path is an ancestor of another, so copying
 # a listed path already covers everything under it. Do not re-copy children.
 
 UI.wz/Basic.img/KeyDownBar2
 UI.wz/Basic.img/KeyDownBar3
 UI.wz/Basic.img/Tab8
+UI.wz/CashShop.img/Base/backgrnd3
+UI.wz/ChatBalloon.img/pet/40
+UI.wz/ChatBalloon.img/pet/41
+UI.wz/Login.img/CharSelect/evan
 UI.wz/Login.img/NewCharEvan
+UI.wz/Login.img/Notice/BtAccept
+UI.wz/Login.img/Notice/text/59
+UI.wz/Login.img/Notice/text/60
+UI.wz/Login.img/Notice/text/61
+UI.wz/Login.img/RaceSelect/backgrnd
+UI.wz/Login.img/RaceSelect/BtAran
+UI.wz/Login.img/RaceSelect/BtEvan
+UI.wz/Login.img/RaceSelect/BtKnight
+UI.wz/Login.img/RaceSelect/BtNormal
+UI.wz/Login.img/RaceSelect/confirm
+UI.wz/Login.img/RaceSelect/new
+UI.wz/MapLogin.img/0/obj/10
+UI.wz/MapLogin.img/0/obj/7
+UI.wz/MapLogin.img/0/obj/8
+UI.wz/MapLogin.img/0/obj/9
+UI.wz/MapLogin.img/back/48
+UI.wz/MapLogin.img/back/49
+UI.wz/MapLogin.img/back/50
+UI.wz/MapLogin.img/back/51
+UI.wz/MapLogin.img/back/52
+UI.wz/MapLogin.img/back/53
+UI.wz/MapLogin.img/back/54
+UI.wz/NameTag.img/medal/124
+UI.wz/NameTag.img/medal/96
+UI.wz/NameTag.img/pet/42
+UI.wz/NameTag.img/pet/43
 UI.wz/tutorial.img/evan
+UI.wz/UIWindow.img/Equip/BtDragonEquip
+UI.wz/UIWindow.img/Equip/DragonEquip
+UI.wz/UIWindow.img/FadeYesNo/backgrnd7
+UI.wz/UIWindow.img/FadeYesNo/backgrnd8
+UI.wz/UIWindow.img/FadeYesNo/backgrnd9
 UI.wz/UIWindow.img/GachaCopy
 UI.wz/UIWindow.img/ImageFrame
+UI.wz/UIWindow.img/KeyConfig/icon/28
+UI.wz/UIWindow.img/KeyConfig/icon/29
+UI.wz/UIWindow.img/MobGage/Mob/8300005
+UI.wz/UIWindow.img/MobGage/Mob/8300006
+UI.wz/UIWindow.img/MobGage/Mob/8300007
+UI.wz/UIWindow.img/MobGage/Mob/9300390
+UI.wz/UIWindow.img/MobGage/Mob/9300393
+UI.wz/UIWindow.img/MobGage/Mob/9400288
+UI.wz/UIWindow.img/MobGage/Mob/9400293
+UI.wz/UIWindow.img/MobGage/Mob/9400659
+UI.wz/UIWindow.img/MobGage/Mob/9400660
+UI.wz/UIWindow.img/MobGage/Mob/9500382
 UI.wz/UIWindow.img/PartySearch2
+UI.wz/UIWindow.img/QuestIcon/10
 UI.wz/UIWindow.img/Repair
 UI.wz/UIWindow.img/SkillEx
 UI.wz/UIWindow.img/SkillMacroEx
+UI.wz/UIWindow.img/Stat/backgrnd3
+UI.wz/UIWindow.img/UserList/Expendition

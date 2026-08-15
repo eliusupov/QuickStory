@@ -1,2 +1,37 @@
-# Item.wz: nodes present in v83-stock and absent from v84 — deleted by the patch (0 roots, 0 paths). A wholesale file swap destroys any of these the live client still has. Each row is a root: everything under it went too.
+# Item.wz: nodes present in v83-stock and absent from v84 — deleted by the patch (35 roots, 35 paths). A wholesale file swap destroys any of these the live client still has. Each row is a root: everything under it went too.
 
+Item.wz/Consume/0202.img/02022504/reward/44
+Item.wz/Consume/0202.img/02022505/reward/44
+Item.wz/Consume/0202.img/02022506/reward/44
+Item.wz/Consume/0202.img/02022507/reward/44
+Item.wz/Consume/0202.img/02022508/reward/44
+Item.wz/Consume/0202.img/02022509/reward/44
+Item.wz/Consume/0202.img/02022510/reward/44
+Item.wz/Consume/0202.img/02022511/reward/44
+Item.wz/Consume/0202.img/02022512/reward/44
+Item.wz/Consume/0202.img/02022513/reward/44
+Item.wz/Consume/0202.img/02022515/reward/44
+Item.wz/Consume/0202.img/02022516/reward/44
+Item.wz/Consume/0202.img/02022517/reward/44
+Item.wz/Consume/0202.img/02022518/reward/44
+Item.wz/Consume/0202.img/02022519/reward/44
+Item.wz/Consume/0202.img/02022520/reward/44
+Item.wz/Consume/0202.img/02022521/reward/44
+Item.wz/Consume/0202.img/02022522/reward/44
+Item.wz/Consume/0202.img/02022523/reward/44
+Item.wz/Consume/0202.img/02022524/reward/44
+Item.wz/Consume/0243.img/02430005/info/tragetBlock
+Item.wz/Etc/0400.img/04001339/info/notSale
+Item.wz/Etc/0400.img/04001339/info/tradeBlock
+Item.wz/Etc/0403.img/04032473/info/quest
+Item.wz/Etc/0403.img/04032474/info/quest
+Item.wz/Etc/0403.img/04032477/info/quest
+Item.wz/Etc/0416.img/04161049/info/notSale
+Item.wz/Etc/0416.img/04161049/info/only
+Item.wz/Etc/0416.img/04161049/info/tradeBlock
+Item.wz/Etc/0416.img/04161050/info/notSale
+Item.wz/Etc/0416.img/04161050/info/only
+Item.wz/Etc/0416.img/04161050/info/tradeBlock
+Item.wz/Etc/0416.img/04161051/info/notSale
+Item.wz/Etc/0416.img/04161051/info/only
+Item.wz/Etc/0416.img/04161051/info/tradeBlock

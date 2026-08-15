@@ -16,11 +16,21 @@ using MapleLib.WzLib;
 
 static class Program
 {
-    // ponytail: every image is expanded one level, always. The old per-file allowlist
-    // was a guess about which files are "bucket images" and it got Map.wz wrong
-    // (Obj/Back/Tile are buckets of named sub-sets). You cannot know whether an image
-    // is a bucket without parsing it, so parse them all and unparse right after to
-    // keep memory flat. Cost: a full run is minutes, not seconds. See TOOL-NOTES.md.
+    // ponytail: every image is expanded EXPAND_DEPTH levels, always, in every file.
+    // The old per-file allowlist was a guess about which files are "bucket images" and
+    // it got Map.wz wrong; one level then turned out to be too shallow for the buckets
+    // that nest (String.wz/Eqp.img/Eqp/<category>/<id>, Etc.img/Etc/<id>,
+    // Map.img/<region>/<mapid>, Skill.wz/<job>.img/skill/<id>). You cannot know how deep
+    // an image's entities sit without parsing it, so parse them all and unparse right
+    // after to keep memory flat.
+    //
+    // Why 3 and not "all the way down": 3 is where entity ids bottom out in this era —
+    // the deepest is Eqp.img/Eqp/<category>/<id>. Below 3 you are looking at animation
+    // frames, foothold vertices and canvas origins, which are intra-image detail that
+    // modified-list/*.txt (BlockSize) already reports and that no manifest row should
+    // ever be a copy root for. Ceiling: an id nested 4+ deep would be invisible again;
+    // the upgrade path is to raise this constant and re-measure the cost.
+    const int EXPAND_DEPTH = 3;
 
     record NodeSet(HashSet<string> Paths, Dictionary<string, long> ImageSizes);
 
@@ -61,6 +71,17 @@ static class Program
         var paths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         var sizes = new Dictionary<string, long>(StringComparer.OrdinalIgnoreCase);
 
+        void AddProps(MapleLib.WzLib.WzPropertyCollection? props, string prefix, int depth)
+        {
+            if (props == null) return;
+            foreach (var prop in props)
+            {
+                string p = prefix + "/" + prop.Name;
+                paths.Add(p);
+                if (depth < EXPAND_DEPTH) AddProps(prop.WzProperties, p, depth + 1);
+            }
+        }
+
         void WalkDir(WzDirectory dir, string prefix)
         {
             foreach (var sub in dir.WzDirectories)
@@ -92,8 +113,7 @@ static class Program
                     img.UnparseImage(); // a partial parse still allocated properties
                     continue;
                 }
-                foreach (var prop in img.WzProperties)
-                    paths.Add(p + "/" + prop.Name);
+                AddProps(img.WzProperties, p, 1);
                 img.UnparseImage(); // keep memory flat across ~60k images
             }
         }
@@ -188,7 +208,7 @@ static class Program
         summary.Add($"Roots: v83=`{string.Join(";", v83Dir)}` v84=`{string.Join(";", v84Dir)}` live=`{string.Join(";", liveDir)}`");
         summary.Add("");
         summary.Add("`—` = not measurable (a required tree lacks this file). It never means zero.");
-        summary.Add("Node counts are paths (directories + images + one level of sub-properties).");
+        summary.Add($"Node counts are paths (directories + images + {EXPAND_DEPTH} levels of sub-properties).");
         summary.Add("");
         summary.Add("| wz | v83-stock | v84 | live client | add (v84−v83) | removed (v83−v84) | protect (live − (v83 ∪ v84)) | modified v83→v84 | modified v83→live | add bytes | protect bytes |");
         summary.Add("|---|---|---|---|---|---|---|---|---|---|---|");
@@ -320,7 +340,9 @@ static class Program
         Console.WriteLine("=== deleted-map name lookup ===");
         var wantedIds = absentPaths
             .Select(p => Path.GetFileNameWithoutExtension(p[(p.LastIndexOf('/') + 1)..]))
-            .ToHashSet(StringComparer.Ordinal);
+            // OrdinalIgnoreCase like every other set in this file: WZ node lookup is
+            // case-insensitive, and a case-differing id must not read as "not found".
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
         string? path = v83Dir.Select(d => Path.Combine(d, "String.wz")).FirstOrDefault(File.Exists);
         if (path == null) { Console.WriteLine("  no v83 String.wz"); return; }
@@ -347,7 +369,13 @@ static class Program
                         Walk(p.WzProperties, region == "" ? p.Name : region, depth + 1);
                 }
             }
-            Walk(mapImg.WzProperties, "", 0);
+            // H1 again, in the one place it survived the rewrite: reading .WzProperties
+            // without checking ParseImage()'s return value turns a failed parse into a
+            // silent "0 names found". Same defect, same fix — read the bool.
+            if (!mapImg.ParseImage())
+                Console.Error.WriteLine("  [PARSE-FAIL] v83 String.wz/Map.img — name lookup skipped, ids will read as unresolved");
+            else
+                Walk(mapImg.WzProperties, "", 0);
         }
 
         var lines = new List<string>

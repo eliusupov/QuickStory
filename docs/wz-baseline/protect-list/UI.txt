@@ -1,4 +1,45 @@
-# UI.wz: nodes in the live client present in neither stock tree (0 copy roots).
+# UI.wz: nodes in the live client present in neither stock tree (41 copy roots).
 # each path is a copy root: no listed path is an ancestor of another, so copying
 # a listed path already covers everything under it. Do not re-copy children.
 
+UI.wz/UIWindow.img/MobGage/Mob/4130103
+UI.wz/UIWindow.img/MobGage/Mob/5090000
+UI.wz/UIWindow.img/MobGage/Mob/5090001
+UI.wz/UIWindow.img/MobGage/Mob/5120100
+UI.wz/UIWindow.img/MobGage/Mob/6090001
+UI.wz/UIWindow.img/MobGage/Mob/6090002
+UI.wz/UIWindow.img/MobGage/Mob/6090003
+UI.wz/UIWindow.img/MobGage/Mob/6090004
+UI.wz/UIWindow.img/MobGage/Mob/7090000
+UI.wz/UIWindow.img/MobGage/Mob/7120100
+UI.wz/UIWindow.img/MobGage/Mob/7120101
+UI.wz/UIWindow.img/MobGage/Mob/7120102
+UI.wz/UIWindow.img/MobGage/Mob/8090000
+UI.wz/UIWindow.img/MobGage/Mob/8120100
+UI.wz/UIWindow.img/MobGage/Mob/8120101
+UI.wz/UIWindow.img/MobGage/Mob/8140510
+UI.wz/UIWindow.img/MobGage/Mob/8220007
+UI.wz/UIWindow.img/MobGage/Mob/8220009
+UI.wz/UIWindow.img/MobGage/Mob/8820002
+UI.wz/UIWindow.img/MobGage/Mob/8820003
+UI.wz/UIWindow.img/MobGage/Mob/8820004
+UI.wz/UIWindow.img/MobGage/Mob/8820005
+UI.wz/UIWindow.img/MobGage/Mob/8820006
+UI.wz/UIWindow.img/MobGage/Mob/9001000
+UI.wz/UIWindow.img/MobGage/Mob/9001001
+UI.wz/UIWindow.img/MobGage/Mob/9001002
+UI.wz/UIWindow.img/MobGage/Mob/9001003
+UI.wz/UIWindow.img/MobGage/Mob/9001004
+UI.wz/UIWindow.img/MobGage/Mob/9001008
+UI.wz/UIWindow.img/MobGage/Mob/9400014
+UI.wz/UIWindow.img/MobGage/Mob/9400112
+UI.wz/UIWindow.img/MobGage/Mob/9400113
+UI.wz/UIWindow.img/MobGage/Mob/9400120
+UI.wz/UIWindow.img/MobGage/Mob/9400121
+UI.wz/UIWindow.img/MobGage/Mob/9400122
+UI.wz/UIWindow.img/MobGage/Mob/9400205
+UI.wz/UIWindow.img/MobGage/Mob/9400300
+UI.wz/UIWindow.img/MobGage/Mob/9400549
+UI.wz/UIWindow.img/MobGage/Mob/9400589
+UI.wz/UIWindow.img/MobGage/Mob/9400606
+UI.wz/UIWindow.img/MobGage/Mob/9400748

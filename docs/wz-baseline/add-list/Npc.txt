@@ -1,7 +1,8 @@
-# Npc.wz: nodes present in v84 and absent from v83-stock (50 copy roots, 188 paths)
+# Npc.wz: nodes present in v84 and absent from v83-stock (98 copy roots, 1933 paths)
 # each path is a copy root: no listed path is an ancestor of another, so copying
 # a listed path already covers everything under it. Do not re-copy children.
 
+Npc.wz/1002101.img/info/script
 Npc.wz/1011101.img
 Npc.wz/1012108.img/condition1
 Npc.wz/1012108.img/condition2
@@ -11,6 +12,17 @@ Npc.wz/1013000.img/condition3
 Npc.wz/1013000.img/condition4
 Npc.wz/1013000.img/condition5
 Npc.wz/1013000.img/condition6
+Npc.wz/1013000.img/stand/1
+Npc.wz/1013000.img/stand/10
+Npc.wz/1013000.img/stand/11
+Npc.wz/1013000.img/stand/2
+Npc.wz/1013000.img/stand/3
+Npc.wz/1013000.img/stand/4
+Npc.wz/1013000.img/stand/5
+Npc.wz/1013000.img/stand/6
+Npc.wz/1013000.img/stand/7
+Npc.wz/1013000.img/stand/8
+Npc.wz/1013000.img/stand/9
 Npc.wz/1013001.img
 Npc.wz/1013002.img
 Npc.wz/1013100.img
@@ -30,6 +42,7 @@ Npc.wz/1013206.img
 Npc.wz/1013207.img
 Npc.wz/1022106.img
 Npc.wz/1022107.img
+Npc.wz/1032104.img/info/default
 Npc.wz/1063018.img
 Npc.wz/1205000.img
 Npc.wz/2012034.img
@@ -40,8 +53,43 @@ Npc.wz/2085002.img
 Npc.wz/2085003.img
 Npc.wz/2092100.img
 Npc.wz/2092101.img
+Npc.wz/9000021.img/say/2/delay
+Npc.wz/9000021.img/say/2/origin
+Npc.wz/9000021.img/say/2/z
+Npc.wz/9000021.img/say/3/delay
+Npc.wz/9000021.img/say/3/origin
+Npc.wz/9000021.img/say/3/z
+Npc.wz/9000021.img/say/4/delay
+Npc.wz/9000021.img/say/4/origin
+Npc.wz/9000021.img/say/4/z
+Npc.wz/9000021.img/say/5/delay
+Npc.wz/9000021.img/say/5/origin
+Npc.wz/9000021.img/say/5/z
+Npc.wz/9000021.img/stand/2/delay
+Npc.wz/9000021.img/stand/2/origin
+Npc.wz/9000021.img/stand/2/z
+Npc.wz/9000021.img/stand/3/delay
+Npc.wz/9000021.img/stand/3/origin
+Npc.wz/9000021.img/stand/3/z
+Npc.wz/9000021.img/stand/4/delay
+Npc.wz/9000021.img/stand/4/origin
+Npc.wz/9000021.img/stand/4/z
+Npc.wz/9000021.img/stand/5/delay
+Npc.wz/9000021.img/stand/5/origin
+Npc.wz/9000021.img/stand/5/z
+Npc.wz/9000054.img/info/reg/event
 Npc.wz/9201144.img
 Npc.wz/9201145.img
+Npc.wz/9900000.img/info/reg/name1
+Npc.wz/9900000.img/info/reg/name2
+Npc.wz/9900000.img/info/reg/name3
+Npc.wz/9900001.img/info/reg/name1
+Npc.wz/9900001.img/info/reg/name2
+Npc.wz/9900001.img/info/reg/name3
+Npc.wz/9901000.img/say/0/delay
+Npc.wz/9901000.img/say/0/z
+Npc.wz/9901000.img/stand/0/delay
+Npc.wz/9901000.img/stand/0/z
 Npc.wz/9901910.img
 Npc.wz/9901911.img
 Npc.wz/9901912.img

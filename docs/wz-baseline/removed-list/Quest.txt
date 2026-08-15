@@ -1,3 +1,41 @@
-# Quest.wz: nodes present in v83-stock and absent from v84 — deleted by the patch (1 roots, 1 paths). A wholesale file swap destroys any of these the live client still has. Each row is a root: everything under it went too.
+# Quest.wz: nodes present in v83-stock and absent from v84 — deleted by the patch (39 roots, 53 paths). A wholesale file swap destroys any of these the live client still has. Each row is a root: everything under it went too.
 
+Quest.wz/Act.img/28178/1/item
+Quest.wz/Check.img/28178/1/item
+Quest.wz/Check.img/28267/0/job
+Quest.wz/Check.img/28268/0/job
+Quest.wz/Check.img/28269/0/job
+Quest.wz/Check.img/28270/0/job
+Quest.wz/Check.img/28271/0/job
+Quest.wz/Check.img/28272/0/job
+Quest.wz/Check.img/28273/0/job
+Quest.wz/Check.img/28274/0/job
+Quest.wz/Check.img/28275/0/job
+Quest.wz/Check.img/28276/0/job
+Quest.wz/Check.img/28277/0/job
+Quest.wz/Check.img/28278/0/job
+Quest.wz/Check.img/28279/0/job
+Quest.wz/Check.img/28280/0/job
+Quest.wz/Check.img/28281/0/job
+Quest.wz/Check.img/4300/0/end
+Quest.wz/Check.img/4300/0/start
+Quest.wz/Check.img/4301/0/end
+Quest.wz/Check.img/4301/0/start
+Quest.wz/Check.img/4302/0/end
+Quest.wz/Check.img/4302/0/start
+Quest.wz/Check.img/4303/0/end
+Quest.wz/Check.img/4303/0/start
+Quest.wz/Check.img/4304/0/end
+Quest.wz/Check.img/4304/0/start
+Quest.wz/Check.img/4305/0/end
+Quest.wz/Check.img/4305/0/start
+Quest.wz/Check.img/4306/1/end
+Quest.wz/Check.img/4306/1/start
+Quest.wz/Check.img/4307/0/end
+Quest.wz/Check.img/4307/0/start
+Quest.wz/Check.img/4308/0/end
+Quest.wz/Check.img/4308/0/start
+Quest.wz/Check.img/4309/1/end
+Quest.wz/Check.img/4309/1/start
+Quest.wz/Check.img/4919/0/job
 Quest.wz/Exclusive.img/medal
