@@ -7,7 +7,13 @@
 # - blank lines and lines whose first non-space char is '#' are ignored
 # - <path> is the same "Wz.wz/rest/of/path" form the add-lists and conflicts.txt use
 # - a listed path is a force ROOT: everything under it is overwritten too
-# - a path NOT listed here keeps its live value; there is no "deny" syntax and none is needed
+# - a path NOT listed here keeps its live value; this file has no "deny" syntax and needs none
+#
+# THIS FILE HAS A COUNTERPART. COLLISION-DENY.txt lists paths the merge must refuse even
+# though they are ABSENT from the target — additions the gate cannot catch, because the gate
+# only guards overwrites. Same format, so one parser serves both. If a path somehow appears in
+# both files: deny wins, and it should be a hard exit — an overlap is an operator error worth
+# stopping for, not something to resolve silently.
 #
 # Every row below was verified three ways (v83-stock / v84 / live client) before listing.
 # The whole list is one rule: the live value is the string literal "MISSING NAME" /
