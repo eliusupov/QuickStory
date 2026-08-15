@@ -41,7 +41,10 @@ post-merge tree too, or at anything harmless.
 Every manifest carries a header. Add/remove/protect lists are **copy roots**: no listed path
 is an ancestor of another, so copying a listed path already covers everything beneath it.
 Do not re-copy children. (This is why counts differ from the first committed manifests — e.g.
-`protect-list/Etc.txt` went 5267 → 4: those 5267 paths were all sub-keys of 4 custom images.)
+`protect-list/Etc.txt` went 5267 → 4 at depth 1, because those 5267 paths were all sub-keys of
+4 custom images. **At the current depth 3 it is 6**; every count in this file that is quoted from
+the depth-1 era is marked as such below. Read the header line of the manifest itself for the
+live figure — every manifest carries its own count and cannot go stale.)
 
 `—` in `SUMMARY.md` means *not measurable* — a tree lacks that file. It never means zero.
 
@@ -94,6 +97,10 @@ What depth 1 bought over the allowlist, all previously invisible: 5 new `Map.wz/
 What depth 3 buys on top: the whole table above, plus `Item.wz` protect-list 4 → 106 (live-only
 sub-nodes under stock item ids) and `Npc.wz` protect 5,333 → 5,981.
 
+**Current protect-list copy-root counts, for reference** (depth 3, committed manifests): Character
+2,987 · Npc 5,981 · Map 399 · Quest 225 · Mob 168 · Item 106 · Reactor 49 · Etc 6 · Skill 3 ·
+Base/Effect/Morph/Sound 0. Any number in this document that disagrees is a depth-1 leftover.
+
 **The merge tool had to move with it.** `WzMerge xml` refused anything more than one level below a
 `.img`; deepening the manifests without deepening it would have produced rows that import nothing.
 It now walks the ancestor chain in the XML text and splices at the right indent. Proof, verbatim:
@@ -123,27 +130,34 @@ It is a cheap change *detector*, not a content hash. It is neither sound nor com
 
 Where it is worth trusting: `modified-list/Character.live.txt` has **5114** rows, none of them a
 trivial ±4-byte delta. That is Ezorsia's 18.6 MB of HD art, sitting under paths that also exist
-in stock v83 — content a presence-only diff cannot see at all (`protect-list/Character.txt` finds
-only 4 nodes). **Ticket 04–09 rule: for `Character.wz`, treat every path in
+in stock v83 — content a presence-only diff cannot see at all. **`protect-list/Character.txt`
+carries 2,987 copy roots at the current depth 3** (it was 4 at depth 1, which is the figure that
+used to be quoted here), and 5,114 still dwarfs it: presence-only diffing does not become
+sufficient just because it got deeper. **Ticket 04–09 rule: for `Character.wz`, treat every path in
 `modified-list/Character.live.txt` as protected. Do not overwrite it with v84 data.**
 
 Escalation if that is not good enough: hash the canonical serialization of each parsed image
-(not its raw block bytes — those embed absolute offsets and change on any re-save). That means
-fully parsing and re-serializing three trees; not done, deliberately, and not worth it unless a
-specific merge dispute needs it.
+(not its raw block bytes — those embed absolute offsets and change on any re-save). Across three
+whole trees that is still not done, deliberately. **It IS done for the images a merge inserts
+into** — `WzMerge merge` digests each of those from memory before the save and re-digests it off
+the written file, and exits 4 on a mismatch (`tool-merge/Program.cs`, "M2"). That is the only
+place a serializer bug can live, so it is where the expensive check earns its keep.
 
 ## Known gaps
 
-- **`Sound.wz/BgmGL.img` (live) fails to parse** — `InvalidDataException: WZ extended property
-  exceeds its declared block`. The only parse failure in any tree. It is a pre-existing defect in
-  the live client's `Sound.wz`, not something this tool introduced, but any BGM work must know
-  that image's contents are unreadable by MapleLib.
-- **`Base.wz`, `Effect.wz`, `Morph.wz`, `Sound.wz`, `TamingMob.wz`, `EzorsiaV2_UI.wz` have no
-  stock baseline** — they exist only in the live tree, so every cell for them reads `—`. They are
-  now *visible* as unmeasured rather than silently absent, but they are still unmeasured.
-  **Ticket 05 (v84 mounts) needs `TamingMob.wz` from both stock trees and has no source data
-  until someone extracts them** from `GMSSetupv83.exe` / `GMSSetupv84.exe`. New-area BGM needs
-  `Sound.wz` the same way.
+- **`Sound.wz/BgmGL.img` fails to parse — in ALL THREE TREES, so it is a MapleLib limitation,
+  not a live-client defect.** `InvalidDataException: WZ extended property exceeds its declared
+  block`. 02f's completed sweep found exactly three parse failures across 55,343 images and all
+  three are this image, one per tree: v83-stock, v84 and live. The failure is therefore symmetric
+  and biases no manifest in any direction — but any BGM work must know MapleLib cannot read that
+  image's contents anywhere, and `WzMerge deps` will report a `Sound.wz/BgmGL.img/<track>`
+  reference it cannot help you merge. (The earlier wording here called it "the only parse failure
+  in any tree" and blamed the live client. Both halves were wrong.)
+- **CLOSED by 02f — every `.wz` the live client has is now baselined in both stock trees.**
+  `Base` (+0), `Effect` (+20), `Morph` (+25), `Reactor` (+6), `Sound` (+62/−2), `TamingMob` (+0).
+  `EzorsiaV2_UI.wz` remains live-only, by nature. **Ticket 05's premise was corrected in the
+  process:** `TamingMob.wz` is a 797-byte stub in all three trees and has never held mount
+  definitions in this era — the eight v84 mounts are `Character.wz/TamingMob/0193200*.img`.
 - **`List.wz` is not a WZ archive** (`WZ header FStart is outside the file` under all three IVs).
   Expected — it is a legacy flat list file. Row kept so the failure is visible.
 - **A collapsed copy root hides whatever is inside it.** `Collapse()` keeps only the topmost new

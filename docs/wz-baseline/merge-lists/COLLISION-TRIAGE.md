@@ -264,7 +264,7 @@ tool owner only has to add the flag.
 
 ```
 add-list  MonsterBook reward slots: 689
-refused   (already exists):         654   -> 36 would actually be WRITTEN
+refused   (already exists):         653   -> 36 would actually be WRITTEN
 mobs hit: 3100101 3110301 3210203 3210206 3210207 4230125 4230400 4230503 4230504
           4250001 5110300 5120501 6130202 7130102 8140100 8140701 8810018
 ```

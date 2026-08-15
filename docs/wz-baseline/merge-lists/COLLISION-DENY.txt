@@ -3,10 +3,15 @@
 # already exists, and every path below is a v84 *addition*, so no collision fires and the merge
 # writes it silently. Produced by ticket 03c; evidence in COLLISION-TRIAGE.md.
 #
+# ENFORCED since ticket 03e: pass this file as `WzMerge merge|xml --deny <file>`. Both
+# subcommands REQUIRE the flag — there is no run without a deny-list, including dry runs, since
+# a dry run is what the operator reads before deciding.
+#
 # FORMAT — deliberately identical to COLLISION-FORCE.txt so one parser serves both:
 #   <path>\t# <reason>
 # - blank lines and lines whose first non-space char is '#' are ignored
-# - a listed path is a deny ROOT: nothing at or beneath it is written
+# - a listed path is a deny ROOT: nothing at or beneath it is written. A manifest row that is a
+#   copy root CONTAINING a deny root is refused too — a partial write is not possible.
 # - NO WILDCARD SYNTAX IS NEEDED. Root semantics already cover every case below; the 36
 #   at-risk MonsterBook slots are reached by denying 17 `reward` parents, not 36 globs.
 #
@@ -36,7 +41,7 @@ Etc.wz/NpcLocation.img/9901919	# server-allocated id range, PlayerNPC.java:66
 # --- Hazard 2: positional arrays cannot be merged slot-by-slot ---------------------------
 # `reward/<n>` is the n-th slot of a monster-book drop list, not an identity. Cosmic rewrote
 # these tables (MonsterBook.img 271350 -> 295409 bytes, the largest live-side edit). Of 689
-# v84 reward slots on the add-list, 654 collide and are refused — leaving 36 that get appended
+# v84 reward slots on the add-list, 653 collide and are refused — leaving 36 that get appended
 # into these 17 Cosmic lists. Result: Cosmic's entries at indices 0-22, Nexon's at 23-28, a
 # list neither vendor ever shipped. There is no partial answer; deny the whole `reward` node.
 # GENERAL RULE for the procedure: any manifest row that is one slot of a positional array is

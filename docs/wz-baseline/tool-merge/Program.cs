@@ -6,10 +6,13 @@ using MapleLib.WzLib.Serializer;
 //
 //   WzMerge dump   <wz> <path/under/wz> [depth]
 //   WzMerge merge  <sourceWz> <targetWz> <outWz|-> <pathsFile> <conflictsTxt>
-//   WzMerge xml    <sourceWz> <xmlRoot>            <pathsFile> <conflictsTxt> [-]
+//                  --deny <denyList> [--force <forceList>] [--live <liveWz>]
+//   WzMerge xml    <sourceWz> <xmlRoot>            <pathsFile> <conflictsTxt>
+//                  --deny <denyList> [--force <forceList>] [-]
 //   WzMerge verify <wz> <pathsFile>
 //   WzMerge hash   <wz> <path/under/wz>
-//   WzMerge deps   <mapWz> <Map/MapN/<id>.img>
+//   WzMerge deps   <mapWz> <mapId|Map/MapN/<id>.img> <addListDir>
+//   WzMerge guard  <outWz>
 //
 // EXIT CODE CONTRACT (scripted callers depend on it; see WZ-MERGE-PROCEDURE.md):
 //   0  success — every requested path was written (or, on a dry run, would be)
@@ -18,8 +21,28 @@ using MapleLib.WzLib.Serializer;
 //   3  completed, but >=1 manifest row was REFUSED. conflicts.txt is non-empty.
 //      A dry run that finds collisions exits 3 by design; that is the answer, not a fault.
 //   4  post-write verification FAILED. The output is not trustworthy: DO NOT install it.
+//   5  completed and refused rows, and added NOTHING AT ALL. (M1: 3 conflated "added 5000,
+//      refused 1" with "added 0, refused 1" — the second is the one that reads as "nothing
+//      owed" and is almost always a mistake in the manifest or the arguments.)
 // "added 0, refused N" used to exit 0, which let a scripted 04-09 loop report green
-// having imported nothing. It exits 3 now.
+// having imported nothing. It exits 5 now.
+//
+// A paths file with ZERO manifest rows is a hard error (exit 2), never a successful no-op:
+// `WzMerge deps ... > f` failing leaves f truncated to nothing by the shell, and
+// add-list/{Base,TamingMob}.txt are legitimately 0-row files. Both used to exit 0 with
+// "added 0, refused 0", which reads as "the client already has everything".
+//
+// TWO LISTS GOVERN WHAT MAY BE WRITTEN, and `merge`/`xml` require the first of them:
+//   --deny  <file>   paths that must NOT be written even though the target lacks them. The
+//                    additive-only gate only refuses paths that already EXIST, so it is
+//                    structurally blind to a harmful v84 *addition* — a server-allocated NPC
+//                    id, a positional-array slot spliced into someone else's list.
+//   --force <file>   paths the operator authorises overwriting. This is the ONLY way to
+//                    overwrite an existing node; without it the additive-only gate stands.
+// Same format, one parser: "<path>\t# <reason>", blanks and '#' comments ignored, each listed
+// path is a ROOT (nothing at or beneath it is written / it may be overwritten). Deny beats
+// force, and a path in both lists is a hard exit rather than a silent resolution.
+// Data: docs/wz-baseline/merge-lists/COLLISION-{DENY,FORCE}.txt.
 //
 // Paths in <pathsFile> are manifest lines, exactly as docs/wz-baseline/add-list/*.txt
 // writes them: "Item.wz/Consume/0200.img/02001500". '#' and blanks ignored. BOTH `merge`
@@ -35,6 +58,11 @@ using MapleLib.WzLib.Serializer;
 // conflicts.txt is a DELIVERABLE, not a log: it is the list of v84 changes this rule
 // dropped on the floor. v84 edits to existing nodes (a portal added to an existing map,
 // a mob merely renamed) land there and need a human decision.
+
+// Anything the tool refuses on the ARGUMENTS — a bad flag, a 0-row manifest, a deny/force
+// overlap, a staging violation — is exit 2, not exit 1. Throwing it means every check can be
+// written where it belongs instead of threading a return code back up.
+sealed class BadArgs : Exception { public BadArgs(string m) : base(m) { } }
 
 static class Program
 {
@@ -53,8 +81,14 @@ static class Program
                 case "verify": return VerifyCmd(args);
                 case "hash": return Hash(args);
                 case "deps": return Deps(args);
+                case "guard": return Guard(args);
                 default: Usage(); return 2;
             }
+        }
+        catch (BadArgs ex)
+        {
+            Console.Error.WriteLine("REFUSED: " + ex.Message);
+            return 2;
         }
         catch (Exception ex)
         {
@@ -65,13 +99,16 @@ static class Program
 
     static void Usage() => Console.Error.WriteLine(
         "WzMerge dump   <wz> <path/under/wz> [depth]\n" +
-        "WzMerge merge  <sourceWz> <targetWz> <outWz|-> <pathsFile> <conflictsTxt>\n" +
-        "WzMerge xml    <sourceWz> <xmlRoot> <pathsFile> <conflictsTxt> [-]\n" +
+        "WzMerge merge  <sourceWz> <targetWz> <outWz|-> <pathsFile> <conflictsTxt> --deny <denyList> [--force <forceList>] [--live <liveWz>]\n" +
+        "WzMerge xml    <sourceWz> <xmlRoot> <pathsFile> <conflictsTxt> --deny <denyList> [--force <forceList>] [-]\n" +
         "WzMerge verify <wz> <pathsFile>\n" +
         "WzMerge hash   <wz> <path/under/wz>\n" +
-        "WzMerge deps   <mapWz> <Map/MapN/<id>.img>\n" +
+        "WzMerge deps   <mapWz> <mapId|Map/MapN/<id>.img> <addListDir>\n" +
+        "WzMerge guard  <outWz>\n" +
         "  '-' in the <outWz> slot (merge) or as a trailing arg (xml) = DRY RUN.\n" +
-        "exit: 0 ok | 1 error | 2 bad args/refused by a safety guard | 3 rows refused | 4 verification failed");
+        "  --live is REQUIRED for a real merge: it is hashed against <targetWz> to prove the\n" +
+        "  staging snapshot is not stale. 'guard' answers 'may I write here?' and writes nothing.\n" +
+        "exit: 0 ok | 1 error | 2 bad args/refused by a safety guard | 3 rows refused | 4 verification failed | 5 refused rows and added nothing");
 
     // ---------- open ----------
 
@@ -128,11 +165,112 @@ static class Program
         return segs.Skip(1).ToArray();
     }
 
-    static List<string> ReadPaths(string file) =>
-        File.ReadAllLines(file)
+    // H2: `merge`/`xml`/`verify` speak manifest form ("Map.wz/Back/x.img"); `dump`/`hash`/`deps`
+    // historically spoke root-relative form ("Back/x.img") and nothing said so, which is why
+    // section 6.1 of the procedure fed `hash` manifest rows it could not resolve. Accept both,
+    // everywhere, by stripping a leading "<Name>.wz" when it matches the file being read.
+    static string[] Segs(string path, string wzFileName)
+    {
+        var segs = path.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        return segs.Length > 0 && segs[0].Equals(wzFileName, StringComparison.OrdinalIgnoreCase)
+            ? segs.Skip(1).ToArray() : segs;
+    }
+
+    // B4/H4: a paths file with zero rows used to run the loop zero times and exit 0 —
+    // "added 0, refused 0", which reads as "the target already has everything". Two real ways
+    // to get one: the procedure's `WzMerge deps ... > f` pipeline, where a failing deps leaves
+    // f truncated to nothing by the shell before the tool ever ran; and
+    // add-list/{Base,TamingMob}.txt, which are genuinely 0-row files. Never succeed on one.
+    static List<string> ReadPaths(string file)
+    {
+        if (!File.Exists(file)) throw new BadArgs($"paths file does not exist: {file}");
+        var rows = File.ReadAllLines(file)
             .Select(l => l.Trim())
             .Where(l => l.Length > 0 && !l.StartsWith('#'))
             .ToList();
+        if (rows.Count == 0)
+            throw new BadArgs($"{file} holds 0 manifest rows (empty, or nothing but comments). " +
+                "A merge of nothing must not report success — if the file was produced by a redirect, " +
+                "the producing command failed after the shell had already truncated it.");
+        return rows;
+    }
+
+    // ---------- deny / force lists (B1) ----------
+
+    // COLLISION-DENY.txt and COLLISION-FORCE.txt are the same format on purpose, so this is the
+    // one parser: "<path>\t# <reason>", blank lines and '#' comments ignored. Every listed path
+    // is a ROOT — deny means nothing at or beneath it is written, force means it may be
+    // overwritten — which is why neither file needs wildcard syntax (17 `reward` parents cover
+    // all 36 at-risk MonsterBook slots).
+    static List<(string path, string reason)> LoadRoots(string kind, string file)
+    {
+        if (!File.Exists(file)) throw new BadArgs($"{kind}-list does not exist: {file}");
+        var rows = new List<(string, string)>();
+        foreach (var raw in File.ReadAllLines(file))
+        {
+            var line = raw.Trim();
+            if (line.Length == 0 || line[0] == '#') continue;
+            int tab = line.IndexOf('\t');
+            string p = (tab < 0 ? line : line[..tab]).Trim().Replace('\\', '/').Trim('/');
+            string why = tab < 0 ? "" : line[(tab + 1)..].TrimStart('#', ' ', '\t').TrimEnd();
+            if (p.Length > 0) rows.Add((p, why));
+        }
+        if (rows.Count == 0)
+            throw new BadArgs($"{kind}-list {file} holds 0 rows. An empty {kind}-list is never what was meant; " +
+                (kind == "force" ? "omit --force instead." : "the committed COLLISION-DENY.txt has 28."));
+        return rows;
+    }
+
+    static bool Under(string path, string root) =>
+        path.Equals(root, StringComparison.OrdinalIgnoreCase) ||
+        path.StartsWith(root + "/", StringComparison.OrdinalIgnoreCase);
+
+    // the row is the root, or sits beneath it — writing the row writes listed content
+    static (string path, string reason)? RootOver(List<(string path, string reason)> roots, string row)
+    {
+        foreach (var r in roots) if (Under(row, r.path)) return r;
+        return null;
+    }
+
+    // a root sits strictly BENEATH the row — writing the row (a copy root) drags the listed
+    // subtree in with it, and there is no way to write "all of it except that". Refuse.
+    static (string path, string reason)? RootInside(List<(string path, string reason)> roots, string row)
+    {
+        foreach (var r in roots) if (!Under(row, r.path) && Under(r.path, row)) return r;
+        return null;
+    }
+
+    // ONE gate for both subcommands: is this manifest row allowed to be written at all?
+    // Returns a refusal reason, or null. Both `merge` and `xml` route through it so the deny
+    // semantics cannot drift apart between them — and so the row is NORMALISED the same way the
+    // write path normalises it before any comparison. Without that, `Map.wz//Npc/2159.img`
+    // resolves and writes (Split(RemoveEmptyEntries) eats the empty segment) while matching no
+    // deny root, which is a bypass.
+    static string? GateRefusal(List<(string path, string reason)> deny, string wzName, string manifestPath)
+    {
+        var segs = manifestPath.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        if (segs.Length < 1 || !segs[0].Equals(wzName, StringComparison.OrdinalIgnoreCase))
+            return $"row is rooted at {(segs.Length > 0 ? segs[0] : "nothing")}, not {wzName} — handle it in that file's own run";
+        string row = string.Join('/', segs);
+        if (RootOver(deny, row) is { } hit)
+            return $"DENIED by deny-list [{hit.path}]: {hit.reason}";
+        // The row is a copy root with a denied node inside it. Writing "all of it except that" is
+        // not something the write path can do, so refuse the row and say why.
+        if (RootInside(deny, row) is { } inside)
+            return $"DENIED by deny-list: this row is a copy root containing the denied node '{inside.path}' ({inside.reason}), and a partial write is not possible";
+        return null;
+    }
+
+    // Deny beats force. An overlap is an operator error worth stopping for — resolving it
+    // silently in either direction hides the fact that two decisions contradict each other.
+    static void AssertNoOverlap(List<(string path, string reason)> deny, List<(string path, string reason)> force)
+    {
+        foreach (var d in deny)
+            foreach (var f in force)
+                if (Under(d.path, f.path) || Under(f.path, d.path))
+                    throw new BadArgs($"deny/force overlap: deny '{d.path}' and force '{f.path}' cover the same node. " +
+                        "Deny wins by rule, but an overlap means two decisions contradict each other — fix the lists.");
+    }
 
     static void Conflict(string path, string reason)
     {
@@ -146,11 +284,14 @@ static class Program
         var lines = new List<string>
         {
             "# " + header,
-            "# Every row is a v84 node this merge REFUSED to write because the path already",
-            "# existed in the target. Additive-only is enforced in the write path, so this file",
-            "# is the exhaustive list of v84 changes that were dropped. Read it before shipping:",
-            "# a v84 EDIT to an existing node (renamed mob, portal added to an existing map)",
-            "# looks exactly like this and is silently lost unless someone decides otherwise.",
+            "# Every row is a v84 node this merge REFUSED to write. Two reasons appear here:",
+            "#   * 'already exists in target' — the additive-only gate, enforced in the write path.",
+            "#     A v84 EDIT to an existing node (renamed mob, portal added to an existing map)",
+            "#     looks exactly like this and is silently lost unless someone decides otherwise.",
+            "#   * 'DENIED by deny-list' — a v84 ADDITION the target lacks and must keep lacking.",
+            "#     The gate is structurally blind to these; only the deny-list catches them.",
+            "# Additive-only is enforced in the write path, so this file is the exhaustive list of",
+            "# v84 changes that were dropped. Read it before shipping.",
             "# Columns: path, reason.",
             "",
         };
@@ -169,7 +310,7 @@ static class Program
         using var _ = file;
         Console.WriteLine($"{args[1]}  iv={ver}  patchVersion={file.Version}");
 
-        var segs = args[2].Split('/', StringSplitOptions.RemoveEmptyEntries);
+        var segs = Segs(args[2], Path.GetFileName(args[1]));
         var obj = Resolve(file, segs, segs.Length);
         if (obj == null) { Console.WriteLine("NOT FOUND: " + args[2]); return 1; }
         Print(obj, "", depth);
@@ -208,7 +349,14 @@ static class Program
     // for minutes, so OOM, a full disk or Ctrl-C leaves a plausible-looking .wz that parses
     // partway and then stops. Before this existed, nothing in the pipeline ever re-parsed the
     // tool's own output — the first reader was the user's game client.
-    static bool VerifyFile(string wzPath, string wzName, IReadOnlyList<string> expect)
+    // M2: `digests` is the content check. Key = manifest path of an image the merge inserted
+    // into; value = the SHA-256 of that image's canonical decoded form taken from the IN-MEMORY
+    // merged tree, immediately before SaveToDisk. Re-taking it from the file on disk and
+    // comparing is the only thing in this pipeline that would notice a corrupted 4 KB canvas
+    // payload — path re-resolution and ParseImage both pass straight over one. The machinery
+    // (`Canon`/`Sha`) already existed for the `hash` subcommand and was never wired into a merge.
+    static bool VerifyFile(string wzPath, string wzName, IReadOnlyList<string> expect,
+                           IReadOnlyDictionary<string, string>? digests = null)
     {
         WzFile f; WzMapleVersion ver;
         // A badly truncated file fails at the header, before any image — that is still a
@@ -222,6 +370,16 @@ static class Program
         {
             var rel = Rel(p, wzName);
             if (Resolve(f, rel, rel.Length) == null) { Console.Error.WriteLine($"  MISSING in output: {p}"); missing++; }
+        }
+        int drift = 0;
+        foreach (var (imgPath, want) in digests ?? new Dictionary<string, string>())
+        {
+            var rel = Rel(imgPath, wzName);
+            var img = Resolve(f, rel, rel.Length);
+            if (img == null) { Console.Error.WriteLine($"  CONTENT: {imgPath} absent from output"); drift++; continue; }
+            string got = Digest(img);
+            if (got == want) Console.WriteLine($"  content OK  {imgPath}  {got[..16]}…");
+            else { Console.Error.WriteLine($"  CONTENT DRIFT in {imgPath}: expected {want}, on disk {got}"); drift++; }
         }
         // Force EVERY image to parse, then immediately unparse it. A truncated tail is
         // invisible to a path lookup that never reaches it; ParseImage throws or returns
@@ -243,8 +401,9 @@ static class Program
             foreach (var sub in d.WzDirectories) Walk(sub);
         }
         Walk(f.WzDirectory);
-        Console.WriteLine($"verify: {imgs} images parsed, {bad} unparseable, {missing} requested paths missing");
-        return missing == 0 && bad == 0;
+        Console.WriteLine($"verify: {imgs} images parsed, {bad} unparseable, {missing} requested paths missing, " +
+                          $"{(digests?.Count ?? 0)} images content-checked, {drift} drifted");
+        return missing == 0 && bad == 0 && drift == 0;
     }
 
     static int VerifyCmd(string[] args)
@@ -283,12 +442,21 @@ static class Program
         foreach (var k in Kids(o).OrderBy(k => k.Name, StringComparer.Ordinal)) Canon(k, prefix + "/" + k.Name, sb);
     }
 
+    // whole-subtree digest of one node. Used by `hash` per direct child, and by the merge (M2)
+    // per inserted-into image, pre-save vs post-save.
+    static string Digest(WzObject o)
+    {
+        var sb = new StringBuilder();
+        Canon(o, o.Name, sb);
+        return Sha(Encoding.UTF8.GetBytes(sb.ToString()));
+    }
+
     static int Hash(string[] args)
     {
         if (args.Length < 3) { Usage(); return 2; }
         var (file, ver) = Open(args[1]);
         using var _ = file;
-        var segs = args[2].Split('/', StringSplitOptions.RemoveEmptyEntries);
+        var segs = Segs(args[2], Path.GetFileName(args[1]));
         var obj = Resolve(file, segs, segs.Length);
         if (obj == null) { Console.Error.WriteLine("NOT FOUND: " + args[2]); return 1; }
         // one line per DIRECT CHILD so a diff of two of these files names exactly which
@@ -307,38 +475,174 @@ static class Program
 
     // ---------- deps (B4: what a map image references outside itself) ----------
 
-    // A map .img names its scenery by SET NAME, not by path: back/<n>/bS -> Map.wz/Back/<bS>.img,
-    // <layer>/obj/<n>/{oS,l0} -> Map.wz/Obj/<oS>.img/<l0>, <layer>/info/tS -> Map.wz/Tile/<tS>.img.
-    // Those sets are separate manifest rows and the ordering rule does NOT catch them: nothing
-    // about "Map/Map2/2400800xx.img" says it needs "Back/dragonDream.img". Merge a map without
-    // its sets and the client renders a broken map or crashes. Output is manifest rows, so it
-    // can be concatenated straight into the paths file.
+    // A map .img names everything it needs by NAME, and none of those names appear anywhere in
+    // the manifest ordering rule:
+    //   back/<n>/bS                      -> Map.wz/Back/<bS>.img
+    //   <layer>/obj/<n>/{oS,l0,l1,l2}    -> Map.wz/Obj/<oS>.img/<l0>/<l1>/<l2>
+    //   <layer>/info/tS                  -> Map.wz/Tile/<tS>.img
+    //   info/bgm   "Bgm14/DragonRider"   -> Sound.wz/Bgm14.img/DragonRider
+    //   info/mapMark "Leafre"            -> Map.wz/MapHelper.img/mark/Leafre
+    //   info/link  "240080100"           -> another whole map image, with references of its own
+    // Merge a map without these and the client renders it broken, silently drops its background,
+    // shows a blank world-map marker or plays no music.
+    //
+    // B3 — GRANULARITY IS THE POINT. This used to print references at WHOLE-IMAGE granularity
+    // ("Map.wz/Back/dragonRoad.img"). That image exists in v83, so the merge gate refused the row
+    // and the reader concluded "nothing owed" — while what v84 actually adds lives INSIDE it
+    // (add-list/Map.txt:6-15, ani/20..24 and back/42..46), and eight of the nine back-bearing
+    // Crimson Sky maps draw those frames. Same defect for Tile (grassySoil.img/edD/1) and for Obj
+    // at l1/l2 depth. So every reference is now resolved against the ADD-LIST: what gets printed
+    // is the set of manifest rows that actually carry the new content, at whatever depth the
+    // manifest holds it, and a reference with no add-list rows under it is printed as a comment
+    // saying "already in v83, nothing owed" instead of as a row the merge will refuse.
+    // Resolution is per-reference and therefore slightly over-inclusive: referencing ONE new
+    // frame of Back/dragonRoad.img pulls all ten of that image's new rows. Additive and cheap;
+    // narrowing it to the exact frame numbers would trade that for a chance of missing one.
+    //
+    // NOT resolved, deliberately, and the cut is unchanged: mob / npc / reactor ids. State it
+    // honestly rather than leaving the banner reading as an all-clear — a v84-only mob id placed
+    // in a v84 map means the LIVE CLIENT HAS NO SPRITE for it.
     static int Deps(string[] args)
     {
-        if (args.Length < 3) { Usage(); return 2; }
+        if (args.Length < 4) { Usage(); return 2; }
         var (file, ver) = Open(args[1]);
         using var _ = file;
         string wzName = Path.GetFileName(args[1]);
-        var segs = args[2].Split('/', StringSplitOptions.RemoveEmptyEntries);
-        var obj = Resolve(file, segs, segs.Length);
-        if (obj == null) { Console.Error.WriteLine("NOT FOUND: " + args[2]); return 1; }
 
-        var rows = new SortedSet<string>(StringComparer.OrdinalIgnoreCase);
-        void Walk(WzObject o)
+        // B4: the procedure hardcoded "Map/Map2/<id>.img" and ticket 07's maps are Map6.
+        // Substituting the id but not the bucket printed NOT FOUND and exited 1 — after the
+        // shell had already truncated the redirect target, so the next command merged an empty
+        // manifest and exited 0, "added 0, refused 0". Take a bare id and find its bucket.
+        var segs = Segs(args[2], wzName);
+        if (segs.Length == 1 && !segs[0].EndsWith(".img", StringComparison.OrdinalIgnoreCase))
         {
-            string? Child(string n) => Kids(o).FirstOrDefault(
-                k => string.Equals(k.Name, n, StringComparison.OrdinalIgnoreCase))?.ToString();
-            if (Child("bS") is string bs && bs.Length > 0) rows.Add($"{wzName}/Back/{bs}.img");
-            if (Child("tS") is string ts && ts.Length > 0) rows.Add($"{wzName}/Tile/{ts}.img");
-            if (Child("oS") is string os && os.Length > 0 && Child("l0") is string l0 && l0.Length > 0)
-                rows.Add($"{wzName}/Obj/{os}.img/{l0}");
-            foreach (var k in Kids(o)) Walk(k);
+            string? bucket = FindMap(file, segs[0]);
+            if (bucket == null)
+            {
+                Console.Error.WriteLine($"NOT FOUND: no {segs[0]}.img under Map/* in {args[1]}. " +
+                    "Nothing was written; if you redirected this command, its target is now empty and the merge that reads it will refuse.");
+                return 1;
+            }
+            Console.Error.WriteLine($"# id {segs[0]} resolved to {bucket}");
+            segs = bucket.Split('/');
         }
-        Walk(obj);
-        Console.WriteLine($"# {args[2]} references {rows.Count} scenery sets ({args[1]} iv={ver} patchVersion={file.Version})");
-        Console.WriteLine("# Each row must already exist in the target, or be merged BEFORE the map image.");
-        foreach (var r in rows) Console.WriteLine(r);
-        return 0;
+        if (Resolve(file, segs, segs.Length) == null)
+        {
+            Console.Error.WriteLine("NOT FOUND: " + args[2]);
+            return 1;
+        }
+
+        var refs = new SortedSet<string>(StringComparer.OrdinalIgnoreCase);
+        var unresolved = new List<string>();
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        void WalkMap(string[] mapSegs)
+        {
+            string key = string.Join('/', mapSegs);
+            if (!seen.Add(key)) return;                       // link cycles are real; visit once
+            var img = Resolve(file, mapSegs, mapSegs.Length);
+            if (img == null) { unresolved.Add($"map image {key} does not exist in {wzName}"); return; }
+            refs.Add($"{wzName}/{key}");                       // the map itself is a dependency too
+
+            void Walk(WzObject o)
+            {
+                string? C(string n) => Kids(o).FirstOrDefault(
+                    k => string.Equals(k.Name, n, StringComparison.OrdinalIgnoreCase))?.ToString();
+                if (C("bS") is string bs && bs.Length > 0) refs.Add($"{wzName}/Back/{bs}.img");
+                if (C("tS") is string ts && ts.Length > 0) refs.Add($"{wzName}/Tile/{ts}.img");
+                if (C("oS") is string os && os.Length > 0 && C("l0") is string l0 && l0.Length > 0)
+                {
+                    string p = $"{wzName}/Obj/{os}.img/{l0}";
+                    if (C("l1") is string l1 && l1.Length > 0)
+                    {
+                        p += "/" + l1;
+                        if (C("l2") is string l2 && l2.Length > 0) p += "/" + l2;
+                    }
+                    refs.Add(p);
+                }
+                foreach (var k in Kids(o)) Walk(k);
+            }
+            Walk(img);
+
+            var info = Kids(img).FirstOrDefault(k => string.Equals(k.Name, "info", StringComparison.OrdinalIgnoreCase));
+            string? I(string n) => info == null ? null : Kids(info).FirstOrDefault(
+                k => string.Equals(k.Name, n, StringComparison.OrdinalIgnoreCase))?.ToString();
+            // "Bgm14/DragonRider" is <img>/<track>, and Sound.wz is a different file entirely.
+            if (I("bgm") is string bgm && bgm.Contains('/'))
+            {
+                var p = bgm.Split('/', 2);
+                refs.Add($"Sound.wz/{p[0]}.img/{p[1]}");
+            }
+            if (I("mapMark") is string mark && mark.Length > 0) refs.Add($"{wzName}/MapHelper.img/mark/{mark}");
+            // A link stub has essentially nothing of its own: 8 of ticket 06's 21 maps are pure
+            // stubs whose entire layout lives in the link target. Without this, deps printed
+            // "references 0 scenery sets" under a banner that reads as an all-clear.
+            if (I("link") is string link && link.Length > 0)
+            {
+                string? target = FindMap(file, link);
+                if (target == null) unresolved.Add($"info/link -> {link}, which has no .img under Map/* in {wzName}");
+                else WalkMap(target.Split('/'));
+            }
+        }
+        WalkMap(segs);
+
+        var lists = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
+        var owed = new SortedSet<string>(StringComparer.OrdinalIgnoreCase);
+        var nothingOwed = new List<string>();
+        foreach (var r in refs)
+        {
+            string wz = r.Split('/')[0];
+            if (!lists.TryGetValue(wz, out var rows)) lists[wz] = rows = AddList(args[3], wz);
+            // a manifest row that IS this reference, sits under it, or is a copy root ABOVE it
+            var hits = rows.Where(x => Under(x, r) || Under(r, x)).ToList();
+            if (hits.Count == 0) nothingOwed.Add(r);
+            else foreach (var h in hits) owed.Add(h);
+        }
+
+        Console.WriteLine($"# deps {string.Join('/', segs)}  ({args[1]} iv={ver} patchVersion={file.Version}; add-list {args[3]})");
+        Console.WriteLine($"# {seen.Count} map image(s) walked, {refs.Count} references, {owed.Count} add-list rows owed, {nothingOwed.Count} references already in v83.");
+        Console.WriteLine("# This IS the paths file for these maps — it already includes the map image row(s) themselves.");
+        Console.WriteLine("# Rows are grouped by .wz file; a merge of one file refuses rows rooted at another and says so.");
+        Console.WriteLine("# NOT resolved here: mob / npc / reactor ids. A v84-only mob id in one of these maps means the");
+        Console.WriteLine("# live client has NO SPRITE for it — check the ids under life/ against add-list/{Mob,Npc,Reactor}.txt.");
+        foreach (var n in nothingOwed) Console.WriteLine($"# already in v83, nothing owed: {n}");
+        foreach (var u in unresolved) Console.WriteLine($"# UNRESOLVED: {u}");
+        // On an unresolved reference the rows are printed COMMENTED OUT. This output is normally
+        // consumed through `> file`, and an incomplete-but-non-empty manifest would sail straight
+        // past the 0-row guard that exists to stop exactly this class of accident: better that the
+        // redirect target contain no manifest rows at all, so the merge that reads it exits 2.
+        string prefix = unresolved.Count > 0 ? "# INCOMPLETE, do not merge: " : "";
+        string group = "";
+        foreach (var row in owed)
+        {
+            string wz = row.Split('/')[0];
+            if (wz != group) { group = wz; Console.WriteLine($"# ==== {wz} ===="); }
+            Console.WriteLine(prefix + row);
+        }
+        if (unresolved.Count > 0)
+            Console.Error.WriteLine($"{unresolved.Count} reference(s) could not be resolved. This deps file is INCOMPLETE and every row in it is commented out; fix the cause and re-run.");
+        return unresolved.Count > 0 ? 1 : 0;
+    }
+
+    // which Map/MapN holds <id>.img. Scanning beats "the bucket is the first digit": it is the
+    // same answer when that rule holds and a loud null when it does not.
+    static string? FindMap(WzFile file, string id)
+    {
+        if (file.WzDirectory?["Map"] is not WzDirectory maps) return null;
+        foreach (var d in maps.WzDirectories)
+            if (d.WzImages.Any(i => string.Equals(i.Name, id + ".img", StringComparison.OrdinalIgnoreCase)))
+                return $"Map/{d.Name}/{id}.img";
+        return null;
+    }
+
+    // Deliberately not ReadPaths: a 0-row add-list is legitimate input here
+    // (Base.txt and TamingMob.txt really do add nothing), it is only a fatal *manifest*.
+    static List<string> AddList(string dir, string wzName)
+    {
+        string f = Path.Combine(dir, Path.GetFileNameWithoutExtension(wzName) + ".txt");
+        if (!File.Exists(f)) throw new BadArgs($"deps needs an add-list for {wzName} and {f} does not exist");
+        return File.ReadAllLines(f).Select(l => l.Trim())
+                   .Where(l => l.Length > 0 && !l.StartsWith('#')).ToList();
     }
 
     // ---------- merge (client binary .wz) ----------
@@ -355,8 +659,106 @@ static class Program
         return 2;
     }
 
-    static int Merge(string[] args)
+    // Dropped into a staging directory the first time WzMerge writes into it. Its only job is to
+    // let the guard below tell "a staging directory that already holds this ticket's other merged
+    // .wz files" apart from "a directory full of somebody else's .wz files".
+    const string StageMarker = ".wz-merge-stage";
+
+    // ===================== B2: WHERE THE OUTPUT MAY GO, ABSOLUTELY =====================
+    // MapleLib's SaveToDisk is NOT atomic and NOT copy-on-write. It File.Create()s the
+    // destination — truncating it instantly (WzFile.cs:675) — and only then spends the next
+    // several minutes streaming unchanged images out of the TARGET's own open reader
+    // (WzDirectory.cs:353-357). Map.wz is 629 MB. Its scratch file is CWD-relative
+    // (GetFileNameWithoutExtension(path) + ".TEMP", WzFile.cs:664).
+    //
+    // The three guards this replaces were all RELATIONAL to <targetWz>: out is not the target,
+    // not the source, not in the target's directory. But the procedure's own real merge sets the
+    // target to <stage>\<T>\pre\<Name>.wz, so an <outWz> of D:\games\MapleStory\Map.wz is none of
+    // those three things — ALL THREE PASSED, File.Move promoted the finished merge straight onto
+    // the live client, and the pinned CWD dropped a several-hundred-MB .TEMP in the client folder.
+    // A guarantee that depends on what <target> happens to be is not a guarantee.
+    //
+    // So this is a property of the OUTPUT DIRECTORY alone, and it does not care about the other
+    // arguments at all:
+    //   * a directory containing an executable is a game install, not a staging directory.
+    //   * a directory already holding OTHER .wz files is refused unless WzMerge itself marked it
+    //     as staging. The live client holds 18; a fresh per-ticket staging directory holds none,
+    //     and once WzMerge has written one it carries the marker, so a multi-file ticket works.
+    // Ask it anything, in advance, without writing: WzMerge guard <outWz>.
+    static string? OutDirRefusal(string outPath)
     {
+        string full = Path.GetFullPath(outPath);
+        string dir = Path.GetDirectoryName(full)!;
+
+        // The .exe test is applied to the nearest EXISTING directory on the way up, not only to
+        // <dir>. Otherwise `<client>\brandnew\Map.wz` slips through — the directory does not exist
+        // yet, so there is nothing to inspect — and the marker written afterwards would whitelist
+        // it permanently. Only the nearest existing ancestor, never the whole chain: staging lives
+        // at D:\games\MapleStory\Server\wz-merge\, and D:\games\MapleStory IS a game install, so a
+        // full ancestor walk would refuse the one layout this document prescribes.
+        // ponytail: heuristic with a named ceiling — an existing, .exe-free subdirectory of a game
+        // install still passes. Not worth more machinery; the marker rule below catches the shape
+        // that actually matters (a directory full of somebody else's .wz).
+        string probe = dir;
+        while (!Directory.Exists(probe))
+        {
+            string? up = Path.GetDirectoryName(probe);
+            if (up == null || up == probe) return null;
+            probe = up;
+        }
+        var exes = Directory.GetFiles(probe, "*.exe");
+        if (exes.Length > 0)
+            return $"{probe} holds {exes.Length} executable(s) (e.g. {Path.GetFileName(exes[0])}). That is a game " +
+                   "install, not a staging directory, and WzMerge never writes into one. Stage under " +
+                   @"D:\games\MapleStory\Server\wz-merge\<ticket>\ and copy into place by hand (procedure 5.7).";
+        if (!Directory.Exists(dir)) return null;              // a staging directory yet to be made
+        var foreign = Directory.GetFiles(dir, "*.wz").Where(f => !SamePath(f, full)).ToArray();
+        if (foreign.Length > 0 && !File.Exists(Path.Combine(dir, StageMarker)))
+            return $"{dir} already holds {foreign.Length} .wz file(s) that WzMerge did not put there " +
+                   $"(e.g. {Path.GetFileName(foreign[0])}) and carries no {StageMarker}. Merges stage into a " +
+                   "directory of their own — a half-written .wz, or MapleLib's multi-hundred-MB .TEMP scratch " +
+                   "file, must never appear beside files it did not make. See WZ-MERGE-PROCEDURE.md section 1.";
+        return null;
+    }
+
+    // Read-only: answers "would a merge be allowed to write here?" and writes nothing, ever.
+    // This is how the guard gets tested against the real client directory without a merge that
+    // could land on it if the guard were wrong.
+    static int Guard(string[] args)
+    {
+        if (args.Length < 2) { Usage(); return 2; }
+        string full = Path.GetFullPath(args[1]);
+        string? why = OutDirRefusal(full);
+        if (why != null) return Refuse(why);
+        Console.WriteLine($"ALLOWED: {full}  (directory {Path.GetDirectoryName(full)} is acceptable output staging)");
+        return 0;
+    }
+
+    static string Sha256File(string path)
+    {
+        using var s = File.OpenRead(path);
+        return Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(s)).ToLowerInvariant();
+    }
+
+    // Named flags are pulled out first so the positional signature below is exactly what it
+    // always was and Usage() still describes it.
+    static string? TakeFlag(List<string> a, string name)
+    {
+        int i = a.FindIndex(x => string.Equals(x, name, StringComparison.OrdinalIgnoreCase));
+        if (i < 0) return null;
+        if (i + 1 >= a.Count) throw new BadArgs($"{name} needs a value");
+        string v = a[i + 1];
+        a.RemoveRange(i, 2);
+        return v;
+    }
+
+    static int Merge(string[] rawArgs)
+    {
+        var argv = rawArgs.ToList();
+        string? denyFile = TakeFlag(argv, "--deny");
+        string? forceFile = TakeFlag(argv, "--force");
+        string? liveFile = TakeFlag(argv, "--live");
+        var args = argv.ToArray();
         if (args.Length < 6) { Usage(); return 2; }
         bool dry = args[3] == "-";
         // Everything absolute up front: the save block below changes the process working
@@ -365,30 +767,59 @@ static class Program
         string srcPath = Path.GetFullPath(args[1]), tgtPath = Path.GetFullPath(args[2]);
         string outPath = dry ? "-" : Path.GetFullPath(args[3]);
         string conflictsPath = Path.GetFullPath(args[5]);
+
+        // B1: --deny is REQUIRED, on dry runs too. A dry run is what the operator reads before
+        // deciding, so a dry run that cannot see the deny-list produces the wrong decision just
+        // as surely as a real merge that cannot. The list was inert for the whole of tickets
+        // 04-06 precisely because nothing forced it to be passed.
+        if (denyFile == null)
+            throw new BadArgs(@"merge requires --deny <file> (use docs\wz-baseline\merge-lists\COLLISION-DENY.txt). " +
+                "The additive-only gate only refuses paths that already exist, so it is structurally blind to a " +
+                "harmful v84 ADDITION — a server-allocated NPC id, a positional-array slot spliced into a list " +
+                "the server owns. There is no safe default for that; the list has to be supplied.");
+        var deny = LoadRoots("deny", denyFile);
+        var force = forceFile == null ? new List<(string path, string reason)>() : LoadRoots("force", forceFile);
+        AssertNoOverlap(deny, force);
+        Console.WriteLine($"deny-list {denyFile}: {deny.Count} roots" +
+                          (forceFile == null ? "; no force-list (nothing may be overwritten)" : $"; force-list {forceFile}: {force.Count} roots"));
+
         var paths = ReadPaths(args[4]);
 
-        // ===================== B1: WHERE THE OUTPUT MAY GO =====================
-        // MapleLib's SaveToDisk is NOT atomic and NOT copy-on-write. It File.Create()s the
-        // destination — truncating it instantly (WzFile.cs:675) — and only then spends the
-        // next several minutes streaming unchanged images out of the TARGET's own open reader
-        // (WzDirectory.cs:353-357). Item.wz is 200 MB, Map.wz is 629 MB. So:
-        //   * out == target only fails safe by accident: WzFile opens with FileShare.Read
-        //     (WzFile.cs:243), so File.Create hits the lock and throws. That is the OS, not
-        //     a design, and it is not something to rely on. Refuse it explicitly.
-        //   * out anywhere in the live client's directory means a crash, an OOM (DeepClone of
-        //     a directory is memory-bound) or a Ctrl-C leaves a truncated, plausible-looking
-        //     .wz sitting next to the real ones — and MapleLib's scratch file is RELATIVE
-        //     (Path.GetFileNameWithoutExtension(path) + ".TEMP", WzFile.cs:664), so it lands
-        //     in the process CWD too. Requiring a staging directory separate from the target's
-        //     is the one rule that makes both of those impossible.
         if (!dry)
         {
+            if (OutDirRefusal(outPath) is string why) return Refuse(why);
+            // Kept: these two say something the directory rule does not, and they name the exact
+            // mistake rather than describing a policy.
             if (SamePath(outPath, tgtPath))
                 return Refuse($"<outWz> is the target itself ({outPath}). SaveToDisk truncates the destination before it reads the images it needs out of it. Write to a staging directory and copy afterwards.");
             if (SamePath(outPath, srcPath))
                 return Refuse($"<outWz> is the v84 source ({outPath}). v84 is read-only input.");
-            if (SamePath(Path.GetDirectoryName(outPath), Path.GetDirectoryName(tgtPath)))
-                return Refuse($"<outWz> is in the same directory as the target ({Path.GetDirectoryName(outPath)}). Merges stage into a directory of their own — a half-written .wz, or MapleLib's multi-hundred-MB .TEMP scratch file, must never appear beside the file it was made from. See WZ-MERGE-PROCEDURE.md 'Staging'.");
+
+            // H1: <stage>\pre\ used to be one directory shared by every ticket, and two tickets
+            // that touch the same .wz cannot share it. If 06 installs its merged Map.wz and 07
+            // then merges onto the stale pre snapshot, 07's output silently REVERTS 06 — both
+            // runs exit 0, and section 6.2's diff compares against that same stale snapshot and
+            // reports clean. Nothing detects it later, so detect it here: the target has to still
+            // be a byte-identical copy of the live file it was snapshotted from.
+            if (liveFile == null)
+                throw new BadArgs(@"a real merge requires --live <path to the live .wz that <targetWz> was copied from>. " +
+                    @"<stage>\<T>\pre\<Name>.wz is a per-ticket snapshot; a stale one silently reverts whatever another " +
+                    "ticket installed in the meantime, with both runs exiting 0. The tool hashes the two and refuses if " +
+                    "they differ. (Dry runs do not need it.)");
+            string livePath = Path.GetFullPath(liveFile);
+            if (!File.Exists(livePath)) throw new BadArgs($"--live {livePath} does not exist");
+            // Otherwise `--live <the target itself>` hashes equal trivially and the check that
+            // makes a stale snapshot impossible quietly becomes a check of nothing.
+            if (SamePath(livePath, tgtPath))
+                return Refuse($"--live is the target itself ({livePath}). It must name the LIVE .wz in the client " +
+                    "directory that <targetWz> was copied from; comparing the target with itself proves nothing.");
+            Console.WriteLine($"snapshot check: hashing {tgtPath} and {livePath} …");
+            string th = Sha256File(tgtPath), lh = Sha256File(livePath);
+            if (th != lh)
+                return Refuse($"STALE SNAPSHOT. Target {tgtPath} ({th}) is not a byte-identical copy of the live {livePath} ({lh}). " +
+                    "Either the live file changed after the snapshot was taken (another ticket installed) or the snapshot is not of that file. " +
+                    "Re-take the snapshot (procedure 5.1) and re-read your dry run — merging onto a stale copy reverts whatever landed in between.");
+            Console.WriteLine($"snapshot check OK: {th}");
         }
 
         var (src, srcVer) = Open(srcPath);
@@ -406,25 +837,56 @@ static class Program
         Console.WriteLine($"target {tgtPath}  iv={tgtVer} patchVersion={tgt.Version}");
         Console.WriteLine($"{paths.Count} paths requested");
 
-        int added = 0;
+        int added = 0, forced = 0;
+        var touched = new SortedSet<string>(StringComparer.OrdinalIgnoreCase);   // images to content-check (M2)
+        var noContentCheck = new List<string>();
         foreach (var manifestPath in paths)
         {
+            // ===================== B1: THE DENY-LIST =====================
+            // Checked BEFORE the additive-only gate, because every deny hazard is a v84 ADDITION
+            // that the target lacks: the gate sees no collision, conflicts.txt stays empty, and
+            // the row is written. Ten server-allocated NPC ids, 36 monster-book reward slots that
+            // splice into 17 Cosmic drop lists, one NPC that merges half-v83/half-v84.
+            // GateRefusal also handles the foreign-root case: `deps` emits rows for every .wz a
+            // map depends on, so a Map.wz merge is legitimately handed Sound.wz rows. Refusing
+            // them by name beats throwing out of Rel(), which killed the run on the first one.
+            if (GateRefusal(deny, wzName, manifestPath) is string refusal)
+            { Conflict(manifestPath, refusal); continue; }
+
             var rel = Rel(manifestPath, wzName);
 
-            // ADDITIVE-ONLY GATE. Nothing below this can overwrite: the only mutation
-            // performed is AddProperty/AddImage onto a parent that does not already
-            // hold this name.
-            if (Resolve(tgt, rel, rel.Length) != null) { Conflict(manifestPath, "already exists in target"); continue; }
-
+            // Resolved BEFORE anything is removed: a force-list row deletes the live node and puts
+            // v84's in its place, so every reason this row might fail has to be known while the
+            // live node is still there. Otherwise "MISSING IN SOURCE" means "deleted, nothing put
+            // back" — an additive-only tool silently performing a deletion.
             var srcObj = Resolve(src, rel, rel.Length);
             if (srcObj == null) { Conflict(manifestPath, "MISSING IN SOURCE — manifest is stale"); continue; }
+
+            // ADDITIVE-ONLY GATE. Nothing below this can overwrite, EXCEPT through the
+            // force-list: the only mutation performed is AddProperty/AddImage onto a parent that
+            // does not already hold this name, or onto one the operator explicitly authorised
+            // clearing first. The force-list is the ONLY way past this; there is no flag that
+            // turns the gate off wholesale.
+            var existing = Resolve(tgt, rel, rel.Length);
+            (string path, string reason)? fHit = null;
+            if (existing != null)
+            {
+                fHit = RootOver(force, manifestPath);
+                if (fHit == null) { Conflict(manifestPath, "already exists in target"); continue; }
+            }
 
             var parent = Resolve(tgt, rel, rel.Length - 1);
             if (parent == null) { Conflict(manifestPath, "parent path absent in target — import the parent first"); continue; }
 
+            // The `existing?.Remove()` calls live INSIDE the branches, immediately before the add
+            // that replaces the removed node, and never on the `default:` path. Removing before
+            // the switch meant an unsupported (parent, source) shape deleted the live node and
+            // then `continue`d — and the row is excluded from post-write verification precisely
+            // because it landed in conflicts.txt, so nothing downstream would have noticed.
             switch (parent, srcObj)
             {
                 case (WzDirectory pd, WzImage si):
+                    existing?.Remove();
                     pd.AddImage(si.DeepClone());
                     break;
                 // whole new sub-directory, e.g. v84's Skill.wz/Dragon (Evan's dragon
@@ -432,6 +894,7 @@ static class Program
                 // this is memory-bound — Skill.wz/Dragon is tens of MB. Fine so far; if a
                 // bigger directory ever OOMs, expand the manifest to per-image rows instead.
                 case (WzDirectory pd2, WzDirectory sd):
+                    existing?.Remove();
                     pd2.AddDirectory(sd.DeepClone());
                     break;
                 // The AddProperty below only lands because the gate above already walked
@@ -439,16 +902,24 @@ static class Program
                 // Short-circuit or reorder that gate and adds are silently dropped onto an
                 // unparsed image. The coupling is real; do not "optimise" the gate away.
                 case (WzImage pi, WzImageProperty sp):
+                    existing?.Remove();
                     pi.AddProperty(sp.DeepClone());
                     pi.Changed = true;
                     break;
                 case (WzImageProperty pp, WzImageProperty sp2) when pp is MapleLib.WzLib.IPropertyContainer pc:
+                    existing?.Remove();
                     pc.AddProperty(sp2.DeepClone());
                     if (pp.ParentImage != null) pp.ParentImage.Changed = true;
                     break;
                 default:
+                    // nothing has been removed at this point, and nothing will be
                     Conflict(manifestPath, $"unsupported shape: parent={parent.GetType().Name} source={srcObj.GetType().Name}");
                     continue;
+            }
+            if (fHit is { } f)
+            {
+                Console.WriteLine($"  FORCE {manifestPath}  (authorised overwrite [{f.path}]: {f.reason})");
+                forced++;
             }
             // The gate is the ONLY protection for three of the four branches above:
             // WzImage.AddProperty throws on a duplicate name, but AddImage, AddDirectory and
@@ -459,6 +930,13 @@ static class Program
 
             added++;
             Console.WriteLine($"  ADD   {manifestPath}");
+
+            // M2: remember which image this landed in. That image is the only one SaveToDisk
+            // re-serializes (Changed=true), so it is the only place a serializer bug can live —
+            // and the only place a content check is worth paying for.
+            int imgIdx = Array.FindIndex(rel, s => s.EndsWith(".img", StringComparison.OrdinalIgnoreCase));
+            if (imgIdx >= 0) touched.Add(string.Join('/', new[] { wzName }.Concat(rel.Take(imgIdx + 1))));
+            else noContentCheck.Add(manifestPath);   // a whole-directory row: no single image to digest
         }
 
         // THE VERSION TRAP, resolved structurally rather than by remembering a menu option.
@@ -480,6 +958,30 @@ static class Program
         {
             string outDir = Path.GetDirectoryName(outPath)!;
             Directory.CreateDirectory(outDir);
+            // Claim the directory as staging so the next merge of this ticket is allowed to add a
+            // second .wz beside this one (see OutDirRefusal).
+            File.WriteAllText(Path.Combine(outDir, StageMarker),
+                "Written by WzMerge. Marks this directory as merge staging, which is the only kind of\r\n" +
+                "directory WzMerge will write a .wz into when other .wz files are already present.\r\n" +
+                "Never create one in a game client directory.\r\n");
+
+            // M2: the pre-save content digest of every image this run inserted into, taken from
+            // the in-memory merged tree. Compared against the same images re-read off the written
+            // file below. This is the check that would notice a corrupted canvas payload — the
+            // documented hole that path re-resolution and ParseImage both walk straight past.
+            var digests = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var imgPath in touched)
+            {
+                var r = Rel(imgPath, wzName);
+                var o = Resolve(tgt, r, r.Length);
+                // Not "skip it": this image is one the merge itself says it wrote into, so failing
+                // to find it in the merged tree means the bookkeeping is wrong. Silently dropping
+                // it would remove the row from the content check without saying so.
+                if (o == null) throw new Exception($"INTERNAL: '{imgPath}' was inserted into but cannot be resolved in the merged tree. Nothing was written.");
+                digests[imgPath] = Digest(o);
+            }
+            Console.WriteLine($"content digests taken for {digests.Count} inserted-into image(s)" +
+                (noContentCheck.Count > 0 ? $"; {noContentCheck.Count} whole-directory row(s) are NOT content-checked: {string.Join(", ", noContentCheck)}" : ""));
 
             // Write beside the destination, verify, and only then move into place. The move is
             // the only step that touches <outWz>, so an OOM / disk-full / Ctrl-C leaves a
@@ -505,7 +1007,7 @@ static class Program
             // re-resolve every path we claim to have added. Nothing else in this pipeline ever
             // re-read the tool's own output; the first reader used to be the game client.
             var expect = paths.Where(p => !Conflicts.Any(c => c.StartsWith(p + "\t", StringComparison.Ordinal))).ToList();
-            verified = VerifyFile(partial, wzName, expect);
+            verified = VerifyFile(partial, wzName, expect, digests);
             if (verified)
             {
                 File.Move(partial, outPath, true);
@@ -518,9 +1020,13 @@ static class Program
         }
 
         WriteConflicts(conflictsPath, $"{wzName}: additive-only merge{(dry ? " — DRY RUN, nothing was written" : "")}," +
-            $" {srcPath} -> {tgtPath}, {added} nodes {(dry ? "would be added" : "added")}, {Conflicts.Count} refused");
-        Console.WriteLine($"added {added}, refused {Conflicts.Count}");
+            $" {srcPath} -> {tgtPath}, {added} nodes {(dry ? "would be added" : "added")} ({forced} by force-list), {Conflicts.Count} refused");
+        Console.WriteLine($"added {added} (forced {forced}), refused {Conflicts.Count}");
         if (!verified) return 4;
+        // M1: "added 5000, refused 1" and "added 0, refused 1" were the same exit code, and only
+        // the second one means "this run accomplished nothing" — the state a stale manifest, a
+        // wrong bucket or the wrong <targetWz> produces, and the one that reads as "nothing owed".
+        if (added == 0) { Console.Error.WriteLine("NOTHING WAS ADDED. Every requested row was refused — read conflicts.txt before assuming the target already had this content."); return 5; }
         return Conflicts.Count > 0 ? 3 : 0;
     }
 
@@ -542,25 +1048,59 @@ static class Program
         }
     }
 
-    static int Xml(string[] args)
+    static int Xml(string[] rawArgs)
     {
+        var argv = rawArgs.ToList();
+        string? denyFile = TakeFlag(argv, "--deny");
+        string? forceFile = TakeFlag(argv, "--force");
+        var args = argv.ToArray();
         if (args.Length < 5) { Usage(); return 2; }
         string srcPath = args[1], xmlRoot = args[2];
-        var paths = ReadPaths(args[3]);
         // H4: the XML side had no dry run at all, while the procedure said "dry run before
         // every real merge". A trailing "-" mirrors merge's "-" in the <outWz> slot: every
         // check below still runs (including the splice position), nothing is written.
         bool dry = args.Length > 5 && args[5] == "-";
 
+        // B1, same two lists and the same parser as the binary side. The server tree is exposed
+        // to exactly the same hazards — NpcLocation ids and MonsterBook reward slots are read by
+        // the server out of wz/, not by the client — so the deny-list is required here too.
+        if (denyFile == null)
+            throw new BadArgs(@"xml requires --deny <file> (docs\wz-baseline\merge-lists\COLLISION-DENY.txt). " +
+                "The XML gate refuses overwrites; like the binary gate it cannot see a harmful ADDITION.");
+        var deny = LoadRoots("deny", denyFile);
+        var force = forceFile == null ? new List<(string path, string reason)>() : LoadRoots("force", forceFile);
+        AssertNoOverlap(deny, force);
+
+        // M4: the XML side had no path guards at all and failed safe against the client only by
+        // accident. Same absolute rule as the binary side: never write into a game install.
+        // Only for a real run — a dry run writes nothing, and the exit-code contract says a dry
+        // run's answer is its findings, not a refusal.
+        if (!dry && OutDirRefusal(Path.Combine(Path.GetFullPath(xmlRoot), "x")) is string dirWhy) return Refuse(dirWhy);
+        // xmlRoot is the tree root; the writes land several directories deeper (xmlRoot\<Name>.wz\
+        // <sub>\<img>.xml), so guard each of those the first time it is written to as well.
+        var dirsChecked = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        var paths = ReadPaths(args[3]);
         var (src, srcVer) = Open(srcPath);
         using var _s = src;
         string wzName = Path.GetFileName(srcPath);
         var ser = new FragmentSerializer();
         Console.WriteLine($"source {srcPath} iv={srcVer}; xml root {xmlRoot}{(dry ? "  [DRY RUN — nothing will be written]" : "")}");
+        Console.WriteLine($"deny-list {denyFile}: {deny.Count} roots" +
+                          (forceFile == null ? "; no force-list (nothing may be overwritten)" : $"; force-list {forceFile}: {force.Count} roots"));
 
-        int added = 0;
+        int added = 0, forced = 0, unverified = 0;
         foreach (var manifestPath in paths)
         {
+            string rowRoot = manifestPath.Split('/')[0];
+            if (!rowRoot.Equals(wzName, StringComparison.OrdinalIgnoreCase))
+            { Conflict(manifestPath, $"row is rooted at {rowRoot}, not {wzName} — export it in that file's own run"); continue; }
+
+            if (RootOver(deny, manifestPath) is { } dHit)
+            { Conflict(manifestPath, $"DENIED by deny-list [{dHit.path}]: {dHit.reason}"); continue; }
+            if (RootInside(deny, manifestPath) is { } dIn)
+            { Conflict(manifestPath, $"DENIED by deny-list: this row is a copy root containing the denied node '{dIn.path}' ({dIn.reason}), and a partial write is not possible"); continue; }
+
             var rel = Rel(manifestPath, wzName);
             int imgIdx = Array.FindIndex(rel, s => s.EndsWith(".img", StringComparison.OrdinalIgnoreCase));
             if (imgIdx < 0) { Conflict(manifestPath, "no .img segment — cannot map to an XML file"); continue; }
@@ -568,6 +1108,10 @@ static class Program
             string xmlFile = Path.Combine(new[] { xmlRoot, wzName }
                 .Concat(rel.Take(imgIdx + 1)).ToArray()) + ".xml";
             var inImg = rel.Skip(imgIdx + 1).ToArray();
+
+            if (!dry && dirsChecked.Add(Path.GetDirectoryName(Path.GetFullPath(xmlFile))!)
+                     && OutDirRefusal(xmlFile) is string fileDirWhy)
+                return Refuse(fileDirWhy);
 
             var srcObj = Resolve(src, rel, rel.Length);
             if (srcObj == null) { Conflict(manifestPath, "MISSING IN SOURCE — manifest is stale"); continue; }
@@ -642,28 +1186,91 @@ static class Program
             // writes them (2 spaces per level, name="…" on the opening line). OrdinalIgnoreCase
             // to match the binary side — WZ node lookup is case-insensitive, and an Ordinal
             // compare here would let a case-differing id past the gate and duplicate it.
-            if (FindChild(lines, start, end, indent, name) >= 0) { Conflict(manifestPath, "already exists in " + xmlFile); continue; }
+            int forcedAt = -1;
+            int at = FindChild(lines, start, end, indent, name);
+            if (at >= 0)
+            {
+                // B1: the force-list is the only way past this gate, exactly as on the binary
+                // side. It deletes the existing element's whole line range and lets the fragment
+                // below take its place — the 37 force rows are all name-table stubs
+                // ("MISSING NAME") that the server reads out of this tree, so a client-only
+                // overwrite would leave the two halves disagreeing.
+                if (RootOver(force, manifestPath) is not { } fHit)
+                { Conflict(manifestPath, "already exists in " + xmlFile); continue; }
+                int last = ElementEnd(lines, at, indent, end);
+                if (last < 0)
+                { Conflict(manifestPath, $"force-list overwrite ABORTED: '{name}' is never closed at indent {indent} in {xmlFile}"); continue; }
+                lines.RemoveRange(at, last - at + 1);
+                end -= last - at + 1;
+                forcedAt = at;      // put the replacement back where the original was, so the
+                                    // git diff of a forced overwrite is N insertions / N deletions
+                                    // in one place instead of a move
+                Console.WriteLine($"  FORCE {manifestPath} -> {xmlFile} (replacing {last - at + 1} line(s); {fHit.reason})");
+                forced++;
+            }
 
             // Insert in sorted position purely so the git diff reads naturally — the server
             // looks nodes up by name, so position is never load-bearing. CompareOrdinal only
             // orders correctly for equal-length ids (true of zero-padded Item.wz ids, not of
             // ragged String.wz ones); when it misjudges, the node still lands somewhere valid.
-            int insertAt = lines.FindIndex(start, end - start,
+            int insertAt = forcedAt >= 0 ? forcedAt : lines.FindIndex(start, end - start,
                 l => NameAt(l, indent) is string n && string.CompareOrdinal(n, name) > 0);
             if (insertAt < 0) insertAt = end; // last child of this container
 
             // Fragment() emits its own CRLF line breaks, so split them back out before splicing.
             var frag = ser.Fragment(sp, new string(' ', indent), xmlFile).Split("\r\n", StringSplitOptions.RemoveEmptyEntries);
             lines.InsertRange(insertAt, frag);
-            if (!dry) File.WriteAllText(xmlFile, string.Join("\r\n", lines) + "\r\n", new UTF8Encoding(false));
+            if (!dry)
+            {
+                // H5: the XML side wrote file-by-file with no verification of any kind and no
+                // exit 4, so a disk-full or an interrupt part way through left a half-applied
+                // server tree that the tool reported as success. Read each file back and compare
+                // it with what was meant to be written. (Recovery is still `git checkout -- wz/`;
+                // that is why this is a check and not a staging rewrite.)
+                string want = string.Join("\r\n", lines) + "\r\n";
+                File.WriteAllText(xmlFile, want, new UTF8Encoding(false));
+                if (File.ReadAllText(xmlFile) != want)
+                { Console.Error.WriteLine($"  UNVERIFIED: {xmlFile} does not read back as written"); unverified++; }
+            }
             added++;
             Console.WriteLine($"  ADD   {manifestPath} -> {xmlFile}:{insertAt + 1} ({frag.Length} lines)");
         }
 
         WriteConflicts(args[4], $"{wzName}: additive-only XML export{(dry ? " — DRY RUN, nothing was written" : "")}" +
-            $" -> {xmlRoot}, {added} nodes {(dry ? "would be added" : "added")}, {Conflicts.Count} refused");
-        Console.WriteLine($"added {added}, refused {Conflicts.Count}");
+            $" -> {xmlRoot}, {added} nodes {(dry ? "would be added" : "added")} ({forced} by force-list), {Conflicts.Count} refused");
+        Console.WriteLine($"added {added} (forced {forced}), refused {Conflicts.Count}");
+        if (unverified > 0)
+        {
+            Console.Error.WriteLine($"{unverified} file(s) did not read back as written. The server tree is HALF-APPLIED: git checkout -- wz/ and re-run.");
+            return 4;
+        }
+        if (added == 0) { Console.Error.WriteLine("NOTHING WAS ADDED. Every requested row was refused — read conflicts.txt."); return 5; }
         return Conflicts.Count > 0 ? 3 : 0;
+    }
+
+    // The line range [i..j] occupied by the element opened at line i at this indent, or -1 if it
+    // cannot be established. Used ONLY by the force-list overwrite, which deletes that range —
+    // so getting it wrong deletes somebody else's node, and -1 (refuse) is the right answer to
+    // any doubt at all.
+    //
+    // The single-line assumption is NOT safe in this tree: `wz/String.wz/Cash.img.xml` really
+    // contains `<string name="desc" value="…` whose value carries an embedded newline, so a
+    // self-closing element can span two lines and `EndsWith("/>")` misses it. Left alone, the
+    // scan below would run past it to the NEXT sibling's closing tag and delete both. So the
+    // walk stops on either of two things, whichever comes first:
+    //   * a closing tag at exactly this indent  -> that is our element's end
+    //   * another element OPENING at exactly this indent -> we ran past our element without
+    //     finding its close, i.e. it was self-closing in a shape we did not recognise. Refuse.
+    static int ElementEnd(List<string> lines, int i, int indent, int limit)
+    {
+        if (lines[i].TrimEnd().EndsWith("/>", StringComparison.Ordinal)) return i;
+        string close = new string(' ', indent) + "</";
+        for (int k = i + 1; k < limit; k++)
+        {
+            if (lines[k].StartsWith(close, StringComparison.Ordinal)) return k;
+            if (NameAt(lines[k], indent) != null) return -1;   // next sibling; ours never closed
+        }
+        return -1;
     }
 
     // name of the element opened at EXACTLY this indent, or null (deeper/shallower lines,

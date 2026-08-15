@@ -2,7 +2,11 @@
 # live client, contrary to the additive-only rule. Produced by ticket 03c; rationale and the
 # full 735-row triage are in COLLISION-TRIAGE.md next to this file.
 #
-# FORMAT (stable contract for a future `WzMerge merge --force-list <file>`):
+# ENFORCED since ticket 03e: pass this file as `WzMerge merge|xml --force <file>`. It is the
+# ONLY way past the additive-only gate; without it no existing node can be overwritten. Optional,
+# unlike --deny, because "overwrite nothing" is a safe default and "deny nothing" is not.
+#
+# FORMAT (identical to COLLISION-DENY.txt; one parser serves both):
 #   <path>\t# <reason>
 # - blank lines and lines whose first non-space char is '#' are ignored
 # - <path> is the same "Wz.wz/rest/of/path" form the add-lists and conflicts.txt use

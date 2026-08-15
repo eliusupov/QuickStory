@@ -4,7 +4,13 @@ Re-runs the tracer merge with the ALREADY-MERGED tree as its target. Every path 
 exists, so a working gate must refuse all of them and write no node. Run:
 
     WzMerge merge <v84>/Item.wz <post-merge>/Item.wz <throwaway>/Item.wz \
-        docs/wz-baseline/merge-lists/03-tracer-Item.txt <conflicts>
+        docs/wz-baseline/merge-lists/03-tracer-Item.txt <conflicts> \
+        --deny docs/wz-baseline/merge-lists/COLLISION-DENY.txt
+
+> **Ticket 03e, two changes to what you will see.** The summary line now reads
+> `added 0 (forced 0), refused 1`, and the **exit code is 5, not 3** — "refused rows and added
+> nothing at all" is its own code, because 3 conflated it with "added 5,000 and dropped one".
+> On this test exit 5 is the expected, correct result. `--deny` is required on every run.
 
 ## binary (.wz) side
 ```

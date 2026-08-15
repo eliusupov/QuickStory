@@ -1,9 +1,12 @@
-# String.wz: additive-only merge — DRY RUN, nothing was written, D:/games/MapleStory/Server/porting-resources/wz-data/v84/String.wz -> D:/games/MapleStory/String.wz, 868 nodes would be added, 711 refused
-# Every row is a v84 node this merge REFUSED to write because the path already
-# existed in the target. Additive-only is enforced in the write path, so this file
-# is the exhaustive list of v84 changes that were dropped. Read it before shipping:
-# a v84 EDIT to an existing node (renamed mob, portal added to an existing map)
-# looks exactly like this and is silently lost unless someone decides otherwise.
+# String.wz: additive-only merge — DRY RUN, nothing was written, D:\games\MapleStory\Server\porting-resources\wz-data\v84\String.wz -> D:\games\MapleStory\String.wz, 832 nodes would be added (0 by force-list), 747 refused
+# Every row is a v84 node this merge REFUSED to write. Two reasons appear here:
+#   * 'already exists in target' — the additive-only gate, enforced in the write path.
+#     A v84 EDIT to an existing node (renamed mob, portal added to an existing map)
+#     looks exactly like this and is silently lost unless someone decides otherwise.
+#   * 'DENIED by deny-list' — a v84 ADDITION the target lacks and must keep lacking.
+#     The gate is structurally blind to these; only the deny-list catches them.
+# Additive-only is enforced in the write path, so this file is the exhaustive list of
+# v84 changes that were dropped. Read it before shipping.
 # Columns: path, reason.
 
 String.wz/Cash.img/5500005	already exists in target
@@ -52,8 +55,9 @@ String.wz/Etc.img/Etc/4161050	already exists in target
 String.wz/Etc.img/Etc/4161051	already exists in target
 String.wz/Ins.img/3994179	already exists in target
 String.wz/Ins.img/3994180	already exists in target
-String.wz/MonsterBook.img/3100101/reward/21	already exists in target
-String.wz/MonsterBook.img/3100101/reward/22	already exists in target
+String.wz/MonsterBook.img/3100101/reward/21	DENIED by deny-list [String.wz/MonsterBook.img/3100101/reward]: positional array, 36 slots across these 17 mobs would splice
+String.wz/MonsterBook.img/3100101/reward/22	DENIED by deny-list [String.wz/MonsterBook.img/3100101/reward]: positional array, 36 slots across these 17 mobs would splice
+String.wz/MonsterBook.img/3100101/reward/23	DENIED by deny-list [String.wz/MonsterBook.img/3100101/reward]: positional array, 36 slots across these 17 mobs would splice
 String.wz/MonsterBook.img/3110100/reward/23	already exists in target
 String.wz/MonsterBook.img/3110100/reward/24	already exists in target
 String.wz/MonsterBook.img/3110101/reward/26	already exists in target
@@ -64,7 +68,10 @@ String.wz/MonsterBook.img/3110102/reward/27	already exists in target
 String.wz/MonsterBook.img/3110102/reward/28	already exists in target
 String.wz/MonsterBook.img/3110300/reward/25	already exists in target
 String.wz/MonsterBook.img/3110300/reward/26	already exists in target
-String.wz/MonsterBook.img/3110301/reward/22	already exists in target
+String.wz/MonsterBook.img/3110301/reward/22	DENIED by deny-list [String.wz/MonsterBook.img/3110301/reward]: positional array
+String.wz/MonsterBook.img/3110301/reward/23	DENIED by deny-list [String.wz/MonsterBook.img/3110301/reward]: positional array
+String.wz/MonsterBook.img/3110301/reward/24	DENIED by deny-list [String.wz/MonsterBook.img/3110301/reward]: positional array
+String.wz/MonsterBook.img/3110301/reward/25	DENIED by deny-list [String.wz/MonsterBook.img/3110301/reward]: positional array
 String.wz/MonsterBook.img/3110302/reward/26	already exists in target
 String.wz/MonsterBook.img/3110302/reward/27	already exists in target
 String.wz/MonsterBook.img/3110302/reward/28	already exists in target
@@ -78,18 +85,21 @@ String.wz/MonsterBook.img/3210201/reward/27	already exists in target
 String.wz/MonsterBook.img/3210202/reward/30	already exists in target
 String.wz/MonsterBook.img/3210202/reward/31	already exists in target
 String.wz/MonsterBook.img/3210202/reward/32	already exists in target
-String.wz/MonsterBook.img/3210203/reward/27	already exists in target
-String.wz/MonsterBook.img/3210203/reward/28	already exists in target
-String.wz/MonsterBook.img/3210203/reward/29	already exists in target
+String.wz/MonsterBook.img/3210203/reward/27	DENIED by deny-list [String.wz/MonsterBook.img/3210203/reward]: positional array
+String.wz/MonsterBook.img/3210203/reward/28	DENIED by deny-list [String.wz/MonsterBook.img/3210203/reward]: positional array
+String.wz/MonsterBook.img/3210203/reward/29	DENIED by deny-list [String.wz/MonsterBook.img/3210203/reward]: positional array
+String.wz/MonsterBook.img/3210203/reward/30	DENIED by deny-list [String.wz/MonsterBook.img/3210203/reward]: positional array
 String.wz/MonsterBook.img/3210204/reward/27	already exists in target
 String.wz/MonsterBook.img/3210204/reward/28	already exists in target
 String.wz/MonsterBook.img/3210205/reward/28	already exists in target
 String.wz/MonsterBook.img/3210205/reward/29	already exists in target
-String.wz/MonsterBook.img/3210206/reward/30	already exists in target
-String.wz/MonsterBook.img/3210206/reward/31	already exists in target
-String.wz/MonsterBook.img/3210207/reward/30	already exists in target
-String.wz/MonsterBook.img/3210207/reward/31	already exists in target
-String.wz/MonsterBook.img/3210207/reward/32	already exists in target
+String.wz/MonsterBook.img/3210206/reward/30	DENIED by deny-list [String.wz/MonsterBook.img/3210206/reward]: positional array
+String.wz/MonsterBook.img/3210206/reward/31	DENIED by deny-list [String.wz/MonsterBook.img/3210206/reward]: positional array
+String.wz/MonsterBook.img/3210206/reward/32	DENIED by deny-list [String.wz/MonsterBook.img/3210206/reward]: positional array
+String.wz/MonsterBook.img/3210207/reward/30	DENIED by deny-list [String.wz/MonsterBook.img/3210207/reward]: positional array
+String.wz/MonsterBook.img/3210207/reward/31	DENIED by deny-list [String.wz/MonsterBook.img/3210207/reward]: positional array
+String.wz/MonsterBook.img/3210207/reward/32	DENIED by deny-list [String.wz/MonsterBook.img/3210207/reward]: positional array
+String.wz/MonsterBook.img/3210207/reward/33	DENIED by deny-list [String.wz/MonsterBook.img/3210207/reward]: positional array
 String.wz/MonsterBook.img/3210208/reward/27	already exists in target
 String.wz/MonsterBook.img/3210208/reward/28	already exists in target
 String.wz/MonsterBook.img/3210208/reward/29	already exists in target
@@ -222,7 +232,8 @@ String.wz/MonsterBook.img/4230123/reward/25	already exists in target
 String.wz/MonsterBook.img/4230123/reward/26	already exists in target
 String.wz/MonsterBook.img/4230124/reward/28	already exists in target
 String.wz/MonsterBook.img/4230124/reward/29	already exists in target
-String.wz/MonsterBook.img/4230125/reward/27	already exists in target
+String.wz/MonsterBook.img/4230125/reward/27	DENIED by deny-list [String.wz/MonsterBook.img/4230125/reward]: positional array
+String.wz/MonsterBook.img/4230125/reward/28	DENIED by deny-list [String.wz/MonsterBook.img/4230125/reward]: positional array
 String.wz/MonsterBook.img/4230126/reward/30	already exists in target
 String.wz/MonsterBook.img/4230126/reward/31	already exists in target
 String.wz/MonsterBook.img/4230200/reward/29	already exists in target
@@ -234,17 +245,22 @@ String.wz/MonsterBook.img/4230201/reward/31	already exists in target
 String.wz/MonsterBook.img/4230201/reward/32	already exists in target
 String.wz/MonsterBook.img/4230300/reward/26	already exists in target
 String.wz/MonsterBook.img/4230300/reward/27	already exists in target
-String.wz/MonsterBook.img/4230400/reward/22	already exists in target
-String.wz/MonsterBook.img/4230400/reward/23	already exists in target
+String.wz/MonsterBook.img/4230400/reward/22	DENIED by deny-list [String.wz/MonsterBook.img/4230400/reward]: positional array
+String.wz/MonsterBook.img/4230400/reward/23	DENIED by deny-list [String.wz/MonsterBook.img/4230400/reward]: positional array
+String.wz/MonsterBook.img/4230400/reward/24	DENIED by deny-list [String.wz/MonsterBook.img/4230400/reward]: positional array
 String.wz/MonsterBook.img/4230500/reward/24	already exists in target
 String.wz/MonsterBook.img/4230500/reward/25	already exists in target
 String.wz/MonsterBook.img/4230501/reward/20	already exists in target
 String.wz/MonsterBook.img/4230501/reward/21	already exists in target
 String.wz/MonsterBook.img/4230502/reward/22	already exists in target
 String.wz/MonsterBook.img/4230502/reward/23	already exists in target
-String.wz/MonsterBook.img/4230503/reward/20	already exists in target
-String.wz/MonsterBook.img/4230503/reward/21	already exists in target
-String.wz/MonsterBook.img/4230504/reward/20	already exists in target
+String.wz/MonsterBook.img/4230503/reward/20	DENIED by deny-list [String.wz/MonsterBook.img/4230503/reward]: positional array
+String.wz/MonsterBook.img/4230503/reward/21	DENIED by deny-list [String.wz/MonsterBook.img/4230503/reward]: positional array
+String.wz/MonsterBook.img/4230503/reward/22	DENIED by deny-list [String.wz/MonsterBook.img/4230503/reward]: positional array
+String.wz/MonsterBook.img/4230504/reward/20	DENIED by deny-list [String.wz/MonsterBook.img/4230504/reward]: positional array
+String.wz/MonsterBook.img/4230504/reward/21	DENIED by deny-list [String.wz/MonsterBook.img/4230504/reward]: positional array
+String.wz/MonsterBook.img/4230504/reward/22	DENIED by deny-list [String.wz/MonsterBook.img/4230504/reward]: positional array
+String.wz/MonsterBook.img/4230504/reward/23	DENIED by deny-list [String.wz/MonsterBook.img/4230504/reward]: positional array
 String.wz/MonsterBook.img/4230505/reward/18	already exists in target
 String.wz/MonsterBook.img/4230505/reward/19	already exists in target
 String.wz/MonsterBook.img/4230506/reward/24	already exists in target
@@ -259,7 +275,10 @@ String.wz/MonsterBook.img/4240000/reward/32	already exists in target
 String.wz/MonsterBook.img/4240000/reward/33	already exists in target
 String.wz/MonsterBook.img/4250000/reward/14	already exists in target
 String.wz/MonsterBook.img/4250000/reward/15	already exists in target
-String.wz/MonsterBook.img/4250001/reward/12	already exists in target
+String.wz/MonsterBook.img/4250001/reward/12	DENIED by deny-list [String.wz/MonsterBook.img/4250001/reward]: positional array
+String.wz/MonsterBook.img/4250001/reward/13	DENIED by deny-list [String.wz/MonsterBook.img/4250001/reward]: positional array
+String.wz/MonsterBook.img/4250001/reward/14	DENIED by deny-list [String.wz/MonsterBook.img/4250001/reward]: positional array
+String.wz/MonsterBook.img/4250001/reward/15	DENIED by deny-list [String.wz/MonsterBook.img/4250001/reward]: positional array
 String.wz/MonsterBook.img/5100000/reward/28	already exists in target
 String.wz/MonsterBook.img/5100000/reward/29	already exists in target
 String.wz/MonsterBook.img/5100000/reward/30	already exists in target
@@ -273,7 +292,9 @@ String.wz/MonsterBook.img/5100004/reward/27	already exists in target
 String.wz/MonsterBook.img/5100005/reward/24	already exists in target
 String.wz/MonsterBook.img/5100005/reward/25	already exists in target
 String.wz/MonsterBook.img/5100005/reward/26	already exists in target
-String.wz/MonsterBook.img/5110300/reward/22	already exists in target
+String.wz/MonsterBook.img/5110300/reward/22	DENIED by deny-list [String.wz/MonsterBook.img/5110300/reward]: positional array
+String.wz/MonsterBook.img/5110300/reward/23	DENIED by deny-list [String.wz/MonsterBook.img/5110300/reward]: positional array
+String.wz/MonsterBook.img/5110300/reward/24	DENIED by deny-list [String.wz/MonsterBook.img/5110300/reward]: positional array
 String.wz/MonsterBook.img/5110301/reward/22	already exists in target
 String.wz/MonsterBook.img/5110301/reward/23	already exists in target
 String.wz/MonsterBook.img/5110302/reward/21	already exists in target
@@ -299,7 +320,8 @@ String.wz/MonsterBook.img/5120100/reward/30	already exists in target
 String.wz/MonsterBook.img/5120500/reward/27	already exists in target
 String.wz/MonsterBook.img/5120500/reward/28	already exists in target
 String.wz/MonsterBook.img/5120500/reward/29	already exists in target
-String.wz/MonsterBook.img/5120501/reward/19	already exists in target
+String.wz/MonsterBook.img/5120501/reward/19	DENIED by deny-list [String.wz/MonsterBook.img/5120501/reward]: positional array
+String.wz/MonsterBook.img/5120501/reward/20	DENIED by deny-list [String.wz/MonsterBook.img/5120501/reward]: positional array
 String.wz/MonsterBook.img/5120502/reward/22	already exists in target
 String.wz/MonsterBook.img/5120502/reward/23	already exists in target
 String.wz/MonsterBook.img/5120502/reward/24	already exists in target
@@ -370,9 +392,10 @@ String.wz/MonsterBook.img/6130103/reward/29	already exists in target
 String.wz/MonsterBook.img/6130103/reward/30	already exists in target
 String.wz/MonsterBook.img/6130200/reward/34	already exists in target
 String.wz/MonsterBook.img/6130200/reward/35	already exists in target
-String.wz/MonsterBook.img/6130202/reward/24	already exists in target
-String.wz/MonsterBook.img/6130202/reward/25	already exists in target
-String.wz/MonsterBook.img/6130202/reward/26	already exists in target
+String.wz/MonsterBook.img/6130202/reward/24	DENIED by deny-list [String.wz/MonsterBook.img/6130202/reward]: positional array
+String.wz/MonsterBook.img/6130202/reward/25	DENIED by deny-list [String.wz/MonsterBook.img/6130202/reward]: positional array
+String.wz/MonsterBook.img/6130202/reward/26	DENIED by deny-list [String.wz/MonsterBook.img/6130202/reward]: positional array
+String.wz/MonsterBook.img/6130202/reward/27	DENIED by deny-list [String.wz/MonsterBook.img/6130202/reward]: positional array
 String.wz/MonsterBook.img/6130203/reward/24	already exists in target
 String.wz/MonsterBook.img/6130203/reward/25	already exists in target
 String.wz/MonsterBook.img/6130204/reward/29	already exists in target
@@ -446,9 +469,12 @@ String.wz/MonsterBook.img/7130100/reward/32	already exists in target
 String.wz/MonsterBook.img/7130100/reward/33	already exists in target
 String.wz/MonsterBook.img/7130101/reward/31	already exists in target
 String.wz/MonsterBook.img/7130101/reward/32	already exists in target
-String.wz/MonsterBook.img/7130102/reward/60	already exists in target
-String.wz/MonsterBook.img/7130102/reward/61	already exists in target
-String.wz/MonsterBook.img/7130102/reward/62	already exists in target
+String.wz/MonsterBook.img/7130102/reward/60	DENIED by deny-list [String.wz/MonsterBook.img/7130102/reward]: positional array
+String.wz/MonsterBook.img/7130102/reward/61	DENIED by deny-list [String.wz/MonsterBook.img/7130102/reward]: positional array
+String.wz/MonsterBook.img/7130102/reward/62	DENIED by deny-list [String.wz/MonsterBook.img/7130102/reward]: positional array
+String.wz/MonsterBook.img/7130102/reward/63	DENIED by deny-list [String.wz/MonsterBook.img/7130102/reward]: positional array
+String.wz/MonsterBook.img/7130102/reward/64	DENIED by deny-list [String.wz/MonsterBook.img/7130102/reward]: positional array
+String.wz/MonsterBook.img/7130102/reward/65	DENIED by deny-list [String.wz/MonsterBook.img/7130102/reward]: positional array
 String.wz/MonsterBook.img/7130103/reward/30	already exists in target
 String.wz/MonsterBook.img/7130103/reward/31	already exists in target
 String.wz/MonsterBook.img/7130104/reward/25	already exists in target
@@ -496,6 +522,10 @@ String.wz/MonsterBook.img/8140001/reward/28	already exists in target
 String.wz/MonsterBook.img/8140001/reward/29	already exists in target
 String.wz/MonsterBook.img/8140002/reward/30	already exists in target
 String.wz/MonsterBook.img/8140002/reward/31	already exists in target
+String.wz/MonsterBook.img/8140100/reward/58	DENIED by deny-list [String.wz/MonsterBook.img/8140100/reward]: positional array
+String.wz/MonsterBook.img/8140100/reward/59	DENIED by deny-list [String.wz/MonsterBook.img/8140100/reward]: positional array
+String.wz/MonsterBook.img/8140100/reward/60	DENIED by deny-list [String.wz/MonsterBook.img/8140100/reward]: positional array
+String.wz/MonsterBook.img/8140100/reward/61	DENIED by deny-list [String.wz/MonsterBook.img/8140100/reward]: positional array
 String.wz/MonsterBook.img/8140101/reward/26	already exists in target
 String.wz/MonsterBook.img/8140101/reward/27	already exists in target
 String.wz/MonsterBook.img/8140101/reward/28	already exists in target
@@ -523,9 +553,11 @@ String.wz/MonsterBook.img/8140700/reward/27	already exists in target
 String.wz/MonsterBook.img/8140700/reward/28	already exists in target
 String.wz/MonsterBook.img/8140700/reward/29	already exists in target
 String.wz/MonsterBook.img/8140700/reward/30	already exists in target
-String.wz/MonsterBook.img/8140701/reward/23	already exists in target
-String.wz/MonsterBook.img/8140701/reward/24	already exists in target
-String.wz/MonsterBook.img/8140701/reward/25	already exists in target
+String.wz/MonsterBook.img/8140701/reward/23	DENIED by deny-list [String.wz/MonsterBook.img/8140701/reward]: positional array
+String.wz/MonsterBook.img/8140701/reward/24	DENIED by deny-list [String.wz/MonsterBook.img/8140701/reward]: positional array
+String.wz/MonsterBook.img/8140701/reward/25	DENIED by deny-list [String.wz/MonsterBook.img/8140701/reward]: positional array
+String.wz/MonsterBook.img/8140701/reward/26	DENIED by deny-list [String.wz/MonsterBook.img/8140701/reward]: positional array
+String.wz/MonsterBook.img/8140701/reward/27	DENIED by deny-list [String.wz/MonsterBook.img/8140701/reward]: positional array
 String.wz/MonsterBook.img/8140702/reward/26	already exists in target
 String.wz/MonsterBook.img/8140702/reward/27	already exists in target
 String.wz/MonsterBook.img/8141000/reward/38	already exists in target
@@ -698,12 +730,19 @@ String.wz/MonsterBook.img/8800002/reward/69	already exists in target
 String.wz/MonsterBook.img/8800002/reward/70	already exists in target
 String.wz/MonsterBook.img/8800002/reward/71	already exists in target
 String.wz/MonsterBook.img/8800002/reward/72	already exists in target
-String.wz/MonsterBook.img/8810018/reward/66	already exists in target
-String.wz/MonsterBook.img/8810018/reward/67	already exists in target
-String.wz/MonsterBook.img/8810018/reward/68	already exists in target
-String.wz/MonsterBook.img/8810018/reward/69	already exists in target
-String.wz/MonsterBook.img/8810018/reward/70	already exists in target
-String.wz/MonsterBook.img/8810018/reward/71	already exists in target
+String.wz/MonsterBook.img/8810018/reward/66	DENIED by deny-list [String.wz/MonsterBook.img/8810018/reward]: positional array
+String.wz/MonsterBook.img/8810018/reward/67	DENIED by deny-list [String.wz/MonsterBook.img/8810018/reward]: positional array
+String.wz/MonsterBook.img/8810018/reward/68	DENIED by deny-list [String.wz/MonsterBook.img/8810018/reward]: positional array
+String.wz/MonsterBook.img/8810018/reward/69	DENIED by deny-list [String.wz/MonsterBook.img/8810018/reward]: positional array
+String.wz/MonsterBook.img/8810018/reward/70	DENIED by deny-list [String.wz/MonsterBook.img/8810018/reward]: positional array
+String.wz/MonsterBook.img/8810018/reward/71	DENIED by deny-list [String.wz/MonsterBook.img/8810018/reward]: positional array
+String.wz/MonsterBook.img/8810018/reward/72	DENIED by deny-list [String.wz/MonsterBook.img/8810018/reward]: positional array
+String.wz/MonsterBook.img/8810018/reward/73	DENIED by deny-list [String.wz/MonsterBook.img/8810018/reward]: positional array
+String.wz/MonsterBook.img/8810018/reward/74	DENIED by deny-list [String.wz/MonsterBook.img/8810018/reward]: positional array
+String.wz/MonsterBook.img/8810018/reward/75	DENIED by deny-list [String.wz/MonsterBook.img/8810018/reward]: positional array
+String.wz/MonsterBook.img/8810018/reward/76	DENIED by deny-list [String.wz/MonsterBook.img/8810018/reward]: positional array
+String.wz/MonsterBook.img/8810018/reward/77	DENIED by deny-list [String.wz/MonsterBook.img/8810018/reward]: positional array
+String.wz/MonsterBook.img/8810018/reward/78	DENIED by deny-list [String.wz/MonsterBook.img/8810018/reward]: positional array
 String.wz/MonsterBook.img/8820000/map/0	already exists in target
 String.wz/MonsterBook.img/8820000/reward/0	already exists in target
 String.wz/Npc.img/9110002/n2	already exists in target

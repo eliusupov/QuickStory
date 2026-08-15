@@ -1,7 +1,12 @@
 # Ambiguous collision resolution — source evidence (ticket 03d)
 
 Read-only analysis. No game data changed, no merge decision made here.
-Both questions from `COLLISION-TRIAGE.md` §"ambiguous" (10 rows, 2 groups).
+Both questions from `COLLISION-TRIAGE.md` §"ambiguous" **as it stood when this was written**:
+10 rows in 2 groups. **Q2 has since been settled** by this very document and
+`COLLISION-TRIAGE.md` now records 4 ambiguous rows, not 10 — the six
+`Etc.wz/Commodity.img/894x` rows are keep-local, with zero loss, because v84's payload already
+exists locally as nodes `8848`–`8853`. Only Q1's four `Character.wz/Dragon/*/info/level` rows
+are still open, and they are an owner decision rather than a missing measurement.
 
 Every claim below is backed by `file:line` in this worktree
 (`D:\games\MapleStory\Server\Cosmic\.claude\worktrees\evan-dualblade`).
@@ -272,3 +277,7 @@ Keep-local loses nothing: the v84 payload is already in the tree under `8848`–
 | Q2 (6 rows) | Is the cash shop DB-driven? | **No** — `Commodity.img` is read from WZ at startup; `SN` is the `HashMap` key and a persisted SQL key in `gifts`/`wishlists`. | Proven from call sites + schema |
 | Q2 | Is anything pinned to SN `60001000`–`60001005`? | Nothing static in Java, SQL, or scripts. Dynamic exposure via `gifts`/`wishlists` only. | Proven for static; DB unverified |
 | Q2 | What is the actual v84-vs-local delta? | A node renumbering — v84's payload already exists locally as nodes `8848`–`8853`. Adopting duplicates six SNs and drops six pet SNs. | Proven |
+
+**Status after this document: Q2 is CLOSED (keep local, zero loss) and the ambiguous count is 4,
+not 10.** `COLLISION-TRIAGE.md` §Buckets is the current figure; this file is the evidence behind
+the change, not a live count.

@@ -2,8 +2,11 @@
 
 **Tickets 04–09 execute this document. Do not invent a second way.** Established by ticket 03
 (tracer: item `2001500`, "Red Potion"), hardened by ticket 03b after a safety review, collision
-figures re-measured by ticket 02g. Everything here was run end to end, not designed on paper; the
-verbatim output is under `docs/wz-baseline/merge-lists/03-verification/`.
+figures re-measured by ticket 02g, and hardened again by ticket **03e** after a second review found
+the deny-list unenforced, the staging guard blind in the configuration this document itself
+prescribes, `deps` wrong at the granularity ticket 06 needs, and a failure mode that exits 0.
+Everything here was run end to end, not designed on paper; the verbatim output is under
+`docs/wz-baseline/merge-lists/03-verification/`.
 
 If you are about to run a merge and have no other context: read sections 0–4, then follow section 5
 literally. Nothing before section 5 is optional background.
@@ -18,7 +21,8 @@ literally. Nothing before section 5 is optional background.
 | **The client must be closed.** | Windows will not let you replace a `.wz` the client holds open, and a merge whose target is held open fails partway. Close MapleStory *and* any HaRepacker window before 5.7. |
 | **Backup** | `D:\games\MapleStory\Server\_backup\client-v83-EzorsiaV2-2026-08-15\`. Confirm by hash that it covers every file you are about to change, **before** you change it (5.0). It is the only rollback for the binary side. |
 | **`D:\games\MapleStory\` is read-only** except the single install copy in 5.7. Nothing else here writes there. |
-| **Server-side undo** is `git checkout -- wz/`. The XML side is in git; the binary side is not. |
+| **Server-side undo** is `git checkout -- wz/`. The XML side is in git; the binary side is not. **Check `git status` before you use it** — another ticket's uncommitted XML lives in the same tree, and a blanket checkout takes theirs with yours. |
+| **You are not alone.** More than one ticket runs at a time. Everything you create goes under `<stage>\<T>\`, including `pre\` (section 1). Never write into another ticket's directory, and never merge from a `pre\` you did not take. |
 | **MapleLib revision** | `HaRepacker-src` at `a7c38edf7c58e8a8b272af490c51113db76bff08`. Every safety claim below is a property of that source. Check with `git -C D:\games\MapleStory\Server\porting-resources\reference-sources\HaRepacker-src rev-parse HEAD`; if it differs, the file/line references in `03-verification/` need re-reading before you trust them. |
 
 ## 1. Staging — the only supported way to run a merge
@@ -28,11 +32,22 @@ and is then *copied* into place by hand as a separate, interruptible step.
 
 ```
 D:\games\MapleStory\Server\wz-merge\
-  pre\        byte-identical copies of the live .wz files you are merging into
-  <ticket>\   the merged output ("post")
+  <ticket>\pre\   byte-identical copies of the live .wz files THIS ticket merges into
+  <ticket>\       the merged output ("post")
 ```
 
-Why this is a rule, not a preference — `WzFile.SaveToDisk`:
+**`pre\` is per-ticket. This is not cosmetic.** It used to be one shared directory, and two tickets
+that touch the same `.wz` cannot share it: if 06 installs its merged `Map.wz` and 07 then merges
+onto the stale shared `pre\Map.wz`, **07's output silently reverts 06** — both runs exit 0, and
+section 6.2's diff compares against that same stale snapshot and reports clean. Nothing downstream
+catches it. So:
+
+- take your own `pre\` under your own ticket directory (5.1), and
+- every real merge must pass **`--live <the live .wz>`**. The tool SHA-256s the target and the live
+  file and refuses with exit 2 if they differ. That is the check that makes a stale snapshot
+  impossible to merge from rather than merely discouraged.
+
+Why staging is a rule, not a preference — `WzFile.SaveToDisk`:
 
 - **truncates the destination the instant it starts** (`WzFile.cs:675`), then spends the following
   minutes streaming unchanged images out of the *target's own open reader*
@@ -41,9 +56,34 @@ Why this is a rule, not a preference — `WzFile.SaveToDisk`:
   or a Ctrl-C leaves a **truncated file that looks finished**.
 - And its scratch file is relative to the working directory.
 
-The tool enforces the discipline rather than trusting you to remember it. It refuses with **exit 2**,
-before opening anything, if `<outWz>` is the target file, or the v84 source, or **in the same
-directory as the target** — which is what aiming an output at `D:\games\MapleStory\` amounts to.
+**The output-directory rule is absolute and does not depend on `<targetWz>`.** The tool refuses
+with **exit 2**, before opening anything, when the directory `<outWz>` names:
+
+- contains any `.exe` — that is a game install, never a staging directory; or
+- already holds `.wz` files WzMerge did not put there. WzMerge drops a `.wz-merge-stage` marker in
+  a directory the first time it writes one, so a multi-file ticket keeps working while the live
+  client's 18 `.wz` are refused outright.
+
+**If you are re-running a ticket that already has a staging directory from an earlier attempt,
+start a new one** (`<stage>\<T>-r2\`). Output from before ticket 03e was produced by a tool with an
+inert deny-list and a `deps` that under-reported, so it is not trustworthy. Those directories carry
+no marker, so the guard refuses to write beside them — that refusal is the correct answer, not an
+obstacle to work around. **The marker is not a judgement about the contents of a directory**, only
+about who created it: once a directory has one, WzMerge will keep adding `.wz` to it, which is what
+a multi-file ticket needs and is also why a fresh directory is the right call after any change to
+the tool.
+
+It still also refuses `<outWz>` equal to the target or to the v84 source. The three guards that
+existed before were *all relational to `<targetWz>`* — and since 5.4 sets the target to a staging
+snapshot rather than the live file, an `<outWz>` of `D:\games\MapleStory\Map.wz` passed all three
+and the finished merge was `File.Move`d straight onto the live client. Ask the guard anything, in
+advance, without writing a byte:
+
+```
+WzMerge guard D:\games\MapleStory\Map.wz          # -> REFUSED, exit 2
+WzMerge guard <stage>\<T>\Map.wz                  # -> ALLOWED, exit 0
+```
+
 Within staging it writes `<outWz>.partial`, verifies it, and only then moves it onto `<outWz>`.
 The refusals and the corrupted-output test are demonstrated in `03-verification/safety-guards.md`.
 
@@ -60,39 +100,50 @@ Sibling of ticket 02's diff tool (`docs/wz-baseline/tool/`), same `MapleLibProje
 
 ```
 WzMerge dump   <wz> <path/under/wz> [depth]
-WzMerge merge  <sourceWz> <targetWz> <outWz|-> <pathsFile> <conflictsTxt>
-WzMerge xml    <sourceWz> <xmlRoot>            <pathsFile> <conflictsTxt> [-]
+WzMerge merge  <sourceWz> <targetWz> <outWz|-> <pathsFile> <conflictsTxt> --deny <denyList> [--force <forceList>] [--live <liveWz>]
+WzMerge xml    <sourceWz> <xmlRoot>            <pathsFile> <conflictsTxt> --deny <denyList> [--force <forceList>] [-]
 WzMerge verify <wz> <pathsFile>
 WzMerge hash   <wz> <path/under/wz>
-WzMerge deps   <mapWz> <Map/MapN/<id>.img>
+WzMerge deps   <mapWz> <mapId|Map/MapN/<id>.img> <addListDir>
+WzMerge guard  <outWz>
 ```
 
 `<pathsFile>` is a manifest: lines exactly as `docs/wz-baseline/add-list/*.txt` writes them
 (`Item.wz/Consume/0200.img/02001500`); `#` and blanks ignored. Feed it an add-list directly, or a
-hand-cut subset (see `docs/wz-baseline/merge-lists/`).
+hand-cut subset (see `docs/wz-baseline/merge-lists/`). **A paths file with zero rows is exit 2, not
+a successful no-op** — see 5.3 for how you get one by accident.
+
+**Path form.** `merge` / `xml` / `verify` take *manifest* form, rooted at `<Name>.wz`.
+`dump` / `hash` / `deps` accept **either** manifest form or root-relative form
+(`Item.wz/Consume/0200.img` and `Consume/0200.img` both work). That asymmetry used to be silent
+and section 6.1 fed `hash` paths it could not resolve.
 
 **Dry run:** `-` in the `<outWz>` slot for `merge`, `-` as a trailing argument for `xml`. Every
-check runs; nothing is written.
+check runs; nothing is written. `--live` is not needed for a dry run; `--deny` still is.
 
 **Manifest root:** both `merge` and `xml` match the leading `<Name>.wz` of each manifest line
 against the **source** argument, so renaming a staging copy of the target cannot break lookups.
-`merge` prints a note when the target is named differently.
+`merge` prints a note when the target is named differently. A row rooted at a *different* `.wz`
+(which `deps` legitimately emits) is refused into `conflicts.txt` with that reason, not thrown.
 
 ### Exit codes — check them; do not eyeball the log
 
 ```
 0  every requested path was added (or, on a dry run, would be)
 1  unexpected failure
-2  bad arguments, or a staging guard refused them
+2  bad arguments, a 0-row paths file, a deny/force overlap, or a safety guard refused
 3  completed, but >=1 row was REFUSED — read conflicts.txt
 4  post-write verification failed — the output is NOT installable
+5  refused rows AND ADDED NOTHING AT ALL — almost always a wrong argument or a stale manifest
 ```
 
-`added 0, refused 21` is **exit 3**, not 0. A scripted 04–09 loop that only checks for zero will
-stop on a file that imported nothing, which is the point. For a dry run, exit 3 means "collisions
-found" — that is the answer you asked for, not a fault.
+`added 0, refused 21` is **exit 5**, not 0 and not 3. A scripted 04–09 loop that only checks for
+zero stops on a file that imported nothing, which is the point; and 5 separates "imported 5,000 and
+dropped one" from "imported nothing", which 3 used to conflate. For a dry run, exit 3 means
+"collisions found" — that is the answer you asked for, not a fault; exit 5 on a dry run means the
+target already has everything you asked for, or you are pointed at the wrong file.
 
-## 4. The two rules the tool enforces
+## 4. The three rules the tool enforces
 
 ### 4.1 Additive-only, enforced in the write path
 
@@ -131,12 +182,59 @@ Read the file before shipping. Two real examples from the tracer sweep, one per 
 | `String.wz/Npc.img/9901910` | "I am /name, who has reached Lv. 120." (Cosmic's injected NPC) | "I am /name, who has reached Lv. 200." | **rule was right** — importing would have destroyed server content |
 | `String.wz/Cash.img/5530001` | `name="MISSING NAME"`, `desc="MISSING INFO"` | "DS Medal Basket" | **rule cost us something** — a human should take v84's value |
 
+### 4.3 The deny-list and the force-list — the gate is not enough on its own
+
+The additive-only gate only refuses paths that **already exist**. It is therefore structurally
+blind to a harmful v84 *addition*, and `conflicts.txt` is silent on every one of them by
+construction. Ticket 03c found three, all of which the tool used to write without comment:
+
+| hazard | rows | why |
+|---|---:|---|
+| `Etc.wz/NpcLocation.img/9901910`–`9901919` | 10 | `PlayerNPC.java:66` — `9901910`–`9906599` is a range the **server allocates from at runtime**. Writing fixed world placements onto it puts a static NPC on ids the server hands out. |
+| `String.wz/MonsterBook.img/<mob>/reward` | 17 roots | `reward/<n>` is the n-th **slot of a positional array**, not an identity. Of 689 v84 reward slots, 653 collide and 36 do not — those 36 append onto 17 Cosmic drop lists, giving Cosmic's entries at indices 0–22 and Nexon's at 23–28. A list neither vendor ever shipped. |
+| `Npc.wz/9000021.img` | 1 | 24 of its nodes refuse as `unsupported shape: parent=WzUOLProperty`; the rest merge, leaving the NPC half-v83/half-v84 — worse than either whole version. |
+
+**`--deny` is therefore mandatory on every `merge` and every `xml` run, dry runs included** (the
+dry run is what you read before deciding, so a dry run without it produces the wrong decision).
+The tool refuses to start without it.
+
+```
+--deny docs\wz-baseline\merge-lists\COLLISION-DENY.txt        28 roots
+--force docs\wz-baseline\merge-lists\COLLISION-FORCE.txt      37 roots, OPTIONAL
+```
+
+Both files are `<path>\t# <reason>`, blanks and `#` ignored, one parser. **Every listed path is a
+ROOT**: nothing at or beneath a deny root is written — which is how 17 `reward` parents cover all
+36 at-risk slots with no wildcard syntax — and everything beneath a force root may be overwritten.
+A manifest row that is a copy root *containing* a deny root is refused too, because there is no way
+to write part of it. **Deny beats force, and a path in both lists is a hard exit 2**, not a silent
+resolution: an overlap means two decisions contradict each other.
+
+**`--force` is the only way past the additive-only gate.** Without it nothing existing is ever
+overwritten. With it, the tool removes the existing node and writes v84's in its place, prints
+`FORCE <path> (authorised overwrite …: <reason>)`, and counts it in the summary line. On the XML
+side the replacement goes back at the **same line position**, so the git diff is N insertions /
+N deletions in one place. The 37 committed force rows are exactly the ids whose live value is the
+literal placeholder `MISSING NAME` / `MISSING INFO` — including the twelve `Eqp/Dragon` names and
+Evan's Mir and saddles, which additive-only cannot repair and tickets 04 and 13 need.
+
+**The 28 deny rows are not of equal confidence and the tool cannot tell you that.** The 10
+`NpcLocation` rows are hard evidence; the 17 `reward` roots are a mechanical consequence;
+`Npc.wz/9000021.img` is a judgement call made on the operator's behalf, marked as such in the file,
+and is the one to revisit if the tool ever learns to write through a UOL parent.
+
 ---
 
 ## 5. The run book
 
 In order, per `.wz` file. `<stage>` = `D:\games\MapleStory\Server\wz-merge`, `<v84>` =
-`D:\games\MapleStory\Server\porting-resources\wz-data\v84`, `<T>` = your ticket number.
+`D:\games\MapleStory\Server\porting-resources\wz-data\v84`, `<T>` = your ticket number,
+`<lists>` = `docs\wz-baseline\merge-lists`, `<adds>` = `docs\wz-baseline\add-list`.
+
+**Everything you write lives under `<stage>\<T>\`, including your `pre\` snapshots. You share no
+directory with another ticket.** More than one ticket can be in flight at a time and two of them
+touching the same `.wz` is normal; per-ticket `pre\` plus the `--live` hash check below is what
+stops the second one from silently reverting the first.
 
 ### 5.0 Confirm the backup covers what you are about to change
 
@@ -148,27 +246,45 @@ certutil -hashfile D:\games\MapleStory\Server\_backup\client-v83-EzorsiaV2-2026-
 Equal, for every file the ticket touches. **If a file is not in the backup, stop and back it up
 before going further.** Record both hashes in your ticket.
 
-### 5.1 Snapshot the pre-merge tree
+### 5.1 Snapshot the pre-merge tree — into YOUR ticket directory
 
 This copy is the target of the merge *and* the "before" side of every check in section 6. It must
 exist before anything is written; nothing reconstructs it afterwards.
 
 ```
-mkdir <stage>\pre
-copy D:\games\MapleStory\<Name>.wz <stage>\pre\<Name>.wz
-certutil -hashfile <stage>\pre\<Name>.wz SHA256      # must equal 5.0
+mkdir <stage>\<T>\pre
+copy D:\games\MapleStory\<Name>.wz <stage>\<T>\pre\<Name>.wz
+certutil -hashfile <stage>\<T>\pre\<Name>.wz SHA256      # must equal 5.0
 ```
+
+**Take it as late as you can** — right before 5.2, not at the top of the ticket. It is a snapshot
+of a file another ticket may install over, and the older it is the more likely 5.4 rejects it.
+If 5.4 says `STALE SNAPSHOT`, another ticket installed in the meantime: re-take this copy, then
+**re-read your dry run**, because the collisions may have changed.
 
 ### 5.2 Dry run, and read the conflicts
 
 ```
-WzMerge merge <v84>\<Name>.wz <stage>\pre\<Name>.wz - <pathsFile> <stage>\<T>\<Name>.dry.conflicts.txt
+WzMerge merge <v84>\<Name>.wz <stage>\<T>\pre\<Name>.wz - <pathsFile> <stage>\<T>\<Name>.dry.conflicts.txt --deny <lists>\COLLISION-DENY.txt
 ```
+
+(Every command in this document is one line. It is written for **PowerShell**, where the line
+continuation is a backtick and `^` is not one — do not break these across lines with `^`.)
+
+Add `--force <lists>\COLLISION-FORCE.txt` **only** if your ticket has decided to adopt v84 values
+for listed ids (4.3). Without it nothing existing is overwritten, which is the safe default.
 
 **Do this before every real merge.** It is the cheapest step in the pipeline and the only one that
 tells you what you are about to lose. Exit 0 = nothing collides. Exit 3 = read the file; for every
 row decide **drop it**, **re-id it**, or **take v84's value by hand**, and record the decision in
-your ticket. Do not proceed with unread conflicts.
+your ticket. Exit 5 = the target already has everything you asked for, or you are pointed at the
+wrong file — do not read that as "nothing owed" without checking which. Do not proceed with unread
+conflicts.
+
+`conflicts.txt` now carries two kinds of row and they mean different things:
+`already exists in target` is the additive-only gate (a v84 *edit* you are dropping), and
+`DENIED by deny-list [...]` is a v84 *addition* that must not be written and needs no further
+decision from you — 03c already made it, and the reason is quoted inline.
 
 Seconds, for a property-level manifest — only the images a listed path walks through get parsed.
 **A manifest row naming a whole `WzDirectory` is the exception:** that row `DeepClone`s the entire
@@ -178,43 +294,88 @@ and it is memory-bound. If a larger directory ever OOMs, expand that row into pe
 ### 5.3 If you are merging maps: resolve asset references first
 
 **The ordering rule (section 7) covers manifest parent/child only. It does not see asset
-references, and a map is nothing but asset references.** A map `.img` names its scenery by *set
-name* — `back/<n>/bS`, `<layer>/obj/<n>/{oS,l0}`, `<layer>/info/tS` — and those sets live in
-`Map.wz/Back`, `Map.wz/Obj` and `Map.wz/Tile` as separate manifest rows with no textual connection
-to the map at all. Merge a map without its sets and the client renders it broken or crashes.
+references, and a map is nothing but asset references.** A map `.img` names everything it needs by
+*name*, with no textual connection to the path it lives at:
 
-Real for ticket 06, not hypothetical: `Map/Map2/240080000.img` references
-`Obj/dungeon3.img/skyValley`, which the live v83 client does not have.
+| in the map | resolves to |
+|---|---|
+| `back/<n>/bS` | `Map.wz/Back/<bS>.img` |
+| `<layer>/obj/<n>/{oS,l0,l1,l2}` | `Map.wz/Obj/<oS>.img/<l0>/<l1>/<l2>` |
+| `<layer>/info/tS` | `Map.wz/Tile/<tS>.img` |
+| `info/bgm` = `Bgm14/DragonRider` | `Sound.wz/Bgm14.img/DragonRider` — **a different `.wz`** |
+| `info/mapMark` = `Leafre` | `Map.wz/MapHelper.img/mark/Leafre` |
+| `info/link` = `240080100` | another whole map image, with references of its own |
 
-For **each** map image you intend to merge:
+Merge a map without these and the client renders it broken, drops its background silently, shows a
+blank world-map marker or plays no music. Real for ticket 06: `Map/Map2/240080000.img` references
+`Obj/dungeon3.img/skyValley`, absent from v83 — and it also draws five new animation frames inside
+`Back/dragonRoad.img`, an image v83 *does* have. **`info/link` matters just as much: 8 of ticket
+06's 21 maps are pure link stubs whose entire layout lives in the target map.** Repo-wide, 2,266 of
+5,262 maps use `link`.
+
+Run this once per map image you intend to merge. **Pass the bare map id** — `deps` finds its bucket
+itself, which is what "`Map/Map2/`" in the old version of this document got wrong for ticket 07's
+`Map6` maps:
 
 ```
-WzMerge deps <v84>\Map.wz Map/Map2/<id>.img  > <stage>\<T>\<id>.deps.txt
-WzMerge merge <v84>\Map.wz D:\games\MapleStory\Map.wz - <stage>\<T>\<id>.deps.txt <stage>\<T>\<id>.deps.conflicts.txt
+WzMerge deps <v84>\Map.wz <id> <adds>  > <stage>\<T>\<id>.deps.txt
 ```
 
-Read the second command's output:
+The output **is a paths file**, already at manifest granularity, already including the map image
+row(s) themselves. `deps` cross-references every reference against the add-lists, so what it prints
+is what is actually owed, at the depth the manifests hold it — `Map.wz/Back/dragonRoad.img/ani/20`
+and its nine siblings, not the whole-image row `Map.wz/Back/dragonRoad.img` that the merge would
+just refuse. A reference the live client already satisfies is printed as a comment
+(`# already in v83, nothing owed: …`), so the file is safe to feed straight in.
 
-- `SKIP … already exists in target` → the client already has that set. Nothing owed.
-- `ADD …` → **the set is missing.** Put that row in your paths file *above* the map row and merge
-  it in the same run.
+**Check the exit code.** `deps` exits 1 if the id has no `.img` under `Map/*` or if a link target
+does not exist. When that happens it prints its rows **commented out**, so the file you just
+redirected into holds no manifest rows at all and the merge that reads it exits 2 rather than
+merging an incomplete list. Fix the cause and re-run; do not uncomment them. And note what that
+failure used to do: the shell truncates the redirect target *before* `deps` runs, so a failed
+`deps` left a zero-byte file and the merge that read it reported `added 0, refused 0`, exit 0 —
+"nothing owed". A zero-row paths file is now exit 2 everywhere.
+
+Then dry-run the deps file the same way as any other manifest:
+
+```
+WzMerge merge <v84>\Map.wz <stage>\<T>\pre\Map.wz - <stage>\<T>\<id>.deps.txt <stage>\<T>\<id>.deps.conflicts.txt --deny <lists>\COLLISION-DENY.txt
+```
+
+- `ADD …` → owed, and the row belongs in your real paths file.
+- `SKIP … already exists in target` → the client already has it.
+- `SKIP … row is rooted at Sound.wz, not Map.wz` → **a genuine cross-file dependency.** `deps`
+  groups its rows under `# ==== <Name>.wz ====` banners; take that group to that file's own merge.
 
 Worked example, verbatim, in `03-verification/safety-guards.md` §G9.
 
-`deps` reports `Back` / `Obj` / `Tile` — the sets whose absence breaks rendering. It does **not**
-follow mob, npc, reactor, sound or portal-script ids; those are server-side or live in other `.wz`
-files and are the content ticket's own problem.
+`deps` does **not** resolve mob, npc, reactor or portal-script ids — still a deliberate scope cut,
+but state it to yourself honestly rather than reading the banner as an all-clear: **a v84-only mob
+id placed in a v84 map means the live client has no sprite for it.** Check the ids under the map's
+`life/` against `add-list/{Mob,Npc,Reactor}.txt` by hand.
 
 ### 5.4 The real merge
 
 ```
-mkdir <stage>\<T>
-WzMerge merge <v84>\<Name>.wz <stage>\pre\<Name>.wz <stage>\<T>\<Name>.wz <pathsFile> <stage>\<T>\<Name>.conflicts.txt
+WzMerge merge <v84>\<Name>.wz <stage>\<T>\pre\<Name>.wz <stage>\<T>\<Name>.wz <pathsFile> <stage>\<T>\<Name>.conflicts.txt --deny <lists>\COLLISION-DENY.txt --live D:\games\MapleStory\<Name>.wz
 ```
+
+`--live` is **required** for a real merge and is checked before anything is opened: the tool
+SHA-256s `<targetWz>` and the live file and refuses with exit 2 if they disagree. It must be the
+**live client's** file — pointing it at the target is refused too, since comparing the target with
+itself proves nothing. See 5.1 for what to do when it fires.
 
 Expect `verified OK -> …` and exit 0 (or 3, if you accepted collisions at 5.2). **Exit 4 means the
 output is bad:** it is left as `<Name>.wz.partial` and was not promoted. Do not install it, do not
-rename it — find out why (disk, memory, an interrupted run) and re-run.
+rename it — find out why (disk, memory, an interrupted run, or a `CONTENT DRIFT` line) and re-run.
+**Exit 5 means nothing was added at all** — read `conflicts.txt` before concluding anything.
+
+Before promoting, the tool re-opens what it wrote and checks three things: every path you asked for
+re-resolves; every image in the file parses; and **every image it inserted into digests the same on
+disk as it did in memory** (`content OK <image> <sha>`). That last one is the check that would
+catch a corrupted canvas payload, which path re-resolution and `ParseImage` both walk straight
+past. A whole-`WzDirectory` manifest row (`Skill.wz/Dragon`) is not content-checked and the tool
+says so on the line above the save.
 
 ### 5.5 Verify — section 6. Do not skip it.
 
@@ -224,16 +385,27 @@ rename it — find out why (disk, memory, an interrupted run) and re-run.
 regenerating — `WzMerge xml` edits the `.img.xml` files in place.
 
 ```
-WzMerge xml <v84>\<Name>.wz wz <pathsFile> <stage>\<T>\<Name>.xml.dry.conflicts.txt -   # dry
-WzMerge xml <v84>\<Name>.wz wz <pathsFile> <stage>\<T>\<Name>.xml.conflicts.txt         # real
+WzMerge xml <v84>\<Name>.wz wz <pathsFile> <stage>\<T>\<Name>.xml.dry.conflicts.txt --deny <lists>\COLLISION-DENY.txt -
+WzMerge xml <v84>\<Name>.wz wz <pathsFile> <stage>\<T>\<Name>.xml.conflicts.txt     --deny <lists>\COLLISION-DENY.txt
 git diff --stat wz/
 ```
+
+`--deny` is required here too, and `--force` behaves exactly as on the binary side. **If your
+ticket forces a `String.wz` row, force it on BOTH sides** — the client reads the binary `.wz` and
+the server reads this tree, and forcing only one leaves the two disagreeing.
 
 The splice is a **text insert**, not an XML round-trip: the fragment goes in at sorted position
 among its parent's children and every other byte of the file is untouched. Expect
 `N insertions(+), 0 deletions(-)` and nothing else — the tracer's was `19 insertions(+), 0
-deletions(-)` across two files. Any deletion, or a reformat of lines you did not add, means stop and
-`git checkout -- wz/`.
+deletions(-)` across two files. A forced row is the one exception: it replaces the existing element
+**in place**, so it reads as N insertions / N deletions at one spot. Any *other* deletion, or a
+reformat of lines you did not add, means stop and `git checkout -- wz/`.
+
+Each written file is read back and compared with what was meant to be written; a mismatch is
+**exit 4** and the message says the tree is half-applied. `xml` writes file by file, so an
+exception mid-run (exit 1) leaves a partially-updated tree as well. Both recover the same way:
+`git checkout -- wz/`, then re-run. That is why the XML side has no staging directory — git is the
+staging directory.
 
 **Dry-run limit:** the XML dry run re-reads each `.img.xml` from disk per row and never writes, so
 two manifest rows adding the *same* name to the same file both report `ADD`. A real run catches the
@@ -296,10 +468,18 @@ Full reasoning and verbatim output: `docs/wz-baseline/merge-lists/03-verificatio
 ### 6.1 The content digest — the check that can fail
 
 ```
-WzMerge hash <stage>\pre\<Name>.wz <image/path>   >  pre.hashes.txt
-WzMerge hash <stage>\<T>\<Name>.wz  <image/path>  >  post.hashes.txt
-fc pre.hashes.txt post.hashes.txt
+WzMerge hash <stage>\<T>\pre\<Name>.wz <image/path>  >  pre.hashes.txt
+WzMerge hash <stage>\<T>\<Name>.wz     <image/path>  >  post.hashes.txt
+fc.exe /N pre.hashes.txt post.hashes.txt
 ```
+
+**`fc.exe`, with the extension.** In PowerShell bare `fc` is the alias for `Format-Custom`, which
+happily formats two file *names* and reports nothing — the check silently cannot fail. Use
+`fc.exe`, or `Compare-Object (Get-Content pre.hashes.txt) (Get-Content post.hashes.txt)`.
+
+`<image/path>` may be written either way — `String.wz/Consume.img` or `Consume.img`. `hash`,
+`dump` and `deps` accept manifest form as well as root-relative form; only `merge`, `xml` and
+`verify` require manifest form.
 
 for each image a node was inserted into — i.e. each `modified-list` row from 6.2. One SHA-256 per
 direct child of the image, over its **decoded** values: scalars by parsed value, canvases by the
@@ -308,6 +488,11 @@ SHA-256 of their compressed pixel bytes.
 **Expected: the only differing lines are the ids you added, plus the `TOTAL` line.** Every other
 child must be digest-identical. Tracer result: 55 of 56 children of `Item.wz/Consume/0200.img` and
 2,290 of 2,291 children of `String.wz/Consume.img` identical.
+
+**The merge now runs this same digest itself**, in memory before the save and again off the written
+file, and refuses to promote the output on a mismatch (5.4). 6.1 remains worth running because it
+compares against the *pre-merge* file and names which children moved — the tool's own check only
+proves the write is faithful to what the merge built.
 
 This is the important check. The merge sets `Changed = true` on exactly the image it inserted into,
 so that image is the *only* one decoded, re-serialized and re-encrypted under the target's IV, and
@@ -324,8 +509,12 @@ pass:
 ```
 dotnet run -c Release --project docs/wz-baseline/tool -- <outDir> <v83Dir> <v84Dir> <liveDir>
 #                                                        ^scratch  ^pre      ^post    ^pre again
-dotnet run -c Release --project docs/wz-baseline/tool -- <stage>\<T>\diff <stage>\pre <stage>\<T> <stage>\pre
+dotnet run -c Release --project docs/wz-baseline/tool -- <stage>\<T>\diff <stage>\<T>\pre <stage>\<T> <stage>\<T>\pre
 ```
+
+Note this compares against **your** `pre\`. That is only meaningful because 5.4 proved your `pre\`
+still matched the live file at merge time; against a shared, stale snapshot this diff reports clean
+on a merge that reverts another ticket.
 
 Use an `<outDir>` **outside `docs/wz-baseline/`** or the run overwrites the committed manifests.
 Then read exactly three things in `<outDir>`:
@@ -359,8 +548,11 @@ all of them:
 
 ```
   SKIP  Item.wz/Consume/0200.img/02001500  (already exists in target)
-  added 0, refused 1                                                    exit 3
+  added 0 (forced 0), refused 1                                         exit 5
 ```
+
+(Exit **5**, not 3: "refused rows and added nothing" is its own code now. On this test it is the
+expected result; anywhere else it means something is wrong with your arguments.)
 
 Committed verbatim for both the binary and the XML side in `03-verification/gate-fires.md`.
 
@@ -434,8 +626,16 @@ change.
 ## 10. The collision map for 04–09 — already measured
 
 Full dry run of every add-list against the live client
-(`docs/wz-baseline/merge-lists/addlist-dryrun-*.conflicts.txt`). **759 of the 16,052 add-list roots
-collide** (every `.wz` with an add-list except `UI.wz`, which is out of scope).
+(`docs/wz-baseline/merge-lists/addlist-dryrun-*.conflicts.txt`). **805 of the 16,177 add-list roots
+are refused**, across all 16 `.wz` with an add-list — `UI.wz` included, which had no dry-run file at
+all until ticket 03e produced one (it refuses **nothing**: 61 roots, 61 importable, which is what
+"all 735 triaged" was quietly assuming without having measured it).
+
+> **The figure moved 759 → 805 because the deny-list is now enforced** (4.3), and 46 of the
+> difference is the point of it: 36 `MonsterBook` reward slots and 10 `NpcLocation` ids that
+> previously sailed through as clean additions. `Etc.wz` 6 → 16 and `String.wz` 711 → 747 are those
+> rows appearing for the first time. `Npc.wz` stays at 34 but 24 of them are reclassified from
+> `unsupported shape` (a tool capability gap) to `DENIED` (a decision that has been made).
 
 > Re-measured by ticket 02g after the diff tool's expansion went from 1 level to 3. The old figures
 > — 41 collisions across 2,172 roots — were computed over manifests that could not see any node
@@ -450,11 +650,12 @@ taken"; it does not say "these are the only v84 changes additive-only will drop"
 
 | file | roots | refused | what |
 |---|---|---|---|
-| `String.wz` | 1,579 | 711 | 654 are `MonsterBook.img/<id>/reward/<n>` — the live client's monster-book rewards differ from v84's, so nearly every new reward slot is already occupied. The rest: **30 in `Eqp.img`**, 11 `Npc.img` (the ten `990191x` names + 1), 10 `Cash.img`, 3 `Etc.img`, 2 `Ins.img`, 1 `Consume.img`. **`Map.img`: 125 new map names, 0 collisions — all importable.** |
-| `Npc.wz` | 98 | 34 | `9901910.img`–`9901919.img` land **inside Cosmic's injected `99xxxxx` block** — ticket 08's biggest landmine, re-id or drop. The other 24 are `9000021.img/say|stand/<n>/{delay,origin,z}` refused as `unsupported shape: parent=WzUOLProperty`: the live client aliases those frames, v84 defines them. Not a collision in the ordinary sense — resolve the alias first. |
+| `String.wz` | 1,579 | 747 | **689 are `MonsterBook.img/<id>/reward/<n>`: 653 already occupied, and the other 36 DENIED** — those 36 are the ones that would otherwise splice into 17 Cosmic drop lists (4.3). The rest: **30 in `Eqp.img`**, 11 `Npc.img` (the ten `990191x` names + 1), 10 `Cash.img`, 3 `Etc.img`, 2 `Ins.img`, 1 `Consume.img`. **`Map.img`: 125 new map names, 0 collisions — all importable.** |
+| `Npc.wz` | 98 | 34 | `9901910.img`–`9901919.img` land **inside Cosmic's injected `99xxxxx` block** — ticket 08's biggest landmine; 03c's verdict is **drop**, because `9901910` is a server allocator base and live is a strict superset of v84 there. The other 24 are `9000021.img/{say,stand}/<n>/…`, now **DENIED** as one image: v84 rebuilt that NPC around UOL links, the merge cannot write through a UOL parent, and letting the remainder through leaves it half-v83/half-v84. |
 | `Character.wz` | 438 | 6 | `Accessory/01142153.img`, `01142154.img`, plus `Dragon/019{4,5,6,7}2002.img/info/level` — the live client already ships Evan's dragon equips and v84 adds a `level` field to four of them. |
-| `Etc.wz` | 10,634 | 6 | `Commodity.img/8941`–`8946`, cash-shop SNs already taken. **10,459 of the roots are `Commodity.img/<sn>/Bonus`** — a field v84 adds to existing cash-shop entries. Real v84 data, but nobody should bulk-import it. |
+| `Etc.wz` | 10,634 | 16 | `Commodity.img/8941`–`8946`, cash-shop SNs already taken (keep local — see `COLLISION-TRIAGE.md`, "Settled from source"), plus the **10 DENIED `NpcLocation.img/990191x` rows**, which are additions and were being written silently. **10,459 of the roots are `Commodity.img/<sn>/Bonus`** — a field v84 adds to existing cash-shop entries. Real v84 data, but nobody should bulk-import it. |
 | `Map.wz` | 601 | 2 | `WorldMap/WorldMap010.img/MapList/93`, `/94` — already present in the live world map. |
+| `UI.wz` | 61 | 0 | clean. Still out of scope by ticket-03 decree (section 11), but now *measured* rather than assumed. |
 | `Item.wz`, `Mob.wz`, `Quest.wz`, `Reactor.wz`, `Skill.wz` | 2,592 | 0 | clean |
 | `Base.wz`, `Effect.wz`, `Morph.wz`, `Sound.wz`, `TamingMob.wz` | 110 | 0 | clean (02f's baselines; `Base`/`TamingMob` add nothing at all) |
 
@@ -465,7 +666,9 @@ are the ones where the live value is the literal placeholder `MISSING NAME`: all
 `Eqp/Dragon` ids (`1942000`–`1972002`, v84 "Silver/Gold/Reverse Mask/Pendant/Wings/Tail") and
 `Accessory/1142143`–`1142151`. Same shape in `Eqp/Taming`: `1902040`–`1902042` and `1912033`–`1912035`
 (Evan's Mir and its saddles) exist locally as `MISSING NAME` / `MISSING INFO`. **Those are ticket 04
-and 13's blank labels, and additive-only will not fix them — they need a deliberate overwrite.**
+and 13's blank labels, and additive-only will not fix them — they need a deliberate overwrite**,
+which is what `--force <lists>\COLLISION-FORCE.txt` is (4.3). All of them are already on that list;
+none of the 571 rows where the live name is better are.
 
 The sweep also found the one shape the tool could not handle: `Skill.wz/Dragon`, a whole new
 **directory** (Evan's dragon animations). Now supported via `WzDirectory.DeepClone()`, and the dry
@@ -477,16 +680,25 @@ ticket 12 will be the first to do that, and it is the case most likely to hit th
 ## 11. What is not covered
 
 - **`UI.wz`.** Out of scope by ticket-03 decree and still is. Take `SkillEx` / `SkillMacroEx` only,
-  never bulk.
+  never bulk. Its dry run exists now (`addlist-dryrun-UI.conflicts.txt`, 61 roots, 0 refused), so
+  the decision is a scope decision rather than an unmeasured one.
 - **Nodes nested 4+ levels below a `.img`.** The manifests expand 3 levels — deep enough for every
   id in this era, not deep enough for animation frames or foothold vertices. `WzMerge xml` itself
   has no depth limit any more (02g); the limit is what the manifests contain.
-- **Sound / TamingMob / Effect / Morph / Base.** No stock baseline exists for these, so there is no
-  add-list to feed the tool (ticket 05's mounts need `TamingMob.wz` extracted first).
-- **`live Sound.wz/BgmGL.img` is unreadable by MapleLib** (`WZ extended property exceeds its
-  declared block`). Pre-existing; avoid.
-- **Bit-rot inside a compressed pixel payload** is not caught by post-write verification: it parses
-  fine and is only decoded when something draws it. Verification catches truncation and structural
-  damage, which are the failure modes an interrupted or out-of-memory write actually produces. The
-  defence against the rest is the output hash (6.4).
-- **Cross-file references other than map scenery.** `deps` covers `Back`/`Obj`/`Tile` only.
+- **`Sound.wz/BgmGL.img` is unreadable by MapleLib in ALL THREE trees** (`WZ extended property
+  exceeds its declared block`) — a library limitation, not a live-client defect, and symmetric, so
+  it biases no manifest. Avoid; `deps` will name a `BgmGL` track it cannot help you with.
+  (`Base`/`Effect`/`Morph`/`Sound`/`TamingMob` **do** have stock baselines and add-lists now — 02f
+  completed them. `Base.txt` and `TamingMob.txt` are 0-row files, which is why a 0-row manifest is
+  a hard error rather than a silent success.)
+- **Mob / npc / reactor ids referenced by a map.** `deps` resolves `Back`/`Obj`/`Tile`/`bgm`/
+  `mapMark`/`link` but not these. **A v84-only mob id in a v84 map means the live client has no
+  sprite for it** — check `life/` against `add-list/{Mob,Npc,Reactor}.txt` by hand.
+- **Bit-rot inside a compressed pixel payload** — *partially* covered now. The merge digests the
+  decoded content (canvases by the SHA-256 of their compressed pixel bytes) of every image it
+  inserted into, before and after the save, and refuses to promote on a mismatch (5.4). What that
+  does **not** cover: images the merge did not touch — MapleLib memcpy's those verbatim — and
+  corruption that happens after the merge, on disk or during the copy in 5.7. The defence there is
+  still the output hash (6.4).
+- **A whole-`WzDirectory` manifest row is not content-checked** (`Skill.wz/Dragon`): there is no
+  single image to digest. The merge prints which rows those were.
