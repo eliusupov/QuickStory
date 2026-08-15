@@ -1,6 +1,16 @@
 # Collision triage — what to do about every node the additive-only merge refuses
 
-Ticket 03c. Companion machine-readable output: `COLLISION-FORCE.txt` in this directory.
+Ticket 03c. Companion machine-readable outputs in this directory:
+
+- `COLLISION-FORCE.txt` — 37 paths the operator authorises overwriting (the additive-only rule
+  was wrong on these). Answers the buckets below.
+- `COLLISION-DENY.txt` — 28 paths the merge must refuse **even though they are absent from the
+  target**. Answers "Deeper problems" below. The additive-only gate cannot catch these: it guards
+  overwrites, and these are additions.
+
+Both files use the same `<path>\t# <reason>` format so one parser serves both. Deny wins if a
+path somehow appears in both, and that should be a hard exit rather than a silent resolution.
+
 `addlist-dryrun-*.conflicts.txt` says *what* was refused; this file says *what to do*, so the
 "names resolve correctly — no blank labels" acceptance criterion in tickets 04–09 has an
 answer instead of a hand-edit.
@@ -215,9 +225,9 @@ placement for Nexon's Lv.200 fame NPC. The live client would then place a static
 Cosmic server hands out dynamically to player-rank NPCs (`PlayerNPC.java:66`). This is the
 `99019xx` clash for real, and refusing the ten `Npc.wz` images does nothing about it.
 
-**Action for whoever owns the merge procedure: these 10 paths must be excluded from
-`add-list/Etc.txt` before any Etc.wz merge runs.** That is a deny, not a force, so it is out of
-scope for `COLLISION-FORCE.txt` — it needs an exclusion mechanism the tool does not have either.
+**Seeded in `COLLISION-DENY.txt`.** The ten paths must not be written. That is a deny, not a
+force, and the tool has no deny mechanism yet — the file supplies the entries and reasons so the
+tool owner only has to add the flag.
 
 ### 2. 36 monster-book reward slots would be spliced into 17 Cosmic drop lists
 
@@ -234,17 +244,24 @@ Nexon's at 23–28. Neither vendor ever shipped that list. **Additive-only is no
 conservative on positional-array nodes — it is actively corrupting**, and the same shape exists
 wherever a v84 array is longer than the live one.
 
-Suggested minimum fix, cheapest first: exclude `String.wz/MonsterBook.img/*/reward/*` from the
-add-list wholesale. Cosmic's tables are the live ones; there is no partial answer.
+**Seeded in `COLLISION-DENY.txt`** as 17 `reward` roots — one per affected mob. Denying the
+parent covers all 36 slots, so no wildcard syntax is needed anywhere in the format.
+
+General rule for the procedure, because MonsterBook will not be the last one: **any manifest row
+that is one slot of a positional array is unsafe to merge piecemeal.** The tell is a parent whose
+children are consecutive integers.
 
 ### 3. `Npc.wz/9000021.img` — 24 refusals the brief never mentions
 
 `addlist-dryrun-Npc.conflicts.txt:9-32` refuses 24 nodes not with "already exists" but with
 `unsupported shape: parent=WzUOLProperty source=WzIntProperty`. v84 rebuilt this NPC
 (`modified-list/Npc.txt:7` — 60238 → 21146 bytes, it shrank by two thirds) by replacing inline
-frames with UOL links, and the merge cannot write a child into a UOL. Not a name clash and not
-triaged here, but it is a merge-tool capability gap sitting in the same file, and this NPC is
-partially merged today — worse than either whole version.
+frames with UOL links, and the merge cannot write a child into a UOL. The other nodes of the
+image merge fine, so **the NPC ends up half-v83 half-v84 — worse than either whole version.**
+
+`COLLISION-DENY.txt` seeds `Npc.wz/9000021.img` so it stays wholly v83. Flagged there as the
+operator's call, not a finding: it trades a known-bad partial for a known-old whole, and the row
+should be removed if the tool learns to write through a UOL parent.
 
 ---
 

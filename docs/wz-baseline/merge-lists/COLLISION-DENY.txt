@@ -1,0 +1,69 @@
+# Deny-list: node paths the merge must REFUSE TO WRITE even though they are absent from the
+# target. The additive-only gate cannot catch these — it only guards against overwriting what
+# already exists, and every path below is a v84 *addition*, so no collision fires and the merge
+# writes it silently. Produced by ticket 03c; evidence in COLLISION-TRIAGE.md.
+#
+# FORMAT — deliberately identical to COLLISION-FORCE.txt so one parser serves both:
+#   <path>\t# <reason>
+# - blank lines and lines whose first non-space char is '#' are ignored
+# - a listed path is a deny ROOT: nothing at or beneath it is written
+# - NO WILDCARD SYNTAX IS NEEDED. Root semantics already cover every case below; the 36
+#   at-risk MonsterBook slots are reached by denying 17 `reward` parents, not 36 globs.
+#
+# Precedence, if both lists are ever supplied: deny wins. A path in both is an operator error
+# and should be a hard exit, not a silent resolution.
+#
+# 28 rows.
+
+# --- Hazard 1: server-owned id range -----------------------------------------------------
+# PlayerNPC.java:66-67 declares 9901910-9906599 a range the server allocates from AT RUNTIME
+# for player-rank NPCs. v84 adds fixed world placements on the first ten of it (9901910/0 =
+# 100030301, Nexon's Lv.200 fame NPC). Live has none of these, so the gate is silent. Writing
+# them puts a static NPC on ids the server hands out dynamically.
+# NOTE: refusing the ten Npc.wz/99019xx.img images — which the gate already does — does NOT
+# cover this. Different file, different mechanism, and this one is not a collision at all.
+Etc.wz/NpcLocation.img/9901910	# server-allocated id range, PlayerNPC.java:66
+Etc.wz/NpcLocation.img/9901911	# server-allocated id range, PlayerNPC.java:66
+Etc.wz/NpcLocation.img/9901912	# server-allocated id range, PlayerNPC.java:66
+Etc.wz/NpcLocation.img/9901913	# server-allocated id range, PlayerNPC.java:66
+Etc.wz/NpcLocation.img/9901914	# server-allocated id range, PlayerNPC.java:66
+Etc.wz/NpcLocation.img/9901915	# server-allocated id range, PlayerNPC.java:66
+Etc.wz/NpcLocation.img/9901916	# server-allocated id range, PlayerNPC.java:66
+Etc.wz/NpcLocation.img/9901917	# server-allocated id range, PlayerNPC.java:66
+Etc.wz/NpcLocation.img/9901918	# server-allocated id range, PlayerNPC.java:66
+Etc.wz/NpcLocation.img/9901919	# server-allocated id range, PlayerNPC.java:66
+
+# --- Hazard 2: positional arrays cannot be merged slot-by-slot ---------------------------
+# `reward/<n>` is the n-th slot of a monster-book drop list, not an identity. Cosmic rewrote
+# these tables (MonsterBook.img 271350 -> 295409 bytes, the largest live-side edit). Of 689
+# v84 reward slots on the add-list, 654 collide and are refused — leaving 36 that get appended
+# into these 17 Cosmic lists. Result: Cosmic's entries at indices 0-22, Nexon's at 23-28, a
+# list neither vendor ever shipped. There is no partial answer; deny the whole `reward` node.
+# GENERAL RULE for the procedure: any manifest row that is one slot of a positional array is
+# unsafe to merge piecemeal. MonsterBook will not be the last one.
+String.wz/MonsterBook.img/3100101/reward	# positional array, 36 slots across these 17 mobs would splice
+String.wz/MonsterBook.img/3110301/reward	# positional array
+String.wz/MonsterBook.img/3210203/reward	# positional array
+String.wz/MonsterBook.img/3210206/reward	# positional array
+String.wz/MonsterBook.img/3210207/reward	# positional array
+String.wz/MonsterBook.img/4230125/reward	# positional array
+String.wz/MonsterBook.img/4230400/reward	# positional array
+String.wz/MonsterBook.img/4230503/reward	# positional array
+String.wz/MonsterBook.img/4230504/reward	# positional array
+String.wz/MonsterBook.img/4250001/reward	# positional array
+String.wz/MonsterBook.img/5110300/reward	# positional array
+String.wz/MonsterBook.img/5120501/reward	# positional array
+String.wz/MonsterBook.img/6130202/reward	# positional array
+String.wz/MonsterBook.img/7130102/reward	# positional array
+String.wz/MonsterBook.img/8140100/reward	# positional array
+String.wz/MonsterBook.img/8140701/reward	# positional array
+String.wz/MonsterBook.img/8810018/reward	# positional array
+
+# --- Hazard 3: partial merge of one entity ------------------------------------------------
+# v84 rebuilt this NPC around UOL links (Npc.txt:7 — 60238 -> 21146 bytes, it shrank by two
+# thirds). 24 of its nodes are refused with `unsupported shape: parent=WzUOLProperty`, so the
+# rest merge and the NPC ends up half-v83 half-v84 — worse than either whole version. Denying
+# the image keeps it wholly v83, which is a state that at least works.
+# This one is the OPERATOR'S CALL, not a finding: it trades a known-bad partial for a known-old
+# whole. Remove the row if the tool learns to write through a UOL parent.
+Npc.wz/9000021.img	# 24 UOL-shape refusals leave this NPC partially merged; deny keeps it whole
