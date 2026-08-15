@@ -18424,28 +18424,22 @@
         <string name="name" value="Wolf Saddle"/>
       </imgdir>
       <imgdir name="1902040">
-        <string name="name" value="MISSING NAME"/>
-        <string name="desc" value="MISSING INFO"/>
+        <string name="name" value="Stage 1 Dragon "/>
       </imgdir>
       <imgdir name="1902041">
-        <string name="name" value="MISSING NAME"/>
-        <string name="desc" value="MISSING INFO"/>
+        <string name="name" value="Stage 2 Dragon"/>
       </imgdir>
       <imgdir name="1902042">
-        <string name="name" value="MISSING NAME"/>
-        <string name="desc" value="MISSING INFO"/>
+        <string name="name" value="Stage 3 Dragon "/>
       </imgdir>
       <imgdir name="1912033">
-        <string name="name" value="MISSING NAME"/>
-        <string name="desc" value="MISSING INFO"/>
+        <string name="name" value="Stage 1 Dragon Saddle "/>
       </imgdir>
       <imgdir name="1912034">
-        <string name="name" value="MISSING NAME"/>
-        <string name="desc" value="MISSING INFO"/>
+        <string name="name" value="Stage 2 Dragon Saddle "/>
       </imgdir>
       <imgdir name="1912035">
-        <string name="name" value="MISSING NAME"/>
-        <string name="desc" value="MISSING INFO"/>
+        <string name="name" value="Stage 3 Dragon Saddle "/>
       </imgdir>
       <imgdir name="1932000">
         <string name="name" value="MISSING NAME"/>
@@ -22690,40 +22684,40 @@
     </imgdir>
     <imgdir name="Dragon">
       <imgdir name="1942000">
-        <string name="name" value="MISSING NAME"/>
+        <string name="name" value="Silver Mask"/>
       </imgdir>
       <imgdir name="1942001">
-        <string name="name" value="MISSING NAME"/>
+        <string name="name" value="Gold Mask"/>
       </imgdir>
       <imgdir name="1942002">
-        <string name="name" value="MISSING NAME"/>
+        <string name="name" value="Reverse Mask"/>
       </imgdir>
       <imgdir name="1952000">
-        <string name="name" value="MISSING NAME"/>
+        <string name="name" value="Silver Pendant"/>
       </imgdir>
       <imgdir name="1952001">
-        <string name="name" value="MISSING NAME"/>
+        <string name="name" value="Gold Pendant"/>
       </imgdir>
       <imgdir name="1952002">
-        <string name="name" value="MISSING NAME"/>
+        <string name="name" value="Reverse Pendant"/>
       </imgdir>
       <imgdir name="1962000">
-        <string name="name" value="MISSING NAME"/>
+        <string name="name" value="Silver Wings"/>
       </imgdir>
       <imgdir name="1962001">
-        <string name="name" value="MISSING NAME"/>
+        <string name="name" value="Gold Wings"/>
       </imgdir>
       <imgdir name="1962002">
-        <string name="name" value="MISSING NAME"/>
+        <string name="name" value="Reverse Wings"/>
       </imgdir>
       <imgdir name="1972000">
-        <string name="name" value="MISSING NAME"/>
+        <string name="name" value="Silver Tail"/>
       </imgdir>
       <imgdir name="1972001">
-        <string name="name" value="MISSING NAME"/>
+        <string name="name" value="Gold Tail"/>
       </imgdir>
       <imgdir name="1972002">
-        <string name="name" value="MISSING NAME"/>
+        <string name="name" value="Reverse Tail"/>
       </imgdir>
     </imgdir>
   </imgdir>

@@ -118,6 +118,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -127,6 +128,63 @@ import java.util.Map;
  * @author Ronan
  */
 public class StatEffect {
+    /**
+     * Skill id -> the {@code Character.wz/TamingMob/0193xxxx.img} sprite the client draws for it,
+     * for every mount skill that rides a fixed sprite instead of the equip in slot -18.
+     * Nothing in the WZ states this pairing; it is hardcoded in the client.
+     * <p>
+     * Keyed by the WHOLE skill id, never by its last four digits. The v83 mounts are not
+     * job-stable — Beginner's are 1017/1018/1019 but Cygnus's and Aran's are x0001019/x0001022/
+     * x0001023 ({@code Beginner.java:41-43}, {@code Noblesse.java:41-43}, {@code Legend.java:47-49})
+     * — so keying on {@code % 10000} silently gives Cygnus a broomstick when it asks for a yeti.
+     * <p>
+     * {@code Beginner.SPACESHIP} / {@code Noblesse.SPACESHIP} are deliberately absent: their
+     * sprite is {@code 1932000 + skillLevel}, not a constant. {@code MONSTER_RIDER} likewise —
+     * it rides whatever is equipped.
+     */
+    private static final Map<Integer, Integer> SKILL_MOUNTS = buildSkillMounts();
+
+    private static Map<Integer, Integer> buildSkillMounts() {
+        Map<Integer, Integer> mounts = new HashMap<>();
+        mounts.put(Beginner.YETI_MOUNT1, 1932003);
+        mounts.put(Noblesse.YETI_MOUNT1, 1932003);
+        mounts.put(Legend.YETI_MOUNT1, 1932003);
+        mounts.put(Beginner.YETI_MOUNT2, 1932004);
+        mounts.put(Noblesse.YETI_MOUNT2, 1932004);
+        mounts.put(Legend.YETI_MOUNT2, 1932004);
+        mounts.put(Beginner.WITCH_BROOMSTICK, 1932005);
+        mounts.put(Noblesse.WITCH_BROOMSTICK, 1932005);
+        mounts.put(Legend.WITCH_BROOMSTICK, 1932005);
+        mounts.put(Beginner.BALROG_MOUNT, 1932010);
+        mounts.put(Noblesse.BALROG_MOUNT, 1932010);
+        mounts.put(Legend.BALROG_MOUNT, 1932010);
+
+        // The eight GMS v84 mounts. Unlike the v83 ones these ARE job-stable: v84 ships each at
+        // 000102x, 1000102x, 2000102x and 2001102x — see docs/wz-baseline/add-list/Skill.txt and
+        // String.wz/Skill.img. (2001 = Evan; its Skill.wz/2001.img is ticket 13's to merge, so the
+        // row is inert until then.) Sprite ids corroborated against two reimplementations of this
+        // client era: Rebirth95 BuffSkill.cs:310-323 and HaRepacker SkillManager.cs:8762-8774.
+        int[][] v84 = {
+                {1025, 1932006},    // Charge! Wooden Pony
+                {1027, 1932007},    // Croco
+                {1028, 1932008},    // Black Scooter
+                {1029, 1932009},    // Pink Scooter
+                {1030, 1932011},    // Nimbus Cloud
+                {1037, 1932018},    // Unicorn
+                {1038, 1932019},    // Low Rider
+                {1039, 1932020}};   // Red Truck
+        for (int[] mount : v84) {
+            for (int job : new int[]{0, 1000, 2000, 2001}) {
+                mounts.put(job * 10000 + mount[0], mount[1]);
+            }
+        }
+        return Map.copyOf(mounts);
+    }
+
+    static Integer skillMountItem(int sourceid) {
+        return SKILL_MOUNTS.get(sourceid);
+    }
+
     private short watk, matk, wdef, mdef, acc, avoid, speed, jump;
     private short hp, mp;
     private double hpR, mpR;
@@ -492,7 +550,10 @@ public class StatEffect {
         ret.itemConNo = DataTool.getInt("itemConNo", source, 0);
         ret.moveTo = DataTool.getInt("moveTo", source, -1);
         Map<MonsterStatus, Integer> monsterStatus = new EnumMap<>(MonsterStatus.class);
-        if (skill) {
+        if (skill && isMonsterRidingSkill(sourceid)) {
+            // a switch cannot ask a lookup table, and the mount list is one now — see SKILL_MOUNTS
+            statups.add(new Pair<>(BuffStat.MONSTER_RIDING, sourceid));
+        } else if (skill) {
             switch (sourceid) {
                 // BEGINNER
                 case Beginner.RECOVERY:
@@ -506,26 +567,6 @@ public class StatEffect {
                 case Legend.ECHO_OF_HERO:
                 case Evan.ECHO_OF_HERO:
                     statups.add(new Pair<>(BuffStat.ECHO_OF_HERO, ret.x));
-                    break;
-                case Beginner.MONSTER_RIDER:
-                case Noblesse.MONSTER_RIDER:
-                case Legend.MONSTER_RIDER:
-                case Corsair.BATTLE_SHIP:
-                case Beginner.SPACESHIP:
-                case Noblesse.SPACESHIP:
-                case Beginner.YETI_MOUNT1:
-                case Beginner.YETI_MOUNT2:
-                case Noblesse.YETI_MOUNT1:
-                case Noblesse.YETI_MOUNT2:
-                case Legend.YETI_MOUNT1:
-                case Legend.YETI_MOUNT2:
-                case Beginner.WITCH_BROOMSTICK:
-                case Noblesse.WITCH_BROOMSTICK:
-                case Legend.WITCH_BROOMSTICK:
-                case Beginner.BALROG_MOUNT:
-                case Noblesse.BALROG_MOUNT:
-                case Legend.BALROG_MOUNT:
-                    statups.add(new Pair<>(BuffStat.MONSTER_RIDING, sourceid));
                     break;
                 case Beginner.INVINCIBLE_BARRIER:
                 case Noblesse.INVINCIBLE_BARRIER:
@@ -1296,14 +1337,11 @@ public class StatEffect {
                 ridingMountId = ItemId.BATTLESHIP;
             } else if (sourceid == Beginner.SPACESHIP || sourceid == Noblesse.SPACESHIP) {
                 ridingMountId = 1932000 + applyto.getSkillLevel(sourceid);
-            } else if (sourceid == Beginner.YETI_MOUNT1 || sourceid == Noblesse.YETI_MOUNT1 || sourceid == Legend.YETI_MOUNT1) {
-                ridingMountId = 1932003;
-            } else if (sourceid == Beginner.YETI_MOUNT2 || sourceid == Noblesse.YETI_MOUNT2 || sourceid == Legend.YETI_MOUNT2) {
-                ridingMountId = 1932004;
-            } else if (sourceid == Beginner.WITCH_BROOMSTICK || sourceid == Noblesse.WITCH_BROOMSTICK || sourceid == Legend.WITCH_BROOMSTICK) {
-                ridingMountId = 1932005;
-            } else if (sourceid == Beginner.BALROG_MOUNT || sourceid == Noblesse.BALROG_MOUNT || sourceid == Legend.BALROG_MOUNT) {
-                ridingMountId = 1932010;
+            } else {
+                Integer skillMount = skillMountItem(sourceid);
+                if (skillMount != null) {
+                    ridingMountId = skillMount;
+                }
             }
 
             // thanks inhyuk for noticing some skill mounts not acting properly for other players when changing maps
@@ -1637,10 +1675,14 @@ public class StatEffect {
     }
 
     public boolean isMonsterRiding() {
-        return skill && (sourceid % 10000000 == 1004 || sourceid == Corsair.BATTLE_SHIP || sourceid == Beginner.SPACESHIP || sourceid == Noblesse.SPACESHIP
-                || sourceid == Beginner.YETI_MOUNT1 || sourceid == Beginner.YETI_MOUNT2 || sourceid == Beginner.WITCH_BROOMSTICK || sourceid == Beginner.BALROG_MOUNT
-                || sourceid == Noblesse.YETI_MOUNT1 || sourceid == Noblesse.YETI_MOUNT2 || sourceid == Noblesse.WITCH_BROOMSTICK || sourceid == Noblesse.BALROG_MOUNT
-                || sourceid == Legend.YETI_MOUNT1 || sourceid == Legend.YETI_MOUNT2 || sourceid == Legend.WITCH_BROOMSTICK || sourceid == Legend.BALROG_MOUNT);
+        return skill && isMonsterRidingSkill(sourceid);
+    }
+
+    static boolean isMonsterRidingSkill(int sourceid) {
+        return sourceid % 10000000 == 1004                                      // MONSTER_RIDER, rides the equip in slot -18
+                || sourceid == Corsair.BATTLE_SHIP
+                || sourceid == Beginner.SPACESHIP || sourceid == Noblesse.SPACESHIP
+                || SKILL_MOUNTS.containsKey(sourceid);
     }
 
     public boolean isMagicDoor() {

@@ -1,0 +1,39 @@
+# Ticket 05 - v84 mounts rideable. Skill.wz merge path list (AUTHORITATIVE DELIVERABLE).
+# Source: docs/wz-baseline/add-list/Skill.txt, restricted to the three BEGINNER job images.
+# 27 rows = 9 skills x 3 beginner jobs (Explorer 000.img, Noblesse 1000.img, Legend 2000.img).
+#   x1025 Charge! Wooden Pony   x1026 Soaring (flight, not a mount - pairs with Morph fly2)
+#   x1027 Croco    x1028 Black Scooter   x1029 Pink Scooter   x1030 Nimbus Cloud
+#   x1037 Unicorn  x1038 Low Rider       x1039 Red Truck
+#
+# NOT TAKEN, deliberately: Skill.wz/2001.img (Evan), 2200-2218.img (Aran), 9000.img and
+# Skill.wz/Dragon are on the same add-list but belong to tickets 12/13. Evan also has its own
+# copies of these nine skills at 20011025-20011039 inside 2001.img; ticket 13 gets those.
+#
+# Merge: WzMerge merge <v84>\Skill.wz <pre>\Skill.wz <out>\Skill.wz THIS <conflicts> --deny <lists>\COLLISION-DENY.txt --live D:\games\MapleStory\Skill.wz
+Skill.wz/000.img/skill/0001025
+Skill.wz/000.img/skill/0001026
+Skill.wz/000.img/skill/0001027
+Skill.wz/000.img/skill/0001028
+Skill.wz/000.img/skill/0001029
+Skill.wz/000.img/skill/0001030
+Skill.wz/000.img/skill/0001037
+Skill.wz/000.img/skill/0001038
+Skill.wz/000.img/skill/0001039
+Skill.wz/1000.img/skill/10001025
+Skill.wz/1000.img/skill/10001026
+Skill.wz/1000.img/skill/10001027
+Skill.wz/1000.img/skill/10001028
+Skill.wz/1000.img/skill/10001029
+Skill.wz/1000.img/skill/10001030
+Skill.wz/1000.img/skill/10001037
+Skill.wz/1000.img/skill/10001038
+Skill.wz/1000.img/skill/10001039
+Skill.wz/2000.img/skill/20001025
+Skill.wz/2000.img/skill/20001026
+Skill.wz/2000.img/skill/20001027
+Skill.wz/2000.img/skill/20001028
+Skill.wz/2000.img/skill/20001029
+Skill.wz/2000.img/skill/20001030
+Skill.wz/2000.img/skill/20001037
+Skill.wz/2000.img/skill/20001038
+Skill.wz/2000.img/skill/20001039

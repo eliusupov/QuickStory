@@ -1,0 +1,45 @@
+# Ticket 05 - v84 mounts rideable. String.wz merge path list (AUTHORITATIVE DELIVERABLE).
+# 7 rows, ALL of them --force rows. Every one is on COLLISION-FORCE.txt already; none is a
+# plain addition, so this list is USELESS without --force <lists>\COLLISION-FORCE.txt.
+#
+# These are exactly the 7 of COLLISION-FORCE.txt's 37 rows that ticket 04 excluded from its own
+# String.paths.txt and handed to 05. 04 forced the other 30. Together 30 + 7 = 37: the whole
+# force list is consumed, none twice.
+#
+# Eqp/Taming x6 - Evan's Mir and its saddles. The sprites shipped in v83; only the NAMES are new,
+#   which is why a presence-only Character.wz diff cannot see them and why additive-only cannot
+#   repair them: the ids already exist locally reading the literal "MISSING NAME"/"MISSING INFO".
+#     1902040 Stage 1 Dragon        1912033 Stage 1 Dragon Saddle
+#     1902041 Stage 2 Dragon        1912034 Stage 2 Dragon Saddle
+#     1902042 Stage 3 Dragon        1912035 Stage 3 Dragon Saddle
+#
+# Eqp/Dragon - one collapsed force ROOT covering 12 Evan dragon-equip names (Silver/Gold/Reverse
+#   Mask, Pendant, Wings, Tail). OWNERSHIP CALL, made here rather than left ambiguous: these are
+#   Evan equips, not mounts, so on subject matter they read as ticket 13's. They are 05's anyway,
+#   because (a) ticket 04 already shipped a String.wz path list that excludes them and names 05 as
+#   the owner, (b) ticket 13 is hard-blocked behind ticket 01's human client launch and has not
+#   started, and (c) the container is id-for-id identical live vs v84 (12 ids, 1942000/01/02,
+#   1952000/01/02, 1962000/01/02, 1972000/01/02 - verified by dump on both sides), so forcing the
+#   whole root is lossless. TICKET 13 MUST NOT RE-ADD THIS ROW - it would be a double force.
+#
+# Merge: WzMerge merge <v84>\String.wz <pre>\String.wz <out>\String.wz THIS <conflicts> --deny <lists>\COLLISION-DENY.txt --force <lists>\COLLISION-FORCE.txt --live D:\games\MapleStory\String.wz
+# XML:   WzMerge xml   <v84>\String.wz wz THIS <conflicts> --deny <lists>\COLLISION-DENY.txt --force <lists>\COLLISION-FORCE.txt
+#
+# ---------------------------------------------------------------------------------------------
+# NOT MERGED - NOT OWNED BY 05. The 27 String.wz/Skill.img rows that name these mount skills.
+# Without them the nine skills in Skill.paths.txt appear in the client skill window with no name
+# and no description. They are pure additions (absent from the live client, zero collisions), so
+# whoever takes them needs no --force. 05's ownership was scoped to Eqp/Taming + Eqp/Dragon, so
+# they are left here ready to paste rather than merged. Evan's copies (20011025-20011039) and the
+# Aran/Dragon rows on the same add-list are ticket 12/13's and are NOT listed here.
+#   String.wz/Skill.img/{0001025,0001026,0001027,0001028,0001029,0001030,0001037,0001038,0001039}
+#   String.wz/Skill.img/{10001025,10001026,10001027,10001028,10001029,10001030,10001037,10001038,10001039}
+#   String.wz/Skill.img/{20001025,20001026,20001027,20001028,20001029,20001030,20001037,20001038,20001039}
+# ---------------------------------------------------------------------------------------------
+String.wz/Eqp.img/Eqp/Dragon
+String.wz/Eqp.img/Eqp/Taming/1902040
+String.wz/Eqp.img/Eqp/Taming/1902041
+String.wz/Eqp.img/Eqp/Taming/1902042
+String.wz/Eqp.img/Eqp/Taming/1912033
+String.wz/Eqp.img/Eqp/Taming/1912034
+String.wz/Eqp.img/Eqp/Taming/1912035

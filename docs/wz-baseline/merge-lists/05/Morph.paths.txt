@@ -1,0 +1,34 @@
+# Ticket 05 - v84 mounts rideable. Morph.wz merge path list (AUTHORITATIVE DELIVERABLE).
+# Source: docs/wz-baseline/add-list/Morph.txt, in full (25 rows, the whole file).
+# No other ticket touches Morph.wz.
+#
+# 0050-0053.img are the four new flying-mount morph states. The fly2/fly2Move/fly2Skill triples
+# added to the seven existing morph images are what skill x1026 "Soaring" drives; without them a
+# flying mount renders wrong in flight.
+#
+# Merge: WzMerge merge <v84>\Morph.wz <pre>\Morph.wz <out>\Morph.wz THIS <conflicts> --deny <lists>\COLLISION-DENY.txt --live D:\games\MapleStory\Morph.wz
+Morph.wz/0050.img
+Morph.wz/0051.img
+Morph.wz/0052.img
+Morph.wz/0053.img
+Morph.wz/1000.img/fly2
+Morph.wz/1000.img/fly2Move
+Morph.wz/1000.img/fly2Skill
+Morph.wz/1001.img/fly2
+Morph.wz/1001.img/fly2Move
+Morph.wz/1001.img/fly2Skill
+Morph.wz/1002.img/fly2
+Morph.wz/1002.img/fly2Move
+Morph.wz/1002.img/fly2Skill
+Morph.wz/1003.img/fly2
+Morph.wz/1003.img/fly2Move
+Morph.wz/1003.img/fly2Skill
+Morph.wz/1100.img/fly2
+Morph.wz/1100.img/fly2Move
+Morph.wz/1100.img/fly2Skill
+Morph.wz/1101.img/fly2
+Morph.wz/1101.img/fly2Move
+Morph.wz/1101.img/fly2Skill
+Morph.wz/1103.img/fly2
+Morph.wz/1103.img/fly2Move
+Morph.wz/1103.img/fly2Skill

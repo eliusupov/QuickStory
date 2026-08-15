@@ -1,0 +1,223 @@
+# Ticket 05 - v84 mounts rideable. Character.wz merge path list (AUTHORITATIVE DELIVERABLE).
+# Source: docs/wz-baseline/add-list/Character.txt, restricted to Character.wz/TamingMob/** .
+# 8 rows. Ticket 04 owns the rest of Character.wz and explicitly excluded TamingMob/**, so 04
+# and 05 are DISJOINT on this file and compose in either order. Stated order: 04 then 05.
+#
+# The eight v84 skill-mount sprites, whole new images, pure additions, zero collisions:
+#   01932006 Charge! Wooden Pony  01932007 Croco      01932008 Black Scooter  01932009 Pink Scooter
+#   01932011 Nimbus Cloud         01932018 Unicorn    01932019 Low Rider      01932020 Red Truck
+# Each is islot=Tm vslot=Tm reqLevel=13 tradeBlock=1 notSale=1 only=1 with a full
+# walk1/walk2/stand1/stand2/tired/jump/prone/ladder/rope/fly animation set. info/tamingMob is 6
+# for 01932006 and 7 for the other seven: that integer indexes TamingMob.wz/000N.img (speed/jump/
+# fatigue), it is NOT a mob id - measured, see the ticket report.
+#
+# Merge: WzMerge merge <v84>\Character.wz <pre>\Character.wz <out>\Character.wz THIS <conflicts> --deny <lists>\COLLISION-DENY.txt --live D:\games\MapleStory\Character.wz
+#
+Character.wz/TamingMob/01932006.img
+Character.wz/TamingMob/01932007.img
+Character.wz/TamingMob/01932008.img
+Character.wz/TamingMob/01932009.img
+Character.wz/TamingMob/01932011.img
+Character.wz/TamingMob/01932018.img
+Character.wz/TamingMob/01932019.img
+Character.wz/TamingMob/01932020.img
+# ---------------------------------------------------------------------------------------------
+# DELIBERATELY NOT MERGED - 184 more TamingMob rows, handed to ticket 13 (Evan).
+# add-list/Character.txt also carries 184 rows INSIDE four images the live client already has:
+# 01902040/41/42 (Stage 1/2/3 Dragon = Evan's Mir) and 01912033 (Stage 1 Dragon Saddle). Every
+# one is a single extra animation LAYER inside an existing frame, e.g. .../fly/0/2.
+#
+# Measured, not assumed. pre vs v84 for 01902041.img/fly/0:
+#   live: 0 = canvas 144x67 (2197 B), delay = 90
+#   v84 : 0 = canvas 160x62 (1810 B), 1 = 156x101 (2249 B), 2 = 45x35 (184 B), delay = 180
+# Merging the add-list rows gives layers 1 and 2 grafted onto the LIVE layer 0 at the LIVE delay,
+# because layer 0 and delay are v84 EDITS, not additions, and additive-only cannot take them.
+# That is the half-v83/half-v84 shape ticket 03c ruled worse than either whole version for
+# Npc.wz/9000021.img, and it cannot be checked without launching the client. The merge itself is
+# clean (verified: 192 rows -> added 192, refused 0, 0 drifted), so this is a rendering judgement,
+# not a tooling limit. Mir is ticket 13's flagship mount and 13 can swap the whole image; 05 only
+# needed Mir's NAMES, which it takes via String.paths.txt. Ticket 13: uncomment or re-derive.
+#   Character.wz/TamingMob/01902040.img/fly/0/2
+#   Character.wz/TamingMob/01902040.img/fly/1/2
+#   Character.wz/TamingMob/01902040.img/fly/2/2
+#   Character.wz/TamingMob/01902040.img/fly/3/2
+#   Character.wz/TamingMob/01902040.img/fly/4/2
+#   Character.wz/TamingMob/01902040.img/fly/5/2
+#   Character.wz/TamingMob/01902040.img/jump/0/2
+#   Character.wz/TamingMob/01902040.img/ladder/0/1
+#   Character.wz/TamingMob/01902040.img/ladder/0/2
+#   Character.wz/TamingMob/01902040.img/ladder/1/1
+#   Character.wz/TamingMob/01902040.img/ladder/1/2
+#   Character.wz/TamingMob/01902040.img/ladder/2
+#   Character.wz/TamingMob/01902040.img/ladder/3
+#   Character.wz/TamingMob/01902040.img/ladder/4
+#   Character.wz/TamingMob/01902040.img/ladder/5
+#   Character.wz/TamingMob/01902040.img/rope/0/1
+#   Character.wz/TamingMob/01902040.img/rope/0/2
+#   Character.wz/TamingMob/01902040.img/rope/1/1
+#   Character.wz/TamingMob/01902040.img/rope/1/2
+#   Character.wz/TamingMob/01902040.img/rope/2
+#   Character.wz/TamingMob/01902040.img/rope/3
+#   Character.wz/TamingMob/01902040.img/rope/4
+#   Character.wz/TamingMob/01902040.img/rope/5
+#   Character.wz/TamingMob/01902040.img/stand1/0/2
+#   Character.wz/TamingMob/01902040.img/stand1/1/2
+#   Character.wz/TamingMob/01902040.img/stand1/2/2
+#   Character.wz/TamingMob/01902040.img/stand1/3/2
+#   Character.wz/TamingMob/01902040.img/stand1/4/2
+#   Character.wz/TamingMob/01902040.img/stand1/5/2
+#   Character.wz/TamingMob/01902040.img/stand2/0/2
+#   Character.wz/TamingMob/01902040.img/stand2/1/2
+#   Character.wz/TamingMob/01902040.img/stand2/2/2
+#   Character.wz/TamingMob/01902040.img/stand2/3/2
+#   Character.wz/TamingMob/01902040.img/stand2/4/2
+#   Character.wz/TamingMob/01902040.img/stand2/5/5
+#   Character.wz/TamingMob/01902040.img/walk1/0/2
+#   Character.wz/TamingMob/01902040.img/walk1/1/2
+#   Character.wz/TamingMob/01902040.img/walk1/2/2
+#   Character.wz/TamingMob/01902040.img/walk1/3/2
+#   Character.wz/TamingMob/01902040.img/walk1/4/2
+#   Character.wz/TamingMob/01902040.img/walk1/5/2
+#   Character.wz/TamingMob/01902040.img/walk2/0/2
+#   Character.wz/TamingMob/01902040.img/walk2/1/2
+#   Character.wz/TamingMob/01902040.img/walk2/2/2
+#   Character.wz/TamingMob/01902040.img/walk2/3/2
+#   Character.wz/TamingMob/01902040.img/walk2/4/2
+#   Character.wz/TamingMob/01902040.img/walk2/5/2
+#   Character.wz/TamingMob/01902041.img/fly/0/1
+#   Character.wz/TamingMob/01902041.img/fly/0/2
+#   Character.wz/TamingMob/01902041.img/fly/1/1
+#   Character.wz/TamingMob/01902041.img/fly/1/2
+#   Character.wz/TamingMob/01902041.img/fly/2/1
+#   Character.wz/TamingMob/01902041.img/fly/2/2
+#   Character.wz/TamingMob/01902041.img/fly/3/1
+#   Character.wz/TamingMob/01902041.img/fly/3/2
+#   Character.wz/TamingMob/01902041.img/fly/4/1
+#   Character.wz/TamingMob/01902041.img/fly/4/2
+#   Character.wz/TamingMob/01902041.img/fly/5/1
+#   Character.wz/TamingMob/01902041.img/fly/5/2
+#   Character.wz/TamingMob/01902041.img/jump/0/1
+#   Character.wz/TamingMob/01902041.img/jump/0/2
+#   Character.wz/TamingMob/01902041.img/ladder/0/1
+#   Character.wz/TamingMob/01902041.img/ladder/0/2
+#   Character.wz/TamingMob/01902041.img/ladder/1/1
+#   Character.wz/TamingMob/01902041.img/ladder/1/2
+#   Character.wz/TamingMob/01902041.img/ladder/2
+#   Character.wz/TamingMob/01902041.img/ladder/3
+#   Character.wz/TamingMob/01902041.img/ladder/4
+#   Character.wz/TamingMob/01902041.img/ladder/5
+#   Character.wz/TamingMob/01902041.img/prone/0/1
+#   Character.wz/TamingMob/01902041.img/rope/0/1
+#   Character.wz/TamingMob/01902041.img/rope/0/2
+#   Character.wz/TamingMob/01902041.img/rope/1/1
+#   Character.wz/TamingMob/01902041.img/rope/1/2
+#   Character.wz/TamingMob/01902041.img/rope/2
+#   Character.wz/TamingMob/01902041.img/rope/3
+#   Character.wz/TamingMob/01902041.img/rope/4
+#   Character.wz/TamingMob/01902041.img/rope/5
+#   Character.wz/TamingMob/01902041.img/stand1/0/1
+#   Character.wz/TamingMob/01902041.img/stand1/0/2
+#   Character.wz/TamingMob/01902041.img/stand1/1/1
+#   Character.wz/TamingMob/01902041.img/stand1/1/2
+#   Character.wz/TamingMob/01902041.img/stand1/2/1
+#   Character.wz/TamingMob/01902041.img/stand1/2/2
+#   Character.wz/TamingMob/01902041.img/stand1/3/1
+#   Character.wz/TamingMob/01902041.img/stand1/3/2
+#   Character.wz/TamingMob/01902041.img/stand1/4/1
+#   Character.wz/TamingMob/01902041.img/stand1/4/2
+#   Character.wz/TamingMob/01902041.img/stand1/5/1
+#   Character.wz/TamingMob/01902041.img/stand1/5/2
+#   Character.wz/TamingMob/01902041.img/stand2/0/1
+#   Character.wz/TamingMob/01902041.img/stand2/0/2
+#   Character.wz/TamingMob/01902041.img/stand2/1/1
+#   Character.wz/TamingMob/01902041.img/stand2/1/2
+#   Character.wz/TamingMob/01902041.img/stand2/2/1
+#   Character.wz/TamingMob/01902041.img/stand2/2/2
+#   Character.wz/TamingMob/01902041.img/stand2/3/1
+#   Character.wz/TamingMob/01902041.img/stand2/3/2
+#   Character.wz/TamingMob/01902041.img/stand2/4/1
+#   Character.wz/TamingMob/01902041.img/stand2/4/2
+#   Character.wz/TamingMob/01902041.img/stand2/5/1
+#   Character.wz/TamingMob/01902041.img/stand2/5/5
+#   Character.wz/TamingMob/01902041.img/tired/0/1
+#   Character.wz/TamingMob/01902041.img/walk1/0/1
+#   Character.wz/TamingMob/01902041.img/walk1/0/2
+#   Character.wz/TamingMob/01902041.img/walk1/1/1
+#   Character.wz/TamingMob/01902041.img/walk1/1/2
+#   Character.wz/TamingMob/01902041.img/walk1/2/1
+#   Character.wz/TamingMob/01902041.img/walk1/2/2
+#   Character.wz/TamingMob/01902041.img/walk1/3/1
+#   Character.wz/TamingMob/01902041.img/walk1/3/2
+#   Character.wz/TamingMob/01902041.img/walk1/4/1
+#   Character.wz/TamingMob/01902041.img/walk1/4/2
+#   Character.wz/TamingMob/01902041.img/walk1/5/1
+#   Character.wz/TamingMob/01902041.img/walk1/5/2
+#   Character.wz/TamingMob/01902041.img/walk2/0/1
+#   Character.wz/TamingMob/01902041.img/walk2/0/2
+#   Character.wz/TamingMob/01902041.img/walk2/1/1
+#   Character.wz/TamingMob/01902041.img/walk2/1/2
+#   Character.wz/TamingMob/01902041.img/walk2/2/1
+#   Character.wz/TamingMob/01902041.img/walk2/2/2
+#   Character.wz/TamingMob/01902041.img/walk2/3/1
+#   Character.wz/TamingMob/01902041.img/walk2/3/2
+#   Character.wz/TamingMob/01902041.img/walk2/4/1
+#   Character.wz/TamingMob/01902041.img/walk2/4/2
+#   Character.wz/TamingMob/01902041.img/walk2/5/1
+#   Character.wz/TamingMob/01902041.img/walk2/5/2
+#   Character.wz/TamingMob/01902042.img/fly/0/2
+#   Character.wz/TamingMob/01902042.img/fly/1/2
+#   Character.wz/TamingMob/01902042.img/fly/2/2
+#   Character.wz/TamingMob/01902042.img/fly/3/2
+#   Character.wz/TamingMob/01902042.img/fly/4/2
+#   Character.wz/TamingMob/01902042.img/fly/5/2
+#   Character.wz/TamingMob/01902042.img/jump/0/2
+#   Character.wz/TamingMob/01902042.img/ladder/0/1
+#   Character.wz/TamingMob/01902042.img/ladder/0/2
+#   Character.wz/TamingMob/01902042.img/ladder/1/1
+#   Character.wz/TamingMob/01902042.img/ladder/1/2
+#   Character.wz/TamingMob/01902042.img/ladder/2
+#   Character.wz/TamingMob/01902042.img/ladder/3
+#   Character.wz/TamingMob/01902042.img/ladder/4
+#   Character.wz/TamingMob/01902042.img/ladder/5
+#   Character.wz/TamingMob/01902042.img/prone/0/2
+#   Character.wz/TamingMob/01902042.img/rope/0/1
+#   Character.wz/TamingMob/01902042.img/rope/0/2
+#   Character.wz/TamingMob/01902042.img/rope/1/1
+#   Character.wz/TamingMob/01902042.img/rope/1/2
+#   Character.wz/TamingMob/01902042.img/rope/2
+#   Character.wz/TamingMob/01902042.img/rope/3
+#   Character.wz/TamingMob/01902042.img/rope/4
+#   Character.wz/TamingMob/01902042.img/rope/5
+#   Character.wz/TamingMob/01902042.img/stand1/0/2
+#   Character.wz/TamingMob/01902042.img/stand1/1/2
+#   Character.wz/TamingMob/01902042.img/stand1/2/2
+#   Character.wz/TamingMob/01902042.img/stand1/3/2
+#   Character.wz/TamingMob/01902042.img/stand1/4/2
+#   Character.wz/TamingMob/01902042.img/stand1/5/2
+#   Character.wz/TamingMob/01902042.img/stand2/0/2
+#   Character.wz/TamingMob/01902042.img/stand2/1/2
+#   Character.wz/TamingMob/01902042.img/stand2/2/2
+#   Character.wz/TamingMob/01902042.img/stand2/3/2
+#   Character.wz/TamingMob/01902042.img/stand2/4/2
+#   Character.wz/TamingMob/01902042.img/stand2/5/5
+#   Character.wz/TamingMob/01902042.img/tired/0/2
+#   Character.wz/TamingMob/01902042.img/walk1/0/2
+#   Character.wz/TamingMob/01902042.img/walk1/1/2
+#   Character.wz/TamingMob/01902042.img/walk1/2/2
+#   Character.wz/TamingMob/01902042.img/walk1/3/2
+#   Character.wz/TamingMob/01902042.img/walk1/4/2
+#   Character.wz/TamingMob/01902042.img/walk1/5/2
+#   Character.wz/TamingMob/01902042.img/walk2/0/2
+#   Character.wz/TamingMob/01902042.img/walk2/1/2
+#   Character.wz/TamingMob/01902042.img/walk2/2/2
+#   Character.wz/TamingMob/01902042.img/walk2/3/2
+#   Character.wz/TamingMob/01902042.img/walk2/4/2
+#   Character.wz/TamingMob/01902042.img/walk2/5/2
+#   Character.wz/TamingMob/01912033.img/1902040/ladder/2
+#   Character.wz/TamingMob/01912033.img/1902040/ladder/3
+#   Character.wz/TamingMob/01912033.img/1902040/ladder/4
+#   Character.wz/TamingMob/01912033.img/1902040/ladder/5
+#   Character.wz/TamingMob/01912033.img/1902040/rope/2
+#   Character.wz/TamingMob/01912033.img/1902040/rope/3
+#   Character.wz/TamingMob/01912033.img/1902040/rope/4
+#   Character.wz/TamingMob/01912033.img/1902040/rope/5

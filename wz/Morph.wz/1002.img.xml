@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <imgdir name="1002.img">
+  <imgdir name="fly2">
+    <uol name="0" value="../fly/1"/>
+  </imgdir>
+  <imgdir name="fly2Move">
+    <uol name="0" value="../fly/0"/>
+  </imgdir>
+  <imgdir name="fly2Skill">
+    <uol name="0" value="../stand/9"/>
+    <uol name="1" value="../fly/0"/>
+  </imgdir>
   <imgdir name="info">
     <int name="hide" value="1"/>
     <int name="speed" value="100"/>
