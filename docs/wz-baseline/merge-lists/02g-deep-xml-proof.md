@@ -81,6 +81,36 @@ the live client already occupies, so it also confirms the server XML tree is liv
 Each node lands **inside its real parent** at the right indent, in sorted position, with no
 reformatting anywhere else in the file. `Eqp.img.xml` is 835 KB and one hunk changed.
 
+## Edge case: an id that sorts after every existing sibling
+
+The sorted-insert falls back to "end of this container" when nothing sorts higher. That fallback is
+the one line that could put a node *outside* its parent, so it gets its own check — two new `Cap`
+ids, both above every id already in `Eqp/Cap`:
+
+```
+  ADD  String.wz/Eqp.img/Eqp/Cap/1003089 -> ...\Eqp.img.xml:4316 (4 lines)
+  ADD  String.wz/Eqp.img/Eqp/Cap/1003090 -> ...\Eqp.img.xml:4320 (3 lines)
+```
+
+```xml
+      <imgdir name="1003073">
+        <string name="name" value="Archaeologist Hat"/>
+        ...
+      </imgdir>
+      <imgdir name="1003089">
+        <string name="name" value="Evan Headband"/>
+        <string name="desc" value="When you equip all Evan cash items except a Wand, ..."/>
+      </imgdir>
+      <imgdir name="1003090">
+        <string name="name" value="Pink Bean Hairband"/>
+      </imgdir>
+    </imgdir>            <-- Cap closes AFTER them
+    <imgdir name="Cape">
+```
+
+`ET.parse()` on the result: well-formed. Re-run this one if the splice is ever touched — it is the
+cheapest thing that fails if the container arithmetic breaks.
+
 ## Binary side
 
 No change was needed: `WzMerge merge` resolves paths segment by segment and adds through
