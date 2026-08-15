@@ -59,16 +59,20 @@ String.wz/Ins.img/3994179	# live "MISSING NAME" -> v84 name is untranslated KMS 
 String.wz/Ins.img/3994180	# live "MISSING NAME" -> v84 name is untranslated KMS text
 
 # ---------------------------------------------------------------------------------------
-# NOT AUTHORISED — the 10 ambiguous rows. Default is keep-local (absent from the list above).
-# Uncomment a row only after the owner rules on it; see COLLISION-TRIAGE.md "Ambiguous".
+# NOT AUTHORISED — the 4 remaining ambiguous rows. Default is keep-local (absent from the list
+# above). Uncomment only after the owner rules; see COLLISION-TRIAGE.md "Ambiguous".
 #
-# Character.wz/Dragon/01942002.img/info/level	# adopt = real Evan dragon growth curve; keep = Cosmic's flat 10000-exp table
+# Character.wz/Dragon/01942002.img/info/level	# adopt = real Evan growth curve, but see below
 # Character.wz/Dragon/01952002.img/info/level	# ditto
 # Character.wz/Dragon/01962002.img/info/level	# ditto
 # Character.wz/Dragon/01972002.img/info/level	# ditto
-# Etc.wz/Commodity.img/8941	# adopt = stock v84 listing; keep = Cosmic cash-shop SN 60001000 (pet 5000013)
-# Etc.wz/Commodity.img/8942	# keep = Cosmic SN 60001001 (pet 5000039)
-# Etc.wz/Commodity.img/8943	# keep = Cosmic SN 60001002 (pet 5000044)
-# Etc.wz/Commodity.img/8944	# keep = Cosmic SN 60001003 (pet 5000045)
-# Etc.wz/Commodity.img/8945	# keep = Cosmic SN 60001004 (pet 5000034)
-# Etc.wz/Commodity.img/8946	# keep = Cosmic SN 60001005 (pet 5000060)
+#
+# Not a display-only change: ItemInformationProvider.java:315-322 blind-scans Character.wz
+# subdirectories for "0"+itemId+".img", so it reads these as generic EQUIP levelling and lands
+# on Dragon/ incidentally. Live's single-child rows are inert (level 1, early return); v84's
+# rows switch that dormant path on for four items. Decide the behaviour, then set this.
+#
+# Etc.wz/Commodity.img/894{1..6} were ambiguous and are now SETTLED: keep local, zero loss.
+# CashShop.java:238-249 keys the map by SN and never reads the node name, and v84's six entries
+# already exist in both trees as nodes 8848-8853 (same SNs 70000365-70000370). Forcing them
+# would duplicate six SNs and delete the six live pet SNs 60001000-60001005. Do not add them.

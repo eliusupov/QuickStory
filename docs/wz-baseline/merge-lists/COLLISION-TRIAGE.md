@@ -41,9 +41,13 @@ bucket — they are a merge-tool capability gap, described under "Deeper problem
 | bucket | rows | one-line rule |
 |---|---:|---|
 | no-op | 35 | live and v84 values are byte-identical; the refusal costs nothing |
-| keep local | 653 | live is Cosmic/Ezorsia content or a strict superset of v84's |
+| keep local | 659 | live is Cosmic/Ezorsia content or a strict superset of v84's |
 | adopt v84 | 37 | live is the literal string `MISSING NAME` / `MISSING INFO` |
-| ambiguous | 10 | needs the owner |
+| ambiguous | 4 | needs the owner |
+
+The six `Etc.wz/Commodity.img/894x` rows opened as *ambiguous* and were later settled from source
+into *keep local* — see "Settled from source" below, which keeps the reasoning because it
+generalises. Ambiguous is now only the four `Character.wz/Dragon` rows.
 
 Classification method — and why the ticket's suggested signal does not work:
 
@@ -64,7 +68,7 @@ holds is **is the live value a name-table stub or real content**.
 
 ---
 
-## Keep local — 653
+## Keep local — 659
 
 ### `99019xx` player-NPC block — 20 rows (10 `Npc.wz` + 10 `String.wz`)
 
@@ -137,11 +141,11 @@ English there.
 
 ---
 
-## Ambiguous — 10
+## Ambiguous — 4
 
-Both of these need the owner. Neither was padded into "adopt".
+One item, and it genuinely needs the owner. It was not padded into "adopt".
 
-### 1. `Character.wz/Dragon/019{4,5,6,7}2002.img/info/level` — 4 rows
+### `Character.wz/Dragon/019{4,5,6,7}2002.img/info/level` — 4 rows
 
 | | value |
 |---|---|
@@ -152,12 +156,22 @@ Both of these need the owner. Neither was padded into "adopt".
 needs; but Cosmic's flat 10000-exp table is a deliberate shape, not a stub, and if the server
 reads this node the flat curve may be load-bearing tuning that the owner chose.
 
-**What the owner needs to know to decide:** whether the Cosmic server reads
-`Character.wz/Dragon/*/info/level` at all, or whether dragon levelling is computed server-side. If
-the server ignores it, adopt v84 (client-side display only, strictly better). If the server reads
-it, adopting changes Evan dragon progression for existing characters.
+**Answered since:** the server *does* read it. `ItemInformationProvider.java:315-322` blind-scans
+every `Character.wz` subdirectory for `"0" + itemId + ".img"`, so it lands on `Dragon/` incidentally
+and treats the node as generic **equip** levelling, not dragon levelling. Today the rows are
+read-but-inert: one child → level 1 → early return. Adopting v84's rows makes them live.
 
-### 2. `Etc.wz/Commodity.img/894{1..6}` — 6 rows
+**Still the owner's call, and that answer is why.** Adopting does not merely improve a display
+table; it switches on an equip-levelling path that is currently dormant, for four items, through
+code that never knew it was looking at a dragon. That is a behaviour change to reason about, not a
+data fix. The Evan tickets should state which they want before this moves.
+
+---
+
+## Settled from source — the six `Etc.wz/Commodity.img/894x` rows
+
+Kept as a worked example because the reasoning generalises: **an id collision is not a content
+collision.** Same evidence that resolved it, no owner input needed.
 
 | id | live | v84 |
 |---|---|---|
@@ -168,19 +182,36 @@ it, adopting changes Evan dragon progression for existing characters.
 | 8945 | `SN=60001004 ItemId=5000034 Price=5800 OnSale=1` | `SN=70000369 ItemId=9102238 Price=11000 OnSale=0` |
 | 8946 | `SN=60001005 ItemId=5000060 Price=20000 OnSale=1` | `SN=70000370 ItemId=9102190 Price=7000 OnSale=1` |
 
-Live's `SN` block `60001000`–`60001005` is a hand-allocated Cosmic/Ezorsia range selling pets
-(`5000013`…`5000060`), all `OnSale=1`. v84's are stock Nexon listings, five of six `OnSale=0`
-(not even purchasable).
+**Verdict: keep local, and it costs nothing at all.** Three facts settle it:
 
-**Trade-off:** adopting v84 deletes six working cash-shop listings and their SNs; keeping local
-loses six listings that are mostly disabled anyway. This looks like keep-local, and the default in
-`COLLISION-FORCE.txt` is keep — but it is listed ambiguous because **`SN` is a server-side key**,
-not display data, and I did not verify that nothing in the server pins SNs `70000365`–`70000370`.
+1. **The node name is never read.** `CashShop.java:238-249` iterates `Commodity.img`'s children and
+   does `loadedItems.put(sn, new CashItem(sn, ...))` — the map is keyed by `SN`. `894x` vs `885x` is
+   invisible to the server. Cash shop is not DB-driven; it loads from WZ at startup.
+2. **v84's payload is already present, under different ids.** Nodes `8848`–`8853` carry exactly
+   v84's six entries — verified in *both* trees, since they are different files with different
+   owners: server `wz/Etc.wz/Commodity.img.xml:91011` (`8848` → `SN=70000365`, `ItemId=9102234`) and
+   the live client `D:\games\MapleStory\Etc.wz` `Commodity.img/8848` → same, through `8853` →
+   `SN=70000370`. The live client renumbered Nexon's six and reused `894x` for pets.
+3. **Therefore adopting v84 is strictly destructive.** It would insert six **duplicate SNs** into a
+   map keyed by SN, and delete the six pet SNs `60001000`–`60001005` that the client still renders —
+   so every click on those six lands on `getItem(sn) → null`.
 
-**What the owner needs to know to decide:** whether `CashItemFactory` / the commodity loader reads
-`Commodity.img` from the client wz at all (Cosmic may load cash-shop data from the DB), and
-whether SNs `6000100x` are referenced anywhere outside this file. If cash-shop data is DB-driven,
-both sides are inert and the rows are a no-op — take keep-local and move on.
+The general lesson for the remaining triage: when a collision looks like "both sides want this id",
+check whether the other side's *content* is already present elsewhere in the file before weighing a
+trade-off. Here there was no trade-off to weigh — only a renumber.
+
+<details>
+<summary>Original ambiguous framing, superseded (kept so the reversal is auditable)</summary>
+
+> **Trade-off:** adopting v84 deletes six working cash-shop listings and their SNs; keeping local
+> loses six listings that are mostly disabled anyway. This looks like keep-local, and the default in
+> `COLLISION-FORCE.txt` is keep — but it is listed ambiguous because **`SN` is a server-side key**,
+> not display data, and I did not verify that nothing in the server pins SNs `70000365`–`70000370`.
+
+That caution was right to raise and wrong in its worry: nothing pins those SNs, because they were
+never missing.
+
+</details>
 
 ---
 
