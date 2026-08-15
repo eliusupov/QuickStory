@@ -672,7 +672,7 @@ public class MapleMap {
             if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
                 adjustedChanceMultiplier = 5.0f;
                 if (mob.isBoss()) {
-                    adjustedChanceMultiplier = 0.8f;
+                    adjustedChanceMultiplier = 0.5f;
                 }
             }
 
@@ -694,7 +694,7 @@ public class MapleMap {
                 adjustedChanceMultiplier = 8.0f;
 
                 if (mob.isBoss()) {
-                    adjustedChanceMultiplier = 1.8f;
+                    adjustedChanceMultiplier = 0.8f;
                 }
             }
 
@@ -703,7 +703,7 @@ public class MapleMap {
                 if (de.itemId != constants.id.ItemId.CHAOS_SCROll_60) {
                     adjustedChanceMultiplier = 13.0f;
                     if (mob.isBoss()) {
-                        adjustedChanceMultiplier = 2.0f;
+                        adjustedChanceMultiplier = 1.3f;
                     }
                 }
             }
@@ -722,7 +722,7 @@ public class MapleMap {
                 adjustedChanceMultiplier = 3.5f;
 
                 if (mob.isBoss()) {
-                    adjustedChanceMultiplier = 0.7f;
+                    adjustedChanceMultiplier = 0.35f;
                 }
             }
 
