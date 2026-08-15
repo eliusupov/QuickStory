@@ -7,10 +7,15 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
+
+    <!-- MapleLib lives outside the repo (git submodule of the HaRepacker checkout under
+         porting-resources/). Default is this machine's layout; override on any other:
+           dotnet build -p:MapleLibProject=<path>\MapleLib.csproj -->
+    <MapleLibProject Condition="'$(MapleLibProject)' == ''">D:\games\MapleStory\Server\porting-resources\reference-sources\HaRepacker-src\MapleLib\MapleLib\MapleLib.csproj</MapleLibProject>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="D:\games\MapleStory\Server\porting-resources\reference-sources\HaRepacker-src\MapleLib\MapleLib\MapleLib.csproj" />
+    <ProjectReference Include="$(MapleLibProject)" />
   </ItemGroup>
 
 </Project>

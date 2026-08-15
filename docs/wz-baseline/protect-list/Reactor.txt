@@ -1,2 +1,11 @@
+# Reactor.wz: nodes in the live client present in neither stock tree (7 copy roots).
+# each path is a copy root: no listed path is an ancestor of another, so copying
+# a listed path already covers everything under it. Do not re-copy children.
+
+Reactor.wz/2519002.img/0
+Reactor.wz/2519002.img/1
+Reactor.wz/2519003.img/0
+Reactor.wz/2519003.img/1
+Reactor.wz/2618000.img/8
 Reactor.wz/9400300.img
 Reactor.wz/9400301.img

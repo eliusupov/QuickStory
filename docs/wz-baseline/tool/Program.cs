@@ -4,60 +4,59 @@ using System.IO;
 using System.Linq;
 using MapleLib.WzLib;
 
-// ponytail: single-purpose one-off diff tool. No CLI framework, no config file -
-// paths and wz-file list are hardcoded below because this runs exactly once.
+// ponytail: single-purpose diff tool. No CLI framework, no config file - the three
+// input roots and the output root come from args (positional), everything else is
+// derived from what is on disk.
+//
+//   WzDump [outRoot] [v83Dir] [v84Dir] [liveDir]
+//
+// "v83Dir/v84Dir/liveDir" are just names for "baseline / new / local"; to verify a
+// merge, pass (pre-merge-tree, post-merge-tree) as v83Dir/v84Dir and read
+// modified-list/*.txt - that is the change-proof mode, no extra code.
 
 static class Program
 {
-    // wz files with per-entity node granularity one level *inside* the top .img
-    // (String.wz / Quest.wz / Skill.wz store many entities as sub-properties of a
-    // handful of category images, unlike Item/Map/Mob/Npc/Character which use one
-    // .img per entity already visible at the shallow directory-tree level).
-    static readonly HashSet<string> ExpandOneLevel = new(StringComparer.OrdinalIgnoreCase)
-    {
-        // String/Quest/Skill: many entities are sub-properties of a handful of
-        // category images. Item: category images are "bucket" images holding up
-        // to 10,000 item ids each (e.g. Item.wz/Consume/0200.img holds ids
-        // 02000000-02009999) - confirmed empirically: shallow diff found only 2
-        // new Item.wz nodes when the 92-manifest lists 412 new items. Etc: the
-        // MakeCharInfo.img Evan block (audit finding #5) is a new sub-property of
-        // an existing image, invisible at the shallow level. UI: SkillEx/
-        // SkillMacroEx already exist as containers in both trees; v84 enlarges
-        // their contents rather than adding new top-level images.
-        "String.wz", "Quest.wz", "Skill.wz", "Item.wz", "Etc.wz", "UI.wz"
-    };
-
-    static readonly string[] WzNames =
-    {
-        "Character.wz", "Etc.wz", "Item.wz", "Map.wz", "Mob.wz",
-        "Npc.wz", "Quest.wz", "Skill.wz", "String.wz", "UI.wz", "Reactor.wz"
-    };
+    // ponytail: every image is expanded one level, always. The old per-file allowlist
+    // was a guess about which files are "bucket images" and it got Map.wz wrong
+    // (Obj/Back/Tile are buckets of named sub-sets). You cannot know whether an image
+    // is a bucket without parsing it, so parse them all and unparse right after to
+    // keep memory flat. Cost: a full run is minutes, not seconds. See TOOL-NOTES.md.
 
     record NodeSet(HashSet<string> Paths, Dictionary<string, long> ImageSizes);
 
+    // H1: image parse failures are hard errors, collected here and printed in SUMMARY.md.
+    static readonly List<string> Failures = new();
+    static long ImagesParsed = 0;
+
     static (WzFile? file, WzMapleVersion? ver, string err) TryOpen(string path)
     {
+        var errs = new List<string>();
         foreach (var ver in new[] { WzMapleVersion.GMS, WzMapleVersion.BMS, WzMapleVersion.EMS })
         {
-            WzFile f = new WzFile(path, -1, ver);
+            WzFile? f = null;
             WzFileParseStatus status;
             try
             {
+                f = new WzFile(path, -1, ver);
                 status = f.ParseWzFile();
             }
             catch (Exception ex)
             {
-                f.Dispose();
-                return (null, null, $"exception under {ver}: {ex.Message}");
+                // M1: a wrong IV produces InvalidDataException (truncated read / bad offset).
+                // That is a failed candidate, not a failed file - try the next IV.
+                f?.Dispose();
+                errs.Add($"{ver}: {ex.GetType().Name} {ex.Message}");
+                continue;
             }
             if (status == WzFileParseStatus.Success)
                 return (f, ver, "");
             f.Dispose();
+            errs.Add($"{ver}: {status}");
         }
-        return (null, null, "no encryption version (GMS/BMS/EMS) produced a valid parse");
+        return (null, null, "no encryption version parsed: " + string.Join(" | ", errs));
     }
 
-    static NodeSet Walk(WzFile file, string wzName, bool expandOneLevel)
+    static NodeSet Walk(WzFile file, string wzName, string tree)
     {
         var paths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         var sizes = new Dictionary<string, long>(StringComparer.OrdinalIgnoreCase);
@@ -76,22 +75,26 @@ static class Program
                 paths.Add(p);
                 sizes[p] = img.BlockSize;
 
-                if (expandOneLevel)
+                // H1: ParseImage() signals failure by returning false (unknown header
+                // byte / bad "Property" marker / lua-in-non-lua image) WITHOUT throwing,
+                // and the WzProperties getter discards that bool and hands back an empty
+                // non-null collection. Reading the bool is the whole fix.
+                bool ok;
+                string err = "returned false (unknown header byte / bad Property marker / lua image)";
+                try { ok = img.ParseImage(); }
+                catch (Exception ex) { ok = false; err = $"{ex.GetType().Name}: {ex.Message}"; }
+
+                ImagesParsed++;
+                if (!ok)
                 {
-                    try
-                    {
-                        var props = img.WzProperties; // triggers ParseImage()
-                        if (props != null)
-                        {
-                            foreach (var prop in props)
-                                paths.Add(p + "/" + prop.Name);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.Error.WriteLine($"  [warn] failed to expand {wzName}{p}: {ex.Message}");
-                    }
+                    Failures.Add($"{tree}\t{p}\t{err}");
+                    Console.Error.WriteLine($"  [PARSE-FAIL] {tree} {p}: {err}");
+                    img.UnparseImage(); // a partial parse still allocated properties
+                    continue;
                 }
+                foreach (var prop in img.WzProperties)
+                    paths.Add(p + "/" + prop.Name);
+                img.UnparseImage(); // keep memory flat across ~60k images
             }
         }
 
@@ -99,10 +102,12 @@ static class Program
         return new NodeSet(paths, sizes);
     }
 
-    static NodeSet? OpenAndWalk(string dir, string wzName, out string status)
+    // dirs: a tree may be spread over several directories (the v83 Reactor.wz baseline
+    // lives outside v83-stock/); first directory that has the file wins.
+    static NodeSet? OpenAndWalk(string[] dirs, string wzName, string tree, out string status)
     {
-        string path = Path.Combine(dir, wzName);
-        if (!File.Exists(path))
+        string? path = dirs.Select(d => Path.Combine(d, wzName)).FirstOrDefault(File.Exists);
+        if (path == null)
         {
             status = "MISSING";
             return null;
@@ -115,8 +120,10 @@ static class Program
         }
         try
         {
-            var set = Walk(file, wzName, ExpandOneLevel.Contains(wzName));
-            status = $"OK ({ver}, {set.Paths.Count} nodes)";
+            int before = Failures.Count;
+            var set = Walk(file, wzName, tree);
+            int failed = Failures.Count - before;
+            status = $"{set.Paths.Count}" + (failed > 0 ? $" ({failed} PARSE-FAIL)" : "");
             return set;
         }
         finally
@@ -125,75 +132,182 @@ static class Program
         }
     }
 
-    static void WriteList(string outFile, IEnumerable<string> paths)
+    // M3: manifests are copy instructions. Collapse any path whose parent is also listed
+    // so every listed path is a copy root and nobody double-copies an image's children.
+    static List<string> Collapse(HashSet<string> paths) =>
+        paths.Where(p => { int i = p.LastIndexOf('/'); return i < 0 || !paths.Contains(p[..i]); })
+             .OrderBy(p => p, StringComparer.OrdinalIgnoreCase).ToList();
+
+    static void WriteList(string outFile, string header, IEnumerable<string> lines, bool copyRoots = true)
     {
         Directory.CreateDirectory(Path.GetDirectoryName(outFile)!);
-        File.WriteAllLines(outFile, paths.OrderBy(p => p, StringComparer.OrdinalIgnoreCase));
+        var head = new List<string> { "# " + header };
+        if (copyRoots)
+        {
+            head.Add("# each path is a copy root: no listed path is an ancestor of another, so copying");
+            head.Add("# a listed path already covers everything under it. Do not re-copy children.");
+        }
+        head.Add("");
+        File.WriteAllLines(outFile, head.Concat(lines));
     }
+
+    // H3: paths present in both trees whose WzImage.BlockSize differs = edited image.
+    // Presence-only diffing cannot see edits (a destructive overwrite preserves paths).
+    static List<string> ModifiedImages(NodeSet? a, NodeSet? b) =>
+        a == null || b == null
+            ? new List<string>()
+            : a.ImageSizes.Where(kv => b.ImageSizes.TryGetValue(kv.Key, out var s) && s != kv.Value)
+               .Select(kv => $"{kv.Key}\t{kv.Value}\t{b.ImageSizes[kv.Key]}")
+               .OrderBy(s => s, StringComparer.OrdinalIgnoreCase).ToList();
 
     static void Main(string[] args)
     {
-        string v83Dir = @"D:\games\MapleStory\Server\porting-resources\wz-data\v83-stock";
-        string v84Dir = @"D:\games\MapleStory\Server\porting-resources\wz-data\v84";
-        string liveDir = @"D:\games\MapleStory";
+        // M7: all four roots overridable. Defaults are this machine's layout.
+        // A root may be several ';'-separated directories (v83's Reactor.wz baseline was
+        // extracted outside v83-stock/ and that tree is owned by another agent).
+        string[] Root(int i, string def) => (args.Length > i ? args[i] : def).Split(';', StringSplitOptions.RemoveEmptyEntries);
         string outRoot = args.Length > 0 ? args[0] : @"D:\games\MapleStory\Server\Cosmic\.claude\worktrees\evan-dualblade\docs\wz-baseline";
+        string[] v83Dir = Root(1, @"D:\games\MapleStory\Server\porting-resources\wz-data\v83-stock;D:\games\MapleStory\Server\porting-resources\wz-data\v83-reactor");
+        string[] v84Dir = Root(2, @"D:\games\MapleStory\Server\porting-resources\wz-data\v84");
+        string[] liveDir = Root(3, @"D:\games\MapleStory");
+
+        // H5: every .wz present in ANY tree gets a row, so an unbaselined file
+        // (TamingMob/Sound/Effect/Morph/Base/List/...) is visible instead of absent.
+        var wzNames = v83Dir.Concat(v84Dir).Concat(liveDir)
+            .Where(Directory.Exists)
+            .SelectMany(d => Directory.GetFiles(d, "*.wz").Select(Path.GetFileName))
+            .Where(n => n != null).Select(n => n!)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .OrderBy(n => n, StringComparer.OrdinalIgnoreCase)
+            .ToArray();
 
         var summary = new List<string>();
         summary.Add("# WZ baseline diff — machine-generated summary");
         summary.Add("");
         summary.Add($"Generated {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
+        summary.Add($"Roots: v83=`{string.Join(";", v83Dir)}` v84=`{string.Join(";", v84Dir)}` live=`{string.Join(";", liveDir)}`");
         summary.Add("");
-        summary.Add("| wz | v83-stock | v84 | live client | add (v84-v83) | protect (live - (v83 u v84)) | add bytes (BlockSize sum) | protect bytes (BlockSize sum) |");
-        summary.Add("|---|---|---|---|---|---|---|---|");
+        summary.Add("`—` = not measurable (a required tree lacks this file). It never means zero.");
+        summary.Add("Node counts are paths (directories + images + one level of sub-properties).");
+        summary.Add("");
+        summary.Add("| wz | v83-stock | v84 | live client | add (v84−v83) | removed (v83−v84) | protect (live − (v83 ∪ v84)) | modified v83→v84 | modified v83→live | add bytes | protect bytes |");
+        summary.Add("|---|---|---|---|---|---|---|---|---|---|---|");
 
-        foreach (var wz in WzNames)
+        var mapSets = new Dictionary<string, NodeSet?>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var wz in wzNames)
         {
             Console.WriteLine($"=== {wz} ===");
+            string stem = Path.GetFileNameWithoutExtension(wz);
 
-            var set83 = OpenAndWalk(v83Dir, wz, out var st83);
+            var set83 = OpenAndWalk(v83Dir, wz, "v83", out var st83);
             Console.WriteLine($"  v83-stock: {st83}");
-            var set84 = OpenAndWalk(v84Dir, wz, out var st84);
+            var set84 = OpenAndWalk(v84Dir, wz, "v84", out var st84);
             Console.WriteLine($"  v84:       {st84}");
-            var setLive = OpenAndWalk(liveDir, wz, out var stLive);
+            var setLive = OpenAndWalk(liveDir, wz, "live", out var stLive);
             Console.WriteLine($"  live:      {stLive}");
-
-            HashSet<string> addPaths = new(StringComparer.OrdinalIgnoreCase);
-            long addBytes = 0;
-            if (set83 != null && set84 != null)
+            if (wz.Equals("Map.wz", StringComparison.OrdinalIgnoreCase))
             {
-                addPaths = new HashSet<string>(set84.Paths, StringComparer.OrdinalIgnoreCase);
-                addPaths.ExceptWith(set83.Paths);
-                addBytes = addPaths.Sum(p => set84.ImageSizes.TryGetValue(p, out var s) ? s : 0);
-                WriteList(Path.Combine(outRoot, "add-list", wz.Replace(".wz", "") + ".txt"), addPaths);
+                mapSets["v83"] = set83; mapSets["v84"] = set84;
             }
 
-            HashSet<string> protectPaths = new(StringComparer.OrdinalIgnoreCase);
-            long protectBytes = 0;
-            if (setLive != null)
+            // ---- add-list: needs BOTH stock trees. H4: no baseline => "—", not 0.
+            string addCell = "—", addBytesCell = "—";
+            if (set83 != null && set84 != null)
+            {
+                var addPaths = new HashSet<string>(set84.Paths, StringComparer.OrdinalIgnoreCase);
+                addPaths.ExceptWith(set83.Paths);
+                long addBytes = addPaths.Sum(p => set84.ImageSizes.TryGetValue(p, out var s) ? s : 0);
+                var rows = Collapse(addPaths);
+                WriteList(Path.Combine(outRoot, "add-list", stem + ".txt"),
+                    $"{wz}: nodes present in v84 and absent from v83-stock ({rows.Count} copy roots, {addPaths.Count} paths)", rows);
+                addCell = rows.Count.ToString();
+                addBytesCell = addBytes.ToString("N0");
+            }
+
+            // ---- removed-list: v84 genuinely deletes content (832 Map.wz maps, confirmed
+            // against maplestory.io). Never wholesale-swap a wz file; this is what you lose.
+            string removedCell = "—";
+            if (set83 != null && set84 != null)
+            {
+                var gone = new HashSet<string>(set83.Paths, StringComparer.OrdinalIgnoreCase);
+                gone.ExceptWith(set84.Paths);
+                var rows = Collapse(gone);
+                WriteList(Path.Combine(outRoot, "removed-list", stem + ".txt"),
+                    $"{wz}: nodes present in v83-stock and absent from v84 — deleted by the patch ({rows.Count} roots, {gone.Count} paths). A wholesale file swap destroys any of these the live client still has. Each row is a root: everything under it went too.", rows, copyRoots: false);
+                removedCell = rows.Count.ToString();
+            }
+
+            // ---- protect-list: live minus both stocks. Without a v83 term it is weak.
+            string protectCell = "—", protectBytesCell = "—";
+            if (setLive != null && (set83 != null || set84 != null))
             {
                 var union = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
                 if (set83 != null) union.UnionWith(set83.Paths);
                 if (set84 != null) union.UnionWith(set84.Paths);
-                protectPaths = new HashSet<string>(setLive.Paths, StringComparer.OrdinalIgnoreCase);
+                var protectPaths = new HashSet<string>(setLive.Paths, StringComparer.OrdinalIgnoreCase);
                 protectPaths.ExceptWith(union);
-                protectBytes = protectPaths.Sum(p => setLive.ImageSizes.TryGetValue(p, out var s) ? s : 0);
-                WriteList(Path.Combine(outRoot, "protect-list", wz.Replace(".wz", "") + ".txt"), protectPaths);
+                long protectBytes = protectPaths.Sum(p => setLive.ImageSizes.TryGetValue(p, out var s) ? s : 0);
+                var rows = Collapse(protectPaths);
+                string caveat = set83 == null ? " WARNING: no v83 baseline — entries may be stock v83 content, not custom." : "";
+                WriteList(Path.Combine(outRoot, "protect-list", stem + ".txt"),
+                    $"{wz}: nodes in the live client present in neither stock tree ({rows.Count} copy roots).{caveat}", rows);
+                protectCell = rows.Count + (set83 == null ? " (no v83)" : "");
+                protectBytesCell = protectBytes.ToString("N0");
             }
 
-            summary.Add($"| {wz} | {(set83 == null ? st83 : set83.Paths.Count.ToString())} | {(set84 == null ? st84 : set84.Paths.Count.ToString())} | {(setLive == null ? stLive : setLive.Paths.Count.ToString())} | {addPaths.Count} | {protectPaths.Count} | {addBytes:N0} | {protectBytes:N0} |");
+            // ---- modified-list: same path, different BlockSize. H3.
+            string modV84 = "—", modLive = "—";
+            var m84 = ModifiedImages(set83, set84);
+            if (set83 != null && set84 != null)
+            {
+                WriteList(Path.Combine(outRoot, "modified-list", stem + ".txt"),
+                    $"{wz}: images present in BOTH v83-stock and v84 whose WzImage.BlockSize differs (edited, not added). Columns: path, v83 bytes, v84 bytes.", m84, copyRoots: false);
+                modV84 = m84.Count.ToString();
+            }
+            var mLive = ModifiedImages(set83, setLive);
+            if (set83 != null && setLive != null)
+            {
+                WriteList(Path.Combine(outRoot, "modified-list", stem + ".live.txt"),
+                    $"{wz}: images present in BOTH v83-stock and the live client whose BlockSize differs (live-side edits — treat as custom content, do not overwrite). Columns: path, v83 bytes, live bytes.", mLive, copyRoots: false);
+                modLive = mLive.Count.ToString();
+            }
 
-            Console.WriteLine($"  add: {addPaths.Count} nodes ({addBytes:N0} bytes), protect: {protectPaths.Count} nodes ({protectBytes:N0} bytes)");
+            // status strings can contain '|' (parser errors) - don't break the table row
+            string Cell(NodeSet? s, string st) => s == null ? st.Replace("|", "/") : s.Paths.Count.ToString("N0");
+            summary.Add($"| {wz} | {Cell(set83, st83)} | {Cell(set84, st84)} | {Cell(setLive, stLive)} | {addCell} | {removedCell} | {protectCell} | {modV84} | {modLive} | {addBytesCell} | {protectBytesCell} |");
+            Console.WriteLine($"  add: {addCell}, removed: {removedCell}, protect: {protectCell}, modified v84: {modV84}, modified live: {modLive}");
+        }
+
+        // H1: a zero-failure run must be provable, not assumed.
+        summary.Add("");
+        summary.Add("## image parse status");
+        summary.Add("");
+        summary.Add($"{ImagesParsed:N0} images parsed, **{Failures.Count} parse failures**.");
+        if (Failures.Count > 0)
+        {
+            summary.Add("");
+            summary.Add("A failed image contributes zero sub-nodes: in v84 it silently drops content,");
+            summary.Add("in live it leaves custom content unprotected, in v83 it manufactures false adds.");
+            summary.Add("Every manifest touching these files is suspect until they parse.");
+            summary.Add("");
+            summary.Add("| tree | path | error |");
+            summary.Add("|---|---|---|");
+            foreach (var f in Failures)
+            {
+                var c = f.Split('\t');
+                summary.Add($"| {c[0]} | `{c[1]}` | {c[2]} |");
+            }
         }
 
         File.WriteAllLines(Path.Combine(outRoot, "SUMMARY.md"), summary);
-        Console.WriteLine("Done. Summary at " + Path.Combine(outRoot, "SUMMARY.md"));
+        Console.WriteLine($"Done. {ImagesParsed:N0} images parsed, {Failures.Count} parse failures. Summary at " + Path.Combine(outRoot, "SUMMARY.md"));
 
         // ponytail: one-off follow-up audit for the Map.wz v83->v84 node-count drop
         // (orchestrator asked: genuine removal, structural repack, or damaged copy?).
-        // Reuses OpenAndWalk rather than a new tool.
-        var absentMapIds = MapAudit(v83Dir, v84Dir, outRoot);
-        NpcSpotCheck(v83Dir);
-        MapNameLookup(v83Dir, outRoot, absentMapIds);
+        // Reuses the sets already walked above rather than re-opening 600 MB of Map.wz.
+        var absentMapIds = MapAudit(mapSets.GetValueOrDefault("v83"), mapSets.GetValueOrDefault("v84"), outRoot);
+        if (absentMapIds.Count > 0) MapNameLookup(v83Dir, outRoot, absentMapIds);
     }
 
     // ponytail: identify what the "missing" map ids actually are, by name, so we can
@@ -201,16 +315,18 @@ static class Program
     // organized by world/region name (maple, event, jp, singapore...), not by leading
     // digit, so this recursively searches for id-shaped keys anywhere under it rather
     // than guessing the region layout.
-    static void MapNameLookup(string v83Dir, string outRoot, List<string> absentPaths)
+    static void MapNameLookup(string[] v83Dir, string outRoot, List<string> absentPaths)
     {
-        Console.WriteLine("=== missing-map name lookup ===");
+        Console.WriteLine("=== deleted-map name lookup ===");
         var wantedIds = absentPaths
             .Select(p => Path.GetFileNameWithoutExtension(p[(p.LastIndexOf('/') + 1)..]))
             .ToHashSet(StringComparer.Ordinal);
 
-        string path = Path.Combine(v83Dir, "String.wz");
+        string? path = v83Dir.Select(d => Path.Combine(d, "String.wz")).FirstOrDefault(File.Exists);
+        if (path == null) { Console.WriteLine("  no v83 String.wz"); return; }
         var (file, ver, err) = TryOpen(path);
         if (file == null) { Console.WriteLine("  could not open v83 String.wz: " + err); return; }
+        using var _ = file;
 
         var mapImg = file.WzDirectory.WzImages.FirstOrDefault(i => i.Name.Equals("Map.img", StringComparison.OrdinalIgnoreCase));
         var found = new Dictionary<string, (string region, string street, string name)>();
@@ -248,16 +364,13 @@ static class Program
                 : $"{id}\t(no String.wz entry found)");
         }
         File.WriteAllLines(Path.Combine(outRoot, "map-missing-names-v83.txt"), lines);
-        file.Dispose();
         Console.WriteLine($"  {found.Count}/{wantedIds.Count} names resolved, wrote " + Path.Combine(outRoot, "map-missing-names-v83.txt"));
     }
 
-    static List<string> MapAudit(string v83Dir, string v84Dir, string outRoot)
+    static List<string> MapAudit(NodeSet? s83, NodeSet? s84, string outRoot)
     {
         Console.WriteLine("=== Map.wz audit ===");
-        var s83 = OpenAndWalk(v83Dir, "Map.wz", out var st83);
-        var s84 = OpenAndWalk(v84Dir, "Map.wz", out var st84);
-        if (s83 == null || s84 == null) { Console.WriteLine("  could not open both trees"); return new(); }
+        if (s83 == null || s84 == null) { Console.WriteLine("  need both stock Map.wz trees"); return new(); }
 
         var v84Sizes = s84.ImageSizes; // image paths only, no directory placeholders
         var v84Leaves = new HashSet<string>(v84Sizes.Keys.Select(p => p[(p.LastIndexOf('/') + 1)..]), StringComparer.OrdinalIgnoreCase);
@@ -265,12 +378,10 @@ static class Program
         var missing = s83.ImageSizes.Keys.Where(p => !v84Sizes.ContainsKey(p)).ToList();
         int relocated = 0, absent = 0;
         var byContainer = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-        var absentSamples = new List<string>();
         foreach (var p in missing)
         {
             string leaf = p[(p.LastIndexOf('/') + 1)..];
-            bool foundElsewhere = v84Leaves.Contains(leaf);
-            if (foundElsewhere) relocated++; else { absent++; if (absentSamples.Count < 20) absentSamples.Add(p); }
+            if (v84Leaves.Contains(leaf)) relocated++; else absent++;
 
             // group by path segment right after "Map.wz/" (Map, Back, Obj, Tile, WorldMap...),
             // and one level further for Map/MapN buckets.
@@ -305,14 +416,5 @@ static class Program
         File.WriteAllLines(Path.Combine(outRoot, "map-v83-only-audit.txt"), lines);
         Console.WriteLine("  wrote " + Path.Combine(outRoot, "map-v83-only-audit.txt"));
         return absentPaths;
-    }
-
-    static void NpcSpotCheck(string v83Dir)
-    {
-        Console.WriteLine("=== Npc.wz 9000071 (Keroben) spot check ===");
-        var s83 = OpenAndWalk(v83Dir, "Npc.wz", out var st83);
-        if (s83 == null) { Console.WriteLine("  could not open v83 Npc.wz"); return; }
-        bool found = s83.Paths.Contains("Npc.wz/9000071.img");
-        Console.WriteLine($"  Npc.wz/9000071.img present in v83-stock: {found}");
     }
 }

@@ -1,3 +1,7 @@
+# Item.wz: nodes in the live client present in neither stock tree (4 copy roots).
+# each path is a copy root: no listed path is an ancestor of another, so copying
+# a listed path already covers everything under it. Do not re-copy children.
+
 Item.wz/Consume/0202.img/02023000
 Item.wz/Consume/0202.img/02023001
 Item.wz/Consume/0202.img/02023002

@@ -1,0 +1,12 @@
+# Item.wz: images present in BOTH v83-stock and the live client whose BlockSize differs (live-side edits — treat as custom content, do not overwrite). Columns: path, v83 bytes, live bytes.
+
+Item.wz/Cash/0521.img	35570	36740
+Item.wz/Cash/0536.img	11734	12124
+Item.wz/Consume/0202.img	817272	823188
+Item.wz/Consume/0203.img	30343	33576
+Item.wz/Consume/0204.img	187999	188083
+Item.wz/Consume/0228.img	30860	34135
+Item.wz/Consume/0229.img	217685	239121
+Item.wz/Etc/0400.img	917005	917111
+Item.wz/Etc/0403.img	1334373	1334417
+Item.wz/Install/0301.img	829513	829521

@@ -1,3 +1,7 @@
+# UI.wz: nodes present in v84 and absent from v83-stock (11 copy roots, 11 paths)
+# each path is a copy root: no listed path is an ancestor of another, so copying
+# a listed path already covers everything under it. Do not re-copy children.
+
 UI.wz/Basic.img/KeyDownBar2
 UI.wz/Basic.img/KeyDownBar3
 UI.wz/Basic.img/Tab8

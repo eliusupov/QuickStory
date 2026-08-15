@@ -1,0 +1,4 @@
+# Mob.wz: nodes in the live client present in neither stock tree (0 copy roots).
+# each path is a copy root: no listed path is an ancestor of another, so copying
+# a listed path already covers everything under it. Do not re-copy children.
+

@@ -1,0 +1,12 @@
+# String.wz: images present in BOTH v83-stock and the live client whose BlockSize differs (live-side edits — treat as custom content, do not overwrite). Columns: path, v83 bytes, live bytes.
+
+String.wz/Cash.img	87962	85721
+String.wz/Consume.img	329337	329281
+String.wz/Eqp.img	372586	379135
+String.wz/Etc.img	286824	282700
+String.wz/Ins.img	27905	29817
+String.wz/Map.img	252756	253193
+String.wz/MonsterBook.img	271350	295409
+String.wz/Npc.img	281322	565262
+String.wz/Pet.img	15863	14667
+String.wz/Skill.img	569210	569651

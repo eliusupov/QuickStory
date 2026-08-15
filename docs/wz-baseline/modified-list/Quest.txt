@@ -1,0 +1,7 @@
+# Quest.wz: images present in BOTH v83-stock and v84 whose WzImage.BlockSize differs (edited, not added). Columns: path, v83 bytes, v84 bytes.
+
+Quest.wz/Act.img	640726	664029
+Quest.wz/Check.img	684779	738232
+Quest.wz/Exclusive.img	173	181
+Quest.wz/QuestInfo.img	1474669	1554533
+Quest.wz/Say.img	3164451	3353246

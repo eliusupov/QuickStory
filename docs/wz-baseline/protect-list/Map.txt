@@ -1,6 +1,13 @@
+# Map.wz: nodes in the live client present in neither stock tree (10 copy roots).
+# each path is a copy root: no listed path is an ancestor of another, so copying
+# a listed path already covers everything under it. Do not re-copy children.
+
+Map.wz/Map/Map5/551000200.img/seat
 Map.wz/Map/Map7/777777777.img
+Map.wz/Map/Map8/801000000.img/seat
 Map.wz/WorldMap/WorldMap014.img
 Map.wz/WorldMap/WorldMap032.img
+Map.wz/WorldMap/WorldMap140.img/MapLink
 Map.wz/WorldMap/WorldMap210.img
 Map.wz/WorldMap/WorldMap211.img
 Map.wz/WorldMap/WorldMap220.img

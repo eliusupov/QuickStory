@@ -1,0 +1,10 @@
+# UI.wz: images present in BOTH v83-stock and v84 whose WzImage.BlockSize differs (edited, not added). Columns: path, v83 bytes, v84 bytes.
+
+UI.wz/Basic.img	141219	142998
+UI.wz/CashShop.img	869958	869372
+UI.wz/ChatBalloon.img	148409	151852
+UI.wz/Login.img	4759124	5722573
+UI.wz/MapLogin.img	21427	22568
+UI.wz/NameTag.img	75177	77834
+UI.wz/tutorial.img	9081014	9949765
+UI.wz/UIWindow.img	8038940	10979450

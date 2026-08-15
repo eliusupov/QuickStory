@@ -1,0 +1,21 @@
+# Reactor.wz: images present in BOTH v83-stock and the live client whose BlockSize differs (live-side edits — treat as custom content, do not overwrite). Columns: path, v83 bytes, live bytes.
+
+Reactor.wz/2006000.img	76580	76679
+Reactor.wz/2006001.img	3056	414
+Reactor.wz/2406000.img	152852	152920
+Reactor.wz/2408001.img	1017332	1017330
+Reactor.wz/2502002.img	17111	17116
+Reactor.wz/2519000.img	62212	69551
+Reactor.wz/2519001.img	70705	78856
+Reactor.wz/2519002.img	89	80214
+Reactor.wz/2519003.img	89	89881
+Reactor.wz/2618000.img	133139	152743
+Reactor.wz/2618003.img	64664	64713
+Reactor.wz/2618004.img	61448	61497
+Reactor.wz/2618005.img	859406	859459
+Reactor.wz/2618006.img	859574	859449
+Reactor.wz/2618007.img	64664	64713
+Reactor.wz/3002000.img	38598	38534
+Reactor.wz/9202005.img	19643	19710
+Reactor.wz/9208003.img	181570	181623
+Reactor.wz/9208004.img	1988072	1988330

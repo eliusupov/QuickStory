@@ -1,0 +1,30 @@
+# Item.wz: images present in BOTH v83-stock and v84 whose WzImage.BlockSize differs (edited, not added). Columns: path, v83 bytes, v84 bytes.
+
+Item.wz/Cash/0501.img	3048392	3070471
+Item.wz/Cash/0503.img	397185	424198
+Item.wz/Cash/0505.img	10781	21327
+Item.wz/Cash/0520.img	3913	5781
+Item.wz/Cash/0522.img	8254	10690
+Item.wz/Cash/0524.img	30590	31412
+Item.wz/Cash/0537.img	2525	3768
+Item.wz/Cash/0552.img	2191	4527
+Item.wz/Cash/0553.img	11181	20387
+Item.wz/Cash/0555.img	1002	1959
+Item.wz/Consume/0200.img	53447	77142
+Item.wz/Consume/0202.img	817272	874156
+Item.wz/Consume/0204.img	187999	207635
+Item.wz/Consume/0210.img	313881	315911
+Item.wz/Consume/0221.img	40554	48049
+Item.wz/Consume/0228.img	30860	35724
+Item.wz/Consume/0229.img	217685	237825
+Item.wz/Consume/0238.img	619498	690448
+Item.wz/Consume/0243.img	27724	54238
+Item.wz/Etc/0400.img	917005	929292
+Item.wz/Etc/0403.img	1334373	1362932
+Item.wz/Etc/0416.img	228440	247898
+Item.wz/Etc/0422.img	118914	119072
+Item.wz/Etc/0431.img	667	1377
+Item.wz/Install/0301.img	829513	882031
+Item.wz/Install/0399.img	287439	292650
+Item.wz/Pet/5000066.img	328604	328606
+Item.wz/Special/0910.img	314382	324701

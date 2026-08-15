@@ -1,0 +1,6 @@
+# Quest.wz: images present in BOTH v83-stock and the live client whose BlockSize differs (live-side edits — treat as custom content, do not overwrite). Columns: path, v83 bytes, live bytes.
+
+Quest.wz/Act.img	640726	643884
+Quest.wz/Check.img	684779	686809
+Quest.wz/QuestInfo.img	1474669	1480909
+Quest.wz/Say.img	3164451	3174422

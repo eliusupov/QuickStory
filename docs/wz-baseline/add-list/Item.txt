@@ -1,3 +1,7 @@
+# Item.wz: nodes present in v84 and absent from v83-stock (236 copy roots, 267 paths)
+# each path is a copy root: no listed path is an ancestor of another, so copying
+# a listed path already covers everything under it. Do not re-copy children.
+
 Item.wz/Cash/0503.img/05030015
 Item.wz/Cash/0505.img/05050005
 Item.wz/Cash/0505.img/05050006
@@ -20,9 +24,6 @@ Item.wz/Cash/0553.img/05530029
 Item.wz/Cash/0553.img/05530030
 Item.wz/Cash/0555.img/05550001
 Item.wz/Cash/0562.img
-Item.wz/Cash/0562.img/05620006
-Item.wz/Cash/0562.img/05620007
-Item.wz/Cash/0562.img/05620008
 Item.wz/Consume/0200.img/02001500
 Item.wz/Consume/0200.img/02001501
 Item.wz/Consume/0200.img/02001502
@@ -226,34 +227,6 @@ Item.wz/Install/0399.img/03994185
 Item.wz/Install/0399.img/03994186
 Item.wz/Install/0399.img/03994187
 Item.wz/Pet/5000067.img
-Item.wz/Pet/5000067.img/angry
-Item.wz/Pet/5000067.img/chat
-Item.wz/Pet/5000067.img/cry
-Item.wz/Pet/5000067.img/eat
-Item.wz/Pet/5000067.img/favoriteItem
-Item.wz/Pet/5000067.img/fly
-Item.wz/Pet/5000067.img/food
-Item.wz/Pet/5000067.img/hang
-Item.wz/Pet/5000067.img/hungry
-Item.wz/Pet/5000067.img/info
-Item.wz/Pet/5000067.img/jump
-Item.wz/Pet/5000067.img/love
-Item.wz/Pet/5000067.img/move
-Item.wz/Pet/5000067.img/move1
-Item.wz/Pet/5000067.img/move2
-Item.wz/Pet/5000067.img/question
-Item.wz/Pet/5000067.img/rest0
-Item.wz/Pet/5000067.img/sleep
-Item.wz/Pet/5000067.img/stand0
-Item.wz/Pet/5000067.img/stand1
-Item.wz/Pet/5000067.img/stand2
-Item.wz/Pet/5000067.img/stand3
-Item.wz/Pet/5000067.img/stand4
-Item.wz/Pet/5000067.img/stand5
-Item.wz/Pet/5000067.img/stand6
-Item.wz/Pet/5000067.img/start
-Item.wz/Pet/5000067.img/stunned
-Item.wz/Pet/5000067.img/unfavoriteItem
 Item.wz/Special/0910.img/9101608
 Item.wz/Special/0910.img/9102282
 Item.wz/Special/0910.img/9102283

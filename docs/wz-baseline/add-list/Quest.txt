@@ -1,3 +1,7 @@
+# Quest.wz: nodes present in v84 and absent from v83-stock (796 copy roots, 798 paths)
+# each path is a copy root: no listed path is an ancestor of another, so copying
+# a listed path already covers everything under it. Do not re-copy children.
+
 Quest.wz/Act.img/10480
 Quest.wz/Act.img/10481
 Quest.wz/Act.img/10482
@@ -398,8 +402,6 @@ Quest.wz/Exclusive.img/0
 Quest.wz/Exclusive.img/1
 Quest.wz/Exclusive.img/2
 Quest.wz/PQuestSearch.img
-Quest.wz/PQuestSearch.img/expedition
-Quest.wz/PQuestSearch.img/party
 Quest.wz/QuestInfo.img/10480
 Quest.wz/QuestInfo.img/10481
 Quest.wz/QuestInfo.img/10482

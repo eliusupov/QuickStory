@@ -1,3 +1,27 @@
+# Character.wz: nodes present in v84 and absent from v83-stock (182 copy roots, 4028 paths)
+# each path is a copy root: no listed path is an ancestor of another, so copying
+# a listed path already covers everything under it. Do not re-copy children.
+
+Character.wz/00002000.img/Awakening
+Character.wz/00002000.img/blaze
+Character.wz/00002000.img/darkFog
+Character.wz/00002000.img/dragonThrust
+Character.wz/00002000.img/Earthquake
+Character.wz/00002000.img/fireCircle
+Character.wz/00002000.img/flameWheel
+Character.wz/00002000.img/fly2
+Character.wz/00002000.img/fly2Move
+Character.wz/00002000.img/fly2Skill
+Character.wz/00002000.img/ghostLettering
+Character.wz/00002000.img/killingWing
+Character.wz/00002000.img/lightingBolt
+Character.wz/00002000.img/magicRegistance
+Character.wz/00002000.img/magicShield
+Character.wz/00002000.img/mapleHero
+Character.wz/00002000.img/OnixBlessing
+Character.wz/00002000.img/recoveryAura
+Character.wz/00002000.img/slow
+Character.wz/00002000.img/soulStone
 Character.wz/Accessory/01012161.img
 Character.wz/Accessory/01022097.img
 Character.wz/Accessory/01142152.img
@@ -17,6 +41,12 @@ Character.wz/Accessory/01142200.img
 Character.wz/Accessory/01142201.img
 Character.wz/Accessory/01142202.img
 Character.wz/Accessory/01142203.img
+Character.wz/Afterimage/mace.img/11
+Character.wz/Afterimage/mace.img/12
+Character.wz/Afterimage/mace.img/13
+Character.wz/Afterimage/mace.img/14
+Character.wz/Afterimage/mace.img/15
+Character.wz/Afterimage/mace.img/16
 Character.wz/Cap/01003010.img
 Character.wz/Cap/01003028.img
 Character.wz/Cap/01003029.img

@@ -1,0 +1,5 @@
+# Etc.wz: images present in BOTH v83-stock and the live client whose BlockSize differs (live-side edits — treat as custom content, do not overwrite). Columns: path, v83 bytes, live bytes.
+
+Etc.wz/Commodity.img	782514	783023
+Etc.wz/ItemMake.img	148479	148808
+Etc.wz/VegaSpell.img	8273	8357

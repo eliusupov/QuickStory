@@ -1,3 +1,7 @@
+# String.wz: nodes in the live client present in neither stock tree (5417 copy roots).
+# each path is a copy root: no listed path is an ancestor of another, so copying
+# a listed path already covers everything under it. Do not re-copy children.
+
 String.wz/Cash.img/5120033
 String.wz/Cash.img/5121011
 String.wz/Cash.img/5121012

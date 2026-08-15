@@ -1,0 +1,3 @@
+# Quest.wz: nodes present in v83-stock and absent from v84 — deleted by the patch (1 roots, 1 paths). A wholesale file swap destroys any of these the live client still has. Each row is a root: everything under it went too.
+
+Quest.wz/Exclusive.img/medal

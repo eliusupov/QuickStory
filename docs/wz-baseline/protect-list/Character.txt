@@ -1,3 +1,7 @@
+# Character.wz: nodes in the live client present in neither stock tree (4 copy roots).
+# each path is a copy root: no listed path is an ancestor of another, so copying
+# a listed path already covers everything under it. Do not re-copy children.
+
 Character.wz/Face/00020816.img
 Character.wz/Face/00020817.img
 Character.wz/Face/00021817.img

@@ -1,0 +1,12 @@
+# Etc.wz: images present in BOTH v83-stock and v84 whose WzImage.BlockSize differs (edited, not added). Columns: path, v83 bytes, v84 bytes.
+
+Etc.wz/CashPackage.img	30743	31532
+Etc.wz/Commodity.img	782514	855944
+Etc.wz/ItemMake.img	148479	149889
+Etc.wz/MakeCharInfo.img	2834	3754
+Etc.wz/NpcLocation.img	69406	59227
+Etc.wz/NPT_exception.img	23975	24611
+Etc.wz/QuestCategory.img	666	671
+Etc.wz/ScriptInfo.img	11632	11885
+Etc.wz/Swindle.img	2560	1738
+Etc.wz/Tips.img	16598	16946

@@ -1,0 +1,12 @@
+# Npc.wz: images present in BOTH v83-stock and v84 whose WzImage.BlockSize differs (edited, not added). Columns: path, v83 bytes, v84 bytes.
+
+Npc.wz/1002101.img	26183	26243
+Npc.wz/1012108.img	22456	67336
+Npc.wz/1013000.img	38391	246576
+Npc.wz/1032104.img	35155	36806
+Npc.wz/9000021.img	60238	21146
+Npc.wz/9000054.img	83561	83358
+Npc.wz/9010010.img	36567	36565
+Npc.wz/9900000.img	9552	9582
+Npc.wz/9900001.img	9553	9583
+Npc.wz/9901000.img	407	440

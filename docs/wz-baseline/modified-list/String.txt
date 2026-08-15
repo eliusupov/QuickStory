@@ -1,0 +1,14 @@
+# String.wz: images present in BOTH v83-stock and v84 whose WzImage.BlockSize differs (edited, not added). Columns: path, v83 bytes, v84 bytes.
+
+String.wz/Cash.img	87962	93155
+String.wz/Consume.img	329337	359243
+String.wz/Eqp.img	372586	383155
+String.wz/Etc.img	286824	290498
+String.wz/Ins.img	27905	29502
+String.wz/Map.img	252756	262235
+String.wz/Mob.img	65924	67578
+String.wz/MonsterBook.img	271350	304675
+String.wz/Npc.img	281322	294221
+String.wz/Pet.img	15863	16185
+String.wz/Skill.img	569210	614663
+String.wz/ToolTipHelp.img	58169	59560

@@ -1,4 +1,9 @@
+# Map.wz: nodes present in v84 and absent from v83-stock (86 copy roots, 1206 paths)
+# each path is a copy root: no listed path is an ancestor of another, so copying
+# a listed path already covers everything under it. Do not re-copy children.
+
 Map.wz/Back/dragonDream.img
+Map.wz/Effect.img/evan
 Map.wz/Map/Map1/100030100.img
 Map.wz/Map/Map1/100030101.img
 Map.wz/Map/Map1/100030102.img
@@ -12,6 +17,7 @@ Map.wz/Map/Map1/100030400.img
 Map.wz/Map/Map2/200080601.img
 Map.wz/Map/Map2/200090080.img
 Map.wz/Map/Map2/200090090.img
+Map.wz/Map/Map2/220011001.img/miniMap
 Map.wz/Map/Map2/240080000.img
 Map.wz/Map/Map2/240080040.img
 Map.wz/Map/Map2/240080041.img
@@ -75,5 +81,10 @@ Map.wz/Map/Map9/922030020.img
 Map.wz/Map/Map9/922030021.img
 Map.wz/Map/Map9/922030022.img
 Map.wz/Map/Map9/925110000.img
+Map.wz/Obj/acc1.img/DragonDream
+Map.wz/Obj/acc1.img/heneFarmFD
+Map.wz/Obj/acc1.img/heneFarmTW
+Map.wz/Obj/acc12.img/dragon
+Map.wz/Obj/dungeon3.img/skyValley
 Map.wz/Tile/blackTileFly.img
 Map.wz/Tile/DeepgrassySoil.img

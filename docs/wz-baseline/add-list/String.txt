@@ -1,3 +1,7 @@
+# String.wz: nodes present in v84 and absent from v83-stock (429 copy roots, 429 paths)
+# each path is a copy root: no listed path is an ancestor of another, so copying
+# a listed path already covers everything under it. Do not re-copy children.
+
 String.wz/Cash.img/5030015
 String.wz/Cash.img/5050005
 String.wz/Cash.img/5050006

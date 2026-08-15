@@ -1,3 +1,7 @@
+# Etc.wz: nodes present in v84 and absent from v83-stock (229 copy roots, 229 paths)
+# each path is a copy root: no listed path is an ancestor of another, so copying
+# a listed path already covers everything under it. Do not re-copy children.
+
 Etc.wz/CashPackage.img/9101608
 Etc.wz/CashPackage.img/9102282
 Etc.wz/CashPackage.img/9102283

@@ -1,0 +1,11 @@
+# Skill.wz: images present in BOTH v83-stock and the live client whose BlockSize differs (live-side edits — treat as custom content, do not overwrite). Columns: path, v83 bytes, live bytes.
+
+Skill.wz/000.img	3175052	3176810
+Skill.wz/1000.img	3208496	3210255
+Skill.wz/131.img	849212	849452
+Skill.wz/1310.img	419811	419959
+Skill.wz/1311.img	1311487	1311479
+Skill.wz/2000.img	3444034	3445793
+Skill.wz/312.img	1854984	1871232
+Skill.wz/910.img	1005808	657404
+Skill.wz/MobSkill.img	6584234	6541327

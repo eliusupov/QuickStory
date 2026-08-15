@@ -1,0 +1,10 @@
+# Reactor.wz: nodes present in v84 and absent from v83-stock (6 copy roots, 34 paths)
+# each path is a copy root: no listed path is an ancestor of another, so copying
+# a listed path already covers everything under it. Do not re-copy children.
+
+Reactor.wz/1002008.img
+Reactor.wz/1409000.img
+Reactor.wz/2302006.img
+Reactor.wz/2408005.img
+Reactor.wz/2408006.img
+Reactor.wz/2409000.img

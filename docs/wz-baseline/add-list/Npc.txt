@@ -1,4 +1,16 @@
+# Npc.wz: nodes present in v84 and absent from v83-stock (50 copy roots, 188 paths)
+# each path is a copy root: no listed path is an ancestor of another, so copying
+# a listed path already covers everything under it. Do not re-copy children.
+
 Npc.wz/1011101.img
+Npc.wz/1012108.img/condition1
+Npc.wz/1012108.img/condition2
+Npc.wz/1013000.img/condition1
+Npc.wz/1013000.img/condition2
+Npc.wz/1013000.img/condition3
+Npc.wz/1013000.img/condition4
+Npc.wz/1013000.img/condition5
+Npc.wz/1013000.img/condition6
 Npc.wz/1013001.img
 Npc.wz/1013002.img
 Npc.wz/1013100.img

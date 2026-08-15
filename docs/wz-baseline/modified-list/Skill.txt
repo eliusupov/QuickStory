@@ -1,0 +1,6 @@
+# Skill.wz: images present in BOTH v83-stock and v84 whose WzImage.BlockSize differs (edited, not added). Columns: path, v83 bytes, v84 bytes.
+
+Skill.wz/000.img	3175052	4411230
+Skill.wz/1000.img	3208496	4444683
+Skill.wz/2000.img	3444034	4680221
+Skill.wz/MobSkill.img	6584234	6631750
