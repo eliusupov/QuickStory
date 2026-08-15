@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <imgdir name="Consume.img">
+  <imgdir name="2001500">
+    <string name="name" value="Red Potion"/>
+    <string name="desc" value="A potion made out of red herbs.\nRecovers 50 HP."/>
+  </imgdir>
   <imgdir name="2023000">
     <string name="name" value="Sharenian Grounds : Fortitude"/>
     <string name="desc" value="From the ancient remains, an unknown blessing grants you fortitude. Increases Weapon Attack &amp; Weapon Defense."/>

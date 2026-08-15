@@ -1,0 +1,4 @@
+# ticket 03 tracer — the name/desc half of item 2001500.
+# Without this the item renders with a blank label, so the tracer is two nodes, not one.
+# Copied verbatim from docs/wz-baseline/add-list/String.txt.
+String.wz/Consume.img/2001500

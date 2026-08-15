@@ -1,0 +1,8 @@
+# Base.wz: additive-only merge — DRY RUN, nothing was written, D:/games/MapleStory/Server/porting-resources/wz-data/v84/Base.wz -> D:/games/MapleStory/Base.wz, 0 nodes would be added, 0 refused
+# Every row is a v84 node this merge REFUSED to write because the path already
+# existed in the target. Additive-only is enforced in the write path, so this file
+# is the exhaustive list of v84 changes that were dropped. Read it before shipping:
+# a v84 EDIT to an existing node (renamed mob, portal added to an existing map)
+# looks exactly like this and is silently lost unless someone decides otherwise.
+# Columns: path, reason.
+

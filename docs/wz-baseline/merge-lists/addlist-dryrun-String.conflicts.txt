@@ -1,0 +1,31 @@
+# String.wz: additive-only merge — DRY RUN, nothing was written, D:/games/MapleStory/Server/porting-resources/wz-data/v84/String.wz -> D:/games/MapleStory/String.wz, 406 nodes would be added, 23 refused
+# Every row is a v84 node this merge REFUSED to write because the path already
+# existed in the target. Additive-only is enforced in the write path, so this file
+# is the exhaustive list of v84 changes that were dropped. Read it before shipping:
+# a v84 EDIT to an existing node (renamed mob, portal added to an existing map)
+# looks exactly like this and is silently lost unless someone decides otherwise.
+# Columns: path, reason.
+
+String.wz/Cash.img/5500005	already exists in target
+String.wz/Cash.img/5500006	already exists in target
+String.wz/Cash.img/5530001	already exists in target
+String.wz/Cash.img/5530002	already exists in target
+String.wz/Cash.img/5530003	already exists in target
+String.wz/Cash.img/5530004	already exists in target
+String.wz/Cash.img/5530005	already exists in target
+String.wz/Cash.img/5530006	already exists in target
+String.wz/Cash.img/5530007	already exists in target
+String.wz/Cash.img/5530008	already exists in target
+String.wz/Consume.img/2100166	already exists in target
+String.wz/Ins.img/3994179	already exists in target
+String.wz/Ins.img/3994180	already exists in target
+String.wz/Npc.img/9901910	already exists in target
+String.wz/Npc.img/9901911	already exists in target
+String.wz/Npc.img/9901912	already exists in target
+String.wz/Npc.img/9901913	already exists in target
+String.wz/Npc.img/9901914	already exists in target
+String.wz/Npc.img/9901915	already exists in target
+String.wz/Npc.img/9901916	already exists in target
+String.wz/Npc.img/9901917	already exists in target
+String.wz/Npc.img/9901918	already exists in target
+String.wz/Npc.img/9901919	already exists in target

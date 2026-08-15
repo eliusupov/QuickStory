@@ -1,0 +1,4 @@
+# ticket 03 tracer — the single v84 node imported to prove the pipeline.
+# Item 2001500 "Red Potion" (untradeable variant), new in GMS v84.
+# Copied verbatim from docs/wz-baseline/add-list/Item.txt.
+Item.wz/Consume/0200.img/02001500
