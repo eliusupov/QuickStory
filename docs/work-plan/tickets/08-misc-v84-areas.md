@@ -160,11 +160,12 @@ stub** — every file reports `1 map image(s) walked`.
 | `925110000` | 20 | 1 | 19 |
 
 **Union: 67 asset rows.** They are heavily shared — the union is a fifth of the sum — and they are
-exactly the granularity 06 proved matters: 34 `Back/grassySoil.img/{ani,back}/*` frames and 7
+exactly the granularity 06 proved matters: 27 `Back/grassySoil.img/{ani,back}/*` frames and 7
 `Tile/grassySoil.img/*` nodes **inside images v83 already has**, 19 `Back/Rien.img/back/*`, 3
 `Back/toyCastleB1.img/back/*`, plus 3 whole `Obj` sub-sets (`insideTC.img/inside0/blackroom`,
-`acc12.img/dragon`, `acc1.img/grassySoil/golem/{20,21}`) and single nodes under `Obj/dungeon.img`,
-`Obj/effect.img`, `Obj/tower.img`.
+`acc12.img/dragon`, `acc1.img/grassySoil/golem/{20,21}`), 3 nodes under `Obj/dungeon.img`
+(`darkCave/acc/41-43`), 2 under `Obj/tower.img` (`marineTower/gate/11,12`), 1 under
+`Obj/effect.img` (`quest/gate/7`) and `MapHelper.img/mark/SnowDragon`.
 
 **One of the 10 new `mapMark` entries is owed, not ten.** 06 flagged the block as biting this
 ticket; measured, the 22 maps name six marks (`None`, `Dungeon`, `Henesys`, `Ludibrium`,
@@ -184,24 +185,29 @@ is written in that order.
 
 ## The route rows — the finding this ticket turned up
 
-**Six of the 95 `Map.wz` rows write into a positional array on a map the live client already has,
-and three more that `add-list/Map.txt` offers were refused.** Full measurement and the general rule
-in **[`docs/wz-baseline/merge-lists/08/ROUTE-ROWS.md`](../../wz-baseline/merge-lists/08/ROUTE-ROWS.md)**.
+**`add-list/Map.txt` offers 18 rows that write into a positional array on one of the five live maps
+these areas hang off. Six are safe and were merged; twelve were refused.** Full table and the
+general rule in
+**[`docs/wz-baseline/merge-lists/08/ROUTE-ROWS.md`](../../wz-baseline/merge-lists/08/ROUTE-ROWS.md)**.
 The short version:
 
 - **Merged, verified pure appends** (live child count == v84 index, dumped for each):
   `200080600.img/{1/obj/25, 1/obj/26, portal/6}`, `251010403.img/{4/obj/33, portal/4}`,
   `106010102.img/portal/8`. These are the client half of three routes into this ticket's maps.
-- **Refused**: `106010101.img/portal/5/{horizontalImpact,script}` (index 5 is `out00` in live and
-  `in00` in v84 — merging attaches `evanGolemDoor` to the exit portal),
-  `220000300.img/portal/15` (v84 *inserted* `scr00` at index 4 and shifted eleven portals down;
-  index 15 is a **duplicate `in06`**), and `220011000.img/portal/4/{horizontalImpact,script}`
+- **Refused, twelve rows across four maps**, because v84 reordered or inserted into each array:
+  `106010101.img/portal/5/{horizontalImpact,script}` (index 5 is `out00` in live and `in00` in v84 —
+  merging attaches `evanGolemDoor` to the exit portal); `106010102.img/portal/{4,5,6,7}/horizontalImpact`
+  (v84 moved `out00` to index 3, so each lands one portal off — **on the same array the merge appends
+  to at index 8**); `220000300.img/portal/{4/horizontalImpact, 4/script, 6/image, 15}` (v84 *inserted*
+  `scr00` at index 4 and shifted eleven portals down, so index 4 is `h000` in live, index 6 is
+  `west00`, and index 15 is a **duplicate `in06`**); and `220011000.img/portal/4/{horizontalImpact,script}`
   (would attach a non-existent script to the working portal into Ludibrium Toy Factory).
 
-This is 03c's `MonsterBook/*/reward` hazard in a second file, and `conflicts.txt` is structurally
-silent on all of it: these rows do not collide, they land at an index whose meaning diverged. The
-three refusals are asserted in the test so a later ticket cannot merge them and read it as an
-improvement.
+Ten of the twelve are the shape `<array>/<n>/<field>` where `n` already exists in the target — which
+passes the parent check, so **the additive gate writes the leaf onto the wrong sibling and says
+nothing.** This is 03c's `MonsterBook/*/reward` hazard in a second file: the rows do not collide,
+they land at an index whose meaning diverged. All twelve refusals are asserted in the test so a later
+ticket cannot merge them and read it as an improvement.
 
 ## Path lists — the authoritative deliverable
 
@@ -217,7 +223,7 @@ improvement.
 | `String.paths.txt` | 39 | 19 `Map.img`, 2 `Mob.img`, 15 `Npc.img`, **+3 forced** |
 | `String.force.txt` | 3 | the force authorisation, a new file, not an edit of `COLLISION-FORCE.txt` |
 | `ROUTE-ROWS.md` | — | the positional-array measurement |
-| **total** | **174** | |
+| **total** | **174** | *the column sums to 177; `String.force.txt`'s 3 rows are already inside `String.paths.txt`'s 39, so **174 is the unique-row count** — do not "fix" it upward* |
 
 **Overlap with 04–07: zero, checked mechanically path by path** — 174 rows against the 1,207 rows
 of `merge-lists/{04,05,06,07}/*.paths.txt`, set intersection **empty**. Specifically, and because
@@ -252,9 +258,9 @@ format and same parser:
 
 All three are the same rule `COLLISION-FORCE.txt` uses — the live value is a Nexon placeholder, here
 an untranslated Korean string GMS v83 shipped for content it had not released — and all three are
-nodes this ticket's own maps display. Same shape both sides, no field lost; the git diff is
-**10 deletions, every one of them a Korean `<string>` replaced in place**, and nothing else in the
-tree deletes a line. Forced on **both** sides per procedure §5.6.
+nodes this ticket's own maps display. Same shape both sides, no field lost; **this ticket's `xml`
+run produced exactly 10 deletions, every one of them a Korean `<string>` replaced in place**, and
+nothing else. Forced on **both** sides per procedure §5.6.
 
 Checked against the review's lesson on `9201144`: nothing in `src/`, `scripts/` or `wz/` references
 any of these three live values, so keeping them would have protected nothing and left two ship maps
@@ -386,10 +392,19 @@ xml:    SKIP Mob.wz/9300396.img     (already exists in wz\Mob.wz\9300396.img.xml
 plus **39 new `.img.xml` files** (22 maps, 7 mobs, 9 NPCs, 1 reactor). The 10 deletions are the
 three forced nodes replaced in place, listed line by line above; there is no other deletion and no
 reformat. **Nothing here ever ran a blanket `git checkout -- wz/`** — the one revert this ticket did
-was path-scoped to a single file (`scripts/portal/enterDollcave.js`). Another agent (ticket 03f) is
-working in the same tree and has its own uncommitted `wz/String.wz/Skill.img.xml`,
-`docs/wz-baseline/tool-merge/Program.cs` and test-class edits; none of them is in this ticket's
-commit and none was touched here.
+was path-scoped to a single file (`scripts/portal/enterDollcave.js`).
+
+### One thing the commit carries that is not this ticket's — stated, not hidden
+
+Ticket **03f** was live in the same working tree throughout and forced
+`String.wz/Npc.img/9201144` "Steward" → "Shadow Knight Rene" (its own decision; the row is on
+`merge-lists/03f/String.paths.txt` and `composed/FORCE.txt`, on neither of this ticket's lists).
+That overwrite is in the **same file** as this ticket's `1013203` force, so a path-scoped commit
+cannot separate them: **commit `2a89da169` therefore shows 14 deletions under `wz/`, not 10** — 10
+mine, 4 03f's — and its message says so. Nothing else of 03f's was committed here: its
+`wz/String.wz/Skill.img.xml`, `docs/wz-baseline/tool-merge/Program.cs`, `merge-lists/{03f,composed}/`
+and four test-class edits were left staged and untouched. **03f should treat `9201144` as already
+applied to `wz/`.**
 
 **Live client, after the ticket:** all **18** `.wz` in `D:\games\MapleStory\` still SHA-256-match
 `_backup\client-v83-EzorsiaV2-2026-08-15\` — re-checked file by file at the end, **0 mismatches** —
@@ -412,13 +427,16 @@ What the class proves:
 - `SnowDragon` is present, every `mapMark` these maps name resolves in `MapHelper.img`, and the
   pre-existing `Henesys`/`Ludibrium` marks survived the insert
 - exactly one reactor is placed (`914100022:1409000`), and 06's two rows are still there
-- the merged asset rows are in the tree **and the v83 siblings beside them still are**
-  (`grassySoil back/0`, `Rien back/0`, `acc1 grassySoil/nature/0`)
-- **the three merged route portals were appended without disturbing any v83 portal** — portal counts
-  6→7, 4→5, 8→9 and every pre-existing portal still has its original target
-- **the three refused route rows are absent** — `106010101` still has 6 portals with an unscripted
-  `out00`, `220000300` still has 15 with exactly one `in06`, `220011000/in00` still leads to
-  `220011001` with no script
+- **a spot-check of 12 of the 67 asset rows**, one per source image, is in the tree **and the v83
+  siblings beside them still are** (`grassySoil back/0`, `Rien back/0`, `acc1 grassySoil/nature/0`).
+  The other 55 are covered only by the merge's own content digest and §6.2, not by a test.
+- **the six merged route rows were appended without disturbing any v83 portal** — portal counts
+  6→7, 4→5, 8→9, obj counts 25→27 and 33→34, and every pre-existing portal still has its original
+  target
+- **all twelve refused route rows are absent** — `106010101` still has 6 portals with an unscripted
+  `out00`; `106010102`'s `in03`–`in06` and `out00` gained no `horizontalImpact`; `220000300` still
+  has 15 portals with exactly one `in06`, no `scr00`, an unscripted `h000` and an `image`-less
+  `west00`; `220011000` still has 5 with `in00` leading to `220011001`, unscripted
 - the three new portal scripts exist, implement `enter(pi)`, and warp to the map the docs claim; and
   every routed map has a return portal at the name its script warps to
 - **`enterDollcave.js` still warps to `105040201` and never mentions `910050300`** — the guard on
@@ -428,9 +446,11 @@ What the class proves:
   "Keroben"
 - the three unplaced NPCs are merged **and are asserted to be unplaced**, so the gap is a fact
   rather than a rediscovery
-- `9901910` is still Cosmic's node (it has `info/speak`, which v84's lacks) and none of
-  `9901911`–`9901919` gained a v84 image
-- all 23 `Sound.wz/Mob.img` rows landed in the XML tree, and 06's `Bgm14.img/DragonRider` is intact
+- **all ten** `9901910`–`9901919` are still Cosmic's nodes — each still has `info/speak`, which
+  v84's version lacks
+- all 23 `Sound.wz/Mob.img` rows landed in the XML tree — read out of `08/Sound.paths.txt` itself
+  rather than a literal list, so the two cannot drift apart — and 06's `Bgm14.img/DragonRider` is
+  intact
 - six of the seven mobs give zero exp, and none of the seven appears in `152`/`153`/`154`
 
 **The suite is not vacuous — it failed twice for real while being written, both times on something
@@ -481,7 +501,7 @@ player.
 |---|---|
 | `910050300` Abandoned Cave | Its only inbound is `105070300/in00`, whose script name `enterDollcave` is **already implemented by Cosmic for a different destination** (`105040201`, gated on quests `20730`/`21734`). Hanging the cave off it would break a working v83 route. Needs its own portal or NPC warp — a design call this ticket has no mandate for. |
 | `910600000` Golem's Temple Entrance | Inbound is `106010101/portal/5` in v84 — but index 5 is `out00` in the live client. **The row cannot be merged without breaking a working portal** (ROUTE-ROWS.md). No other edge exists in either tree. |
-| `922030000` Frog House | Inbound is `220000300/portal/4` (`scr00`, `script=enterBlackFrog`), which v84 **inserted**, shifting eleven portals down. `add-list` only offers index 15, which is a duplicate `in06`. Unmergeable. |
+| `922030000` Frog House | Inbound is `220000300/portal/4` (`scr00`, `script=enterBlackFrog`), which v84 **inserted**, shifting eleven portals down. `add-list` *does* carry `portal/4/{horizontalImpact,script}` — but index 4 in the live client is `h000`, a hidden town point, so those rows would script the wrong portal. Unmergeable at any offered index. |
 | `922030001` Frog House (Black) | Reached only from `922030000`, which is unreachable; its own entry is the missing map script `enterBlackfrog`. |
 | `922030010` Sky Terrace | Inbound is `220011000/in00` converted to a script portal by v84. Merging it would attach `enterBlackBC` to the **working** portal into Ludibrium Toy Factory. Refused. |
 | `922030011` Safe - 1st Entrance | Reached only from `922030010`. |
@@ -637,6 +657,6 @@ unverified.
   flagged; the alternative was to leave them nameless, and that is a taste call, not a data one.
 - **Prove the `910060100` gate is passable.** Quest `22515`–`22518` do not exist in this tree, so
   the pre-written NPC route cannot be exercised end to end until ticket 09 or 13 merges them.
-- **Reconcile the suite count exactly.** 1,947 green here = 1,927 + 16 new node tests + 4 new portal
-  scripts; STATUS records the previous baseline as 1,928, one higher. Nothing here removes a test and
-  the build is green, so the one-test difference is in a figure I inherited, not in this work.
+- **Keep another agent's decision out of this ticket's commit.** 03f's forced `9201144` rename
+  landed in the same `.img.xml` as this ticket's forced `1013203`, and a path-scoped commit cannot
+  split one file. Recorded in the commit message and in §5.6 above rather than left to be found.

@@ -286,38 +286,65 @@ class V84MiscAreasNodeTest {
         for (String pn : List.of("in03", "in04", "in05", "in06")) {
             assertNotNull(portal(106010102, pn), "106010102/" + pn + " (v83) was lost");
         }
+
+        // The two obj rows are the door art. Without them the portal is invisible, which is the
+        // "nothing happens on touch" symptom the human step warns about - so count them too.
+        assertEquals(27, map(200080600).getChildByPath("1/obj").getChildren().size(),
+                "200080600 layer 1 obj: 25 in v83 + the two merged door frames");
+        assertEquals(34, map(251010403).getChildByPath("4/obj").getChildren().size(),
+                "251010403 layer 4 obj: 33 in v83 + the merged vault-door frame");
     }
 
     /**
-     * The three route rows this ticket deliberately REFUSED, because v84 reindexed those portal
-     * arrays and the add-list index names a different portal in the live client than it does in
-     * v84. Merging them would have attached a script to a working v83 portal or duplicated one.
-     * Asserted so a later ticket cannot merge them by accident and call it an improvement.
+     * The twelve route rows this ticket deliberately REFUSED, because v84 reordered or inserted
+     * into those portal arrays and the add-list index names a different portal in the live client
+     * than it does in v84. Merging them would have attached a script to a working v83 portal,
+     * written a field onto the wrong sibling, or duplicated one. Asserted so a later ticket cannot
+     * merge them by accident and call it an improvement. Full table: 08/ROUTE-ROWS.md.
      */
     @Test
-    void theThreeUnsafeRoutePortalRowsWereNotMerged() {
+    void theUnsafeRoutePortalRowsWereNotMerged() {
         // 106010101/portal/5 is out00 in the live client and in00 in v84.
         assertEquals(6, portalCount(106010101), "106010101 must still have exactly 6 portals");
-        assertNull(DataTool.getString("script", portal(106010101, "out00"), null),
-                "106010101/out00 gained v84's evanGolemDoor script - that row is at index 5 in BOTH "
-                        + "trees but names a different portal in each");
+        assertNoneOf(106010101, "out00", "script", "horizontalImpact");
         assertEquals(106010102, DataTool.getInt("tm", portal(106010101, "in00"), -1),
                 "106010101/in00 must still lead to Golem's Temple 2");
 
-        // 220000300/portal/15 is in06 in v84 because v84 INSERTED scr00 at index 4.
+        // 106010102/portal/{4,5,6,7}/horizontalImpact: v84 moved out00 to index 3, so every one of
+        // those rows lands one portal off. This is the same array the merge appends to at index 8.
+        for (String pn : List.of("in03", "in04", "in05", "in06", "out00")) {
+            assertNoneOf(106010102, pn, "horizontalImpact");
+        }
+
+        // 220000300: v84 INSERTED scr00 at index 4, shifting eleven portals down. portal/15 is a
+        // duplicate in06; portal/4/{horizontalImpact,script} would land on h000; portal/6/image on
+        // west00.
         assertEquals(15, portalCount(220000300), "220000300 must still have exactly 15 portals");
         long in06 = map(220000300).getChildByPath("portal").getChildren().stream()
                 .filter(p -> "in06".equals(DataTool.getString("pn", p, null))).count();
         assertEquals(1, in06, "220000300 gained a duplicate in06 portal");
         assertNull(portal(220000300, "scr00"),
-                "220000300/scr00 cannot be merged - v84 inserted it at index 4, and the add-list "
-                        + "only offers index 15, which is a duplicate of the existing in06");
+                "220000300/scr00 cannot be merged - v84 inserted it at index 4, so no add-list row "
+                        + "reaches it without landing on a different portal");
+        assertNoneOf(220000300, "h000", "script", "horizontalImpact");
+        assertNoneOf(220000300, "west00", "image");
 
         // 220011000/portal/4 is a working v83 portal in the live client.
-        assertNull(DataTool.getString("script", portal(220011000, "in00"), null),
-                "220011000/in00 gained v84's enterBlackBC script over a working portal");
+        assertEquals(5, portalCount(220011000), "220011000 must still have exactly 5 portals");
+        assertNoneOf(220011000, "in00", "script", "horizontalImpact");
         assertEquals(220011001, DataTool.getInt("tm", portal(220011000, "in00"), -1),
                 "220011000/in00 must still lead to 220011001");
+    }
+
+    /** Asserts a named portal has none of the given child fields - i.e. no refused row landed on it. */
+    private static void assertNoneOf(int mapId, String portalName, String... fields) {
+        Data p = portal(mapId, portalName);
+        assertNotNull(p, mapId + "/" + portalName + " is missing");
+        for (String field : fields) {
+            assertNull(p.getChildByPath(field),
+                    mapId + "/" + portalName + " gained a '" + field + "' node - a refused v84 "
+                            + "positional-array row landed on the wrong portal");
+        }
     }
 
     /**
@@ -470,8 +497,10 @@ class V84MiscAreasNodeTest {
     }
 
     /**
-     * The three NPCs the ticket names that no map in either tree places. Merged deliberately, so
-     * the gap is asserted rather than left to be rediscovered as a bug.
+     * The three NPCs the ticket names that no map <em>this ticket ships</em> places. Merged
+     * deliberately, so the gap is asserted rather than left to be rediscovered as a bug.
+     * `1011101` and `2092100` are placed by nothing in either tree; `1013106` Glowing Stele is
+     * placed only by 100030301, an Evan world map ticket 13 owns.
      */
     @Test
     void theUnplacedNpcsAreMergedAndKnownToBeUnplaced() {
@@ -505,6 +534,13 @@ class V84MiscAreasNodeTest {
         assertNotNull(npc, "Cosmic's own 9901910.img.xml disappeared");
         assertNotNull(npc.getChildByPath("info/speak"),
                 "9901910 lost info/speak - that is v84's node, which must never be merged here");
+        // the other nine: Cosmic ships them too, and none may gain v84's shape either
+        for (int id = 9901911; id <= 9901919; id++) {
+            Data sibling = wz("Npc.wz").getData(id + ".img");
+            assertNotNull(sibling, "Cosmic's own " + id + ".img.xml disappeared");
+            assertNotNull(sibling.getChildByPath("info/speak"),
+                    id + " lost info/speak - v84's node was merged onto the allocator range");
+        }
         assertNull(wz("Npc.wz").getData("9000021.img").getChildByPath("say/2/delay"),
                 "Npc.wz/9000021.img is on the deny-list and must stay wholly v83");
     }
@@ -518,16 +554,18 @@ class V84MiscAreasNodeTest {
      * ticket 06's twelve unclaimed mob banks.
      */
     @Test
-    void theSoundXmlRowsWereApplied() {
+    void theSoundXmlRowsWereApplied() throws IOException {
         Data mob = wz("Sound.wz").getData("Mob.img");
         assertNotNull(mob, "wz/Sound.wz/Mob.img.xml did not parse");
-        int[] ids = {9300386, 9300387, 9300389, 9300390, 9300392, 9300395, 9300396,   // this ticket
-                9400658, 9400659, 9400660, 9400661,                                    // ticket 07's handoff
-                8300005, 8300006, 8300007, 9500374, 9500375, 9500376, 9500377,
-                9500378, 9500379, 9500380, 9500381, 9500382};                          // ticket 06's mobs
-        assertEquals(23, ids.length, "the Sound path list is 23 rows");
-        for (int id : ids) {
-            assertNotNull(mob.getChildByPath(String.valueOf(id)), "Sound.wz/Mob.img/" + id);
+
+        // Read the path list rather than a literal array, so the two cannot drift apart.
+        List<String> rows = manifestRows(Path.of("docs", "wz-baseline", "merge-lists", "08",
+                "Sound.paths.txt"));
+        assertEquals(23, rows.size(), "08/Sound.paths.txt row count");
+        for (String row : rows) {
+            assertTrue(row.startsWith("Sound.wz/Mob.img/"), "unexpected Sound row: " + row);
+            String id = row.substring("Sound.wz/Mob.img/".length());
+            assertNotNull(mob.getChildByPath(id), "Sound.wz/Mob.img/" + id + " was not spliced");
         }
         // ticket 06's own Sound row must still be there and must not have been re-added
         assertNotNull(wz("Sound.wz").getData("Bgm14.img").getChildByPath("DragonRider"),
@@ -561,6 +599,14 @@ class V84MiscAreasNodeTest {
                         "dropperid " + id + " appears in " + file + ", which this ticket never edits");
             }
         }
+    }
+
+    /** Manifest rows of a path list: everything that is not blank and not a comment. */
+    private static List<String> manifestRows(Path p) throws IOException {
+        return Files.readAllLines(p, StandardCharsets.UTF_8).stream()
+                .map(l -> l.replace("﻿", "").trim())
+                .filter(l -> !l.isEmpty() && !l.startsWith("#"))
+                .toList();
     }
 
     private static String readOrFail(Path p) {

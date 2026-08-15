@@ -6,9 +6,14 @@ already has**, which is the hazard class 03c named (`String.wz/MonsterBook.img/*
 `conflicts.txt` is structurally blind to: the row does not collide, it lands at an index whose
 meaning differs between the two trees.
 
-`add-list/Map.txt` offers nine such rows for the areas in scope. **Six are safe and were merged;
-three are not and were refused.** The difference was measured, not assumed — for every one, the live
-child count and the v84 index were dumped and compared.
+`add-list/Map.txt` offers **eighteen** such rows onto the five live maps this ticket's areas hang
+off. **Six are safe and were merged; twelve are not and were refused.** The difference was measured,
+not assumed — for every one, the live array was dumped and compared with v84's index by index.
+
+*(An earlier draft of this file listed nine rows and gave a wrong reason for one of them. The
+enumeration below is the corrected one: `grep -n "<mapid>.img/portal" docs/wz-baseline/add-list/Map.txt`
+for each of the five maps is what produces it, and that is the check to re-run rather than trust
+this table.)*
 
 ## Merged — verified pure appends
 
@@ -32,14 +37,20 @@ every pre-existing portal still has its original target.
 
 ## Refused — the index means a different portal in each tree
 
-| row | live `portal[N]` | v84 `portal[N]` | what merging it would do |
+Twelve rows, across four maps. In every case v84 **reordered or inserted into** the array, so the
+index that carries the change in v84 carries something else in the live client.
+
+| row(s) | live `portal[N]` | v84 `portal[N]` | what merging it would do |
 |---|---|---|---|
 | `Map/Map1/106010101.img/portal/5/{horizontalImpact,script}` | `out00` → 106010100 | `in00` `pt=7 script=evanGolemDoor` | attach `evanGolemDoor` to the **exit portal back to Golem's Temple 1** |
-| `Map/Map2/220000300.img/portal/15` | *(does not exist; live has 15 portals, `0`–`14`)* | `in06` → 220000307 | append a **duplicate `in06`**. v84's real addition is `scr00` at index **4**, inserted, which shifted all eleven `in0x` down one — that node is on no add-list row at any reachable index |
+| `Map/Map1/106010102.img/portal/{4,5,6,7}/horizontalImpact` | `in04`, `in05`, `in06`, `out00` | `in03`, `in04`, `in05`, `in06` | v84 moved `out00` to index 3, shifting `in03`–`in06` down one. Every row lands one portal off — **including on the very array this ticket appends to at index 8** |
+| `Map/Map2/220000300.img/portal/4/{horizontalImpact,script}` | `h000` `pt=10` (a hidden town point) | `scr00` `pt=7 script=enterBlackFrog` | attach `enterBlackFrog` to a **hidden town portal**. This IS the row that carries v84's Frog House entrance — it is simply unusable at this index |
+| `Map/Map2/220000300.img/portal/6/image` | `west00` → 220000400 | `h001` | write an `image` node onto the **wrong portal** |
+| `Map/Map2/220000300.img/portal/15` | *(does not exist; live has 15 portals, `0`–`14`)* | `in06` → 220000307 | append a **duplicate `in06`** — v84 has 16 portals only because it inserted `scr00` at index 4 |
 | `Map/Map2/220011000.img/portal/4/{horizontalImpact,script}` | `in00` `pt=2` → 220011001 | `in00` `pt=7 script=enterBlackBC` | attach `enterBlackBC` to the **working portal into Ludibrium Toy Factory**, whose script does not exist, i.e. break it |
 
-`V84MiscAreasNodeTest.theThreeUnsafeRoutePortalRowsWereNotMerged` asserts all three refusals, so a
-later ticket cannot merge them by accident and read it as an improvement.
+`V84MiscAreasNodeTest.theUnsafeRoutePortalRowsWereNotMerged` asserts these refusals, so a later
+ticket cannot merge them by accident and read it as an improvement.
 
 **Cost of refusing them**, stated rather than buried: `910600000` Golem's Temple Entrance,
 `922030000`/`922030001` Frog House and `922030010`–`922030022` Sky Terrace / Safe have **no route
@@ -55,3 +66,9 @@ sees positional-array semantics.** Any add-list row of the form `<img>/<array>/<
 the target already has must be checked by dumping the target's child count for `<array>` and
 comparing it with `n`. Equal ⇒ append, safe. Less ⇒ the merge refuses anyway (parent gap). Greater
 ⇒ **the row is naming an existing slot's neighbour and the arrays have diverged; do not merge it.**
+
+**And a row of the form `<img>/<array>/<n>/<field>` — where `n` already exists in the target — is
+the more dangerous shape**, because it passes the parent check and the additive gate happily writes
+a new leaf onto the wrong sibling. Ten of the twelve refusals above are that shape. The only check
+that catches them is comparing the two arrays element by element by `pn`, not by index. Do that
+before merging any `portal/<n>/…` or `obj/<n>/…` row onto a pre-existing image.
