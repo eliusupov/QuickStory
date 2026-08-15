@@ -1,0 +1,25 @@
+# Ticket 07 — Neo City 2227 playable. String.wz merge path list.
+# 7 rows, confined to Map.img and Mob.img. Ticket 04 owns Eqp/Etc/Consume/Ins/Cash.img,
+# ticket 05 owns the Eqp/{Taming,Dragon} name rows; this ticket touches none of them.
+# No Npc.img row — these three maps place no NPCs.
+#
+# No row here is at or beneath a COLLISION-DENY root: the 17 denied MonsterBook `reward`
+# parents are 3100101/3110301/32102xx/4230xxx/4250001/5110300/5120501/6130202/7130102/
+# 8140100/8140701/8810018, none of which is 9400658-9400661, and this list never names
+# MonsterBook.img at all.
+#
+# No overlap with ticket 06's String.paths.txt — 06 lists ossyria/240080xxx and
+# Mob.img/{83000xx,95003xx}; these ids are disjoint.
+
+# --- map names ---------------------------------------------------------------
+# "Neo City" / "<Year 2227> Dangerous City Intersection|Center|Construction Site"
+String.wz/Map.img/ossyria/683070400
+String.wz/Map.img/ossyria/683070401
+String.wz/Map.img/ossyria/683070402
+
+# --- mob names ---------------------------------------------------------------
+# Imperial Guard Type A / Dunas Type D / Royal Guard Type S / Afterlord Type A
+String.wz/Mob.img/9400658
+String.wz/Mob.img/9400659
+String.wz/Mob.img/9400660
+String.wz/Mob.img/9400661

@@ -1,0 +1,20 @@
+# Ticket 07 — Neo City 2227 playable. Map.wz merge path list.
+# 3 rows. NO DEPENDENCY ROWS ARE OWED — this is the whole file.
+#
+# `WzMerge deps <v84>\Map.wz <id> docs\wz-baseline\add-list` was run for all three ids
+# (raw output: D:\games\MapleStory\Server\wz-merge\07\<id>.deps.txt, all exit 0).
+# Between them the three maps make 135 asset references and EVERY ONE already exists in
+# the live v83 client: Back/neoCity2.img, MapHelper.img/mark/TokyoK, 41 distinct
+# Obj/Tdungeon2.img/zone4/{acc,buiding,foot,foot2}/* nodes, Obj/Tdungeon.img/mushCatle/gate/6,
+# Obj/Tdungeon2.img/neoCity/teraForest_out/14, Obj/connect.img/rope/14/*, and the BGM
+# Sound.wz/Bgm21.img/2215year. v84 reuses the v83 Neo City tileset wholesale and adds no
+# new scenery for this area. 1 add-list row owed per map = the map image itself.
+#
+# No `info/link` stubs: all three are full map images.
+# No overlap with ticket 06's Map.paths.txt — 06's dependency rows (Back/dragonRoad.img
+# frames, Obj/dungeon3.img/skyValley, Tile/blackTileFly.img) and its 22 map ids are disjoint
+# from everything here.
+
+Map.wz/Map/Map6/683070400.img
+Map.wz/Map/Map6/683070401.img
+Map.wz/Map/Map6/683070402.img

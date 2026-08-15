@@ -1,0 +1,21 @@
+# Ticket 07 — Neo City 2227 playable. Mob.wz merge path list.
+# 4 rows. The ticket's stated mob list is CORRECT — unlike ticket 06's, it was checked
+# against the maps' own `life` nodes rather than taken on trust:
+#
+#   683070400   6 spawns  9400658 x4, 9400661 x2
+#   683070401  12 spawns  9400658 x6, 9400659 x1 (mobTime 43200), 9400661 x5
+#   683070402  14 spawns  9400658 x9, 9400660 x1 (mobTime 43200), 9400661 x4
+#
+# Those counts are asserted per mob per map in V84NeoCity2227NodeTest, not just as totals.
+#
+# Every `life` entry in all three maps is type="m". There are ZERO npc and ZERO reactor
+# entries, so this ticket merges no Npc.wz and no Reactor.wz.
+#
+# All four carry summonType=1 — the same flag that made ticket 06's 9500374-9500382
+# unspawnable — but here it is irrelevant: these ids ARE placed by `life` nodes.
+# No overlap with ticket 06's Mob.paths.txt (8300000-8300007, 9500374-9500382).
+
+Mob.wz/9400658.img
+Mob.wz/9400659.img
+Mob.wz/9400660.img
+Mob.wz/9400661.img

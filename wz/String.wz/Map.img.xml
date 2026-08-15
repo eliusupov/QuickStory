@@ -6644,6 +6644,18 @@
       <string name="streetName" value="Neo City"/>
       <string name="mapName" value="&lt;Year 2503&gt; Air Battleship Stern"/>
     </imgdir>
+    <imgdir name="683070400">
+      <string name="streetName" value="Neo City"/>
+      <string name="mapName" value="&lt;Year 2227&gt; Dangerous City Intersection"/>
+    </imgdir>
+    <imgdir name="683070401">
+      <string name="streetName" value="Neo City"/>
+      <string name="mapName" value="&lt;Year 2227&gt; Dangerous City Center"/>
+    </imgdir>
+    <imgdir name="683070402">
+      <string name="streetName" value="Neo City"/>
+      <string name="mapName" value="&lt;Year 2227&gt; Dangerous City Construction Site"/>
+    </imgdir>
   </imgdir>
   <imgdir name="elin">
     <imgdir name="300000000">

@@ -99,6 +99,18 @@
   <imgdir name="8300007">
     <string name="name" value="Dragon Rider"/>
   </imgdir>
+  <imgdir name="9400658">
+    <string name="name" value="Imperial Guard Type A"/>
+  </imgdir>
+  <imgdir name="9400659">
+    <string name="name" value="Dunas Type D"/>
+  </imgdir>
+  <imgdir name="9400660">
+    <string name="name" value="Royal Guard Type S"/>
+  </imgdir>
+  <imgdir name="9400661">
+    <string name="name" value="Afterlord Type A"/>
+  </imgdir>
   <imgdir name="9500374">
     <string name="name" value="Green Cornian"/>
   </imgdir>

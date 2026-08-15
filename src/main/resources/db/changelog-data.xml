@@ -49,6 +49,9 @@
     <changeSet id="153" author="v84-ticket-06">
         <sqlFile path="db/data/153-crimson-sky-drop-data.sql"/>
     </changeSet>
+    <changeSet id="154" author="v84-ticket-07">
+        <sqlFile path="db/data/154-neo-city-2227-drop-data.sql"/>
+    </changeSet>
 
     <changeSet id="161" author="Ponk">
         <sqlFile path="db/data/161-admin-data.sql"/>

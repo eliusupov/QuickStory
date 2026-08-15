@@ -3,8 +3,15 @@
         (Neo Tokyo Teleporter)
 */
 
-var quests = [3719, 3724, 3730, 3736, 3742, 3748];
-var array = ["Year 2021 - Average Town Entrance", "Year 2099 - Midnight Harbor Entrance", "Year 2215 - Bombed City Center Retail District", "Year 2216 - Ruined City Intersection", "Year 2230 - Dangerous Tower Lobby", "Year 2503 - Air Battleship Bow"/*, "Year 2227 - Dangerous City Intersection"*/];
+// v84 ticket 07: Year 2227 (683070400-683070402) enabled. It was authored here and commented
+// out because the maps did not exist in the v83 client; they do now.
+// `quests[i]` gates `array[i]`, so the new destination needed a seventh gate. 3749
+// "Nibelung's Song" is the quest that closes the Year 2503 chain, which makes 2227 unlock on
+// finishing the last previously-reachable area rather than alongside it. v84 ships NO quest of
+// its own for 2227 (its new 37xx quests, 3756-3761, are the Crimson Sky/Dragon Rider chain),
+// so this gate is a choice, not a port. Level fits: the 2227 maps carry lvLimit 120.
+var quests = [3719, 3724, 3730, 3736, 3742, 3748, 3749];
+var array = ["Year 2021 - Average Town Entrance", "Year 2099 - Midnight Harbor Entrance", "Year 2215 - Bombed City Center Retail District", "Year 2216 - Ruined City Intersection", "Year 2230 - Dangerous Tower Lobby", "Year 2503 - Air Battleship Bow", "Year 2227 - Dangerous City Intersection"];
 var limit;
 
 function start() {
@@ -69,9 +76,9 @@ function action(mode, type, selection) {
                 case 5:
                     mapid = 240070600;
                     break;
-                /*case 6:
+                case 6:
                     mapid = 683070400;
-                    break;*/
+                    break;
             }
 
             if (mapid > 0) {
