@@ -39,13 +39,13 @@ runtime and nothing needs regenerating to change resolution.
 | T7 forward-idiom in envelope | 11 | 3.5% |
 | T5 data-site code xref | 1 | 0.3% |
 | M hand-resolved | 4 | 1.3% |
-| **resolved and verified** | **262** | **82.6%** |
-| **rejected as false positive** | **16** | 5.0% |
+| **resolved and verified** | **264** | **83.3%** |
+| **rejected as false positive** | **14** | 4.4% |
 | unresolved | 39 | 12.3% |
 
-Per **operation**, after the source-bug corrections: **269 PASS, 0 FAIL, 55 unresolved,
+Per **operation**, after the source-bug corrections: **271 PASS, 0 FAIL, 53 unresolved,
 3 dropped**. Restricted to the shipping set (groups C–J; A/B/L are already done by
-`edits\`, K is optional gameplay caps): **293 ops → 256 PASS, 0 FAIL, 37 unresolved.**
+`edits\`, K is optional gameplay caps): **293 ops → 258 PASS, 0 FAIL, 35 unresolved.**
 
 ## The three techniques phase 0 measured, re-measured
 
@@ -68,9 +68,36 @@ window-style idiom and the `CWnd::CreateWnd` argument block), and T7 then reprod
 all four addresses independently. It also reproduced pass3's `0x009F7B1D → 0x00A4127E`,
 which is `CWvsApp::InitializeGr2D` — the single most important site in the set.
 
-A tier that was tried and **deleted**: widening T2's confirm window to ±0x4000. It
-produced 4 hits and every one was rejected by the injectivity check. Do not
-reintroduce it — a signature unique in an arbitrary window is not evidence.
+Three tiers were tried and **deleted**; the measurements are recorded in `resolve.py`
+so nobody rebuilds them:
+
+- widening T2's confirm window to ±0x4000 — 4 hits, all 4 rejected by injectivity. A
+  signature unique in an *arbitrary* window is not evidence; one unique in an envelope
+  derived window (T6) is.
+- T8, propagating a sibling's delta to an exact predicted address — 0 hits.
+- T9, the same tolerating v84's register reallocation within ±0x40 — 1 net hit and 4
+  new collisions, one of which displaced a good result. See "group I" below for why.
+
+## Group I is not a translation problem
+
+`0x00522C73`–`0x005243EF`, the eleven near-identical party/guild/trade/family/quest
+pop-up blocks, is the weakest part of the set (10 of 23 ops), and heuristics will not
+close it. v84 rebuilt this code:
+
+- **registers were reallocated** — v83's `mov eax,0x1FC ; sub eax,ecx` is
+  `mov ecx,0x1FC ; sub ecx,eax` in v84. The write only touches the immediate, so the
+  register is harmless *if* you have the right address, but it defeats every
+  context-signature tier.
+- **a branch was added** that v83 has no counterpart for:
+  `test esi,esi ; jne … ; mov ecx,0x1EC ; add edx,-0x33`. So v84 may need *more*
+  patches here than v83 had, on a second code path Ezorsia never saw.
+- **there are fewer blocks.** `mov edx,0x1D0` occurs **12 times** in v83's
+  `0x00522000-0x00525000` and only **6 times** in the corresponding v84 range. Eleven
+  v83 patch sites cannot map injectively onto six v84 slots — several handlers were
+  merged or rewritten.
+
+Treat even the 10 passing group-I rows as provisional, and expect this group to need
+design, not address translation. Everything else in the set is a clean translation.
 
 ## The 16 false positives — and why shape checking alone does not catch them
 
@@ -78,18 +105,22 @@ Every accepted hit must (a) reproduce in the second, independent v84 dump, (b)
 disassemble to the same instruction shape as v83 — same mnemonic, same register
 skeleton, immediate/displacement at the same offset and width.
 
-**All 16 false positives passed the shape check.** `push 578` looks exactly like
+**All 14 false positives passed the shape check.** `push 578` looks exactly like
 `push 578` wherever it is. They were caught by two structural invariants instead:
 
-- **injectivity** — two distinct v83 sites cannot be one v84 site. Sixteen sites
+- **injectivity** — two distinct v83 sites cannot be one v84 site. Fourteen sites
   collided on four v84 addresses.
 - **monotonicity** — a delta far outside its neighbours' band is wrong.
 
-The damage they would have done is concentrated: 16 of the 23 group-I operations (the
-eleven near-identical party/guild/trade/quest pop-up blocks) collapsed onto two
-addresses, and four group-D status-bar writes collapsed onto the addresses that
-already belonged to `0x008CFD4B`/`0x008CFD50`. Applying them would have written eight
-resolution values into two instructions.
+Tie-breaking on the tier alone is wrong: `0x00523FA3`'s delta `+0xBC42` matches its
+T1-resolved neighbours on *both* sides exactly, so it beats four better-ranked
+claimants on the same address. Collisions are resolved on delta agreement with the
+T1/hand-resolved skeleton first, tier second.
+
+The damage they would have done is concentrated: 10 of the 23 group-I operations
+collapsed onto two addresses, and four group-D status-bar writes collapsed onto the
+addresses that already belonged to `0x008CFD4B`/`0x008CFD50`. Applying them would have
+written eight resolution values into two instructions.
 
 Full list in the `resolve.py` output and in `data/v84-resolved.json`
 (`status: false-positive`, with `reason`).
@@ -227,7 +258,7 @@ Check in this order — each step gates the next, so stop at the first failure:
 | 3 | mouse cursor reaches all four screen edges | `0x0059AC09/22`, `0x0059A898/8B1` cursor clamps | cursor clamp group in C |
 | 4 | in game: status bar spans the bottom, HP/MP/EXP bars aligned | group D + `AdjustStatusBar` cave | **expect partial failure** — `0x008D1F65` and `0x008D217C` are unresolved |
 | 5 | open a skill window, hover a buff icon: tooltip stays on screen | `0x008F32CC/DF` tooltip clamp | known unresolved (`0x008F32CC`) |
-| 6 | receive a party/guild/trade invite | group I | 15 of 23 group-I ops are unresolved after the false-positive purge |
+| 6 | receive a party/guild/trade invite | group I | **expect failure** — 13 of 23 ops unresolved and the group is restructured in v84 (see above); this is the designated known-broken step |
 | 7 | open the cash shop | group F — 11/11 verified, all 9 caves pass | if this breaks, the cave mechanism itself is wrong |
 | 8 | Mu Lung Dojo | group G — 11/11 verified, 10 caves | same |
 | 9 | pick up an item / gain EXP: messages readable, not clipped | group H | 3 of 11 unresolved |

@@ -189,6 +189,21 @@ def regs_of(op_str):
     return re.sub(r'0x[0-9a-f]+|\b\d+\b', '#', op_str)
 
 
+def same_slot(a, b):
+    """Same operand geometry: the write would land on the same operand, same width.
+
+    Register allocation is deliberately NOT compared here. v84 recompiled some blocks
+    with different registers (`mov eax,0x1FC` became `mov ecx,0x1FC`); the patch only
+    ever rewrites the immediate, so a different destination register is harmless. It
+    is still weaker evidence, so callers record it as its own class.
+    """
+    if not a or not b:
+        return False
+    return (a['m'] == b['m'] and a['len'] == b['len']
+            and a['imm_off'] == b['imm_off'] and a['imm_size'] == b['imm_size']
+            and a['disp_off'] == b['disp_off'] and a['disp_size'] == b['disp_size'])
+
+
 def same_shape(a, b):
     if not a or not b:
         return False
@@ -604,6 +619,17 @@ def main():
             n5 += 1
     print(f'T5 data-site xref                : {n5}')
 
+    # T8 (propagate a sibling's delta to an exact predicted address) and T9 (same,
+    # tolerating v84's register reallocation within +-0x40) were both TRIED AND
+    # DELETED. T8 scored 0. T9 scored 1 net and produced 4 new injectivity collisions,
+    # including one that displaced a previously good hit. The reason is a real finding,
+    # not a tuning problem: v84 rebuilt the group-I pop-up handlers with different
+    # registers (`mov eax,0x1FC ; sub eax,ecx` became `mov ecx,0x1FC ; sub ecx,eax`),
+    # added an alternate branch (`mov ecx,0x1EC ; add edx,-0x33`) that v83 has no
+    # counterpart for, and the surviving anchors there are non-monotone -- which points
+    # at block reordering as well. Group I needs per-site RE, not another heuristic.
+
+
     # ---------------- M: hand-resolved sites (data/manual-sites.json)
     nm = 0
     if os.path.exists(paths.MANUAL):
@@ -637,6 +663,8 @@ def main():
             continue
         r['shape84'] = shape(V84, r['v84'])
         r['shape_ok'] = same_shape(r['shape83'], r['shape84'])
+        if not r['shape_ok'] and r.get('regalloc') and same_slot(r['shape83'], r['shape84']):
+            r['shape_ok'] = 'regalloc'      # registers differ, operand geometry does not
         if not r['shape_ok'] or not r['dual_dump']:
             r['status'] = 'false-positive'
             fp.append(r)
@@ -650,7 +678,24 @@ def main():
     # reject the rest.
     TIER_RANK = {'T1-context': 0, 'M-manual': 0, 'T2b-interval': 1, 'T2c-extend': 1,
                  'T5-xref': 1, 'T2-anchored': 2, 'T6-envelope': 3, 'T7-idiom': 3,
-                 'T3-function': 4, 'T4-wide': 5}
+                 'T3-function': 4}
+    # T1 and the hand-resolved sites are the trustworthy skeleton; a claimant whose
+    # delta exactly equals that of a T1 anchor bracketing it is far more likely right
+    # than one that merely used a better-ranked search. Break ties on that FIRST --
+    # ranking on tier alone threw away 0x00523FA3, whose delta +0xBC42 matches its T1
+    # neighbours on both sides exactly.
+    trusted = sorted((r['v83'], r['delta']) for r in rows.values()
+                     if r['tier'] in ('T1-context', 'M-manual', 'T5-xref')
+                     and r['delta'] is not None)
+    tk = [a for a, _ in trusted]
+
+    def matches_trusted_delta(r):
+        i = bisect.bisect_left(tk, r['v83'])
+        for j in (i - 1, i):
+            if 0 <= j < len(trusted) and trusted[j][1] == r['delta']:
+                return 0
+        return 1
+
     byv84 = collections.defaultdict(list)
     for r in rows.values():
         if r['v84'] is not None and r['status'] != 'false-positive':
@@ -659,9 +704,9 @@ def main():
     for addr, rs in byv84.items():
         if len(rs) < 2:
             continue
-        rs.sort(key=lambda r: TIER_RANK.get(r['tier'], 9))
-        losers = rs[1:] if TIER_RANK.get(rs[0]['tier'], 9) < TIER_RANK.get(rs[1]['tier'], 9) \
-            else rs
+        key = lambda r: (matches_trusted_delta(r), TIER_RANK.get(r['tier'], 9))  # noqa: E731
+        rs.sort(key=key)
+        losers = rs[1:] if key(rs[0]) < key(rs[1]) else rs
         for r in losers:
             r.update(status='false-positive',
                      reason=f'collision: {len(rs)} v83 sites claim 0x{addr:08X}')

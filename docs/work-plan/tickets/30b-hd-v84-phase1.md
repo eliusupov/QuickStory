@@ -15,15 +15,15 @@ the tier table, the false-positive list and the manual test procedure.
 | | |
 |---|---|
 | patch operations parsed from source | 327 (over 319 addresses, 317 distinct instruction anchors) |
-| resolved to v84 **and verified** | 262 anchors — 82.6% |
-| rejected as false positives | 16 |
+| resolved to v84 **and verified** | 264 anchors — 83.3% |
+| rejected as false positives | 14 |
 | unresolved | 39 |
-| **operations** PASS / FAIL / unresolved / dropped | **269 / 0 / 55 / 3** |
-| **shipping set** (groups C–J) | **293 ops → 256 PASS, 0 FAIL, 37 unresolved (87.4%)** |
+| **operations** PASS / FAIL / unresolved / dropped | **271 / 0 / 53 / 3** |
+| **shipping set** (groups C–J) | **293 ops → 258 PASS, 0 FAIL, 35 unresolved (88.1%)** |
 
 Phase 0 reported 255/316 = 80.7% "mechanically located". That figure is roughly right
 in magnitude but was never checked for correctness. Re-derived with verification:
-**16 of the hits phase 0's method produces are false positives**, and two new techniques
+**14 of the hits phase 0's method produces are false positives**, and two new techniques
 (monotone-envelope bracketing, forward-idiom scoring) recover more than the shortfall.
 
 ## Corrections to phase 0
@@ -46,20 +46,41 @@ in magnitude but was never checked for correctness. Re-derived with verification
 
 ## The false positives (the part that matters)
 
-All 16 **passed the instruction-shape check** — `push 578` looks like `push 578`
+All 14 **passed the instruction-shape check** — `push 578` looks like `push 578`
 wherever it is. They were caught by two structural invariants instead:
 
 - **injectivity**: two v83 sites cannot map to one v84 site
 - **monotonicity**: v84 only inserts code, so deltas rise with address
 
-16 of the 23 group-I operations (the eleven near-identical invite/pop-up blocks)
+10 of the 23 group-I operations (the eleven near-identical invite/pop-up blocks)
 collapsed onto two v84 addresses, and four group-D status-bar writes collapsed onto
 addresses already owned by `0x008CFD4B`/`0x008CFD50`. Applying them writes eight
 different resolution values into two instructions.
 
 **Consequence for anyone reusing phase 0's method: a shape check is not sufficient.**
 
-Also deleted: a tier that widened T2's confirm window to ±0x4000. 4 hits, 4 rejected.
+Collisions are broken on delta agreement with the T1/hand-resolved skeleton *first*,
+tier second — ranking on tier alone discards `0x00523FA3`, whose delta `+0xBC42` matches
+its T1 neighbours on both sides exactly.
+
+Three tiers were tried and deleted (measurements kept in `resolve.py`): widening T2's
+window to ±0x4000 (4 hits, 4 rejected); sibling-delta point prediction (0 hits);
+regalloc-tolerant sibling window (1 net hit, 4 new collisions).
+
+## Group I is not a translation problem
+
+The pop-up/invite cluster is the weakest part of the set (10 of 23 ops) and no
+heuristic will close it, because v84 **rebuilt** the code:
+
+- registers reallocated: v83's `mov eax,0x1FC ; sub eax,ecx` is `mov ecx,0x1FC ;
+  sub ecx,eax` in v84 — harmless to the write, fatal to context signatures
+- a branch was added with no v83 counterpart (`test esi,esi ; jne … ; mov ecx,0x1EC ;
+  add edx,-0x33`), so v84 may need *more* patches here, on a path Ezorsia never saw
+- there are fewer blocks: `mov edx,0x1D0` occurs **12×** in v83's `0x00522000-0x00525000`
+  and **6×** in the matching v84 range. Eleven v83 sites cannot map injectively onto six.
+
+Treat the 10 passing group-I rows as provisional. Everything outside group I is a clean
+translation.
 
 ## Source bugs fixed in the generated table
 
@@ -122,7 +143,8 @@ and everything else is address coverage.
 
 | | days |
 |---|---|
-| 37 unresolved shipping ops by hand with `probe.py` (~15/day at the observed rate) | 2.5 |
+| 22 non-group-I unresolved shipping ops by hand with `probe.py` | 1.5 |
+| group I: re-RE the v84 pop-up handlers (restructured, not translatable) | 1.5 |
 | build + link the DLL, port `codecaves.h` verbatim, wire the cave table | 1 |
 | first launch, gated walkthrough, fix what moved | 1.5 |
 | re-tune v83 magic offsets to v84's `UI.wz` (unknowable until step 3) | 2 – 5 |

@@ -42,6 +42,8 @@ static const HdPatch kHdPatches[] = {
   { 0x0052F808,   4, K_INT   ,        {0,0,0,423}, 'I', "P051", 0x00523BC5 },  // various requests like party, guild, friend, family, invites 
   { 0x0052F9E8,   4, K_INT   ,        {0,2,0,-92}, 'I', "P052", 0x00523DA5 },  // various requests like party, guild, friend, family, invites 
   { 0x0052FA08,   4, K_INT   ,        {0,0,0,423}, 'I', "P053", 0x00523DC5 },  // various requests like party, guild, friend, family, invites 
+  { 0x0052FBE6,   4, K_INT   ,        {0,2,0,-92}, 'I', "P054", 0x00523FA3 },  // various requests like party, guild, friend, family, invites 
+  { 0x0052FBFA,   4, K_INT   ,        {0,0,0,423}, 'I', "P055", 0x00523FB7 },  // various requests like party, guild, friend, family, invites 
   { 0x0052FDCF,   4, K_INT   ,       {0,2,0,-102}, 'I', "P056", 0x0052418C },  // party quest available pop-up y axis		my first address find o
   { 0x0053FD89,   1, K_BYTE  ,        {0,0,0,184}, 'J', "P059", 0x00533B03 },  // boss bar extend to window
   { 0x0053FD8A,   4, K_INT   ,        {2,0,0,-15}, 'J', "P060", 0x00533B03 },  // boss bar	extend to window

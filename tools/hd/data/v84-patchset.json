@@ -1244,9 +1244,17 @@
    "drop": null,
    "fixed": false,
    "tier": "T2-anchored",
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "v84": 5438438,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "mov eax, 0x1fc",
+   "v84_verdict": "ok"
   },
   {
    "id": "P055",
@@ -1260,9 +1268,17 @@
    "drop": null,
    "fixed": false,
    "tier": "T2c-extend",
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "v84": 5438458,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "mov edx, 0x1d0",
+   "v84_verdict": "ok"
   },
   {
    "id": "P056",

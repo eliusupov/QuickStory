@@ -1776,7 +1776,7 @@
    "v83": 5390243,
    "v84": 5438437,
    "tier": "T2-anchored",
-   "status": "false-positive",
+   "status": "resolved",
    "shape83": {
     "m": "mov",
     "ops": "eax, 0x1fc",
@@ -1805,13 +1805,13 @@
    "fn83": 5389920,
    "fn84": null,
    "shape_ok": true,
-   "reason": "collision: 5 v83 sites claim 0x0052FBE5"
+   "mono_ok": true
   },
   {
    "v83": 5390263,
    "v84": 5438457,
    "tier": "T2c-extend",
-   "status": "false-positive",
+   "status": "resolved",
    "shape83": {
     "m": "mov",
     "ops": "edx, 0x1d0",
@@ -1840,7 +1840,7 @@
    "fn83": 5389920,
    "fn84": null,
    "shape_ok": true,
-   "reason": "collision: 5 v83 sites claim 0x0052FBF9"
+   "mono_ok": true
   },
   {
    "v83": 5390732,
