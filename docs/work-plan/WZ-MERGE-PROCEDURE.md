@@ -239,6 +239,16 @@ Two shapes, and the second is the dangerous one:
 |---|---|---|
 | `<img>/portal/15` | new child, write it | appends — safe *only* if the arrays agree up to 15 |
 | `<img>/portal/4/script` | parent `4` exists, leaf `script` does not, write it | **writes onto whichever portal sits at index 4 in the target** |
+| `Check.img/28266/0/lvmax` | parent `0` exists, leaf `lvmax` does not, write it | **the indices line up perfectly and it is still wrong** — it adds a field to a record the target already has, changing what that record means (ticket 09: 108 working quests capped at Lv.40) |
+
+**That third row is why the refusal message names two hazards and not one.** The interior-write
+refusal covers "the source's slot `n` may be a different entry than this tree's" *and* "the slot is
+the same entry and the row edits it". They need different investigations and only the first can be
+cleared by comparing arrays. An operator who checks the indices, finds them identical and overrides
+on that basis has disproved half the reason. Ticket 09's 108 `lvmax` rows are the worked example:
+`Check.img/<id>` holds exactly `0` and `1`, so the gate refuses all 123 of 09's
+`Check.img/<id>/<step>/<field>` rows structurally — measured, `added 9, refused 123`, exit 3 — but
+every one of those refusals is about *what the field does to the record*, not about the index.
 
 `WzMerge merge` and `WzMerge xml` both enforce this now, and report it as
 `POSITIONAL ARRAY: …` in `conflicts.txt` — deliberately distinct from `already exists in target`,
@@ -277,6 +287,37 @@ refusing: three staged areas have no route in.
 container's child names but cannot digest two nodes and compare them. It catches the interior write,
 the occupied slot and the hole; it does **not** catch the content-identical append. The deny-list is
 shared by both subcommands, so denying the row is what closes that gap on both sides.
+
+### 4.5 An empty `conflicts.txt` is not evidence of safety
+
+**Read this before writing "0 refused" in a ticket as though it meant anything.** The additive-only
+gate refuses a row when the *leaf* already exists. Every hazard this project has found so far was a
+row whose leaf did **not** exist, so the gate was silent by construction and `conflicts.txt` was
+empty or header-only while the merge quietly changed content the live client already ships:
+
+| found in | shape | `conflicts.txt` said |
+|---|---|---|
+| 03c, `String.wz/MonsterBook.img/<mob>/reward/<n>` | appends Nexon's drop slots onto Cosmic's rewritten lists | nothing |
+| 08, `Map.wz/…/portal/<n>/<field>` | attaches a field to a portal players use today | nothing |
+| 09, `Quest.wz/Check.img/<id>/0/lvmax` | adds a start requirement to 108 working quests | nothing |
+| 09, `Quest.wz/Exclusive.img/{0,1,2}` | v84's re-partition merged *beside* the live one | nothing |
+
+The rule that follows, and it is the through-line of all four: **a row that writes into a node the
+live client already has is an EDIT, not an addition, and no clean run tells you which edit it is.**
+Dump both sides of the row's parent before merging it. Depth is a usable tell inside one file — in
+`Quest.wz` anything deeper than `<Img>.img/<id>` is by definition inside an existing quest — but it
+is a tell, not a check.
+
+**And one shape has no structural check at all, deliberately.** `Quest.wz/Exclusive.img` groups
+medal ids; the live client uses one *named* group `medal`, v84 *replaced* it with numeric groups
+`0`/`1`/`2` holding a different partition of the same ids. Those are genuine additions — no
+collision, and the container is not an array (its only live child is named), so the positional gate
+does not look at it — and merging them yields an image carrying both partitions with seven ids in
+two mutually-exclusive groups. **No depth, index or subset rule sees a semantic replacement; only
+dumping both sides does.** A heuristic that guessed at it — "refuse integer children added to a
+container that has only named ones" — would refuse legitimate content and teach an operator to
+override, which is worse than the gap. `Quest.wz/Exclusive.img` is therefore denied as a whole image
+on `COLLISION-DENY.txt`, and **that list, not the tool, is what stands in front of this class.**
 
 ---
 
@@ -463,6 +504,22 @@ among its parent's children and every other byte of the file is untouched. Expec
 deletions(-)` across two files. A forced row is the one exception: it replaces the existing element
 **in place**, so it reads as N insertions / N deletions at one spot. Any *other* deletion, or a
 reformat of lines you did not add, means stop and `git checkout -- wz/`.
+
+**One caveat on that rule, because ticket 09 hit it and it is not a fault.** `git diff --stat` can
+report hundreds of deletions on a large insert into a big, highly repetitive XML file — 09's
+`Check.img.xml` showed `2076 insertions, 232 deletions` and `Say.img.xml` `1741, 583` — and **not
+one line was actually removed**. Git re-anchors its hunks; every "deleted" line is re-added verbatim
+in the same hunk. **The stat line does not discriminate; "is every old line still present" does.**
+Before concluding either way, run the check that answers the question:
+
+```
+git show HEAD:wz/<Name>.wz/<Img>.img.xml > pre.xml       # CR-normalise both, then:
+comm -23 <(sort -u pre.xml) <(sort -u wz/<Name>.wz/<Img>.img.xml) | head
+```
+
+Empty output means nothing was lost. Confirm it with the structural count too — the top-level
+`<imgdir name>` set should have gained exactly your manifest's ids and lost none. A stat line with
+deletions and an empty `comm` is a diff artefact; a non-empty `comm` is a real loss, stop.
 
 Each written file is read back and compared with what was meant to be written; a mismatch is
 **exit 4** and the message says the tree is half-applied. `xml` writes file by file, so an

@@ -18,7 +18,7 @@
 # Precedence, if both lists are ever supplied: deny wins. A path in both is an operator error
 # and should be a hard exit, not a silent resolution.
 #
-# 40 rows.
+# 156 roots. (28 from 03c, +12 from 03g/ticket 08, +116 from 03h/ticket 09.)
 
 # --- Hazard 1: server-owned id range -----------------------------------------------------
 # PlayerNPC.java:66-67 declares 9901910-9906599 a range the server allocates from AT RUNTIME
@@ -97,3 +97,182 @@ Map.wz/Map/Map2/220011000.img/portal/4/script	# positional array: would attach e
 # This one is the OPERATOR'S CALL, not a finding: it trades a known-bad partial for a known-old
 # whole. Remove the row if the tool learns to write through a UOL parent.
 Npc.wz/9000021.img	# 24 UOL-shape refusals leave this NPC partially merged; deny keeps it whole
+
+# --- Hazard 2c: the same hazard again, writing INTO live quests ---------------------------
+# Ticket 09, folded in by 03h. `add-list/Quest.txt` is 924 copy roots; 792 are whole new quest
+# nodes and the other 132 write into content the live client already ships. 09 refused all 132
+# by leaving them off its path list, which protects 09 and nothing else — these rows sit in the
+# add-list forever and the next ticket to open Quest.wz meets them fresh. Measured row by row,
+# both sides dumped, in `09/DEEP-ROWS.md`.
+#
+# WHAT THE TOOL ALREADY DOES, so an operator knows what these rows are and are not for: all 123
+# `Check.img/<id>/<step>/<field>` rows below are ALSO refused structurally by the positional-array
+# gate (4.4), because `Check.img/<id>` holds exactly `0` and `1` and the row descends THROUGH an
+# existing slot. That was verified against these exact rows (`added 9, refused 123`, exit 3) —
+# 09 predicted an index-keyed check would miss all of them and it does not. The rows are listed
+# anyway for the same reason 08's twelve are: a deny row records the DECISION and the reason,
+# and the gate records only the shape.
+#
+# ROOT SEMANTICS: denied at `<id>/0`, the start block, not at the leaf. One root covers every
+# field v84 adds to that block, so the twelve date rows on 2208-2211 collapse to four roots and
+# 126 add-list rows are covered by 116. Nothing this project wants ever writes into the start
+# block of a quest the live client already ships.
+
+Quest.wz/Check.img/28162/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28163/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28164/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28165/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28166/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28167/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28168/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28169/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28170/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28171/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28172/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28173/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28174/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28175/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28176/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28177/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28178/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28179/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28180/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28181/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28182/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28183/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28184/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28185/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28186/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28187/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28188/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28189/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28190/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28191/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28192/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28193/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28194/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28195/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28196/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28197/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28198/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28199/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28200/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28201/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28202/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28203/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28204/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28205/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28206/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28207/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28208/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28209/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28210/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28211/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28212/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28213/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28214/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28215/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28216/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28217/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28218/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28219/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28220/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28221/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28222/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28223/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28224/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28225/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28226/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28227/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28228/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28229/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28230/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28231/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28232/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28233/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28234/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28235/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28236/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28237/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28238/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28239/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28240/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28241/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28242/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28243/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28244/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28245/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28246/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28247/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28248/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28249/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28250/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28251/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28252/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28253/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28254/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28255/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28256/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28257/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28258/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28259/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28260/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28261/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28262/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28263/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28264/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28265/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28266/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28282/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28283/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+Quest.wz/Check.img/28325/0	# ticket 09: v84 adds lvmax=40 here — MAX_LEVEL start requirement, caps a working v83 quest at Lv.40
+
+# The 13 date rows: v84 gives five currently-ungated, currently-working quests a start/end
+# window that expired years ago. `EndDateRequirement.check` compares `end` against the wall
+# clock, so merging these turns five working quests off permanently.
+Quest.wz/Check.img/2208/0	# ticket 09: v84 adds start=200801010000 end=200801020000 interval=1440 — a 24h window in Jan 2008 on a working, ungated quest (NPC 1092011)
+Quest.wz/Check.img/2209/0	# ticket 09: same 24h Jan-2008 window on a working, ungated quest
+Quest.wz/Check.img/2210/0	# ticket 09: same 24h Jan-2008 window on a working, ungated quest
+Quest.wz/Check.img/2211/0	# ticket 09: same 24h Jan-2008 window on a working, ungated quest
+Quest.wz/Check.img/3845/0	# ticket 09: v84 adds end=2010010100 to a working, ungated Lv.60-80 quest (NPC 2092001)
+
+# The two inert ones. Both quests are already date-dead in the live client, so these change
+# nothing — refused anyway, because "inert" is the argument ticket 08's enterDollcave.js
+# mistake was made on and neither row buys anything.
+Quest.wz/Check.img/10109/0	# ticket 09: v84 adds interval=1440 to an already date-dead quest — inert, no benefit
+Quest.wz/Check.img/9260/0	# ticket 09: v84 adds dayByDay=1 to an already date-dead quest — inert, no benefit
+
+# --- Hazard 4: a container the two trees PARTITION differently -----------------------------
+# THE ONE SHAPE NO STRUCTURAL CHECK IN THIS TOOL CATCHES, and the deny-list is the only thing
+# standing in front of it. Ticket 09, `09/DEEP-ROWS.md`.
+#
+#   live  Exclusive.img/medal : 29000 29001 29002 29003 29300 29301 29302 29303 29304
+#                               29400 29500 29501 29502 29503        (one NAMED group, 14 ids)
+#   v84   Exclusive.img/0     : 10415 10417 10418 10419 10420
+#         Exclusive.img/1     : 29002 29500
+#         Exclusive.img/2     : 29300 29301 29302 29303 29304        (three NUMERIC groups)
+#
+# v84 REPLACED `medal` with numeric groups and re-partitioned the ids. `0`/`1`/`2` are genuine
+# additions — the target has no child by those names — so no collision fires, the positional
+# gate sees a container whose only child is `medal` and therefore not an array, and the merge
+# writes an image holding `medal` AND `0`/`1`/`2`, with seven ids (29002, 29500, 29300-29304)
+# in two mutually-exclusive groups at once. Neither vendor ever shipped that.
+#
+# It is a SEMANTIC replacement, and no depth, index or subset rule sees it — only dumping both
+# sides does. A heuristic that guessed at it (say, "refuse integer children added to a container
+# that has only named ones") would refuse legitimate content elsewhere and teach an operator to
+# override, which is worse than this documented gap. Denied at the IMAGE, not at the three
+# groups: the statement being made is that this image cannot be merged piecemeal at all.
+# Nothing in src/ reads Exclusive.img (grepped, zero hits), so the cost is that v84's new
+# 10415-10420 group is unenforced client-side, which beats a self-contradicting one.
+Quest.wz/Exclusive.img	# ticket 09: live groups medals under the NAME `medal`, v84 under `0`/`1`/`2` — merging either partition into the other duplicates 7 ids across mutually-exclusive groups. Not mergeable piecemeal; deny the image.
+
+# NOT DENIED, deliberately, and recorded here so the next reader does not think they were
+# missed. Six of 09's 132 rows are absent from this file because they are not hazards:
+#   Quest.wz/QuestInfo.img/1008/demandSummary, 9260/{demandSummary,rewardSummary},
+#   {20012,20311}/type   — client-side display text on quests 09 did not own. `Quest`'s
+#     constructor never reads `type`; demandSummary/rewardSummary have no server reader at
+#     all. 09 refused them for consistency, not for cost. Re-adding them is harmless.
+#   Quest.wz/PQuestSearch.img — a whole new image indexing a party-search window the v83
+#     client does not have and the server never opens. Unclaimed, not unsafe.
+# A deny-list that carries non-hazards is a deny-list operators learn to skim.

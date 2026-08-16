@@ -419,8 +419,14 @@ static class Program
 
             string tell = $"'{container}' holds exactly the consecutive integers 0..{b.Count - 1}, so its children are SLOTS OF A POSITIONAL ARRAY, not identities";
 
+            // 03h: the wording matters as much as the refusal. This branch covers TWO different
+            // hazards and the first draft named only one, which is a refusal an operator can
+            // disprove and then override. Ticket 09's 108 `Check.img/<id>/0/lvmax` rows land
+            // here and the indices line up perfectly — slot 0 is the start block in both trees —
+            // so "the index may name a different entry" reads as false and the row looks safe.
+            // It is not: the write ADDS a field to a record that already works.
             if (i != rel.Length - 1)
-                return $"POSITIONAL ARRAY: {tell}. This row writes '{string.Join('/', rel.Skip(i + 1))}' INTO slot {idx}, which already exists — and v84's slot {idx} need not be the same entry as the target's. Merging it attaches the field to whichever entry sits at that index HERE. Compare the two arrays element by element (by name, not by index) and either re-author the row against the target's index or deny it.";
+                return $"POSITIONAL ARRAY: {tell}. This row writes '{string.Join('/', rel.Skip(i + 1))}' INTO slot {idx}, which already EXISTS. TWO hazards, and this refusal covers both — checking one and finding it harmless does not clear the row: (a) the source's slot {idx} need not be the same entry as this tree's, so the field lands on whichever entry sits at that index HERE (v84 reindexes arrays; see 08's portals); (b) even when it IS the same entry, the row EDITS an existing record by adding a field to it, and the additive gate cannot see an edit that adds — ticket 09's `Check.img/<id>/0/lvmax` is exactly this, and merging it caps 108 working quests at Lv.40. Dump BOTH slots in full, decide what the added field does to the record that is already there, and either re-author the row or deny it.";
 
             if (idx < b.Count)
                 return $"POSITIONAL ARRAY: {tell}. Slot {idx} is already occupied; this is not an append.";
@@ -1367,7 +1373,7 @@ static class Program
                 // and slot n here need not be slot n in the source.
                 if (IsIndex(seg, out int segIdx) && ArrayCount(ChildNames(lines, start, end, indent)) is int ac0)
                 {
-                    Conflict(manifestPath, $"POSITIONAL ARRAY: the container of '{seg}' holds exactly the consecutive integers 0..{ac0 - 1}, so its children are SLOTS, not identities. This row writes into slot {segIdx}, which already exists — the source's slot {segIdx} need not be the same entry. Re-author the row against this tree's index or deny it.");
+                    Conflict(manifestPath, $"POSITIONAL ARRAY: the container of '{seg}' holds exactly the consecutive integers 0..{ac0 - 1}, so its children are SLOTS, not identities. This row writes into slot {segIdx}, which already EXISTS. TWO hazards, both covered by this refusal: (a) the source's slot {segIdx} need not be the same entry as this tree's; (b) even when it is, the row EDITS an existing record by adding a field to it — ticket 09's `Check.img/<id>/0/lvmax` caps 108 working quests at Lv.40 that way, with the indices lining up perfectly. Dump both slots, then re-author the row or deny it.");
                     located = false; break;
                 }
                 int i = FindChild(lines, start, end, indent, seg);

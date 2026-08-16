@@ -1,12 +1,13 @@
 # The composed install — one merge per `.wz`, all content tickets at once
 
-Built by **ticket 03f**; ticket **08** folded in and re-run end to end by **ticket 03g**.
-Tickets 04, 05, 06, 07 and 08 each staged their own `.wz` **from the same pristine v83 base**, so
+Built by **ticket 03f**; ticket **08** folded in and re-run end to end by **03g**, ticket **09** by
+**03h**.
+Tickets 04, 05, 06, 07, 08 and 09 each staged their own `.wz` **from the same pristine v83 base**, so
 their outputs do not compose: installing two of them loses one set (05's ticket says so at its
 "Human steps → Step 0", 06's at its step 1). The fix is to merge **once per file from the ticket
 path lists**, which is what this directory is.
 
-`compose.ps1` regenerates every `*.paths.txt` here from `..\{04,05,06,07,03f,08}\`. Those are the
+`compose.ps1` regenerates every `*.paths.txt` here from `..\{04,05,06,07,03f,08,09}\`. Those are the
 source of truth; no `*.paths.txt` here is hand-edited. **`FORCE.txt` and this README are
 hand-maintained** — `compose.ps1` does not touch either, so if you add a ticket, update `FORCE.txt`
 yourself.
@@ -25,16 +26,26 @@ yourself.
 | `Npc.paths.txt` | 15 | 06 (6) + 08 (9) |
 | `Reactor.paths.txt` | 3 | 06 (2) + 08 (1) |
 | `Sound.paths.txt` | 24 | 06 (1) + 08 (23) |
+| `Quest.paths.txt` | **252** | 09 |
 | `FORCE.txt` | **41 roots** | `COLLISION-FORCE.txt` (37) + 03f's `Npc.img/9201144` + 08's 3 |
 
-**Composability was checked, not assumed.** Across all ten files **1,409 rows, every one unique,
+**Ticket 09 is the cheapest fold-in this directory will ever get.** No other ticket's path list
+contains a single `Quest.wz` row, so `Quest.paths.txt` is 09's 252 rows verbatim and the other ten
+files are **unchanged in content** — the header comment lines moved, no row did. 09 forces nothing,
+so `FORCE.txt` stays at **41 roots**, all `String.wz`. The 540 rows for the 135 `22xxx` Evan ids are
+**ticket 13's** and are not here; add `13` to the `Quest` entry of `compose.ps1`'s `$files` table
+when they land.
+
+**Composability was checked, not assumed.** Across all eleven files **1,662 rows, every one unique,
 and no row is an ancestor of another**, so nothing can be written twice or shadow another ticket's
 row. The one order-sensitive mechanism is the force path — the `existing?.Remove()` branches of the
 `switch (parent, srcObj)` in `Program.cs`'s `Merge()`: a force row removes and re-adds, and
 `Eqp/Dragon` is a **container-level** force root — but 04 has zero rows beneath it, so 04→05 and
 05→04 give identical trees. Ordering inside each ticket block **is** load-bearing for `Map.wz`
 (06's 12 dependency rows must precede the 22 map images; 08's 67 asset rows must precede its 22)
-and is preserved verbatim.
+and is preserved verbatim. (03g's figure for the ten pre-09 files read **1,409**; the actual count
+is **1,410** — the `Map` composition fill row was added after the sentence was written. Re-counted
+mechanically here, not carried forward.)
 
 ### `FORCE.txt` is 41 roots, and reusing the old 38-root file reverts three names
 
@@ -91,6 +102,7 @@ A scripted install that aborts on non-zero will stop on these three. It should n
 | **`Character`** | **3** | 242 | 0 | **12** |
 | `Mob` | 0 | 28 | 0 | 0 |
 | `Map` | 0 | 133 | 0 | 0 |
+| `Quest` | 0 | 252 | 0 | 0 |
 
 The 23 refusals are 15 decisions taken before 04 shipped, plus 8 the **positional-array gate**
 (§4.4, added by 03g) found that nobody had enumerated:
@@ -167,6 +179,34 @@ Skill      69AE95DF8380EC2268665A1205CD35F42B6DCBEBC85E6049C12657518BF95B49    8
 Sound      09870377512C832C4F44A62DB0C3B98638FAF529AC0CE14A71D1FA974019A796   365,641,276
 String     04ADEF719A3A9CE0AD12ADDA929B848ADE5F27F60A70ACF1CE2C3E722C40336B     3,612,239
 ```
+
+## Re-verified end to end with ticket 09 folded in, 2026-08-16 (ticket 03h)
+
+Staging `D:\games\MapleStory\Server\wz-merge\03h\`, **eleven** files, same run book, deny-list now
+**156 roots** (03c's 28 + 08's 12 + 09's 116).
+
+| file | exit | added | forced | refused |
+|---|---:|---:|---:|---:|
+| `Morph` `Skill` `Sound` `Reactor` `Npc` `Mob` `Map` | 0 | 25 / 27 / 24 / 3 / 15 / 28 / 133 | 0 | 0 |
+| **`Quest`** | **0** | **252** | 0 | **0** |
+| `String` | 3 | 501 | 41 | 9 |
+| `Item` | 3 | 389 | 0 | 2 |
+| `Character` | 3 | 242 | 0 | 12 |
+
+**All ten pre-existing outputs are byte-identical to 03g's**, not just `Morph` and `Skill` — every
+SHA-256 in the table above reproduces exactly. Folding in a ticket that owns a file no one else
+touches changes nothing else, and the run proves it rather than asserting it. `Quest.wz` is
+`5F37E5F56970FFD01DC5B28D082BF02CE130FF7B56C7C1B592C67D77996F04FE`, 6,083,413 bytes — **the same
+hash ticket 09 staged from its own list**, so 09's merge re-derives bit-for-bit from the composed
+manifest.
+
+`Quest.conflicts.txt` is header-only; the 23 refusals across `String`/`Item`/`Character` are the
+same 23 documented above, unchanged. All eleven outputs passed the tool's own post-write
+verification and were promoted (`Quest`: `6 images parsed, 0 unparseable, 0 requested paths missing,
+4 images content-checked, 0 drifted`); no `.partial` was left behind. Gate re-fire on the tool's own
+`Quest.wz`: **`added 0, refused 252`, exit 5.** All 18 live `.wz` still SHA-256-match
+`_backup\client-v83-EzorsiaV2-2026-08-15\` — 0 mismatches, no stray `.partial`/`.TEMP`/`.merged` in
+the client directory. Nothing was written to `D:\games\MapleStory\`.
 
 **`Morph` and `Skill` are byte-identical to 03f's run** — same lists, same base, no refusal change,
 and the merge is deterministic, so the composition re-derives exactly. The other eight differ, each

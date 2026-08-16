@@ -14,6 +14,7 @@ $files = @{
   "Npc"       = @("06","08")
   "Reactor"   = @("06","08")
   "Sound"     = @("06","08")
+  "Quest"     = @("09")
 }
 
 $perFile = @{
@@ -27,6 +28,7 @@ $perFile = @{
   "Npc"       = "# 15 rows. 06's 6 + 08's 9. Expect exit 0."
   "Reactor"   = "# 3 rows. 06's 2 + 08's 1. Expect exit 0."
   "Sound"     = "# 24 rows. 06's 1 (Bgm14.img/DragonRider) + 08's 23 Mob.img SFX banks. Needs the`r`n# post-03f verifier, which discounts BgmGL.img - unparseable in all three trees. Expect exit 0."
+  "Quest"     = "# 252 rows, ticket 09 alone - 63 quest ids x Act/Check/QuestInfo/Say. No other ticket's`r`n# path list contains a single Quest.wz row (checked mechanically), so this file is 09's block`r`n# and nothing else. The 540 rows for the 135 22xxx Evan ids are ticket 13's and are NOT here.`r`n# 09 contributes no force rows. Expect 0 refusals, exit 0.`r`n#`r`n# The 132 add-list rows that write INTO live quests are on COLLISION-DENY.txt (03h), and the`r`n# positional-array gate refuses 123 of them structurally as well. Do not re-add them."
 }
 
 # Rows the COMPOSITION needs that no ticket's list carries. Not a place to smuggle content in:
@@ -43,17 +45,18 @@ $fill = @{
 
 foreach ($name in $files.Keys) {
   $lines = @()
-  $lines += "# COMPOSED INSTALL LIST - $name.wz. Built by ticket 03f, ticket 08 folded in by 03g,"
-  $lines += "# from the committed per-ticket lists under ..\{04,05,06,07,03f,08}\ - those are the"
+  $lines += "# COMPOSED INSTALL LIST - $name.wz. Built by 03f; 08 folded in by 03g, 09 by 03h,"
+  $lines += "# from the committed per-ticket lists under ..\{04,05,06,07,03f,08,09}\ - those are the"
   $lines += "# source of truth, this file is a concatenation of them in ticket order with each"
   $lines += "# block's internal order preserved. Every row is unique across the whole composed set"
-  $lines += "# and no row is an ancestor of another (checked, all ten files). Regenerate, never edit."
+  $lines += "# and no row is an ancestor of another (checked, all eleven files). Regenerate, never edit."
   $lines += "#"
   $lines += ($perFile[$name] -split "`r`n")
   $lines += "#"
-  $lines += "# Ticket 09 owns Quest.wz and appends its own block at the foot of this file; nothing"
-  $lines += "# above the marker needs to move. Add `"09`" to compose.ps1's `$files table and re-run -"
-  $lines += "# and if 09 forces anything, regenerate FORCE.txt too (41 roots today, all String.wz)."
+  $lines += "# Ticket 09 is folded in (03h): it owns Quest.wz outright and touches no other file, so"
+  $lines += "# every list except Quest.paths.txt is byte-identical to 03g's. FORCE.txt stays at 41"
+  $lines += "# roots, all String.wz - 09 forces nothing. Ticket 13 (Evan, the 540 22xxx rows) is next;"
+  $lines += "# add `"13`" to the Quest entry of compose.ps1's `$files table and re-run."
   $lines += "#"
   $lines += "# Run book: ..\..\..\work-plan\WZ-MERGE-PROCEDURE.md section 5, one file at a time."
   $lines += ""
@@ -72,7 +75,7 @@ foreach ($name in $files.Keys) {
     foreach ($r in $fill[$name]) { $lines += $r }
     $lines += ""
   }
-  $lines += "# ==== ticket 09 appends here ===="
+  $lines += "# ==== ticket 13 appends here ===="
   [System.IO.File]::WriteAllLines("$out\$name.paths.txt", [string[]]$lines)
   $n = ($lines | Where-Object { $_.Trim() -ne '' -and -not $_.Trim().StartsWith('#') }).Count
   "{0,-10} {1,4} rows" -f $name, $n
