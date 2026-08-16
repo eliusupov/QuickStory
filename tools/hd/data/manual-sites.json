@@ -1,0 +1,81 @@
+{
+ "_": "Hand-resolved v83->v84 sites that no automatic tier can reach, plus source-bug findings. Every entry states the evidence that was checked against the two v84 dumps. resolve.py applies these last; verify.py re-checks them like any other patch.",
+ "sites": {
+  "0x0040013E": {
+   "v84": "0x00400146",
+   "tier": "M-manual",
+   "evidence": "PE COFF Characteristics = e_lfanew + 0x16. e_lfanew is 0x128 in v83 (localhome.exe) and 0x130 in the v84 image, so the field moves 0x128+0x16=0x13E -> 0x130+0x16=0x146. Both images read 0x010F there. Confirmed in v84_mem.bin and v84_mem2.bin.",
+   "caveat": "This is a LOADER-TIME flag (IMAGE_FILE_LARGE_ADDRESS_AWARE). Writing it into an already-mapped image does nothing; the source's own comment says as much. Port it into a file patcher, never into the injected DLL."
+  },
+  "0x00C08459": {
+   "v84": "0x00C61459",
+   "tier": "M-manual",
+   "evidence": "Embedded application manifest. v83 'requestedExecutionLevel' at 0x00C0842A, the level=\"...\" opening quote at 0x00C08459; v84 at 0x00C6142A / 0x00C61459. Constant delta 0x59000, inside the phase-0 anchor envelope. v83 already reads asInvoker (it is a pre-patched localhost repack); v84 still reads requireAdministrator.",
+   "fill_count": 22,
+   "caveat": "v83 blanks 0x15 bytes; v84's literal is \"requireAdministrator\" = 22 bytes to blank. Using the v83 count leaves a stray closing quote and an invalid manifest."
+  },
+  "0x00C08463": {
+   "v84": "0x00C61463",
+   "tier": "M-manual",
+   "evidence": "closing quote of the same manifest slot, +0xA from 0x00C61459 exactly as in v83."
+  },
+  "0x00AFE084": {
+   "v84": "0x00B4FAC4",
+   "tier": "M-manual",
+   "evidence": "Three 16-byte-stride IPv4 string slots. Unique such triple in each image: v83 0x00AFE084 holds '192.168.1.109' x3 (already redirected); v84 0x00B4FAC4 holds the stock '63.251.217.4/.3/.2'. Identical in v84_mem.bin and v84_mem2.bin. The sibling data delta 0x51A28 at 0x00AFE8A0 corroborates the region.",
+   "caveat": "Group B. edits\\redirect already does this at runtime; port only if you drop that edit."
+  },
+  "0x00BE273C": {
+   "v84": "0x00C3BA84",
+   "tier": "M-manual",
+   "evidence": "No absolute code xref exists for this dword, but its sibling 0x00BE2738 resolved by xref to 0x00C3BA80 and 0x00BE2DF0/0x00BE2DF4 resolved to 0x00C3C138/0x00C3C13C -- all three at the same delta 0x59348. 0x00BE273C = 0x00BE2738 + 4 therefore maps to 0x00C3BA84."
+  }
+ },
+ "source_bugs": {
+  "P031": {
+   "site": "0x004D59B2",
+   "source": "Memory::WriteInt(0x004D59B2 + 1, m_nGameHeight); //mov eax,800",
+   "fault": "The instruction at 0x004D59B2 is `cmp ecx, 0x258` (81 F9 58 02 00 00) -- a 6-byte form whose imm32 starts at +2, not +1. The comment (`mov eax,800`) describes the neighbouring 0x004D599D, not this site.",
+   "as_shipped": "writes the 4 value bytes over 81 [F9 58 02 00], leaving 81 D0 02 00 00 00 = `adc eax, 2`, then a stray `add byte ptr [esi+0xE], bh`. Register and memory corruption, not a crash, which is why it survived.",
+   "fix": "offset 2, value m_nGameHeight (the operand really is the 600 height compare)"
+  },
+  "P311": {
+   "site": "0x00A448B0",
+   "source": "Memory::WriteInt(0x00A448B0 + 2, floor(-m_nGameHeight / 2)); //push -300 ; CWvsPhysicalSpace2D::Load",
+   "fault": "The instruction is `add eax, 0xFFFFFED4` (05 D4 FE FF FF) -- imm32 at +1, not +2. It is an `add`, not a `push`; the comment is wrong too.",
+   "as_shipped": "writes one byte past the immediate, corrupting the following `cmp dword ptr [esi+0x28], eax`.",
+   "fix": "offset 1, value floor(-m_nGameHeight / 2)"
+  },
+  "P158": {
+   "site": "0x0064061D",
+   "source": "Memory::WriteInt(0x0064061D + 1, m_nGameHeight); //mov ecx,600",
+   "fault": "0x0064061D is `idiv ecx` (F7 F9) -- two bytes, no immediate at all. The `mov ecx, 0x258` the comment means is at 0x00640618, which the previous source line already patches.",
+   "as_shipped": "overwrites F7 [F9 8B 45 E0] -> F7 D0 02 00 00 = `not eax` plus garbage, directly on the divisor setup.",
+   "fix": "DELETE. 0x00640618+1 already applies the intended height. Do not port this operation."
+  },
+  "P302_P304": {
+   "site": "0x009F7079 / 0x009F707E",
+   "source": "Memory::WriteInt(0x009F7079, m_nGameHeight) // dd 600   AND   Memory::WriteInt(0x009F7078 + 1, m_nGameHeight)",
+   "fault": "Not destructive, but redundant: 0x009F7078 is `push 0x258` so its imm32 IS 0x009F7079. The source writes the same two dwords twice under two spellings (lines 290/291 and 311/312).",
+   "fix": "keep one spelling (0x009F7078 + 1 / 0x009F707D + 1); drop the other so the patch set has one row per real operand."
+  },
+  "manifest_fill": {
+   "site": "0x00C08459",
+   "source": "Memory::FillBytes(0x00C08459, 0x20, 0x00C0846E - 0x00C08459)",
+   "fault": "count is computed from the v83 literal length. v84's literal is one byte longer -- see the 0x00C08459 site entry above.",
+   "fix": "count 0x16 on v84"
+  },
+  "elevation_noop": {
+   "site": "0x0049C2CD / 0x0049CFE8 / 0x0049D398",
+   "source": "Memory::WriteByte(0x00XXXXXX + 1, 0x01)",
+   "fault": "Intent is HKEY_LOCAL_MACHINE (0x80000002) -> HKEY_CURRENT_USER (0x80000001) on a `push imm32`. In localhome.exe the push already reads 0x80000001, so the write is a no-op there. Not a bug in the source, but it means these three cannot be validated against this v83 reference.",
+   "fix": "no change; group A, already covered by edits\\bypass."
+  },
+  "ip_fill": {
+   "site": "0x00AFE084",
+   "source": "Memory::FillBytes(0x00AFE084, 0x00, 0x006FE0B2 - 0x006FE084)",
+   "fault": "cosmetic: the count expression subtracts two 0x006Fxxxx addresses while the target is 0x00AFxxxx. The difference (0x2E) is what is used, so behaviour is correct, but the expression is a copy-paste artefact.",
+   "fix": "none required"
+  }
+ }
+}
