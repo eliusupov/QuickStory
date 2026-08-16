@@ -101,11 +101,26 @@ static bool Cave(DWORD origin, int nops, void* body) {
 }
 
 // ---- caves ----------------------------------------------------------------
-// codecaves.h is taken from github.com/444Ro666/MapleEzorsia-v2 VERBATIM -- the cave
-// bodies are our own code and did not change between v83 and v84; only the jmp-back
-// addresses did, and those come from hd_patches.inc. Do NOT retype the asm: it is
-// ~600 lines of naked __asm and a transcription slip there is a silent crash.
-// Copy the upstream file in, then replace each `dwXxxRetn` with HD_Xxx_RETN.
+// codecaves.h is taken from github.com/444Ro666/MapleEzorsia-v2 VERBATIM and each
+// `dwXxxRetn` replaced with HD_Xxx_RETN from hd_patches.inc. Do NOT retype the asm:
+// it is ~600 lines of naked __asm and a transcription slip there is a silent crash.
+//
+// A cave body is NOT v84-neutral, though. It REPLAYS the instructions it displaced, so
+// wherever v84 displaced something different the asm has to be edited too. verify.py
+// diffs the displaced sequence between images and prints the ones that differ. As of
+// this table, 30 caves resolve, all tile their NOP run, and TWO need an edit:
+//
+//   AlwaysViewRestoreFix  0x00642105 -> 0x0065797A
+//       v83: test eax,eax ; je 0x64210F ; mov ecx,[eax] ; push eax
+//       v84: same, but `je 0x657984`               -> retarget the je
+//   AdjustStatusBarInput  0x008D217C -> 0x00906EBE
+//       v83: push 0x16 ; push edi ; lea ecx,[esi+0x0CD0]
+//       v84: push 0x16 ; push edi ; lea ecx,[esi+0x0D08]   -> CUIStatusBar grew 0x38
+//
+// A third, AdjustStatusBarBG (v83 0x008D1F65 -> v84 0x00906D39), cannot be ported as
+// written at all: v84 recompiled it from a vtable call with an inline struct copy into
+// a direct thiscall, so its 5-byte NOP run no longer tiles. It needs 3 NOPs and a body
+// of `push nStatusBarY ; push edi ; jmp 0x00906D3C`. Not in the table yet.
 // #include "codecaves.h"
 
 static void ApplyAll() {
