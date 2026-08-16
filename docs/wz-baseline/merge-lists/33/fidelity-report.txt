@@ -1,0 +1,29 @@
+== inputs
+  C:/Users/elius/AppData/Local/Temp/claude/D--games-MapleStory-Server-Cosmic--claude-worktrees-evan-dualblade/153450ca-8c96-43b9-ab04-ac30f7fe175a/scratchpad/v84-QuestInfo.txt  2237474 bytes  sha256=1a41fc2af2556595
+  D:/games/MapleStory/Server/Cosmic/.claude/worktrees/evan-dualblade/wz/Quest.wz/QuestInfo.img.xml  2412161 bytes  sha256=e9c3dd92a0442c03
+  C:/Users/elius/AppData/Local/Temp/claude/D--games-MapleStory-Server-Cosmic--claude-worktrees-evan-dualblade/153450ca-8c96-43b9-ab04-ac30f7fe175a/scratchpad/v84-Check.txt  1971125 bytes  sha256=796c0ff87de86fb5
+  D:/games/MapleStory/Server/Cosmic/.claude/worktrees/evan-dualblade/wz/Quest.wz/Check.img.xml  2504450 bytes  sha256=0b8feb9156347768
+  C:/Users/elius/AppData/Local/Temp/claude/D--games-MapleStory-Server-Cosmic--claude-worktrees-evan-dualblade/153450ca-8c96-43b9-ab04-ac30f7fe175a/scratchpad/v84-Act.txt  1602855 bytes  sha256=cd14c2a5ae123763
+  D:/games/MapleStory/Server/Cosmic/.claude/worktrees/evan-dualblade/wz/Quest.wz/Act.img.xml  1833518 bytes  sha256=987aaf649039d262
+
+== QuestInfo: v84 roots=3015 merged roots=3016 claimed-added=135
+   dump parse: 21426 nodes, 432 value-continuation lines, max depth 3 (all lines accounted for)
+   arithmetic: merged 3016 = pre-merge 2881 + 135 added  -> ok
+== comparator self-check (mutations of a real added subtree)
+  probe = QuestInfo.img/22000  (8 nodes)
+  CLEAN   control (unmutated clone) -> no findings
+  CAUGHT  changed leaf value (/name) -> SELFTEST/name: VALUE v84='Strange Dream' merged='Strange Dream_CORRUPTED'
+  CAUGHT  dropped child (dropped last child) -> SELFTEST/showLayerTag: MISSING in merged
+  CAUGHT  extra child (appended bogusChild) -> SELFTEST/bogusChild: EXTRA in merged (not in v84)
+  CAUGHT  reordered children (swapped two children) -> SELFTEST: CHILD ORDER v84=['name', 'area', '0', '1', '2', 'type', 'showLayerTag'] merged=['area', 'name', '0', '1', '2', 'type', 'showLayerTag']
+
+== Check: v84 roots=3004 merged roots=3005 claimed-added=135
+   dump parse: 59871 nodes, 0 value-continuation lines, max depth 6 (all lines accounted for)
+   arithmetic: merged 3005 = pre-merge 2870 + 135 added  -> ok
+
+== Act: v84 roots=3021 merged roots=3022 claimed-added=135
+   dump parse: 39807 nodes, 0 value-continuation lines, max depth 6 (all lines accounted for)
+   arithmetic: merged 3022 = pre-merge 2887 + 135 added  -> ok
+
+== compared 405 added quest subtrees, 5292 nodes total
+== 0 divergences: every added subtree is node-for-node identical to v84

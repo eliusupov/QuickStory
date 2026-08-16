@@ -430,6 +430,62 @@ they hand out, and the nodes were serialised directly from the v84 archive by a 
 copies — but "what landed is what v84 has" is **not** proven to the standard "nothing pre-existing
 changed" is. If that matters to a later ticket, it is a fresh id-by-id digest against the source.
 
+**Closed by the follow-up below.** That digest was run; the gap is no longer open.
+
+## Follow-up: the 405 added nodes ARE faithful to v84 (id by id, node by node)
+
+`docs/wz-baseline/merge-lists/33/fidelity.py`, output in `fidelity-report.txt` beside it.
+**Result: 405/405 added quest subtrees, 5,292 nodes, 0 divergences.** Read-only — it never
+writes under `wz/`.
+
+**What was compared.** Ground truth is `WzMerge dump <v84 Quest.wz> <Img>.img 20` for each of
+`QuestInfo`/`Check`/`Act`, parsed into a tree and compared against the committed
+`wz/Quest.wz/<Img>.img.xml` (verified clean against `HEAD` = `0de6857fc`, so the *committed*
+data is what was measured). For each of the 135 ids in each image, every node in the subtree:
+**element type, child names, child order, and value** — recursively, order-sensitive.
+Per-image totals: QuestInfo 914 nodes / max depth 2, Check 3,260 / depth 5, Act 1,118 / depth 6.
+This is a different code path from the one that wrote the files: `dump` is MapleLib's reader plus
+a six-line `Print`, the merge was MapleLib's `XmlSerializer`. It therefore proves the merge's
+*write* path faithful; it cannot go behind MapleLib's *read* of the `.wz` (ticket 20 hash-verified
+those bytes, and nothing short of a second WZ implementation could).
+
+**The comparator was proven able to fail** before its result was believed. Four deliberate
+mutations of a real added subtree (`QuestInfo.img/22000`), plus an unmutated control:
+
+| mutation | caught as |
+|---|---|
+| control, unmutated clone | *no findings* — so the four below are not trivially always-failing |
+| leaf value changed | `SELFTEST/name: VALUE v84='Strange Dream' merged='Strange Dream_CORRUPTED'` |
+| child dropped | `SELFTEST/showLayerTag: MISSING in merged` |
+| extra child appended | `SELFTEST/bogusChild: EXTRA in merged (not in v84)` |
+| two children swapped | `SELFTEST: CHILD ORDER v84=[name, area, 0, 1, 2, …] merged=[area, name, 0, 1, 2, …]` |
+
+The self-check runs first and returns exit 2 without comparing anything if any mutation escapes.
+
+**Instrument hazards checked, not assumed:**
+
+- **Parser losing lines.** The dump parser asserts `non-blank lines == nodes + value-continuation
+  lines` per image (21,426 / 59,871 / 39,807 nodes) — nothing can be silently skipped by the
+  indent rule and still pass.
+- **`dump` depth truncation.** `Print` stops silently at its depth limit. Depth 20 was requested and
+  the parser asserts observed max depth < 19; actual max is 6.
+- **Strings containing newlines.** `Console.WriteLine` emits them verbatim, so a value can span dump
+  lines; the parser glues those back (432 such lines in QuestInfo v84-wide). Separately confirmed
+  that **none of the 405 added subtrees has a value containing a newline**, so XML
+  attribute-value normalisation (which turns a raw `#xA` into a space on read) cannot be masking a
+  difference here. That hazard remains latent for pre-existing quests and is out of this scope.
+- **BOM / encoding.** Both the dumps and the three XMLs are asserted BOM-free; the dumps are
+  decoded as strict UTF-8 (produced under `chcp 65001`), so a mangled console codepage would raise
+  rather than compare equal.
+- **CRLF.** Comparison is on parsed nodes, not text, so line endings cannot produce either a false
+  alarm or a false silence.
+- **The id list is treated as the claim, not as truth.** An id present in `*.new-ids.txt` but absent
+  from either the v84 source or the merged XML is reported as a divergence. None were. Root-count
+  arithmetic also balances in all three: 3016 = 2881 + 135, 3005 = 2870 + 135, 3022 = 2887 + 135 —
+  so nothing beyond the 135 appeared either.
+
+Nothing was repaired, because nothing needed repairing.
+
 ## Acceptance criteria
 
 - [x] Every v84 quest id absent from this tree is present in `QuestInfo`, and in `Check`/`Act` —
@@ -444,6 +500,8 @@ changed" is. If that matters to a later ticket, it is a fresh id-by-id digest ag
       review deleted two duplicate test methods (baseline 2072; the rest of the delta is concurrent
       agents' tests in the same worktree). `V84EvanQuestRealLoad` 2/2 separately.
 - [x] Every declined or inconsistent quest listed with its reason
+- [x] **Every added node matches v84** — 405/405 subtrees, 5,292 nodes, 0 divergences, comparator
+      self-check demonstrated on four mutation kinds (see the follow-up above)
 
 ## Rollback
 
