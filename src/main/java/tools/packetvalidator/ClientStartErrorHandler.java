@@ -27,18 +27,23 @@ import java.util.Set;
 public class ClientStartErrorHandler implements PacketHandler {
     private static final Logger log = LoggerFactory.getLogger(ClientStartErrorHandler.class);
 
-    private static final int SEEN_LIMIT = 512;
+    static final int SEEN_LIMIT = 512;
 
     // ponytail: dedupe by exact entry text, LRU-bounded. Entries carry no timestamp, so two identical
     // crashes are indistinguishable and the second is suppressed - acceptable, the first already told
     // us where to look. Upgrade path if that ever matters: key by (client address, entry index).
-    private static final Set<String> seen = Collections.synchronizedSet(
-            Collections.newSetFromMap(new LinkedHashMap<>(SEEN_LIMIT, 0.75f, true) {
-                @Override
-                protected boolean removeEldestEntry(Map.Entry<String, Boolean> eldest) {
-                    return size() > SEEN_LIMIT;
-                }
-            }));
+    private static final Set<String> seen = newSeenSet();
+
+    /** Package-private so {@code ClientStartErrorHandlerTest} can prove the bound actually holds. */
+    static Set<String> newSeenSet() {
+        return Collections.synchronizedSet(
+                Collections.newSetFromMap(new LinkedHashMap<>(SEEN_LIMIT, 0.75f, true) {
+                    @Override
+                    protected boolean removeEldestEntry(Map.Entry<String, Boolean> eldest) {
+                        return size() > SEEN_LIMIT;
+                    }
+                }));
+    }
 
     /** This packet is unauthenticated, so cap how much noise one sender can put in the log. */
     private static final int MAX_LOGGED_PER_PACKET = 20;
