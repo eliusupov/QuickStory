@@ -193,8 +193,18 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
         if (ServerConstants.VERSION < 84) {
             return;
         }
-        p.skip(p.readInt() * 8);    // nMultiTargetForBall: count x (int x, int y)
-        p.skip(p.readInt() * 4);    // nRandTimeForAreaAttack: count x int
+        skipCounted(p, 8);          // nMultiTargetForBall: count x (int x, int y)
+        skipCounted(p, 4);          // nRandTimeForAreaAttack: count x int
+    }
+
+    // Client-supplied count, so bound it rather than trusting it: a wrong model here would otherwise
+    // turn into an IndexOutOfBounds out of a hot handler and drop the session. Skipping nothing
+    // leaves the movement parse to fail the way it already does, which the caller catches.
+    private static void skipCounted(InPacket p, int elementSize) {
+        int count = p.readInt();
+        if (count > 0 && (long) count * elementSize <= p.available()) {
+            p.skip(count * elementSize);
+        }
     }
 
     private static boolean inRangeInclusive(Byte pVal, Integer pMin, Integer pMax) {
