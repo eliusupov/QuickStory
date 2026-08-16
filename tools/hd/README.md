@@ -31,21 +31,27 @@ runtime and nothing needs regenerating to change resolution.
 | | anchors | share |
 |---|---:|---:|
 | T1 masked context signature | 184 | 58.0% |
-| T2 neighbour-delta anchoring | 42 | 13.2% |
+| T2 neighbour-delta anchoring | 43 | 13.6% |
 | T2b interval-identical bracketing | 1 | 0.3% |
-| T2c one-sided identity extension | 5 | 1.6% |
+| T2c one-sided identity extension | 6 | 1.9% |
 | T3 function-scoped | 6 | 1.9% |
 | T6 monotone-envelope | 8 | 2.5% |
 | T7 forward-idiom in envelope | 11 | 3.5% |
 | T5 data-site code xref | 1 | 0.3% |
-| M hand-resolved | 4 | 1.3% |
-| **resolved and verified** | **264** | **83.3%** |
-| **rejected as false positive** | **14** | 4.4% |
-| unresolved | 39 | 12.3% |
+| M hand-resolved | 9 | 2.8% |
+| **resolved and verified** | **269** | **84.9%** |
+| **rejected as false positive** | **10** | 3.2% |
+| unresolved | 38 | 12.0% |
 
-Per **operation**, after the source-bug corrections: **271 PASS, 0 FAIL, 53 unresolved,
+Per **operation**, after the source-bug corrections: **276 PASS, 0 FAIL, 48 unresolved,
 3 dropped**. Restricted to the shipping set (groups C–J; A/B/L are already done by
-`edits\`, K is optional gameplay caps): **293 ops → 258 PASS, 0 FAIL, 35 unresolved.**
+`edits\`, K is optional gameplay caps): **293 ops → 263 PASS, 0 FAIL, 30 unresolved
+(89.8%).**
+
+Hand-resolved sites live in `data/manual-sites.json` with their evidence written out;
+`resolve.py` applies them last and they **override** any search-tier hit, because a
+recorded chain of reasoning outranks a signature match. A manual answer that disagrees
+with a T1 hit is printed as a warning rather than silently preferred.
 
 ## The three techniques phase 0 measured, re-measured
 
@@ -105,22 +111,25 @@ Every accepted hit must (a) reproduce in the second, independent v84 dump, (b)
 disassemble to the same instruction shape as v83 — same mnemonic, same register
 skeleton, immediate/displacement at the same offset and width.
 
-**All 14 false positives passed the shape check.** `push 578` looks exactly like
+**All 10 false positives passed the shape check.** `push 578` looks exactly like
 `push 578` wherever it is. They were caught by two structural invariants instead:
 
-- **injectivity** — two distinct v83 sites cannot be one v84 site. Fourteen sites
-  collided on four v84 addresses.
-- **monotonicity** — a delta far outside its neighbours' band is wrong.
+- **injectivity** — two distinct v83 sites cannot be one v84 site.
+- **monotonicity** — a delta far outside its neighbours' band is wrong. Note this is a
+  strong *heuristic*, not a law: v84 removed a few bytes between `0x008D1D50` and
+  `0x008D1FF4` (v83 gap `0x2A4`, v84 gap `0x185`), so the check runs against a band over
+  four neighbours a side with a `0x800` margin rather than a strict ordering.
 
 Tie-breaking on the tier alone is wrong: `0x00523FA3`'s delta `+0xBC42` matches its
 T1-resolved neighbours on *both* sides exactly, so it beats four better-ranked
 claimants on the same address. Collisions are resolved on delta agreement with the
 T1/hand-resolved skeleton first, tier second.
 
-The damage they would have done is concentrated: 10 of the 23 group-I operations
+The damage they would have done is concentrated: 8 of the 23 group-I operations
 collapsed onto two addresses, and four group-D status-bar writes collapsed onto the
-addresses that already belonged to `0x008CFD4B`/`0x008CFD50`. Applying them would have
-written eight resolution values into two instructions.
+addresses that already belonged to `0x008CFD4B`/`0x008CFD50` — those four were then
+resolved correctly by hand to `0x00906C07`/`0x0C` and `0x00906D8C`/`0x91`. Applying the
+false positives would have written eight resolution values into two instructions.
 
 Full list in the `resolve.py` output and in `data/v84-resolved.json`
 (`status: false-positive`, with `reason`).
@@ -186,9 +195,22 @@ route. MinHook becomes necessary only for the optional `EzorsiaV2_UI.wz` side ar
 which needs exactly two hooks (`CWvsApp::InitializeResMan`, `StringPool::GetString`).
 The hook table in `dllmain.cpp` is deliberately empty.
 
-**`codecaves.h` must be copied from upstream verbatim** and only its `dw…Retn`
-constants replaced with the generated `HD_<name>_RETN` values. The cave bodies are
-~600 lines of naked `__asm`; retyping them is how you get a silent crash.
+**`codecaves.h` must be copied from upstream verbatim** and its `dw…Retn` constants
+replaced with the generated `HD_<name>_RETN` values. The cave bodies are ~600 lines of
+naked `__asm`; retyping them is how you get a silent crash.
+
+**Two cave bodies additionally need editing**, because a cave body *replays* the
+instructions it displaced and v84 displaced different ones. `verify.py` finds these
+automatically and prints both sequences — 30 caves resolved, 2 need an edit:
+
+| cave | v83 displaced | v84 displaced | edit |
+|---|---|---|---|
+| `AlwaysViewRestoreFix` `0x00642105` → `0x0065797A` | `test eax,eax ; je 0x64210F ; mov ecx,[eax] ; push eax` | same, `je 0x657984` | retarget the `je` |
+| `AdjustStatusBarInput` `0x008D217C` → `0x00906EBE` | `push 0x16 ; push edi ; lea ecx,[esi+0xCD0]` | `… lea ecx,[esi+0xD08]` | `CUIStatusBar` member moved `+0x38` |
+
+The `+0x38` shift is corroborated independently by `0x008D247B → 0x009071BD`, whose
+`lea ecx,[esi+0xCD4]` becomes `lea ecx,[esi+0xD0C]`. Assume any other v83 struct offset
+baked into a cave body has moved by the same amount and re-check it before shipping.
 
 To build: x86 DLL, no CRT dependency needed beyond `memcpy`/`memset`, link
 `kernel32`. Any MSVC toolchain; match the other edit DLLs (they are ~30–70 KB x86).
@@ -203,6 +225,7 @@ To build: x86 DLL, no CRT dependency needed beyond `memcpy`/`memset`, link
 | `SHAPE` | the bytes decode to the same instruction shape as the v83 site |
 | `SLOT` | the write lands on that instruction's own immediate/displacement, at the right width — **this is the check the three latent bugs fail** |
 | `CAVE` | for code caves: the NOP run tiles a whole number of v84 instructions, so the cave's `jmp` back at origin+N lands on an instruction boundary |
+| cave body (informational) | whether the displaced instruction sequence is identical in v83 and v84 — if not, the naked `__asm` has to be edited, not just re-pointed |
 | `BLOCK` | same tiling check for `FillBytes` / `WriteByteArray` |
 | `DUAL` | the same bytes appear in the second, independent dump |
 | `FIT` | the value fits the operand width |
@@ -225,10 +248,14 @@ prove any of this:
 4. **Interaction with `edits\`.** No two-writers-to-one-address conflict is possible from
    this table (groups A/B/L are excluded), but nothing proves `bypass` does not itself
    relocate code.
-5. **The 37 unresolved shipping operations.** Their absence is mostly cosmetic
-   (mis-placed widgets), but `0x008D1F65` / `0x008D217C` are status-bar code caves: if
-   the other status-bar patches apply and these do not, the HUD will be *inconsistently*
-   placed, which looks worse than not patching at all. See the manual test below.
+5. **The 30 unresolved shipping operations.** Mostly cosmetic (mis-placed widgets).
+   The one to watch is `0x008D1F65` (`AdjustStatusBarBG`): v84 recompiled that
+   construct from a vtable call with an inline struct copy into a direct thiscall, so
+   its 5-byte NOP run no longer tiles. Its v84 address is known (`0x00906D39`) but the
+   cave needs redesigning — 3 NOPs and a body of `push nStatusBarY ; push edi ; jmp
+   0x00906D3C`. Until that is done the status-bar background will sit at 22px while the
+   rest of the HUD moves, which looks worse than not patching at all. Details in
+   `data/manual-sites.json` under `not_portable_as_is`.
 6. **The `0x0040013E` 4 GB edit.** It patches the PE `Characteristics` field, which the
    loader has already consumed by the time any DLL runs. It is a no-op from inside the
    process — the source says as much. Port it into a file patcher or drop it.
@@ -256,7 +283,7 @@ Check in this order — each step gates the next, so stop at the first failure:
 | 1 | window opens at 1280×720, not 800×600 | `0x00A4127E` / `0x00A41283` (`InitializeGr2D`) landed | the whole set is mis-timed or mis-addressed; nothing below will be meaningful |
 | 2 | login screen: version number and world-select buttons in place | group E + the `VersionNumberFix` / `LoginBackCanvas` / `LoginViewRec` caves | E caves; `0x0060D85B` is known unresolved |
 | 3 | mouse cursor reaches all four screen edges | `0x0059AC09/22`, `0x0059A898/8B1` cursor clamps | cursor clamp group in C |
-| 4 | in game: status bar spans the bottom, HP/MP/EXP bars aligned | group D + `AdjustStatusBar` cave | **expect partial failure** — `0x008D1F65` and `0x008D217C` are unresolved |
+| 4 | in game: status bar spans the bottom, HP/MP/EXP bars aligned | group D, 30/31 ops, + `AdjustStatusBar` and `AdjustStatusBarInput` caves | **expect the background layer to stay put** — `AdjustStatusBarBG` (`0x008D1F65`) is the one op still unported, and its cave needs redesigning, not just an address |
 | 5 | open a skill window, hover a buff icon: tooltip stays on screen | `0x008F32CC/DF` tooltip clamp | known unresolved (`0x008F32CC`) |
 | 6 | receive a party/guild/trade invite | group I | **expect failure** — 13 of 23 ops unresolved and the group is restructured in v84 (see above); this is the designated known-broken step |
 | 7 | open the cash shop | group F — 11/11 verified, all 9 caves pass | if this breaks, the cave mechanism itself is wrong |

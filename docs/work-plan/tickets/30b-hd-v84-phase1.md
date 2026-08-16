@@ -15,16 +15,40 @@ the tier table, the false-positive list and the manual test procedure.
 | | |
 |---|---|
 | patch operations parsed from source | 327 (over 319 addresses, 317 distinct instruction anchors) |
-| resolved to v84 **and verified** | 264 anchors — 83.3% |
-| rejected as false positives | 14 |
-| unresolved | 39 |
-| **operations** PASS / FAIL / unresolved / dropped | **271 / 0 / 53 / 3** |
-| **shipping set** (groups C–J) | **293 ops → 258 PASS, 0 FAIL, 35 unresolved (88.1%)** |
+| resolved to v84 **and verified** | 269 anchors — 84.9% |
+| rejected as false positives | 10 |
+| unresolved | 38 |
+| **operations** PASS / FAIL / unresolved / dropped | **276 / 0 / 48 / 3** |
+| **shipping set** (groups C–J) | **293 ops → 263 PASS, 0 FAIL, 30 unresolved (89.8%)** |
 
 Phase 0 reported 255/316 = 80.7% "mechanically located". That figure is roughly right
 in magnitude but was never checked for correctness. Re-derived with verification:
-**14 of the hits phase 0's method produces are false positives**, and two new techniques
-(monotone-envelope bracketing, forward-idiom scoring) recover more than the shortfall.
+**10 of the hits phase 0's method produces are false positives**, and two new techniques
+(monotone-envelope bracketing, forward-idiom scoring) plus nine hand-resolved sites
+more than close the gap.
+
+## Code caves: 2 of 30 need the asm body edited, not re-pointed
+
+The harness compares the instruction sequence a cave displaces in v83 with the one it
+displaces in v84. All 30 resolved caves tile their NOP run exactly; two replay
+something that changed:
+
+| cave | v83 displaced | v84 displaced | edit |
+|---|---|---|---|
+| `AlwaysViewRestoreFix` `0x00642105`→`0x0065797A` | `test eax,eax ; je 0x64210F ; mov ecx,[eax] ; push eax` | same but `je 0x657984` | retarget the `je` |
+| `AdjustStatusBarInput` `0x008D217C`→`0x00906EBE` | `push 0x16 ; push edi ; lea ecx,[esi+0xCD0]` | `… lea ecx,[esi+0xD08]` | `CUIStatusBar` member moved `+0x38` |
+
+The `+0x38` shift is confirmed independently by `0x008D247B → 0x009071BD`
+(`[esi+0xCD4]` → `[esi+0xD0C]`). This invalidates the assumption that cave bodies are
+v84-neutral — any v83 struct offset baked into one has to be re-checked.
+
+One cave cannot be ported at all as written: `AdjustStatusBarBG` (`0x008D1F65`). Its v84
+address is known (`0x00906D39`, by exhaustive enumeration — v83 has exactly three
+`push 0x16` in the status-bar region, v84 has the matching two plus `0x00904888`), but
+v84 recompiled the construct from a vtable call with an inline struct copy into a direct
+thiscall, so a 5-byte NOP run no longer tiles (2+1=3 or 2+1+6=9). It needs a redesigned
+cave: 3 NOPs, body `push nStatusBarY ; push edi ; jmp 0x00906D3C`. Recorded in
+`tools/hd/data/manual-sites.json` under `not_portable_as_is`.
 
 ## Corrections to phase 0
 
@@ -46,16 +70,20 @@ in magnitude but was never checked for correctness. Re-derived with verification
 
 ## The false positives (the part that matters)
 
-All 14 **passed the instruction-shape check** — `push 578` looks like `push 578`
+All 10 **passed the instruction-shape check** — `push 578` looks like `push 578`
 wherever it is. They were caught by two structural invariants instead:
 
 - **injectivity**: two v83 sites cannot map to one v84 site
-- **monotonicity**: v84 only inserts code, so deltas rise with address
+- **monotonicity**: v84 mostly only inserts code, so deltas rise with address. Mostly:
+  v84 *removed* a few bytes between `0x008D1D50` and `0x008D1FF4` (v83 gap `0x2A4`,
+  v84 gap `0x185`), so the check uses a band over four neighbours a side with an
+  `0x800` margin, not a strict ordering.
 
-10 of the 23 group-I operations (the eleven near-identical invite/pop-up blocks)
+8 of the 23 group-I operations (the eleven near-identical invite/pop-up blocks)
 collapsed onto two v84 addresses, and four group-D status-bar writes collapsed onto
-addresses already owned by `0x008CFD4B`/`0x008CFD50`. Applying them writes eight
-different resolution values into two instructions.
+addresses already owned by `0x008CFD4B`/`0x008CFD50` — those four were then resolved
+correctly by hand. Applying the false positives writes eight different resolution
+values into two instructions.
 
 **Consequence for anyone reusing phase 0's method: a shape check is not sufficient.**
 
@@ -143,13 +171,14 @@ and everything else is address coverage.
 
 | | days |
 |---|---|
-| 22 non-group-I unresolved shipping ops by hand with `probe.py` | 1.5 |
+| 17 non-group-I unresolved shipping ops by hand with `probe.py` | 1 |
 | group I: re-RE the v84 pop-up handlers (restructured, not translatable) | 1.5 |
+| redesign the `AdjustStatusBarBG` cave for v84's codegen | 0.5 |
 | build + link the DLL, port `codecaves.h` verbatim, wire the cave table | 1 |
 | first launch, gated walkthrough, fix what moved | 1.5 |
 | re-tune v83 magic offsets to v84's `UI.wz` (unknowable until step 3) | 2 – 5 |
 | `EzorsiaV2_UI.wz` side archive + its 2 MinHook hooks (optional) | 0.5 |
-| **total** | **7 – 10.5** |
+| **total** | **7.5 – 11** |
 
 Phase 0 estimated 13.5–20 days for the whole job; ~4 of those are now spent and the
 resolution work came in at the optimistic end.

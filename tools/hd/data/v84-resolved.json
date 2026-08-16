@@ -8086,9 +8086,9 @@
   },
   {
    "v83": 9248080,
-   "v84": 9455742,
-   "tier": "T3-function",
-   "status": "false-positive",
+   "v84": 9464839,
+   "tier": "M-manual",
+   "status": "resolved",
    "shape83": {
     "m": "push",
     "ops": "0x242",
@@ -8110,20 +8110,21 @@
     "bytes": "6842020000"
    },
    "window": 5,
-   "delta": 207662,
+   "delta": 216759,
    "dual_dump": true,
    "fn_ok": true,
-   "note": "unique in located fn 0x009045FF",
+   "note": "CUIStatusBar::OnCreate. v83 0x008D1D50 = `push 0x242 ; push 0x320 ; push esi ; push esi ; lea eax,[ebp-0x14] ; push eax`",
    "fn83": 9239256,
    "fn84": 9455103,
+   "data": false,
    "shape_ok": true,
-   "reason": "collision: 3 v83 sites claim 0x0090487E"
+   "mono_ok": true
   },
   {
    "v83": 9248085,
-   "v84": 9455747,
-   "tier": "T3-function",
-   "status": "false-positive",
+   "v84": 9464844,
+   "tier": "M-manual",
+   "status": "resolved",
    "shape83": {
     "m": "push",
     "ops": "0x320",
@@ -8145,14 +8146,15 @@
     "bytes": "6820030000"
    },
    "window": 5,
-   "delta": 207662,
+   "delta": 216759,
    "dual_dump": true,
    "fn_ok": true,
-   "note": "unique in located fn 0x009045FF",
+   "note": "the `push 0x320` immediately after 0x00906C07, exactly as in v83.",
    "fn83": 9239256,
    "fn84": 9455103,
+   "data": false,
    "shape_ok": true,
-   "reason": "collision: 3 v83 sites claim 0x00904883"
+   "mono_ok": true
   },
   {
    "v83": 9248613,
@@ -8180,9 +8182,9 @@
   },
   {
    "v83": 9248756,
-   "v84": 9455742,
-   "tier": "T3-function",
-   "status": "false-positive",
+   "v84": 9465228,
+   "tier": "M-manual",
+   "status": "resolved",
    "shape83": {
     "m": "push",
     "ops": "0x242",
@@ -8204,20 +8206,21 @@
     "bytes": "6842020000"
    },
    "window": 5,
-   "delta": 206986,
+   "delta": 216472,
    "dual_dump": true,
    "fn_ok": true,
-   "note": "unique in located fn 0x009045FF",
+   "note": "second of the two `push 0x242 ; push 0x320` pairs in v84's status-bar region, matching v83's second (0x008D1FF4). v84 0x",
    "fn83": 9239256,
    "fn84": 9455103,
+   "data": false,
    "shape_ok": true,
-   "reason": "collision: 3 v83 sites claim 0x0090487E"
+   "mono_ok": true
   },
   {
    "v83": 9248761,
-   "v84": 9455747,
-   "tier": "T3-function",
-   "status": "false-positive",
+   "v84": 9465233,
+   "tier": "M-manual",
+   "status": "resolved",
    "shape83": {
     "m": "push",
     "ops": "0x320",
@@ -8239,20 +8242,21 @@
     "bytes": "6820030000"
    },
    "window": 5,
-   "delta": 206986,
+   "delta": 216472,
    "dual_dump": true,
    "fn_ok": true,
-   "note": "unique in located fn 0x009045FF",
+   "note": "the `push 0x320` immediately after 0x00906D8C.",
    "fn83": 9239256,
    "fn84": 9455103,
+   "data": false,
    "shape_ok": true,
-   "reason": "collision: 3 v83 sites claim 0x00904883"
+   "mono_ok": true
   },
   {
    "v83": 9249148,
-   "v84": null,
-   "tier": null,
-   "status": "unresolved",
+   "v84": 9465534,
+   "tier": "M-manual",
+   "status": "resolved",
    "shape83": {
     "m": "push",
     "ops": "0x16",
@@ -8263,14 +8267,26 @@
     "disp_size": 0,
     "bytes": "6a16"
    },
-   "shape84": null,
+   "shape84": {
+    "m": "push",
+    "ops": "0x16",
+    "len": 2,
+    "imm_off": 1,
+    "imm_size": 1,
+    "disp_off": 0,
+    "disp_size": 0,
+    "bytes": "6a16"
+   },
    "window": null,
-   "delta": null,
-   "dual_dump": null,
+   "delta": 216386,
+   "dual_dump": true,
    "fn_ok": null,
-   "note": "",
+   "note": "AdjustStatusBarInput cave. v83 displaces 9 bytes `push 0x16 ; push edi ; lea ecx,[esi+0xCD0]`; v84 0x00906EBE displaces ",
    "fn83": 9239256,
-   "fn84": 9455103
+   "fn84": 9455103,
+   "data": false,
+   "shape_ok": true,
+   "mono_ok": true
   },
   {
    "v83": 9249915,

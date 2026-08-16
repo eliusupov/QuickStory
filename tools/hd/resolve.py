@@ -43,7 +43,9 @@ LO, HI = 0x400000, 0xC00000          # plausible absolute-VA range -> wildcard t
 # resolution goes through a code cross-reference instead.
 DATA_ANCHORS = {0x00AFE084,   # 3x 16-byte server IP string slots
                 0x00AFE8A0,   # damage-cap double
-                0x00BE2738, 0x00BE273C, 0x00BE2DF0, 0x00BE2DF4}
+                0x00BE2738, 0x00BE273C, 0x00BE2DF0, 0x00BE2DF4,
+                0x0040013E,   # PE COFF Characteristics field
+                0x00C08459, 0x00C08463}   # embedded manifest text
 WINDOWS = [(32, 32), (24, 24), (16, 16), (12, 12)]
 
 
@@ -640,10 +642,17 @@ def main():
                                     'status': 'unresolved', 'shape83': None,
                                     'shape84': None, 'window': None, 'delta': None,
                                     'dual_dump': None, 'fn_ok': None, 'note': ''})
-            if r['v84'] is None:
+            # Hand RE with written evidence outranks every search tier, so it
+            # OVERRIDES an existing hit -- several of these sites were claimed by a
+            # weak tier that the injectivity check would only have rejected later.
+            # A clash with T1 is a real disagreement and gets shouted about.
+            if r['tier'] == 'T1-context' and r['v84'] != int(v['v84'], 16):
+                print(f'   !! manual 0x{s:08X} -> 0x{int(v["v84"], 16):08X} '
+                      f'DISAGREES with T1 0x{r["v84"]:08X}; keeping manual')
+            if r['v84'] != int(v['v84'], 16):
                 r.update(v84=int(v['v84'], 16), tier=v['tier'], status='hit',
                          delta=int(v['v84'], 16) - s, note=v['evidence'][:120],
-                         data=True)
+                         data=s in DATA_ANCHORS)
                 nm += 1
     print(f'M  hand-resolved                 : {nm}')
 

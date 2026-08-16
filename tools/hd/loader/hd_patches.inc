@@ -210,6 +210,11 @@ static const HdPatch kHdPatches[] = {
   { 0x00904888,   5, K_CAVE  ,          {0,0,0,0}, 'D', "P240", 0x008CFD55 },  // CONST (non-linear)  // 
   { 0x0090644B,   4, K_INT   ,          {0,2,0,1}, 'D', "P241", 0x008D1793 },  // add eax,533
   { 0x00906452,   4, K_INT   ,        {0,0,0,798}, 'D', "P242", 0x008D179A },  // push 647 //hd800
+  { 0x00906C08,   4, K_INT   ,        {0,2,0,-22}, 'D', "P243", 0x008D1D50 },  // push 578
+  { 0x00906C0D,   4, K_INT   ,          {2,0,0,0}, 'D', "P244", 0x008D1D55 },  // push 800
+  { 0x00906D8D,   4, K_INT   ,        {0,2,0,-22}, 'D', "P246", 0x008D1FF4 },  // push 578
+  { 0x00906D92,   4, K_INT   ,          {2,0,0,0}, 'D', "P247", 0x008D1FF9 },  // push 800 ; CUIStatusBar
+  { 0x00906EBE,   9, K_CAVE  ,          {0,0,0,0}, 'D', "P248", 0x008D217C },  // CONST (non-linear)  // 
   { 0x009071BE,   4, K_INT   ,        {0,2,0,-33}, 'D', "P249", 0x008D247B },  // push 567 ; IWzVector2D::RelMove
   { 0x009074A8,   4, K_INT   ,        {0,2,0,-19}, 'D', "P250", 0x008D2765 },  // push 581
   { 0x009076F7,   4, K_INT   ,        {0,2,0,-19}, 'D', "P251", 0x008D29B4 },  // push 581
@@ -338,3 +343,5 @@ static const HdPatch kHdPatches[] = {
 #define HD_ccMoreGainMsgsFade_RETN   0x008CF75C  // origin + 7 nops
 #define HD_AdjustStatusBar_ORIGIN 0x00904888
 #define HD_AdjustStatusBar_RETN   0x0090488D  // origin + 5 nops
+#define HD_AdjustStatusBarInput_ORIGIN 0x00906EBE
+#define HD_AdjustStatusBarInput_RETN   0x00906EC7  // origin + 9 nops

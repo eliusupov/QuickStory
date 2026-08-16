@@ -25,10 +25,46 @@
    "evidence": "Three 16-byte-stride IPv4 string slots. Unique such triple in each image: v83 0x00AFE084 holds '192.168.1.109' x3 (already redirected); v84 0x00B4FAC4 holds the stock '63.251.217.4/.3/.2'. Identical in v84_mem.bin and v84_mem2.bin. The sibling data delta 0x51A28 at 0x00AFE8A0 corroborates the region.",
    "caveat": "Group B. edits\\redirect already does this at runtime; port only if you drop that edit."
   },
+  "0x008D1D50": {
+   "v84": "0x00906C07",
+   "tier": "M-manual",
+   "evidence": "CUIStatusBar::OnCreate. v83 0x008D1D50 = `push 0x242 ; push 0x320 ; push esi ; push esi ; lea eax,[ebp-0x14] ; push eax`; v84 0x00906C07 = `push 0x242 ; push 0x320 ; push edi ; lea eax,[ebp-0x18] ; push edi ; push eax ; mov byte[ebp-4],0x7B ; call 0x61283A`. Only TWO `push 0x242 ; push 0x320` pairs exist in v84's 0x00906000-0x00907400, matching v83's two (0x008D1D50, 0x008D1FF4), in the same order. Identical in both dumps. The T3 hit that previously claimed 0x0090487E for this site was rejected as a collision with 0x008CFD4B.",
+   "caveat": "delta 0x34EB7 is slightly ABOVE its neighbours' band: v84 REMOVED a couple of bytes between this block and the next (v83 gap 0x2A4 -> v84 gap 0x185). Monotonicity is a strong heuristic here, not a law."
+  },
+  "0x008D1D55": {
+   "v84": "0x00906C0C",
+   "tier": "M-manual",
+   "evidence": "the `push 0x320` immediately after 0x00906C07, exactly as in v83."
+  },
+  "0x008D1FF4": {
+   "v84": "0x00906D8C",
+   "tier": "M-manual",
+   "evidence": "second of the two `push 0x242 ; push 0x320` pairs in v84's status-bar region, matching v83's second (0x008D1FF4). v84 0x00906D8C = `push 0x242 ; push 0x320 ; push edi ; lea eax,[ebp-0x18] ; push edi ; push eax ; mov byte[ebp-4],0x82 ; call 0x61283A` -- same block shape as 0x00906C07, different unwind-state index, as expected for the second copy."
+  },
+  "0x008D1FF9": {
+   "v84": "0x00906D91",
+   "tier": "M-manual",
+   "evidence": "the `push 0x320` immediately after 0x00906D8C."
+  },
+  "0x008D217C": {
+   "v84": "0x00906EBE",
+   "tier": "M-manual",
+   "evidence": "AdjustStatusBarInput cave. v83 displaces 9 bytes `push 0x16 ; push edi ; lea ecx,[esi+0xCD0]`; v84 0x00906EBE displaces 9 bytes `push 0x16 ; push edi ; lea ecx,[esi+0xD08]` -- tiles exactly, same instruction count. The CUIStatusBar member offset moved +0x38, and the independently T2-resolved 0x008D247B -> 0x009071BD shows the identical +0x38 shift (0xCD4 -> 0xD0C), which corroborates this address from a second site. Delta 0x34D42 equals 0x008D247B's exactly.",
+   "cave_body_edit": "REQUIRED: the naked asm in AdjustStatusBarInput replays `lea ecx,[esi+0x0CD0]`. For v84 that must become `lea ecx,[esi+0x0D08]`."
+  },
   "0x00BE273C": {
    "v84": "0x00C3BA84",
    "tier": "M-manual",
    "evidence": "No absolute code xref exists for this dword, but its sibling 0x00BE2738 resolved by xref to 0x00C3BA80 and 0x00BE2DF0/0x00BE2DF4 resolved to 0x00C3C138/0x00C3C13C -- all three at the same delta 0x59348. 0x00BE273C = 0x00BE2738 + 4 therefore maps to 0x00C3BA84."
+  }
+ },
+ "not_portable_as_is": {
+  "0x008D1F65": {
+   "v84_logical": "0x00906D39",
+   "tier": "M-manual-needs-rewrite",
+   "evidence": "AdjustStatusBarBG cave. v83 and v84 each hold exactly the set of `push 0x16` sites in their status-bar region -- v83 has three (0x008CFD55, 0x008D1F65, 0x008D217C), v84 has two in the matching range plus 0x00904888 for 0x008CFD55. By order and by function, 0x008D1F65 corresponds to v84 0x00906D39.",
+   "why_not_shipped": "v84 recompiled this construct. v83 displaces `push 0x16 ; movsd ; push 0` (a vtable call at [ecx+0x90] with an inline struct copy) = 5 bytes. v84 0x00906D39 is `push 0x16 ; push edi ; lea ecx,[esi+0xD04]` -- a direct thiscall. A 5-byte NOP run does not tile there (2+1=3, or 2+1+6=9). Porting it means REWRITING the cave: nops 3, body `push nStatusBarY ; push edi ; jmp 0x00906D3C`. Left out of the shipping set until that rewrite is made and re-verified.",
+   "confidence": "address high, cave design not yet done"
   }
  },
  "source_bugs": {

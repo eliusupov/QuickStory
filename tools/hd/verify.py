@@ -50,6 +50,17 @@ def insn_run(img, va, n):
     return tot == n, seq
 
 
+def norm_seq(seq):
+    """Instruction sequence with struct offsets and immediates left in place.
+
+    A cave body REPLAYS the instructions it displaced. If v84 displaced a different
+    sequence -- a different member offset, a different addressing form, a different
+    instruction count -- the naked asm in codecaves.h has to be edited, not just
+    re-pointed. Comparing the raw text is exactly the right sensitivity here.
+    """
+    return tuple(s.strip() for s in seq)
+
+
 def fits(value, size):
     if value is None or isinstance(value, (str, list, float)):
         return True
@@ -129,12 +140,16 @@ def main():
         if r.get('data'):
             c['SHAPE'] = c['SLOT'] = None            # data site: nothing to decode
         elif p['op'] == 'CodeCave':
-            ok83, _ = insn_run(V83, p['site'], p['size'])
+            ok83, seq83 = insn_run(V83, p['site'], p['size'])
             ok84, seq = insn_run(V84, v84_anchor, p['size'])
             c['SHAPE'] = same_shape(shape(V83, p['site']), shape(V84, v84_anchor))
             c['CAVE83'], c['CAVE'] = ok83, ok84
             row['cave_v84_seq'] = seq
+            row['cave_v83_seq'] = seq83
             row['cave_retn_v84'] = v84_anchor + p['size']
+            # informational, not a pass/fail: it says whether the naked asm body in
+            # codecaves.h has to be EDITED for v84 or only re-pointed
+            row['cave_body_same'] = norm_seq(seq83) == norm_seq(seq)
             c['SLOT'] = None
         elif p['op'] in ('FillBytes', 'WriteString', 'WriteByteArray'):
             ok84, seq = insn_run(V84, v84_anchor, p['size'])
@@ -198,6 +213,15 @@ def main():
             print(f'  {r["id"]} {r["group"]} 0x{r["v83"]:08X}+{r["off"]} -> '
                   f'0x{r["v84"]:08X} [{r["tier"]}] {r["checks"]}'
                   f' {r.get("v84_insn", "")}')
+
+    caves = [r for r in rows if r['op'] == 'CodeCave' and r['verdict'] == 'PASS']
+    edit = [r for r in caves if not r.get('cave_body_same')]
+    print(f'\n--- CODE CAVES: {len(caves)} resolved, NOP run tiles v84 instructions in all')
+    print(f'    {len(edit)} need the naked asm BODY edited, not just re-pointed ---')
+    for r in edit:
+        print(f'  {r["id"]} {r["group"]} 0x{r["v83"]:08X} -> 0x{r["v84"]:08X} ({r["size"]}B)')
+        print(f'      v83 displaced: {" ; ".join(r["cave_v83_seq"])}')
+        print(f'      v84 displaced: {" ; ".join(r["cave_v84_seq"])}')
 
     unres = [r for r in rows if r['verdict'] == 'UNRESOLVED']
     print(f'\n--- STILL NEEDING MANUAL RE ({len(unres)} ops, '
