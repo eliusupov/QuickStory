@@ -1,6 +1,15 @@
 # 24 — v84 `SET_FIELD` / `CharacterData` layout, and the Evan-only entry crash
 
-**Status:** one change landed, awaiting live confirmation. **Confidence: moderate, not high — read §4.**
+> ## ⚠ ROUND 1 WAS WRONG — READ §8 FIRST
+>
+> The fix in §4 was **disproved by the live client** and reverted in `b2eed322c`. Job 2001 *does* use
+> the extended ten-slot SP table; all six reference repos were right and my "the v83 half of the bracket
+> is dead code" argument was wrong. §1, §2 and §3's *structural* findings still stand and are reused in
+> §8 — but §4's conclusion, and §3's premise that "the explorer proves every job-independent field is
+> correct", are both retracted. **§8 is the current state of this investigation.**
+
+**Status:** round 1 reverted; round 2 changed no code — the remaining candidate is unmeasurable and the
+evidence does not support a guess. **Read §8.**
 **Branch:** `worktree-evan-dualblade`.
 **Symptom:** v84 client crashes on entering the world as Evan (job 2001). Explorer (job 0) on the same
 map, same account, enters and plays.
@@ -362,3 +371,163 @@ check is the owner's next launch.
 6. **Not examined:** everything sent after `getCharInfo` in `PlayerLoggedinHandler` — keymap, macros,
    buddy list, family, guild — beyond confirming none of them branch on job. If a *later* packet turns
    out to be the crash, `getCharInfo` has been cleared by §2 and the search should start there.
+
+---
+
+# 8. Round 2 — what the live client actually said, and where that leaves it
+
+**No code changed this round.** Every field in `SET_FIELD` is now either verified or excluded except
+one, that one is unmeasurable with anything on disk, and the indirect evidence points *away* from it
+being wrong. Guessing again would cost a launch and could make things worse, as round 1 did.
+
+## 8.1 Two measurements from the owner
+
+**(a) The round-1 fix was disproved.** With job 2001 writing a plain SP short, the client crashed on
+**character select** — one step *earlier* than the bug it targeted, because `CHARLIST` runs every
+character through the same `addCharStats` (`addCharEntry:348`). Reverting restored it immediately.
+
+**(b) The explorer is not actually working.** > *"i cant go through portal with my explorer, 0 quests,
+not items, nothing"* — it spawns and moves, but no inventory, no quests, portals dead.
+
+My round-1 prediction that a wrong guess here would be "an unchanged Evan crash, not a new failure" was
+wrong too. **A mid-packet field is not fail-safe in either direction.** Recorded because I argued the
+opposite in §4.
+
+## 8.2 What (a) proves, which is more than it looks
+
+Reverting was the right call, but the experiment also **positively confirms** two things:
+
+1. **Job 2001 uses the extended table** — excluded by experiment, not argument. Do not re-try it.
+2. **The extended-SP encoding itself is correct.** With 1 byte (count 0) character select works; with
+   2 bytes it crashes. Had the v84 client wanted a *fixed-width* SP array — the live hypothesis in §7.5,
+   since the repos give 1, 15 and 23 bytes for this character — then 1 and 2 would *both* be short and
+   both would crash. Only the 1-byte form works, so v84 reads a variable count byte, exactly as Cosmic
+   writes it. **§7.5 is now resolved: the variable form is right.**
+3. Because character select renders the Evan through `addCharStats` + `addCharLook` without crashing,
+   **the Evan's entire char-stat block parses correctly.** So the Evan entry crash is in a block that
+   `CHARLIST` does not contain — i.e. *after* the stat block.
+
+## 8.3 A lead I found, validated, and killed
+
+Worth recording because it looked decisive and was not. `CharacterData::Decode` index 10 is
+`DecodeStr` with `guard: "(v143 & 1) != 0 && CInPacket::Decode1(a2)"` — a guard that *contains a decode
+call*. Read naively that means the client reads buddy-capacity (idx 8), a byte (idx 9), **and a third
+byte inside the `if`**, where Cosmic writes only two — a 1-byte deficit landing exactly at the boundary
+between "works" and "broken". It explained every symptom.
+
+It is wrong. 149 guards in the export contain an inline decode, and three of them sit on packets whose
+layout is known:
+
+| function | trace | actual packet |
+|---|---|---|
+| `CWvsContext::OnMonsterBookSetCard` | `[0] Decode1`, `[1][2] Decode4` guarded by inline `Decode1` | `writeByte, writeInt, writeInt` — 9 bytes |
+| `CField_Tournament::OnTournamentSetPrize` | `[0][1] Decode1`, `[2][3] Decode4` guarded by inline `Decode1` | two bytes then two ints |
+| `CUserRemote::OnPetActivated` | `[0][1] Decode1`, `[2] Decode1` guarded by inline `Decode1` | — |
+
+In every case the inline-guard decode is a **textual duplicate of the immediately preceding listed
+entry**, not an extra read. If it were an extra byte, `OnMonsterBookSetCard` would want 10 bytes for a
+9-byte packet that demonstrably works.
+
+**So index 9 *is* the linked-name bool, and Cosmic's two bytes are correct.** Adding this to §1.5's
+list of instrument quirks: *a guard containing `CInPacket::Decode*` re-states the preceding entry; it
+never adds a read.*
+
+## 8.4 Where the desync must be, by elimination
+
+| region | status |
+|---|---|
+| `OnSetField` header (channel, portal, bCharacterData, notices, 3 seeds) | verified §2 |
+| flag mask, extra-data byte | verified §2.1 |
+| **char-stat block** | **verified by experiment** §8.2 |
+| buddy capacity, linked-name bool + string | verified §8.3 |
+| money, 5 slot limits, 8-byte FILETIME | verified §2.1 |
+| four equip lists / terminators | verified, **discrimination win** §1.4 |
+| **equip + bundle item bodies** | **BLIND — the only candidate left** |
+| byte-positioned inventories, skills (incl. masterlevel predicate), cooldowns, quests, completed quests, minigame, rings, teleport, monster book, new year, area info, trailing short | verified §2.1 |
+
+One candidate remains: **`GW_ItemSlotBase::Decode`**. It is `"unresolved"` in the export at *every*
+call site — `CharacterData::Decode` indices 16/20/24/28/31 and `CWvsContext::OnInventoryOperation`
+index 5 all delegate to the same unreadable function — and the client is packed (§1.3). **It cannot be
+measured with anything in this tree.**
+
+## 8.5 The two candidate layouts, and why I did not pick one
+
+Verified myself this round, not via a summary. Cosmic's `addItemInfo` (`PacketCreator.java:401-493`) is
+**byte-identical to HeavenMS v83 upstream** (`MaplePacketCreator.java:392-484`) — no local drift. For a
+non-cash equip, from `writeShort(flag)` to the end:
+
+| | fields | bytes |
+|---|---|---|
+| **A — v83, what Cosmic sends** | `byte 0`, `byte itemLevel`, `int exp`, `int vicious`, `long 0`, `long ftEquipped`, `int -1` | **30** |
+| **B — v95** (`Rebirth95 GW_ItemSlotEquip.cs:236-259`) | `byte nLevelUpType`, `byte nLevel`, `int nEXP`, `int nDurability`, `int nIUC`, `byte nGrade`, `byte nCHUC`, `short nOption1-3`, `short nSocket1-2`, *(`long liSN` if not cash)*, `long ftEquipped`, `int nPrevBonusExpRate` | **38 or 46** |
+
+**Every field B adds is a post-v84 feature**: `nGrade`/`nOption*` are the potential system and `nCHUC`
+is star force, both introduced with Chaos (GMS ~v0.95, Aug 2011); v84 is Mar 2010 and pre-Big Bang. So
+the prior strongly favours **A**, which is what Cosmic already sends.
+
+**A second argument against B, from the live client.** If v84 wanted B, each of the explorer's four
+equips would be 8–16 bytes short, a cumulative 32–64 byte deficit. A deficit makes `CInPacket` read
+past `m_uLength` and throw — the client would **crash**, which is exactly what the Evan does and
+exactly what the explorer does *not*. The explorer surviving to a playable state is evidence the packet
+was **long enough**, i.e. the item records are not under-sized.
+
+Which leaves the uncomfortable possibility that **`SET_FIELD` is fine and the explorer's symptoms are
+not a packet bug at all.**
+
+## 8.6 The competing explanation, which is documented and in another lane
+
+All three explorer symptoms are also textbook client-data symptoms:
+
+- *"0 quests"* — a freshly created character genuinely **has** zero quest records; `addQuestInfo` writes
+  two zero counts and that is correct. The quest *window* is populated from the client's `Quest.wz`.
+- *"can't go through portal"* — portals come from the client's `Map.wz` and are validated against the
+  server's map data. Nothing in `SET_FIELD` carries them.
+- *"no items"* — ambiguous between "inventory is empty" (packet) and "items present but not rendering"
+  (WZ).
+
+And this repo already documents the merge as incomplete — `EvanCreator.java:36-38`:
+
+> *"Evan's own v84 tutorial maps are not installed yet (Map.wz v84 rows are still unmerged), so starting
+> there would strand the character in a map the client cannot load."*
+
+Both characters are on `MUSHROOM_TOWN` (10000). If the server's map XML is v83 and the client's `Map.wz`
+is v84, portal names/indices can disagree and portals stop working with a perfectly good field packet.
+That is `docs/wz-baseline/` + `wz/` — **another agent's lane, deliberately not touched.**
+
+## 8.7 The one question that decides it
+
+Zero cost, ten seconds, no launch needed — the owner is already in game with the explorer:
+
+> **Open the inventory and look at the ETC tab. Is "Beginner's Guide" (4161001) there, in slot 1?**
+
+The ETC inventory is serialised *after* all four equip lists and after the USE and SETUP lists. For that
+item to appear with the right name in the right slot, the client must have walked every equip record at
+exactly the right size and landed on the ETC list — which is only possible if the item body layout is
+correct.
+
+- **Guide is there** → `SET_FIELD` parsed end to end. The item body is layout **A**, the packet is fine,
+  and "no items / 0 quests / dead portals" is client-data (`Map.wz`/`Quest.wz`/`Character.wz`), i.e. the
+  WZ lane. Stop looking at `PacketCreator`.
+- **ETC tab empty or garbage** → the parse desynced at or before the equips. The item body is the only
+  unverified field left, so layout **B** (or some v84 variant) is real, and the next step is to find the
+  IDB/unpacked dump (§1.3) rather than to guess which of B's fields v84 has.
+
+Two supporting reads if the first is ambiguous — both are serialised *before* the equips, so they
+bracket the desync: **the meso amount** (`writeInt(meso)`, immediately after the linked-name byte) and
+**the inventory slot counts** (the five bytes after it). If those are correct but the ETC tab is not,
+the desync starts precisely at the first equip record.
+
+## 8.8 Still unresolved
+
+1. **The Evan entry crash has no identified cause.** §8.2 clears the stat block; §8.4 clears everything
+   else structural. If the ETC-tab check says the packet is fine, then the crash is *not* in
+   `getCharInfo` at all and the search should move to the packets sent after it in
+   `PlayerLoggedinHandler` (§7.6) — none of which branch on job, so the differing **data** (Evan's item
+   ids, `SkillFactory.getSkill(20000012)` at line 364) would be the thing to look at.
+2. **`GW_ItemSlotBase::Decode` and `GW_CharacterStat::Decode` remain unreadable.** The IDB or unpacked
+   dump behind `ida_export_gms_v84.json` is still the single highest-value missing artifact.
+3. **Why the Evan crashes where the explorer merely misbehaves.** The only byte-level difference between
+   their field packets is the SP field: 1 byte (Evan, extended count 0) vs 2 (explorer). A shared
+   downstream desync read at a 1-byte-different alignment can easily be fatal in one case and survivable
+   in the other — but that is a mechanism, not evidence, and it is only relevant if the ETC-tab check
+   comes back "empty".
