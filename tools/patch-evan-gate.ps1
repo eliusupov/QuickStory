@@ -37,7 +37,10 @@ param(
     [int]    $Timeout      = 180,   # seconds to keep polling the address once attached
     [switch] $DryRun,               # read and report only, never write
     [switch] $SelfTest,             # verify the constants against local.exe on disk, then exit
-    [switch] $Watch                 # stay resident: re-patch every client launch, forever
+    [switch] $Watch,                # stay resident: re-patch every client launch, forever
+    [switch] $Trace,                # ALSO install the _com_error trap (ticket 11b) - FREEZES the
+                                    # client at the throw instead of showing the error dialog
+    [switch] $ReadTrace             # read back what the trap captured, then exit
 )
 
 $ErrorActionPreference = 'Stop'
@@ -74,6 +77,34 @@ $Gates = @(
                          0x81,0xFE,0xD1,0x07,0x00,0x00,0x0F,0x84,0xCB,0x00,0x00,0x00)
        Write = [byte[]]@(0x90) * 21 }
 )
+
+# --- ticket 11b: the _com_error trap (DIAGNOSTIC ONLY, opt-in via -Trace) ----------------------
+# The crash dialog is _com_error's "Unknown error 0x%0lX" @0x00B3D8E8 - a THROWN exception, which
+# is why Windows logs no crash event. All 22,687 `if (FAILED(hr)) _com_issue_error(hr)` sites
+# funnel through 0x00A5FDE4. Overwriting it with:
+#     mov [0x00A5FDEE], esp      ; stash esp in this function's own dead tail
+#     jmp $                      ; freeze right at the throw
+# turns the crash into a HANG we can inspect at leisure. [esp] is then the return address = the
+# exact VA of the failing check, and [esp+4] is the HRESULT.
+# 0x00A5FDE4 + 14 = 0x00A5FDF2, which is where the next function starts - nothing outside is
+# touched.
+#
+# THE SCRATCH MUST NOT BE IN THE CODE PAGE. Ticket 11b's original design stashed esp at
+# 0x00A5FDEE, inside the patched function's own tail. That is a WRITE INTO A CODE PAGE, and this
+# script restores the original page protection right after patching - so at runtime the page is
+# read-only again and the stash itself access-violates. The trap would then CAUSE a crash rather
+# than catch one, and the resulting "it crashed without freezing" reads exactly like "the throw
+# did not come through here". First run of that design was inconclusive for this reason.
+# Fix: VirtualAllocEx a genuinely writable page at a FIXED address (so the reader, which is a
+# separate process, knows where to look without passing state through a file) and stash there.
+$TraceScratchVA = 0x30000000
+$TraceGate = @{ Name  = 'ComErrorTrap'
+                VA    = 0x00A5FDE4
+                Off   = 0x0065FDE4
+                Read  = [byte[]]@(0x6A,0x00,0xFF,0x74,0x24,0x08,0xE8,0xD4,0x07,0x00,0x00,0xC2,0x04,0x00)
+                # mov [0x30000000], esp ; jmp $ ; nop-pad to 14
+                Write = [byte[]]@(0x89,0x25,0x00,0x00,0x00,0x30,0xEB,0xFE,0x90,0x90,0x90,0x90,0x90,0x90) }
+if ($Trace) { $Gates = $Gates + $TraceGate }
 
 $LogFile = Join-Path $PSScriptRoot 'evan-gate-patch.log'
 function Log($msg) {
@@ -144,10 +175,48 @@ public static extern bool VirtualProtectEx(IntPtr h, IntPtr addr, UIntPtr size, 
 public static extern bool FlushInstructionCache(IntPtr h, IntPtr addr, UIntPtr size);
 [DllImport("kernel32.dll", SetLastError=true)]
 public static extern bool CloseHandle(IntPtr h);
+[DllImport("kernel32.dll", SetLastError=true)]
+public static extern IntPtr VirtualAllocEx(IntPtr h, IntPtr addr, UIntPtr size, uint allocType, uint prot);
 '@
 
 $PROCESS_ACCESS      = 0x0438  # VM_OPERATION | VM_READ | VM_WRITE | QUERY_INFORMATION
 $PAGE_EXECUTE_RW     = 0x40
+
+# --- ticket 11b: read back what the trap captured ---------------------------------------------
+if ($ReadTrace) {
+    $proc = Get-Process -Name MapleStory -ErrorAction SilentlyContinue | Select-Object -First 1
+    if (-not $proc) { Log 'READTRACE: no MapleStory process. The client must still be HUNG, not closed.'; exit 2 }
+    $h = [W.K32]::OpenProcess($PROCESS_ACCESS, $false, $proc.Id)
+    if ($h -eq [IntPtr]::Zero) { Log "READTRACE: OpenProcess failed (win32 $([Runtime.InteropServices.Marshal]::GetLastWin32Error()))"; exit 3 }
+
+    try {
+        $b4 = New-Object byte[] 4; $r = 0
+        if (-not [W.K32]::ReadProcessMemory($h, [IntPtr]::new($TraceScratchVA), $b4, 4, [ref]$r) -or $r -ne 4) {
+            Log 'READTRACE: could not read the scratch slot.'; exit 4
+        }
+        $esp = [BitConverter]::ToUInt32($b4, 0)
+        Log "READTRACE: captured esp = 0x$('{0:X8}' -f $esp)"
+        if ($esp -eq 0) { Log 'READTRACE: scratch is still zero - the trap never fired. The throw did NOT come through 0x00A5FDE4.'; exit 5 }
+
+        $stack = New-Object byte[] 0x80
+        if (-not [W.K32]::ReadProcessMemory($h, [IntPtr]::new([int]$esp), $stack, 0x80, [ref]$r) -or $r -ne 0x80) {
+            Log "READTRACE: could not read the stack at 0x$('{0:X8}' -f $esp) (win32 $([Runtime.InteropServices.Marshal]::GetLastWin32Error()))"; exit 4
+        }
+
+        $w0 = [BitConverter]::ToUInt32($stack, 0)
+        $w1 = [BitConverter]::ToUInt32($stack, 4)
+        Log "READTRACE: *** FAULTING CHECK  = 0x$('{0:X8}' -f $w0)  (the VA that threw) ***"
+        Log "READTRACE: *** HRESULT         = 0x$('{0:X8}' -f $w1) ***"
+        Log 'READTRACE: code-range words on the stack (poor-man''s backtrace, nearest first):'
+        for ($i = 0; $i -lt 0x80; $i += 4) {
+            $w = [BitConverter]::ToUInt32($stack, $i)
+            # Only words inside the image are plausible return addresses; everything else is data.
+            if ($w -ge 0x00400000 -and $w -le 0x00A80000) { Log ("  [esp+0x{0:X2}] 0x{1:X8}" -f $i, $w) }
+        }
+    }
+    finally { [void][W.K32]::CloseHandle($h) }
+    exit 0
+}
 
 Log "=== ticket 01b/11 runtime patch === $($Gates.Count) gates: $(($Gates | ForEach-Object { "$($_.Name)@0x$('{0:X8}' -f $_.VA)" }) -join ', '), DryRun=$DryRun, Watch=$Watch"
 
@@ -169,6 +238,20 @@ function Invoke-GatePatch {
         return 3
     }
     Log "attached to PID $($proc.Id) ($($proc.ProcessName))"
+
+    # The trap stashes esp at $TraceScratchVA, so that page must exist and be WRITABLE before the
+    # patched code ever runs. Reserve it at a fixed address so -ReadTrace (a separate process)
+    # knows where to look. MEM_COMMIT|MEM_RESERVE = 0x3000, PAGE_READWRITE = 0x04.
+    if ($Trace) {
+        $alloc = [W.K32]::VirtualAllocEx($h, [IntPtr]::new($TraceScratchVA), [UIntPtr]::new(4096), 0x3000, 0x04)
+        if ($alloc -eq [IntPtr]::Zero) {
+            $e = [Runtime.InteropServices.Marshal]::GetLastWin32Error()
+            Log "ABORT PID $($proc.Id): could not reserve trace scratch at 0x$('{0:X8}' -f $TraceScratchVA) (win32 $e). NOT installing the trap - it would fault on its own stash."
+            [void][W.K32]::CloseHandle($h)
+            return 4
+        }
+        Log "trace scratch reserved at 0x$('{0:X8}' -f $alloc.ToInt32())"
+    }
 
 # --- poll, guard, write, verify -----------------------------------------------------------------
 # Every gate must land. A partial patch is worse than none: gate 1 alone makes GetSkillLevel

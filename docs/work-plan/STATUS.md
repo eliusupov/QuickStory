@@ -1269,25 +1269,270 @@ Three smaller things worth carrying:
 
 # WHERE THE PROJECT STANDS
 
-**Everything that can be done without the owner is done.** Tickets **01–10 and 16 (partial)** are
-complete or staged; **11–15 need the client running.** The Evan branch is no longer blocked — 01's
-runtime gate patch reported `GUARD PASS` → `PATCHED and verified` against the live process, and 10
-landed on the back of it.
+**Evan works in game.** `!job 2001` succeeded, the character exists and renders. Tickets **01–10 and
+16 (partial)** are complete; **11 is running**, **12–15 not started.** 01's runtime gate patch
+reported `GUARD PASS` → `PATCHED and verified` against the live process. **It patches memory — it
+must be re-run after every client launch.**
 
-**Orchestrator-verified at close, independently:** all **18** client `.wz` SHA-256-match the backup —
-compared list against list, not sampled. **Nothing has ever been installed. The game client has not
-been modified once in this entire project.** Ticket 10 re-verified this by enumerating
-`D:\games\MapleStory\*.wz` rather than checking a hard-coded list, after a dispatch of mine claimed
-the opposite; see its section above.
+## ✅ SOLVED 2026-08-16 — the skill-window crash was `UI.wz/Basic.img/Tab8`
 
-## What is ready and waiting
+**One missing node.** It was sitting unapplied in our own `add-list/UI.txt:7` the entire time.
+Merged additively from `porting-resources/wz-data/v84/UI.wz` (1 added, 0 forced, 0 refused,
+0 conflicts, `patchVersion` 83 inherited, content digest verified, 0 drifted) and installed —
+**the skill window opens, and with `!maxskill` the Evan skills are there.**
 
-`docs/wz-baseline/merge-lists/composed/` — **1,750 rows across 13 files** (11 + `Etc.wz` + `UI.wz`,
-both introduced by ticket 10). Nine of the eleven pre-existing outputs reproduce byte-identical
-across four independent runs, `Quest.wz` bit-for-bit equal to ticket 09's separately staged output;
-only `Skill.wz` and `String.wz` move, and only by ticket 10's rows. Server XML and SQL are already
-applied to the repo and green at **2,008** tests. The client half is one deliberate human copy away
-— **`Server\wz-merge\10c\`, thirteen files.**
+This is a **15-year-old unsolved community bug**. Three people reported this exact symptom on
+RaGEZONE in 2011 (*"the client crashed when I opened the skill bar. No prompt from the client."*)
+and nobody ever fixed it. The only proposed cause was an unconfirmed guess.
+
+**Why every binary-level theory failed:** v83's skill window has 5 tab slots and Evan has 10
+advancements. A 5-slot array indexed past its end is an out-of-bounds read — **no exception, no
+packet, no `_com_error`** — which is exactly why the `_com_issue_error` trap never fired, why the
+server logged nothing, and why Windows recorded no crash event. Both gate patches were necessary
+and neither was sufficient.
+
+**The generalisable lesson — this cost most of a day:** *when the client misbehaves around v84
+content, check the add-list for an unapplied node before disassembling anything.* Two separate
+"impossible" conclusions (this, and Evan character creation — see ticket 15 below) were both just
+missing nodes we already knew about. `docs/wz-baseline/add-list/` is the first place to look.
+
+### 🐛 WzMerge DEFECT — a partial array refusal LEAVES A HOLE. Found the hard way, still unfixed.
+
+Merging the UI add-list broke the client **before the login screen**. Cause was the merge tool,
+not the data:
+
+`UI.wz/MapLogin.img/back` held exactly `0..47`. The array gate **refused `48..52`** (correctly —
+v84 inserted earlier, so those slots are content-duplicates) and then **allowed `53` and `54`**,
+producing `{0..47, 53, 54}` — a five-index **hole** in a positional array. `MapLogin.img` is the
+login-screen background, so it died exactly where the symptom said.
+
+**The bug:** each index is judged against the **baseline** child count (48), so `53 >= 48` reads as
+a clean append. It is only an append if `48..52` land too. The gate evaluates rows **independently
+instead of against the running state**, so any *partial* refusal within one array silently creates
+a gap — the precise corruption the gate exists to prevent.
+
+**`WzMerge guard` does NOT catch this** (verified: `rc=0` on the broken output). Guard checks
+parse/verify, not array continuity.
+
+**Until fixed, the rule is: if the gate SKIPs any index of an array, drop EVERY row of that array
+from the merge.** Never accept a partial array result. Fix would be to re-evaluate appends against
+post-refusal state, and to teach `guard` to assert array continuity.
+
+Rebuilt excluding all of `MapLogin.img` (cosmetic login background): **46 added, 0 refused,
+0 conflicts, 0 drifted** → `Server\wz-merge\11h\UI.wz`.
+
+### Where the two ~~dead~~ gate patches actually stand
+
+Both are still REQUIRED — without them the skills resolve to nothing even once granted. Our two
+addresses match the published community frontier exactly
+([RZ 1226050](https://forum.ragezone.com/threads/evan-class-for-v83.1226050/) publishes
+`PatchNop(0x0075C783,4)` and `PatchNop(0x00761714,21)`). There is no published third patch, and
+none is needed.
+
+### Feasibility, settled (ticket 11e research)
+
+- Evan shipped **GMS v84 (2010-03-31)**; v83 shipped 2010-02-22 — the binary predates Evan by 5 weeks.
+- **There is no v87+ escape hatch.** No working Evan exists on *any* Cosmic/HeavenMS-class server.
+  A client retarget would mean **488 hand-mapped opcodes** (`SendOpcode` 308 + `RecvOpcode` 180)
+  plus packet structures, AES keys and NGS/CRC bypasses. Not warranted — the v83 path works.
+- Server side was never the blocker: `client/Job.java:59-63` already has `EVAN(2001)`,
+  `EVAN1(2200)`…`EVAN10(2218)`.
+- **Dual Blade is v88 with zero prior art on v83.** Treat as unexplored, not as a known path.
+
+---
+
+**HISTORICAL — the investigation that got here.** Kept because the dead ends are expensive to
+re-derive.
+
+### The gate hypothesis is DEAD — tested and falsified 2026-08-16
+
+Ticket 11 found there are **two** Evan gates, not one, and that patching only the first is *worse
+than none* (`GetSkillLevel` reports level 1 for Evan's beginner-common ids while `GetSkill` still
+returns NULL → unguarded deref at `0x008F2600`):
+
+| VA | function | patch |
+|---|---|---|
+| `0x0075C776` | `CSkillInfo::GetSkill` (85 call sites) | surgical: `74 08`→`90 90`, `75 04`→`EB 04` |
+| `0x00761714` | `CSkillInfo::GetSkillLevel` | 21× `0x90` |
+
+**Both were patched and verified in a live `MapleStory.exe` (PID 40532, 14:26:41) — and the skill
+window still crashed.** Ticket 11 pre-committed to the falsification: *"still crashes ⇒ diagnosis
+wrong; do not delete WZ nodes, look for a third gate."* Honoured — **nothing is being stripped
+from `Skill.wz`.**
+
+Gate order in `$Gates` is now a **safety property**: `GetSkill` first, because the loop stops at
+the first timeout and `GetSkillLevel`-alone is the crash state while `GetSkill`-alone is inert.
+
+**Also ruled out by ticket 11, offline:** all 27 actions Evan's 58 skills reference exist in the
+live `Character.wz/00002000.img`; all 48 `skill/` and `level/` child names are already used by v83
+images; every skill has `name`+`desc`+`h1..hN`. `SkillEx`/`SkillMacroEx` are dead weight — the
+string `SkillEx` appears nowhere in the client image in either encoding.
+
+**Wasted-effort warning for future sessions:** `local.exe` / `localhome.exe` / `*.evan.exe` are
+ImpREC memory dumps, **not runnable clients**. They self-relaunch with `÷ GameLaunching` forever,
+each process dying in under a second with no window — a ~2/second process storm. Several crash
+reports were collected against `localhome.evan.exe` before this was spotted and are **worthless**.
+The patcher now watches `MapleStory` **only**. The server logs *nothing* during the crash (opening
+the skill window sends no packet), so server logs will never help here.
+
+### Live three-point bisect — the crash is a MISSING EVAN UI RESOURCE, not code and not skill data
+
+Same character, same client, both gates patched; **only the job id changed**:
+
+| Job | Class | v83 ships its UI resources | Skill window |
+|---|---|---|---|
+| `0` | Explorer beginner | yes | **opens**, skills listed |
+| `2000` | Aran beginner (Legend) | **yes** | **opens**, zero skills listed |
+| `2001` | Evan beginner (Legend) | **no** | **CRASHES** (5×) |
+
+**Two conclusions, both load-bearing:**
+
+1. **The special/Legend-class path works.** Aran is structurally the same shape as Evan — Legend
+   beginner job, own skill root, own special-cased tab resource — and it opens. So "v83 can't
+   handle a Legend job" is false. The difference is that v83 *ships Aran's UI resources and not
+   Evan's*.
+2. **The fault is drawn regardless of skill count.** Job 2000 opened while listing **zero** skills,
+   so the per-skill icon draw path never executed — and it was fine. Job 2001 would also list zero
+   skills (none learned) and still crashes. Therefore the crash is in **window/tab construction**,
+   which runs before and independently of the skill list — **not** in per-skill icon canvases.
+   This deprioritises the `0x008AA04D`→`0x008F2600` unguarded deref unless it can be shown to run
+   on an empty skill list.
+
+This is the signature of a **missing resource**, which means the fix is most likely **additive** —
+adding the Evan tab node — exactly what the owner's rule wants, and better than patching code.
+
+### 11c — THE HOLE IS FOUND. `Skill/Tab` serves 5 tabs; Evan needs 11.
+
+| node | present indices | count |
+|---|---|---|
+| `UIWindow.img/Skill/Tab/enabled/<n>` | 0,1,2,3,4 | 5 |
+| `UIWindow.img/Skill/Tab/disabled/<n>` | 0,1,2,3,4 | 5 |
+| `UIWindow.img/Skill/Tab/AranButton/Bt<d>` | **Bt1..Bt4** — no `Bt0`, no `Bt5+` | 4 |
+| `UIWindow.img/SkillEx/Tab/enabled\|disabled/<n>` | **0..10** | **11** |
+| `UIWindow.img/SkillEx/**/AranButton` | **absent** | 0 |
+
+Both live-working jobs have 5-long chains; Evan's is 11. `Bt%d` (`0x00B3B690`) formatted for an
+11-entry chain reaches `Bt5`..`Bt10`, which do not resolve — at **tab construction**, matching
+2000-opens-with-zero-skills vs 2001-crashes. v84 shipping a separate `SkillEx/Tab` sized exactly
+0..10 is the corroboration: v84 built a wider window for Evan and never widened v83's `Skill/Tab`.
+
+**Not merge damage — computed, not assumed.** 6-level dump with canvases hashed by stored
+compressed bytes: LIVE vs v83 backup = **zero** differing lines; LIVE vs stock v84 = **zero**.
+Stock v84 also has only `Bt1..Bt4`. `Evan` under `UIWindow.img`: **0 hits** in both.
+
+**`Skill.wz/2001.img` is a CLEAN NEGATIVE — nothing to strip.** 27/27 `icon`, `iconMouseOver`,
+`iconDisabled`, all `32x32 f1`, all inflate. `iconMouseOverDisabled` is 0/27 — *and absent from
+every v83 image too* (000/1000/2000), so nothing relies on it. Child sets identical to `000.img`;
+levels contiguous `1..N`; **0 UOL/_inlink/_outlink** in the Evan images; 2,273 + 254 + 156 canvases
+decoded with **0 bad**; every skill id has a `String.wz` name row. Empty level sets exist in the
+*working* `000.img` too.
+
+**The fix is ADDITIVE — the owner's preferred shape, and permanent (unlike the per-launch memory
+patch):**
+- `Skill/Tab/enabled|disabled/5..10` ← `SkillEx/Tab/enabled|disabled/5..10` (real Evan glyphs,
+  already present in the live file). `0..4` is a consecutive run, so this is a genuine append.
+- `Skill/Tab/AranButton/Bt5..Bt10` ← clone `Bt4` (`normal/0 pressed/0 disabled/0 mouseOver/0`,
+  each `34x18 f1` + origin). Tabs 5-10 read "4th job" until real art exists — cosmetic.
+
+### ⛔ 11b OVERTURNS 11c — the tab hypothesis is DEAD. Do not implement the tab fix.
+
+11c's *data* is correct (`Skill/Tab` has 5 slots, `SkillEx/Tab` has 11) but its *inference* was
+wrong, and so was the orchestrator's "Aran is the control" reasoning. Disassembly, not assertion:
+
+- **`CUISkill::CreateTabs` @`0x008AD2D1`** (from `UpdateSkills` @`0x008ACEB7`) loops on the tab
+  **INDEX**, not the root value: `cmp edi,[eax-4]` uses `roots[]` only for its **count**, then
+  `push edi` / `push "%d"` / `sprintf`. **`roots[edi]` is never read.**
+- **A job-2001 character is a BEGINNER — its root list has ONE element.** The 11-job chain belongs
+  to a job-2218 character. Jobs 0, 2000 and 2001 all build exactly one tab, named `"0"`.
+  Job 0 works ⇒ the tab strip works. `Bt5..Bt10` would add nodes **nothing ever asks for.**
+- **The `AranButton` block is gated on jobs 2100–2199 only** (`job/1000==2 && (job%1000)/100==1`).
+  `2000 % 1000 / 100 = 0`, so **`!job 2000` never exercised the Aran path** — it was not the
+  control the orchestrator claimed. No `"EvanButton"` string exists in the image in any encoding.
+- **No third gate.** `CSkillInfo::LOAD` @`0x0075C060` enumerates every `Skill.wz` child; the only
+  skips are `"MC"`/`"BF"`/`"Ite"` prefixes and one res-string. `LoadSkillRoot` @`0x0075C858`
+  registers unconditionally, on the startup path, not lazily.
+- **Icon/row path ruled out by dump:** `2000.img` and `2001.img` are structural twins — 28 vs 27
+  skills, same shapes, **byte-identical icon canvases**, no `masterLevel`/`req`, zero UOLs.
+  Job 2000 renders zero rows, therefore so does 2001.
+
+**After both patched gates, nothing left in the skill path treats 2001 differently from 2000.**
+A full-image scan for `0x000007D1` found 60 sites; every one reachable from the skill path behaves
+identically for both jobs.
+
+**One real defect found, not proven to fire:** `CSkillInfo::GetSkillsByRoot` @`0x0075C7C5` runs
+*first* on window open, and at `0x0075C7E2` dereferences the result of `0x0075C70A` unguarded.
+`0x0075C70A` null-checks its own result; its only caller does not. Fires iff the root has no
+`<root>.img` registered — and `2001.img` **is** installed, so this is a real bug but probably not
+this crash.
+
+### ▶ ACTIVE: the `_com_error` tracer — get the address, stop guessing
+
+The dialog is a **thrown** `_com_error` (`"Unknown error 0x%0lX"` @`0x00B3D8E8`), which is why
+Windows logs no crash event. All 22,687 `FAILED(hr)` sites funnel through `0x00A5FDE4`.
+`patch-evan-gate.ps1 -Trace` installs a 14-byte trap there:
+`mov [0x00A5FDEE],esp` + `jmp $` — the client **freezes at the throw** instead of dying.
+Then `-ReadTrace` reads it back: `[esp]` = **the exact VA of the failing check**, `[esp+4]` = the
+HRESULT, code-range words = a poor-man's backtrace. `0x00A5FDE4 + 14 = 0x00A5FDF2` = the next
+function's start, so nothing outside is touched. Self-test verifies the pattern is unique.
+**If it does NOT freeze**, the throw came direct from `0x00A60BB7`, whose only two sites are
+`0x0075C61E` / `0x0075CC89` — both `E_FAIL` out of the `Skill.wz` loader. Either way it is decisive.
+
+Hint for whoever reads the trace: **`2001 % 10 == 1`** while every other beginner job ends in `0`.
+Any v83 routine doing `job % 10` advancement arithmetic reads 2001 as "1st advancement of class
+200". If the fault lands outside `CUISkill`, that is the shape to look for.
+
+### `docs/wz-baseline/tool-uicopy/` — built, UNUSED, UNVALIDATED. Do not trust it as-is.
+
+Built for the dead tab fix, cancelled mid-flight. Never run against anything that shipped. Its
+additive-only and zero-removal machinery is sound, but review found:
+- The canvas **dimension check is tautological** — it compares source metadata to a verbatim copy
+  of itself. Only the `bmp == null` clause has teeth (that one does exercise zlib inflate).
+- **No content digest anywhere.** Marking `Changed` re-serializes the *entire* `.img`, and nothing
+  checks the re-encoded siblings. It proves zero *removals*, never zero *modifications* — the exact
+  gap `tool-merge` closed with `Canon`/`Digest`, which was not carried over.
+- **patchVersion 83 is never asserted**, only compared against a co-detected value — and the two
+  detections are different searches (input finds `MapleStory.exe` and seeds at 83; staged output
+  brute-forces from 0).
+- An exception **during verification exits 1, not 4**, leaving the `.partial` behind.
+- **Relative UOL/`_inlink` targets break on rename** — resolution is relative to the node's own
+  position, and landing a subtree at a new name/depth silently repoints them. That is the failure
+  mode a rename tool actually has, and verification skips UOLs by construction.
+
+## Installed on the client right now — `evan-min`, not the composed set
+
+`Server\wz-merge\evan-min\` — **5 files, 109 rows**, purely additive, zero forces, zero removals.
+Orchestrator-verified by foreground SHA-256 on 2026-08-16: exactly `Character Etc Skill String UI`
+differ from the backup; the other **13 `.wz` are byte-identical to it**. (Hash in the foreground —
+a backgrounded `Get-FileHash` in this harness once produced a false 13-file DIFF that did not
+reproduce.)
+
+### The composed set crashes the client — bisect in progress
+
+`Server\wz-merge\10c\` (**1,750 rows / 13 files**) was installed twice and **crashed the client both
+times** — once with the `String.wz` deletion defect present, once after it was fixed and the set was
+provably additive. So *removal was not the cause*. The dialog is `_com_error`'s
+`Unknown error 0x%0lX` — an **HRESULT, not a WZ parser message** — and the owner has no code.
+Stock v84 WZ was also installed once as a diagnostic but is **confounded** (`patchVersion=84`
+against a v83 binary); every composed output is `83`, so headers were not the cause.
+
+**Correction — `evan-min` did NOT exonerate its five files.** It is a strict subset of the composed
+set (one `UI` row aside), so **771 composed rows remain untested in files that currently look
+"proven"**: `String` 510, `Character` 234, `Skill` 27. The live crash space is therefore **1,642 rows
+across 12 files**, not 871 across 8. An earlier note of mine claiming otherwise was wrong.
+
+| Half | Install | Rows under test |
+|---|---|---|
+| **B** | current `evan-min` 5 + `10c`'s `Item Quest Map Mob Morph Npc Sound Reactor` | **871** |
+| **A** | `evan-min` 5 upgraded to `10c`'s `Skill String Character UI Etc` | **771** |
+
+Both halves are **already built** in `10c\` — each bisect step is a file copy, not a merge run.
+Step B only touches files that currently match the backup, so the split is clean. One launch
+per step; ~4 launches to isolate.
+
+Server XML and SQL are applied to the repo and green at **2,008** tests, and the server runs from
+**the worktree** — the owner's normal `launch.bat` runs the **main checkout**, which has none of
+this work. **The branch must be merged for his own launcher to pick it up**, including the
+`config.yaml` IP fix (a pre-existing bug that breaks his normal server too).
 
 ## What needs the owner — in priority order
 
@@ -1296,13 +1541,11 @@ applied to the repo and green at **2,008** tests. The client half is one deliber
    the region and the client kept running. **It patches memory, so `tools\patch-evan-gate.ps1`
    must be re-run after every launch** — without it no Evan skill resolves, and the symptom looks
    exactly like bad WZ data.
-2. **Install the composed client merge — now `Server\wz-merge\10c\`, THIRTEEN files**, with the
-   client closed: `Character Etc Item Map Mob Morph Npc Quest Reactor Skill Sound String UI`.
-   Hashes and sizes in `composed/README.md`, procedure in ticket 10 `## Human steps → Step 0`.
-   Everything downstream of "does it actually work in game" waits on this — it is now the single
-   highest-value thing on this list. **Do not install `wz-merge\10\`** (four files, merged from
-   pristine v83 to prove ticket 10's path lists); it does not compose with 03i's output and
-   `10\String.wz` alone would drop tickets 04–08.
+2. ~~**Install the composed merge `10c\` (13 files).**~~ **Done twice — crashes the client both
+   times.** Superseded by the bisect above. The orchestrator installs each half; the owner only
+   launches. **Do not install `wz-merge\10\`** (four files, merged from pristine v83 to prove
+   ticket 10's path lists); it does not compose with 03i's output and `10\String.wz` alone would
+   drop tickets 04–08.
 3. **Crimson Sky's travel route.** The area is complete and unreachable; neither v83 nor v84 ships
    the return node, so this is a design decision, not a defect. Three options in ticket 06. Related:
    quest **`3759` grants Soaring**, which those maps gate on, and it sits behind one expired date node.
@@ -1320,7 +1563,10 @@ Batched; nothing here blocks other tickets.
 | From | Step | Staged? |
 |---|---|---|
 | ~~01~~ | ~~Double-click `local.evan.exe`~~ — **superseded and done.** `local.exe`/`localhome.exe` turned out to be memory dumps, not clients; the client is `MapleStory.exe`, Themida-compressed, unpatchable on disk. `tools\patch-evan-gate.ps1` patches the live process and has run successfully. **Re-run it after every launch.** | **done** |
-| **10** | **Install `Server\wz-merge\10c\` — 13 files.** This replaces 03's two-file copy and `composed/README.md`'s ten-file one; do this instead of either, not as well as. Then: run the gate patcher, `!job 2001` → `!job 2200`, watch a dragon appear **on a second client's screen** without changing map, walk, change map, log out and have the second client walk back in (no ghost dragon), open the skill window. Full pass/fail in ticket 10 `## Human steps`. | **ready** |
+| ~~10~~ | ~~Install `Server\wz-merge\10c\` — 13 files.~~ **Done — crashes the client. Superseded by the bisect.** | done, failed |
+| **11** | **Launch 1 — the gate test.** Launch `MapleStory.exe` and say so; orchestrator patches the live PID; log in as the Evan and open the skill window. Survives → the crash was the missing per-launch patch. Crashes → it is data-level and 11 has its reproduction. Nothing is reinstalled for this; current `evan-min` stands. | **ready** |
+| **bisect** | **Launch 2 — same sitting.** Close the client; orchestrator copies half **B** in; relaunch. Crash localises to 871 rows, clean load localises to the other 771. Repeat ~4×, halving each time. Each pass also *ships content*, so a green step is never wasted. | **ready** |
+| **merge** | **Merge the branch to `master`** so the owner's normal `launch.bat` (main checkout) picks up the server work and the `config.yaml` Hamachi-IP fix. | pending owner |
 | ~~03~~ | ~~Copy `Server\wz-merge\post\{Item,String}.wz`~~ — **folded into 10's install.** Those two files predate the deny-list and the positional-array gate. The tracer item `2001500` is in the composed `Item.wz`, so `!item 2001500` remains the right smoke test — just run it after 10's install, not after a separate copy. | superseded |
 
 **Orchestrator verification of 01** (independent): pattern occurs exactly once per binary at

@@ -23,6 +23,7 @@ package net.server.handlers.login;
 
 import client.Client;
 import client.creator.novice.BeginnerCreator;
+import client.creator.novice.EvanCreator;
 import client.creator.novice.LegendCreator;
 import client.creator.novice.NoblesseCreator;
 import net.AbstractPacketHandler;
@@ -57,6 +58,10 @@ public final class CreateCharHandler extends AbstractPacketHandler {
             break;
         case 2: // Aran
             status = LegendCreator.createCharacter(c, name, face, hair + haircolor, skincolor, top, bottom, shoes, weapon, gender);
+            break;
+        case 3: // Evan - v84 port. The v83 client does not send 3 on its own; ticket 15b is
+                // patching the race-select screen to offer a 4th option. Harmless until it does.
+            status = EvanCreator.createCharacter(c, name, face, hair + haircolor, skincolor, top, bottom, shoes, weapon, gender);
             break;
         default:
             c.sendPacket(PacketCreator.deleteCharResponse(0, 9));
