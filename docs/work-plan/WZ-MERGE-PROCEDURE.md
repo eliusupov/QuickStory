@@ -227,11 +227,30 @@ UOL parent.
 
 ### 4.4 Positional arrays — the index is not an identity, and the tool now says so
 
-**A WZ container whose children are exactly the consecutive integers `0..c-1` is an array, and its
-child names are POSITIONS, not ids.** `portal`, a map layer's `obj`, `Back/<set>.img/back`, a
-monster-book `reward`, an item box's `reward`, an equip animation's frames — all of them. Two trees
-can hold the same entry at different indices, and then **index `n` means a different thing in each
-tree**. Nothing in 4.1–4.3 can see that: the row does not collide, it lands in the wrong place.
+**A WZ container whose children are all integers forming ONE CONSECUTIVE RUN is an array, and its
+child names are POSITIONS, not ids.** `portal`, a map layer's `obj`, a map's `foothold` groups,
+`Back/<set>.img/back`, a monster-book `reward`, an item box's `reward`, an equip animation's frames
+— all of them. Two trees can hold the same entry at different indices, and then **index `n` means a
+different thing in each tree**. Nothing in 4.1–4.3 can see that: the row does not collide, it lands
+in the wrong place.
+
+**The run does not have to start at 0** (03i). It said `0..c-1` until then, and that clause let two
+rows through on `Character.wz/Glove/01082262.img` — `swingT2` is `{1,2}` in the live client and
+`swingO3` is `{1}`, so the gate did not see an array at all while refusing six siblings of the same
+shape on the same item. It also misses every `foothold` container in `Map.wz`, which v84 numbers
+from 1: 14 such rows sit in `add-list/Map.txt` today, refused now, unrefused before.
+
+**Two clauses did not change, and they are what stop it over-refusing:**
+
+- **every** child must be an integer. A map `.img` has layers `0`–`7` *alongside* `info`, `portal`,
+  `foothold` and `life`, so a map image is not an array — otherwise every row writing into a layer
+  would be refused, including the six appends ticket 08 correctly merged.
+- the run must be **consecutive**. Dropping this would make every id container in `String.wz` an
+  array — `Consume.img`'s children are 2,290 integer item ids with enormous gaps — and refuse 501
+  legitimate name rows. **The cost is a stated blind spot:** a genuinely sparse array such as
+  `Glove/01082262.img/swingOF` = `{0,3}` or `Quest.wz/Check.img/4940` = `{0,1,4961}` reads as "not
+  an array". Nothing structural separates those from an id table. The deny-list is what stands in
+  front of them, as it does for `Exclusive.img` in 4.5.
 
 Two shapes, and the second is the dangerous one:
 
@@ -257,9 +276,11 @@ is refused unless it is a **pure append**:
 
 - the row must name the array's **last** segment (a row that writes a field *into* an existing slot
   is always refused — the slot exists, so it is one of the target's own entries);
-- the index must be **≥ the target's child count as it was before this run** (a `deny`/`force`
-  decision, not the tool, is how you take one anyway);
-- every index between that count and this one must also be somewhere in the same manifest, or the
+- the index must be **greater than the array's highest index as it was before this run** (a
+  `deny`/`force` decision, not the tool, is how you take one anyway). An index *below* the array's
+  **lowest** index is refused as a **PREPEND** with its own message: a source that numbers the
+  container from a different origin than the target is not aligned with it at all;
+- every index between that highest one and this one must also be somewhere in the same manifest, or the
   array would be left with a **hole**. `deps` only emits the assets a map *references*, so it will
   hand you `Obj/effect.img/quest/gate/7` without the `gate/6` that v84 added beside it. Add the
   missing sibling from `add-list/`; do not work around the refusal;
@@ -279,9 +300,19 @@ WzMerge dump <v84>\Map.wz                        Map/Map2/220000300.img/portal 2
 
 Then either re-author the row against *this* tree's index (a hand-authored node, not a merge — the
 tool only ever copies from the source `.wz`) or put it on the deny-list with the reason. Ticket 08's
-twelve are on `COLLISION-DENY.txt`; the six it merged are pure appends and are in the composed
-`Map.paths.txt`. `merge-lists/08/ROUTE-ROWS.md` is the worked example, including the cost of
-refusing: three staged areas have no route in.
+twelve are on `COLLISION-DENY.txt` (Hazard 2b) and 03i's two glove rows beside them (Hazard 2d); the
+six 08 merged are pure appends and are in the composed `Map.paths.txt`. `merge-lists/08/ROUTE-ROWS.md`
+is the worked example, including the cost of refusing: three staged areas have no route in.
+`03-verification/positional-array-gate.md` is the measured proof, including the 68-parent
+classification that shows the 03i widening changes exactly two rows and nothing else.
+
+**One thing the refusal message says that is easy to misread as a contradiction.** Hazard (b) —
+"this row adds a field to a record the target already has" — describes something the same run
+*permits* elsewhere: `String.wz/Npc.img/1063018/d0` is also a field added to an existing node, and it
+merges. The difference is not the shape. A named node can be checked by reading its name; an array
+slot has only a position, so **you cannot tell which record you are editing without dumping it.**
+That sentence is in the refusal text for the operator who spots the apparent contradiction and would
+otherwise override on it.
 
 **The XML side enforces the same rule with one gap**: it is a line-text scan, so it can see the
 container's child names but cannot digest two nodes and compare them. It catches the interior write,
@@ -618,6 +649,29 @@ child must be digest-identical. Tracer result: 55 of 56 children of `Item.wz/Con
 file, and refuses to promote the output on a mismatch (5.4). 6.1 remains worth running because it
 compares against the *pre-merge* file and names which children moved — the tool's own check only
 proves the write is faithful to what the merge built.
+
+**Three things `hash` does not prove. State them where you use it, not in a footnote.**
+
+1. **Sibling ORDER is normalised away.** `Canon()` walks children `OrderBy(Name, Ordinal)`, so a
+   container whose children were reordered — same names, same values, different sequence — digests
+   identically before and after. **Nothing in this project has ever proved that order was preserved
+   inside a merged container**, and every "unchanged" in every ticket and in `REGRESSION.md` means
+   "unchanged up to sibling order". For a keyed lookup (which is how both the client and
+   `XMLDomMapleData` read these trees) that is fine; for a positional array it would not be, and
+   4.4 is what stands in front of *that*. The one reorder actually observed — quest `28326` moving
+   inside `Check.img.xml` when the sorted insert relocated it — was found in the server XML text,
+   not by this tool. If order ever matters, diff `WzMerge dump` output, which prints in tree order.
+2. **A `WzUOLProperty` is digested as its LINK STRING, not as what it points at** (03i). Following
+   the link is what made `hash` stack-overflow on `Reactor.wz`: `1050000.img/0/hit/2` is a UOL back
+   to its own ancestor `0`, and `Kids()` on a UOL returns the *resolved target's* children, so the
+   walk ran `0 -> hit/2 -> 0` forever, branching twice per level, until `0xC00000FD`. Six images
+   did it, symmetric pre and post, which an operator could easily read as merge damage. The link
+   target is digested at its own path in the same pass, so nothing is lost — but a change *behind*
+   the link does not move the UOL node's own digest.
+3. **`Canon()` stops at depth 64** and writes a `DEPTH LIMIT` marker line into the digest if it ever
+   gets there. That is a backstop for a cycle of some other shape, not the fix for the one above;
+   the marker is inside the hashed text, so a truncated subtree can never digest equal to an
+   untruncated one.
 
 This is the important check. The merge sets `Changed = true` on exactly the image it inserted into,
 so that image is the *only* one decoded, re-serialized and re-encrypted under the target's IV, and

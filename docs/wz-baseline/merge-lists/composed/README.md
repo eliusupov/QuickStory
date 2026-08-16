@@ -1,7 +1,8 @@
 # The composed install — one merge per `.wz`, all content tickets at once
 
 Built by **ticket 03f**; ticket **08** folded in and re-run end to end by **03g**, ticket **09** by
-**03h**.
+**03h**, and re-run again by **03i** with the corrected positional-array gate (two more rows refused
+— see the 03i section at the bottom, which is the current state).
 Tickets 04, 05, 06, 07, 08 and 09 each staged their own `.wz` **from the same pristine v83 base**, so
 their outputs do not compose: installing two of them loses one set (05's ticket says so at its
 "Human steps → Step 0", 06's at its step 1). The fix is to merge **once per file from the ticket
@@ -103,6 +104,9 @@ A scripted install that aborts on non-zero will stop on these three. It should n
 | `Mob` | 0 | 28 | 0 | 0 |
 | `Map` | 0 | 133 | 0 | 0 |
 | `Quest` | 0 | 252 | 0 | 0 |
+
+*(This table is 03g/03h's run. **03i refuses two more on `Character` — 240 added, 14 refused.**
+The 03i section at the bottom is the current state; everything else in this table still holds.)*
 
 The 23 refusals are 15 decisions taken before 04 shipped, plus 8 the **positional-array gate**
 (§4.4, added by 03g) found that nobody had enumerated:
@@ -223,5 +227,79 @@ force) were in the tree before this run. What would need re-applying is only wha
 adds. `WzMerge xml` enforces the same positional-array rule as the binary side, minus the
 content-identical check (§4.4).
 
-**These outputs supersede 03f's.** Re-run this composition after ticket 09 rather than installing
-these; the run is cheap (minutes) and the point of it is that it is repeatable.
+## Re-run with the corrected positional-array gate, 2026-08-16 (ticket 03i)
+
+Staging `D:\games\MapleStory\Server\wz-merge\03i\`, eleven files, same run book, deny-list now
+**188 roots** (03c's 28 + 08's 12 + 09's 116 + 03i's 32).
+
+03i widened the array rule to any **consecutive run of integers**, not only one starting at 0.
+That is one clause, and it changes exactly one file:
+
+| file | exit | added | forced | refused |
+|---|---:|---:|---:|---:|
+| `Morph` `Skill` `Sound` `Reactor` `Npc` `Mob` `Map` `Quest` | 0 | 25 / 27 / 24 / 3 / 15 / 28 / 133 / 252 | 0 | 0 |
+| `String` | 3 | 501 | 41 | 9 |
+| `Item` | 3 | 389 | 0 | 2 |
+| **`Character`** | **3** | **240** | 0 | **14** |
+
+**All ten other outputs are byte-identical to 03g's and 03h's** — every SHA-256 in the table above
+reproduces exactly, and `Quest.wz` is again
+`5F37E5F56970FFD01DC5B28D082BF02CE130FF7B56C7C1B592C67D77996F04FE`, 6,083,413 bytes, still the file
+ticket 09 staged from its own list. `Character.wz` is
+`06F0FA886E5F53C487E1FC4AEA2151189203E0D50186C73122AB142BB13C46E4`, **211,839,146 bytes** — 495
+bytes smaller than 03h's, the two refused rows and nothing else.
+
+**Proof that "nothing else" is not an assertion.** `WzMerge hash` at the `Character.wz` root: the
+**only** differing child between 03h's output and 03i's is `Glove` — `Hair`, `Weapon`, `Dragon`,
+`Afterimage`, `Accessory`, `Cap` and every other directory digest-identical. Inside
+`Glove/01082262.img`, the only children that differ are `swingT2` and `swingO3`, and both now digest
+**equal to the live client's**. Against the `pre\` snapshot, the only children of that image which
+changed at all are `ladder` and `rope` — the two containers the live client ships **empty**.
+
+The two rows are also on `COLLISION-DENY.txt` (Hazard 2d), and `Item.wz`'s two `reward/43` rows were
+added to it (Hazard 2e) at 03j's request: the binary gate refuses them by digest, but `WzMerge xml`
+is a text scan and cannot, so without a deny row the next XML run silently re-applies the duplicate
+that 03j had just reverted. Their `conflicts.txt` line is now `DENIED by deny-list` rather than
+`POSITIONAL ARRAY`; the output is unchanged, which is why `Item.wz` still reproduces byte-identical.
+
+All eleven outputs passed the tool's own post-write verification and were promoted; no `.partial`
+was left behind. All 18 live `.wz` SHA-256-match `_backup\client-v83-EzorsiaV2-2026-08-15\` **before
+and after** this run — 18/18, no stray `.partial`/`.merged`/`.TEMP` beside them. Nothing was
+installed.
+
+### The 25 refusals
+
+The 23 above **plus the two glove rows**, and two of the 23 are now reported as `DENIED` rather than
+`POSITIONAL ARRAY` (same rows, same outcome — `Item.wz` `reward/43`):
+
+- **`Character.wz`, 2 rows — NEW at 03i, `POSITIONAL ARRAY`.**
+  `Glove/01082262.img/swingT2/2/rGlove` and `.../swingO3/0`. Live `swingT2` is `{1,2}` and `swingO3`
+  is `{1}` — consecutive runs that do not start at 0, which the old rule did not recognise as arrays
+  at all. `swingT2/2/rGlove` put v84's 12x9 right glove into the frame holding Ezorsia's 12x8 left
+  one; `swingO3/0` prepended a v84 frame whose right glove is 47x9 against the live 6x5. Same item,
+  same reasoning, same cost as the six already refused above: four animation frames keep Ezorsia's
+  art. Reversible the same way — force-list them if an owner decides otherwise.
+
+### ⚠ Six forced `String.wz` names take untranslated Korean, and are reversible in one place
+
+Called out here because `COLLISION-FORCE.txt` discloses it in its own row comments and nothing
+surfaced it where an owner would look. 08's three Korean **NPC** names were flagged as reversible;
+these six are the same class and the same choice is available:
+
+| force root | live value | v84 value |
+|---|---|---|
+| `String.wz/Eqp.img/Eqp/Accessory/1142143` | `MISSING NAME` | untranslated KMS text |
+| `String.wz/Eqp.img/Eqp/Accessory/1142145` | `MISSING NAME` | untranslated KMS text |
+| `String.wz/Eqp.img/Eqp/Accessory/1142149` | `MISSING NAME` | untranslated KMS text |
+| `String.wz/Eqp.img/Eqp/Accessory/1142150` | `MISSING NAME` | untranslated KMS text |
+| `String.wz/Eqp.img/Eqp/Accessory/1142151` | `MISSING NAME` | untranslated KMS text |
+| `String.wz/Eqp.img/Eqp/Longcoat/1051176` | `MISSING NAME` | untranslated KMS text |
+
+**To reverse:** delete those six lines from `composed\FORCE.txt` and re-run `String.wz` on both the
+binary and the XML side. The items then read `MISSING NAME` again, which is what they read today on
+the live client. Nothing else in the composition depends on them. The other 35 force roots replace a
+`MISSING NAME` / `MISSING INFO` stub with an **English** name and are not in question.
+
+**These outputs supersede 03g's and 03h's.** Re-run this composition whenever a ticket is folded in
+— add it to `compose.ps1`'s `$files`, bump the `$expect` total in the same commit, and run §5 again.
+The run is cheap (minutes) and the point of it is that it is repeatable.

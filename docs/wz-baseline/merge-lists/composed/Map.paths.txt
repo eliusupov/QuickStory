@@ -4,7 +4,8 @@
 # block's internal order preserved. Every row is unique across the whole composed set
 # and no row is an ancestor of another (checked, all eleven files). Regenerate, never edit.
 #
-# 132 rows. 06's 34 (12 dependency rows FIRST, then 22 map images), 07's 3, 08's 95
+# 133 rows: 132 from the tickets plus 1 composition fill (see the bottom of the file).
+# 06's 34 (12 dependency rows FIRST, then 22 map images), 07's 3, 08's 95
 # (67 asset rows, then 22 map images, then 6 route rows that append onto EXISTING v83 maps).
 # THE ORDER INSIDE EACH TICKET BLOCK IS LOAD-BEARING - deps before the maps that draw them.
 # 08's twelve UNSAFE route rows are not here and are on COLLISION-DENY.txt; the tool refuses

@@ -1,6 +1,8 @@
 $ErrorActionPreference = "Stop"
-$root = "D:\games\MapleStory\Server\Cosmic\.claude\worktrees\evan-dualblade\docs\wz-baseline\merge-lists"
-$out  = "$root\composed"
+# 03i: was hard-coded to a worktree path, so it could not run from master after that branch
+# merged. This script lives in <repo>\docs\wz-baseline\merge-lists\composed, so derive both.
+$root = Split-Path -Parent $PSScriptRoot
+$out  = $PSScriptRoot
 New-Item -ItemType Directory -Force $out | Out-Null
 
 $files = @{
@@ -23,7 +25,7 @@ $perFile = @{
   "String"    = "# 510 rows. REQUIRES --force composed\FORCE.txt (41 roots - 38 + ticket 08's 3).`r`n# Reusing the 38-root file silently reverts 08's three forced names. Expect 9 refusals."
   "Morph"     = "# 25 rows, ticket 05 alone. Expect 0 refusals, exit 0."
   "Skill"     = "# 27 rows, ticket 05 alone. The nine mount skills x 3 beginner jobs. Expect exit 0."
-  "Map"       = "# 132 rows. 06's 34 (12 dependency rows FIRST, then 22 map images), 07's 3, 08's 95`r`n# (67 asset rows, then 22 map images, then 6 route rows that append onto EXISTING v83 maps).`r`n# THE ORDER INSIDE EACH TICKET BLOCK IS LOAD-BEARING - deps before the maps that draw them.`r`n# 08's twelve UNSAFE route rows are not here and are on COLLISION-DENY.txt; the tool refuses`r`n# that shape structurally as well (POSITIONAL ARRAY, see WZ-MERGE-PROCEDURE.md 4.4)."
+  "Map"       = "# 133 rows: 132 from the tickets plus 1 composition fill (see the bottom of the file).`r`n# 06's 34 (12 dependency rows FIRST, then 22 map images), 07's 3, 08's 95`r`n# (67 asset rows, then 22 map images, then 6 route rows that append onto EXISTING v83 maps).`r`n# THE ORDER INSIDE EACH TICKET BLOCK IS LOAD-BEARING - deps before the maps that draw them.`r`n# 08's twelve UNSAFE route rows are not here and are on COLLISION-DENY.txt; the tool refuses`r`n# that shape structurally as well (POSITIONAL ARRAY, see WZ-MERGE-PROCEDURE.md 4.4)."
   "Mob"       = "# 28 rows. 06's 17 + 07's 4 + 08's 7. Expect exit 0."
   "Npc"       = "# 15 rows. 06's 6 + 08's 9. Expect exit 0."
   "Reactor"   = "# 3 rows. 06's 2 + 08's 1. Expect exit 0."
@@ -43,6 +45,7 @@ $fill = @{
   "Map" = @("Map.wz/Obj/effect.img/quest/gate/6")
 }
 
+$total = 0
 foreach ($name in $files.Keys) {
   $lines = @()
   $lines += "# COMPOSED INSTALL LIST - $name.wz. Built by 03f; 08 folded in by 03g, 09 by 03h,"
@@ -62,7 +65,10 @@ foreach ($name in $files.Keys) {
   $lines += ""
   foreach ($t in $files[$name]) {
     $p = "$root\$t\$name.paths.txt"
-    if (-not (Test-Path $p)) { continue }
+    # 03i: `continue` on a missing file used to be silent, so a renamed or unmerged ticket
+    # directory dropped its whole block and the composed list still looked plausible. Not every
+    # ticket touches every .wz, so absence is legal — but it has to be visible.
+    if (-not (Test-Path $p)) { Write-Host ("  no {0}\{1}.paths.txt - ticket {1} contributes nothing to {2}" -f $t, $name, $name); continue }
     $rows = Get-Content $p | Where-Object { $_.Trim() -ne '' -and -not $_.Trim().StartsWith('#') } | ForEach-Object { $_.Trim() }
     $lines += "# ==== ticket $t ($($rows.Count) rows, order preserved from $t\$name.paths.txt) ===="
     $lines += $rows
@@ -79,4 +85,12 @@ foreach ($name in $files.Keys) {
   [System.IO.File]::WriteAllLines("$out\$name.paths.txt", [string[]]$lines)
   $n = ($lines | Where-Object { $_.Trim() -ne '' -and -not $_.Trim().StartsWith('#') }).Count
   "{0,-10} {1,4} rows" -f $name, $n
+  $total += $n
 }
+
+# 03i: the one number that catches a silently-dropped block. 1,662 is what tickets 04-09 compose
+# to and what WZ-MERGE-PROCEDURE.md 4.4 / the composed README are written against. Bump it in the
+# same commit that adds a ticket to $files - never to make this line pass.
+$expect = 1662
+if ($total -ne $expect) { throw "composed total is $total rows, expected $expect. A ticket block is missing, or one was added without updating `$expect." }
+"{0,-10} {1,4} rows TOTAL (asserted)" -f "ALL", $total

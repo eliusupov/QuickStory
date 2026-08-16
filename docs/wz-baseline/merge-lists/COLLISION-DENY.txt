@@ -18,7 +18,9 @@
 # Precedence, if both lists are ever supplied: deny wins. A path in both is an operator error
 # and should be a hard exit, not a silent resolution.
 #
-# 156 roots. (28 from 03c, +12 from 03g/ticket 08, +116 from 03h/ticket 09.)
+# 188 roots. (28 from 03c, +12 from 03g/ticket 08, +116 from 03h/ticket 09, +32 from 03i:
+# 2 glove rows in Hazard 2d, 2 Item.wz reward slots in Hazard 2e, and 28 live-map container roots
+# in Hazard 5.)
 
 # --- Hazard 1: server-owned id range -----------------------------------------------------
 # PlayerNPC.java:66-67 declares 9901910-9906599 a range the server allocates from AT RUNTIME
@@ -73,8 +75,9 @@ String.wz/MonsterBook.img/8810018/reward	# positional array
 # Every live/v84 pair below was dumped index by index; ROUTE-ROWS.md in `08/` records the
 # comparison and the cost of refusing them (three staged areas have no route in).
 # SINCE TICKET 03g THE TOOL ALSO REFUSES THESE STRUCTURALLY — a write into a container whose
-# children are exactly 0..c-1 must be a pure append (index == c) whose content is not already
-# in the array, and the refusal is reported as `POSITIONAL ARRAY:` rather than as a collision.
+# children are ONE CONSECUTIVE RUN of integers must be a pure append onto the end whose content
+# is not already in the array, and the refusal is reported as `POSITIONAL ARRAY:` rather than as
+# a collision. (03g demanded the run start at 0; 03i does not — see Hazard 2d.)
 # These rows stay listed anyway: they are a decision about data, and a deny row says WHY.
 Map.wz/Map/Map1/106010101.img/portal/5/horizontalImpact	# positional array: live slot 5 is out00 (-> 106010100), v84's is in00; would move the exit portal
 Map.wz/Map/Map1/106010101.img/portal/5/script	# positional array: would attach evanGolemDoor to the exit portal back to Golem's Temple 1
@@ -89,6 +92,44 @@ Map.wz/Map/Map2/220000300.img/portal/15	# positional array: appends a DUPLICATE 
 Map.wz/Map/Map2/220011000.img/portal/4/horizontalImpact	# positional array: live slot 4 is the WORKING portal into Ludibrium Toy Factory (in00 pt=2 -> 220011001)
 Map.wz/Map/Map2/220011000.img/portal/4/script	# positional array: would attach enterBlackBC, a script that does not exist, to that working portal — i.e. break it
 
+# --- Hazard 2d: the same hazard, on an array that does not start at 0 ----------------------
+# Ticket 03i, found by ticket 16's regression pass. `Character.wz/Glove/01082262.img` is the
+# live client's "Dragon Master's Proof", shipped with Ezorsia's own art. 03g refused six rows on
+# this image on exactly the reasoning above. Two more rows of the SAME SHAPE landed anyway,
+# because 03g's rule demanded the integer run start at 0 and these two containers do not:
+#
+#   swingT2  live {1: rGlove 5x6, 2: lGlove 12x8}   v84 {1: rGlove 7x5, 2: rGlove 12x9}
+#            merged -> slot 2 held Ezorsia's lGlove 12x8 AND v84's rGlove 12x9, one frame
+#   swingO3  live {1: rGlove 6x5}                   v84 {0: lGlove 7x5 + rGlove 47x9, 1: ...}
+#            merged -> {0: v84's pair, 1: Ezorsia's} — two frames from two art sets, and a
+#            47x9 sprite against a 6x5 one, so these are very unlikely to be the same animation
+#
+# 03i widened the rule to any consecutive run (`ArrayRange`), and both now refuse structurally:
+# swingT2's as an interior write, swingO3's as a PREPEND (slot 0 below a run that starts at 1).
+# They are listed here for the same reason 08's twelve are — the gate records a shape, a deny
+# row records the decision. Cost of refusing: four animation frames of one cosmetic equip keep
+# Ezorsia's art, which is what the other six refusals already chose for the same item.
+Character.wz/Glove/01082262.img/swingT2/2/rGlove	# positional array (03i): live swingT2 is {1,2}; writes v84's rGlove 12x9 into the slot holding Ezorsia's lGlove 12x8
+Character.wz/Glove/01082262.img/swingO3/0	# positional array (03i): live swingO3 is {1}; slot 0 is a PREPEND from a differently-numbered v84 animation (47x9 rGlove vs the live 6x5)
+
+# --- Hazard 2e: a content-identical append the XML side CANNOT see ------------------------
+# Ticket 03i, at 03j's request. These two rows are the `Item.wz` twin of `220000300.img/portal/15`:
+# the live box holds 43 reward slots `0..42`, v84 has 44, and v84's slot 43 (item `2020014`) is
+# CONTENT-IDENTICAL to the live client's slot 16. The arrays diverged — Ezorsia rewrote the table —
+# so the "append" does not add an item, it DOUBLES that item's drop weight: `getItemReward` sums
+# `prob` across every child, and both slots carry the same one.
+#
+# WHY THESE NEED A DENY ROW AND 08's PORTALS DO NOT. The binary gate already refuses them (it
+# digests both slots and compares, `POSITIONAL ARRAY: ... content-identical`, measured in the
+# composed run). `WzMerge xml` CANNOT: it is a line-text scan with no decoded nodes to compare, so
+# it sees a pure append by index and writes it — which is exactly what happened, and 03j had to
+# revert both from `wz/Item.wz/Consume/0202.img.xml` by hand. THE ROWS ARE STILL ON
+# `composed/Item.paths.txt`, so without these two lines the next `xml` run silently re-applies
+# them and 03j's fix is gone. This is the gap 4.4's closing paragraph describes; the deny-list is
+# the only thing that closes it, because one deny-list serves both subcommands.
+Item.wz/Consume/0202.img/02022503/reward/43	# 03i/03j: v84 slot 43 is content-identical to live slot 16 (item 2020014); appending it doubles that item's prob. The XML side cannot detect this — deny is what stops it.
+Item.wz/Consume/0202.img/02022514/reward/43	# 03i/03j: same box, same duplicate slot, same effect
+
 # --- Hazard 3: partial merge of one entity ------------------------------------------------
 # v84 rebuilt this NPC around UOL links (Npc.txt:7 — 60238 -> 21146 bytes, it shrank by two
 # thirds). 24 of its nodes are refused with `unsupported shape: parent=WzUOLProperty`, so the
@@ -100,7 +141,9 @@ Npc.wz/9000021.img	# 24 UOL-shape refusals leave this NPC partially merged; deny
 
 # --- Hazard 2c: the same hazard again, writing INTO live quests ---------------------------
 # Ticket 09, folded in by 03h. `add-list/Quest.txt` is 924 copy roots; 792 are whole new quest
-# nodes and the other 132 write into content the live client already ships. 09 refused all 132
+# nodes and 131 of the remaining 132 write into content the live client already ships. (03i: the
+# 132nd is `Quest.wz/PQuestSearch.img`, a whole NEW image — it was filed under this heading and it
+# does not belong to it. It is still unclaimed; see the closing note.) 09 refused all 132
 # by leaving them off its path list, which protects 09 and nothing else — these rows sit in the
 # add-list forever and the next ticket to open Quest.wz meets them fresh. Measured row by row,
 # both sides dumped, in `09/DEEP-ROWS.md`.
@@ -272,7 +315,103 @@ Quest.wz/Exclusive.img	# ticket 09: live groups medals under the NAME `medal`, v
 #   Quest.wz/QuestInfo.img/1008/demandSummary, 9260/{demandSummary,rewardSummary},
 #   {20012,20311}/type   — client-side display text on quests 09 did not own. `Quest`'s
 #     constructor never reads `type`; demandSummary/rewardSummary have no server reader at
-#     all. 09 refused them for consistency, not for cost. Re-adding them is harmless.
+#     all. 09 refused them for consistency, not for cost.
+#     03i, correcting an overstatement: "re-adding them is harmless" holds for the four
+#     summary rows, which are display strings on quests that have none today. It does NOT hold
+#     unqualified for `{20012,20311}/type`: server-inert, yes — verified — but `type` is the
+#     client's quest-TAB categorisation, so adding it MOVES a live quest between tabs in the
+#     quest window. Harmless to the server, visible to the player. Decide it, do not skim it.
 #   Quest.wz/PQuestSearch.img — a whole new image indexing a party-search window the v83
 #     client does not have and the server never opens. Unclaimed, not unsafe.
 # A deny-list that carries non-hazards is a deny-list operators learn to skim.
+
+# --- Hazard 5: v84 content written INTO maps the live client already has ------------------
+# Ticket 03i, from ticket 16's §7. `add-list/Map.txt` holds 413 rows that write BELOW a
+# `<id>.img` — into a map, not a new one — and every one of those 413 maps exists in the live
+# client. Ticket 08 examined 18 of them (its own areas) and split them 6 merge / 12 deny
+# (Hazard 2b). The other 395 had never been read by anyone. (§7 says 389; the arithmetic there
+# subtracted 08's 6 merged rows twice. 413 - 6 merged - 12 denied = 395.)
+#
+# All 395 were run through the corrected gate against the live client
+# (`merge <v84>\Map.wz <pre>\Map.wz - <the 395> ... --deny`, exit 3, `added 179, refused 216`):
+#
+#   216  REFUSED STRUCTURALLY by the positional-array gate — 200 interior writes into an
+#        occupied slot, 14 appends whose content the array already holds, 2 prepends. Not
+#        listed here: the gate stops them by shape and always will.
+#        14 of the 216 are refused ONLY because of 03i's widened rule — every one a
+#        `foothold/<n>` container, which v84 numbers from 1, not 0. That is the single
+#        biggest practical effect of this ticket and it is in a file no ticket has finished.
+#   179  the gate calls a pure append. Of those, 119 are scenery — `<layer>/tile/<n>`,
+#        `<layer>/obj/<n>`, `miniMap`, two `<layer>/info/tS*` — and are left unclaimed and
+#        undenied, exactly as they were. They draw; they do not act.
+#    55  are the shape NOTHING STRUCTURAL CAN CATCH: a genuine append onto a live map that
+#        CHANGES WHAT THE MAP DOES. Those 55 are denied below, as 28 container roots.
+#
+# WHY A CONTAINER ROOT and not 55 rows: the statement is not "not these 55 slots", it is "no
+# ticket adds an NPC / reactor / portal / foothold to THIS live map without deciding to". A
+# root also refuses a manifest row that contains it, which is what should happen.
+#
+# NONE of these 28 roots touches a row on any composed list (checked mechanically, all eleven
+# files), and none of them is one of 08's six merged appends — those are on 200080600 and
+# 251010403, which do not appear here.
+
+# `life/<n>` on a live map. All 11 are `type=n` NPC placements, no mobs, so no spawn table
+# moves — but 4 of the 5 npc ids have NO SPRITE in the live client (1011101, 1022106, 1022107,
+# 2030015 are absent from live Npc.wz; only 9901000 is present), so merging these puts broken
+# NPCs into Henesys, Ellinia, the Ellinia tree dungeon, Kerning and Herb Town. Ticket 16 §4
+# states "zero life nodes were added to any map the live client already had"; these are the
+# rows that would falsify it.
+Map.wz/Map/Map1/100000100.img/life	# 03i: v84 places npc 1011101 in Henesys Hunting Ground I; no sprite in live Npc.wz
+Map.wz/Map/Map1/101030000.img/life	# 03i: v84 places npc 1022107 in the Ellinia tree dungeon; no sprite in live Npc.wz
+Map.wz/Map/Map1/101030100.img/life	# 03i: v84 places npc 1022107; no sprite in live Npc.wz
+Map.wz/Map/Map1/101030200.img/life	# 03i: v84 places npc 1022107; no sprite in live Npc.wz
+Map.wz/Map/Map1/101030300.img/life	# 03i: v84 places npc 1022107; no sprite in live Npc.wz
+Map.wz/Map/Map1/101030400.img/life	# 03i: v84 places npc 1022107; no sprite in live Npc.wz
+Map.wz/Map/Map1/102000003.img/life	# 03i: v84 places npc 9901000 (present in live) into a live Perion map — an NPC appears where players have none today
+Map.wz/Map/Map1/106000000.img/life	# 03i: v84 places npc 1022106 in Kerning City; no sprite in live Npc.wz
+Map.wz/Map/Map1/106000100.img/life	# 03i: v84 places npc 1022106; no sprite in live Npc.wz
+Map.wz/Map/Map1/106000200.img/life	# 03i: v84 places npc 1022106; no sprite in live Npc.wz
+Map.wz/Map/Map2/211040400.img/life	# 03i: v84 places npc 2030015 in El Nath; no sprite in live Npc.wz
+
+# `reactor/<n>` on a live map. 30 rows, 7 maps. A reactor is a clickable world object with
+# server-side state and drops; adding one to a map players use today is a content change, not
+# a render change. 109090300 (Ola Ola area) takes 18 of them in one block.
+Map.wz/Map/Map1/109090300.img/reactor	# 03i: 18 v84 reactors appended onto a live map's reactor list
+Map.wz/Map/Map2/230010400.img/reactor	# 03i: v84 reactor appended onto a live Aquarium map
+Map.wz/Map/Map2/230020000.img/reactor	# 03i: 2 v84 reactors appended onto a live map
+Map.wz/Map/Map2/230040000.img/reactor	# 03i: 2 v84 reactors appended onto a live map
+Map.wz/Map/Map2/230040100.img/reactor	# 03i: 2 v84 reactors appended onto a live map
+Map.wz/Map/Map2/230040200.img/reactor	# 03i: 3 v84 reactors appended onto a live map
+Map.wz/Map/Map2/230040400.img/reactor	# 03i: 2 v84 reactors appended onto a live map
+
+# `portal/<n>` on a live map. Same class 08 measured, only these are pure appends by index so
+# the gate passes them. A portal is a route: it either goes somewhere the player can now reach
+# or somewhere that does not exist. 109090000's five are `pt=0` spawn points (`pn=sp`,
+# `tm=999999999`), which change where an entering player LANDS.
+Map.wz/Map/Map1/109090000.img/portal	# 03i: 5 v84 spawn points appended to a live map — changes where players arrive
+Map.wz/Map/Map2/221000000.img/portal	# 03i: v84 portal appended to a live Omega Sector map
+Map.wz/Map/Map2/222000000.img/portal	# 03i: v84 portal appended to a live Korean Folk Town map
+Map.wz/Map/Map2/240000000.img/portal	# 03i: v84 portal appended to a live Leafre map
+
+# `foothold` on a live map. Read by the server (MapFactory.java:197) as well as the client:
+# this is collision geometry, and a group appended onto a live map changes where players stand.
+Map.wz/Map/Map2/220011001.img/foothold	# 03i: appends a whole foothold GROUP to a live Ludibrium Toy Factory map
+
+# `user` / `ladderRope` on a live map. Neither is read by this server (grepped: no
+# `getChildByPath("user")`, no "ladderRope" in src/main/java), so these are client-side —
+# a climbable rope that appears out of nowhere, and four map-entry condition blocks.
+Map.wz/Map/Map1/105100300.img/user	# 03i: v84 map-entry condition block on a live Sleepywood map; not read by this server, client-side only
+Map.wz/Map/Map1/105100301.img/user	# 03i: as above
+Map.wz/Map/Map1/105100400.img/user	# 03i: as above
+Map.wz/Map/Map1/105100401.img/user	# 03i: as above
+Map.wz/Map/Map1/120000105.img/ladderRope	# 03i: appends a climbable rope to a live map
+
+# NOT DENIED from the 395, deliberately, same doctrine as the note above:
+#   - the 119 scenery appends (`<layer>/tile/<n>`, `<layer>/obj/<n>`, `miniMap`, two
+#     `<layer>/info/tS*`). They are unclaimed, and the honest description of them is
+#     "cosmetic, unread". Anyone merging them still owes the tile/obj asset check of 5.3.
+#   - `Map/Map2/220011001.img/info/{swim,fly,noMapCmd,onFirstUserEnter,onUserEnter}`.
+#     Every one of v84's values is 0 or the empty string, and Cosmic already normalises an
+#     empty `onUserEnter`/`onFirstUserEnter` back to the mapid (MapFactory.java:153-157), so
+#     writing them changes nothing on this server. Verified, not assumed. If a later v84 tree
+#     carries a non-empty script name here, this line stops being true.

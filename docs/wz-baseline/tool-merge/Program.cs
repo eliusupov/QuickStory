@@ -217,7 +217,9 @@ static class Program
         }
         if (rows.Count == 0)
             throw new BadArgs($"{kind}-list {file} holds 0 rows. An empty {kind}-list is never what was meant; " +
-                (kind == "force" ? "omit --force instead." : "the committed COLLISION-DENY.txt has 40."));
+                // ponytail: no row count here. The first version said "has 40"; the list is at 188
+                // and still growing, and a stale number in an error message is worse than none.
+                (kind == "force" ? "omit --force instead." : "the committed COLLISION-DENY.txt is never empty — check the path."));
         return rows;
     }
 
@@ -353,21 +355,37 @@ static class Program
     // hand are that shape, and nothing in the pipeline said a word about any of them.
 
     // A container is a positional array iff EVERY child name is a non-negative integer and they
-    // are exactly 0..c-1. "Every" is load-bearing: a map .img has children `0`-`7` (the layers)
-    // ALONGSIDE info/portal/foothold/life, and calling that an array would refuse every row that
-    // writes into a layer — including the six appends ticket 08 correctly merged.
-    static int? ArrayCount(IEnumerable<string> childNames)
+    // form ONE CONSECUTIVE RUN. "Every" is load-bearing: a map .img has children `0`-`7` (the
+    // layers) ALONGSIDE info/portal/foothold/life, and calling that an array would refuse every
+    // row that writes into a layer — including the six appends ticket 08 correctly merged.
+    //
+    // 03i: the run NO LONGER HAS TO START AT 0, and that clause is the whole ticket. The first
+    // version demanded exactly 0..c-1, so `Glove/01082262.img/swingT2` (live children `{1,2}`)
+    // and `swingO3` (live `{1}`) were not arrays at all and two v84 frames were spliced into
+    // Ezorsia's art — the exact hazard the six refusals on their siblings exist to stop.
+    //
+    // The run must still be CONSECUTIVE, and that is the clause 03h declined to drop and this
+    // ticket declines again. Allowing holes would make every id container in String.wz an array
+    // (`Consume.img`'s children are 2,290 integer item ids with enormous gaps) and refuse 501
+    // legitimate name rows. The cost is a known, stated blind spot: a genuinely sparse array
+    // like `Glove/01082262.img/swingOF` = `{0,3}`, or `Check.img/4940` = `{0,1,4961}`, reads as
+    // "not an array". Nothing structural can separate those from an id table; the deny-list is
+    // what stands in front of them. See WZ-MERGE-PROCEDURE.md 4.4.
+    static (int Min, int Count)? ArrayRange(IEnumerable<string> childNames)
     {
         var seen = new HashSet<int>();
-        int c = 0;
+        int min = int.MaxValue, max = int.MinValue;
         foreach (var n in childNames)
         {
             if (!IsIndex(n, out int v) || !seen.Add(v)) return null;
-            c++;
+            if (v < min) min = v;
+            if (v > max) max = v;
         }
-        if (c == 0) return null;
-        for (int i = 0; i < c; i++) if (!seen.Contains(i)) return null;
-        return c;
+        if (seen.Count == 0) return null;              // an EMPTY container is not an array:
+                                                       // `01082262.img/ladder` has no children and
+                                                       // v84's two frames are a legitimate fill.
+        if (max - min + 1 != seen.Count) return null;   // a run with holes — see above
+        return (min, seen.Count);
     }
 
     // "4" yes; "04", "+4", "-4", "4 " no. A leading zero is a different NAME than the integer it
@@ -391,7 +409,9 @@ static class Program
     // `back/10` arrives before `back/9`).
     sealed class ArrayBase
     {
+        public int Min;                 // 03i: arrays do not all start at 0
         public int Count;
+        public int Max => Min + Count - 1;
         public HashSet<string> Digests = new();
     }
 
@@ -406,18 +426,24 @@ static class Program
             string container = string.Join('/', new[] { wzName }.Concat(rel.Take(i)));
             if (!baseline.TryGetValue(container, out var b))
             {
+                // ponytail: memoised from the TARGET as it was before this run, so a manifest
+                // holding both `obj/25` and `obj/25/foo` would refuse the second even though this
+                // run supplies slot 25 itself. No composed row is an ancestor of another (checked,
+                // all eleven files), so it cannot fire today; fix it by folding `requested` into
+                // the baseline if a manifest ever needs both.
                 var node = Resolve(tgt, rel, i);
-                int? c = node == null ? null : ArrayCount(Kids(node).Select(k => k.Name));
-                b = c == null ? null : new ArrayBase
+                var r = node == null ? null : ArrayRange(Kids(node).Select(k => k.Name));
+                b = r == null ? null : new ArrayBase
                 {
-                    Count = c.Value,
+                    Min = r.Value.Min,
+                    Count = r.Value.Count,
                     Digests = Kids(node!).Select(SlotDigest).ToHashSet()
                 };
                 baseline[container] = b;   // a null is memoised too: "not an array, stop asking"
             }
             if (b == null) continue;
 
-            string tell = $"'{container}' holds exactly the consecutive integers 0..{b.Count - 1}, so its children are SLOTS OF A POSITIONAL ARRAY, not identities";
+            string tell = $"'{container}' holds exactly the consecutive integers {b.Min}..{b.Max}, so its children are SLOTS OF A POSITIONAL ARRAY, not identities";
 
             // 03h: the wording matters as much as the refusal. This branch covers TWO different
             // hazards and the first draft named only one, which is a refusal an operator can
@@ -426,15 +452,22 @@ static class Program
             // so "the index may name a different entry" reads as false and the row looks safe.
             // It is not: the write ADDS a field to a record that already works.
             if (i != rel.Length - 1)
-                return $"POSITIONAL ARRAY: {tell}. This row writes '{string.Join('/', rel.Skip(i + 1))}' INTO slot {idx}, which already EXISTS. TWO hazards, and this refusal covers both — checking one and finding it harmless does not clear the row: (a) the source's slot {idx} need not be the same entry as this tree's, so the field lands on whichever entry sits at that index HERE (v84 reindexes arrays; see 08's portals); (b) even when it IS the same entry, the row EDITS an existing record by adding a field to it, and the additive gate cannot see an edit that adds — ticket 09's `Check.img/<id>/0/lvmax` is exactly this, and merging it caps 108 working quests at Lv.40. Dump BOTH slots in full, decide what the added field does to the record that is already there, and either re-author the row or deny it.";
+                return $"POSITIONAL ARRAY: {tell}. This row writes '{string.Join('/', rel.Skip(i + 1))}' INTO slot {idx}, which already EXISTS. TWO hazards, and this refusal covers both — checking one and finding it harmless does not clear the row: (a) the source's slot {idx} need not be the same ENTRY as this tree's, so the field lands on whichever entry sits at that index HERE (v84 reindexes arrays, and the two trees need not even hold the same NUMBER of entries); (b) even when it is the same entry, the row EDITS a record the target already has by adding a field to it, and the additive gate cannot see an edit that adds. What makes (b) different from adding a field to any other existing node — which this same run does permit — is that the record here has NO NAME, only a position, so there is nothing to check the edit against: you cannot tell WHICH record you are editing without dumping it. Do that: dump BOTH slots in full, decide what the added field does to the record that is already there, and either re-author the row against THIS tree or deny it. (Worked example of (b) landing with the indices lining up perfectly: ticket 09's `Quest.wz/Check.img/<id>/0/lvmax`, which caps 108 working quests at Lv.40.)";
 
-            if (idx < b.Count)
+            if (idx >= b.Min && idx <= b.Max)
                 return $"POSITIONAL ARRAY: {tell}. Slot {idx} is already occupied; this is not an append.";
 
+            // 03i: an array that starts at 1 makes index 0 reachable, and it is not an append —
+            // the source is numbering the same animation from a different origin, which means the
+            // two arrays are not aligned at all. `Glove/01082262.img/swingO3` is exactly this:
+            // live `{1}`, v84 `{0,1}`, and v84's slot 0 carries a 47x9 rGlove against the live 6x5.
+            if (idx < b.Min)
+                return $"POSITIONAL ARRAY: {tell}. Slot {idx} sits BELOW the array's first index {b.Min}, so this is a PREPEND, not an append. A source that numbers this container from a different origin than the target is not aligned with it, and the entry would sit beside slots that belong to a different set. Dump both containers by content and either re-author the row or deny it.";
+
             var want = requested.TryGetValue(container, out var w) ? w : new SortedSet<int>();
-            for (int k = b.Count; k < idx; k++)
+            for (int k = b.Max + 1; k < idx; k++)
                 if (!want.Contains(k))
-                    return $"POSITIONAL ARRAY: {tell}. Slot {idx} would leave a GAP — the array ends at {b.Count - 1} and nothing in this manifest supplies slot {k}. A client that walks the array stops at the hole.";
+                    return $"POSITIONAL ARRAY: {tell}. Slot {idx} would leave a GAP — the array ends at {b.Max} and nothing in this manifest supplies slot {k}. A client that walks the array stops at the hole.";
 
             // A pure append by index can still be a duplicate by content: if v84 INSERTED an
             // entry earlier in the array, every later slot is the target's own content shifted
@@ -617,7 +650,22 @@ static class Program
     // least about. So: digest the DECODED values of each direct child, pre and post, and diff.
     static string Sha(ReadOnlySpan<byte> b) => Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(b)).ToLowerInvariant();
 
-    static void Canon(WzObject o, string prefix, StringBuilder sb)
+    // 03i: `WzMerge hash <Reactor.wz> /` exited 0xC00000FD — a stack overflow — on six images,
+    // symmetric pre and post, so `hash` (this project's protect-verification instrument) failed on
+    // a whole file in a way an operator reads as merge damage. The cause is not depth, it is a
+    // CYCLE: `Reactor.wz/1050000.img/0/hit/2` is a WzUOLProperty pointing back at its own ancestor
+    // `0`, and `Kids()` on a UOL hands back the RESOLVED TARGET's children, so Canon walked
+    // 0 -> hit/2 -> 0 -> hit/2 forever, branching twice per level.
+    //
+    // The fix is to stop following the symlink, not to bound the walk: a bound would still expand
+    // 2^depth lines before it stopped. A UOL's content IS its link string — the node it points at
+    // is digested at its own path in the same pass, so nothing is lost and nothing is counted
+    // twice. The depth cap below is a backstop for a cycle of some other shape, not the fix; it
+    // writes its own marker line INTO the digest so a truncated subtree can never read as a
+    // matching one.
+    const int CanonMaxDepth = 64;
+
+    static void Canon(WzObject o, string prefix, StringBuilder sb, int depth = 0)
     {
         // ponytail: leaf value via ToString(), which is the decoded scalar for every property
         // type these manifests carry (int/short/long/float/double/string/uol/vector). Canvases
@@ -626,11 +674,19 @@ static class Program
         {
             MapleLib.WzLib.WzProperties.WzCanvasProperty c =>
                 $"canvas {c.PngProperty?.Width}x{c.PngProperty?.Height} png:{Sha(c.PngProperty?.GetCompressedBytes(false) ?? Array.Empty<byte>())}",
+            MapleLib.WzLib.WzProperties.WzUOLProperty u => $"UOL -> {u.Value}",
             WzImageProperty p when (p.WzProperties?.Count ?? 0) == 0 => $"{p.PropertyType} = {p}",
             _ => o.GetType().Name
         };
         sb.Append(prefix).Append('\t').Append(val).Append('\n');
-        foreach (var k in Kids(o).OrderBy(k => k.Name, StringComparer.Ordinal)) Canon(k, prefix + "/" + k.Name, sb);
+        if (o is MapleLib.WzLib.WzProperties.WzUOLProperty) return;   // a link, not a subtree
+        if (depth >= CanonMaxDepth)
+        {
+            sb.Append(prefix).Append("\tDEPTH LIMIT ").Append(CanonMaxDepth).Append(" — subtree NOT digested\n");
+            return;
+        }
+        foreach (var k in Kids(o).OrderBy(k => k.Name, StringComparer.Ordinal))
+            Canon(k, prefix + "/" + k.Name, sb, depth + 1);
     }
 
     // whole-subtree digest of one node. Used by `hash` per direct child, and by the merge (M2)
@@ -1292,7 +1348,7 @@ static class Program
                           (forceFile == null ? "; no force-list (nothing may be overwritten)" : $"; force-list {forceFile}: {force.Count} roots"));
 
         int added = 0, forced = 0, unverified = 0;
-        var xmlArrayBase = new Dictionary<string, int?>(StringComparer.OrdinalIgnoreCase);   // B5
+        var xmlArrayBase = new Dictionary<string, (int Min, int Count)?>(StringComparer.OrdinalIgnoreCase);   // B5
         var xmlSlots = RequestedSlots(paths);
         foreach (var manifestPath in paths)
         {
@@ -1371,9 +1427,9 @@ static class Program
                 // the container's children at this indent. Descending THROUGH an integer segment
                 // whose container is an array means the row writes a field into an existing slot,
                 // and slot n here need not be slot n in the source.
-                if (IsIndex(seg, out int segIdx) && ArrayCount(ChildNames(lines, start, end, indent)) is int ac0)
+                if (IsIndex(seg, out int segIdx) && ArrayRange(ChildNames(lines, start, end, indent)) is { } ac0)
                 {
-                    Conflict(manifestPath, $"POSITIONAL ARRAY: the container of '{seg}' holds exactly the consecutive integers 0..{ac0 - 1}, so its children are SLOTS, not identities. This row writes into slot {segIdx}, which already EXISTS. TWO hazards, both covered by this refusal: (a) the source's slot {segIdx} need not be the same entry as this tree's; (b) even when it is, the row EDITS an existing record by adding a field to it — ticket 09's `Check.img/<id>/0/lvmax` caps 108 working quests at Lv.40 that way, with the indices lining up perfectly. Dump both slots, then re-author the row or deny it.");
+                    Conflict(manifestPath, $"POSITIONAL ARRAY: the container of '{seg}' holds exactly the consecutive integers {ac0.Min}..{ac0.Min + ac0.Count - 1}, so its children are SLOTS, not identities. This row writes into slot {segIdx}, which already EXISTS. TWO hazards, both covered by this refusal: (a) the source's slot {segIdx} need not be the same entry as this tree's; (b) even when it is, the row EDITS a record the target already has by adding a field to it — and unlike a named node, this record has only a position, so you cannot tell WHICH record you are editing without dumping it. Ticket 09's `Check.img/<id>/0/lvmax` caps 108 working quests at Lv.40 that way, with the indices lining up perfectly. Dump both slots, then re-author the row or deny it.");
                     located = false; break;
                 }
                 int i = FindChild(lines, start, end, indent, seg);
@@ -1431,17 +1487,19 @@ static class Program
             {
                 string container = manifestPath[..manifestPath.LastIndexOf('/')];
                 if (!xmlArrayBase.TryGetValue(container, out var ac))
-                    xmlArrayBase[container] = ac = ArrayCount(ChildNames(lines, start, end, indent));
-                if (ac is int c0)
+                    xmlArrayBase[container] = ac = ArrayRange(ChildNames(lines, start, end, indent));
+                if (ac is { } r0)
                 {
+                    int lo = r0.Min, hi = r0.Min + r0.Count - 1;
                     string? why = null;
-                    if (leafIdx < c0) why = $"slot {leafIdx} is already occupied; this is not an append";
-                    else for (int k = c0; k < leafIdx && why == null; k++)
+                    if (leafIdx >= lo && leafIdx <= hi) why = $"slot {leafIdx} is already occupied; this is not an append";
+                    else if (leafIdx < lo) why = $"slot {leafIdx} sits BELOW the array's first index {lo} — that is a PREPEND, not an append, and means the source numbers this container from a different origin than the target";
+                    else for (int k = hi + 1; k < leafIdx && why == null; k++)
                         if (!(xmlSlots.TryGetValue(container, out var w) && w.Contains(k)))
-                            why = $"slot {leafIdx} would leave a GAP — the array ends at {c0 - 1} and nothing in this manifest supplies slot {k}";
+                            why = $"slot {leafIdx} would leave a GAP — the array ends at {hi} and nothing in this manifest supplies slot {k}";
                     if (why != null)
                     {
-                        Conflict(manifestPath, $"POSITIONAL ARRAY: '{container}' holds exactly the consecutive integers 0..{c0 - 1}, so its children are SLOTS, not identities. {why}.");
+                        Conflict(manifestPath, $"POSITIONAL ARRAY: '{container}' holds exactly the consecutive integers {lo}..{hi}, so its children are SLOTS, not identities. {why}.");
                         continue;
                     }
                     // NOTE: the binary side additionally refuses an append whose CONTENT already
