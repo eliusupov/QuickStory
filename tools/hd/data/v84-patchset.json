@@ -165,10 +165,18 @@
    "comment": "related to smega display  //likely screen area where pop up starts for smega",
    "drop": null,
    "fixed": false,
-   "tier": "T6-envelope",
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "M-manual",
+   "v84": 4576219,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "push 0x384",
+   "v84_verdict": "ok"
   },
   {
    "id": "P007",
@@ -229,10 +237,18 @@
    "comment": "push 800 ; CAvatarMegaphone::ByeAvatarMegaphone ; IWzVector2D::RelMove",
    "drop": null,
    "fixed": false,
-   "tier": "T6-envelope",
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "T1b-masked-target",
+   "v84": 4577877,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "push 0x384",
+   "v84_verdict": "ok"
   },
   {
    "id": "P010",
@@ -651,10 +667,18 @@
    "comment": "remove elevation requests\t//still not working unfortunately\t//still keeping this to checks for admin privilege",
    "drop": null,
    "fixed": false,
-   "tier": null,
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "T1b-masked-target",
+   "v84": 4854583,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "push 0x80000002",
+   "v84_verdict": "partial"
   },
   {
    "id": "P024",
@@ -667,10 +691,18 @@
    "comment": "likely requires affecting WINAPI CreateProcess, which requires a launcher\t\t//because a packed client cannot be directly edited for these offsets",
    "drop": null,
    "fixed": false,
-   "tier": null,
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "T1b-masked-target",
+   "v84": 4857938,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "push 0x80000002",
+   "v84_verdict": "partial"
   },
   {
    "id": "P025",
@@ -2633,10 +2665,18 @@
    "comment": "mov eax,600",
    "drop": null,
    "fixed": false,
-   "tier": null,
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "M-manual",
+   "v84": 6013273,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "mov eax, 0x258",
+   "v84_verdict": "ok"
   },
   {
    "id": "P106",
@@ -2649,10 +2689,18 @@
    "comment": "mov eax,800 ; RelMove?",
    "drop": null,
    "fixed": false,
-   "tier": null,
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "M-manual",
+   "v84": 6013289,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "mov eax, 0x320",
+   "v84_verdict": "ok"
   },
   {
    "id": "P107",
@@ -2807,12 +2855,12 @@
    "size": 4,
    "value": 720,
    "comment": "push 600",
-   "drop": null,
+   "drop": "sizeof, not a resolution constant (v84 reads 608)",
    "fixed": false,
    "tier": null,
    "v84": null,
    "checks": {},
-   "verdict": "UNRESOLVED"
+   "verdict": "DROPPED"
   },
   {
    "id": "P114",
@@ -2981,7 +3029,7 @@
    "comment": "CLogin::SendCheckPasswordPacket: At the start of the sequence of pushes that contains 0C9h, place a long jmp to further down in the method to the SystemInfo basic block.Do auth patches for encoding the correct strings(user / pw)",
    "drop": null,
    "fixed": false,
-   "tier": null,
+   "tier": "T1b-masked-target",
    "v84": null,
    "checks": {},
    "verdict": "UNRESOLVED"
@@ -2997,10 +3045,18 @@
    "comment": "CLogin::SendCheckPasswordPacket/sub_5F6952\t\tend 005F6C6F //??",
    "drop": null,
    "fixed": false,
-   "tier": null,
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "T1b-masked-target",
+   "v84": 6339266,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "push dword ptr [ebp + 0xc]",
+   "v84_verdict": "ok"
   },
   {
    "id": "P122",
@@ -3648,10 +3704,18 @@
    "comment": "push 600",
    "drop": null,
    "fixed": false,
-   "tier": null,
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "M-manual",
+   "v84": 6574309,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "push 0x258",
+   "v84_verdict": "ok"
   },
   {
    "id": "P149",
@@ -3664,10 +3728,18 @@
    "comment": "push 800 ; IWzGr2DLayer::Getcanvas",
    "drop": null,
    "fixed": false,
-   "tier": null,
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "M-manual",
+   "v84": 6574314,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "push 0x320",
+   "v84_verdict": "ok"
   },
   {
    "id": "P150",
@@ -3680,10 +3752,18 @@
    "comment": "push 600",
    "drop": null,
    "fixed": false,
-   "tier": null,
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "M-manual",
+   "v84": 6574846,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "push 0x258",
+   "v84_verdict": "ok"
   },
   {
    "id": "P151",
@@ -3696,10 +3776,18 @@
    "comment": "push 800 ; IWzGr2DLayer::Getcanvas",
    "drop": null,
    "fixed": false,
-   "tier": null,
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "M-manual",
+   "v84": 6574851,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "push 0x320",
+   "v84_verdict": "ok"
   },
   {
    "id": "P152",
@@ -5378,10 +5466,18 @@
    "comment": "length of pick up and exp gain message canvas //found with help from Davi",
    "drop": null,
    "fixed": false,
-   "tier": null,
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "T1b-masked-target",
+   "v84": 9236774,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "push 0x15e",
+   "v84_verdict": "ok"
   },
   {
    "id": "P222",
@@ -5428,10 +5524,18 @@
    "comment": "address to move the message in the canvas adjusted above to the center of the new canvas  //thanks chris",
    "drop": null,
    "fixed": false,
-   "tier": null,
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "T1b-masked-target",
+   "v84": 9237689,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "mov esi, 0x15e",
+   "v84_verdict": "ok"
   },
   {
    "id": "P224",
@@ -5558,10 +5662,18 @@
    "comment": "inventory/exp gain x axis //310 //####hd415 //405",
    "drop": null,
    "fixed": false,
-   "tier": null,
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "T1b-masked-target",
+   "v84": 9238762,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "push 0x1bc",
+   "v84_verdict": "ok"
   },
   {
    "id": "P229",
@@ -5742,10 +5854,18 @@
    "comment": "ty rain",
    "drop": null,
    "fixed": false,
-   "tier": null,
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "T1b-masked-target",
+   "v84": 9402762,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "mov eax, 0x30d3f",
+   "v84_verdict": "ok"
   },
   {
    "id": "P237",
@@ -5758,10 +5878,18 @@
    "comment": "set speed cap //ty ronan",
    "drop": null,
    "fixed": false,
-   "tier": null,
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "T1b-masked-target",
+   "v84": 9406852,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "mov esi, 0x8c",
+   "v84_verdict": "ok"
   },
   {
    "id": "P238",
@@ -6438,10 +6566,19 @@
    "comment": "mov eax,799 ; CUIToolTip::MakeLayer",
    "drop": null,
    "fixed": false,
-   "tier": null,
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "M-manual",
+   "v84": 9608162,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "regalloc": true,
+   "v84_insn": "mov ecx, 0x31f",
+   "v84_verdict": "ok"
   },
   {
    "id": "P266",
@@ -6950,10 +7087,18 @@
    "comment": "push -300",
    "drop": null,
    "fixed": false,
-   "tier": null,
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "M-manual",
+   "v84": 10480485,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "mov dword ptr [ebp - 0x34], 0xfffffed4",
+   "v84_verdict": "ok"
   },
   {
    "id": "P288",
@@ -6966,10 +7111,18 @@
    "comment": "push 300",
    "drop": null,
    "fixed": false,
-   "tier": null,
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "M-manual",
+   "v84": 10480499,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "mov dword ptr [ebp - 0x2c], 0x12c",
+   "v84_verdict": "ok"
   },
   {
    "id": "P289",
@@ -7611,7 +7764,7 @@
    "comment": "ty rain",
    "drop": null,
    "fixed": false,
-   "tier": "T5-xref",
+   "tier": "T1b-masked-target",
    "v84": 11862728,
    "checks": {
     "ADDR": true,

@@ -15,17 +15,19 @@ the tier table, the false-positive list and the manual test procedure.
 | | |
 |---|---|
 | patch operations parsed from source | 327 (over 319 addresses, 317 distinct instruction anchors) |
-| resolved to v84 **and verified** | 269 anchors — 84.9% |
-| rejected as false positives | 10 |
-| unresolved | 38 |
-| **operations** PASS / FAIL / unresolved / dropped | **276 / 0 / 48 / 3** |
-| **shipping set** (groups C–J) | **293 ops → 263 PASS, 0 FAIL, 30 unresolved (89.8%)** |
+| resolved to v84 **and verified** | 288 anchors — 90.9% |
+| rejected as false positives | 9 |
+| unresolved | 20 |
+| **operations** PASS / FAIL / unresolved / dropped | **295 / 0 / 28 / 4** |
+| **shipping set** (groups C–J) | **292 ops → 277 PASS, 0 FAIL, 15 unresolved (94.9%)** |
+| groups complete | **C, F, G, H, J at 100%**; D 30/31, E 32/33 |
 
 Phase 0 reported 255/316 = 80.7% "mechanically located". That figure is roughly right
 in magnitude but was never checked for correctness. Re-derived with verification:
-**10 of the hits phase 0's method produces are false positives**, and two new techniques
-(monotone-envelope bracketing, forward-idiom scoring) plus nine hand-resolved sites
-more than close the gap.
+**9 of the hits phase 0's method produces are false positives**, and three new techniques
+(monotone-envelope bracketing, forward-idiom scoring, and masking each patch's own write
+target out of its signature) plus 19 hand-resolved sites more than close the gap.
+Everything still open is group I (13 ops) and two code caves.
 
 ## Code caves: 2 of 30 need the asm body edited, not re-pointed
 
@@ -70,7 +72,7 @@ cave: 3 NOPs, body `push nStatusBarY ; push edi ; jmp 0x00906D3C`. Recorded in
 
 ## The false positives (the part that matters)
 
-All 10 **passed the instruction-shape check** — `push 578` looks like `push 578`
+All 9 **passed the instruction-shape check** — `push 578` looks like `push 578`
 wherever it is. They were caught by two structural invariants instead:
 
 - **injectivity**: two v83 sites cannot map to one v84 site
@@ -121,6 +123,7 @@ The three from the brief, all confirmed against the binary, plus two more.
 | P158 | `0x0064061D` | is `idiv ecx`, no immediate. The intended `mov ecx,600` is `0x00640618`, already patched by the previous line | **delete** |
 | P302/P304 | `0x009F7079` / `0x009F707E` | duplicate spelling of P301/P303 | drop |
 | P323 | `0x00C08459` | manifest blank count is v83's literal length; v84's is one byte longer | count `0x16` |
+| P113 | `0x005E3FA0` | **not a resolution constant at all.** `push 0x10 ; push 0x258 ; call 0x403196 ; pop ecx ; pop ecx ; mov [edi],eax` is a two-argument cdecl allocator; the 600 is a `sizeof`. v84's counterpart `0x005F8BCF` — the only such call in the monotone band — reads **608**, while every genuine resolution site still reads 600. | **do not port**; a height under 608 under-allocates |
 
 ## Method
 
@@ -131,6 +134,11 @@ The load-bearing addition:
   inserts code, so the true delta lies between theirs. Search only that window.
 - **T7 forward idiom** — when the window still holds several `push 600`s, decode forward
   from each candidate and LCS the mnemonic sequence against v83's.
+- **T1b, own-target masking** — the bytes a patch overwrites are the one part of the site
+  guaranteed not to matter, and v84 changed exactly those on a whole class of sites
+  (`push 0x122 → 0x15E`, `push 0x1F8 → 0x1BC`, `push 0x320 → 0x384`). Wildcarding the
+  write range in the site's own signature recovers 10 anchors. Capped at 8 bytes so a
+  46-NOP cave cannot mask away its entire signature.
 
 T7 was validated against ground truth established by hand *first*: `0x009F6E99`,
 `0x009F6EA0`, `0x009F7078`, `0x009F707D` were resolved manually via the
@@ -171,14 +179,16 @@ and everything else is address coverage.
 
 | | days |
 |---|---|
-| 17 non-group-I unresolved shipping ops by hand with `probe.py` | 1 |
+| redesign the 2 caves whose v84 body changed (`AdjustStatusBarBG`, `ccLoginDescriptorFix`) | 0.5 |
 | group I: re-RE the v84 pop-up handlers (restructured, not translatable) | 1.5 |
-| redesign the `AdjustStatusBarBG` cave for v84's codegen | 0.5 |
+| edit the 2 cave bodies the harness flagged (`je` retarget, `[esi+0xD08]`) | 0.25 |
 | build + link the DLL, port `codecaves.h` verbatim, wire the cave table | 1 |
 | first launch, gated walkthrough, fix what moved | 1.5 |
-| re-tune v83 magic offsets to v84's `UI.wz` (unknowable until step 3) | 2 – 5 |
+| re-tune v83 magic offsets to v84's `UI.wz` (unknowable until the launch) | 2 – 5 |
 | `EzorsiaV2_UI.wz` side archive + its 2 MinHook hooks (optional) | 0.5 |
-| **total** | **7.5 – 11** |
+| **total** | **7.25 – 10.25** |
 
-Phase 0 estimated 13.5–20 days for the whole job; ~4 of those are now spent and the
-resolution work came in at the optimistic end.
+Phase 0 estimated 13.5–20 days for the whole job. Roughly 4 are now spent and the
+address-resolution half is essentially done: 94.9% of the shipping set is verified and
+what remains is two cave redesigns and one restructured group, none of which is
+address-search work.

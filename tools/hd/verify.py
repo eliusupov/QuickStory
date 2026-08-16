@@ -24,7 +24,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import paths                                    # noqa: E402
-from resolve import MD, classify, same_shape, shape   # noqa: E402
+from resolve import MD, classify, same_shape, same_slot, shape   # noqa: E402
 
 # Groups the architecture decision drops: the existing ijl15.dll + edits\ loader
 # (bypass / redirect / skip-logo / window-mode / no-patcher / no-ad-balloon) already
@@ -92,6 +92,10 @@ def main():
         # P302/P304 are the second spelling of P301/P303 (0x9F7078+1 / 0x9F707D+1).
         'P302': {'drop': 'duplicate spelling of P301'},
         'P304': {'drop': 'duplicate spelling of P303'},
+        # P113: 0x005E3FA0 is `push 0x10 ; push 600 ; call <allocator>` -- the 600 is a
+        # sizeof, not a resolution. v84 raised it to 608 while every real resolution
+        # site still reads 600. Writing a height there under-allocates below 608.
+        'P113': {'drop': 'sizeof, not a resolution constant (v84 reads 608)'},
     }
     # v84's manifest literal is one byte longer than v83's
     for p in patches:
@@ -158,7 +162,13 @@ def main():
             c['SLOT'] = None
         else:
             s84 = shape(V84, v84_anchor)
-            c['SHAPE'] = same_shape(shape(V83, anchor), s84)
+            s83 = shape(V83, anchor)
+            c['SHAPE'] = same_shape(s83, s84)
+            if not c['SHAPE'] and r.get('regalloc') and same_slot(s83, s84):
+                # v84 recompiled this site with a different register. The write only
+                # touches the immediate, so operand geometry is the correct test here.
+                c['SHAPE'] = True
+                row['regalloc'] = True
             cc = classify(V84, dict(p, site=v84_anchor, off=p['target'] - anchor))
             c['SLOT'] = cc['verdict'] in ('ok', 'partial', 'opcode')
             row['v84_insn'] = s84 and f"{s84['m']} {s84['ops']}"

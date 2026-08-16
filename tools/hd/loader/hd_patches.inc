@@ -11,8 +11,10 @@ static const HdPatch kHdPatches[] = {
   { 0x00437F5F,   4, K_INT   ,         {0,-1,0,0}, 'C', "P003", 0x004372B1 },  // push -300
   { 0x00437F64,   4, K_INT   ,         {-1,0,0,0}, 'C', "P004", 0x004372B6 },  // push -400 ; RelMove?
   { 0x0045C66B,   4, K_INT   ,          {2,0,0,0}, 'J', "P005", 0x0045A5CB },  // push 800 ; CAvatarMegaphone ; CreateWnd
+  { 0x0045D3DB,   4, K_INT   ,          {2,0,0,0}, 'J', "P006", 0x0045B337 },  // related to smega display  //likely screen area where pop up 
   { 0x0045D4BD,   4, K_INT   ,       {2,0,0,-225}, 'J', "P007", 0x0045B417 },  // smega with avatar x axis for duration on screen
   { 0x0045D96F,   4, K_INT   ,       {2,0,0,-225}, 'J', "P008", 0x0045B898 },  // push 575 ##ED  //smega x axis fade
+  { 0x0045DA55,   4, K_INT   ,          {2,0,0,0}, 'J', "P009", 0x0045B97E },  // push 800 ; CAvatarMegaphone::ByeAvatarMegaphone ; IWzVector2
   { 0x0046B877,  12, K_CAVE  ,          {0,0,0,0}, 'F', "P010", 0x00469414 },  // CONST (non-linear)  // 
   { 0x0046B892,  14, K_CAVE  ,          {0,0,0,0}, 'F', "P011", 0x0046942F },  // CONST (non-linear)  // 
   { 0x0046B8AF,  16, K_CAVE  ,          {0,0,0,0}, 'F', "P012", 0x0046944C },  // CONST (non-linear)  // 
@@ -24,6 +26,8 @@ static const HdPatch kHdPatches[] = {
   { 0x0046B94B,  11, K_CAVE  ,          {0,0,0,0}, 'F', "P018", 0x004694E8 },  // CONST (non-linear)  // 
   { 0x0046DE4F,   4, K_INT   ,          {0,2,0,0}, 'C', "P019", 0x0046B85C },  // mov eax,600
   { 0x0046DE5D,   4, K_INT   ,          {2,0,0,0}, 'C', "P020", 0x0046B86A },  // mov eax,800 ; IWzVector2D::RelMove
+  { 0x004A1337,   1, K_BYTE  ,          {0,0,0,1}, 'A', "P023", 0x0049C2CD },  // remove elevation requests	//still not working unfortunately	
+  { 0x004A2052,   1, K_BYTE  ,          {0,0,0,1}, 'A', "P024", 0x0049CFE8 },  // likely requires affecting WINAPI CreateProcess, which requir
   { 0x004A2402,   1, K_BYTE  ,          {0,0,0,1}, 'A', "P025", 0x0049D398 },  // remove elevation requests	//still not working unfortunately
   { 0x004B08E6,  14, K_CAVE  ,          {0,0,0,0}, 'F', "P026", 0x004AB10F },  // CONST (non-linear)  // cash shop preview fix
   { 0x004D1F40,   4, K_INT   ,          {2,0,0,0}, 'C', "P027", 0x004CC160 },  // mov [ebp-16],800 ; CreateWnd
@@ -91,6 +95,8 @@ static const HdPatch kHdPatches[] = {
   { 0x005BA046,   4, K_INT   ,          {2,0,0,0}, 'C', "P102", 0x005A9B52 },  // mov eax,800 ; RelMove?
   { 0x005BB29E,   4, K_INT   ,          {0,2,0,0}, 'C', "P103", 0x005AADAA },  // mov eax,600
   { 0x005BB2AE,   4, K_INT   ,          {2,0,0,0}, 'C', "P104", 0x005AADBA },  // mov eax,800 ; RelMove?
+  { 0x005BC159,   4, K_INT   ,          {0,2,0,0}, 'C', "P105", 0x005ABC65 },  // mov eax,600
+  { 0x005BC169,   4, K_INT   ,          {2,0,0,0}, 'C', "P106", 0x005ABC75 },  // mov eax,800 ; RelMove?
   { 0x005BD01D,   4, K_INT   ,          {0,2,0,0}, 'C', "P107", 0x005ACB29 },  // mov eax,600
   { 0x005BD02D,   4, K_INT   ,          {2,0,0,0}, 'C', "P108", 0x005ACB39 },  // mov eax,800 ; RelMove?
   { 0x005D2008,   4, K_INT   ,          {0,2,0,0}, 'C', "P109", 0x005C187E },  // mov eax,600
@@ -103,6 +109,7 @@ static const HdPatch kHdPatches[] = {
   { 0x006096BD,   4, K_INT   ,         {-1,0,0,0}, 'E', "P117", 0x005F4824 },  // push -400 ; RelMove?				!!game login frame!! turn this on if
   { 0x0060B418,   4, K_INT   ,         {0,-1,0,0}, 'E', "P118", 0x005F64DE },  // push -300 ;
   { 0x0060B561,   4, K_INT   ,         {0,-1,0,0}, 'E', "P119", 0x005F6627 },  // push -300 ;
+  { 0x0060BAC2,   1, K_BYTE  ,          {0,0,0,8}, 'A', "P121", 0x005F6B87 },  // CLogin::SendCheckPasswordPacket/sub_5F6952		end 005F6C6F //?
   { 0x006190B9,   4, K_INT   ,          {0,2,0,0}, 'E', "P124", 0x0060411C },  // push 600
   { 0x0062294A,   4, K_INT   ,         {0,0,0,50}, 'E', "P125", 0x0060D849 },  // speed 1	//temporary fix by increasing the speed of display u
   { 0x006232D8,  11, K_CAVE  ,          {0,0,0,0}, 'E', "P127", 0x0060E1BF },  // CONST (non-linear)  // world select buttons fix		//thank you teto for pointing out 
@@ -126,6 +133,10 @@ static const HdPatch kHdPatches[] = {
   { 0x00644A7F,   4, K_INT   ,          {2,0,0,0}, 'E', "P145", 0x0062F5E4 },  // push 800 ; (UI/Logo/NXXXon)
   { 0x00644E61,   4, K_INT   ,          {0,2,0,0}, 'E', "P146", 0x0062F9C6 },  // push 600
   { 0x00644E66,   4, K_INT   ,          {2,0,0,0}, 'E', "P147", 0x0062F9CB },  // push 800; (UI/Logo/Wizet)
+  { 0x006450E5,   4, K_INT   ,          {0,2,0,0}, 'E', "P148", 0x0062FC4A },  // push 600
+  { 0x006450EA,   4, K_INT   ,          {2,0,0,0}, 'E', "P149", 0x0062FC4F },  // push 800 ; IWzGr2DLayer::Getcanvas
+  { 0x006452FE,   4, K_INT   ,          {0,2,0,0}, 'E', "P150", 0x0062FE63 },  // push 600
+  { 0x00645303,   4, K_INT   ,          {2,0,0,0}, 'E', "P151", 0x0062FE68 },  // push 800 ; IWzGr2DLayer::Getcanvas
   { 0x00655CB4,   4, K_INT   ,          {1,0,0,0}, 'C', "P152", 0x0064043E },  // mov edi,400
   { 0x00655CB9,   4, K_INT   ,          {0,1,0,0}, 'C', "P153", 0x00640443 },  // mov esi,300
   { 0x00655D6E,   4, K_INT   ,          {2,0,0,0}, 'C', "P154", 0x006404F8 },  // mov ecx,800
@@ -193,11 +204,14 @@ static const HdPatch kHdPatches[] = {
   { 0x0088AE58,   4, K_INT   ,        {2,0,0,-80}, 'C', "P218", 0x0085F374 },  // mov ecx,720 ; CreateDlg
   { 0x008CBCDB,   4, K_INT   ,       {1,0,0,-143}, 'H', "P219", 0x00897BB4 },  // ??related to exp gain/item pick up msg
   { 0x008CF0D7,   4, K_INT   ,         {0,0,0,26}, 'H', "P220", 0x0089AEE2 },  // moregainmsgs part 1
+  { 0x008CF126,   4, K_INT   ,        {0,0,0,400}, 'H', "P221", 0x0089AF33 },  // length of pick up and exp gain message canvas //found with h
   { 0x008CF377,   6, K_CAVE  ,          {0,0,0,0}, 'H', "P222", 0x0089B185 },  // CONST (non-linear)  // moregainmsgs part 2
+  { 0x008CF4B9,   4, K_INT   ,        {0,0,0,400}, 'H', "P223", 0x0089B2C6 },  // address to move the message in the canvas adjusted above to 
   { 0x008CF6D8,   5, K_CAVE  ,          {0,0,0,0}, 'H', "P224", 0x0089B4E6 },  // CONST (non-linear)  // moregainmsgsFade1
   { 0x008CF755,   7, K_CAVE  ,          {0,0,0,0}, 'H', "P225", 0x0089B563 },  // CONST (non-linear)  // moregainmsgsFade
   { 0x008CF82A,   1, K_BYTE  ,          {0,0,0,1}, 'H', "P226", 0x0089B636 },  // related to exp gain/item pick up msg, seems to affect msg he
   { 0x008CF82C,   4, K_INT   ,       {0,2,0,-370}, 'H', "P227", 0x0089B639 },  // inventory/exp gain y axis //####hd100 //90
+  { 0x008CF8EA,   4, K_INT   ,       {2,0,0,-405}, 'H', "P228", 0x0089B6F7 },  // inventory/exp gain x axis //310 //####hd415 //405
   { 0x008CF989,   4, K_INT   ,        {0,2,0,-18}, 'H', "P229", 0x0089B796 },  // ???related to exp gain/item pick up msg //??!!found in anoth
   { 0x008D556F,   4, K_INT   ,          {0,2,0,0}, 'C', "P230", 0x008A12F4 },  // mov eax,600 ;
   { 0x008D557D,   4, K_INT   ,          {2,0,0,0}, 'C', "P231", 0x008A1302 },  // mov eax,800 ; IWzVector2D::RelMove
@@ -205,6 +219,8 @@ static const HdPatch kHdPatches[] = {
   { 0x008DE524,   4, K_INT   ,          {2,0,0,0}, 'C', "P233", 0x008AA26B },  // push 800 ; CreateWnd
   { 0x008F4CBF,   4, K_INT   ,        {0,1,0,-14}, 'C', "P234", 0x008C069F },  // ??related to status bar
   { 0x008F4CC4,   4, K_INT   ,       {1,0,0,-158}, 'C', "P235", 0x008C06A4 },  // ???related to status bar
+  { 0x008F798A,   4, K_INT   ,     {0,0,0,199999}, 'K', "P236", 0x008C3304 },  // ty rain
+  { 0x008F8984,   4, K_INT   ,        {0,0,0,140}, 'K', "P237", 0x008C4286 },  // set speed cap //ty ronan
   { 0x0090487F,   4, K_INT   ,        {0,2,0,-22}, 'D', "P238", 0x008CFD4B },  // push 578
   { 0x00904884,   4, K_INT   ,          {2,0,0,0}, 'D', "P239", 0x008CFD50 },  // push 800
   { 0x00904888,   5, K_CAVE  ,          {0,0,0,0}, 'D', "P240", 0x008CFD55 },  // CONST (non-linear)  // 
@@ -231,6 +247,7 @@ static const HdPatch kHdPatches[] = {
   { 0x00914DE8,   4, K_INT   ,        {0,0,0,798}, 'D', "P262", 0x008DF7F8 },  // push 647 //hd800
   { 0x009218FC,   4, K_INT   ,          {2,0,0,0}, 'C', "P263", 0x008EBC3C },  // mov eax,800 ; RelMove?
   { 0x00921918,   4, K_INT   ,          {0,2,0,0}, 'C', "P264", 0x008EBC58 },  // mov eax,600
+  { 0x00929BE2,   4, K_INT   ,         {2,0,0,-1}, 'C', "P265", 0x008F32CC },  // mov eax,799 ; CUIToolTip::MakeLayer
   { 0x00929BF5,   4, K_INT   ,         {2,0,0,-1}, 'C', "P266", 0x008F32DF },  // mov eax,599 ; CUIToolTip::MakeLayer
   { 0x0096C1CE,   4, K_INT   ,         {0,-1,0,0}, 'C', "P267", 0x0093519A },  // push -300 ;
   { 0x0096CB3A,   4, K_INT   ,          {2,0,0,0}, 'C', "P268", 0x0093586B },  // push 800 ; RelMove? (Skills)
@@ -251,6 +268,8 @@ static const HdPatch kHdPatches[] = {
   { 0x009DA37C,   4, K_INT   ,       {2,0,0,-100}, 'C', "P284", 0x009994F5 },  // mov edx,700 ; CreateDlg
   { 0x009E8DE9,   4, K_INT   ,          {2,0,0,0}, 'C', "P285", 0x009A3E72 },  // mov edx,800 ; CreateDlg
   { 0x009E8DF6,   4, K_INT   ,          {0,2,0,0}, 'C', "P286", 0x009A3E7F },  // mov edx,600
+  { 0x009FEB65,   4, K_INT   ,         {0,-1,0,0}, 'C', "P287", 0x009B76BD },  // push -300
+  { 0x009FEB73,   4, K_INT   ,          {0,1,0,0}, 'C', "P288", 0x009B76CB },  // push 300
   { 0x00A27F79,   4, K_INT   ,          {0,2,0,0}, 'C', "P289", 0x009DFCF0 },  // lea eax,[esi+eax-600]
   { 0x00A27FE3,   4, K_INT   ,          {2,0,0,0}, 'C', "P290", 0x009DFD5C },  // mov ecx,800
   { 0x00A280F1,   4, K_INT   ,          {2,0,0,0}, 'C', "P291", 0x009DFE68 },  // lea eax,[ecx+eax-800]

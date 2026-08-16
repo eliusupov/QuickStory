@@ -301,6 +301,47 @@ def main():
                 break
     print(f'T1 masked context signature      : {sum(r["tier"] == "T1-context" for r in rows.values())}')
 
+    # ---------------- T1b: context signature with the patch's OWN target masked
+    # The bytes a patch overwrites are the one part of the site guaranteed not to
+    # matter -- they are about to be replaced. And v84 often changed exactly those:
+    #   0x0089AF33  push 0x122 -> push 0x15E   (gain-message canvas 290 -> 350)
+    #   0x0089B6F7  push 0x1F8 -> push 0x1BC
+    #   0x0045B97E  push 0x320 -> push 0x384   (avatar megaphone 800 -> 900)
+    # Leaving the immediate in the signature makes every one of those a miss. Wildcard
+    # the write range and the surrounding context still identifies the site.
+    wr = {}
+    for p in patches:
+        a = norm[p['id']]['anchor']
+        lo, hi = p['site'] + p['off'] - a, p['site'] + p['off'] - a + p['size']
+        cur = wr.get(a)
+        wr[a] = (min(cur[0], lo), max(cur[1], hi)) if cur else (lo, hi)
+
+    n1b = 0
+    for s, r in rows.items():
+        if r['v84'] is not None or s not in wr:
+            continue
+        o = s - paths.BASE
+        wlo, whi = wr[s]
+        if whi - wlo > 8:
+            continue          # a 46-NOP code cave would mask away the whole signature
+        for pre, post in WINDOWS:
+            pat = V83[o - pre:o + post]
+            msk = bytearray(mask_of(pat, s - pre))
+            for i in range(max(0, pre + wlo), min(len(msk), pre + whi)):
+                msk[i] = 0
+            msk = bytes(msk)
+            if find_masked(V83, pat, msk, R83)[0] != 1:
+                continue
+            c84, h84 = find_masked(V84, pat, msk, R84)
+            cb, hb = find_masked(V84B, pat, msk, R84)
+            if c84 == 1 and hb == h84:
+                r.update(v84=h84[0] + pre, tier='T1b-masked-target', window=pre + post,
+                         delta=h84[0] + pre - s, status='hit',
+                         note='context unique with the patch target wildcarded')
+                n1b += 1
+                break
+    print(f'T1b context, own target masked   : {n1b}')
+
     # ---------------- T2: neighbour-delta anchoring
     def nearby_deltas(va):
         got = sorted((r['v83'], r['delta']) for r in rows.values() if r['v84'] is not None)
@@ -652,7 +693,7 @@ def main():
             if r['v84'] != int(v['v84'], 16):
                 r.update(v84=int(v['v84'], 16), tier=v['tier'], status='hit',
                          delta=int(v['v84'], 16) - s, note=v['evidence'][:120],
-                         data=s in DATA_ANCHORS)
+                         data=s in DATA_ANCHORS, regalloc=v.get('regalloc', False))
                 nm += 1
     print(f'M  hand-resolved                 : {nm}')
 
@@ -685,7 +726,7 @@ def main():
     # wherever it is. Distinct sites colliding on one v84 address is proof that at
     # least one of them is wrong, so keep only a strictly better-evidenced tier and
     # reject the rest.
-    TIER_RANK = {'T1-context': 0, 'M-manual': 0, 'T2b-interval': 1, 'T2c-extend': 1,
+    TIER_RANK = {'T1-context': 0, 'M-manual': 0, 'T1b-masked-target': 1, 'T2b-interval': 1, 'T2c-extend': 1,
                  'T5-xref': 1, 'T2-anchored': 2, 'T6-envelope': 3, 'T7-idiom': 3,
                  'T3-function': 4}
     # T1 and the hand-resolved sites are the trustworthy skeleton; a claimant whose
@@ -694,7 +735,7 @@ def main():
     # ranking on tier alone threw away 0x00523FA3, whose delta +0xBC42 matches its T1
     # neighbours on both sides exactly.
     trusted = sorted((r['v83'], r['delta']) for r in rows.values()
-                     if r['tier'] in ('T1-context', 'M-manual', 'T5-xref')
+                     if r['tier'] in ('T1-context', 'T1b-masked-target', 'M-manual', 'T5-xref')
                      and r['delta'] is not None)
     tk = [a for a, _ in trusted]
 
@@ -751,7 +792,7 @@ def main():
     print()
     print(f'=== RESULT ({N} distinct patch anchors) ===')
     t = collections.Counter(r['tier'] for r in ok)
-    for k in ("T1-context", "T2-anchored", "T2b-interval", "T2c-extend",
+    for k in ("T1-context", "T1b-masked-target", "T2-anchored", "T2b-interval", "T2c-extend",
               "T3-function", "T6-envelope", "T7-idiom", "T5-xref", "M-manual"):
         print(f'  {k:16} {t[k]:3}  ({100.0 * t[k] / N:.1f}%)')
     print(f'  {"RESOLVED":16} {len(ok):3}  ({100.0 * len(ok) / N:.1f}%)')

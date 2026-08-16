@@ -25,6 +25,59 @@
    "evidence": "Three 16-byte-stride IPv4 string slots. Unique such triple in each image: v83 0x00AFE084 holds '192.168.1.109' x3 (already redirected); v84 0x00B4FAC4 holds the stock '63.251.217.4/.3/.2'. Identical in v84_mem.bin and v84_mem2.bin. The sibling data delta 0x51A28 at 0x00AFE8A0 corroborates the region.",
    "caveat": "Group B. edits\\redirect already does this at runtime; port only if you drop that edit."
   },
+  "0x005ABC65": {
+   "v84": "0x005BC158",
+   "tier": "M-manual",
+   "evidence": "Six neighbours in 0x005A8B46-0x005ACB39 all resolve at the uniform delta +0x104F3; 0x005ABC65 + 0x104F3 = 0x005BC158, where v84 holds the byte-identical 22-byte block `mov eax,0x258 ; sub eax,[ebx+0x28] ; mov [ebp-0x18],esi ; cdq ; sub eax,edx ; mov ecx,eax ; mov eax,0x320`. Identical in both dumps."
+  },
+  "0x005ABC75": {
+   "v84": "0x005BC168",
+   "tier": "M-manual",
+   "evidence": "the `mov eax,0x320` at the end of the same block, 0x10 after 0x005BC158, exactly as in v83."
+  },
+  "0x008F32CC": {
+   "v84": "0x00929BE1",
+   "tier": "M-manual",
+   "evidence": "CUIToolTip::MakeLayer. Delta 0x36915 is exactly that of its already-resolved partner 0x008F32DF -> 0x00929BF4. v84 reallocated the register: v83 `mov eax,0x31F ; cmp esi,eax ; jle ; sub eax,ecx ; mov [ebp+0xC],eax`, v84 `mov ecx,0x31F ; cmp esi,ecx ; jle ; sub ecx,eax ; mov [ebp+0xC],ecx`, converging on the identical `mov ecx,[ebx+8] ; add edx,ecx`. The write is +1 = the imm32 in both, so the register change is harmless.",
+   "regalloc": true,
+   "caveat": "register-reallocated site: the shape check must compare operand geometry, not the register name. That is what the \"regalloc\": true flag switches on."
+  },
+  "0x009B76BD": {
+   "v84": "0x009FEB62",
+   "tier": "M-manual",
+   "evidence": "Only ONE `mov [ebp-x], 0xFFFFFED4` exists in the whole 0x3310-wide monotone band between 0x009A3E7F (+0x44F76) and 0x009DFCF0 (+0x48286). v83 `mov [ebp-0x30],-300 ; mov [ebp-0x2C],-200 ; mov [ebp-0x28],300`; v84 `mov [ebp-0x34],-300 ; mov [ebp-0x30],-200 ; mov [ebp-0x2C],300 ; mov [ebp-0x28],200`. Same value sequence, frame offsets shifted 4 (one extra local), one extra trailing store. Delta 0x474A5, inside the band. Identical in both dumps."
+  },
+  "0x009B76CB": {
+   "v84": "0x009FEB70",
+   "tier": "M-manual",
+   "evidence": "the `mov [ebp-x], 0x12C` of the same triple, at the same delta 0x474A5."
+  },
+  "0x0045B337": {
+   "v84": "0x0045D3DA",
+   "tier": "M-manual",
+   "evidence": "CAvatarMegaphone. v83 `push 0x320 ; push eax ; mov [ebp-0x14],eax ; movsd ; call [ecx+0x90]`; v84 0x0045D3DA `push 0x384 ; push eax ; mov [ebp-0x10],eax ; movsd`. Same block, and v84 raised the literal 800 -> 900 which is why every byte-matching tier missed it. Delta 0x20A3 sits inside the bracket set by 0x0045A5CB (+0x209F) and 0x0045B417 (+0x20A5). Identical in both dumps.",
+   "caveat": "v84's baseline here is 900, not 800. The Ezorsia value (m_nGameWidth) is still what you want, but be aware v84 already widened this element."
+  },
+  "0x0062FC4A": {
+   "v84": "0x006450E4",
+   "tier": "M-manual",
+   "evidence": "IWzGr2DLayer::GetCanvas logo block. Seven sites in 0x0062EE54-0x0062F9CB all resolve by T1 at a uniform delta +0x1549A; 0x0062FC4A + 0x1549A = 0x006450E4, where v84 holds the byte-identical 14-byte block `push 0x258 ; push 0x320 ; push ebx ; push ebx ; push esi ; call [eax+0x8C] ; cmp eax,ebx ; jge`. Only two such blocks remain unclaimed in v84 (0x006450E4, 0x006452FD) matching v83's two (0x0062FC4A, 0x0062FE63) in order. Identical in both dumps."
+  },
+  "0x0062FC4F": {
+   "v84": "0x006450E9",
+   "tier": "M-manual",
+   "evidence": "the `push 0x320` immediately after 0x006450E4."
+  },
+  "0x0062FE63": {
+   "v84": "0x006452FD",
+   "tier": "M-manual",
+   "evidence": "second of the two remaining logo blocks, same uniform delta +0x1549A, byte-identical 14-byte block."
+  },
+  "0x0062FE68": {
+   "v84": "0x00645302",
+   "tier": "M-manual",
+   "evidence": "the `push 0x320` immediately after 0x006452FD."
+  },
   "0x008D1D50": {
    "v84": "0x00906C07",
    "tier": "M-manual",
@@ -68,6 +121,13 @@
   }
  },
  "source_bugs": {
+  "P113": {
+   "site": "0x005E3FA0",
+   "source": "Memory::WriteInt(0x005E3FA0 + 1, m_nGameHeight); //push 600",
+   "fault": "NOT A RESOLUTION CONSTANT. The site is `push 0x10 ; push 0x258 ; call 0x403196 ; pop ecx ; pop ecx ; mov [edi],eax` -- a two-argument cdecl allocator returning a pointer. The 600 is a sizeof, and Ezorsia matched it purely because the literal happens to be 600.",
+   "proof": "v84's counterpart is 0x005F8BCF, delta 0x14C2F, inside the monotone band [0x10789, 0x14E98] and the only `push 0x10 ; push <~600> ; call 0x403196` in it. v84 raised the literal to 0x260 = 608, while EVERY genuine resolution site in the set still reads 600. A structure grew by 8 bytes; a screen did not.",
+   "fix": "DO NOT PORT. Writing m_nGameHeight (720) there over-allocates by 112 bytes and is merely wasteful at 1280x720, but at any height below 608 it under-allocates and corrupts the heap. Dropped from the shipping set."
+  },
   "P031": {
    "site": "0x004D59B2",
    "source": "Memory::WriteInt(0x004D59B2 + 1, m_nGameHeight); //mov eax,800",

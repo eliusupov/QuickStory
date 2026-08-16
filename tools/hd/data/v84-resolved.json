@@ -13,6 +13,7 @@
    "fn_ok": null,
    "note": "PE COFF Characteristics = e_lfanew + 0x16. e_lfanew is 0x128 in v83 (localhome.exe) and 0x130 in the v84 image, so the f",
    "data": true,
+   "regalloc": false,
    "shape_ok": null,
    "mono_ok": true
   },
@@ -193,9 +194,9 @@
   },
   {
    "v83": 4567863,
-   "v84": 4572778,
-   "tier": "T6-envelope",
-   "status": "false-positive",
+   "v84": 4576218,
+   "tier": "M-manual",
+   "status": "resolved",
    "shape83": {
     "m": "push",
     "ops": "0x320",
@@ -208,23 +209,25 @@
    },
    "shape84": {
     "m": "push",
-    "ops": "0x320",
+    "ops": "0x384",
     "len": 5,
     "imm_off": 1,
     "imm_size": 4,
     "disp_off": 0,
     "disp_size": 0,
-    "bytes": "6820030000"
+    "bytes": "6884030000"
    },
    "window": 5,
-   "delta": 4915,
+   "delta": 8355,
    "dual_dump": true,
    "fn_ok": null,
-   "note": "unique in monotone envelope [+0x-353,+0x3463]",
+   "note": "CAvatarMegaphone. v83 `push 0x320 ; push eax ; mov [ebp-0x14],eax ; movsd ; call [ecx+0x90]`; v84 0x0045D3DA `push 0x384",
    "fn83": 4567737,
    "fn84": null,
+   "data": false,
+   "regalloc": false,
    "shape_ok": true,
-   "reason": "collision: 3 v83 sites claim 0x0045C66A"
+   "mono_ok": true
   },
   {
    "v83": 4568087,
@@ -298,9 +301,9 @@
   },
   {
    "v83": 4569470,
-   "v84": 4572778,
-   "tier": "T6-envelope",
-   "status": "false-positive",
+   "v84": 4577876,
+   "tier": "T1b-masked-target",
+   "status": "resolved",
    "shape83": {
     "m": "push",
     "ops": "0x320",
@@ -313,23 +316,23 @@
    },
    "shape84": {
     "m": "push",
-    "ops": "0x320",
+    "ops": "0x384",
     "len": 5,
     "imm_off": 1,
     "imm_size": 4,
     "disp_off": 0,
     "disp_size": 0,
-    "bytes": "6820030000"
+    "bytes": "6884030000"
    },
-   "window": 5,
-   "delta": 3308,
+   "window": 48,
+   "delta": 8406,
    "dual_dump": true,
    "fn_ok": null,
-   "note": "unique in monotone envelope [+0x-353,+0x3463]",
+   "note": "context unique with the patch target wildcarded",
    "fn83": 4569112,
    "fn84": null,
    "shape_ok": true,
-   "reason": "collision: 3 v83 sites claim 0x0045C66A"
+   "mono_ok": true
   },
   {
    "v83": 4625428,
@@ -766,9 +769,9 @@
   },
   {
    "v83": 4833997,
-   "v84": null,
-   "tier": null,
-   "status": "unresolved",
+   "v84": 4854582,
+   "tier": "T1b-masked-target",
+   "status": "resolved",
    "shape83": {
     "m": "push",
     "ops": "0x80000001",
@@ -779,20 +782,31 @@
     "disp_size": 0,
     "bytes": "6801000080"
    },
-   "shape84": null,
-   "window": null,
-   "delta": null,
-   "dual_dump": null,
-   "fn_ok": null,
-   "note": "",
+   "shape84": {
+    "m": "push",
+    "ops": "0x80000002",
+    "len": 5,
+    "imm_off": 1,
+    "imm_size": 4,
+    "disp_off": 0,
+    "disp_size": 0,
+    "bytes": "6802000080"
+   },
+   "window": 64,
+   "delta": 20585,
+   "dual_dump": true,
+   "fn_ok": true,
+   "note": "context unique with the patch target wildcarded",
    "fn83": 4833811,
-   "fn84": 4854396
+   "fn84": 4854396,
+   "shape_ok": true,
+   "mono_ok": true
   },
   {
    "v83": 4837352,
-   "v84": null,
-   "tier": null,
-   "status": "unresolved",
+   "v84": 4857937,
+   "tier": "T1b-masked-target",
+   "status": "resolved",
    "shape83": {
     "m": "push",
     "ops": "0x80000001",
@@ -803,14 +817,25 @@
     "disp_size": 0,
     "bytes": "6801000080"
    },
-   "shape84": null,
-   "window": null,
-   "delta": null,
-   "dual_dump": null,
-   "fn_ok": null,
-   "note": "",
+   "shape84": {
+    "m": "push",
+    "ops": "0x80000002",
+    "len": 5,
+    "imm_off": 1,
+    "imm_size": 4,
+    "disp_off": 0,
+    "disp_size": 0,
+    "bytes": "6802000080"
+   },
+   "window": 48,
+   "delta": 20585,
+   "dual_dump": true,
+   "fn_ok": true,
+   "note": "context unique with the patch target wildcarded",
    "fn83": 4835559,
-   "fn84": 4856144
+   "fn84": 4856144,
+   "shape_ok": true,
+   "mono_ok": true
   },
   {
    "v83": 4838296,
@@ -3489,9 +3514,9 @@
   },
   {
    "v83": 5946469,
-   "v84": null,
-   "tier": null,
-   "status": "unresolved",
+   "v84": 6013272,
+   "tier": "M-manual",
+   "status": "resolved",
    "shape83": {
     "m": "mov",
     "ops": "eax, 0x258",
@@ -3502,20 +3527,33 @@
     "disp_size": 0,
     "bytes": "b858020000"
    },
-   "shape84": null,
+   "shape84": {
+    "m": "mov",
+    "ops": "eax, 0x258",
+    "len": 5,
+    "imm_off": 1,
+    "imm_size": 4,
+    "disp_off": 0,
+    "disp_size": 0,
+    "bytes": "b858020000"
+   },
    "window": null,
-   "delta": null,
-   "dual_dump": null,
+   "delta": 66803,
+   "dual_dump": true,
    "fn_ok": null,
-   "note": "",
+   "note": "Six neighbours in 0x005A8B46-0x005ACB39 all resolve at the uniform delta +0x104F3; 0x005ABC65 + 0x104F3 = 0x005BC158, wh",
    "fn83": 5941047,
-   "fn84": null
+   "fn84": null,
+   "data": false,
+   "regalloc": false,
+   "shape_ok": true,
+   "mono_ok": true
   },
   {
    "v83": 5946485,
-   "v84": null,
-   "tier": null,
-   "status": "unresolved",
+   "v84": 6013288,
+   "tier": "M-manual",
+   "status": "resolved",
    "shape83": {
     "m": "mov",
     "ops": "eax, 0x320",
@@ -3526,14 +3564,27 @@
     "disp_size": 0,
     "bytes": "b820030000"
    },
-   "shape84": null,
+   "shape84": {
+    "m": "mov",
+    "ops": "eax, 0x320",
+    "len": 5,
+    "imm_off": 1,
+    "imm_size": 4,
+    "disp_off": 0,
+    "disp_size": 0,
+    "bytes": "b820030000"
+   },
    "window": null,
-   "delta": null,
-   "dual_dump": null,
+   "delta": 66803,
+   "dual_dump": true,
    "fn_ok": null,
-   "note": "",
+   "note": "the `mov eax,0x320` at the end of the same block, 0x10 after 0x005BC158, exactly as in v83.",
    "fn83": 5941047,
-   "fn84": null
+   "fn84": null,
+   "data": false,
+   "regalloc": false,
+   "shape_ok": true,
+   "mono_ok": true
   },
   {
    "v83": 5950249,
@@ -3946,9 +3997,9 @@
   },
   {
    "v83": 6252948,
-   "v84": null,
-   "tier": null,
-   "status": "unresolved",
+   "v84": 6338765,
+   "tier": "T1b-masked-target",
+   "status": "false-positive",
    "shape83": {
     "m": "jmp",
     "ops": "0x5f6b5a",
@@ -3959,20 +4010,30 @@
     "disp_size": 0,
     "bytes": "e9c1010000"
    },
-   "shape84": null,
-   "window": null,
-   "delta": null,
-   "dual_dump": null,
+   "shape84": {
+    "m": "push",
+    "ops": "edi",
+    "len": 1,
+    "imm_off": 0,
+    "imm_size": 0,
+    "disp_off": 0,
+    "disp_size": 0,
+    "bytes": "57"
+   },
+   "window": 32,
+   "delta": 85817,
+   "dual_dump": true,
    "fn_ok": null,
-   "note": "",
+   "note": "context unique with the patch target wildcarded",
    "fn83": 6252882,
-   "fn84": null
+   "fn84": null,
+   "shape_ok": false
   },
   {
    "v83": 6253447,
-   "v84": null,
-   "tier": null,
-   "status": "unresolved",
+   "v84": 6339264,
+   "tier": "T1b-masked-target",
+   "status": "resolved",
    "shape83": {
     "m": "push",
     "ops": "dword ptr [ebp + 8]",
@@ -3983,14 +4044,25 @@
     "disp_size": 1,
     "bytes": "ff7508"
    },
-   "shape84": null,
-   "window": null,
-   "delta": null,
-   "dual_dump": null,
+   "shape84": {
+    "m": "push",
+    "ops": "dword ptr [ebp + 0xc]",
+    "len": 3,
+    "imm_off": 0,
+    "imm_size": 0,
+    "disp_off": 2,
+    "disp_size": 1,
+    "bytes": "ff750c"
+   },
+   "window": 48,
+   "delta": 85817,
+   "dual_dump": true,
    "fn_ok": null,
-   "note": "",
+   "note": "context unique with the patch target wildcarded",
    "fn83": 6252882,
-   "fn84": null
+   "fn84": null,
+   "shape_ok": true,
+   "mono_ok": true
   },
   {
    "v83": 6253472,
@@ -4104,7 +4176,7 @@
    "delta": 86272,
    "dual_dump": true,
    "fn_ok": null,
-   "note": "unique in monotone envelope [+0x13E98,+0x1612B]",
+   "note": "unique in monotone envelope [+0x13F39,+0x1612B]",
    "fn83": 6346744,
    "fn84": null,
    "shape_ok": true,
@@ -4871,9 +4943,9 @@
   },
   {
    "v83": 6487114,
-   "v84": null,
-   "tier": null,
-   "status": "unresolved",
+   "v84": 6574308,
+   "tier": "M-manual",
+   "status": "resolved",
    "shape83": {
     "m": "push",
     "ops": "0x258",
@@ -4884,20 +4956,33 @@
     "disp_size": 0,
     "bytes": "6858020000"
    },
-   "shape84": null,
+   "shape84": {
+    "m": "push",
+    "ops": "0x258",
+    "len": 5,
+    "imm_off": 1,
+    "imm_size": 4,
+    "disp_off": 0,
+    "disp_size": 0,
+    "bytes": "6858020000"
+   },
    "window": null,
-   "delta": null,
-   "dual_dump": null,
+   "delta": 87194,
+   "dual_dump": true,
    "fn_ok": null,
-   "note": "",
+   "note": "IWzGr2DLayer::GetCanvas logo block. Seven sites in 0x0062EE54-0x0062F9CB all resolve by T1 at a uniform delta +0x1549A; ",
    "fn83": 6487017,
-   "fn84": null
+   "fn84": null,
+   "data": false,
+   "regalloc": false,
+   "shape_ok": true,
+   "mono_ok": true
   },
   {
    "v83": 6487119,
-   "v84": null,
-   "tier": null,
-   "status": "unresolved",
+   "v84": 6574313,
+   "tier": "M-manual",
+   "status": "resolved",
    "shape83": {
     "m": "push",
     "ops": "0x320",
@@ -4908,20 +4993,33 @@
     "disp_size": 0,
     "bytes": "6820030000"
    },
-   "shape84": null,
+   "shape84": {
+    "m": "push",
+    "ops": "0x320",
+    "len": 5,
+    "imm_off": 1,
+    "imm_size": 4,
+    "disp_off": 0,
+    "disp_size": 0,
+    "bytes": "6820030000"
+   },
    "window": null,
-   "delta": null,
-   "dual_dump": null,
+   "delta": 87194,
+   "dual_dump": true,
    "fn_ok": null,
-   "note": "",
+   "note": "the `push 0x320` immediately after 0x006450E4.",
    "fn83": 6487017,
-   "fn84": null
+   "fn84": null,
+   "data": false,
+   "regalloc": false,
+   "shape_ok": true,
+   "mono_ok": true
   },
   {
    "v83": 6487651,
-   "v84": null,
-   "tier": null,
-   "status": "unresolved",
+   "v84": 6574845,
+   "tier": "M-manual",
+   "status": "resolved",
    "shape83": {
     "m": "push",
     "ops": "0x258",
@@ -4932,20 +5030,33 @@
     "disp_size": 0,
     "bytes": "6858020000"
    },
-   "shape84": null,
+   "shape84": {
+    "m": "push",
+    "ops": "0x258",
+    "len": 5,
+    "imm_off": 1,
+    "imm_size": 4,
+    "disp_off": 0,
+    "disp_size": 0,
+    "bytes": "6858020000"
+   },
    "window": null,
-   "delta": null,
-   "dual_dump": null,
+   "delta": 87194,
+   "dual_dump": true,
    "fn_ok": null,
-   "note": "",
+   "note": "second of the two remaining logo blocks, same uniform delta +0x1549A, byte-identical 14-byte block.",
    "fn83": 6487554,
-   "fn84": null
+   "fn84": null,
+   "data": false,
+   "regalloc": false,
+   "shape_ok": true,
+   "mono_ok": true
   },
   {
    "v83": 6487656,
-   "v84": null,
-   "tier": null,
-   "status": "unresolved",
+   "v84": 6574850,
+   "tier": "M-manual",
+   "status": "resolved",
    "shape83": {
     "m": "push",
     "ops": "0x320",
@@ -4956,14 +5067,27 @@
     "disp_size": 0,
     "bytes": "6820030000"
    },
-   "shape84": null,
+   "shape84": {
+    "m": "push",
+    "ops": "0x320",
+    "len": 5,
+    "imm_off": 1,
+    "imm_size": 4,
+    "disp_off": 0,
+    "disp_size": 0,
+    "bytes": "6820030000"
+   },
    "window": null,
-   "delta": null,
-   "dual_dump": null,
+   "delta": 87194,
+   "dual_dump": true,
    "fn_ok": null,
-   "note": "",
+   "note": "the `push 0x320` immediately after 0x006452FD.",
    "fn83": 6487554,
-   "fn84": null
+   "fn84": null,
+   "data": false,
+   "regalloc": false,
+   "shape_ok": true,
+   "mono_ok": true
   },
   {
    "v83": 6554686,
@@ -7371,9 +7495,9 @@
   },
   {
    "v83": 9023283,
-   "v84": null,
-   "tier": null,
-   "status": "unresolved",
+   "v84": 9236773,
+   "tier": "T1b-masked-target",
+   "status": "resolved",
    "shape83": {
     "m": "push",
     "ops": "0x122",
@@ -7384,14 +7508,25 @@
     "disp_size": 0,
     "bytes": "6822010000"
    },
-   "shape84": null,
-   "window": null,
-   "delta": null,
-   "dual_dump": null,
-   "fn_ok": null,
-   "note": "",
+   "shape84": {
+    "m": "push",
+    "ops": "0x15e",
+    "len": 5,
+    "imm_off": 1,
+    "imm_size": 4,
+    "disp_off": 0,
+    "disp_size": 0,
+    "bytes": "685e010000"
+   },
+   "window": 64,
+   "delta": 213490,
+   "dual_dump": true,
+   "fn_ok": true,
+   "note": "context unique with the patch target wildcarded",
    "fn83": 9023130,
-   "fn84": 9236620
+   "fn84": 9236620,
+   "shape_ok": true,
+   "mono_ok": true
   },
   {
    "v83": 9023877,
@@ -7430,9 +7565,9 @@
   },
   {
    "v83": 9024198,
-   "v84": null,
-   "tier": null,
-   "status": "unresolved",
+   "v84": 9237688,
+   "tier": "T1b-masked-target",
+   "status": "resolved",
    "shape83": {
     "m": "mov",
     "ops": "esi, 0x122",
@@ -7443,14 +7578,25 @@
     "disp_size": 0,
     "bytes": "be22010000"
    },
-   "shape84": null,
-   "window": null,
-   "delta": null,
-   "dual_dump": null,
-   "fn_ok": null,
-   "note": "",
+   "shape84": {
+    "m": "mov",
+    "ops": "esi, 0x15e",
+    "len": 5,
+    "imm_off": 1,
+    "imm_size": 4,
+    "disp_off": 0,
+    "disp_size": 0,
+    "bytes": "be5e010000"
+   },
+   "window": 64,
+   "delta": 213490,
+   "dual_dump": true,
+   "fn_ok": true,
+   "note": "context unique with the patch target wildcarded",
    "fn83": 9023833,
-   "fn84": 9237323
+   "fn84": 9237323,
+   "shape_ok": true,
+   "mono_ok": true
   },
   {
    "v83": 9024742,
@@ -7594,9 +7740,9 @@
   },
   {
    "v83": 9025271,
-   "v84": null,
-   "tier": null,
-   "status": "unresolved",
+   "v84": 9238761,
+   "tier": "T1b-masked-target",
+   "status": "resolved",
    "shape83": {
     "m": "push",
     "ops": "0x1f8",
@@ -7607,14 +7753,25 @@
     "disp_size": 0,
     "bytes": "68f8010000"
    },
-   "shape84": null,
-   "window": null,
-   "delta": null,
-   "dual_dump": null,
+   "shape84": {
+    "m": "push",
+    "ops": "0x1bc",
+    "len": 5,
+    "imm_off": 1,
+    "imm_size": 4,
+    "disp_off": 0,
+    "disp_size": 0,
+    "bytes": "68bc010000"
+   },
+   "window": 48,
+   "delta": 213490,
+   "dual_dump": true,
    "fn_ok": null,
-   "note": "",
+   "note": "context unique with the patch target wildcarded",
    "fn83": 9025039,
-   "fn84": null
+   "fn84": null,
+   "shape_ok": true,
+   "mono_ok": true
   },
   {
    "v83": 9025430,
@@ -7863,9 +8020,9 @@
   },
   {
    "v83": 9188100,
-   "v84": null,
-   "tier": null,
-   "status": "unresolved",
+   "v84": 9402761,
+   "tier": "T1b-masked-target",
+   "status": "resolved",
    "shape83": {
     "m": "mov",
     "ops": "eax, 0x7fadce49",
@@ -7876,20 +8033,31 @@
     "disp_size": 0,
     "bytes": "b849cead7f"
    },
-   "shape84": null,
-   "window": null,
-   "delta": null,
-   "dual_dump": null,
+   "shape84": {
+    "m": "mov",
+    "ops": "eax, 0x30d3f",
+    "len": 5,
+    "imm_off": 1,
+    "imm_size": 4,
+    "disp_off": 0,
+    "disp_size": 0,
+    "bytes": "b83f0d0300"
+   },
+   "window": 64,
+   "delta": 214661,
+   "dual_dump": true,
    "fn_ok": null,
-   "note": "",
+   "note": "context unique with the patch target wildcarded",
    "fn83": 9184740,
-   "fn84": null
+   "fn84": null,
+   "shape_ok": true,
+   "mono_ok": true
   },
   {
    "v83": 9192070,
-   "v84": null,
-   "tier": null,
-   "status": "unresolved",
+   "v84": 9406851,
+   "tier": "T1b-masked-target",
+   "status": "resolved",
    "shape83": {
     "m": "mov",
     "ops": "esi, 0x12fd1",
@@ -7900,14 +8068,25 @@
     "disp_size": 0,
     "bytes": "bed12f0100"
    },
-   "shape84": null,
-   "window": null,
-   "delta": null,
-   "dual_dump": null,
+   "shape84": {
+    "m": "mov",
+    "ops": "esi, 0x8c",
+    "len": 5,
+    "imm_off": 1,
+    "imm_size": 4,
+    "disp_off": 0,
+    "disp_size": 0,
+    "bytes": "be8c000000"
+   },
+   "window": 32,
+   "delta": 214781,
+   "dual_dump": true,
    "fn_ok": null,
-   "note": "",
+   "note": "context unique with the patch target wildcarded",
    "fn83": 9184740,
-   "fn84": null
+   "fn84": null,
+   "shape_ok": true,
+   "mono_ok": true
   },
   {
    "v83": 9239883,
@@ -8008,7 +8187,7 @@
    "delta": 215859,
    "dual_dump": true,
    "fn_ok": null,
-   "note": "unique in monotone envelope [+0x3361F,+0x35CB7]",
+   "note": "unique in monotone envelope [+0x33685,+0x35CB7]",
    "fn83": 9239256,
    "fn84": 9455103,
    "shape_ok": true,
@@ -8117,6 +8296,7 @@
    "fn83": 9239256,
    "fn84": 9455103,
    "data": false,
+   "regalloc": false,
    "shape_ok": true,
    "mono_ok": true
   },
@@ -8153,6 +8333,7 @@
    "fn83": 9239256,
    "fn84": 9455103,
    "data": false,
+   "regalloc": false,
    "shape_ok": true,
    "mono_ok": true
   },
@@ -8213,6 +8394,7 @@
    "fn83": 9239256,
    "fn84": 9455103,
    "data": false,
+   "regalloc": false,
    "shape_ok": true,
    "mono_ok": true
   },
@@ -8249,6 +8431,7 @@
    "fn83": 9239256,
    "fn84": 9455103,
    "data": false,
+   "regalloc": false,
    "shape_ok": true,
    "mono_ok": true
   },
@@ -8285,6 +8468,7 @@
    "fn83": 9239256,
    "fn84": 9455103,
    "data": false,
+   "regalloc": false,
    "shape_ok": true,
    "mono_ok": true
   },
@@ -8850,9 +9034,9 @@
   },
   {
    "v83": 9384652,
-   "v84": null,
-   "tier": null,
-   "status": "unresolved",
+   "v84": 9608161,
+   "tier": "M-manual",
+   "status": "resolved",
    "shape83": {
     "m": "mov",
     "ops": "eax, 0x31f",
@@ -8863,14 +9047,27 @@
     "disp_size": 0,
     "bytes": "b81f030000"
    },
-   "shape84": null,
+   "shape84": {
+    "m": "mov",
+    "ops": "ecx, 0x31f",
+    "len": 5,
+    "imm_off": 1,
+    "imm_size": 4,
+    "disp_off": 0,
+    "disp_size": 0,
+    "bytes": "b91f030000"
+   },
    "window": null,
-   "delta": null,
-   "dual_dump": null,
+   "delta": 223509,
+   "dual_dump": true,
    "fn_ok": null,
-   "note": "",
+   "note": "CUIToolTip::MakeLayer. Delta 0x36915 is exactly that of its already-resolved partner 0x008F32DF -> 0x00929BF4. v84 reall",
    "fn83": 9384257,
-   "fn84": null
+   "fn84": null,
+   "data": false,
+   "regalloc": true,
+   "shape_ok": "regalloc",
+   "mono_ok": true
   },
   {
    "v83": 9384671,
@@ -9598,9 +9795,9 @@
   },
   {
    "v83": 10188477,
-   "v84": null,
-   "tier": null,
-   "status": "unresolved",
+   "v84": 10480482,
+   "tier": "M-manual",
+   "status": "resolved",
    "shape83": {
     "m": "mov",
     "ops": "dword ptr [ebp - 0x30], 0xfffffed4",
@@ -9611,20 +9808,33 @@
     "disp_size": 1,
     "bytes": "c745d0d4feffff"
    },
-   "shape84": null,
+   "shape84": {
+    "m": "mov",
+    "ops": "dword ptr [ebp - 0x34], 0xfffffed4",
+    "len": 7,
+    "imm_off": 3,
+    "imm_size": 4,
+    "disp_off": 2,
+    "disp_size": 1,
+    "bytes": "c745ccd4feffff"
+   },
    "window": null,
-   "delta": null,
-   "dual_dump": null,
+   "delta": 292005,
+   "dual_dump": true,
    "fn_ok": null,
-   "note": "",
+   "note": "Only ONE `mov [ebp-x], 0xFFFFFED4` exists in the whole 0x3310-wide monotone band between 0x009A3E7F (+0x44F76) and 0x009",
    "fn83": 10188309,
-   "fn84": null
+   "fn84": null,
+   "data": false,
+   "regalloc": false,
+   "shape_ok": true,
+   "mono_ok": true
   },
   {
    "v83": 10188491,
-   "v84": null,
-   "tier": null,
-   "status": "unresolved",
+   "v84": 10480496,
+   "tier": "M-manual",
+   "status": "resolved",
    "shape83": {
     "m": "mov",
     "ops": "dword ptr [ebp - 0x28], 0x12c",
@@ -9635,14 +9845,27 @@
     "disp_size": 1,
     "bytes": "c745d82c010000"
    },
-   "shape84": null,
+   "shape84": {
+    "m": "mov",
+    "ops": "dword ptr [ebp - 0x2c], 0x12c",
+    "len": 7,
+    "imm_off": 3,
+    "imm_size": 4,
+    "disp_off": 2,
+    "disp_size": 1,
+    "bytes": "c745d42c010000"
+   },
    "window": null,
-   "delta": null,
-   "dual_dump": null,
+   "delta": 292005,
+   "dual_dump": true,
    "fn_ok": null,
-   "note": "",
+   "note": "the `mov [ebp-x], 0x12C` of the same triple, at the same delta 0x474A5.",
    "fn83": 10188309,
-   "fn84": null
+   "fn84": null,
+   "data": false,
+   "regalloc": false,
+   "shape_ok": true,
+   "mono_ok": true
   },
   {
    "v83": 10353904,
@@ -9883,7 +10106,7 @@
    "delta": 296413,
    "dual_dump": true,
    "fn_ok": null,
-   "note": "unique in monotone envelope [+0x47286,+0x5A348]",
+   "note": "unique in monotone envelope [+0x47286,+0x52A28]",
    "fn83": 10426866,
    "fn84": null,
    "shape_ok": true,
@@ -10407,13 +10630,14 @@
    "fn83": 11121396,
    "fn84": 11443492,
    "data": true,
+   "regalloc": false,
    "shape_ok": null,
    "mono_ok": true
   },
   {
    "v83": 11528352,
    "v84": 11862728,
-   "tier": "T5-xref",
+   "tier": "T1b-masked-target",
    "status": "resolved-data",
    "shape83": {
     "m": "add",
@@ -10426,11 +10650,11 @@
     "bytes": "0000"
    },
    "shape84": null,
-   "window": 0,
+   "window": 64,
    "delta": 334376,
    "dual_dump": true,
-   "fn_ok": null,
-   "note": "6 agreeing code xrefs",
+   "fn_ok": false,
+   "note": "context unique with the patch target wildcarded",
    "fn83": 11121396,
    "fn84": 11443492,
    "data": true,
@@ -10558,6 +10782,7 @@
    "fn_ok": null,
    "note": "Embedded application manifest. v83 'requestedExecutionLevel' at 0x00C0842A, the level=\"...\" opening quote at 0x00C08459;",
    "data": true,
+   "regalloc": false,
    "shape_ok": null,
    "mono_ok": true
   },
@@ -10574,6 +10799,7 @@
    "fn_ok": null,
    "note": "closing quote of the same manifest slot, +0xA from 0x00C61459 exactly as in v83.",
    "data": true,
+   "regalloc": false,
    "shape_ok": null,
    "mono_ok": true
   }

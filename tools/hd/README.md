@@ -31,22 +31,25 @@ runtime and nothing needs regenerating to change resolution.
 | | anchors | share |
 |---|---:|---:|
 | T1 masked context signature | 184 | 58.0% |
+| T1b context with the patch's own target masked | 10 | 3.2% |
 | T2 neighbour-delta anchoring | 43 | 13.6% |
 | T2b interval-identical bracketing | 1 | 0.3% |
 | T2c one-sided identity extension | 6 | 1.9% |
 | T3 function-scoped | 6 | 1.9% |
 | T6 monotone-envelope | 8 | 2.5% |
 | T7 forward-idiom in envelope | 11 | 3.5% |
-| T5 data-site code xref | 1 | 0.3% |
-| M hand-resolved | 9 | 2.8% |
-| **resolved and verified** | **269** | **84.9%** |
-| **rejected as false positive** | **10** | 3.2% |
-| unresolved | 38 | 12.0% |
+| M hand-resolved | 19 | 6.0% |
+| **resolved and verified** | **288** | **90.9%** |
+| **rejected as false positive** | **9** | 2.8% |
+| unresolved | 20 | 6.3% |
 
-Per **operation**, after the source-bug corrections: **276 PASS, 0 FAIL, 48 unresolved,
-3 dropped**. Restricted to the shipping set (groups C–J; A/B/L are already done by
-`edits\`, K is optional gameplay caps): **293 ops → 263 PASS, 0 FAIL, 30 unresolved
-(89.8%).**
+Per **operation**, after the source-bug corrections: **295 PASS, 0 FAIL, 28 unresolved,
+4 dropped**. Restricted to the shipping set (groups C–J; A/B/L are already done by
+`edits\`, K is optional gameplay caps): **292 ops → 277 PASS, 0 FAIL, 15 unresolved
+(94.9%).**
+
+Groups **C, F, G, H and J are complete**. D is 30/31 and E is 32/33 — one code cave
+each. Everything still open is group I (13 ops) plus those two caves.
 
 Hand-resolved sites live in `data/manual-sites.json` with their evidence written out;
 `resolve.py` applies them last and they **override** any search-tier hit, because a
@@ -67,6 +70,16 @@ rest of the gap is made up by two techniques phase 0 did not have:
 - **T7 forward-idiom.** When the window still holds several `push 600`s, decode forward
   from each candidate and compare the mnemonic sequence to v83's by LCS. Forward
   decoding is aligned and reliable; backward decoding is not, so this only looks ahead.
+- **T1b, the one that should have been obvious.** The bytes a patch overwrites are the
+  one part of the site guaranteed not to matter — they are about to be replaced. And
+  v84 changed exactly those on a whole class of sites: `push 0x122 → push 0x15E` (gain
+  message canvas 290→350), `push 0x1F8 → push 0x1BC`, `push 0x320 → push 0x384` (avatar
+  megaphone 800→900). Wildcarding the write range in the site's own signature recovers
+  them. It is capped at 8 bytes so a 46-NOP code cave cannot mask its whole signature.
+
+T1b was validated the same way as T7: `0x0089AF33`, `0x0089B2C6`, `0x0089B6F7` and
+`0x0045B97E` were resolved **by hand first**, and T1b reproduced all four addresses
+independently.
 
 T7 was validated against ground truth: `0x009F6E99`, `0x009F6EA0`, `0x009F7078`,
 `0x009F707D` were resolved **by hand first** (the `neg/sbb/and 0x7FF50000/add 0xB0000`
@@ -105,13 +118,13 @@ close it. v84 rebuilt this code:
 Treat even the 10 passing group-I rows as provisional, and expect this group to need
 design, not address translation. Everything else in the set is a clean translation.
 
-## The 16 false positives — and why shape checking alone does not catch them
+## The 9 false positives — and why shape checking alone does not catch them
 
 Every accepted hit must (a) reproduce in the second, independent v84 dump, (b)
 disassemble to the same instruction shape as v83 — same mnemonic, same register
 skeleton, immediate/displacement at the same offset and width.
 
-**All 10 false positives passed the shape check.** `push 578` looks exactly like
+**All 9 false positives passed the shape check.** `push 578` looks exactly like
 `push 578` wherever it is. They were caught by two structural invariants instead:
 
 - **injectivity** — two distinct v83 sites cannot be one v84 site.
@@ -145,6 +158,7 @@ Full list in the `resolve.py` output and in `data/v84-resolved.json`
 | P158 | `0x0064061D` | is `idiv ecx` (`F7 F9`) — no immediate at all. The `mov ecx,600` the comment means is `0x00640618`, which the previous source line already patches. As shipped it writes `F7 D0 02 00 00` = `not eax` over the divisor setup. | **delete** |
 | P302/P304 | `0x009F7079`, `0x009F707E` | not destructive, but the same two dwords as `0x009F7078+1` / `0x009F707D+1`. The source writes them twice under two spellings. | drop the duplicate spelling |
 | P323 | `0x00C08459` | manifest blank count is the v83 literal length. v84's literal is `requireAdministrator`, one byte longer; using v83's `0x15` leaves a stray quote and an invalid manifest. | count `0x16` |
+| P113 | `0x005E3FA0` | **not a resolution constant.** The site is `push 0x10 ; push 0x258 ; call 0x403196 ; pop ecx ; pop ecx ; mov [edi],eax` — a two-argument cdecl allocator. The 600 is a `sizeof`; Ezorsia matched it because the literal happened to be 600. v84's counterpart (`0x005F8BCF`, inside the monotone band and the only such call in it) reads **608**, while every genuine resolution site still reads 600. A structure grew by 8 bytes; a screen did not. | **do not port** — writing a height there over-allocates at 720 and *under*-allocates below 608 |
 
 Two more that are not bugs but are worth knowing:
 `0x0049C2CD/0x0049CFE8/0x0049D398` mean to turn `push 0x80000002` (HKEY_LOCAL_MACHINE)
@@ -248,7 +262,7 @@ prove any of this:
 4. **Interaction with `edits\`.** No two-writers-to-one-address conflict is possible from
    this table (groups A/B/L are excluded), but nothing proves `bypass` does not itself
    relocate code.
-5. **The 30 unresolved shipping operations.** Mostly cosmetic (mis-placed widgets).
+5. **The 15 unresolved shipping operations** — 13 of them group I.
    The one to watch is `0x008D1F65` (`AdjustStatusBarBG`): v84 recompiled that
    construct from a vtable call with an inline struct copy into a direct thiscall, so
    its 5-byte NOP run no longer tiles. Its v84 address is known (`0x00906D39`) but the
@@ -281,14 +295,14 @@ Check in this order — each step gates the next, so stop at the first failure:
 | # | what | proves | if it fails |
 |---|---|---|---|
 | 1 | window opens at 1280×720, not 800×600 | `0x00A4127E` / `0x00A41283` (`InitializeGr2D`) landed | the whole set is mis-timed or mis-addressed; nothing below will be meaningful |
-| 2 | login screen: version number and world-select buttons in place | group E + the `VersionNumberFix` / `LoginBackCanvas` / `LoginViewRec` caves | E caves; `0x0060D85B` is known unresolved |
+| 2 | login screen: version number and world-select buttons in place | group E, 32/33 ops, + the `VersionNumberFix` / `LoginBackCanvas` / `LoginViewRec` caves | only `ccLoginDescriptorFix` (`0x0060D85B`) is unported; the world-select tab animation may still be off |
 | 3 | mouse cursor reaches all four screen edges | `0x0059AC09/22`, `0x0059A898/8B1` cursor clamps | cursor clamp group in C |
 | 4 | in game: status bar spans the bottom, HP/MP/EXP bars aligned | group D, 30/31 ops, + `AdjustStatusBar` and `AdjustStatusBarInput` caves | **expect the background layer to stay put** — `AdjustStatusBarBG` (`0x008D1F65`) is the one op still unported, and its cave needs redesigning, not just an address |
-| 5 | open a skill window, hover a buff icon: tooltip stays on screen | `0x008F32CC/DF` tooltip clamp | known unresolved (`0x008F32CC`) |
+| 5 | open a skill window, hover a buff icon: tooltip stays on screen | `0x008F32CC/DF` tooltip clamp, both resolved | if it clips, the regalloc-tolerant match at `0x00929BE1` is wrong |
 | 6 | receive a party/guild/trade invite | group I | **expect failure** — 13 of 23 ops unresolved and the group is restructured in v84 (see above); this is the designated known-broken step |
 | 7 | open the cash shop | group F — 11/11 verified, all 9 caves pass | if this breaks, the cave mechanism itself is wrong |
 | 8 | Mu Lung Dojo | group G — 11/11 verified, 10 caves | same |
-| 9 | pick up an item / gain EXP: messages readable, not clipped | group H | 3 of 11 unresolved |
+| 9 | pick up an item / gain EXP: messages readable, not clipped | group H, 11/11 | v84 already widened this canvas 290 -> 350, so check it is not double-counted |
 
 Groups F and G are the strongest evidence in the set (11/11 each, all caves verified
 including NOP tiling), so **if the cash shop and Dojo render correctly the mechanism
