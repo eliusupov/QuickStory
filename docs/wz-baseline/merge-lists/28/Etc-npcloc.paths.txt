@@ -1,0 +1,34 @@
+# the 32 NpcLocation ids that LANDED. The other 10 (9901910-9901919) are on
+# COLLISION-DENY.txt and were refused - see Etc-npcloc.xml.conflicts.txt.
+Etc.wz/NpcLocation.img/1011101
+Etc.wz/NpcLocation.img/1013001
+Etc.wz/NpcLocation.img/1013002
+Etc.wz/NpcLocation.img/1013100
+Etc.wz/NpcLocation.img/1013101
+Etc.wz/NpcLocation.img/1013102
+Etc.wz/NpcLocation.img/1013103
+Etc.wz/NpcLocation.img/1013104
+Etc.wz/NpcLocation.img/1013105
+Etc.wz/NpcLocation.img/1013106
+Etc.wz/NpcLocation.img/1013200
+Etc.wz/NpcLocation.img/1013201
+Etc.wz/NpcLocation.img/1013202
+Etc.wz/NpcLocation.img/1013203
+Etc.wz/NpcLocation.img/1013204
+Etc.wz/NpcLocation.img/1013205
+Etc.wz/NpcLocation.img/1013206
+Etc.wz/NpcLocation.img/1013207
+Etc.wz/NpcLocation.img/1022106
+Etc.wz/NpcLocation.img/1022107
+Etc.wz/NpcLocation.img/1063018
+Etc.wz/NpcLocation.img/1205000
+Etc.wz/NpcLocation.img/2012034
+Etc.wz/NpcLocation.img/2030015
+Etc.wz/NpcLocation.img/2085000
+Etc.wz/NpcLocation.img/2085001
+Etc.wz/NpcLocation.img/2085002
+Etc.wz/NpcLocation.img/2085003
+Etc.wz/NpcLocation.img/2092100
+Etc.wz/NpcLocation.img/2092101
+Etc.wz/NpcLocation.img/9201144
+Etc.wz/NpcLocation.img/9201145

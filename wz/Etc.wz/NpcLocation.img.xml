@@ -64,6 +64,9 @@
   <imgdir name="1011100">
     <int name="0" value="100000102"/>
   </imgdir>
+  <imgdir name="1011101">
+    <int name="0" value="100000100"/>
+  </imgdir>
   <imgdir name="1012000">
     <int name="0" value="100000000"/>
   </imgdir>
@@ -165,6 +168,60 @@
   <imgdir name="1013000">
     <int name="0" value="-1"/>
   </imgdir>
+  <imgdir name="1013001">
+    <int name="0" value="900010200"/>
+  </imgdir>
+  <imgdir name="1013002">
+    <int name="0" value="900020220"/>
+  </imgdir>
+  <imgdir name="1013100">
+    <int name="0" value="100030101"/>
+  </imgdir>
+  <imgdir name="1013101">
+    <int name="0" value="100030102"/>
+  </imgdir>
+  <imgdir name="1013102">
+    <int name="0" value="100030102"/>
+  </imgdir>
+  <imgdir name="1013103">
+    <int name="0" value="100030300"/>
+  </imgdir>
+  <imgdir name="1013104">
+    <int name="0" value="100030102"/>
+  </imgdir>
+  <imgdir name="1013105">
+    <int name="0" value="100030310"/>
+  </imgdir>
+  <imgdir name="1013106">
+    <int name="0" value="100030301"/>
+  </imgdir>
+  <imgdir name="1013200">
+    <int name="0" value="900020100"/>
+    <int name="1" value="900020110"/>
+  </imgdir>
+  <imgdir name="1013201">
+    <int name="0" value="-1"/>
+  </imgdir>
+  <imgdir name="1013202">
+    <int name="0" value="-1"/>
+  </imgdir>
+  <imgdir name="1013203">
+    <int name="0" value="922030000"/>
+  </imgdir>
+  <imgdir name="1013204">
+    <int name="0" value="-1"/>
+  </imgdir>
+  <imgdir name="1013205">
+    <int name="0" value="900030000"/>
+  </imgdir>
+  <imgdir name="1013206">
+    <int name="0" value="-1"/>
+  </imgdir>
+  <imgdir name="1013207">
+    <int name="0" value="200090080"/>
+    <int name="1" value="200090090"/>
+    <int name="2" value="914100000"/>
+  </imgdir>
   <imgdir name="10200">
     <int name="0" value="1020000"/>
   </imgdir>
@@ -258,6 +315,18 @@
   </imgdir>
   <imgdir name="1022105">
     <int name="0" value="101040000"/>
+  </imgdir>
+  <imgdir name="1022106">
+    <int name="0" value="106000000"/>
+    <int name="1" value="106000100"/>
+    <int name="2" value="106000200"/>
+  </imgdir>
+  <imgdir name="1022107">
+    <int name="0" value="101030000"/>
+    <int name="1" value="101030100"/>
+    <int name="2" value="101030200"/>
+    <int name="3" value="101030300"/>
+    <int name="4" value="101030400"/>
   </imgdir>
   <imgdir name="1031000">
     <int name="0" value="101000001"/>
@@ -663,6 +732,9 @@
   </imgdir>
   <imgdir name="1063017">
     <int name="0" value="910510100"/>
+  </imgdir>
+  <imgdir name="1063018">
+    <int name="0" value="910050300"/>
   </imgdir>
   <imgdir name="1072000">
     <int name="0" value="102020300"/>
@@ -1180,6 +1252,9 @@
   <imgdir name="1204033">
     <int name="0" value="104000000"/>
   </imgdir>
+  <imgdir name="1205000">
+    <int name="0" value="914100021"/>
+  </imgdir>
   <imgdir name="1209000">
     <int name="0" value="914000100"/>
   </imgdir>
@@ -1477,6 +1552,9 @@
   <imgdir name="2012033">
     <int name="0" value="920020000"/>
   </imgdir>
+  <imgdir name="2012034">
+    <int name="0" value="200080601"/>
+  </imgdir>
   <imgdir name="2013000">
     <int name="0" value="200080101"/>
     <int name="1" value="920010000"/>
@@ -1605,6 +1683,9 @@
   </imgdir>
   <imgdir name="2030014">
     <int name="0" value="921100100"/>
+  </imgdir>
+  <imgdir name="2030015">
+    <int name="0" value="211040400"/>
   </imgdir>
   <imgdir name="2032000">
     <int name="0" value="200050001"/>
@@ -2344,6 +2425,19 @@
   <imgdir name="2084002">
     <int name="0" value="390009999"/>
   </imgdir>
+  <imgdir name="2085000">
+    <int name="0" value="240080000"/>
+  </imgdir>
+  <imgdir name="2085001">
+    <int name="0" value="240080000"/>
+    <int name="1" value="240080100"/>
+  </imgdir>
+  <imgdir name="2085002">
+    <int name="0" value="240080800"/>
+  </imgdir>
+  <imgdir name="2085003">
+    <int name="0" value="-1"/>
+  </imgdir>
   <imgdir name="2090000">
     <int name="0" value="250000000"/>
   </imgdir>
@@ -2463,6 +2557,12 @@
   </imgdir>
   <imgdir name="2092001">
     <int name="0" value="251000000"/>
+  </imgdir>
+  <imgdir name="2092100">
+    <int name="0" value="251000000"/>
+  </imgdir>
+  <imgdir name="2092101">
+    <int name="0" value="925110000"/>
   </imgdir>
   <imgdir name="2093000">
     <int name="0" value="251000000"/>
@@ -5538,6 +5638,12 @@
     <int name="1" value="682010000"/>
     <int name="2" value="682010001"/>
     <int name="3" value="682010002"/>
+  </imgdir>
+  <imgdir name="9201144">
+    <int name="0" value="683010000"/>
+  </imgdir>
+  <imgdir name="9201145">
+    <int name="0" value="683010000"/>
   </imgdir>
   <imgdir name="9209000">
     <int name="0" value="100000000"/>

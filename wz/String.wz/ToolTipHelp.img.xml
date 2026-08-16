@@ -245,6 +245,57 @@
         <string name="Title" value="Use Portal (Up)"/>
       </imgdir>
     </imgdir>
+    <imgdir name="100030102">
+      <imgdir name="0">
+        <string name="Title" value="Farm Center"/>
+      </imgdir>
+      <imgdir name="1">
+        <string name="Title" value="Utah&apos;s House"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="100030200">
+      <imgdir name="0">
+        <string name="Title" value="Farm Center"/>
+      </imgdir>
+      <imgdir name="1">
+        <string name="Title" value="Utah&apos;s House"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="100030300">
+      <imgdir name="0">
+        <string name="Title" value="To Utah&apos;s House "/>
+      </imgdir>
+      <imgdir name="1">
+        <string name="Title" value="To the Farm Entrance"/>
+      </imgdir>
+      <imgdir name="2">
+        <string name="Title" value="Lush Forest"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="100030310">
+      <imgdir name="0">
+        <string name="Title" value="Farm Center"/>
+      </imgdir>
+      <imgdir name="1">
+        <string name="Title" value="Large Forest Trail 2"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="100030320">
+      <imgdir name="0">
+        <string name="Title" value="Farm Entrance"/>
+      </imgdir>
+      <imgdir name="1">
+        <string name="Title" value="Large Forest Trail 1"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="100030400">
+      <imgdir name="0">
+        <string name="Title" value="Utah&apos;s Pig Farm Entrance "/>
+      </imgdir>
+      <imgdir name="1">
+        <string name="Title" value="Farm Center, To Utah&apos;s House"/>
+      </imgdir>
+    </imgdir>
     <imgdir name="20000">
       <imgdir name="0">
         <string name="Title" value="Mushroom Town"/>
@@ -3458,6 +3509,24 @@
     <imgdir name="100030000">
       <string name="quest00" value="Utah&apos;s Pig Farm"/>
     </imgdir>
+    <imgdir name="100030101">
+      <string name="out00" value="Front Yard"/>
+      <string name="in00" value="Small Attic"/>
+    </imgdir>
+    <imgdir name="100030102">
+      <string name="west00" value="Small Forest Trail"/>
+      <string name="east00" value="Back Yard"/>
+    </imgdir>
+    <imgdir name="100030300">
+      <string name="in00" value="Lush Forest"/>
+      <string name="west00" value="Large Forest Trail 1"/>
+    </imgdir>
+    <imgdir name="100030320">
+      <string name="west00" value="Farm Entrance"/>
+    </imgdir>
+    <imgdir name="100030400">
+      <string name="quest00" value="Utah&apos;s Pig Farm"/>
+    </imgdir>
     <imgdir name="101030104">
       <string name="pt00" value="Hidden Relic"/>
     </imgdir>
@@ -3470,6 +3539,9 @@
     <imgdir name="105090800">
       <string name="in00" value="Forgotten Shrine"/>
     </imgdir>
+    <imgdir name="106010101">
+      <string name="in00" value="Golem&apos;s Temple Entrance"/>
+    </imgdir>
     <imgdir name="200000000">
       <string name="market00" value="Free Market Entrance"/>
     </imgdir>
@@ -3481,6 +3553,12 @@
     </imgdir>
     <imgdir name="220000000">
       <string name="market00" value="Free Market Entrance"/>
+    </imgdir>
+    <imgdir name="220000300">
+      <string name="scr00" value="Frog House"/>
+    </imgdir>
+    <imgdir name="220011000">
+      <string name="in00" value="Sky Terrace"/>
     </imgdir>
     <imgdir name="221000000">
       <string name="market00" value="Free Market Entrance"/>
@@ -3542,6 +3620,12 @@
     </imgdir>
     <imgdir name="500000000">
       <string name="market00" value="Free Market Entrance"/>
+    </imgdir>
+    <imgdir name="900030000">
+      <string name="out00" value="Black Magician Expedition Force Stronghold"/>
+    </imgdir>
+    <imgdir name="914100010">
+      <string name="in00" value="Cave of Silence"/>
     </imgdir>
     <imgdir name="925100000">
       <string name="next00" value="Through the Head of the Ship!"/>

@@ -280,6 +280,14 @@
       <string name="streetName" value="Hidden Street"/>
       <string name="mapName" value="The Blue Mushroom Forest"/>
     </imgdir>
+    <imgdir name="100030301">
+      <string name="streetName" value="Farm Street"/>
+      <string name="mapName" value="Forest Hall "/>
+    </imgdir>
+    <imgdir name="100030320">
+      <string name="streetName" value="Farm Street"/>
+      <string name="mapName" value="Large Forest Trail 2"/>
+    </imgdir>
     <imgdir name="100040000">
       <string name="streetName" value="Victoria Road"/>
       <string name="mapName" value="The Forest South of Ellinia"/>
@@ -7716,6 +7724,10 @@
       <string name="streetName" value="Victoria Road"/>
       <string name="mapName" value="Power B. Fore&apos;s Borrowed Training Center "/>
     </imgdir>
+    <imgdir name="910510300">
+      <string name="streetName" value="Hidden Street"/>
+      <string name="mapName" value="Abandoned Cave "/>
+    </imgdir>
     <imgdir name="910600000">
       <string name="streetName" value="Hidden Street"/>
       <string name="mapName" value="Golem&apos;s Temple Entrance "/>
@@ -7775,6 +7787,90 @@
     <imgdir name="922030022">
       <string name="streetName" value="Hidden Street"/>
       <string name="mapName" value="Safe - 2nd Entrance "/>
+    </imgdir>
+    <imgdir name="922231001">
+      <string name="streetName" value="Hidden Street"/>
+      <string name="mapName" value="Moon Bunny Playground"/>
+    </imgdir>
+    <imgdir name="923020000">
+      <string name="streetName" value="안개바다"/>
+      <string name="mapName" value="난파된 유령선"/>
+    </imgdir>
+    <imgdir name="923020001">
+      <string name="streetName" value="안개바다"/>
+      <string name="mapName" value="배의 후미"/>
+    </imgdir>
+    <imgdir name="923020010">
+      <string name="streetName" value="안개바다"/>
+      <string name="mapName" value="함장의 권위"/>
+    </imgdir>
+    <imgdir name="923020020">
+      <string name="streetName" value="안개바다"/>
+      <string name="mapName" value="쓰러진 돛대"/>
+    </imgdir>
+    <imgdir name="923020100">
+      <string name="streetName" value="안개바다"/>
+      <string name="mapName" value="유령선 항해실"/>
+    </imgdir>
+    <imgdir name="923020109">
+      <string name="streetName" value="안개바다"/>
+      <string name="mapName" value="두번째 기회"/>
+    </imgdir>
+    <imgdir name="923020110">
+      <string name="streetName" value="안개바다"/>
+      <string name="mapName" value="제1 작전실"/>
+    </imgdir>
+    <imgdir name="923020111">
+      <string name="streetName" value="안개바다"/>
+      <string name="mapName" value="제2 작전실"/>
+    </imgdir>
+    <imgdir name="923020112">
+      <string name="streetName" value="안개바다"/>
+      <string name="mapName" value="제3 작전실"/>
+    </imgdir>
+    <imgdir name="923020113">
+      <string name="streetName" value="안개바다"/>
+      <string name="mapName" value="제4 작전실"/>
+    </imgdir>
+    <imgdir name="923020114">
+      <string name="streetName" value="안개바다"/>
+      <string name="mapName" value="제5 작전실"/>
+    </imgdir>
+    <imgdir name="923020120">
+      <string name="streetName" value="안개바다"/>
+      <string name="mapName" value="제1 작전실"/>
+    </imgdir>
+    <imgdir name="923020189">
+      <string name="streetName" value="안개바다"/>
+      <string name="mapName" value="마지막 기회"/>
+    </imgdir>
+    <imgdir name="923020190">
+      <string name="streetName" value="안개바다"/>
+      <string name="mapName" value="길을 잃은 함장실"/>
+    </imgdir>
+    <imgdir name="924900000">
+      <string name="streetName" value="Hidden Street"/>
+      <string name="mapName" value="Waiting Area"/>
+    </imgdir>
+    <imgdir name="924900100">
+      <string name="streetName" value="Dragon VS Dragon"/>
+      <string name="mapName" value="1st Match "/>
+    </imgdir>
+    <imgdir name="924900200">
+      <string name="streetName" value="Dragon VS Dragon"/>
+      <string name="mapName" value="2nd Match "/>
+    </imgdir>
+    <imgdir name="924900300">
+      <string name="streetName" value="Dragon VS Dragon"/>
+      <string name="mapName" value="3rd Match"/>
+    </imgdir>
+    <imgdir name="924900400">
+      <string name="streetName" value="Dragon VS Dragon"/>
+      <string name="mapName" value="4th Match "/>
+    </imgdir>
+    <imgdir name="924900500">
+      <string name="streetName" value="Dragon VS Dragon"/>
+      <string name="mapName" value="5th Match "/>
     </imgdir>
     <imgdir name="925110000">
       <string name="streetName" value="Hidden Street"/>
@@ -8627,6 +8723,66 @@
     <imgdir name="980000604">
       <string name="streetName" value="Monster Carnival"/>
       <string name="mapName" value="Carnival Field 6 &lt;The Defeated&gt;"/>
+    </imgdir>
+    <imgdir name="980000700">
+      <string name="streetName" value="Monster Carnival"/>
+      <string name="mapName" value="Premium Carnival Field 1 &lt;Lobby&gt; "/>
+    </imgdir>
+    <imgdir name="980000701">
+      <string name="streetName" value="Monster Carnival"/>
+      <string name="mapName" value="Premium Carnival Field 1 &lt;Battle Field&gt;"/>
+    </imgdir>
+    <imgdir name="980000702">
+      <string name="streetName" value="Monster Carnival"/>
+      <string name="mapName" value="Premium Carnival Field 1 &lt;Resurrection&gt;"/>
+    </imgdir>
+    <imgdir name="980000703">
+      <string name="streetName" value="Monster Carnival"/>
+      <string name="mapName" value="Premium Carnival Field 1 &lt;Victorious&gt;"/>
+    </imgdir>
+    <imgdir name="980000704">
+      <string name="streetName" value="Monster Carnival"/>
+      <string name="mapName" value="Premium Carnival Field 1 &lt;The Defeated&gt;"/>
+    </imgdir>
+    <imgdir name="980000800">
+      <string name="streetName" value="Monster Carnival"/>
+      <string name="mapName" value="Premium Carnival Field 2 &lt;Lobby&gt;"/>
+    </imgdir>
+    <imgdir name="980000801">
+      <string name="streetName" value="Monster Carnival"/>
+      <string name="mapName" value="Premium Carnival Field 2 &lt;Battle Field&gt;"/>
+    </imgdir>
+    <imgdir name="980000802">
+      <string name="streetName" value="Monster Carnival"/>
+      <string name="mapName" value="Premium Carnival Field 2 &lt;Resurrection&gt;"/>
+    </imgdir>
+    <imgdir name="980000803">
+      <string name="streetName" value="Monster Carnival"/>
+      <string name="mapName" value="Premium Carnival Field 2 &lt;Victorious&gt;"/>
+    </imgdir>
+    <imgdir name="980000804">
+      <string name="streetName" value="Monster Carnival"/>
+      <string name="mapName" value="Premium Carnival Field 2 &lt;The Defeated&gt;"/>
+    </imgdir>
+    <imgdir name="980000900">
+      <string name="streetName" value="Monster Carnival"/>
+      <string name="mapName" value="Premium Carnival Field 3 &lt;Lobby&gt;"/>
+    </imgdir>
+    <imgdir name="980000901">
+      <string name="streetName" value="Monster Carnival"/>
+      <string name="mapName" value="Premium Carnival Field 3 &lt;Battle Field&gt;"/>
+    </imgdir>
+    <imgdir name="980000902">
+      <string name="streetName" value="Monster Carnival"/>
+      <string name="mapName" value="Premium Carnival Field 3 &lt;Resurrection&gt;"/>
+    </imgdir>
+    <imgdir name="980000903">
+      <string name="streetName" value="Monster Carnival"/>
+      <string name="mapName" value="Premium Carnival Field 3 &lt;Victorious&gt;"/>
+    </imgdir>
+    <imgdir name="980000904">
+      <string name="streetName" value="Monster Carnival"/>
+      <string name="mapName" value="Premium Carnival Field 3 &lt;The Defeated&gt;"/>
     </imgdir>
     <imgdir name="980010000">
       <string name="streetName" value="Ariant Coliseum"/>
@@ -17891,6 +18047,9 @@
     <imgdir name="683000129">
       <string name="streetName" value="Mini Dungeon"/>
       <string name="mapName" value="Sweet Cake Hill 3"/>
+    </imgdir>
+    <imgdir name="683010000">
+      <string name="mapName" value="Dragon&apos;s Nest"/>
     </imgdir>
   </imgdir>
   <imgdir name="Episode1GL">

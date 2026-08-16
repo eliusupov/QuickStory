@@ -1,0 +1,21 @@
+# Etc.wz: additive-only XML export — DRY RUN, nothing was written -> wz, 32 nodes would be added (0 by force-list), 10 refused
+# Every row is a v84 node this merge REFUSED to write. Two reasons appear here:
+#   * 'already exists in target' — the additive-only gate, enforced in the write path.
+#     A v84 EDIT to an existing node (renamed mob, portal added to an existing map)
+#     looks exactly like this and is silently lost unless someone decides otherwise.
+#   * 'DENIED by deny-list' — a v84 ADDITION the target lacks and must keep lacking.
+#     The gate is structurally blind to these; only the deny-list catches them.
+# Additive-only is enforced in the write path, so this file is the exhaustive list of
+# v84 changes that were dropped. Read it before shipping.
+# Columns: path, reason.
+
+Etc.wz/NpcLocation.img/9901910	DENIED by deny-list [Etc.wz/NpcLocation.img/9901910]: server-allocated id range, PlayerNPC.java:66
+Etc.wz/NpcLocation.img/9901911	DENIED by deny-list [Etc.wz/NpcLocation.img/9901911]: server-allocated id range, PlayerNPC.java:66
+Etc.wz/NpcLocation.img/9901912	DENIED by deny-list [Etc.wz/NpcLocation.img/9901912]: server-allocated id range, PlayerNPC.java:66
+Etc.wz/NpcLocation.img/9901913	DENIED by deny-list [Etc.wz/NpcLocation.img/9901913]: server-allocated id range, PlayerNPC.java:66
+Etc.wz/NpcLocation.img/9901914	DENIED by deny-list [Etc.wz/NpcLocation.img/9901914]: server-allocated id range, PlayerNPC.java:66
+Etc.wz/NpcLocation.img/9901915	DENIED by deny-list [Etc.wz/NpcLocation.img/9901915]: server-allocated id range, PlayerNPC.java:66
+Etc.wz/NpcLocation.img/9901916	DENIED by deny-list [Etc.wz/NpcLocation.img/9901916]: server-allocated id range, PlayerNPC.java:66
+Etc.wz/NpcLocation.img/9901917	DENIED by deny-list [Etc.wz/NpcLocation.img/9901917]: server-allocated id range, PlayerNPC.java:66
+Etc.wz/NpcLocation.img/9901918	DENIED by deny-list [Etc.wz/NpcLocation.img/9901918]: server-allocated id range, PlayerNPC.java:66
+Etc.wz/NpcLocation.img/9901919	DENIED by deny-list [Etc.wz/NpcLocation.img/9901919]: server-allocated id range, PlayerNPC.java:66

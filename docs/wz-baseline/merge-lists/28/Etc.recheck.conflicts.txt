@@ -1,0 +1,86 @@
+# Etc.wz: additive-only XML export — DRY RUN, nothing was written -> wz, 0 nodes would be added (0 by force-list), 75 refused
+# Every row is a v84 node this merge REFUSED to write. Two reasons appear here:
+#   * 'already exists in target' — the additive-only gate, enforced in the write path.
+#     A v84 EDIT to an existing node (renamed mob, portal added to an existing map)
+#     looks exactly like this and is silently lost unless someone decides otherwise.
+#   * 'DENIED by deny-list' — a v84 ADDITION the target lacks and must keep lacking.
+#     The gate is structurally blind to these; only the deny-list catches them.
+# Additive-only is enforced in the write path, so this file is the exhaustive list of
+# v84 changes that were dropped. Read it before shipping.
+# Columns: path, reason.
+
+Etc.wz/CashPackage.img/9101608	already exists in wz\Etc.wz\CashPackage.img.xml
+Etc.wz/CashPackage.img/9102282	already exists in wz\Etc.wz\CashPackage.img.xml
+Etc.wz/CashPackage.img/9102283	already exists in wz\Etc.wz\CashPackage.img.xml
+Etc.wz/CashPackage.img/9102287	already exists in wz\Etc.wz\CashPackage.img.xml
+Etc.wz/CashPackage.img/9102288	already exists in wz\Etc.wz\CashPackage.img.xml
+Etc.wz/CashPackage.img/9102289	already exists in wz\Etc.wz\CashPackage.img.xml
+Etc.wz/CashPackage.img/9102290	already exists in wz\Etc.wz\CashPackage.img.xml
+Etc.wz/CashPackage.img/9102291	already exists in wz\Etc.wz\CashPackage.img.xml
+Etc.wz/CashPackage.img/9102292	already exists in wz\Etc.wz\CashPackage.img.xml
+Etc.wz/CashPackage.img/9102293	already exists in wz\Etc.wz\CashPackage.img.xml
+Etc.wz/CashPackage.img/9102294	already exists in wz\Etc.wz\CashPackage.img.xml
+Etc.wz/Commodity.img/8947	already exists in wz\Etc.wz\Commodity.img.xml
+Etc.wz/Commodity.img/8948	already exists in wz\Etc.wz\Commodity.img.xml
+Etc.wz/Commodity.img/8949	already exists in wz\Etc.wz\Commodity.img.xml
+Etc.wz/Commodity.img/8950	already exists in wz\Etc.wz\Commodity.img.xml
+Etc.wz/Commodity.img/8951	already exists in wz\Etc.wz\Commodity.img.xml
+Etc.wz/Commodity.img/8952	already exists in wz\Etc.wz\Commodity.img.xml
+Etc.wz/Commodity.img/8953	already exists in wz\Etc.wz\Commodity.img.xml
+Etc.wz/Commodity.img/8954	already exists in wz\Etc.wz\Commodity.img.xml
+Etc.wz/Commodity.img/8955	already exists in wz\Etc.wz\Commodity.img.xml
+Etc.wz/Commodity.img/8956	already exists in wz\Etc.wz\Commodity.img.xml
+Etc.wz/Commodity.img/8957	already exists in wz\Etc.wz\Commodity.img.xml
+Etc.wz/NPT_exception.img/2089	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2090	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2091	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2092	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2093	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2094	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2095	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2096	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2097	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2098	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2099	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2100	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2101	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2102	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2103	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2104	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2105	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2106	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2107	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2108	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2109	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2110	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2111	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2112	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2113	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2114	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2115	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2116	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2117	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2118	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2119	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2120	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2121	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2122	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2123	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2124	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2125	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2126	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2127	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2128	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2129	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2130	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2131	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2132	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2133	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2134	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2135	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2136	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2137	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2138	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2139	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2140	already exists in wz\Etc.wz\NPT_exception.img.xml
+Etc.wz/NPT_exception.img/2141	already exists in wz\Etc.wz\NPT_exception.img.xml

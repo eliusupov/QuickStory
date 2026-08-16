@@ -99,6 +99,12 @@
   <imgdir name="8300007">
     <string name="name" value="Dragon Rider"/>
   </imgdir>
+  <imgdir name="9101004">
+    <string name="name" value="Blue Mushroom"/>
+  </imgdir>
+  <imgdir name="9300394">
+    <string name="name" value="Delinquent Rudolph"/>
+  </imgdir>
   <imgdir name="9300395">
     <string name="name" value="Watchmen Crew"/>
   </imgdir>
@@ -4100,6 +4106,54 @@
   </imgdir>
   <imgdir name="9600066">
     <string name="name" value="New Year&apos;s Party Pouch"/>
+  </imgdir>
+  <imgdir name="9990000">
+    <string name="name" value="No Element"/>
+  </imgdir>
+  <imgdir name="9990001">
+    <string name="name" value="Mammal"/>
+  </imgdir>
+  <imgdir name="9990002">
+    <string name="name" value="Plant"/>
+  </imgdir>
+  <imgdir name="9990003">
+    <string name="name" value="Fish"/>
+  </imgdir>
+  <imgdir name="9990004">
+    <string name="name" value="Reptile"/>
+  </imgdir>
+  <imgdir name="9990005">
+    <string name="name" value="Spirit"/>
+  </imgdir>
+  <imgdir name="9990006">
+    <string name="name" value="Devil"/>
+  </imgdir>
+  <imgdir name="9990007">
+    <string name="name" value="Immortal"/>
+  </imgdir>
+  <imgdir name="9990008">
+    <string name="name" value="Enchanted"/>
+  </imgdir>
+  <imgdir name="9990009">
+    <string name="name" value="Boss"/>
+  </imgdir>
+  <imgdir name="9990010">
+    <string name="name" value="Fireball"/>
+  </imgdir>
+  <imgdir name="9990011">
+    <string name="name" value="Blizzard"/>
+  </imgdir>
+  <imgdir name="9990012">
+    <string name="name" value="Lightning"/>
+  </imgdir>
+  <imgdir name="9990013">
+    <string name="name" value="Poison"/>
+  </imgdir>
+  <imgdir name="9990014">
+    <string name="name" value="Holy"/>
+  </imgdir>
+  <imgdir name="9990015">
+    <string name="name" value="Darkness"/>
   </imgdir>
   <imgdir name="9999998">
     <string name="name" value="Star Monster"/>

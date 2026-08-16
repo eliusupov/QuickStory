@@ -1,0 +1,23 @@
+baseline rev: cdaecd67829003b0300e33aff43bcf39a4f86bb1
+  wz/Etc.wz/CashPackage.img.xml: baseline nodes=2400 post=2462 | changed=0 missing=0 new=62 (expected 62, UNEXPECTED 0) | proof2 lost lines=0
+  wz/Etc.wz/Commodity.img.xml: baseline nodes=82725 post=83869 | changed=0 missing=0 new=1144 (expected 1144, UNEXPECTED 0) | proof2 lost lines=0
+  wz/Etc.wz/NPT_exception.img.xml: baseline nodes=2090 post=2143 | changed=0 missing=0 new=53 (expected 53, UNEXPECTED 0) | proof2 lost lines=0
+  wz/Etc.wz/NpcLocation.img.xml: baseline nodes=5210 post=5284 | changed=0 missing=0 new=74 (expected 74, UNEXPECTED 0) | proof2 lost lines=0
+  wz/String.wz/Cash.img.xml: baseline nodes=1577 post=1646 | changed=0 missing=0 new=69 (expected 69, UNEXPECTED 0) | proof2 lost lines=0
+  wz/String.wz/Consume.img.xml: baseline nodes=7385 post=7481 | changed=0 missing=0 new=96 (expected 96, UNEXPECTED 0) | proof2 lost lines=0
+  wz/String.wz/Ins.img.xml: baseline nodes=905 post=910 | changed=0 missing=0 new=5 (expected 5, UNEXPECTED 0) | proof2 lost lines=0
+  wz/String.wz/Map.img.xml: baseline nodes=13466 post=13585 | changed=0 missing=0 new=119 (expected 119, UNEXPECTED 0) | proof2 lost lines=0
+  wz/String.wz/Mob.img.xml: baseline nodes=3243 post=3279 | changed=0 missing=0 new=36 (expected 36, UNEXPECTED 0) | proof2 lost lines=0
+  wz/String.wz/MonsterBook.img.xml: baseline nodes=14233 post=15631 | changed=0 missing=0 new=1398 (expected 1398, UNEXPECTED 0) | proof2 lost lines=0
+  wz/String.wz/Pet.img.xml: baseline nodes=219 post=231 | changed=0 missing=0 new=12 (expected 12, UNEXPECTED 0) | proof2 lost lines=0
+  wz/String.wz/Skill.img.xml: baseline nodes=13089 post=13127 | changed=0 missing=0 new=38 (expected 38, UNEXPECTED 0) | proof2 lost lines=0
+  wz/String.wz/ToolTipHelp.img.xml: baseline nodes=2489 post=2544 | changed=0 missing=0 new=55 (expected 55, UNEXPECTED 0) | proof2 lost lines=0
+TOTAL over 31 files: changed=0 missing=0 unexpectedNew=0 expectedNew=7165 proof2LostLines=0
+SELF-CHECKS (on wz/String.wz/Consume.img.xml)
+  wz/String.wz/Consume.img.xml: baseline nodes=7385 post=7481 | changed=0 missing=0 new=96 (expected 96, UNEXPECTED 0) | proof2 lost lines=0
+  PASS  control (unmutated)
+  PASS  changed pre-existing value -> proof1 changed>0
+  PASS  deleted a pre-existing line -> proof2 lost>0
+  PASS  node nested inside a pre-existing record -> unexpectedNew>0
+  PASS  two pre-existing siblings reordered -> proof1 changed>0
+RESULT: PASS

@@ -1,0 +1,43 @@
+== comparator self-check (mutations of a real added subtree String.wz/MonsterBook.img/3400000, 30 nodes)
+  CLEAN   control (unmutated clone) -> no findings
+  CAUGHT  changed leaf value (/map/0) -> SELFTEST/map/0: VALUE v84='103040100' merged='103040100_CORRUPTED'
+  CAUGHT  dropped child (dropped last child) -> SELFTEST/episode: MISSING in merged
+  CAUGHT  extra child (appended bogusChild) -> SELFTEST/bogusChild: EXTRA in merged (not in v84)
+  CAUGHT  reordered children (swapped two children) -> SELFTEST: CHILD ORDER v84=['map', 'reward', 'episode'] merged=['reward', 'map', 'episode']
+
+  Effect.wz/Direction4.img: 1 rows, 1655 nodes compared
+  Etc.wz/CashPackage.img: 11 rows, 62 nodes compared
+  Etc.wz/Commodity.img: 11 rows, 111 nodes compared
+  Etc.wz/NPT_exception.img: 53 rows, 53 nodes compared
+  Etc.wz/NpcLocation.img: 32 rows, 74 nodes compared
+  Map.wz/Back/dragonDream.img: 1 rows, 216 nodes compared
+  Map.wz/Tile/DeepgrassySoil.img: 1 rows, 168 nodes compared
+  Mob.wz/2220110.img: 1 rows, 86 nodes compared
+  Mob.wz/2230112.img: 1 rows, 94 nodes compared
+  Mob.wz/9300388.img: 1 rows, 122 nodes compared
+  Mob.wz/9300391.img: 1 rows, 31 nodes compared
+  Mob.wz/9300393.img: 1 rows, 578 nodes compared
+  Mob.wz/9300394.img: 1 rows, 214 nodes compared
+  Mob.wz/QuestCountGroup/9101004.img: 1 rows, 4 nodes compared
+  Npc.wz/1022106.img: 1 rows, 69 nodes compared
+  Npc.wz/1022107.img: 1 rows, 10 nodes compared
+  Npc.wz/2030015.img: 1 rows, 7 nodes compared
+  Quest.wz/PQuestSearch.img: 1 rows, 176 nodes compared
+  Reactor.wz/1002008.img: 1 rows, 91 nodes compared
+  Reactor.wz/2302006.img: 1 rows, 103 nodes compared
+  Reactor.wz/2409000.img: 1 rows, 24 nodes compared
+  Skill.wz/9000.img: 1 rows, 410 nodes compared
+  String.wz/Cash.img: 23 rows, 69 nodes compared
+  String.wz/Consume.img: 33 rows, 96 nodes compared
+  String.wz/Ins.img: 2 rows, 5 nodes compared
+  String.wz/Map.img: 40 rows, 119 nodes compared
+  String.wz/Mob.img: 18 rows, 36 nodes compared
+  String.wz/MonsterBook.img: 41 rows, 1398 nodes compared
+  String.wz/Pet.img: 3 rows, 12 nodes compared
+  String.wz/Skill.img: 10 rows, 38 nodes compared
+  String.wz/ToolTipHelp.img: 16 rows, 55 nodes compared
+  Etc.wz/Commodity.img (re-slotted): 105 rows, 1033 nodes compared
+
+== 416 manifest rows, 7219 nodes compared against stock v84
+   reader reconciliations: 6 float values compared numerically, 78 UOL nodes compared by type+presence only (dump resolves the link)
+== 0 divergences: every added node is what v84 holds (name, type, value, child order)

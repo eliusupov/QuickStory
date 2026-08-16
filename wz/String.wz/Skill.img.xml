@@ -5839,6 +5839,44 @@
   <imgdir name="900">
     <string name="bookName" value="Admin. Skill Book (Normal)"/>
   </imgdir>
+  <imgdir name="9000">
+    <string name="bookName" value="Additional Skills"/>
+  </imgdir>
+  <imgdir name="90000000">
+    <string name="name" value="Instant Death"/>
+    <string name="desc" value=""/>
+    <string name="h1" value="Instant Death "/>
+  </imgdir>
+  <imgdir name="90001001">
+    <string name="name" value="Knock Down"/>
+    <string name="desc" value=""/>
+    <string name="h1" value="One Shot Kill "/>
+  </imgdir>
+  <imgdir name="90001002">
+    <string name="name" value="Slow"/>
+    <string name="desc" value=""/>
+    <string name="h1" value="Slow "/>
+  </imgdir>
+  <imgdir name="90001003">
+    <string name="name" value="Poison"/>
+    <string name="desc" value=""/>
+    <string name="h1" value="Poison "/>
+  </imgdir>
+  <imgdir name="90001004">
+    <string name="name" value="Darkness "/>
+    <string name="desc" value=""/>
+    <string name="h1" value="Darkness "/>
+  </imgdir>
+  <imgdir name="90001005">
+    <string name="name" value="Seal "/>
+    <string name="desc" value=""/>
+    <string name="h1" value="Seal "/>
+  </imgdir>
+  <imgdir name="90001006">
+    <string name="name" value="Freeze "/>
+    <string name="desc" value=""/>
+    <string name="h1" value="Freeze "/>
+  </imgdir>
   <imgdir name="9001000">
     <string name="name" value="Haste (Normal)"/>
     <string name="desc" value="[Master Level : 1]\n GM Haste"/>
@@ -5886,6 +5924,16 @@
     <string name="name" value="Resurrection"/>
     <string name="desc" value="[Master Level : 1]\n GM Resurrection"/>
     <string name="h1" value="Ressurect nearby players."/>
+  </imgdir>
+  <imgdir name="9101006">
+    <string name="name" value="Super Dragon Roar"/>
+    <string name="desc" value="[Master Level : 1]\n Super Dragon Roar"/>
+    <string name="h1" value="Damage 1000%, Full Screen Attack"/>
+  </imgdir>
+  <imgdir name="9101007">
+    <string name="name" value="Teleport"/>
+    <string name="desc" value="[Master Level : 1]\n Teleport"/>
+    <string name="h1" value="Teleport "/>
   </imgdir>
   <imgdir name="9101008">
     <string name="name" value="Hyper Body"/>

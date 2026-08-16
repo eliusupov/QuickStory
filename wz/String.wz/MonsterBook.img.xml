@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <imgdir name="MonsterBook.img">
   <imgdir name="100100">
     <imgdir name="map">
@@ -553,6 +553,34 @@
       <int name="33" value="4032139" />
     </imgdir>
     <string name="episode" value=" Lv. :  15\nForm : Spirit\n\nPart of the Slime family of monsters, the Bubbling lives in dark, underground regions. Is normally much faster than the regular Slime and has a much higher Avoidability which makes it a much more difficult target to hunt for beginners." />
+  </imgdir>
+  <imgdir name="1210111">
+    <imgdir name="map">
+      <int name="0" value="100030320"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4000002"/>
+      <int name="1" value="2000000"/>
+      <int name="2" value="4003004"/>
+      <int name="3" value="2040902"/>
+      <int name="4" value="1040011"/>
+      <int name="5" value="1040034"/>
+      <int name="6" value="1060024"/>
+      <int name="7" value="2060000"/>
+      <int name="8" value="4010002"/>
+      <int name="9" value="4020001"/>
+      <int name="10" value="4000021"/>
+      <int name="11" value="2061000"/>
+      <int name="12" value="1402018"/>
+      <int name="13" value="1032003"/>
+      <int name="14" value="1041012"/>
+      <int name="15" value="1040014"/>
+      <int name="16" value="4030012"/>
+      <int name="17" value="1492000"/>
+      <int name="18" value="1052098"/>
+      <int name="19" value="1072285"/>
+    </imgdir>
+    <string name="episode" value="Level: 10\nForm: Mammal\n\nStrange Pigs have appeared at the Henesys Pig Farm. From the outside, they look similar to Ribbon Pigs with their red ribbons, but they have different personalities. Unlike normal Ribbon Pigs, who pride themselves as warriors, these Strange Pigs are lazy and violent, attacking any and all who pass. No one knows for sure yet where these pigs came from."/>
   </imgdir>
   <imgdir name="130100">
     <imgdir name="map">
@@ -1356,6 +1384,45 @@
     </imgdir>
     <string name="episode" value=" Lv. :  20\nForm : Plant\n\nA mushroom monster with a blue cap. Is the fattest looking mushroom of all the mushrooms in that family of monsters. For a mushroom, which are just about everywhere throughout Maple World, it is one of the rarer breeds. But go nearby Henesys and you'll find yourself entering into the Blue Mushroom Forest! These mushrooms will give up some gold at times, enriching the lives of many happy adventurers. " />
   </imgdir>
+  <imgdir name="2220110">
+    <imgdir name="map">
+      <int name="0" value="106010000"/>
+      <int name="1" value="106010100"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4000009"/>
+      <int name="1" value="2000001"/>
+      <int name="2" value="2002002"/>
+      <int name="3" value="2044002"/>
+      <int name="4" value="1332006"/>
+      <int name="5" value="1051000"/>
+      <int name="6" value="1002127"/>
+      <int name="7" value="2060000"/>
+      <int name="8" value="4010006"/>
+      <int name="9" value="4020005"/>
+      <int name="10" value="2000003"/>
+      <int name="11" value="1442001"/>
+      <int name="12" value="1041027"/>
+      <int name="13" value="1061025"/>
+      <int name="14" value="1040012"/>
+      <int name="15" value="1060010"/>
+      <int name="16" value="2061000"/>
+      <int name="17" value="1072020"/>
+      <int name="18" value="1432001"/>
+      <int name="19" value="4020006"/>
+      <int name="20" value="2000002"/>
+      <int name="21" value="1072011"/>
+      <int name="22" value="1332001"/>
+      <int name="23" value="1382002"/>
+      <int name="24" value="1002178"/>
+      <int name="25" value="1412012"/>
+      <int name="26" value="4030012"/>
+      <int name="27" value="1002613"/>
+      <int name="28" value="1002616"/>
+      <int name="29" value="1002619"/>
+    </imgdir>
+    <string name="episode" value="Level: 20\nForm: Plant\n\nThese Blue Mushrooms look as if somone has just hit them over the head. But no one has touched them! It&apos;s unclear why these strange Blue Mushrooms, who seem to always be crying, have appeared around Henesys."/>
+  </imgdir>
   <imgdir name="2230100">
     <imgdir name="map">
       <int name="0" value="101020009" />
@@ -1881,6 +1948,46 @@
       <int name="25" value="4032147" />
     </imgdir>
     <string name="episode" value=" Lv. :  24\nForm : Devil\n\nA mysterious creature that wears a heavy stone mask over its head and plays pranks. Has a number of surrounding theories about its origins, just like the Wooden Mask, but no one knows anything about these creatures for sure. The Rocky Mask is very curious about many things and therefore tends to grab anything that it deems interesting, which means it steals peoples' belongings pretty frequently." />
+  </imgdir>
+  <imgdir name="2230112">
+    <imgdir name="map">
+      <int name="0" value="101030001"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4000020"/>
+      <int name="1" value="2000001"/>
+      <int name="2" value="2002004"/>
+      <int name="3" value="2060000"/>
+      <int name="4" value="4003004"/>
+      <int name="5" value="1032000"/>
+      <int name="6" value="1041013"/>
+      <int name="7" value="1061024"/>
+      <int name="8" value="1051005"/>
+      <int name="9" value="1032002"/>
+      <int name="10" value="4010003"/>
+      <int name="11" value="4020004"/>
+      <int name="12" value="1002064"/>
+      <int name="13" value="2000003"/>
+      <int name="14" value="1072039"/>
+      <int name="15" value="1072033"/>
+      <int name="16" value="4000021"/>
+      <int name="17" value="1432003"/>
+      <int name="18" value="1402006"/>
+      <int name="19" value="2061000"/>
+      <int name="20" value="1382017"/>
+      <int name="21" value="1040079"/>
+      <int name="22" value="1060069"/>
+      <int name="23" value="4000047"/>
+      <int name="24" value="1002151"/>
+      <int name="25" value="1060050"/>
+      <int name="26" value="1452005"/>
+      <int name="27" value="1462004"/>
+      <int name="28" value="1002166"/>
+      <int name="29" value="1412005"/>
+      <int name="30" value="1082186"/>
+      <int name="31" value="2330001"/>
+    </imgdir>
+    <string name="episode" value="Level: 25\nForm: Mammal\n\nWild Boar are famous for their brute strength cultivated by living in the barren lands of Perion. It&apos;s difficult to believe that these same Wild Boars could be afraid of something. But for whatever reason, there has been an influx of Wild Boars in Perion who appear scared and intimidated. No one knows for sure the reason behind the appearance of these Wild Boars."/>
   </imgdir>
   <imgdir name="2230200">
     <imgdir name="map">
@@ -3854,6 +3961,128 @@
       <int name="31" value="4131005" />
     </imgdir>
     <string name="episode" value=" Lv. :  38\nForm : Mammal\nSpecial Trait : -50% Fire Attribute Damage.\n\nBaby seal monsters whose genders are yet to be ascertained. They are popular amongst adventurers in Aqua Road, as their sparkling eyes and tiny little flippers are as endearing as can be. They may be cute baby seals now, but they develop into Freezers and Sparkers when they mature. " />
+  </imgdir>
+  <imgdir name="3400000">
+    <imgdir name="map">
+      <int name="0" value="103040100"/>
+      <int name="1" value="103040101"/>
+      <int name="2" value="103040103"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4000539"/>
+      <int name="1" value="2000001"/>
+      <int name="2" value="2000003"/>
+      <int name="3" value="2000006"/>
+      <int name="4" value="2022003"/>
+      <int name="5" value="2000004"/>
+      <int name="6" value="4020007"/>
+      <int name="7" value="4004000"/>
+      <int name="8" value="1002098"/>
+      <int name="9" value="1002154"/>
+      <int name="10" value="1002170"/>
+      <int name="11" value="1002185"/>
+      <int name="12" value="1002628"/>
+      <int name="13" value="1072300"/>
+      <int name="14" value="1072126"/>
+      <int name="15" value="1072117"/>
+      <int name="16" value="1072118"/>
+      <int name="17" value="1072107"/>
+      <int name="18" value="2040004"/>
+      <int name="19" value="2040504"/>
+      <int name="20" value="2049208"/>
+      <int name="21" value="2049210"/>
+      <int name="22" value="2382097"/>
+    </imgdir>
+    <string name="episode" value="Level: 35\nForm: Enchanted\n\nA beverage monster that came out of the Kerning Square food court. The cherry-flavored bubbles that pop in your mouth taste especially yummy. You should use a thick straw to make sure you get all the bubbles."/>
+  </imgdir>
+  <imgdir name="3400001">
+    <imgdir name="map">
+      <int name="0" value="103040101"/>
+      <int name="1" value="103040102"/>
+      <int name="2" value="103040103"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4000541"/>
+      <int name="1" value="2000001"/>
+      <int name="2" value="2000003"/>
+      <int name="3" value="2000006"/>
+      <int name="4" value="2022003"/>
+      <int name="5" value="2000004"/>
+      <int name="6" value="4020007"/>
+      <int name="7" value="4004000"/>
+      <int name="8" value="1002098"/>
+      <int name="9" value="1002154"/>
+      <int name="10" value="1002170"/>
+      <int name="11" value="1002185"/>
+      <int name="12" value="1002628"/>
+      <int name="13" value="1072300"/>
+      <int name="14" value="1072126"/>
+      <int name="15" value="1072117"/>
+      <int name="16" value="1072118"/>
+      <int name="17" value="1072107"/>
+      <int name="18" value="2040004"/>
+      <int name="19" value="2040504"/>
+      <int name="20" value="2049208"/>
+      <int name="21" value="2049210"/>
+      <int name="22" value="2382099"/>
+    </imgdir>
+    <string name="episode" value="Level: 36\nForm: Enchanted\n\nA beverage monster that came out of the Kerning Square food court. The mango-flavored bubbles that pop in your mouth taste especially yummy. You should use a thick straw to make sure you get all the bubbles."/>
+  </imgdir>
+  <imgdir name="3400002">
+    <imgdir name="map">
+      <int name="0" value="103040102"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4000540"/>
+      <int name="1" value="2000001"/>
+      <int name="2" value="2000003"/>
+      <int name="3" value="2000006"/>
+      <int name="4" value="2022003"/>
+      <int name="5" value="2000004"/>
+      <int name="6" value="4020007"/>
+      <int name="7" value="4004000"/>
+      <int name="8" value="1002098"/>
+      <int name="9" value="1002154"/>
+      <int name="10" value="1002170"/>
+      <int name="11" value="1002185"/>
+      <int name="12" value="1002628"/>
+      <int name="13" value="1072300"/>
+      <int name="14" value="1072126"/>
+      <int name="15" value="1072117"/>
+      <int name="16" value="1072118"/>
+      <int name="17" value="1072107"/>
+      <int name="18" value="2040004"/>
+      <int name="19" value="2040504"/>
+      <int name="20" value="2049208"/>
+      <int name="21" value="2049210"/>
+      <int name="22" value="2382098"/>
+    </imgdir>
+    <string name="episode" value="Level: 37\nForm: Enchanted\n\nA beverage monster that came out of the Kerning Square food court. The melon-flavored bubbles that pop in your mouth taste especially yummy. You should use a thick straw to make sure you get all the bubbles."/>
+  </imgdir>
+  <imgdir name="3400003">
+    <imgdir name="map">
+      <int name="0" value="103040200"/>
+    </imgdir>
+    <imgdir name="reward">
+    </imgdir>
+    <string name="episode" value="Level: 38\nForm: Enchanted\n\nA machine monster that has popped up in the arcade in Kerning Square. Put a coin in and you can manipulate the claws to pull out a soft and fluffy Yeti doll.  You&apos;ll need a delicate touch, or you may end up spending all of the coins your pocket. "/>
+  </imgdir>
+  <imgdir name="3400005">
+    <imgdir name="map">
+      <int name="0" value="103040201"/>
+    </imgdir>
+    <imgdir name="reward">
+    </imgdir>
+    <string name="episode" value="Level: 38\nForm: Enchanted\n\nA machine monster that has popped up in the arcade in Kerning Square. Put a coin in and you can manipulate the claw to pull out a cute Jr. Pepe doll. Unless you&apos;re careful though, you might just end up using all of the coins in your pocket. "/>
+  </imgdir>
+  <imgdir name="3400007">
+    <imgdir name="map">
+      <int name="0" value="103040202"/>
+      <int name="1" value="103040203"/>
+    </imgdir>
+    <imgdir name="reward">
+    </imgdir>
+    <string name="episode" value="Level: 39\nForm: Enchanted\n\nA machine monster that has popped up in the arcade in Kerning Square. Put a coin in and you can manipulate the claw to pull out one of the many dolls inside. It may appear easy at first, but it&apos;s hard to nab the exact doll you want. "/>
   </imgdir>
   <imgdir name="4110300">
     <imgdir name="map">
@@ -5921,6 +6150,509 @@
       <int name="12" value="4130014" />
     </imgdir>
     <string name="episode" value="Lv.: 46\nForm : Plant\n\nThe mysterious tree monsters that can only be found in Ellin Forest. They are somewhat similar to Stumps in that they, too, resemble a tree stump; however, they are not dead, dry trees, but rather tree monster that are very much alive and can grow flowers and berries. Although they sometimes attack small animals, they generally feed on nutrients they absorb using their root." />
+  </imgdir>
+  <imgdir name="4300001">
+    <imgdir name="map">
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4000530"/>
+      <int name="1" value="2000001"/>
+      <int name="2" value="2000003"/>
+      <int name="3" value="2000006"/>
+      <int name="4" value="2022003"/>
+      <int name="5" value="2000004"/>
+      <int name="6" value="4020008"/>
+      <int name="7" value="4004000"/>
+      <int name="8" value="1302009"/>
+      <int name="9" value="1312007"/>
+      <int name="10" value="1322016"/>
+      <int name="11" value="1332011"/>
+      <int name="12" value="1332031"/>
+      <int name="13" value="1382019"/>
+      <int name="14" value="1402007"/>
+      <int name="15" value="1412005"/>
+      <int name="16" value="1422007"/>
+      <int name="17" value="1432005"/>
+      <int name="18" value="1442009"/>
+      <int name="19" value="1452007"/>
+      <int name="20" value="1472014"/>
+      <int name="21" value="1472015"/>
+      <int name="22" value="1472016"/>
+      <int name="23" value="1472017"/>
+      <int name="24" value="1482006"/>
+      <int name="25" value="1492006"/>
+      <int name="26" value="2040004"/>
+      <int name="27" value="2040501"/>
+      <int name="28" value="2040504"/>
+      <int name="29" value="2040801"/>
+      <int name="30" value="2041007"/>
+      <int name="31" value="2041004"/>
+      <int name="32" value="2049200"/>
+      <int name="33" value="2049202"/>
+      <int name="34" value="2049204"/>
+      <int name="35" value="2049206"/>
+      <int name="36" value="2382103"/>
+    </imgdir>
+    <string name="episode" value="Level: 40\nForm: Enchanted\n\nA refreshing, aqua-scented perfume that used to be displayed in Kerning Square&apos;s beauty store display case. It&apos;s cool scent makes it popular with...cool men."/>
+  </imgdir>
+  <imgdir name="4300003">
+    <imgdir name="map">
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4000532"/>
+      <int name="1" value="2000001"/>
+      <int name="2" value="2000003"/>
+      <int name="3" value="2000006"/>
+      <int name="4" value="2022003"/>
+      <int name="5" value="2000004"/>
+      <int name="6" value="4020008"/>
+      <int name="7" value="4004000"/>
+      <int name="8" value="1302009"/>
+      <int name="9" value="1312007"/>
+      <int name="10" value="1322016"/>
+      <int name="11" value="1332011"/>
+      <int name="12" value="1332031"/>
+      <int name="13" value="1382019"/>
+      <int name="14" value="1402007"/>
+      <int name="15" value="1412005"/>
+      <int name="16" value="1422007"/>
+      <int name="17" value="1432005"/>
+      <int name="18" value="1442009"/>
+      <int name="19" value="1452007"/>
+      <int name="20" value="1472014"/>
+      <int name="21" value="1472015"/>
+      <int name="22" value="1472016"/>
+      <int name="23" value="1472017"/>
+      <int name="24" value="1482006"/>
+      <int name="25" value="1492006"/>
+      <int name="26" value="2040004"/>
+      <int name="27" value="2040501"/>
+      <int name="28" value="2040504"/>
+      <int name="29" value="2040801"/>
+      <int name="30" value="2041007"/>
+      <int name="31" value="2041004"/>
+      <int name="32" value="2049200"/>
+      <int name="33" value="2049202"/>
+      <int name="34" value="2049204"/>
+      <int name="35" value="2049206"/>
+      <int name="36" value="2382104"/>
+    </imgdir>
+    <string name="episode" value="Level: 41\nForm: Enchanted\n\nA smooth, fruit-scented perfume that used to be displayed in Kerning Square&apos;s beauty store display case. It&apos;s sweet scent makes it popular amongst women."/>
+  </imgdir>
+  <imgdir name="4300005">
+    <imgdir name="map">
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4000534"/>
+      <int name="1" value="2000001"/>
+      <int name="2" value="2000003"/>
+      <int name="3" value="2000006"/>
+      <int name="4" value="2022003"/>
+      <int name="5" value="2000004"/>
+      <int name="6" value="4020008"/>
+      <int name="7" value="4004000"/>
+      <int name="8" value="1302009"/>
+      <int name="9" value="1312007"/>
+      <int name="10" value="1322016"/>
+      <int name="11" value="1332011"/>
+      <int name="12" value="1332031"/>
+      <int name="13" value="1382019"/>
+      <int name="14" value="1402007"/>
+      <int name="15" value="1412005"/>
+      <int name="16" value="1422007"/>
+      <int name="17" value="1432005"/>
+      <int name="18" value="1442009"/>
+      <int name="19" value="1452007"/>
+      <int name="20" value="1472014"/>
+      <int name="21" value="1472015"/>
+      <int name="22" value="1472016"/>
+      <int name="23" value="1472017"/>
+      <int name="24" value="1482006"/>
+      <int name="25" value="1492006"/>
+      <int name="26" value="2040004"/>
+      <int name="27" value="2040501"/>
+      <int name="28" value="2040504"/>
+      <int name="29" value="2040801"/>
+      <int name="30" value="2041007"/>
+      <int name="31" value="2041004"/>
+      <int name="32" value="2049200"/>
+      <int name="33" value="2049202"/>
+      <int name="34" value="2049204"/>
+      <int name="35" value="2049206"/>
+      <int name="36" value="2382105"/>
+    </imgdir>
+    <string name="episode" value="Level: 41\nForm: Enchanted\n\nA fragrant, flower-scented perfume that used to be displayed in Kerning Square&apos;s beauty store display case. It&apos;s a popular perfume that&apos;s often given as a gift."/>
+  </imgdir>
+  <imgdir name="4300006">
+    <imgdir name="map">
+      <int name="0" value="103040300"/>
+      <int name="1" value="103040301"/>
+      <int name="2" value="103040303"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4000525"/>
+      <int name="1" value="2000001"/>
+      <int name="2" value="2000003"/>
+      <int name="3" value="2000006"/>
+      <int name="4" value="2022003"/>
+      <int name="5" value="2000004"/>
+      <int name="6" value="4020008"/>
+      <int name="7" value="4004000"/>
+      <int name="8" value="1302009"/>
+      <int name="9" value="1312007"/>
+      <int name="10" value="1322016"/>
+      <int name="11" value="1332011"/>
+      <int name="12" value="1332031"/>
+      <int name="13" value="1382019"/>
+      <int name="14" value="1402007"/>
+      <int name="15" value="1412005"/>
+      <int name="16" value="1422007"/>
+      <int name="17" value="1432005"/>
+      <int name="18" value="1442009"/>
+      <int name="19" value="1452007"/>
+      <int name="20" value="1472014"/>
+      <int name="21" value="1472015"/>
+      <int name="22" value="1472016"/>
+      <int name="23" value="1472017"/>
+      <int name="24" value="1482006"/>
+      <int name="25" value="1492006"/>
+      <int name="26" value="2040004"/>
+      <int name="27" value="2040501"/>
+      <int name="28" value="2040504"/>
+      <int name="29" value="2040801"/>
+      <int name="30" value="2041007"/>
+      <int name="31" value="2041004"/>
+      <int name="32" value="2049200"/>
+      <int name="33" value="2049202"/>
+      <int name="34" value="2049204"/>
+      <int name="35" value="2049206"/>
+      <int name="36" value="2382106"/>
+    </imgdir>
+    <string name="episode" value="Level: 43\nForm: Enchanted\n\nA mannequin that once stood in the children&apos;s clothing section of Kerning Square. It is wearing a highly popular bunny pajama. Don&apos;t be fooled by its cute exterior, as it makes sudden attacks on all who come near."/>
+  </imgdir>
+  <imgdir name="4300007">
+    <imgdir name="map">
+      <int name="0" value="103040301"/>
+      <int name="1" value="103040302"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4000526"/>
+      <int name="1" value="2000001"/>
+      <int name="2" value="2000003"/>
+      <int name="3" value="2000006"/>
+      <int name="4" value="2022003"/>
+      <int name="5" value="2000004"/>
+      <int name="6" value="4020008"/>
+      <int name="7" value="4004000"/>
+      <int name="8" value="1302009"/>
+      <int name="9" value="1312007"/>
+      <int name="10" value="1322016"/>
+      <int name="11" value="1332011"/>
+      <int name="12" value="1332031"/>
+      <int name="13" value="1382019"/>
+      <int name="14" value="1402007"/>
+      <int name="15" value="1412005"/>
+      <int name="16" value="1422007"/>
+      <int name="17" value="1432005"/>
+      <int name="18" value="1442009"/>
+      <int name="19" value="1452007"/>
+      <int name="20" value="1472014"/>
+      <int name="21" value="1472015"/>
+      <int name="22" value="1472016"/>
+      <int name="23" value="1472017"/>
+      <int name="24" value="1482006"/>
+      <int name="25" value="1492006"/>
+      <int name="26" value="2040004"/>
+      <int name="27" value="2040501"/>
+      <int name="28" value="2040504"/>
+      <int name="29" value="2040801"/>
+      <int name="30" value="2041007"/>
+      <int name="31" value="2041004"/>
+      <int name="32" value="2049200"/>
+      <int name="33" value="2049202"/>
+      <int name="34" value="2049204"/>
+      <int name="35" value="2049206"/>
+      <int name="36" value="2382107"/>
+    </imgdir>
+    <string name="episode" value="Level: 44\nForm: Enchanted\n\nA mannequin that once stood in the women&apos;s clothing section of Kerning Square. It is draped in a sky blue dress that is currently in fashion. It was modeled to look like a famous celebrity so it&apos;s a big hit with the male visitors, but one must not forget that it is a monster after all."/>
+  </imgdir>
+  <imgdir name="4300008">
+    <imgdir name="map">
+      <int name="0" value="103040302"/>
+      <int name="1" value="103040303"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4000527"/>
+      <int name="1" value="2000001"/>
+      <int name="2" value="2000003"/>
+      <int name="3" value="2000006"/>
+      <int name="4" value="2022003"/>
+      <int name="5" value="2000004"/>
+      <int name="6" value="4020008"/>
+      <int name="7" value="4004000"/>
+      <int name="8" value="1302009"/>
+      <int name="9" value="1312007"/>
+      <int name="10" value="1322016"/>
+      <int name="11" value="1332011"/>
+      <int name="12" value="1332031"/>
+      <int name="13" value="1382019"/>
+      <int name="14" value="1402007"/>
+      <int name="15" value="1412005"/>
+      <int name="16" value="1422007"/>
+      <int name="17" value="1432005"/>
+      <int name="18" value="1442009"/>
+      <int name="19" value="1452007"/>
+      <int name="20" value="1472014"/>
+      <int name="21" value="1472015"/>
+      <int name="22" value="1472016"/>
+      <int name="23" value="1472017"/>
+      <int name="24" value="1482006"/>
+      <int name="25" value="1492006"/>
+      <int name="26" value="2040004"/>
+      <int name="27" value="2040501"/>
+      <int name="28" value="2040504"/>
+      <int name="29" value="2040801"/>
+      <int name="30" value="2041007"/>
+      <int name="31" value="2041004"/>
+      <int name="32" value="2049200"/>
+      <int name="33" value="2049202"/>
+      <int name="34" value="2049204"/>
+      <int name="35" value="2049206"/>
+      <int name="36" value="2382108"/>
+    </imgdir>
+    <string name="episode" value="Level: 45\nForm: Enchanted\n\nA mannequin that once stood in the menswear section of Kerning Square. It dons an expensive suit and hat. The staff at Kerning Square always worry that the clothing will get damaged, but that doesn&apos;t stop it from attacking visitors."/>
+  </imgdir>
+  <imgdir name="4300009">
+    <imgdir name="map">
+      <int name="0" value="103040400"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4000528"/>
+      <int name="1" value="2000001"/>
+      <int name="2" value="2000003"/>
+      <int name="3" value="2000006"/>
+      <int name="4" value="2022003"/>
+      <int name="5" value="2000004"/>
+      <int name="6" value="4020008"/>
+      <int name="7" value="4004000"/>
+      <int name="8" value="1302009"/>
+      <int name="9" value="1312007"/>
+      <int name="10" value="1322016"/>
+      <int name="11" value="1332011"/>
+      <int name="12" value="1332031"/>
+      <int name="13" value="1382019"/>
+      <int name="14" value="1402007"/>
+      <int name="15" value="1412005"/>
+      <int name="16" value="1422007"/>
+      <int name="17" value="1432005"/>
+      <int name="18" value="1442009"/>
+      <int name="19" value="1452007"/>
+      <int name="20" value="1472014"/>
+      <int name="21" value="1472015"/>
+      <int name="22" value="1472016"/>
+      <int name="23" value="1472017"/>
+      <int name="24" value="1482006"/>
+      <int name="25" value="1492006"/>
+      <int name="26" value="2040004"/>
+      <int name="27" value="2040501"/>
+      <int name="28" value="2040504"/>
+      <int name="29" value="2040801"/>
+      <int name="30" value="2041007"/>
+      <int name="31" value="2041004"/>
+      <int name="32" value="2049200"/>
+      <int name="33" value="2049202"/>
+      <int name="34" value="2049204"/>
+      <int name="35" value="2049206"/>
+      <int name="36" value="2382109"/>
+    </imgdir>
+    <string name="episode" value="Level: 46\nForm: Enchanted\n\nA compilation of the latest hits sold at the Kerning Square record store. It&apos;s a project album that contains the most popular songs of the last three months. It&apos;s the most popular album amongst young people."/>
+  </imgdir>
+  <imgdir name="4300010">
+    <imgdir name="map">
+      <int name="0" value="103040400"/>
+      <int name="1" value="103040410"/>
+      <int name="2" value="103040420"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4000529"/>
+      <int name="1" value="2000001"/>
+      <int name="2" value="2000003"/>
+      <int name="3" value="2000006"/>
+      <int name="4" value="2022003"/>
+      <int name="5" value="2000004"/>
+      <int name="6" value="4020008"/>
+      <int name="7" value="4004000"/>
+      <int name="8" value="1302009"/>
+      <int name="9" value="1312007"/>
+      <int name="10" value="1322016"/>
+      <int name="11" value="1332011"/>
+      <int name="12" value="1332031"/>
+      <int name="13" value="1382019"/>
+      <int name="14" value="1402007"/>
+      <int name="15" value="1412005"/>
+      <int name="16" value="1422007"/>
+      <int name="17" value="1432005"/>
+      <int name="18" value="1442009"/>
+      <int name="19" value="1452007"/>
+      <int name="20" value="1472014"/>
+      <int name="21" value="1472015"/>
+      <int name="22" value="1472016"/>
+      <int name="23" value="1472017"/>
+      <int name="24" value="1482006"/>
+      <int name="25" value="1492006"/>
+      <int name="26" value="2040004"/>
+      <int name="27" value="2040501"/>
+      <int name="28" value="2040504"/>
+      <int name="29" value="2040801"/>
+      <int name="30" value="2041007"/>
+      <int name="31" value="2041004"/>
+      <int name="32" value="2049200"/>
+      <int name="33" value="2049202"/>
+      <int name="34" value="2049204"/>
+      <int name="35" value="2049206"/>
+      <int name="36" value="2382110"/>
+    </imgdir>
+    <string name="episode" value="Level: 47\nForm: Enchanted\n\nA compilation of oldies sold at the Kerning Square record store. Contains songs that must have been grooved to by people&apos;s mothers and fathers. The song recorded on track 8 is a favorite of Chief Stan in Henesys. Younger visitors are often puzzled at who the singers are."/>
+  </imgdir>
+  <imgdir name="4300011">
+    <imgdir name="map">
+      <int name="0" value="103040410"/>
+      <int name="1" value="103040420"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4000536"/>
+      <int name="1" value="2000001"/>
+      <int name="2" value="2000003"/>
+      <int name="3" value="2000006"/>
+      <int name="4" value="2022003"/>
+      <int name="5" value="2000004"/>
+      <int name="6" value="4020008"/>
+      <int name="7" value="4004000"/>
+      <int name="8" value="1302009"/>
+      <int name="9" value="1312007"/>
+      <int name="10" value="1322016"/>
+      <int name="11" value="1332011"/>
+      <int name="12" value="1332031"/>
+      <int name="13" value="1382019"/>
+      <int name="14" value="1402007"/>
+      <int name="15" value="1412005"/>
+      <int name="16" value="1422007"/>
+      <int name="17" value="1432005"/>
+      <int name="18" value="1442009"/>
+      <int name="19" value="1452007"/>
+      <int name="20" value="1472014"/>
+      <int name="21" value="1472015"/>
+      <int name="22" value="1472016"/>
+      <int name="23" value="1472017"/>
+      <int name="24" value="1482006"/>
+      <int name="25" value="1492006"/>
+      <int name="26" value="2040004"/>
+      <int name="27" value="2040501"/>
+      <int name="28" value="2040504"/>
+      <int name="29" value="2040801"/>
+      <int name="30" value="2041007"/>
+      <int name="31" value="2041004"/>
+      <int name="32" value="2049200"/>
+      <int name="33" value="2049202"/>
+      <int name="34" value="2049204"/>
+      <int name="35" value="2049206"/>
+      <int name="36" value="2382111"/>
+    </imgdir>
+    <string name="episode" value="Level: 48\nForm: Enchanted\n\nA low price, amateur Amp that is displayed in the Kerning Square instrument store show window. It&apos;s perfect for use at home. While it&apos;s small and light, it&apos;s not suitable for someone with keen ears or for a concert."/>
+  </imgdir>
+  <imgdir name="4300012">
+    <imgdir name="map">
+      <int name="0" value="103040420"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4000537"/>
+      <int name="1" value="2000001"/>
+      <int name="2" value="2000003"/>
+      <int name="3" value="2000006"/>
+      <int name="4" value="2022003"/>
+      <int name="5" value="2000004"/>
+      <int name="6" value="4020008"/>
+      <int name="7" value="4004000"/>
+      <int name="8" value="1302009"/>
+      <int name="9" value="1312007"/>
+      <int name="10" value="1322016"/>
+      <int name="11" value="1332011"/>
+      <int name="12" value="1332031"/>
+      <int name="13" value="1382019"/>
+      <int name="14" value="1402007"/>
+      <int name="15" value="1412005"/>
+      <int name="16" value="1422007"/>
+      <int name="17" value="1432005"/>
+      <int name="18" value="1442009"/>
+      <int name="19" value="1452007"/>
+      <int name="20" value="1472014"/>
+      <int name="21" value="1472015"/>
+      <int name="22" value="1472016"/>
+      <int name="23" value="1472017"/>
+      <int name="24" value="1482006"/>
+      <int name="25" value="1492006"/>
+      <int name="26" value="2040004"/>
+      <int name="27" value="2040501"/>
+      <int name="28" value="2040504"/>
+      <int name="29" value="2040801"/>
+      <int name="30" value="2041007"/>
+      <int name="31" value="2041004"/>
+      <int name="32" value="2049200"/>
+      <int name="33" value="2049202"/>
+      <int name="34" value="2049204"/>
+      <int name="35" value="2049206"/>
+      <int name="36" value="2382112"/>
+    </imgdir>
+    <string name="episode" value="Level: 49\nForm: Enchanted\n\nA high quality, professional Amp that is displayed in the Kerning Square instrument store show window. Its large size grants it the highest quality sound. It&apos;s perfect for a concert or for musicians in a band. Its high price makes it out of grasp for most people."/>
+  </imgdir>
+  <imgdir name="4300013">
+    <imgdir name="map">
+      <int name="0" value="103040430"/>
+      <int name="1" value="103040460"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="2000001"/>
+      <int name="1" value="2000003"/>
+      <int name="2" value="2000006"/>
+      <int name="3" value="2022003"/>
+      <int name="4" value="2000004"/>
+      <int name="5" value="4020008"/>
+      <int name="6" value="4004000"/>
+      <int name="7" value="1302009"/>
+      <int name="8" value="1312007"/>
+      <int name="9" value="1322016"/>
+      <int name="10" value="1332011"/>
+      <int name="11" value="1332031"/>
+      <int name="12" value="1382019"/>
+      <int name="13" value="1402007"/>
+      <int name="14" value="1412005"/>
+      <int name="15" value="1422007"/>
+      <int name="16" value="1432005"/>
+      <int name="17" value="1442009"/>
+      <int name="18" value="1452007"/>
+      <int name="19" value="1472014"/>
+      <int name="20" value="1472015"/>
+      <int name="21" value="1472016"/>
+      <int name="22" value="1472017"/>
+      <int name="23" value="1482006"/>
+      <int name="24" value="1492006"/>
+      <int name="25" value="2040004"/>
+      <int name="26" value="2040501"/>
+      <int name="27" value="2040504"/>
+      <int name="28" value="2040801"/>
+      <int name="29" value="2041007"/>
+      <int name="30" value="2041004"/>
+      <int name="31" value="2049200"/>
+      <int name="32" value="2049202"/>
+      <int name="33" value="2049204"/>
+      <int name="34" value="2049206"/>
+      <int name="35" value="2049201"/>
+      <int name="36" value="2049203"/>
+      <int name="37" value="2049205"/>
+      <int name="38" value="2049207"/>
+      <int name="39" value="2388075"/>
+    </imgdir>
+    <string name="episode" value="Level: 49\nForm: Devil\n\nA ghost that haunts Kerning Square&apos;s record shop and instrument store. He always has his favorite guitar around his neck as he bombards people with loud noise.\nHe considers the sounds he makes to be the true spirit of rock, but most simply consider it an awful racket. Still, he will never stop playing his music."/>
   </imgdir>
   <imgdir name="5090000">
     <imgdir name="map">
@@ -9426,6 +10158,331 @@
     </imgdir>
     <string name="episode" value=" Lv. :  73\nForm : Enchanted\n\nIt is neither a mammal nor a plant. These strange forms of life co-exist although they are completely independent of each other, unlike the relationship that a crocodile and a plover bird share. Researchers seemed to have created these mysterious creatures to study a co-independent couple of organism that are of one entity. " />
   </imgdir>
+  <imgdir name="7120103">
+    <imgdir name="map">
+      <int name="0" value="240070100"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4000545"/>
+      <int name="1" value="2000002"/>
+      <int name="2" value="2000006"/>
+      <int name="3" value="2000004"/>
+      <int name="4" value="4020000"/>
+      <int name="5" value="4006001"/>
+      <int name="6" value="4004000"/>
+      <int name="7" value="1002095"/>
+      <int name="8" value="1051054"/>
+      <int name="9" value="1082110"/>
+      <int name="10" value="1072163"/>
+      <int name="11" value="1472028"/>
+      <int name="12" value="1032020"/>
+      <int name="13" value="1102023"/>
+      <int name="14" value="2040002"/>
+      <int name="15" value="2040705"/>
+      <int name="16" value="1332018"/>
+      <int name="17" value="1422010"/>
+      <int name="18" value="2040427"/>
+      <int name="19" value="2040824"/>
+      <int name="20" value="2049100"/>
+      <int name="21" value="4130000"/>
+      <int name="22" value="4130017"/>
+      <int name="23" value="4130020"/>
+      <int name="24" value="4007006"/>
+      <int name="25" value="4010005"/>
+      <int name="26" value="4020007"/>
+      <int name="27" value="4010004"/>
+      <int name="28" value="2044301"/>
+      <int name="29" value="2041021"/>
+      <int name="30" value="1312009"/>
+      <int name="31" value="1332015"/>
+      <int name="32" value="1402011"/>
+      <int name="33" value="1002246"/>
+      <int name="34" value="1032014"/>
+      <int name="35" value="1041095"/>
+      <int name="36" value="1061094"/>
+      <int name="37" value="1072146"/>
+      <int name="38" value="1372015"/>
+      <int name="39" value="1050070"/>
+      <int name="40" value="1050069"/>
+      <int name="41" value="1072165"/>
+      <int name="42" value="1082105"/>
+      <int name="43" value="1082108"/>
+      <int name="44" value="1041102"/>
+      <int name="45" value="1061101"/>
+      <int name="46" value="1032016"/>
+      <int name="47" value="1372016"/>
+      <int name="48" value="1492009"/>
+      <int name="49" value="2040618"/>
+      <int name="50" value="4007004"/>
+      <int name="51" value="4007007"/>
+      <int name="52" value="4130002"/>
+      <int name="53" value="4130003"/>
+      <int name="54" value="4130021"/>
+      <int name="55" value="2049000"/>
+      <int name="56" value="2384058"/>
+    </imgdir>
+    <string name="episode" value="Level: 70\nForm: Enchanted\n\nA red mutated Slime that has appeared out of nowhere in a peaceful town in Year 2030. Although it may be a Slime, it shouldn&apos;t be taken lightly. It is a very dangerous monster whose strength is 10 times that of the average Slime. However, it still retains the nature of Slimes and will eat anything in its path."/>
+  </imgdir>
+  <imgdir name="7120104">
+    <imgdir name="map">
+      <int name="0" value="240070101"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4000546"/>
+      <int name="1" value="2050000"/>
+      <int name="2" value="2000006"/>
+      <int name="3" value="2000004"/>
+      <int name="4" value="4020007"/>
+      <int name="5" value="4010004"/>
+      <int name="6" value="2044301"/>
+      <int name="7" value="2041021"/>
+      <int name="8" value="1312009"/>
+      <int name="9" value="1332015"/>
+      <int name="10" value="1402011"/>
+      <int name="11" value="1002246"/>
+      <int name="12" value="1032014"/>
+      <int name="13" value="1041095"/>
+      <int name="14" value="1061094"/>
+      <int name="15" value="1072146"/>
+      <int name="16" value="1051054"/>
+      <int name="17" value="1372015"/>
+      <int name="18" value="1050070"/>
+      <int name="19" value="1050069"/>
+      <int name="20" value="1072165"/>
+      <int name="21" value="1082105"/>
+      <int name="22" value="1082108"/>
+      <int name="23" value="1041102"/>
+      <int name="24" value="1061101"/>
+      <int name="25" value="1002095"/>
+      <int name="26" value="1032016"/>
+      <int name="27" value="1372016"/>
+      <int name="28" value="1492009"/>
+      <int name="29" value="2040618"/>
+      <int name="30" value="4007007"/>
+      <int name="31" value="4130002"/>
+      <int name="32" value="4130003"/>
+      <int name="33" value="4130021"/>
+      <int name="34" value="4007001"/>
+      <int name="35" value="2049000"/>
+      <int name="36" value="2384059"/>
+    </imgdir>
+    <string name="episode" value="Level: 71\nForm: Enchanted\n\nA mutated Slime that has appeared out of nowhere in a peaceful town in Year 2030 Neo City. It is slightly more dangerous than the Red Slime. It&apos;s transparent body is as strong as steel, and it roams around destroying all things made of metal."/>
+  </imgdir>
+  <imgdir name="7120105">
+    <imgdir name="map">
+      <int name="0" value="240070102"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4000547"/>
+      <int name="1" value="2000006"/>
+      <int name="2" value="2000004"/>
+      <int name="3" value="2044101"/>
+      <int name="4" value="2041008"/>
+      <int name="5" value="4006001"/>
+      <int name="6" value="4004002"/>
+      <int name="7" value="1051062"/>
+      <int name="8" value="1002287"/>
+      <int name="9" value="1082119"/>
+      <int name="10" value="1072211"/>
+      <int name="11" value="1332019"/>
+      <int name="12" value="1452009"/>
+      <int name="13" value="2040512"/>
+      <int name="14" value="2044010"/>
+      <int name="15" value="4007000"/>
+      <int name="16" value="4130001"/>
+      <int name="17" value="4130005"/>
+      <int name="18" value="4130017"/>
+      <int name="19" value="4010006"/>
+      <int name="20" value="4020006"/>
+      <int name="21" value="4007004"/>
+      <int name="22" value="2049000"/>
+      <int name="23" value="2384060"/>
+    </imgdir>
+    <string name="episode" value="Level: 72\nForm: Enchanted\n\nThe most dangerous of Slimes. It has appeared out of nowhere in a peaceful town in Year 2030 Neo City. While its gold color may be attractive, it has a violent personality and will attack indiscriminately if angered."/>
+  </imgdir>
+  <imgdir name="7120106">
+    <imgdir name="map">
+      <int name="0" value="240070200"/>
+      <int name="1" value="240070201"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4000548"/>
+      <int name="1" value="2002003"/>
+      <int name="2" value="2002004"/>
+      <int name="3" value="2000006"/>
+      <int name="4" value="2000004"/>
+      <int name="5" value="4020002"/>
+      <int name="6" value="4006001"/>
+      <int name="7" value="2040301"/>
+      <int name="8" value="2040516"/>
+      <int name="9" value="1040092"/>
+      <int name="10" value="1060081"/>
+      <int name="11" value="1041092"/>
+      <int name="12" value="1061091"/>
+      <int name="13" value="1041095"/>
+      <int name="14" value="1061094"/>
+      <int name="15" value="1050061"/>
+      <int name="16" value="1051063"/>
+      <int name="17" value="1051054"/>
+      <int name="18" value="1092023"/>
+      <int name="19" value="1072182"/>
+      <int name="20" value="1072172"/>
+      <int name="21" value="1072210"/>
+      <int name="22" value="1072177"/>
+      <int name="23" value="1082207"/>
+      <int name="24" value="2040418"/>
+      <int name="25" value="4130001"/>
+      <int name="26" value="4130004"/>
+      <int name="27" value="4130012"/>
+      <int name="28" value="4010002"/>
+      <int name="29" value="4007004"/>
+      <int name="30" value="4007002"/>
+      <int name="31" value="2049000"/>
+      <int name="32" value="2384062"/>
+    </imgdir>
+    <string name="episode" value="Level: 73\nForm: Enchanted\n\nA security robot that has suddenly appeared at the Harbor in Year 2099 Neo City. It uses its radar sensor to detect any moving object before unleashing its indiscriminate attacks. It looks as if it is being controlled by something but that can&apos;t be verified.  The technology appears too advanced to be from the year 2099."/>
+  </imgdir>
+  <imgdir name="7120107">
+    <imgdir name="map">
+      <int name="0" value="240070201"/>
+      <int name="1" value="240070202"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4000549"/>
+      <int name="1" value="2000006"/>
+      <int name="2" value="2000004"/>
+      <int name="3" value="4010005"/>
+      <int name="4" value="4006000"/>
+      <int name="5" value="4004004"/>
+      <int name="6" value="2040513"/>
+      <int name="7" value="2044602"/>
+      <int name="8" value="1051043"/>
+      <int name="9" value="1041096"/>
+      <int name="10" value="1061095"/>
+      <int name="11" value="1040090"/>
+      <int name="12" value="1060079"/>
+      <int name="13" value="1051055"/>
+      <int name="14" value="1060095"/>
+      <int name="15" value="1040107"/>
+      <int name="16" value="1002252"/>
+      <int name="17" value="1002289"/>
+      <int name="18" value="1072160"/>
+      <int name="19" value="1041099"/>
+      <int name="20" value="1061098"/>
+      <int name="21" value="1002288"/>
+      <int name="22" value="1472027"/>
+      <int name="23" value="1322020"/>
+      <int name="24" value="1382010"/>
+      <int name="25" value="1051057"/>
+      <int name="26" value="1040109"/>
+      <int name="27" value="1060098"/>
+      <int name="28" value="1002277"/>
+      <int name="29" value="1002340"/>
+      <int name="30" value="2070005"/>
+      <int name="31" value="1492009"/>
+      <int name="32" value="2040622"/>
+      <int name="33" value="2040623"/>
+      <int name="34" value="2043110"/>
+      <int name="35" value="4130016"/>
+      <int name="36" value="4130017"/>
+      <int name="37" value="4130020"/>
+      <int name="38" value="2330004"/>
+      <int name="39" value="4020000"/>
+      <int name="40" value="4007004"/>
+      <int name="41" value="4007006"/>
+      <int name="42" value="2049000"/>
+      <int name="43" value="2384062"/>
+    </imgdir>
+    <string name="episode" value="Level: 75\nForm: Enchanted\n\nA security robot that has suddenly appeared at the Harbor in Year 2099 Neo City. It uses a radar sensor more advanced than the Overlord A to detect living organisms before unleashing its indiscriminate attacks. It looks as if it is being controlled by something, but that can&apos;t be verified. The technology appears too advanced to be from the year 2099."/>
+  </imgdir>
+  <imgdir name="7120108">
+    <imgdir name="map">
+      <int name="0" value="240070300"/>
+      <int name="1" value="240070301"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4000550"/>
+      <int name="1" value="2000002"/>
+      <int name="2" value="2000004"/>
+      <int name="3" value="4020003"/>
+      <int name="4" value="4010006"/>
+      <int name="5" value="4004004"/>
+      <int name="6" value="2002008"/>
+      <int name="7" value="2044001"/>
+      <int name="8" value="2041013"/>
+      <int name="9" value="1051046"/>
+      <int name="10" value="1002268"/>
+      <int name="11" value="1072149"/>
+      <int name="12" value="1002282"/>
+      <int name="13" value="1041099"/>
+      <int name="14" value="1061098"/>
+      <int name="15" value="1050061"/>
+      <int name="16" value="1082098"/>
+      <int name="17" value="1092017"/>
+      <int name="18" value="1472029"/>
+      <int name="19" value="1002289"/>
+      <int name="20" value="1002252"/>
+      <int name="21" value="1040106"/>
+      <int name="22" value="1060094"/>
+      <int name="23" value="1412008"/>
+      <int name="24" value="1032022"/>
+      <int name="25" value="1051058"/>
+      <int name="26" value="1050077"/>
+      <int name="27" value="1072173"/>
+      <int name="28" value="1082116"/>
+      <int name="29" value="1082207"/>
+      <int name="30" value="2040321"/>
+      <int name="31" value="2040534"/>
+      <int name="32" value="2043114"/>
+      <int name="33" value="4007000"/>
+      <int name="34" value="4007006"/>
+      <int name="35" value="4130000"/>
+      <int name="36" value="4130002"/>
+      <int name="37" value="4130013"/>
+      <int name="38" value="2049000"/>
+      <int name="39" value="2385038"/>
+    </imgdir>
+    <string name="episode" value="Level: 77\nForm: Enchanted\n\nA first generation robot that appeared after the bombing of the city center in Year 2215 Neo City. While it may look basic, its program contains a human personality algorithm. It is constantly talking, making it stand out in the midst of a city that has gone silent due to the bombing."/>
+  </imgdir>
+  <imgdir name="7120109">
+    <imgdir name="map">
+      <int name="0" value="240070301"/>
+      <int name="1" value="240070302"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4000551"/>
+      <int name="1" value="2000006"/>
+      <int name="2" value="2000004"/>
+      <int name="3" value="4010004"/>
+      <int name="4" value="4020004"/>
+      <int name="5" value="2041008"/>
+      <int name="6" value="2044401"/>
+      <int name="7" value="4006001"/>
+      <int name="8" value="4004004"/>
+      <int name="9" value="1002338"/>
+      <int name="10" value="1050074"/>
+      <int name="11" value="1082107"/>
+      <int name="12" value="1072161"/>
+      <int name="13" value="1102029"/>
+      <int name="14" value="1452010"/>
+      <int name="15" value="1402012"/>
+      <int name="16" value="1322028"/>
+      <int name="17" value="1032022"/>
+      <int name="18" value="1072312"/>
+      <int name="19" value="2330003"/>
+      <int name="20" value="2040619"/>
+      <int name="21" value="2044314"/>
+      <int name="22" value="2049100"/>
+      <int name="23" value="4007003"/>
+      <int name="24" value="4007005"/>
+      <int name="25" value="4130002"/>
+      <int name="26" value="4130009"/>
+      <int name="27" value="2049000"/>
+      <int name="28" value="1442030"/>
+      <int name="29" value="2385039"/>
+    </imgdir>
+    <string name="episode" value="Level: 79\nForm: Enchanted\n\nAn android robot that appeared after the bombing of the city center in Year 2214 Neo City. It is an android that has been designed to have a high attack rate. Unfortunately, it&apos;s program lacks proper modification, so it attacks anything and everything."/>
+  </imgdir>
   <imgdir name="7130000">
     <imgdir name="map">
       <int name="0" value="200010300" />
@@ -10659,6 +11716,15 @@
     </imgdir>
     <string name="episode" value=" Lv. :  77\nForm : Mammal\n\nA wicked monster that lives in the Goblin Forest. It was a cat before it secretly mastered the magic that Mu Lung's trainees were studying in order to become virtuous masters. It considers Mu Lung's swordsmith, who instructs mental training, as its arch-nemesis. It dazzles the humans with its eloquence while riding a giant cloud, but remember that this Priest Cat is but a goblin inside." />
   </imgdir>
+  <imgdir name="7220003">
+    <imgdir name="map">
+      <int name="0" value="240070203"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="2388076"/>
+    </imgdir>
+    <string name="episode" value="Level: 77\nForm: Enchanted\n\nA giant robot that appeared in the middle of the night at the Harbor in Year 2099 Neo City. There is nothing known about who made it or why it has appeared. Andy, who came from the future, has theorized that it is the first robot with artificial intelligence."/>
+  </imgdir>
   <imgdir name="8090000">
     <imgdir name="map">
       <int name="0" value="261010102" />
@@ -10726,6 +11792,222 @@
       <int name="29" value="4130013" />
     </imgdir>
     <string name="episode" value=" Lv. :  80\nForm : Enchanted\n\nA strange form of life created in a beaker, which has eventually become independently mobile. It was intended to be a project of creating a life form mainly consisting of soil based on the force of nature, but an accidental drop of blood resulted in this mysterious, unidentifiable creature. It began its life as one creature before undergoing a biological variation that has bifurcated this monster into two separate creatures." />
+  </imgdir>
+  <imgdir name="8120102">
+    <imgdir name="map">
+      <int name="0" value="240070400"/>
+      <int name="1" value="240070401"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4000552"/>
+      <int name="1" value="1002640"/>
+      <int name="2" value="1041107"/>
+      <int name="3" value="1040110"/>
+      <int name="4" value="1082112"/>
+      <int name="5" value="1072179"/>
+      <int name="6" value="1102028"/>
+      <int name="7" value="1402015"/>
+      <int name="8" value="1452011"/>
+      <int name="9" value="4004002"/>
+      <int name="10" value="4010000"/>
+      <int name="11" value="4020000"/>
+      <int name="12" value="4007001"/>
+      <int name="13" value="4007003"/>
+      <int name="14" value="4130000"/>
+      <int name="15" value="4130013"/>
+      <int name="16" value="2330004"/>
+      <int name="17" value="2040532"/>
+      <int name="18" value="2044112"/>
+      <int name="19" value="2044807"/>
+      <int name="20" value="2049000"/>
+      <int name="21" value="2385043"/>
+    </imgdir>
+    <string name="episode" value="Level: 82\nForm: Enchanted\n\nA tank robot that has appeared in Year 2216 Ruined Neo City. It roams the already ruined city, rolling over anything in its path and attacking any survivors. According to rumors, it functions on its own through artificial intelligence, but it is possible that it is being remotely controlled by someone."/>
+  </imgdir>
+  <imgdir name="8120103">
+    <imgdir name="map">
+      <int name="0" value="240070401"/>
+      <int name="1" value="240070402"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4000553"/>
+      <int name="1" value="2000006"/>
+      <int name="2" value="2000005"/>
+      <int name="3" value="4010006"/>
+      <int name="4" value="4020007"/>
+      <int name="5" value="2040707"/>
+      <int name="6" value="2043301"/>
+      <int name="7" value="4006001"/>
+      <int name="8" value="4004001"/>
+      <int name="9" value="2000002"/>
+      <int name="10" value="1102030"/>
+      <int name="11" value="1002339"/>
+      <int name="12" value="1051057"/>
+      <int name="13" value="1082112"/>
+      <int name="14" value="1072173"/>
+      <int name="15" value="1472029"/>
+      <int name="16" value="1382010"/>
+      <int name="17" value="1462012"/>
+      <int name="18" value="2070005"/>
+      <int name="19" value="1032022"/>
+      <int name="20" value="1052125"/>
+      <int name="21" value="2330003"/>
+      <int name="22" value="2040026"/>
+      <int name="23" value="2040316"/>
+      <int name="24" value="2043015"/>
+      <int name="25" value="4007000"/>
+      <int name="26" value="4007003"/>
+      <int name="27" value="4130000"/>
+      <int name="28" value="4130002"/>
+      <int name="29" value="4130010"/>
+      <int name="30" value="2049000"/>
+      <int name="31" value="2385044"/>
+    </imgdir>
+    <string name="episode" value="Level: 84\nForm: Enchanted\n\nA humanoid tank robot that has appeared in Year 2216 Ruined Neo City. It&apos;s program contains a personality that is different from the Afterlord, and it&apos;s equipped with a highly advanced detection sensor."/>
+  </imgdir>
+  <imgdir name="8120104">
+    <imgdir name="map">
+      <int name="0" value="240070500"/>
+      <int name="1" value="240070501"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4000554"/>
+      <int name="1" value="2000006"/>
+      <int name="2" value="2000002"/>
+      <int name="3" value="4020008"/>
+      <int name="4" value="4010003"/>
+      <int name="5" value="2044401"/>
+      <int name="6" value="4006001"/>
+      <int name="7" value="4004000"/>
+      <int name="8" value="4131007"/>
+      <int name="9" value="2070005"/>
+      <int name="10" value="1050070"/>
+      <int name="11" value="1452011"/>
+      <int name="12" value="1082103"/>
+      <int name="13" value="1040107"/>
+      <int name="14" value="1060095"/>
+      <int name="15" value="1051057"/>
+      <int name="16" value="1002330"/>
+      <int name="17" value="1002272"/>
+      <int name="18" value="1032016"/>
+      <int name="19" value="1041105"/>
+      <int name="20" value="1061104"/>
+      <int name="21" value="1050075"/>
+      <int name="22" value="1051077"/>
+      <int name="23" value="1051066"/>
+      <int name="24" value="1072173"/>
+      <int name="25" value="1082116"/>
+      <int name="26" value="1082109"/>
+      <int name="27" value="1082121"/>
+      <int name="28" value="1041115"/>
+      <int name="29" value="1061114"/>
+      <int name="30" value="1072197"/>
+      <int name="31" value="1082125"/>
+      <int name="32" value="1082131"/>
+      <int name="33" value="4001110"/>
+      <int name="34" value="2330003"/>
+      <int name="35" value="1492010"/>
+      <int name="36" value="2040619"/>
+      <int name="37" value="4007001"/>
+      <int name="38" value="4007006"/>
+      <int name="39" value="4130003"/>
+      <int name="40" value="4130007"/>
+      <int name="41" value="4130011"/>
+      <int name="42" value="2049000"/>
+      <int name="43" value="2385040"/>
+    </imgdir>
+    <string name="episode" value="Level: 86\nForm: Enchanted\n\nA maverick-type machine that has appeared in Year 2230 Dangerous Tower just before the collapse. A dangerous monster that moves quickly using its propulsion system while shooting its laser gun."/>
+  </imgdir>
+  <imgdir name="8120105">
+    <imgdir name="map">
+      <int name="0" value="240070501"/>
+      <int name="1" value="240070502"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4000555"/>
+      <int name="1" value="2000006"/>
+      <int name="2" value="2000005"/>
+      <int name="3" value="4010003"/>
+      <int name="4" value="4020003"/>
+      <int name="5" value="2041014"/>
+      <int name="6" value="2044001"/>
+      <int name="7" value="4006001"/>
+      <int name="8" value="4004003"/>
+      <int name="9" value="2000002"/>
+      <int name="10" value="2070006"/>
+      <int name="11" value="1051080"/>
+      <int name="12" value="1082122"/>
+      <int name="13" value="1072183"/>
+      <int name="14" value="1002328"/>
+      <int name="15" value="1092025"/>
+      <int name="16" value="1372016"/>
+      <int name="17" value="1472031"/>
+      <int name="18" value="1032023"/>
+      <int name="19" value="1432030"/>
+      <int name="20" value="1442044"/>
+      <int name="21" value="1462015"/>
+      <int name="22" value="2330003"/>
+      <int name="23" value="1482010"/>
+      <int name="24" value="2040323"/>
+      <int name="25" value="2043214"/>
+      <int name="26" value="4007000"/>
+      <int name="27" value="4007002"/>
+      <int name="28" value="4130001"/>
+      <int name="29" value="4130007"/>
+      <int name="30" value="4130012"/>
+      <int name="31" value="2330004"/>
+      <int name="32" value="2049000"/>
+      <int name="33" value="2385041"/>
+    </imgdir>
+    <string name="episode" value="Level: 88\nForm: Enchanted\n\nA maverick-type machine that has appeared in Year 2230 Dangerous Tower just before the collapse. It&apos;s designed to be excelllent at pursuits and can move in the dark without making a sound. It is a dangerous monster that moves quickly using its propulsion system while shooting its laser gun."/>
+  </imgdir>
+  <imgdir name="8120106">
+    <imgdir name="map">
+      <int name="0" value="240070502"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4000556"/>
+      <int name="1" value="2000005"/>
+      <int name="2" value="2000004"/>
+      <int name="3" value="2002004"/>
+      <int name="4" value="4006001"/>
+      <int name="5" value="4010006"/>
+      <int name="6" value="4020006"/>
+      <int name="7" value="2044301"/>
+      <int name="8" value="2041009"/>
+      <int name="9" value="1002284"/>
+      <int name="10" value="1002253"/>
+      <int name="11" value="1072155"/>
+      <int name="12" value="1072167"/>
+      <int name="13" value="1050074"/>
+      <int name="14" value="1302018"/>
+      <int name="15" value="1002274"/>
+      <int name="16" value="1002276"/>
+      <int name="17" value="1041107"/>
+      <int name="18" value="1061106"/>
+      <int name="19" value="1050080"/>
+      <int name="20" value="1051068"/>
+      <int name="21" value="1072212"/>
+      <int name="22" value="1082110"/>
+      <int name="23" value="1041121"/>
+      <int name="24" value="1061120"/>
+      <int name="25" value="1072203"/>
+      <int name="26" value="1072206"/>
+      <int name="27" value="1082143"/>
+      <int name="28" value="1072312"/>
+      <int name="29" value="2040031"/>
+      <int name="30" value="2040823"/>
+      <int name="31" value="2043210"/>
+      <int name="32" value="4130022"/>
+      <int name="33" value="4007003"/>
+      <int name="34" value="4007005"/>
+      <int name="35" value="4130000"/>
+      <int name="36" value="4130019"/>
+      <int name="37" value="4130021"/>
+      <int name="38" value="2049000"/>
+      <int name="39" value="2385042"/>
+    </imgdir>
+    <string name="episode" value="Level: 89\nForm: Enchanted\n\nA maverick-type machine that has appeared in Year 2230 Dangerous Tower just before the collapse. An evolved version of the Maverick Type S that has the capability to fly. Caution must be taken as its flying capability allows it to have a large movement range."/>
   </imgdir>
   <imgdir name="8130100">
     <imgdir name="map">
@@ -11360,6 +12642,92 @@
       <int name="40" value="4130014" />
     </imgdir>
     <string name="episode" value=" Lv. :  90\nForm : Mammal\nSpecial Trait : -50% Fire Attribute Damage. Vulnerable to Ice Attribute Attacks.\n\nA monster born in an ocean of lava in a cave. It was originally a bulldog before completely absorbing the mysterious force in lava, evolving into its current monstrous state. It has fire attribute and, as the ruler of the lava, it attacks by emitting flame of blazing heat. " />
+  </imgdir>
+  <imgdir name="8140511">
+    <imgdir name="map">
+      <int name="0" value="240070600"/>
+      <int name="1" value="240070601"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4000557"/>
+      <int name="1" value="2000006"/>
+      <int name="2" value="2022003"/>
+      <int name="3" value="4004003"/>
+      <int name="4" value="4010001"/>
+      <int name="5" value="4020001"/>
+      <int name="6" value="1002532"/>
+      <int name="7" value="1072205"/>
+      <int name="8" value="1082144"/>
+      <int name="9" value="1052128"/>
+      <int name="10" value="1051097"/>
+      <int name="11" value="1382035"/>
+      <int name="12" value="1402005"/>
+      <int name="13" value="1312015"/>
+      <int name="14" value="4007000"/>
+      <int name="15" value="4007006"/>
+      <int name="16" value="4130001"/>
+      <int name="17" value="4130014"/>
+      <int name="18" value="2043301"/>
+      <int name="19" value="2040321"/>
+      <int name="20" value="2040029"/>
+      <int name="21" value="2290050"/>
+      <int name="22" value="2049001"/>
+      <int name="23" value="2049000"/>
+      <int name="24" value="2386033"/>
+    </imgdir>
+    <string name="episode" value="Level: 91\nForm: Enchanted\n\nA soldier-type robot that launched an all out offensive while aboard the Year 2503 Air Battleship Hermes. It appears to have been designed for invasion, as it is optimized for war. It&apos;s quick and smooth movement makes it an efficient robot for close-ranged battles."/>
+  </imgdir>
+  <imgdir name="8140512">
+    <imgdir name="map">
+      <int name="0" value="240070601"/>
+      <int name="1" value="240070602"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4000558"/>
+      <int name="1" value="2000002"/>
+      <int name="2" value="2000006"/>
+      <int name="3" value="4010001"/>
+      <int name="4" value="4020008"/>
+      <int name="5" value="4004000"/>
+      <int name="6" value="2044602"/>
+      <int name="7" value="2070006"/>
+      <int name="8" value="1051063"/>
+      <int name="9" value="1002254"/>
+      <int name="10" value="1002285"/>
+      <int name="11" value="1422010"/>
+      <int name="12" value="1050074"/>
+      <int name="13" value="1050072"/>
+      <int name="14" value="1322028"/>
+      <int name="15" value="1002327"/>
+      <int name="16" value="1002278"/>
+      <int name="17" value="1050083"/>
+      <int name="18" value="1041106"/>
+      <int name="19" value="1061105"/>
+      <int name="20" value="1050076"/>
+      <int name="21" value="1082115"/>
+      <int name="22" value="1051068"/>
+      <int name="23" value="1051079"/>
+      <int name="24" value="1040112"/>
+      <int name="25" value="1060101"/>
+      <int name="26" value="1041117"/>
+      <int name="27" value="1061116"/>
+      <int name="28" value="1082132"/>
+      <int name="29" value="2290082"/>
+      <int name="30" value="1072315"/>
+      <int name="31" value="2044802"/>
+      <int name="32" value="2290097"/>
+      <int name="33" value="2040317"/>
+      <int name="34" value="2040929"/>
+      <int name="35" value="2044809"/>
+      <int name="36" value="4007002"/>
+      <int name="37" value="4130013"/>
+      <int name="38" value="4130018"/>
+      <int name="39" value="4130019"/>
+      <int name="40" value="2049001"/>
+      <int name="41" value="2049000"/>
+      <int name="42" value="2386034"/>
+    </imgdir>
+    <string name="episode" value="Level: 93\nForm: Enchanted\n\nA soldier-type robot that launched an all out offensive while aboard the Year 2503 Air Battleship Hermes. It appears to have been designed for an invasion, as it is optimized for war. Its powerful radar detection sensor and the recoil system equipped on every joint makes it perfect for long-ranged attacks. "/>
   </imgdir>
   <imgdir name="8140600">
     <imgdir name="map">
@@ -13748,6 +15116,159 @@
       <int name="33" value="2388054" />
     </imgdir>
     <string name="episode" value="레벨 : Lv.85\n형태 : 무기물형\n\n빅토리아중앙던전의 개미굴광장에는 유명한 노점상인이 있다. 하지만 그 보다 더 깊은 던전에 가끔씩 정체불명의 포장마차가 문을 연다는데... 더 특이한 점은 이 포장마차에서 물건을 사 본 사람은 아직 한 명도 없다는 것이다. 그 이유는 가까이 다가가기만 하면 갑자기 태도가 180도  달라지기 때문이라는데... 개미굴 광장의 노점상인은 경쟁자의 출현에 심기가 불편한것 같다." />
+  </imgdir>
+  <imgdir name="8220010">
+    <imgdir name="map">
+      <int name="0" value="240070303"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="2388077"/>
+    </imgdir>
+    <string name="episode" value="Level: 81\nForm: Devil\n\nAn android that is suspected of being the one who attacked and destroyed the city center of Year 2215 Neo City. It continues to drive the city into fear as it unceasingly summons Robbies and Iruvatas."/>
+  </imgdir>
+  <imgdir name="8220011">
+    <imgdir name="map">
+      <int name="0" value="240070403"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="2388078"/>
+    </imgdir>
+    <string name="episode" value="Level: 85\nForm: Devil\n\nAn android that has been discovered in the Year 2216 Ruined City Center. It is suspected of being the agent that controls Afterlords and Prototype Lords. It&apos;s also been reported that it seems to be looking for something in the ruined city."/>
+  </imgdir>
+  <imgdir name="8220012">
+    <imgdir name="map">
+      <int name="0" value="240070503"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="2388079"/>
+    </imgdir>
+    <string name="episode" value="Level: 90\nForm: Devil\n\nAn android with artificial intelligence that has used the power of Mavericks to seize control of the Year 2230 Dangerous Tower and City. It does not have a body and only exists as a hologram."/>
+  </imgdir>
+  <imgdir name="8220013">
+    <imgdir name="map">
+      <int name="0" value="240070603"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="2000005"/>
+      <int name="1" value="1452009"/>
+      <int name="2" value="1382007"/>
+      <int name="3" value="1462009"/>
+      <int name="4" value="1322019"/>
+      <int name="5" value="1312010"/>
+      <int name="6" value="1412008"/>
+      <int name="7" value="1422010"/>
+      <int name="8" value="1472026"/>
+      <int name="9" value="1432007"/>
+      <int name="10" value="1442008"/>
+      <int name="11" value="1302012"/>
+      <int name="12" value="1402012"/>
+      <int name="13" value="1332018"/>
+      <int name="14" value="1332019"/>
+      <int name="15" value="2043001"/>
+      <int name="16" value="2043101"/>
+      <int name="17" value="2043201"/>
+      <int name="18" value="2043301"/>
+      <int name="19" value="2043701"/>
+      <int name="20" value="2043801"/>
+      <int name="21" value="2044001"/>
+      <int name="22" value="2044101"/>
+      <int name="23" value="2044201"/>
+      <int name="24" value="2044301"/>
+      <int name="25" value="2044401"/>
+      <int name="26" value="2044501"/>
+      <int name="27" value="2044601"/>
+      <int name="28" value="2000004"/>
+      <int name="29" value="1092017"/>
+      <int name="30" value="1372059"/>
+      <int name="31" value="1402074"/>
+      <int name="32" value="1442091"/>
+      <int name="33" value="1452090"/>
+      <int name="34" value="1472101"/>
+      <int name="35" value="1482052"/>
+      <int name="36" value="2047000"/>
+      <int name="37" value="2047001"/>
+      <int name="38" value="2047002"/>
+      <int name="39" value="2047100"/>
+      <int name="40" value="2047101"/>
+      <int name="41" value="2047102"/>
+    </imgdir>
+    <string name="episode" value="Level: Unknown.\nForm: Enchanted\n\nThe core military force behind the army of robots that attacked Year 2503 Neo City. The great mobility of this Air Battleship is enhanced by its high tech barrier system.\nIt must be destroyed, as it is a weapon that continues to threaten the lives of humans."/>
+  </imgdir>
+  <imgdir name="8300006">
+    <imgdir name="map">
+      <int name="0" value="240080600"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="4001401"/>
+      <int name="1" value="2040002"/>
+      <int name="2" value="2040005"/>
+      <int name="3" value="2040302"/>
+      <int name="4" value="2040402"/>
+      <int name="5" value="2040502"/>
+      <int name="6" value="2040505"/>
+      <int name="7" value="2040602"/>
+      <int name="8" value="2040702"/>
+      <int name="9" value="2040705"/>
+      <int name="10" value="2040708"/>
+      <int name="11" value="2040802"/>
+      <int name="12" value="2040805"/>
+      <int name="13" value="2040902"/>
+      <int name="14" value="2043002"/>
+      <int name="15" value="2043102"/>
+      <int name="16" value="2043202"/>
+      <int name="17" value="2043302"/>
+      <int name="18" value="2043702"/>
+      <int name="19" value="2043802"/>
+      <int name="20" value="2044002"/>
+      <int name="21" value="2044102"/>
+      <int name="22" value="2044202"/>
+      <int name="23" value="2044302"/>
+      <int name="24" value="2044402"/>
+      <int name="25" value="2044502"/>
+      <int name="26" value="2044602"/>
+      <int name="27" value="2044702"/>
+      <int name="28" value="1051104"/>
+      <int name="29" value="1052075"/>
+      <int name="30" value="1052071"/>
+      <int name="31" value="1052072"/>
+      <int name="32" value="1052134"/>
+      <int name="33" value="2000005"/>
+      <int name="34" value="2047200"/>
+      <int name="35" value="2047201"/>
+      <int name="36" value="2047202"/>
+      <int name="37" value="2047203"/>
+      <int name="38" value="2047204"/>
+      <int name="39" value="2047205"/>
+      <int name="40" value="2047206"/>
+      <int name="41" value="2047207"/>
+      <int name="42" value="2047208"/>
+    </imgdir>
+    <string name="episode" value="Level: 120\nForm: Insect\n\nA giant, flying Dragon that appears in the dragon forests. He patrols the dragon forests, kidnapping invaders and Halflings. This has caused rumors that anyone who touches the shadow of Dragonica will be pulled into darkness. He is a pet that is being raised by the unidentified Dragon Rider, a servant of Horn Tail."/>
+  </imgdir>
+  <imgdir name="8300007">
+    <imgdir name="map">
+      <int name="0" value="240080800"/>
+    </imgdir>
+    <imgdir name="reward">
+      <int name="0" value="2000005"/>
+      <int name="1" value="2049100"/>
+      <int name="2" value="2049201"/>
+      <int name="3" value="2049203"/>
+      <int name="4" value="2049205"/>
+      <int name="5" value="2049207"/>
+      <int name="6" value="2040502"/>
+      <int name="7" value="2040505"/>
+      <int name="8" value="2040514"/>
+      <int name="9" value="2040517"/>
+      <int name="10" value="2040534"/>
+      <int name="11" value="2047000"/>
+      <int name="12" value="2047001"/>
+      <int name="13" value="2047002"/>
+      <int name="14" value="2047100"/>
+      <int name="15" value="2047101"/>
+      <int name="16" value="2047102"/>
+    </imgdir>
+    <string name="episode" value="Level: 120\nForm: Spirit\n\nAn unidentified being who is said to have been adopted by Horn Tail. A few who have seen him say that he is not of the dragon race. His eyes are empty, as if lacking in any emotion other than hatred. According to rumors, he lost his soul because of a curse put on him by Horn Tail.\nOne traveler who saw his arm, which was revealed while battling the Dragon Rider, claims that he must be a Halfling."/>
   </imgdir>
   <imgdir name="8500002">
     <imgdir name="map">
