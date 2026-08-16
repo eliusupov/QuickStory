@@ -226,12 +226,12 @@ String.wz/Consume.img/2430076
 String.wz/Consume.img/2430077
 String.wz/Eqp.img/Eqp/Accessory/1012161
 String.wz/Eqp.img/Eqp/Accessory/1022097
-String.wz/Eqp.img/Eqp/Accessory/1142143
-String.wz/Eqp.img/Eqp/Accessory/1142144
-String.wz/Eqp.img/Eqp/Accessory/1142145
-String.wz/Eqp.img/Eqp/Accessory/1142149
-String.wz/Eqp.img/Eqp/Accessory/1142150
-String.wz/Eqp.img/Eqp/Accessory/1142151
+String.wz/Eqp.img/Eqp/Accessory/1142143/name
+String.wz/Eqp.img/Eqp/Accessory/1142144/name
+String.wz/Eqp.img/Eqp/Accessory/1142145/name
+String.wz/Eqp.img/Eqp/Accessory/1142149/name
+String.wz/Eqp.img/Eqp/Accessory/1142150/name
+String.wz/Eqp.img/Eqp/Accessory/1142151/name
 String.wz/Eqp.img/Eqp/Accessory/1142156
 String.wz/Eqp.img/Eqp/Accessory/1142157
 String.wz/Eqp.img/Eqp/Accessory/1142158
@@ -257,7 +257,7 @@ String.wz/Eqp.img/Eqp/Cap/1003090
 String.wz/Eqp.img/Eqp/Cape/1102231
 String.wz/Eqp.img/Eqp/Cape/1102232
 String.wz/Eqp.img/Eqp/Coat/1042184
-String.wz/Eqp.img/Eqp/Glove/1082262
+String.wz/Eqp.img/Eqp/Glove/1082262/name
 String.wz/Eqp.img/Eqp/Glove/1082263
 String.wz/Eqp.img/Eqp/Glove/1082270
 String.wz/Eqp.img/Eqp/Glove/1082271
@@ -313,13 +313,13 @@ String.wz/Eqp.img/Eqp/Hair/34066
 String.wz/Eqp.img/Eqp/Hair/34067
 String.wz/Eqp.img/Eqp/Longcoat/1050161
 String.wz/Eqp.img/Eqp/Longcoat/1050168
-String.wz/Eqp.img/Eqp/Longcoat/1051176
+String.wz/Eqp.img/Eqp/Longcoat/1051176/name
 String.wz/Eqp.img/Eqp/Longcoat/1051200
 String.wz/Eqp.img/Eqp/Longcoat/1051208
 String.wz/Eqp.img/Eqp/Longcoat/1051209
-String.wz/Eqp.img/Eqp/Longcoat/1052217
-String.wz/Eqp.img/Eqp/Longcoat/1052224
-String.wz/Eqp.img/Eqp/Longcoat/1052228
+String.wz/Eqp.img/Eqp/Longcoat/1052217/name
+String.wz/Eqp.img/Eqp/Longcoat/1052224/name
+String.wz/Eqp.img/Eqp/Longcoat/1052228/name
 String.wz/Eqp.img/Eqp/Longcoat/1052231
 String.wz/Eqp.img/Eqp/Longcoat/1052245
 String.wz/Eqp.img/Eqp/Pants/1062121
@@ -328,7 +328,7 @@ String.wz/Eqp.img/Eqp/PetEquip/1802039
 String.wz/Eqp.img/Eqp/PetEquip/1802064
 String.wz/Eqp.img/Eqp/Ring/1112909
 String.wz/Eqp.img/Eqp/Ring/1112910
-String.wz/Eqp.img/Eqp/Shield/1092067
+String.wz/Eqp.img/Eqp/Shield/1092067/name
 String.wz/Eqp.img/Eqp/Shoes/1072438
 String.wz/Eqp.img/Eqp/Shoes/1072439
 String.wz/Eqp.img/Eqp/Shoes/1072443
@@ -417,12 +417,12 @@ String.wz/Pet.img/5000067
 
 # ==== ticket 05 (7 rows, order preserved from 05\String.paths.txt) ====
 String.wz/Eqp.img/Eqp/Dragon
-String.wz/Eqp.img/Eqp/Taming/1902040
-String.wz/Eqp.img/Eqp/Taming/1902041
-String.wz/Eqp.img/Eqp/Taming/1902042
-String.wz/Eqp.img/Eqp/Taming/1912033
-String.wz/Eqp.img/Eqp/Taming/1912034
-String.wz/Eqp.img/Eqp/Taming/1912035
+String.wz/Eqp.img/Eqp/Taming/1902040/name
+String.wz/Eqp.img/Eqp/Taming/1902041/name
+String.wz/Eqp.img/Eqp/Taming/1902042/name
+String.wz/Eqp.img/Eqp/Taming/1912033/name
+String.wz/Eqp.img/Eqp/Taming/1912034/name
+String.wz/Eqp.img/Eqp/Taming/1912035/name
 
 # ==== ticket 06 (35 rows, order preserved from 06\String.paths.txt) ====
 String.wz/Map.img/ossyria/240080000

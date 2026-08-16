@@ -13,6 +13,11 @@
 #   else owns and which names Item.wz/Pet/5000067.img, an item this ticket adds.
 # EXCLUDED - owned by ticket 05 (mounts): String.wz/Eqp.img/Eqp/Dragon (collapsed root, 12 names)
 #   and Eqp/Taming/{1902040,1902041,1902042,1912033,1912034,1912035} (Mir + saddles).
+# NARROWED (ticket 03k): the 12 force rows of this list whose ids v84 supplies with ONLY a `name`
+#   now read `<id>/name`, not `<id>` - Eqp/Accessory/{1142143,1142144,1142145,1142149,1142150,
+#   1142151}, Eqp/Glove/1082262, Eqp/Longcoat/{1051176,1052217,1052224,1052228}, Eqp/Shield/1092067.
+#   A force row is a ROOT: at id level it replaced the whole node and took the live client's `desc`
+#   with it (12 of the 18 deletions ticket 11a measured). Same narrowing in COLLISION-FORCE.txt.
 # EXCLUDED - owned by ticket 06: Map.img, Mob.img, Npc.img. Not claimed by 04: MonsterBook.img, Skill.img, ToolTipHelp.img, Pet.img.
 String.wz/Cash.img/5030015
 String.wz/Cash.img/5050005
@@ -220,12 +225,12 @@ String.wz/Consume.img/2430076
 String.wz/Consume.img/2430077
 String.wz/Eqp.img/Eqp/Accessory/1012161
 String.wz/Eqp.img/Eqp/Accessory/1022097
-String.wz/Eqp.img/Eqp/Accessory/1142143
-String.wz/Eqp.img/Eqp/Accessory/1142144
-String.wz/Eqp.img/Eqp/Accessory/1142145
-String.wz/Eqp.img/Eqp/Accessory/1142149
-String.wz/Eqp.img/Eqp/Accessory/1142150
-String.wz/Eqp.img/Eqp/Accessory/1142151
+String.wz/Eqp.img/Eqp/Accessory/1142143/name
+String.wz/Eqp.img/Eqp/Accessory/1142144/name
+String.wz/Eqp.img/Eqp/Accessory/1142145/name
+String.wz/Eqp.img/Eqp/Accessory/1142149/name
+String.wz/Eqp.img/Eqp/Accessory/1142150/name
+String.wz/Eqp.img/Eqp/Accessory/1142151/name
 String.wz/Eqp.img/Eqp/Accessory/1142156
 String.wz/Eqp.img/Eqp/Accessory/1142157
 String.wz/Eqp.img/Eqp/Accessory/1142158
@@ -251,7 +256,7 @@ String.wz/Eqp.img/Eqp/Cap/1003090
 String.wz/Eqp.img/Eqp/Cape/1102231
 String.wz/Eqp.img/Eqp/Cape/1102232
 String.wz/Eqp.img/Eqp/Coat/1042184
-String.wz/Eqp.img/Eqp/Glove/1082262
+String.wz/Eqp.img/Eqp/Glove/1082262/name
 String.wz/Eqp.img/Eqp/Glove/1082263
 String.wz/Eqp.img/Eqp/Glove/1082270
 String.wz/Eqp.img/Eqp/Glove/1082271
@@ -307,13 +312,13 @@ String.wz/Eqp.img/Eqp/Hair/34066
 String.wz/Eqp.img/Eqp/Hair/34067
 String.wz/Eqp.img/Eqp/Longcoat/1050161
 String.wz/Eqp.img/Eqp/Longcoat/1050168
-String.wz/Eqp.img/Eqp/Longcoat/1051176
+String.wz/Eqp.img/Eqp/Longcoat/1051176/name
 String.wz/Eqp.img/Eqp/Longcoat/1051200
 String.wz/Eqp.img/Eqp/Longcoat/1051208
 String.wz/Eqp.img/Eqp/Longcoat/1051209
-String.wz/Eqp.img/Eqp/Longcoat/1052217
-String.wz/Eqp.img/Eqp/Longcoat/1052224
-String.wz/Eqp.img/Eqp/Longcoat/1052228
+String.wz/Eqp.img/Eqp/Longcoat/1052217/name
+String.wz/Eqp.img/Eqp/Longcoat/1052224/name
+String.wz/Eqp.img/Eqp/Longcoat/1052228/name
 String.wz/Eqp.img/Eqp/Longcoat/1052231
 String.wz/Eqp.img/Eqp/Longcoat/1052245
 String.wz/Eqp.img/Eqp/Pants/1062121
@@ -322,7 +327,7 @@ String.wz/Eqp.img/Eqp/PetEquip/1802039
 String.wz/Eqp.img/Eqp/PetEquip/1802064
 String.wz/Eqp.img/Eqp/Ring/1112909
 String.wz/Eqp.img/Eqp/Ring/1112910
-String.wz/Eqp.img/Eqp/Shield/1092067
+String.wz/Eqp.img/Eqp/Shield/1092067/name
 String.wz/Eqp.img/Eqp/Shoes/1072438
 String.wz/Eqp.img/Eqp/Shoes/1072439
 String.wz/Eqp.img/Eqp/Shoes/1072443

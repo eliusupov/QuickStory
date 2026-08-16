@@ -19,6 +19,15 @@
 # both files: deny wins, and it should be a hard exit — an overlap is an operator error worth
 # stopping for, not something to resolve silently.
 #
+# GRANULARITY (ticket 03k). 18 rows below name `<id>/name`, not `<id>`. A force root is a ROOT:
+# the tool removes everything at or beneath it and puts v84's subtree in its place. For those 18
+# ids v84's node carries ONLY `name`, while the live client's carries `name` AND `desc`, so an
+# id-level root deleted the live `desc` as a side effect of fixing the name. Ticket 11a measured
+# it: 18 `desc` nodes removed, making String.wz the only file in the composed set that subtracts.
+# Narrowing the root to `/name` keeps the fix and keeps the `desc`. The other 19 rows stay at id
+# level because v84 supplies the whole node there and nothing is lost - measured, not assumed.
+# The same 18 rows are narrowed in ..\04\String.paths.txt and ..\05\String.paths.txt.
+#
 # Every row below was verified three ways (v83-stock / v84 / live client) before listing.
 # The whole list is one rule: the live value is the string literal "MISSING NAME" /
 # "MISSING INFO", i.e. a Cosmic name-table stub, and v84 has the real text.
@@ -35,26 +44,26 @@ String.wz/Cash.img/5530006	# live "MISSING NAME" -> v84 "100 Power Elixirs"
 String.wz/Cash.img/5530007	# live "MISSING NAME" -> v84 "150 Power Elixirs"
 String.wz/Cash.img/5530008	# live "MISSING NAME" -> v84 "200 Power Elixirs"
 String.wz/Consume.img/2100166	# live "MISSING NAME" -> v84 "Free Spirit Summoning Sack"
-String.wz/Eqp.img/Eqp/Accessory/1142143	# live "MISSING NAME" -> v84 name is untranslated KMS text; still better than a stub
-String.wz/Eqp.img/Eqp/Accessory/1142144	# live "MISSING NAME" -> v84 "DS Mania Medal"
-String.wz/Eqp.img/Eqp/Accessory/1142145	# live "MISSING NAME" -> v84 name is untranslated KMS text
-String.wz/Eqp.img/Eqp/Accessory/1142149	# live "MISSING NAME" -> v84 name is untranslated KMS text
-String.wz/Eqp.img/Eqp/Accessory/1142150	# live "MISSING NAME" -> v84 name is untranslated KMS text
-String.wz/Eqp.img/Eqp/Accessory/1142151	# live "MISSING NAME" -> v84 name is untranslated KMS text
+String.wz/Eqp.img/Eqp/Accessory/1142143/name	# live "MISSING NAME" -> v84 name is untranslated KMS text; still better than a stub
+String.wz/Eqp.img/Eqp/Accessory/1142144/name	# live "MISSING NAME" -> v84 "DS Mania Medal"
+String.wz/Eqp.img/Eqp/Accessory/1142145/name	# live "MISSING NAME" -> v84 name is untranslated KMS text
+String.wz/Eqp.img/Eqp/Accessory/1142149/name	# live "MISSING NAME" -> v84 name is untranslated KMS text
+String.wz/Eqp.img/Eqp/Accessory/1142150/name	# live "MISSING NAME" -> v84 name is untranslated KMS text
+String.wz/Eqp.img/Eqp/Accessory/1142151/name	# live "MISSING NAME" -> v84 name is untranslated KMS text
 String.wz/Eqp.img/Eqp/Dragon	# 12 Evan dragon-equip names, all live "MISSING NAME" -> Silver/Gold/Reverse Mask,Pendant,Wings,Tail. Ticket 04-09 blocker.
-String.wz/Eqp.img/Eqp/Glove/1082262	# live "MISSING NAME" -> v84 "Dragon Master's Proof"
-String.wz/Eqp.img/Eqp/Longcoat/1051176	# live "MISSING NAME" -> v84 name is untranslated KMS text
-String.wz/Eqp.img/Eqp/Longcoat/1052217	# live "MISSING NAME" -> v84 "Cloud Robe"
-String.wz/Eqp.img/Eqp/Longcoat/1052224	# live "MISSING NAME" -> v84 "Strawberry Baby"
-String.wz/Eqp.img/Eqp/Longcoat/1052228	# live "MISSING NAME" -> v84 "Layered Long Skull Tee"
+String.wz/Eqp.img/Eqp/Glove/1082262/name	# live "MISSING NAME" -> v84 "Dragon Master's Proof"
+String.wz/Eqp.img/Eqp/Longcoat/1051176/name	# live "MISSING NAME" -> v84 name is untranslated KMS text
+String.wz/Eqp.img/Eqp/Longcoat/1052217/name	# live "MISSING NAME" -> v84 "Cloud Robe"
+String.wz/Eqp.img/Eqp/Longcoat/1052224/name	# live "MISSING NAME" -> v84 "Strawberry Baby"
+String.wz/Eqp.img/Eqp/Longcoat/1052228/name	# live "MISSING NAME" -> v84 "Layered Long Skull Tee"
 String.wz/Eqp.img/Eqp/PetEquip/1802039	# live "MISSING NAME" -> v84 "Golden Pig Lucky Sack"
-String.wz/Eqp.img/Eqp/Shield/1092067	# live "MISSING NAME" -> v84 "Transparent Shield"
-String.wz/Eqp.img/Eqp/Taming/1902040	# live "MISSING NAME" -> v84 "Stage 1 Dragon". Evan mount, ticket 04-09 blocker.
-String.wz/Eqp.img/Eqp/Taming/1902041	# live "MISSING NAME" -> v84 "Stage 2 Dragon"
-String.wz/Eqp.img/Eqp/Taming/1902042	# live "MISSING NAME" -> v84 "Stage 3 Dragon"
-String.wz/Eqp.img/Eqp/Taming/1912033	# live "MISSING NAME" -> v84 "Stage 1 Dragon Saddle"
-String.wz/Eqp.img/Eqp/Taming/1912034	# live "MISSING NAME" -> v84 "Stage 2 Dragon Saddle"
-String.wz/Eqp.img/Eqp/Taming/1912035	# live "MISSING NAME" -> v84 "Stage 3 Dragon Saddle"
+String.wz/Eqp.img/Eqp/Shield/1092067/name	# live "MISSING NAME" -> v84 "Transparent Shield"
+String.wz/Eqp.img/Eqp/Taming/1902040/name	# live "MISSING NAME" -> v84 "Stage 1 Dragon". Evan mount, ticket 04-09 blocker.
+String.wz/Eqp.img/Eqp/Taming/1902041/name	# live "MISSING NAME" -> v84 "Stage 2 Dragon"
+String.wz/Eqp.img/Eqp/Taming/1902042/name	# live "MISSING NAME" -> v84 "Stage 3 Dragon"
+String.wz/Eqp.img/Eqp/Taming/1912033/name	# live "MISSING NAME" -> v84 "Stage 1 Dragon Saddle"
+String.wz/Eqp.img/Eqp/Taming/1912034/name	# live "MISSING NAME" -> v84 "Stage 2 Dragon Saddle"
+String.wz/Eqp.img/Eqp/Taming/1912035/name	# live "MISSING NAME" -> v84 "Stage 3 Dragon Saddle"
 String.wz/Eqp.img/Eqp/Weapon/1452058	# live "MISSING NAME" -> v84 "Barisetter"
 String.wz/Etc.img/Etc/4161049	# live "MISSING NAME" -> v84 "Dragon Types and Characteristics (Vol.I)". Evan quest item.
 String.wz/Etc.img/Etc/4161050	# live "MISSING NAME" -> v84 "Dragon Types and Characteristics (Vol.II)". Evan quest item.

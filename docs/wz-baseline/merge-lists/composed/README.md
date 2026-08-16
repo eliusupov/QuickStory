@@ -5,7 +5,9 @@ Built by **ticket 03f**; ticket **08** folded in and re-run end to end by **03g*
 in by itself.
 
 > **Read the LAST section first — this file is append-per-ticket and the top is the oldest part.**
-> Current state: **1,750 rows across THIRTEEN files**, staged at `D:\games\MapleStory\Server\wz-merge\10c\`.
+> Current state: **1,750 rows across THIRTEEN files**, staged at `D:\games\MapleStory\Server\wz-merge\03k\`.
+> **`03k\` supersedes `10c\` as the install target** — same 1,750 rows, one narrowed force
+> granularity, and it is the first composed set that removes nothing at all (see the last section).
 > `Etc.wz` and `UI.wz` joined at ticket 10, so the "eleven files" and "1,662 rows" written
 > throughout the earlier sections are superseded; the per-file counts in the table below are 03h's
 > and are superseded for `Skill` (27 → 39) and `String` (510 → 580).
@@ -385,3 +387,92 @@ above already expects on other files.
 offender. Proven both ways — a deliberately leaked line fails the run, and with it removed the
 totals return to 1,750 and `Skill.wz` re-merges **byte-identical** to the run that had the stray
 row, confirming the row had cost nothing but the exit code.
+
+## Ticket 03k — the composed set no longer subtracts. `03k\` is the install target.
+
+Ticket 11a measured the one thing that made `String.wz` unlike every other file in this
+composition: it **removed 18 live nodes**. All eighteen were `.../desc = "MISSING INFO"` under an
+item id that is a **force root**. A force root is a ROOT — the tool removes everything at or
+beneath it and puts v84's subtree in its place — and v84's node for those eighteen ids carries
+**only `name`**, so fixing the name deleted the live `desc` beside it. Six of the eighteen are
+`Eqp/Taming/*`, Evan's Mir and its saddles.
+
+**The rows were right; the granularity was one level too high.** Dropping them would have restored
+`MISSING NAME`, which is the whole reason they exist. They are now `<id>/name`.
+
+### Fixed at the source, not layered on top
+
+Four files, because the `*.paths.txt` here are **generated** and `FORCE.txt` is **hand-maintained**,
+so a fix applied only to this directory's generated list is reverted by the next `compose.ps1` run:
+
+| file | rows narrowed | why there |
+|---|---:|---|
+| `..\04\String.paths.txt` | 12 | 04 owns these ids; its standalone list carries the same defect |
+| `..\05\String.paths.txt` | 6 | 05 owns `Eqp/Taming/*`, same defect |
+| `..\COLLISION-FORCE.txt` | 18 | the force roots' source of truth. `composed\FORCE.txt` copies its 37 rows **verbatim**; narrowing only the copy would make that stated invariant false and would revert the moment anyone rebuilt the copy from it |
+| `composed\FORCE.txt` | 18 | the hand-maintained copy, kept verbatim as it claims to be |
+
+`composed\String.paths.txt` was then **regenerated** by `compose.ps1`, not edited — 18 rows changed,
+nothing else, and it is the only composed list that moved. Editing 04's and 05's committed lists is
+correct rather than rude: both are already merged, both would reproduce the same deletion if re-run
+standalone, and the alternative — a composed-only override — is exactly the silent-revert trap the
+top of this file warns about. **The other 19 force roots stay at id level**: v84 supplies their
+whole node there, and the census shows they overwrite `desc` with real text rather than deleting it.
+
+Row count, force-root count and refusal count are all unchanged: **1,750 rows, 41 force roots**,
+25 refusals. Only 18 paths gained a `/name` suffix.
+
+### Verified end to end, 2026-08-16
+
+Staging `D:\games\MapleStory\Server\wz-merge\03k\`, all **thirteen** files, same run book, deny-list
+188 roots. All 18 live `.wz` SHA-256-match `_backup\client-v83-EzorsiaV2-2026-08-15\` **before and
+after**; nothing was written to `D:\games\MapleStory\`, no `.partial` was left behind, and
+`wz-merge\{03i,10,10c}\` were not touched.
+
+Per-file result is **identical to `10c\`** — `Character` exit 3 / 240 added / 14 refused, `Item`
+exit 3 / 389 / 2, `String` exit 3 / **571 added (41 forced) / 9 refused**, the other ten exit 0 with
+their documented counts. Gate re-fire on the composition's own `String.wz`:
+`added 41 (forced 41), refused 539`, exit 3 — the correct re-fire result for a list carrying
+`--force`.
+
+**Twelve of the thirteen outputs are byte-identical to `10c\`** — and therefore to `03i\` for the
+ten files that reach back that far. Every SHA-256 in the tables above reproduces exactly. Only
+`String.wz` moves, by **+216 bytes**, which is the eighteen retained `desc` stubs:
+
+```
+String  9A270CCB79E1BADBC420E5ACE414E86B41EEF3CEFE804BE8B4656B0C3A3B7B7B     3,655,395
+```
+
+**The acceptance test, measured with `..\..\tool-census\` (backup vs `03k\`, every image, full
+depth) rather than by inspection:**
+
+```
+String.wz: NEW=0 CHANGED=10 REMOVEDimg=0 onlyB-kinds=0 | nodes added=2175 REMOVED=0 VALCHG=80
+Etc.wz:    NEW=0 CHANGED=1  REMOVEDimg=0 onlyB-kinds=0 | nodes added=84   REMOVED=0 VALCHG=0
+UI.wz:     NEW=0 CHANGED=1  REMOVEDimg=0 onlyB-kinds=0 | nodes added=553  REMOVED=0 VALCHG=0
+```
+
+`REMOVED=0`. **Every file in the composed set is now a strict superset of the working client.** The
+80 value changes are unchanged in count and every one sits inside an authorised force root: 50
+names, the 18 `desc` fields v84 genuinely supplies, and 08's/03f's 12 map and NPC dialogue lines.
+(`Etc.wz` and `UI.wz` had never been censused — 11a ran against `03i\`, which predates them. Both
+are clean, `onlyB-kinds=0` included.)
+
+The eighteen names still land, `desc` and all — `WzMerge dump` on `03k\String.wz`, all 18 checked:
+
+```
+1902040 [WzSubProperty]                       1142144 [WzSubProperty]
+  desc [WzStringProperty] = MISSING INFO        desc [WzStringProperty] = MISSING INFO
+  name [WzStringProperty] = Stage 1 Dragon      name [WzStringProperty] = DS Mania Medal
+```
+
+### The server XML tree carries the same 18 deletions, already committed, and undoing them is not worth it
+
+`wz\String.wz\Eqp.img.xml` shows `<imgdir name="1142143">` holding only `name`: the XML force run
+replaced the block exactly as the binary one did. The narrowed lists mean a **future** `xml` run
+preserves `desc`, but the 18 values already lost were the literal string `MISSING INFO`, and no
+**runtime** path reads a `String.wz` `desc`: the only reader in `src/` is
+`tools/mapletools/NoItemNameFetcher.java:58-67`, an offline maintenance tool whose whole job is to
+*list* ids with an incomplete name/desc pair — so those 18 will show up in its report, which is the
+one visible consequence. Left alone deliberately; recorded here so it is not rediscovered as a new
+defect.

@@ -12,6 +12,11 @@
 #     1902040 Stage 1 Dragon        1912033 Stage 1 Dragon Saddle
 #     1902041 Stage 2 Dragon        1912034 Stage 2 Dragon Saddle
 #     1902042 Stage 3 Dragon        1912035 Stage 3 Dragon Saddle
+#   NARROWED (ticket 03k) to Eqp/Taming/<id>/name. A force row is a ROOT, and v84's node for these
+#   six carries ONLY `name` while the live client's carries `name` AND `desc`, so the id-level row
+#   replaced the node and deleted the live `desc` - 6 of the 18 deletions ticket 11a measured, and
+#   the only reason String.wz was the one file in the composed set that subtracted. The names still
+#   land; only the granularity changed. Same narrowing in COLLISION-FORCE.txt.
 #
 # Eqp/Dragon - one collapsed force ROOT covering 12 Evan dragon-equip names (Silver/Gold/Reverse
 #   Mask, Pendant, Wings, Tail). OWNERSHIP CALL, made here rather than left ambiguous: these are
@@ -47,9 +52,9 @@
 # !skill command in this codebase. Without these rows the eight mounts were unobtainable.
 # ---------------------------------------------------------------------------------------------
 String.wz/Eqp.img/Eqp/Dragon
-String.wz/Eqp.img/Eqp/Taming/1902040
-String.wz/Eqp.img/Eqp/Taming/1902041
-String.wz/Eqp.img/Eqp/Taming/1902042
-String.wz/Eqp.img/Eqp/Taming/1912033
-String.wz/Eqp.img/Eqp/Taming/1912034
-String.wz/Eqp.img/Eqp/Taming/1912035
+String.wz/Eqp.img/Eqp/Taming/1902040/name
+String.wz/Eqp.img/Eqp/Taming/1902041/name
+String.wz/Eqp.img/Eqp/Taming/1902042/name
+String.wz/Eqp.img/Eqp/Taming/1912033/name
+String.wz/Eqp.img/Eqp/Taming/1912034/name
+String.wz/Eqp.img/Eqp/Taming/1912035/name
