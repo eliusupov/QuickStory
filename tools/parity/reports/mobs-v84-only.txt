@@ -1,0 +1,2 @@
+# mob ids in stock v84 that the server has no Mob.wz image for
+# 0 rows

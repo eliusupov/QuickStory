@@ -1,0 +1,2 @@
+# reactordrops.itemid values with no Item.wz/Character.wz data
+# 0 rows

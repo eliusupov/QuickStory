@@ -1,0 +1,19 @@
+# id	stat	v83-stock	v84-stock	this server - NEXON changed it between v83 and v84 and this server still has v83's value. This is the real v84 content gap.
+# 17 rows
+2000012	price	1000	0	1000
+2430032	slotMax	1	10	1
+4001339	price	1	5	1
+4001339	slotMax	100	200	100
+4001339	notSale	1	-	1
+4001339	tradeBlock	1	-	1
+4032473	quest	1	-	1
+4032477	quest	1	-	1
+4161049	only	1	-	1
+4161049	notSale	1	-	1
+4161049	tradeBlock	1	-	1
+4161050	only	1	-	1
+4161050	notSale	1	-	1
+4161050	tradeBlock	1	-	1
+4161051	only	1	-	1
+4161051	notSale	1	-	1
+4161051	tradeBlock	1	-	1

@@ -1,0 +1,12 @@
+# id	stat	v83-stock	v84-stock	this server - both moved. Merging v84 would overwrite an owner edit; hand-resolve.
+# 10 rows
+2430005	tradeBlock	-	1	1
+4031179	only	-	1	1
+4031179	notSale	-	1	1
+4032473	slotMax	-	1	1
+4032473	only	-	1	1
+4032473	notSale	-	1	1
+4032474	quest	1	-	-
+4161049	quest	-	1	1
+4161050	quest	-	1	1
+4161051	quest	-	1	1

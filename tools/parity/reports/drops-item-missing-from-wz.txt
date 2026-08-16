@@ -1,0 +1,2 @@
+# drop_data.itemid values with no Item.wz/Character.wz data - the drop cannot be created
+# 0 rows

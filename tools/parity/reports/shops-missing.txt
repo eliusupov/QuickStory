@@ -1,0 +1,27 @@
+# npc	placed?	name	v84 func label	maps - the client calls this NPC a shop and the server has neither a shops row nor an openShop script for it
+# 25 rows
+1002104	PLACED	Tru	Info Merchant	104000004
+1011101	unplaced	General Mau	Street Vendor	
+1204005	PLACED	Tru	Info Merchant	910400000
+2040022	PLACED	Rydole	Weapon Creator	220020600
+2080000	PLACED	Mos	Weapon Technician	240000000
+2080007	unplaced	General Mau	Street Vendor	
+2090004	PLACED	Mr. Do	Potion Creator	250000000
+9000018	unplaced	Matilda	Weapon Rental for Internet Cafe	
+9030000	PLACED	Fredrick	Store Banker	910000000
+9110001	unplaced	Raimu the Warrior	Local Product Merchant	
+9209000	PLACED	Abdula	Merchant Intermediary	100000000,104000000,200000000,240000000,260000000,600000000
+9209002	PLACED	Mr. Ho	Special Item Merchant	680100000,680100001,680100002,680100003
+9209003	PLACED	Lung Tup	Special Item Merchant	680100000,680100001,680100002,680100003
+9209004	PLACED	Lena	Special Item Merchant	680100000,680100001,680100002,680100003
+9209005	PLACED	Tae Gong	Special Item Merchant	680100000,680100001,680100002,680100003
+9209006	PLACED	Hanako	Special Item Merchant	680100000,680100001,680100002,680100003
+9250007	unplaced	Dang	Weapon Store	
+9250008	unplaced	Parn	Potion Store	
+9250009	unplaced	Noi-nha	Armor Store	
+9310001	unplaced	Lady Li	Weapon Seller	
+9310002	unplaced	Owner Jang	Armor Seller	
+9330000	unplaced	Rana	General Merchant	
+9330001	unplaced	Uncle Wang	Weapon Seller	
+9330002	unplaced	Jason Woo	Armor Seller	
+9330029	unplaced	Yoo Yoo	General Merchant	

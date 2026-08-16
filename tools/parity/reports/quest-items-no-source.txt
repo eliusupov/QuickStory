@@ -1,0 +1,370 @@
+# quest	item	count	start npc - completion item with NO drop / reactor / shop / quest reward / script mention, on a quest whose start NPC IS placed. Blocks completion.
+# 368 rows
+1018	4000142	1	2004	NO-TRACE	Jr. Sentinel Shellpiece | A hard piece of rock that forms the body of Jr. Sentinel.	area20	EN	Todd's How-to-Hunt
+3063	4031191	1	2012018	NO-TRACE	Golden Bell | A small gold bell that is needed to make a new necklace for Nero.\n#cUsed as a : Quest Item#	area33	EN	Nero's Necklace
+3063	4031192	1	2012018	NO-TRACE	Red Ribbon | A red ribbon needed to make a new necklace for Nero.\n#cUsed as a : Quest Item#	area33	EN	Nero's Necklace
+3361	4031774	1	2111008	NO-TRACE	Yulete's Lab Report | A compilation of Yulete's lab work and research. Very neat!	area44	EN	Zenumist and the Ostracized Research
+3362	4031796	1	2111009	NO-TRACE	Yulete's Lab Report | A compilation of Yulete's lab work and research. The notes, while very neat, are complicated. 	area44	EN	Alcadno and the Ostracized Research
+3758	4001402	10	2085000	NO-TRACE	Dragon's Essence  | Essence of a dragon. It contains the energy of a dragon.	area41	EN	Towards the Sky 1
+3760	4001401	1	2081000	NO-TRACE	Dragonica's Horn  | The horn of Dragonica, who lives in the Crimson Sky area.	area41	EN	Dragonica's Horn
+4478	4161043	1	1022101	NO-TRACE	Santa Encyclopedia No.1 | Santa Encyclopedia that contains the history of Santa.\n#cDouble click on the item to open the book.	area50	EN	Disappeared Santa Encyclopedia  
+4478	4161038	1	1022101	NO-TRACE	Santa Encyclopedia No.2 | Santa Encyclopedia that contains the history of Santa's Family.\n#cDouble click on the item to open the book.	area50	EN	Disappeared Santa Encyclopedia  
+4478	4161039	1	1022101	NO-TRACE	Santa Encyclopedia No.3 | Santa Encyclopedia that contains method about how to make the Christmas Socks.\n#cDouble click on the item to 	area50	EN	Disappeared Santa Encyclopedia  
+4478	4161040	1	1022101	NO-TRACE	Santa Encyclopedia No.4 | Santa Encyclopedia that contains characteristics of Santa.\n#cDouble click on the item to open the book.	area50	EN	Disappeared Santa Encyclopedia  
+4478	4161041	1	1022101	NO-TRACE	Santa Encyclopedia No.5 | Santa Encyclopedia that contains how to do a good thing for Christmas.\n#cDouble click on the item to open the	area50	EN	Disappeared Santa Encyclopedia  
+4478	4161042	1	1022101	NO-TRACE	Santa Encyclopedia No.6 | Santa Encyclopedia that explains about the Santa village of Finland.\n#cDouble click on the item to open the b	area50	EN	Disappeared Santa Encyclopedia  
+4481	4161039	1	9250051	NO-TRACE	Santa Encyclopedia No.3 | Santa Encyclopedia that contains method about how to make the Christmas Socks.\n#cDouble click on the item to 	area50	EN	Socks Creation Recipes
+4482	4220022	1	9250051	NO-TRACE	Socks Frame | Double click on the item to open the UI to add knitting balls to make the Christmas socks.	area50	EN	Socks Actual Creation Action
+4484	4031881	1	2001000	NO-TRACE	Picture of Rudolph | Someone took a picture of Rudolph flying in the night sky of Happy ville. Rudolph seems happy in this picture.	area50	EN	Cliff's Request
+4488	4031884	1	9220005	NO-TRACE	Warm Milk | This warm milk will help Icarus to go to bed.	area50	EN	Warm Milk Delivery
+4924	4031760	1	9201083	NO-TRACE	White Versal Materia | A form of concentrated energy, harvested from the alternate dimension of Versal. The blinding white energy ind	area50	EN	Brand Materia
+4925	4031760	1	9201083	NO-TRACE	White Versal Materia | A form of concentrated energy, harvested from the alternate dimension of Versal. The blinding white energy ind	area50	EN	Brand Materia Continued
+4963	2022261	1	9201003	NO-TRACE	Stuffing Scoop | A delicious scoop of stuffing. This treat comes around only once in a while so eat it up before it gets cold. 	area50	EN	Dinner Fixins'
+4963	2022262	1	9201003	NO-TRACE	Cranberry Sauce | This delicious cranberry sauce complements almost any meal! \n[Gives + 30 Magic Attack for 3 minutes]	area50	EN	Dinner Fixins'
+4963	2022263	1	9201003	script-mention-only	Mashed Potato | It looks like someone dropped this potato. \n[Restores 800 HP]	area50	EN	Dinner Fixins'
+4963	2022264	1	9201003	script-mention-only	Gravy | The only thing better than a gravy boat is a gravy train. \n[Restores 800 MP]	area50	EN	Dinner Fixins'
+5009	4000425	1	9220006	NO-TRACE	Christmas Present box (Purple) | A present box from snowman.	area50	EN	Giant Swowman's Purple box
+5010	4000424	1	9220006	NO-TRACE	Christmas Present box (Blue) | A present box from snowman.	area50	EN	Giant Snowman's Blue Box
+5011	4000423	1	9220006	NO-TRACE	Christmas Present box (Red) | A present box from snowman.	area50	EN	Giant Snowman's Red Box
+5012	4000422	1	9220006	NO-TRACE	Christmas Present box (White) | A present box from snowman.	area50	EN	Giant Snowman's White Box
+6014	4260000	1	2110003	NO-TRACE	Basic Monster Crystal 1 | A Monster Crystal that was formed by combining the droppings of monsters on level 31 ~ 50.	area10	EN	Ramain's Amazing Skills
+6033	4260003	1	2110004	script-mention-only	Intermediate Monster Crystal 1 | A Monster Crystal that was formed by combining the droppings of monsters on level 71 ~ 80.	area10	EN	Meren's Second Round of Teaching
+7301	4001078	1	2081006	script-mention-only	Cornian's Dagger | A dagger that resembles a tide which was used by Green Cornian. Very sharp around the edges, making it a letha	area41	EN	Secret Medicine for Transformation
+7303	4001078	1	2081006	script-mention-only	Cornian's Dagger | A dagger that resembles a tide which was used by Green Cornian. Very sharp around the edges, making it a letha	area41	EN	Making the Secret Medicine for Transformation
+8020	4031180	1	20100	NO-TRACE	Beginner's Shopping Guide | A Shopping guide for beginners that Yoona asked to bring for the quiz.	area20	EN	Yoona's Quiz on Shopping : Start
+8142	4000300	1	9101002	NO-TRACE	Letty's Hairball | A hairball from Leatty. So small and soft, it could easily fly away.	area20	EN	Todd's How-to-Hunt
+8142	4000301	1	9101002	NO-TRACE	Toy Drum | A toy drum from the drumming rabbit.	area20	EN	Todd's How-to-Hunt
+8207	4031109	1	2041017	NO-TRACE	White Chocolate | An ingredient used to make a chocolate. Melt it, mix it with water, then mold it accordingly to make a delicio	area50	EN	Valentine's Day : Chocolate Basket
+8207	4031110	1	2041017	NO-TRACE	Dark Chocolate | An ingredient used to make a chocolate. Melt it, mix it with water, then mold it accordingly to make a delicio	area50	EN	Valentine's Day : Chocolate Basket
+8207	4031113	1	2041017	NO-TRACE	Basket | A basket with a handle. Decorate it with ribbons and chocolate, and this may come out as something nice.	area50	EN	Valentine's Day : Chocolate Basket
+8207	4031114	1	2041017	NO-TRACE	Cover Material | All the materials used to decorate the chocolate basket are in here. It looks like ribbons, marbles, and fabri	area50	EN	Valentine's Day : Chocolate Basket
+8218	4031664	5	9200000	NO-TRACE	Charcoal | Heats up the grill, needed for any BBQ.	area50	EN	Summer Break: Cody's BBQ - Start
+8218	4031665	5	9200000	NO-TRACE	BBQ Sauce | Spicy sauce. Goes perfect with Maple Meat.	area50	EN	Summer Break: Cody's BBQ - Start
+8218	4031666	5	9200000	NO-TRACE	Maple Raw Meat | Fresh meat ready to be cooked. Tastes excellent with BBQ sauce.	area50	EN	Summer Break: Cody's BBQ - Start
+8257	2022261	1	9201003	NO-TRACE	Stuffing Scoop | A delicious scoop of stuffing. This treat comes around only once in a while so eat it up before it gets cold. 	area50	EN	Dinner Fixins'
+8257	2022262	1	9201003	NO-TRACE	Cranberry Sauce | This delicious cranberry sauce complements almost any meal! \n[Gives + 30 Magic Attack for 3 minutes]	area50	EN	Dinner Fixins'
+8257	2022263	1	9201003	script-mention-only	Mashed Potato | It looks like someone dropped this potato. \n[Restores 800 HP]	area50	EN	Dinner Fixins'
+8257	2022264	1	9201003	script-mention-only	Gravy | The only thing better than a gravy boat is a gravy train. \n[Restores 800 MP]	area50	EN	Dinner Fixins'
+8295	4031445	13	9201031	NO-TRACE	Altar Piece | A piece needed to build the Altar at the Festival of Lights.	area30	EN	Festival of Lights - Building the Altar
+8299	4032234	10	1012003	NO-TRACE	Piece of Courage | A piece that represents courage	area50	EN	Chief Stan's Piece of Mind of Maple
+8299	4032235	10	1012003	NO-TRACE	Piece of Wisdom | A piece that represents wisdom 	area50	EN	Chief Stan's Piece of Mind of Maple
+8299	4032236	10	1012003	NO-TRACE	Piece of Accuracy | A piece that represents accuracy	area50	EN	Chief Stan's Piece of Mind of Maple
+8299	4032237	10	1012003	NO-TRACE	Piece of Dexterity | A piece that represents dexterity	area50	EN	Chief Stan's Piece of Mind of Maple
+8299	4032238	10	1012003	NO-TRACE	Piece of Freedom | A piece that represents freedom 	area50	EN	Chief Stan's Piece of Mind of Maple
+8800	4031306	1	9010000	NO-TRACE	Birthday Present (Red) | A box that may contain a birthday present. No one knows what's inside the box... Used for MapleStory Anniversa	area30	EN	Anniversary : Birthday Present (Red)
+8801	4031305	5	9200000	NO-TRACE	Birthday Candle | A candle for birthday cakes. Used for MapleStory Anniversary Event.	area30	EN	Anniversary : Cody's Quest
+8802	4031307	1	9010000	NO-TRACE	Birthday Present (Blue) | A box that may contain a birthday present. No one knows what's inside the box... Used for MapleStory Anniversa	area30	EN	Anniversary : Birthday Present (Blue)
+8821	4031416	1	9200000	NO-TRACE	Yellow Turkey Egg | An oversized Yellow Turkey Egg. You can turn this in to Cody.	area30	EN	Thanksgiving : Turkey Yellow Egg hunt
+8822	4031417	1	9200000	NO-TRACE	Green Turkey Egg | An oversized Green Turkey Egg. You can turn this in to Cody. 	area30	EN	Thanksgiving : Turkey Green Egg hunt
+8830	4031444	5	9201031	NO-TRACE	Sabbath Candle | A candle needed to begin the Festival of Lights.	area30	EN	Festival of Lights - Blessing the Festival 
+8868	4031525	10	9201000	NO-TRACE	Ring Fragment | A piece from a set of broken engagement rings.	area30	EN	Amoria : Circle of Trust 2 (A Bond is Forged)
+8879	4031306	1	9010000	NO-TRACE	Birthday Present (Red) | A box that may contain a birthday present. No one knows what's inside the box... Used for MapleStory Anniversa	area50	EN	2nd Anniversary : Birthday Present (Red)
+8880	4031307	1	9010000	NO-TRACE	Birthday Present (Blue) | A box that may contain a birthday present. No one knows what's inside the box... Used for MapleStory Anniversa	area50	EN	2nd Anniversary : Birthday Present (Blue)
+8881	4031590	5	9200000	NO-TRACE	Birthday Candle | A candle for birthday cakes. Used for MapleStory Anniversary Event.	area50	EN	2nd Anniversary : Cody's Quest
+8886	4031659	15	9200000	NO-TRACE	BBQ Sauce | Spicy sauce. Goes perfect with Maple Meat.	area50	EN	Summer Break: Cody's BBQ.
+8887	4031658	15	9200000	NO-TRACE	Charcoal | Heats up the grill, needed for any BBQ.	area50	EN	Summer Break: Cody's BBQ..
+8888	4031660	15	9200000	NO-TRACE	Maple Raw Meat | Fresh meat ready to be cooked. Tastes excellent with BBQ sauce.	area50	EN	Summer Break: Cody's BBQ...
+9052	4031167	5	9010000	NO-TRACE	Blue Present Box for Training | A blue present box that the GM hung on the monster for the event "Face the Hotness."	area50	EN	Beat the Heat <Easy> - 2nd Stage
+9055	4031168	5	9010000	NO-TRACE	Yellow Present Box for Training | A yellow present box that the GM hung on the monster for the event "Face the Hotness."	area50	EN	Beat the Heat <Medium> - 2nd Stage
+9058	4031169	8	9010000	NO-TRACE	Green Present Box for Training | A green present box that the GM hung on the monster for the event "Face the Hotness."	area50	EN	Beat the Heat <Hard> - 2nd Stage
+9100	3994006	1	9010000	NO-TRACE	Alphabet Soup Pasta "P" | An alphabet "P" made out of pasta. Gather up other alphabets, and bring them all to the Maple Administrator.	area50	KO	추석이벤트 : MapleStory
+9100	3994007	1	9010000	NO-TRACE	Alphabet Soup Pasta "R" | An alphabet "R" made out of pasta. Gather up other alphabets, and bring them all to the Maple Administrator.	area50	KO	추석이벤트 : MapleStory
+9100	3994000	1	9010000	NO-TRACE	Alphabet Soup Pasta "A" | An alphabet "A" made out of pasta. Gather up other alphabets, and bring them all to the Maple Administrator.	area50	KO	추석이벤트 : MapleStory
+9100	3994008	1	9010000	NO-TRACE	Alphabet Soup Pasta "T" | An alphabet "T" made out of pasta. Gather up other alphabets, and bring them all to the Maple Administrator.	area50	KO	추석이벤트 : MapleStory
+9100	3994001	1	9010000	NO-TRACE	Alphabet Soup Pasta "E" | An alphabet "E" made out of pasta. Gather up other alphabets, and bring them all to the Maple Administrator.	area50	KO	추석이벤트 : MapleStory
+9100	3994010	1	9010000	NO-TRACE	Alphabet Soup Pasta "Y" | An alphabet "Y" made out of pasta. Gather up other alphabets, and bring them all to the Maple Administrator.	area50	KO	추석이벤트 : MapleStory
+9100	3994003	1	9010000	NO-TRACE	Alphabet Soup Pasta "L" | An alphabet "L" made out of pasta. Gather up other alphabets, and bring them all to the Maple Administrator.	area50	KO	추석이벤트 : MapleStory
+9100	3994005	1	9010000	NO-TRACE	Alphabet Soup Pasta "O" | An alphabet "O" made out of pasta. Gather up other alphabets, and bring them all to the Maple Administrator.	area50	KO	추석이벤트 : MapleStory
+9101	3994000	1	9010000	NO-TRACE	Alphabet Soup Pasta "A" | An alphabet "A" made out of pasta. Gather up other alphabets, and bring them all to the Maple Administrator.	area50	EN	Back to School Event : MapleStory 
+9101	3994006	1	9010000	NO-TRACE	Alphabet Soup Pasta "P" | An alphabet "P" made out of pasta. Gather up other alphabets, and bring them all to the Maple Administrator.	area50	EN	Back to School Event : MapleStory 
+9101	3994003	1	9010000	NO-TRACE	Alphabet Soup Pasta "L" | An alphabet "L" made out of pasta. Gather up other alphabets, and bring them all to the Maple Administrator.	area50	EN	Back to School Event : MapleStory 
+9101	3994001	1	9010000	NO-TRACE	Alphabet Soup Pasta "E" | An alphabet "E" made out of pasta. Gather up other alphabets, and bring them all to the Maple Administrator.	area50	EN	Back to School Event : MapleStory 
+9101	3994008	1	9010000	NO-TRACE	Alphabet Soup Pasta "T" | An alphabet "T" made out of pasta. Gather up other alphabets, and bring them all to the Maple Administrator.	area50	EN	Back to School Event : MapleStory 
+9101	3994005	1	9010000	NO-TRACE	Alphabet Soup Pasta "O" | An alphabet "O" made out of pasta. Gather up other alphabets, and bring them all to the Maple Administrator.	area50	EN	Back to School Event : MapleStory 
+9101	3994007	1	9010000	NO-TRACE	Alphabet Soup Pasta "R" | An alphabet "R" made out of pasta. Gather up other alphabets, and bring them all to the Maple Administrator.	area50	EN	Back to School Event : MapleStory 
+9101	3994010	1	9010000	NO-TRACE	Alphabet Soup Pasta "Y" | An alphabet "Y" made out of pasta. Gather up other alphabets, and bring them all to the Maple Administrator.	area50	EN	Back to School Event : MapleStory 
+9110	3994008	1	9010000	NO-TRACE	Alphabet Soup Pasta "T" | An alphabet "T" made out of pasta. Gather up other alphabets, and bring them all to the Maple Administrator.	area50	KO	추석이벤트 : Wizet
+9110	3994001	1	9010000	NO-TRACE	Alphabet Soup Pasta "E" | An alphabet "E" made out of pasta. Gather up other alphabets, and bring them all to the Maple Administrator.	area50	KO	추석이벤트 : Wizet
+9110	3994002	1	9010000	NO-TRACE	Alphabet Soup Pasta "I" | An alphabet "I" made out of pasta. Gather up other alphabets, and bring them all to the Maple Administrator.	area50	KO	추석이벤트 : Wizet
+9110	3994011	1	9010000	NO-TRACE	Alphabet Soup Pasta "Z" | An alphabet "Z" made out of pasta. Gather up other alphabets, and bring them all to the GM to...	area50	KO	추석이벤트 : Wizet
+9111	3994002	1	9010000	NO-TRACE	Alphabet Soup Pasta "I" | An alphabet "I" made out of pasta. Gather up other alphabets, and bring them all to the Maple Administrator.	area50	EN	Back to School Event : Wizet 
+9111	3994011	1	9010000	NO-TRACE	Alphabet Soup Pasta "Z" | An alphabet "Z" made out of pasta. Gather up other alphabets, and bring them all to the GM to...	area50	EN	Back to School Event : Wizet 
+9111	3994001	1	9010000	NO-TRACE	Alphabet Soup Pasta "E" | An alphabet "E" made out of pasta. Gather up other alphabets, and bring them all to the Maple Administrator.	area50	EN	Back to School Event : Wizet 
+9111	3994008	1	9010000	NO-TRACE	Alphabet Soup Pasta "T" | An alphabet "T" made out of pasta. Gather up other alphabets, and bring them all to the Maple Administrator.	area50	EN	Back to School Event : Wizet 
+9120	3994001	1	9010000	NO-TRACE	Alphabet Soup Pasta "E" | An alphabet "E" made out of pasta. Gather up other alphabets, and bring them all to the Maple Administrator.	area50	KO	추석이벤트 : Nexon
+9120	3994009	1	9010000	NO-TRACE	Alphabet Soup Pasta "X" | An alphabet "X" made out of pasta. Gather up other alphabets, and bring them all to the Maple Administrator.	area50	KO	추석이벤트 : Nexon
+9120	3994004	1	9010000	NO-TRACE	Alphabet Soup Pasta "N" | An alphabet "N" made out of pasta. Gather up other alphabets, and bring them all to the Maple Administrator.	area50	KO	추석이벤트 : Nexon
+9120	3994005	1	9010000	NO-TRACE	Alphabet Soup Pasta "O" | An alphabet "O" made out of pasta. Gather up other alphabets, and bring them all to the Maple Administrator.	area50	KO	추석이벤트 : Nexon
+9121	3994004	1	9010000	NO-TRACE	Alphabet Soup Pasta "N" | An alphabet "N" made out of pasta. Gather up other alphabets, and bring them all to the Maple Administrator.	area50	EN	Back to School Event : Nexon 
+9121	3994001	1	9010000	NO-TRACE	Alphabet Soup Pasta "E" | An alphabet "E" made out of pasta. Gather up other alphabets, and bring them all to the Maple Administrator.	area50	EN	Back to School Event : Nexon 
+9121	3994009	1	9010000	NO-TRACE	Alphabet Soup Pasta "X" | An alphabet "X" made out of pasta. Gather up other alphabets, and bring them all to the Maple Administrator.	area50	EN	Back to School Event : Nexon 
+9121	3994005	1	9010000	NO-TRACE	Alphabet Soup Pasta "O" | An alphabet "O" made out of pasta. Gather up other alphabets, and bring them all to the Maple Administrator.	area50	EN	Back to School Event : Nexon 
+9140	4031181	1	9010000	NO-TRACE	Rice Powder | A sack of well-grinded rice powder. Add this with honey and leaf for something delicious!	area50	KO	추석 송편 만들기
+9140	4031182	1	9010000	NO-TRACE	Honey | A beehive full of sweet honey.	area50	KO	추석 송편 만들기
+9140	4031183	1	9010000	NO-TRACE	Leaf | A strong-scented leaf. Put this in when making the Song Pyun for optimal results	area50	KO	추석 송편 만들기
+9150	4031186	1	9010000	NO-TRACE	Bottle of Oil | A bottle full of sesami oil.	area50	KO	추석 한과(유과) 만들기
+9150	4031184	1	9010000	NO-TRACE	Glutinous Rice Powder | A sack of well-grinded Glutinous Rice Powder. Add this with honey and oil for nice Yugwa.	area50	KO	추석 한과(유과) 만들기
+9150	4031185	1	9010000	NO-TRACE	Pot of Honey | A pot full of sweet honey	area50	KO	추석 한과(유과) 만들기
+9154	4032037	1	9010000	NO-TRACE	Beef Slice | A single slice of beef. Marinate it, then grill it to try to make the Fire Grill Skewer.	area50	KO	추석 화양적 만들기
+9154	4032038	1	9010000	NO-TRACE	Dry Mushroom | A single slice of dried mushroom. Mix it with some seasoning to make a Fire Grill Skewer.	area50	KO	추석 화양적 만들기
+9154	4032039	1	9010000	NO-TRACE	Whole Bellflower | A whole bellflower that can be used as part of the Fire Grill Skewer if soaked in salt water	area50	KO	추석 화양적 만들기
+9210	4031220	1	2041017	NO-TRACE	Mythical Flour | A mythical flour that Ace of Hearts uses to make cookies.	area50	KO	사랑의 초코스틱
+9260	4031063	1	2002002	NO-TRACE	Torr's Horn | A little horn that Torr lost.	area50	EN	Torr's Horn
+9305	3993000	3	9010000	NO-TRACE	Lucky Dish | A pair of luck dish out of bamboos. Common in Korean culture	area50	KO	대나무 복조리와 복주머니
+9310	4031109	1	2041017	NO-TRACE	White Chocolate | An ingredient used to make a chocolate. Melt it, mix it with water, then mold it accordingly to make a delicio	area50	EN	Valentine's Day : Heart Chocolate
+9310	4031110	1	2041017	NO-TRACE	Dark Chocolate | An ingredient used to make a chocolate. Melt it, mix it with water, then mold it accordingly to make a delicio	area50	EN	Valentine's Day : Heart Chocolate
+9310	4031111	1	2041017	NO-TRACE	Heart Box | A heart-shaped box with no decoration whatsoever. Used to carry the chocolate.	area50	EN	Valentine's Day : Heart Chocolate
+9310	4031112	1	2041017	NO-TRACE	Gold Ribbon | Used to decorate the chocolate.	area50	EN	Valentine's Day : Heart Chocolate
+9311	4031109	1	2041017	NO-TRACE	White Chocolate | An ingredient used to make a chocolate. Melt it, mix it with water, then mold it accordingly to make a delicio	area50	EN	Valentine's Day : Chocolate Basket
+9311	4031110	1	2041017	NO-TRACE	Dark Chocolate | An ingredient used to make a chocolate. Melt it, mix it with water, then mold it accordingly to make a delicio	area50	EN	Valentine's Day : Chocolate Basket
+9311	4031113	1	2041017	NO-TRACE	Basket | A basket with a handle. Decorate it with ribbons and chocolate, and this may come out as something nice.	area50	EN	Valentine's Day : Chocolate Basket
+9311	4031114	1	2041017	NO-TRACE	Cover Material | All the materials used to decorate the chocolate basket are in here. It looks like ribbons, marbles, and fabri	area50	EN	Valentine's Day : Chocolate Basket
+9321	4031226	1	1022002	NO-TRACE	Gwin's Bag | A heavy bag that is full of mysterious items. Looking into the corner of the back of the bag, the name GWIN is	area50	KO	그의 가방
+9330	2022053	7	9010000	script-mention-only	Jujube | A ripe, red jujube.\nRecovers 30 HP.	area50	KO	밍밍부인의 차례상
+9330	2022054	3	9010000	script-mention-only	Pear | A big, juicy-looking pear.\nRecovers 30 HP.	area50	KO	밍밍부인의 차례상
+9332	2022057	5	9010000	script-mention-only	Tofu | Made out of soy beans, it is one healthy food recommended for everyone.\nRecovers 50 HP.	area50	KO	박첨지의 차례상
+9340	4031124	2	2041017	NO-TRACE	Strawberry | A very ripe, red strawberry. Used to make tasty fruit candies.	area50	KO	화이트데이:딸기사탕
+9340	4031125	1	2041017	NO-TRACE	Wooden Skewer | A long wooden skewer for the fruits.	area50	KO	화이트데이:딸기사탕
+9340	4031122	1	2041017	NO-TRACE	Sugar | Used to make candies. Melt it to turn it into syrup, then sprinkle them onto the fruits to make tasty fruit ca	area50	KO	화이트데이:딸기사탕
+9341	4031113	1	2041017	NO-TRACE	Basket | A basket with a handle. Decorate it with ribbons and chocolate, and this may come out as something nice.	area50	KO	화이트데이:사탕바구니
+9341	4031114	1	2041017	NO-TRACE	Cover Material | All the materials used to decorate the chocolate basket are in here. It looks like ribbons, marbles, and fabri	area50	KO	화이트데이:사탕바구니
+9350	4031257	3	9010010	NO-TRACE	Empty Bottle of Perfume | An empty bottle of perfume.	area50	KO	새마음 새출발
+9351	4031271	4	9010010	NO-TRACE	Empty Bottle of Perfume | An empty bottle of perfume.	area50	KO	새마음 새출발!
+9352	4031272	5	9010010	NO-TRACE	Empty Bottle of Perfume | An empty bottle of perfume.	area50	KO	새마음 새출발!!
+9370	4031282	1	9010000	NO-TRACE	Evil Energy | An energy that control those who are weak.	area50	KO	몬스터의 습격
+9371	4031282	1	1061011	NO-TRACE	Evil Energy | An energy that control those who are weak.	area50	KO	악의 기운 봉인
+9386	4031297	1	9010000	NO-TRACE	Party Invitation | A formal invitation to the Big Gala for the 3rd Anniversary of MapleStory.	area50	EN	MapleStory 3rd Anniversary Bonanza
+9391	4031301	1	9010000	NO-TRACE	Invitation to Aquarium | An invitation to Aquarium that Icarus lost.	area50	KO	이카루스의 잃어버린 초대권
+9392	4031304	1	1052106	NO-TRACE	Invitation to Aquarium | An invitation to Aquarium that Ronnie lost.	area50	KO	로니의 잃어버린 초대권
+9412	4001038	1	2012017	NO-TRACE	Stump Eraser | An eraser shaped like a Stump. There are five other erasers featuring different shapes of forms. Try collectin	area33	EN	Hughes Needs the Eraser
+9412	4001039	1	2012017	NO-TRACE	Mushmom Eraser | An eraser shaped like a Mushmom. There are five other erasers featuring different shapes of forms. Try collect	area33	EN	Hughes Needs the Eraser
+9412	4001040	1	2012017	NO-TRACE	Lupin Eraser | An eraser shaped like a Lupin. There are five other erasers featuring different shapes of forms. Try collectin	area33	EN	Hughes Needs the Eraser
+9412	4001041	1	2012017	NO-TRACE	Wraith Eraser | An eraser shaped like a Wraith. There are five other erasers featuring different shapes of forms. Try collecti	area33	EN	Hughes Needs the Eraser
+9412	4001042	1	2012017	NO-TRACE	Slime Eraser | An eraser shaped like a Slime. There are five other erasers featuring different shapes of forms. Try collectin	area33	EN	Hughes Needs the Eraser
+9412	4001043	1	2012017	NO-TRACE	Octopus Eraser | An eraser shaped like an Octopus. There are five other erasers featuring different shapes of forms. Try collec	area33	EN	Hughes Needs the Eraser
+9413	4001038	1	2050002	NO-TRACE	Stump Eraser | An eraser shaped like a Stump. There are five other erasers featuring different shapes of forms. Try collectin	area37	EN	A Revenge on Gray the Alien
+9413	4001039	1	2050002	NO-TRACE	Mushmom Eraser | An eraser shaped like a Mushmom. There are five other erasers featuring different shapes of forms. Try collect	area37	EN	A Revenge on Gray the Alien
+9413	4001040	1	2050002	NO-TRACE	Lupin Eraser | An eraser shaped like a Lupin. There are five other erasers featuring different shapes of forms. Try collectin	area37	EN	A Revenge on Gray the Alien
+9413	4001041	1	2050002	NO-TRACE	Wraith Eraser | An eraser shaped like a Wraith. There are five other erasers featuring different shapes of forms. Try collecti	area37	EN	A Revenge on Gray the Alien
+9413	4001042	1	2050002	NO-TRACE	Slime Eraser | An eraser shaped like a Slime. There are five other erasers featuring different shapes of forms. Try collectin	area37	EN	A Revenge on Gray the Alien
+9413	4001043	1	2050002	NO-TRACE	Octopus Eraser | An eraser shaped like an Octopus. There are five other erasers featuring different shapes of forms. Try collec	area37	EN	A Revenge on Gray the Alien
+9414	4001038	1	1022008	NO-TRACE	Stump Eraser | An eraser shaped like a Stump. There are five other erasers featuring different shapes of forms. Try collectin	area30	EN	An Immovable Sword
+9414	4001039	1	1022008	NO-TRACE	Mushmom Eraser | An eraser shaped like a Mushmom. There are five other erasers featuring different shapes of forms. Try collect	area30	EN	An Immovable Sword
+9414	4001040	1	1022008	NO-TRACE	Lupin Eraser | An eraser shaped like a Lupin. There are five other erasers featuring different shapes of forms. Try collectin	area30	EN	An Immovable Sword
+9414	4001041	1	1022008	NO-TRACE	Wraith Eraser | An eraser shaped like a Wraith. There are five other erasers featuring different shapes of forms. Try collecti	area30	EN	An Immovable Sword
+9414	4001042	1	1022008	NO-TRACE	Slime Eraser | An eraser shaped like a Slime. There are five other erasers featuring different shapes of forms. Try collectin	area30	EN	An Immovable Sword
+9414	4001043	1	1022008	NO-TRACE	Octopus Eraser | An eraser shaped like an Octopus. There are five other erasers featuring different shapes of forms. Try collec	area30	EN	An Immovable Sword
+9414	4001115	1	1022008	NO-TRACE	Undine's Cloth | An arcane piece of cloth from Undine, the powerful water spirit. Something may happen if this is combined with	area30	EN	An Immovable Sword
+9415	4001038	1	1032100	NO-TRACE	Stump Eraser | An eraser shaped like a Stump. There are five other erasers featuring different shapes of forms. Try collectin	area30	EN	Hectagon Crystal Necklace and the Seal Cushion
+9415	4001039	1	1032100	NO-TRACE	Mushmom Eraser | An eraser shaped like a Mushmom. There are five other erasers featuring different shapes of forms. Try collect	area30	EN	Hectagon Crystal Necklace and the Seal Cushion
+9415	4001040	1	1032100	NO-TRACE	Lupin Eraser | An eraser shaped like a Lupin. There are five other erasers featuring different shapes of forms. Try collectin	area30	EN	Hectagon Crystal Necklace and the Seal Cushion
+9415	4001041	1	1032100	NO-TRACE	Wraith Eraser | An eraser shaped like a Wraith. There are five other erasers featuring different shapes of forms. Try collecti	area30	EN	Hectagon Crystal Necklace and the Seal Cushion
+9415	4001042	1	1032100	NO-TRACE	Slime Eraser | An eraser shaped like a Slime. There are five other erasers featuring different shapes of forms. Try collectin	area30	EN	Hectagon Crystal Necklace and the Seal Cushion
+9415	4001043	1	1032100	NO-TRACE	Octopus Eraser | An eraser shaped like an Octopus. There are five other erasers featuring different shapes of forms. Try collec	area30	EN	Hectagon Crystal Necklace and the Seal Cushion
+9415	4001116	1	1032100	NO-TRACE	Hectagon Necklace | A beautiful piece of necklace featuring the hexagon-shaped jewelry. Something may happen if brought with the M	area30	EN	Hectagon Crystal Necklace and the Seal Cushion
+9416	4001197	1	2111007	NO-TRACE	Bluish Mineral | A mineral featuring bluish color	area44	KO	브로커 한과 신비한 광석
+9416	4001038	1	2111007	NO-TRACE	Stump Eraser | An eraser shaped like a Stump. There are five other erasers featuring different shapes of forms. Try collectin	area44	KO	브로커 한과 신비한 광석
+9416	4001039	1	2111007	NO-TRACE	Mushmom Eraser | An eraser shaped like a Mushmom. There are five other erasers featuring different shapes of forms. Try collect	area44	KO	브로커 한과 신비한 광석
+9416	4001040	1	2111007	NO-TRACE	Lupin Eraser | An eraser shaped like a Lupin. There are five other erasers featuring different shapes of forms. Try collectin	area44	KO	브로커 한과 신비한 광석
+9416	4001041	1	2111007	NO-TRACE	Wraith Eraser | An eraser shaped like a Wraith. There are five other erasers featuring different shapes of forms. Try collecti	area44	KO	브로커 한과 신비한 광석
+9416	4001042	1	2111007	NO-TRACE	Slime Eraser | An eraser shaped like a Slime. There are five other erasers featuring different shapes of forms. Try collectin	area44	KO	브로커 한과 신비한 광석
+9416	4001043	1	2111007	NO-TRACE	Octopus Eraser | An eraser shaped like an Octopus. There are five other erasers featuring different shapes of forms. Try collec	area44	KO	브로커 한과 신비한 광석
+9503	4031302	5	9010000	NO-TRACE	Sea Trash | A filthy, dirty can of trash that pollutes the sea.	area50	KO	깨끗한 바다 만들기!
+9504	4031321	10	9010000	NO-TRACE	Sea Trash | A filthy, dirty can of trash that pollutes the sea.	area50	KO	깨끗한 바다 만들기!!
+9640	4031504	13	9201030	NO-TRACE	Blue Gift Box | A blue gift box that features the Christmas presents.	area50	KO	산타 고양이의 선물준비
+9641	4031505	13	9201030	NO-TRACE	Yellow Gift Box | A yellow gift box that features the Christmas presents.	area50	KO	착한 고양이에게 선물을
+9642	4031506	13	9201030	NO-TRACE	Green Gift Box | A green gift box that features the Christmas presents.	area50	KO	고양이들의 크리스마스
+9710	4031557	1	9010010	NO-TRACE	Cassandra's Cellphone | A broken cellphone that Cassandra lost.	area50	KO	카산드라의 휴대폰
+9711	4031558	5	9010010	NO-TRACE	Dances with Balrog's Stamp | A Stamp that must be placed on the package, sent to Warriors.	area50	KO	전사학교 입학통지서
+9712	4031559	5	9010010	NO-TRACE	Grendel the Really Old's Stamp | A Stamp that must be placed on the package, sent to the Magicians.	area50	KO	마법사학교 입학통지서
+9713	4031560	5	9010010	NO-TRACE	Dark Lord Stamp | Stamp that is needed to put on the package that is sent to the Thieves.	area50	KO	도적학교 입학통지서
+9714	4031561	5	9010010	NO-TRACE	Athena Pierce's Stamp | Stamp that is needed to put on the package that is sent to the Archers.	area50	KO	궁수학교 입학통지서
+9730	4031583	5	9010010	NO-TRACE	Purple Leaf of Transformation | A purple leaf with a sweet aroma.  If you smell the flower, you can't transform back for 1 hour.	area50	EN	To Fool a Liar
+9731	4031584	5	9010010	NO-TRACE	Pink Leaf of Transformation | A pink leaf with a sweet aroma.  If you smell the flower, you can't transform back for 1 hour.	area50	EN	To Fool a Liar
+9732	4031585	5	9010010	NO-TRACE	Yellow Leaf of Transformation | A yellow leaf with a sweet aroma.  If you smell the flower, you can't transform back for 1 hour.	area50	EN	To Fool a Liar
+9733	4031933	15	9010010	NO-TRACE	Solid Purple Lumber | A solid, purple lumber. Can be used to build things.	area50	EN	Help out Gordon!
+9734	4031934	15	9010010	NO-TRACE	Solid Pink Lumber | A solid, pink lumber. Can be used to build things.	area50	EN	Help out Gordon!!
+9735	4031935	15	9010010	NO-TRACE	Solid Yellow Lumber | A solid, yellow lumber. Can be used to build things.	area50	EN	Help out Gordon!!!
+9740	4031586	5	9010010	NO-TRACE	Lonely Baking Powder | Baking powder that contains loneliness.	area50	KO	카산드라의 자장면
+9741	4031587	5	9010010	NO-TRACE	Black Bean Paste of Longing | Black Bean Paste that contains the sorrow of missing someone.	area50	KO	카산드라가 만든 자장면
+9742	4031588	5	9010010	NO-TRACE	Pork of Loneliness | Pork that contains loneliness.	area50	KO	카산드라의 솔로를 위한 자장면
+9745	4031938	5	1012102	NO-TRACE	99% Dark Chocolate | A 99% Cacao dark chocolate that tastes like crayon. It's so bitter, some call it a tearjerker.	area50	KO	커플을 위한 다크 초콜릿
+9746	4031939	5	9000007	NO-TRACE	99% Dark Chocolate | A 99% Cacao dark chocolate that tastes like crayon. It's so bitter, some call it a tearjerker.	area50	KO	커플을 위한 다크 초콜릿!
+9747	4031940	5	2012010	NO-TRACE	99% Dark Chocolate | A 99% Cacao dark chocolate that tastes like crayon. It's so bitter, some call it a tearjerker.	area50	KO	커플을 위한 다크 초콜릿!!
+9803	4031608	1	1012109	NO-TRACE	Infinity Scroll | A scroll that is needed to activate the maple leaf marble.  You must have this to converse with the maple leaf	area50	KO	변해버린 단풍잎
+9804	4031611	1	1012109	NO-TRACE	Infinity Scroll | A scroll that is needed to activate the maple leaf marble.  You must have this to converse with the maple leaf	area50	KO	변해버린 단풍잎 
+9805	4031612	1	1012109	NO-TRACE	Infinity Scroll | A scroll that is needed to activate the maple leaf marble.  You must have this to converse with the maple leaf	area50	KO	변해버린 단풍잎   
+9861	4031661	5	9010010	NO-TRACE	Bottle of Emotion | A water bottle with shiny purple liquid inside.  You can capture emotions in it.	area50	KO	오래된 깃발에 담긴 것
+9863	4031667	5	9010010	NO-TRACE	Bottle of Emotion | A water bottle with shiny purple liquid inside.  You can capture emotions in it.	area50	KO	오래된 깃발에 담긴 것 
+9866	4031662	1	1022007	NO-TRACE	Ragged Steel Sword | A ragged steel sword.  Judging by the clean handle, it seems like it's a valuable item to someone.	area50	KO	소녀의 낡은 철검
+9870	4001127	3	9010014	NO-TRACE	Fuse | This is used to make firecrackers.	area50	KO	아르미의 1500일 기념폭죽
+9870	4001128	3	9010014	NO-TRACE	Powder keg | This is used to make firecrackers.	area50	KO	아르미의 1500일 기념폭죽
+9871	4031701	3	9010010	NO-TRACE	Chumji's Watermelon | Sweet watermelon that is grown from Chumji's field.	area50	KO	시원한 수박
+9872	4031701	1	9010010	NO-TRACE	Chumji's Watermelon | Sweet watermelon that is grown from Chumji's field.	area50	KO	박첨지의 수박 되찾기
+9873	4031701	3	9010010	NO-TRACE	Chumji's Watermelon | Sweet watermelon that is grown from Chumji's field.	area50	KO	수박이 먹고 싶은 밍밍부인
+9889	4001136	15	9010010	NO-TRACE	Piece of Scroll | A piece of a scroll.  I should collect the pieces and take it to Cassandra before September 19th, 2008.	area50	KO	조각난 주문서
+9923	2022255	25	2120003	NO-TRACE	Pumpkin Pieces | Pieces of pumpkin left over from making halloween Jack-o'-Lanterns. The pumpkin, perfectly ripe, has an aroma 	area50	EN	Collect Pumpkin Pieces
+9946	2022255	5	2120003	NO-TRACE	Pumpkin Pieces | Pieces of pumpkin left over from making halloween Jack-o'-Lanterns. The pumpkin, perfectly ripe, has an aroma 	area50	KO	호박주스 만들기
+9961	4220023	1	9010010	NO-TRACE	Fortune Sheet | A sheet that details this year's fortunes on horoscope.	area50	KO	새해 운세보기
+9962	4031895	10	9010010	NO-TRACE	Piece of Cheese | A tasty piece of cheese, the main dish for mice.	area50	KO	화이트 마우스 머리띠
+9963	4031895	10	9010010	NO-TRACE	Piece of Cheese | A tasty piece of cheese, the main dish for mice.	area50	KO	화이트 마우스 분장
+9970	4031923	15	9010010	NO-TRACE	Radio Parts | A radio part that can be used to fix Petit's radio.	area50	KO	페티트의 수리부품
+9987	4001166	5	1022006	NO-TRACE	Snow Silk | A ball of silk that's cold like snow, as if it'll melt away.	area50	EN	Materials for the Mysterious Fabric
+9992	4001166	6	1032100	NO-TRACE	Snow Silk | A ball of silk that's cold like snow, as if it'll melt away.	area50	EN	Vanished Mysterious Fabric
+9994	4001166	5	1032002	NO-TRACE	Snow Silk | A ball of silk that's cold like snow, as if it'll melt away.	area50	EN	Repairing the Maple Cape
+9996	4001166	5	2012012	NO-TRACE	Snow Silk | A ball of silk that's cold like snow, as if it'll melt away.	area50	EN	Alcaster's Advice
+10002	4031988	1	9000034	NO-TRACE	Special Agent Badge | Item Agent O asked me to retrieve.  I should take it back to Agent O.	area50	EN	Number of Special Agent Badges 
+10005	4031701	3	9010000	NO-TRACE	Chumji's Watermelon | Sweet watermelon that is grown from Chumji's field.	area50	EN	Agent W's Watermelon Investigation
+10007	4001192	3	9000021	NO-TRACE	Intelligence Document | Intelligence document that contains investigations regarding Master M and party quest monsters.	area50	EN	Agent C's Intelligence Activity
+10010	4031999	10	9000036	NO-TRACE	Master M's Direction Scroll | Directions believed be written by Master M.	area50	EN	Special Order: Find Master M's Orders!
+10011	4032000	10	9000036	NO-TRACE	Master M's Order Scroll | An order believed to be written by Master M.	area50	EN	Special Order: Find Master M's Orders!
+10012	4032001	10	9000036	NO-TRACE	Master M's Command Scroll | A command believed to be written by Master M.	area50	EN	Special Order: Find Master M's Orders!
+10036	4220067	1	9001102	NO-TRACE	Moon  | An envelope used to contain a picture of the moon. Made out of durable paper that will not rip as a result of 	area50	KO	달은 어떻게 생겼나요
+10050	4032066	1	9000042	NO-TRACE	Baby Bird Feather | A soft feather presumably from a baby bird. Gaga will definitely like this.	area50	KO	아기새의 깃털
+10056	2022422	50	9010010	NO-TRACE	Small Stories | A tape that contains various small stories from daily life. You can fine view its content by double-clicking o	area50	KO	카산드라의 메이플 스카프
+10081	4032087	5	9010010	NO-TRACE	Lucky White Monkey Doll | A white monkey doll that is considered a lucky charm. Whether it really brings good luck remains to be seen.	area50	KO	카산드라의 진심은?!
+10104	2430000	10	9010010	NO-TRACE	Torn Cygnus' Book Volume 1 | When used one at a time, a special power covers my body and blesses me.  I think if I collect 20, I'll be able	area50	EN	Book of Cygnus Vol. 1
+10105	2430001	10	9010010	NO-TRACE	Torn Cygnus' Book Volume 2 | When used one at a time, a special power covers my body and blesses me.  I think if I collect 20, I'll be able	area50	EN	Book of Cygnus Vol. 2
+10106	2430002	10	9010010	NO-TRACE	Torn Cygnus' Book Volume 3 | When used one at a time, a special power covers my body and blesses me.  I think if I collect 20, I'll be able	area50	EN	Book of Cygnus Vol. 3
+10109	4032178	1	9010000	NO-TRACE	Hack Attempt | A record that shows that Chief Grays tried to hack into the system.	area50	KO	해킹자료 분석
+10206	4001237	10	9010000	NO-TRACE	Slightly Polluted Rock | This rock has a slight hint of that unmistakable force of darkness.	area50	EN	Remnants of Black Mage
+10207	4001238	10	9010000	NO-TRACE	Polluted Rock | This rock really has the force of Black Mage stored in it.	area50	EN	Remnants of Black Mage
+10208	4001239	10	9010000	NO-TRACE	Heavily Polluted Rock | This rock contains a powerful force of Black Mage stored in it.	area50	EN	Remnants of Black Mage
+10209	4001240	10	9010000	NO-TRACE	Polluted Item | A piece of rock that has been irreparable damaged because of the force of the Black Mage.	area50	EN	Remnants of Black Mage
+10240	4032264	5	9010010	NO-TRACE	Spring Flower Seed   | A seed that grows into a Spring Flower. 	area50	KO	카산드라의 봄꽃축제
+10240	4032266	5	9010010	NO-TRACE	Dazzling Sunlight  | Dazzling sunlight filled with the feeling of spring.  	area50	KO	카산드라의 봄꽃축제
+10241	4032265	5	9010010	NO-TRACE	Spring Flower Petal   | The petals that make up the Spring Flower.  	area50	KO	카산드라의 봄꽃축제
+10241	4032270	5	9010010	NO-TRACE	Glistening Sunlight  | Glistening sunlight filled with the feeling of spring.  	area50	KO	카산드라의 봄꽃축제
+10260	4032271	15	9010010	NO-TRACE	Pure Small Sprout   | A fragrant new sprout filled with the energies of spring. Used as an ingredient for Pure Perfume.  	area50	KO	순결한 향수 만들기1
+10261	4032275	15	9010010	NO-TRACE	Pure Normal Sprout   | A fragrant new sprout filled with the energies of spring. Used as an ingredient for Pure Perfume. 	area50	KO	순결한 향수 만들기2
+10262	4032276	15	9010010	NO-TRACE	Pure Sprout   | A fragrant new sprout filled with the energies of spring. Used as an ingredient for Pure Perfume. 	area50	KO	순결한 향수 만들기3
+10263	4032277	15	9010010	NO-TRACE	Pure Large Sprout | A fragrant new sprout filled with the energies of spring. Used as an ingredient for Pure Perfume. 	area50	KO	순결한 향수 만들기4
+10264	4032284	1	9010010	NO-TRACE	Child's Broken Toy   | A toy stolen from a child by a monster. It's broken and cannot be used.  	area50	KO	숨어있는 몬스터 퇴치
+10265	4032285	1	9010010	NO-TRACE	Child's Broken Toy   | A toy stolen from a child by a monster. It's broken and cannot be used.  	area50	KO	숨어있는 몬스터 퇴치
+10266	4032286	1	9010010	NO-TRACE	Child's Broken Toy   | A toy stolen from a child by a monster. It's broken and cannot be used.  	area50	KO	숨어있는 몬스터 퇴치
+10267	4032287	1	9010010	NO-TRACE	Child's Broken Toy   | A toy stolen from a child by a monster. It's broken and cannot be used.  	area50	KO	숨어있는 몬스터 퇴치
+10268	4032272	5	9000021	NO-TRACE	Stationery of Longing  | Pink stationary that's rumored to return a favorable response if used to send a letter to a secret crush.  	area50	KO	가가의 사랑 편지1
+10268	4032273	5	9000021	NO-TRACE	Pencil of Courage X 10   | A pencil that's used to write things you don’t have the courage to say. 	area50	KO	가가의 사랑 편지1
+10270	4032278	5	9000021	NO-TRACE	Stationery of Deep Longing   | Pink stationary that's rumored to return a favorable response if used to send a letter to a secret crush.  	area50	KO	가가의 사랑 편지2
+10270	4032281	5	9000021	NO-TRACE	Pencil of Courage X 100   | A pencil that's used to write things you don’t have the courage to say. 	area50	KO	가가의 사랑 편지2
+10271	4032279	5	9000021	NO-TRACE	Stationary of Hope and Longing   | Pink stationary that's rumored to return a favorable response if used to send a letter to a secret crush.  	area50	KO	가가의 사랑 편지3
+10271	4032282	5	9000021	NO-TRACE	Pencil of Courage X 1000   | AA pencil that's used to write things you don’t have the courage to say. 	area50	KO	가가의 사랑 편지3
+10272	4032280	5	9000021	NO-TRACE	Letter of Love and Longing   | Pink stationary that's rumored to return a favorable response if used to send a letter to a secret crush.  	area50	KO	가가의 사랑 편지4
+10272	4032283	5	9000021	NO-TRACE	Pencil of Courage X 10000   | A pencil that's used to write things you don’t have the courage to say. 	area50	KO	가가의 사랑 편지4
+10274	4032298	10	9010010	NO-TRACE	Party Balloon   | A MapleStory 6th Anniversary Party Item. 	area50	KO	메이플 6주년 파티준비
+10275	4032299	10	9010010	NO-TRACE	Party Firecracker  | A MapleStory 6th Anniversary Party Item. 	area50	KO	메이플 6주년 파티준비!
+10276	4032300	10	9010010	NO-TRACE	Party Candle   | A MapleStory 6th Anniversary Party Item. 	area50	KO	메이플 6주년 파티준비!!
+10277	4032301	10	9010010	NO-TRACE	Party Conehat   | A MapleStory 6th Anniversary Party Item. 	area50	KO	메이플 6주년 파티준비!!!
+10300	4032348	10	9010020	NO-TRACE	Secure Bundle of Straw  | A secure bundle of straw that can be used to make the Witch's Broomstick.  	area50	EN	Making the Witch's Secure Broomstick
+10301	4032349	10	9010020	NO-TRACE	Solid  Bundle of Straw  | A solid bundle of straw that can be used to make the Witch's Broomstick.  	area50	EN	Making the Witch's Solid Broomstick
+10302	4032350	10	9010020	NO-TRACE	Strong  Bundle of Straw  | A strong bundle of straw that can be used to make the Witch's Broomstick. 	area50	EN	Making the Witch's Sturdy Broomstick
+10324	4001307	1	-	NO-TRACE	A Soccer Cleat | The fifth of 8 treasures mentioned by Shuang.	area50	EN	Vaughn Lee's Cleat
+10325	4001307	1	-	NO-TRACE	A Soccer Cleat | The fifth of 8 treasures mentioned by Shuang.	area50	EN	Stan's Cleat
+10326	4001307	1	-	NO-TRACE	A Soccer Cleat | The fifth of 8 treasures mentioned by Shuang.	area50	EN	Louie's Cleat
+10327	4001306	1	-	NO-TRACE	The Shiny Watch | The fourth of 8 treasures mentioned by Shuang.	area50	EN	Corba's Watch
+10342	4032366	10	9010010	NO-TRACE	Vague Aran Memory | A vague memory of the Aran.	area50	EN	Vague Aran Memories
+10344	4032367	10	9010010	NO-TRACE	Dim Aran Memory | A dim memory of the Aran.	area50	EN	Dim Aran Memories
+10346	4032368	10	9010010	NO-TRACE	Faint Aran Memory | A faint memory of the Aran.	area50	EN	Faint Aran Memories
+10348	4032369	10	9010010	NO-TRACE	Cloudy Aran Memory | A cloudy memory of the Aran.	area50	EN	Cloudy Aran Memories
+10350	4032370	10	9010010	NO-TRACE	Lingering Aran Memory | A lingering memory of the Aran.	area50	EN	Lingering Aran Memories
+10352	4032371	10	9010010	NO-TRACE	Flickering Aran Memory | A flickering memory of the Aran.	area50	EN	Flickering Aran Memories
+10355	4001316	1	9000021	NO-TRACE	Cassandra's Album | A photo album filled with Cassandra's baby pictures.	area50	EN	Delivering Cassandra's Album
+10356	4001316	1	9010010	NO-TRACE	Cassandra's Album | A photo album filled with Cassandra's baby pictures.	area50	EN	Delivering Cassandra's Album
+10360	3994139	1	9010010	NO-TRACE	Maha Charm | A charm that contains protection from Maha, the spirit of Polearm. Take this to Cassandra for a chance to answ	area50	EN	Aran Welcome Celebration
+10405	4001320	1	9010010	NO-TRACE	Flower Tube Coupon | Take this to Cassandra, and exchange it for a pretty Pink Flower Tube.	area50	EN	2009 Pink Flower Floatie!
+10415	4032418	10	9010010	NO-TRACE	Bingo Necklace | The necklace of a puppy named Bingo	area50	EN	Winter Bingo
+10417	4032419	10	9010010	NO-TRACE	Bingo Necklace | The necklace of a puppy named Bingo	area50	EN	Winter Bingo
+10418	4032420	10	9010010	NO-TRACE	Bingo Necklace | The necklace of a puppy named Bingo	area50	EN	Winter Bingo
+10419	4032421	10	9010010	NO-TRACE	Bingo Necklace | The necklace of a puppy named Bingo	area50	EN	Winter Bingo
+10420	4032422	10	9010010	NO-TRACE	Bingo Necklace | The necklace of a puppy named Bingo	area50	EN	Winter Bingo
+10425	4032433	1	9001102	NO-TRACE	Photo of the Moon | A clear photo of the moon. This will certainly make the Baby Moon Bunny happy.	area50	KO	달은 어떻게 생겼죠?
+10431	4001334	1	9000021	NO-TRACE	Yellow Flower Pot | A small pot that contains a yellow flower. Take it to Gaga to trade it for a crayon.	area50	KO	가가의 남색 크레파스
+10432	4001334	1	9000021	NO-TRACE	Yellow Flower Pot | A small pot that contains a yellow flower. Take it to Gaga to trade it for a crayon.	area50	KO	가가의 보라색 크레파스
+10433	4001334	1	9000021	NO-TRACE	Yellow Flower Pot | A small pot that contains a yellow flower. Take it to Gaga to trade it for a crayon.	area50	KO	가가의 빨간색 크레파스
+10434	4001334	1	9000021	NO-TRACE	Yellow Flower Pot | A small pot that contains a yellow flower. Take it to Gaga to trade it for a crayon.	area50	KO	가가의 주황색 크레파스
+10435	4001334	1	9000021	NO-TRACE	Yellow Flower Pot | A small pot that contains a yellow flower. Take it to Gaga to trade it for a crayon.	area50	KO	가가의 노란색 크레파스
+10436	4001334	1	9000021	NO-TRACE	Yellow Flower Pot | A small pot that contains a yellow flower. Take it to Gaga to trade it for a crayon.	area50	KO	가가의 초록색 크레파스
+10437	4001334	1	9000021	NO-TRACE	Yellow Flower Pot | A small pot that contains a yellow flower. Take it to Gaga to trade it for a crayon.	area50	KO	가가의 파란색 크레파스
+10438	4001334	1	9000021	NO-TRACE	Yellow Flower Pot | A small pot that contains a yellow flower. Take it to Gaga to trade it for a crayon.	area50	KO	가가의 남색 크레파스
+10439	4001334	1	9000021	NO-TRACE	Yellow Flower Pot | A small pot that contains a yellow flower. Take it to Gaga to trade it for a crayon.	area50	KO	가가의 보라색 크레파스
+10440	4001334	1	9000021	NO-TRACE	Yellow Flower Pot | A small pot that contains a yellow flower. Take it to Gaga to trade it for a crayon.	area50	KO	가가의 빨간색 크레파스
+10441	4001334	1	9000021	NO-TRACE	Yellow Flower Pot | A small pot that contains a yellow flower. Take it to Gaga to trade it for a crayon.	area50	KO	가가의 주황색 크레파스
+10442	4001334	1	9000021	NO-TRACE	Yellow Flower Pot | A small pot that contains a yellow flower. Take it to Gaga to trade it for a crayon.	area50	KO	가가의 노란색 크레파스
+10443	4001334	1	9000021	NO-TRACE	Yellow Flower Pot | A small pot that contains a yellow flower. Take it to Gaga to trade it for a crayon.	area50	KO	가가의 초록색 크레파스
+10444	4001334	1	9000021	NO-TRACE	Yellow Flower Pot | A small pot that contains a yellow flower. Take it to Gaga to trade it for a crayon.	area50	KO	가가의 파란색 크레파스
+10445	4001334	1	9000021	NO-TRACE	Yellow Flower Pot | A small pot that contains a yellow flower. Take it to Gaga to trade it for a crayon.	area50	KO	가가의 크레파스
+10452	4032434	5	9010010	NO-TRACE	Yellow Butterfly | A cute little yellow butterfly. It might fly away if you don't keep your eye on it.	area50	KO	레인보우 위크:노란색의 마법
+10453	4032434	5	9010010	NO-TRACE	Yellow Butterfly | A cute little yellow butterfly. It might fly away if you don't keep your eye on it.	area50	KO	레인보우 위크:노란색의 마법
+10454	4032434	5	9010010	NO-TRACE	Yellow Butterfly | A cute little yellow butterfly. It might fly away if you don't keep your eye on it.	area50	KO	레인보우 위크:노란색의 마법
+10455	4032434	5	9010010	NO-TRACE	Yellow Butterfly | A cute little yellow butterfly. It might fly away if you don't keep your eye on it.	area50	KO	레인보우 위크:노란색의 마법
+10456	4032434	5	9010010	NO-TRACE	Yellow Butterfly | A cute little yellow butterfly. It might fly away if you don't keep your eye on it.	area50	KO	레인보우 위크:노란색의 마법
+10457	4032434	5	9010010	NO-TRACE	Yellow Butterfly | A cute little yellow butterfly. It might fly away if you don't keep your eye on it.	area50	KO	레인보우 위크:노란색의 마법
+10491	3994185	1	9010010	NO-TRACE	Cassandra's Strange Slush  | Give it to Cassandra before it disappears!	area50	KO	가가 골탕 먹이기
+10492	3994185	1	9010010	NO-TRACE	Cassandra's Strange Slush  | Give it to Cassandra before it disappears!	area50	KO	메이플운영자 골탕먹이기
+10493	3994185	1	9010010	NO-TRACE	Cassandra's Strange Slush  | Give it to Cassandra before it disappears!	area50	KO	클리프 골탕먹이기
+10494	3994185	1	9010010	NO-TRACE	Cassandra's Strange Slush  | Give it to Cassandra before it disappears!	area50	KO	토르 골탕먹이기
+10496	4032532	20	9000021	NO-TRACE	Thermal Fabric  | Red fabric that is great at insulating heat. 	area50	KO	가가의 월동준비
+10501	4032533	1	9010010	NO-TRACE	Baby Onyx Dragon Horn  | A piece of a Baby Onyx Dragon's horn. 	area50	EN	Searcing for Remnants of the Dragon Master 1
+10502	4032534	1	9010010	NO-TRACE	Onyx Dragon Footprint | A footprint left behind by an Onyx Dragon.	area50	EN	Searching for Remnants of the Dragon Master 2
+10503	4032535	1	9010010	NO-TRACE	Adolescent Onyx Dragon Horn  | A piece of an Adolescent Onyx Dragon's horn.	area50	EN	Searching for Remnants of the Dragon Master 3
+10504	4032536	1	9010010	NO-TRACE	Onyx Dragon Footprint | A footprint left behind by an Onyx Dragon.	area50	EN	Searching for Remnants of the Dragon Master 4
+10505	4032537	1	9010010	NO-TRACE	Onyx Dragon Scale  | A scale from an Onyx Dragon.	area50	EN	Searching for Remnants of the Dragon Master 5
+10506	4032538	1	9010010	NO-TRACE	Onyx Dragon Footprint | A footprint left behind by an Onyx Dragon.	area50	EN	Searching for Remnants of the Dragon Master 6
+10507	4032539	1	9010010	NO-TRACE	Onyx Dragon Horn | A piece of a fully matured Onyx Dragon's horn.	area50	EN	Searching for Remnants of the Dragon Master 7
+10510	3994187	1	9010010	NO-TRACE	Mini Dragon | A Mini Dragon that hatched from the egg Cassandra left with you. Return it to Cassandra to receive a reward!	area50	EN	Evan Everyday Event
+20528	4032196	2	1102002	NO-TRACE	Concentrated Formula: Step 1 | A formula concentrated with effective and potent ingredients. The first formula used to raise Mimiana and Mimi	area15	EN	Raising Mimio
+20528	4032197	2	1102002	NO-TRACE	Concentrated Formula: Step 2 | A formula concentrated with effective and potent ingredients. The second formula used to raise Mimiana and Mim	area15	EN	Raising Mimio
+20528	4032198	2	1102002	NO-TRACE	Concentrated Formula: Step 3 | A formula concentrated with effective and potent ingredients. The third formula used to raise Mimiana and Mimi	area15	EN	Raising Mimio
+22407	4032476	2	2060005	NO-TRACE	Captain Alpha's Buckle | Captain Alpha's buckle, which was discovered deep inside the ocean in a treasure chest near the shipwreck. It 	area7	EN	Making a Bigger Saddle
+22408	4032497	1	2092001	NO-TRACE	Potter | A master craftsman in Herb Town. He is as light as a feather.	area7	EN	Obtaining the Unbreakable Porcelain
+22410	4032504	10	2060005	NO-TRACE	Lycanthrope Leather | A tough piece of Lycanthrope leather.	area7	EN	The Lost Big Saddle
+22410	4032505	2	2060005	NO-TRACE	Captain Alpha's Buckle | Captain Alpha's buckle, which was discovered deep inside the ocean in a treasure chest near the shipwreck. It 	area7	EN	The Lost Big Saddle
+22524	4032459	1	1012111	NO-TRACE	Blue Mushroom Doll | A cute doll that resembles a Blue Mushroom.	area7	EN	Strange Puppet
+22531	4032461	1	1040001	NO-TRACE	Zombie Mushroom Doll | A doll that resembles a Zombie Mushroom, though something isn't quite right with the face.	area7	EN	A Guard's Fourth Assignment: Discovery of Strange Mushrooms
+22532	4032462	1	1040001	NO-TRACE	Wild Boar Doll | A cute doll that resembles a Wild Boar.	area7	EN	A Guard's Fifth Assignment: Strange Wild Boars
+22548	4032463	1	1052103	NO-TRACE	Document with Clue | A document that has a clue about the thief that stole Sabitrama's herb written on it. It looks like an ordinar	area7	EN	Clue about the Thief
+22559	4032466	1	1012003	NO-TRACE	Golem Doll | A cute doll that resembles a Golem.	area7	EN	Eliminate the Golems
+28107	4032248	1	9200000	NO-TRACE	Map to MV's Lair | 	area50	EN	Discovering Secrets
+28109	4032119	1	9220016	NO-TRACE	MV's Sabre | A shining sabre of MV, hidden deep in the treasure dungeon.	area50	EN	MV's Treasure
+28120	4032306	2	9200000	NO-TRACE	Yellow Birthday Candle | A candle Cody was looking for.	area50	EN	Preparing for Cody's 4 Year Anniversary Party!
+28121	4032307	2	9200000	NO-TRACE	Blue Birthday Candle | A candle Cody was looking for.	area50	EN	Preparing for Cody's 4 Year Anniversary Party!
+28122	4032308	2	9200000	NO-TRACE	Pink Birthday Candle | A candle Cody was looking for.	area50	EN	Preparing for Cody's 4 Year Anniversary Party!
+28284	4032444	16	9010010	NO-TRACE	Green Halloween Stick Candy | A green-colored Halloween Candy that Cassandra likes.	area50	EN	Cassandra's Trick or Treat
+28285	4032445	16	9010010	NO-TRACE	Blue Halloween Stick Candy | A blue-colored Halloween Candy that Cassandra likes.	area50	EN	Cassandra's Trick or Treat
+28286	4032446	16	9010010	NO-TRACE	Red Halloween Stick Candy | A red-colored Halloween Candy that Cassandra likes.	area50	EN	Cassandra's Trick or Treat
+28296	4000521	10	9201143	NO-TRACE	Olivia's Doll | Olivia's doll, which is obtained by defeating Olivia in the secret room. 	area50	EN	Butler: "The Trap"
+28297	4000521	10	9201143	NO-TRACE	Olivia's Doll | Olivia's doll, which is obtained by defeating Olivia in the secret room. 	area50	EN	Butler: "The Trap"
+28298	4000521	10	9201143	NO-TRACE	Olivia's Doll | Olivia's doll, which is obtained by defeating Olivia in the secret room. 	area50	EN	Butler: "The Trap"
+28303	4000518	13	9201136	NO-TRACE	Haunted Mansion Gold Key | A key that looks like it can unlock the doors inside the Haunted Mansion.	area50	EN	Olivia: "Find My Daddy"
+28303	4000519	13	9201136	NO-TRACE	Haunted Mansion Silver Key | A key that looks like it can unlock the doors inside the Haunted Mansion.	area50	EN	Olivia: "Find My Daddy"
+28303	4000520	13	9201136	NO-TRACE	Haunted Mansion Brass Key | A key that looks like it can unlock the doors inside the Haunted Mansion.	area50	EN	Olivia: "Find My Daddy"
+28307	4032435	5	9201143	NO-TRACE	Tombstone |  I wonder who this tombstone belongs to?	area50	EN	Steward: "I'm a Butler, Not a Maid!"
+28308	4000517	1	9201138	NO-TRACE	Sophilia's Favorite Doll | Sophilia's Favorite Doll	area50	EN	Jonas: "Jonas' Presence" 1
+28310	4000518	13	9201136	NO-TRACE	Haunted Mansion Gold Key | A key that looks like it can unlock the doors inside the Haunted Mansion.	area50	EN	Olivia: "Find My Daddy"
+28310	4000519	13	9201136	NO-TRACE	Haunted Mansion Silver Key | A key that looks like it can unlock the doors inside the Haunted Mansion.	area50	EN	Olivia: "Find My Daddy"
+28310	4000520	13	9201136	NO-TRACE	Haunted Mansion Brass Key | A key that looks like it can unlock the doors inside the Haunted Mansion.	area50	EN	Olivia: "Find My Daddy"
+28314	4032436	5	9201143	NO-TRACE	Tombstone |  I wonder who this tombstone belongs to?	area50	EN	Steward: "I'm a Butler, Not a Maid!"
+28315	4000517	1	9201138	NO-TRACE	Sophilia's Favorite Doll | Sophilia's Favorite Doll	area50	EN	Jonas: "Jonas' Presence" 2
+28317	4000518	13	9201136	NO-TRACE	Haunted Mansion Gold Key | A key that looks like it can unlock the doors inside the Haunted Mansion.	area50	EN	Olivia: "Find My Daddy"
+28317	4000519	13	9201136	NO-TRACE	Haunted Mansion Silver Key | A key that looks like it can unlock the doors inside the Haunted Mansion.	area50	EN	Olivia: "Find My Daddy"
+28317	4000520	13	9201136	NO-TRACE	Haunted Mansion Brass Key | A key that looks like it can unlock the doors inside the Haunted Mansion.	area50	EN	Olivia: "Find My Daddy"
+28321	4032437	5	9201143	NO-TRACE	Tombstone |  I wonder who this tombstone belongs to?	area50	EN	Steward: "I'm a Butler, Not a Maid!"
+28322	4000517	1	9201138	NO-TRACE	Sophilia's Favorite Doll | Sophilia's Favorite Doll	area50	EN	Jonas: "Jonas' Presence" 3
+28326	4032522	3	9200000	NO-TRACE	Yellow Turkey Egg | An oversized Yellow Turkey Egg. You can turn this in to Cody.	area50	EN	Yellow Turkey Egg Hunt
+28327	4032523	5	9200000	NO-TRACE	Green Turkey Egg | An oversized Green Turkey Egg. You can turn this in to Cody. 	area50	EN	Green Turkey Egg Hunt
+28328	4032524	10	9200000	NO-TRACE	Blue Turkey Egg | An oversized Blue Turkey Egg. You can turn this in to Cody. 	area50	EN	Blue Turkey Egg Hunt
+28329	4032525	1	9201052	NO-TRACE	Turkey Commando's Eye | A pair of futuristic eyeglasses previously worn by Turkey Commando.	area50	EN	The Object of Professor Foxwit's Interest
+28331	4031445	13	9201031	NO-TRACE	Altar Piece | A piece needed to build the Altar at the Festival of Lights.	area30	EN	Festival of Lights - Building the Altar
+28338	4001429	5	9000021	NO-TRACE	Mardi Gras Bead Necklace | A necklace that Gaga wants.	area50	EN	Mardi Gras Throws
+28351	4000566	1	9010000	NO-TRACE	Onyx Dragon Footprint | A footprint left behind by an Onyx Dragon.	area7	EN	Dragon Master's Treasure Chest
+28351	4000567	1	9010000	NO-TRACE	Adolescent Onyx Dragon Horn  | A piece of an Adolescent Onyx Dragon's horn.	area7	EN	Dragon Master's Treasure Chest
+28351	4000568	1	9010000	NO-TRACE	Onyx Dragon Footprint | A footprint left behind by an Onyx Dragon.	area7	EN	Dragon Master's Treasure Chest
+28351	4000569	1	9010000	NO-TRACE	Onyx Dragon Scale  | A scale from an Onyx Dragon.	area7	EN	Dragon Master's Treasure Chest
+28351	4000570	1	9010000	NO-TRACE	Onyx Dragon Footprint | A footprint left behind by an Onyx Dragon.	area7	EN	Dragon Master's Treasure Chest
+28351	4000571	1	9010000	NO-TRACE	Onyx Dragon Horn | A piece of a fully matured Onyx Dragon's horn.	area7	EN	Dragon Master's Treasure Chest
+28355	4001435	100	9010010	NO-TRACE	Evan Sweat Droplet | The sweat drops of Evan. An item required for the #cEvan Trailblazer event.#	area50	EN	Confused Evan
+28356	4001435	400	9010010	NO-TRACE	Evan Sweat Droplet | The sweat drops of Evan. An item required for the #cEvan Trailblazer event.#	area50	EN	Beginner Evan
+28357	4001435	800	9010010	NO-TRACE	Evan Sweat Droplet | The sweat drops of Evan. An item required for the #cEvan Trailblazer event.#	area50	EN	Confident Evan
+28358	4001435	1200	9010010	NO-TRACE	Evan Sweat Droplet | The sweat drops of Evan. An item required for the #cEvan Trailblazer event.#	area50	EN	Elite Evan
+28359	4001435	3000	9010010	NO-TRACE	Evan Sweat Droplet | The sweat drops of Evan. An item required for the #cEvan Trailblazer event.#	area50	EN	Evan Trailblazer
+28360	4001435	3000	9010010	NO-TRACE	Evan Sweat Droplet | The sweat drops of Evan. An item required for the #cEvan Trailblazer event.#	area50	EN	Evan's Eternal Trailblazer

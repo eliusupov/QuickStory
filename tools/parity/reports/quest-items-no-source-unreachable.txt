@@ -1,0 +1,76 @@
+# same, but the quest's start NPC is placed on no map - nobody can start it, so the missing source is invisible
+# 74 rows
+4000	4000257	25	9330016	NO-TRACE	Yeti Key Chain | A key chain with a doll that resembles Yeti.	area48	KO	아종의 취미생활 1
+4001	4000258	25	9330016	NO-TRACE	Jr. Pepe Key Chain | A key chain with a doll that resembles Jr. Pepe.	area48	KO	아종의 취미생활 2
+4003	4000254	15	9330018	NO-TRACE	Red Bubble | A red bubble used for bubble teas.	area48	KO	오씨의 버블티 사업
+4003	4000255	15	9330018	NO-TRACE	Yellow Bubble | A yellow bubble used for bubble teas.	area48	KO	오씨의 버블티 사업
+4003	4000256	15	9330018	NO-TRACE	Green Bubble | A green bubble used for bubble teas.	area48	KO	오씨의 버블티 사업
+4005	4031352	1	9330017	NO-TRACE	Pink Yeti Doll | A PINK Yeti doll, unlike other Yeti dolls.	area48	KO	껌팔이 소녀의 핑크예티
+4009	4000202	50	9330006	NO-TRACE	Motorcycle Helmet | A helmet adorned by Biker Monkey	area48	KO	영웅의 북
+4010	4031296	1	9330004	NO-TRACE	New Cellphone | A brand-new cellphone that boasts lots of new features. A must-have for everyone.  It is written as Made In Ko	area48	KO	영원의 눈물
+4013	4031354	1	9330020	NO-TRACE	Necklace | Women love wearing this as an accessory.	area48	KO	목걸이를 찾아서 2
+4014	4000259	25	9330028	NO-TRACE	UFO Catcher | A key chain with a doll that resembles the UFO Catcher.	area48	KO	자격의 시험
+4103	4031227	1	9310008	NO-TRACE	Centipede Red Marble | A red marble previously possessed by the Centipede. A weird vibe can be felt on it.	area48	KO	비밀임무
+4109	4000194	25	9310005	NO-TRACE	Black Fur | A fluffy black wool from the black sheep.	area48	KO	정경찰의 부탁
+4218	4031388	1	9250012	NO-TRACE	Kid's Key | A key used by Kid.	area48	KO	수호대의 두 번째 임무
+4676	4032056	50	9105002	NO-TRACE	Magic Crystal | A beautiful crystal with a red maple leaf inside. Hand this in to the Event Personnel, and she'll exchange thi	area50	EN	Naomi's Invitation 2
+4946	4031769	10	9201076	NO-TRACE	Tarrymore Earring | This beautiful, elegant earring belongs to Ludmilla.	area50	EN	Family Jewels
+4946	4031770	5	9201076	NO-TRACE	Sepha Earring | This expensive, stylish earring belongs to Ludmilla.	area50	EN	Family Jewels
+4949	4031764	25	9201075	NO-TRACE	Paranormal Activity Report Page | A page from a file detailing strange activity and possible locations for ghosts.  It doesn't look very profess	area50	EN	The M-Files
+4950	4031812	50	9201075	NO-TRACE	Paranormal Activity Report Page | A page from a file detailing strange activity and possible locations for ghosts.  It doesn't look very profess	area50	EN	File Under Incomplete
+4953	4000400	15	9201077	NO-TRACE	Lock of Doll's Hair | A lock of blonde hair from one of Prendergast's dolls.	area50	EN	In Her Likeness
+5069	2022538	5	9200001	NO-TRACE	Red Easter Egg | A freshly boiled egg colored in red. Recovers 400 HP and MP.	area50	EN	Easter : Mad Bunny's Easter(Red)
+8298	4032233	1	9300010	NO-TRACE	Maple Necklace Chain | This can be used to create the Mind of Maple Necklace.	area50	EN	In search of the Mind of Maple
+8569	4001128	15	9300010	NO-TRACE	Powder keg | This is used to make firecrackers.	area50	EN	Find the Ghost-scaring Chinese Firecrackers
+8701	2022065	5	9200001	NO-TRACE	Yellow Easter Egg | A freshly boiled egg colored in yellow. Recovers 100 HP and MP.	area30	EN	2006 Easter : Mad Bunny's Easter(Yellow)
+8713	2022066	5	9200001	NO-TRACE	Green Easter Egg | A freshly boiled egg colored in green. \nRecovers 200 HP and MP.	area30	EN	2006 Easter : Mad Bunny's Easter(Green)
+8823	4031418	1	9201029	NO-TRACE	Pie Crust | An ingredient needed for Grandma Benson's pumpkin pie. 	area50	EN	Thanksgiving : Pumpkin Pie
+8823	4031419	1	9201029	NO-TRACE	Pumpkin | An ingredient needed for Grandma Benson's pumpkin pie. 	area50	EN	Thanksgiving : Pumpkin Pie
+8823	4031420	1	9201029	NO-TRACE	Flour | An ingredient needed for Grandma Benson's pumpkin pie. 	area50	EN	Thanksgiving : Pumpkin Pie
+8823	4031421	1	9201029	NO-TRACE	Powder Sugar | An ingredient needed for Grandma Benson's pumpkin pie. 	area50	EN	Thanksgiving : Pumpkin Pie
+8832	4031446	25	9201032	NO-TRACE	Graham Cracker | A large, sweet graham cracker used to build houses. 	area30	EN	Graham Cracked
+8874	2022065	5	9200001	NO-TRACE	Yellow Easter Egg | A freshly boiled egg colored in yellow. Recovers 100 HP and MP.	area50	EN	Easter : Mad Bunny's Easter(Yellow)
+8875	2022066	5	9200001	NO-TRACE	Green Easter Egg | A freshly boiled egg colored in green. \nRecovers 200 HP and MP.	area50	EN	Easter : Mad Bunny's Easter(Green)
+9421	4031322	1	9001005	NO-TRACE	Coca Fruit | Coca fruit that is used to make the secret ingredient for Coca-Cola.	area50	KO	비밀의 코카-콜라 원액만들기
+9421	4031323	1	9001005	NO-TRACE	CO2 | CO2 that is used to make the secret ingredient for Coca-Cola.	area50	KO	비밀의 코카-콜라 원액만들기
+9421	4031324	1	9001005	NO-TRACE	Caramel | Caramel that is used to make the secret ingredient for Coca-Cola.	area50	KO	비밀의 코카-콜라 원액만들기
+9423	4000214	50	9001001	NO-TRACE	Coca-Cola Gem | A red gem with a Coca-Cola logo engraved on it.	area50	KO	북극곰 로로의 반짝이는 별
+9424	4000221	100	9001001	NO-TRACE	Coke Bottle Lid | A bottle lid that a Coke Mushroom used to wear on its head.	area50	KO	북극곰 로로의 하늘 구경
+9425	4000216	50	9001001	NO-TRACE	Coca-Cola Can | An empty can that had been filled with the sweet and tangy Coca-Cola.	area50	KO	북극곰 로로의 하늘로 가는 사다리 1
+9425	4000217	50	9001001	NO-TRACE	Coca-Cola Light Can | An empty can that had been filled with Coke Light, a drink with zero calories.	area50	KO	북극곰 로로의 하늘로 가는 사다리 1
+9426	4000212	50	9001001	NO-TRACE	CokePLAY Cube | A cube with the CokePLAY symbol.	area50	KO	북극곰 로로의 하늘로 가는 사다리 2
+9426	4000211	50	9001001	NO-TRACE	Coca-Cola Cube | A cube with a drawing of a Coca-Cola bottle on it.	area50	KO	북극곰 로로의 하늘로 가는 사다리 2
+9427	4000216	15	9001002	NO-TRACE	Coca-Cola Can | An empty can that had been filled with the sweet and tangy Coca-Cola.	area50	KO	북극곰 포치의 썰매 만들기
+9427	4000209	5	9001002	NO-TRACE	Co-ke Slime’s Bell | The bell of Co-ke Slime that has been taken off.	area50	KO	북극곰 포치의 썰매 만들기
+9427	4000217	15	9001002	NO-TRACE	Coca-Cola Light Can | An empty can that had been filled with Coke Light, a drink with zero calories.	area50	KO	북극곰 포치의 썰매 만들기
+9427	4000210	5	9001002	NO-TRACE	Co-ke Pig’s Ribbon | A piece of Co-ke Pig’s ribbon.	area50	KO	북극곰 포치의 썰매 만들기
+9429	4000220	20	9001005	NO-TRACE	Ice Block | A block that had been part of the hard body of an Ice Golem.	area50	KO	북극곰 형제의 이글루 짓기
+9429	4000218	50	9001005	NO-TRACE	Ice Shell | A turtle shell shaped like an igloo that is made of ice.	area50	KO	북극곰 형제의 이글루 짓기
+9429	4000219	25	9001005	NO-TRACE	Coke Ice Block | A block that had been part of the hard body of a Coke Golem. It looks like frozen Cola.	area50	KO	북극곰 형제의 이글루 짓기
+9430	4000213	50	9001002	NO-TRACE	Coca-Cola Card | A card with a drawing of Coca-Cola.	area50	KO	심심한 북극곰 포치
+9431	4031322	1	9001002	NO-TRACE	Coca Fruit | Coca fruit that is used to make the secret ingredient for Coca-Cola.	area50	KO	북극곰 포치의 코카-콜라
+9431	4031323	1	9001002	NO-TRACE	CO2 | CO2 that is used to make the secret ingredient for Coca-Cola.	area50	KO	북극곰 포치의 코카-콜라
+9431	4031324	1	9001002	NO-TRACE	Caramel | Caramel that is used to make the secret ingredient for Coca-Cola.	area50	KO	북극곰 포치의 코카-콜라
+9432	4031322	1	9001002	NO-TRACE	Coca Fruit | Coca fruit that is used to make the secret ingredient for Coca-Cola.	area50	KO	북극곰 포치의 부탁
+9432	4031323	1	9001002	NO-TRACE	CO2 | CO2 that is used to make the secret ingredient for Coca-Cola.	area50	KO	북극곰 포치의 부탁
+9432	4000216	25	9001002	NO-TRACE	Coca-Cola Can | An empty can that had been filled with the sweet and tangy Coca-Cola.	area50	KO	북극곰 포치의 부탁
+9511	4000199	25	9330003	NO-TRACE	Wild Dog Shades | A pair of cool-looking sunglasses adorned by stylish Wild Dog.	area50	KO	주걸균의 대만명소
+9650	1442012	1	9001006	script-mention-only	?	area50	KO	북극곰 푸치의 슈퍼 스노우보드
+9651	1442012	1	9001006	script-mention-only	?	area50	KO	북극곰 푸치의 골든 스노우보드
+9928	2022256	3	2120005	NO-TRACE	Halloween Candy | A candy wrapped in stripes. Kids love it. Recovers 20 HP and MP.	area50	KO	이상한 소녀
+9930	4031834	1	2120004	NO-TRACE	Perfect Tool | The most perfect tool for making dolls.	area50	KO	완벽한 연장
+9931	4031832	1	2120004	NO-TRACE	Sophelia’s Portrait | A portrait of Sophelia.	area50	KO	소필리아의 초상화
+9932	4031835	1	2120006	NO-TRACE	Lyudmilla’s Earring | The earrings that Lyudmilla lost. They shine with brilliance.	area50	KO	루드밀라의 귀고리
+9945	2022256	5	2120008	NO-TRACE	Halloween Candy | A candy wrapped in stripes. Kids love it. Recovers 20 HP and MP.	area50	KO	인형찾기
+10064	4031838	10	2120006	NO-TRACE	Piece of Cloth | A small piece of cloth. If you drag and drop it onto the rag doll, the doll will be completed bit by bit.	area50	KO	루드밀라의 사진첩
+10066	2022256	10	2120005	NO-TRACE	Halloween Candy | A candy wrapped in stripes. Kids love it. Recovers 20 HP and MP.	area50	KO	과거의 기억
+10072	4031838	10	2120008	NO-TRACE	Piece of Cloth | A small piece of cloth. If you drag and drop it onto the rag doll, the doll will be completed bit by bit.	area50	KO	페토인형 만들기
+22503	4032453	10	1013000	NO-TRACE	Pork | Juicy pork. Baby dragons might like it.	area7	EN	A Bite of Pork
+22529	4032460	3	1022106	NO-TRACE	Refreshing Stump Sap | Tree sap from a Stump. It is surprisingly refreshing.	area7	EN	Helping Beginner Adventurer Christopher
+28128	4032404	1	9201116	NO-TRACE	Miwok Artifact Piece | A piece that appears to be a fragment of the Miwok Artifact. 	area50	EN	In Search of the Miwok Artifact
+28129	4000509	1	9201116	NO-TRACE	Old Tree Branch of the Wise One | The Old Tree Branch that the Wise One from the Miwok tribe used to predict the future. Kopee Relicseeker says 	area50	EN	The Legendary Tribal Ring: Circle of Ancient Thought
+28129	4000510	2	9201116	NO-TRACE	Bluejay Feather of the Wise One | The Bluejay Feather that the Wise One from the Miwok tribe used to predict the future. Kopee Relicseeker says 	area50	EN	The Legendary Tribal Ring: Circle of Ancient Thought
+28129	4000511	1	9201116	NO-TRACE	Red Bird Feather of the Wise One | The Red Bird Feather that the Wise One from the Miwok tribe used to predict the future. Kopee Relicseeker says	area50	EN	The Legendary Tribal Ring: Circle of Ancient Thought
+28130	4000512	1	9201116	NO-TRACE	Cat Eye of the Brave One | The cat eye with which the Brave One from the Miwok tribe equipped himself in battles. Kopee Relicseeker says 	area50	EN	The Legendary Tribal Ring: Circle of Ancient Strength
+28130	4000513	2	9201116	NO-TRACE	Buffalo Horns of the Brave One | The buffalo horn with which the Brave One from the Miwok tribe equipped himself in battles. Kopee Relicseeker 	area50	EN	The Legendary Tribal Ring: Circle of Ancient Strength
+28130	4000514	1	9201116	NO-TRACE	Puma Bones of the Brave One | The puma bone with which the Brave One from the Miwok tribe equipped himself in battles. Kopee Relicseeker say	area50	EN	The Legendary Tribal Ring: Circle of Ancient Strength

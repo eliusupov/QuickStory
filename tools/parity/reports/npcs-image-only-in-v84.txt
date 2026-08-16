@@ -1,0 +1,2 @@
+# npc ids with a v84 Npc.wz image the server's Npc.wz lacks
+# 0 rows

@@ -1,0 +1,27 @@
+# id	stat	v83-stock	v84-stock	this server - both moved. Merging v84 would overwrite an owner edit; hand-resolve.
+# 25 rows
+1382058	tuc	-	7	7
+1382058	price	-	440000	440000
+1382058	incINT	-	1	1
+1382058	incPAD	-	77	77
+1382058	incMAD	-	120	120
+1382058	incMMP	-	70	70
+1382058	attackSpeed	-	8	8
+1382058	tradeBlock	-	1	1
+1452058	tuc	-	7	7
+1452058	price	-	475000	475000
+1452058	incDEX	-	1	1
+1452058	incPAD	-	98	98
+1452058	incACC	-	1	1
+1452058	attackSpeed	-	6	6
+1452058	knockback	-	68	68
+1452058	tradeBlock	-	1	1
+1472069	incDEX	-	1	1
+1472069	tradeBlock	-	1	1
+1492024	tuc	-	7	7
+1492024	price	-	485000	485000
+1492024	incSTR	-	1	1
+1492024	incPAD	-	76	76
+1492024	incACC	-	1	1
+1492024	attackSpeed	-	5	5
+1492024	tradeBlock	-	1	1

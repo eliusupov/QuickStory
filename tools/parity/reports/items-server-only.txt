@@ -1,0 +1,10 @@
+# item ids the server has that stock v84 does not - CUSTOM CONTENT, PRESERVE. Never propose deletion.
+# 8 rows
+20816	type0	Face
+20817	type0	Face
+21817	type0	Face
+21820	type0	Face
+2023000	use	Consume
+2023001	use	Consume
+2023002	use	Consume
+2023003	use	Consume
