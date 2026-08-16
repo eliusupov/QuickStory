@@ -2350,9 +2350,51 @@ public class PacketCreator {
         p.writeByte(skillId);
         p.writeByte(skillLevel);
         p.writeShort(pOption);
+        writeV84MobMoveExtras(p);
         p.writePos(startPos);
         rebroadcastMovementList(p, movementPacket, movementDataLength);
         return p;
+    }
+
+    /**
+     * The clientbound mirror of {@code MoveLifeHandler.skipV84MobMoveExtras}. v84 inserts two
+     * count-prefixed blocks between the mob's packed skill data and the movement body:
+     * {@code nMultiTargetForBall} (int count, then count x {int x, int y}) and
+     * {@code nRandTimeForAreaAttack} (int count, then count x int).
+     *
+     * <p>Evidence, and why this contradicts atlas: atlas gates these at {@code >= 84} on the
+     * SERVERBOUND side ({@code monster/serverbound/movement.go}, the gate ticket 25 landed) but at
+     * {@code >= 87} on the CLIENTBOUND side ({@code monster/clientbound/movement.go}, commented
+     * "v84..86 == v83 (off-by-one fix)"). The IDA exports say the clientbound gate is the one that
+     * is wrong - the exact off-by-one class atlas's own {@code VERIFYING_A_PACKET.md} §4 warns
+     * about. {@code CMob::OnMove} reads, with the leading pool-level mob id and the trailing
+     * movement buffer normalised out (the coarse v72/v79/v84/v92 exports omit both; v79 and v92
+     * reproduce their annotated neighbours exactly under that convention, which is what earns the
+     * convention its trust):
+     *
+     * <pre>
+     *   v83 @0x66be61   3 x Decode1 + 1 x Decode4                 (no blocks, no bNotChangeAction)
+     *   v84 @0x6820ea   3 x Decode1 + 6 x Decode4                 (blocks; still no bNotChangeAction)
+     *   v87 @0x6a6cb3   4 x Decode1 + 6 x Decode4                 (blocks + bNotChangeAction)
+     *   v92             4 x Decode1 + 6 x Decode4                 (as v87)
+     * </pre>
+     *
+     * The five extra Decode4 at v84 are exactly the two count-prefixed blocks (2 counts + x + y +
+     * time), and the serverbound {@code CMob::GenerateMovePath} gains the same five at v84
+     * (10 -> 14) - which is the delta ticket 25 already trusted in the other direction.
+     * {@code bNotChangeAction} is a genuine 87 field and is deliberately NOT written here.
+     *
+     * <p>ponytail: both counts are written as 0 rather than echoed from the inbound MOVE_LIFE.
+     * Non-zero counts only occur for mobs doing ball/area attacks, and {@code resetMobPosition}
+     * has no inbound packet to echo at all. Thread the raw block through MoveLifeHandler if a
+     * ball-attack mob ever renders wrong for observers.
+     */
+    private static void writeV84MobMoveExtras(OutPacket p) {
+        if (ServerConstants.VERSION < 84) {
+            return;
+        }
+        p.writeInt(0);  // nMultiTargetForBall count
+        p.writeInt(0);  // nRandTimeForAreaAttack count
     }
 
     public static Packet summonAttack(int cid, int summonOid, byte direction, List<SummonAttackTarget> targets) {
