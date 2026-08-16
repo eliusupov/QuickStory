@@ -4633,6 +4633,14 @@ public class PacketCreator {
 
     public static Packet skillBookResult(Character chr, int skillid, int maxlevel, boolean canuse, boolean success) {
         final OutPacket p = OutPacket.create(SendOpcode.SKILL_LEARN_ITEM_RESULT);
+        if (ServerConstants.VERSION >= 84) {
+            // bOnExclRequest - leading byte the v84+ client reads before the character id, to clear
+            // the requester's exclusive-request lock. Measured, not inferred: gms_v84
+            // CWvsContext::OnSkillLearnItemResult decodes Decode1 then Decode4(characterId) @0xa6988,
+            // v87 @0xab5923 and v95 @0x9f7b35 likewise; v79/v83 start at Decode4. 15-byte body at
+            // v83, 16 at v84+. See ticket 25.
+            p.writeBool(true);
+        }
         p.writeInt(chr.getId());
         p.writeByte(1);
         p.writeInt(skillid);
@@ -4700,6 +4708,19 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * `m_anJobCode[slot]` - a per-avatar short the v84+ client reads after each occupant's name in
+     * an Omok / Match Cards room. Absent in v83 (CMiniRoomBaseDlg::OnEnterResultBase @0x65ec3d has
+     * no such read), present from v84 (sub_674AA6 @0x674aa6) through v95. This is one of the fields
+     * where v84 does NOT follow v83, so the gate is >= 84 and not the usual >= 87. Shop rooms and
+     * hired merchants keep the v83 shape - only the two game dialogs read it. See ticket 25.
+     */
+    private static void addMiniGameJobCode(final OutPacket p, Character chr) {
+        if (ServerConstants.VERSION >= 84) {
+            p.writeShort(chr.getJob().getId());
+        }
+    }
+
     public static Packet getMiniGame(Client c, MiniGame minigame, boolean owner, int piece) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.ROOM.getCode());
@@ -4709,11 +4730,13 @@ public class PacketCreator {
         p.writeByte(0);
         addCharLook(p, minigame.getOwner(), false);
         p.writeString(minigame.getOwner().getName());
+        addMiniGameJobCode(p, minigame.getOwner());
         if (minigame.getVisitor() != null) {
             Character visitor = minigame.getVisitor();
             p.writeByte(1);
             addCharLook(p, visitor, false);
             p.writeString(visitor.getName());
+            addMiniGameJobCode(p, visitor);
         }
         p.writeByte(0xFF);
         p.writeByte(0);
@@ -4817,6 +4840,7 @@ public class PacketCreator {
         p.writeByte(slot);
         addCharLook(p, chr, false);
         p.writeString(chr.getName());
+        addMiniGameJobCode(p, chr);
         p.writeInt(1);
         p.writeInt(chr.getMiniGamePoints(MiniGameResult.WIN, true));
         p.writeInt(chr.getMiniGamePoints(MiniGameResult.TIE, true));
@@ -4908,11 +4932,13 @@ public class PacketCreator {
         p.writeByte(0);
         addCharLook(p, minigame.getOwner(), false);
         p.writeString(minigame.getOwner().getName());
+        addMiniGameJobCode(p, minigame.getOwner());
         if (minigame.getVisitor() != null) {
             Character visitor = minigame.getVisitor();
             p.writeByte(1);
             addCharLook(p, visitor, false);
             p.writeString(visitor.getName());
+            addMiniGameJobCode(p, visitor);
         }
         p.writeByte(0xFF);
         p.writeByte(0);
@@ -4966,6 +4992,7 @@ public class PacketCreator {
         p.writeByte(slot);
         addCharLook(p, chr, false);
         p.writeString(chr.getName());
+        addMiniGameJobCode(p, chr);
         p.writeInt(1);
         p.writeInt(chr.getMiniGamePoints(MiniGameResult.WIN, false));
         p.writeInt(chr.getMiniGamePoints(MiniGameResult.TIE, false));

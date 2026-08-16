@@ -24,6 +24,7 @@ package net.server.channel.handlers;
 import client.Character;
 import client.Client;
 import config.YamlConfig;
+import constants.net.ServerConstants;
 import net.packet.InPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,6 +76,7 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
         int skillId = p.readByte() & 0xff;
         int skillLv = p.readByte() & 0xff;
         short pOption = p.readShort();
+        skipV84MobMoveExtras(p);
         p.skip(8);
 
         if (rawActivity >= 0) {
@@ -176,6 +178,23 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
                 chr.changeMapBanish(monster.getBanish());
             }
         }
+    }
+
+    /**
+     * v84 inserts two count-prefixed blocks between the mob's packed skill data and its move flags:
+     * `nMultiTargetForBall` (int count, then count x {int x, int y}) and `nRandTimeForAreaAttack`
+     * (int count, then count x int). v83's CMob::GenerateMovePath @0x66b6fc has neither; v84's
+     * sub_6818C3 has both - which the v84 IDA export corroborates independently, showing exactly
+     * five extra Decode4 call sites between skillData and the move-flags byte (2 counts + the two
+     * position reads + the one time read). Both counts are normally 0, i.e. 8 bytes, but they are
+     * variable, so read them rather than skipping a constant. See ticket 25.
+     */
+    private static void skipV84MobMoveExtras(InPacket p) {
+        if (ServerConstants.VERSION < 84) {
+            return;
+        }
+        p.skip(p.readInt() * 8);    // nMultiTargetForBall: count x (int x, int y)
+        p.skip(p.readInt() * 4);    // nRandTimeForAreaAttack: count x int
     }
 
     private static boolean inRangeInclusive(Byte pVal, Integer pMin, Integer pMax) {

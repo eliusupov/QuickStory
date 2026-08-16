@@ -31,6 +31,7 @@ import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
 import config.YamlConfig;
 import constants.game.GameConstants;
+import constants.net.ServerConstants;
 import constants.id.ItemId;
 import constants.id.MapId;
 import constants.id.MobId;
@@ -566,15 +567,36 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         }
     }
 
+    /**
+     * The v84 client wraps every serverbound attack in a damage-randomiser / anti-hack envelope that
+     * v83 has no trace of: dr0+dr1 after the field key, dr2+dr3 after the packed hit/damage mask,
+     * and randomDr+crc32 after the skill id - plus, for MAGIC only, a second six-word block right
+     * after that pair. Measured twice over: the gms_v84 IDA export's CUserLocal::TryDoingBodyAttack
+     * reads Decode1, Decode4 x2, Decode1, Decode4 x2, Decode4(skillId), Decode4 x2, then the two
+     * skill-data CRCs, where v83 goes straight from the skill id to the CRCs (24 -> 30 decode
+     * sites); and the per-version magic senders (v83 @0x956da2 has no dr words at all, v84
+     * @0x9942f3 has both blocks). Skipping the magic block leaves the per-mob damage loop reading
+     * garbage monster ids, i.e. magic attacks that deal no damage. See ticket 25.
+     */
+    protected static void skipV84AttackWords(InPacket p, int words) {
+        if (ServerConstants.VERSION >= 84) {
+            p.skip(words * 4);
+        }
+    }
+
     protected AttackInfo parseDamage(InPacket p, Character chr, boolean ranged, boolean magic) {
         //2C 00 00 01 91 A1 12 00 A5 57 62 FC E2 75 99 10 00 47 80 01 04 01 C6 CC 02 DD FF 5F 00
         AttackInfo ret = new AttackInfo();
         p.readByte();
+        skipV84AttackWords(p, 2);   // dr0, dr1
         ret.numAttackedAndDamage = p.readByte();
+        skipV84AttackWords(p, 2);   // dr2, dr3
         ret.numAttacked = (ret.numAttackedAndDamage >>> 4) & 0xF;
         ret.numDamage = ret.numAttackedAndDamage & 0xF;
         ret.targets = new HashMap<>();
         ret.skill = p.readInt();
+        // randomDr + crc32, plus the magic-only secondary block (2dr0..2dr3, 2rnd, 2crc).
+        skipV84AttackWords(p, magic ? 8 : 2);
         ret.ranged = ranged;
         ret.magic = magic;
 

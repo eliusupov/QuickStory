@@ -68,9 +68,17 @@ public final class SummonDamageHandler extends AbstractDealDamageHandler {
         }
         Skill summonSkill = SkillFactory.getSkill(summon.getSkill());
         StatEffect summonEffect = summonSkill.getEffect(summon.getSkillLevel());
-        p.skip(4);
+        // Same v84 anti-hack envelope as the player attack packets, interleaved differently: the
+        // gms_v84 export's CSummoned::TryDoingAttackManual encodes summonId, ~drInfo[0] @0x7caffc,
+        // ~drInfo[1] @0x7cb010, updateTime, ~drInfo[2] @0x7cb035, ~drInfo[3] @0x7cb049, the action
+        // byte, dwKey @0x7cb0c5, crc32 @0x7cb0ec, then the mob count - 21 encode sites at v83, 27
+        // at v84. See ticket 25.
+        skipV84AttackWords(p, 2);   // drInfo[0], drInfo[1]
+        p.skip(4);                  // updateTime
+        skipV84AttackWords(p, 2);   // drInfo[2], drInfo[3]
         List<SummonAttackTarget> targets = new ArrayList<>();
         byte direction = p.readByte();
+        skipV84AttackWords(p, 2);   // dwKey, crc32
         int numAttacked = p.readByte();
         p.skip(8); // I failed lol (mob x,y and summon x,y), Thanks Gerald
         for (int x = 0; x < numAttacked; x++) {
