@@ -268,6 +268,15 @@ static class Program
         return null;
     }
 
+    // T23: force NEVER authorises an APPEND. It is consulted only when the target ALREADY HOLDS
+    // the node, so a forced row is always a replace-in-place of something that exists — which is
+    // why a force row cannot splice a new slot into a positional array, and why the array gate
+    // below it stays effective for every row that would add one. Hoisting this above the
+    // `existing == null` test would hand the force-list a hole-punching power it has never had.
+    // Pinned by selftest ("force never authorises an APPEND").
+    static (string path, string reason)? ForceHit(WzObject? existing, List<(string path, string reason)> force, string row)
+        => existing == null ? null : RootOver(force, row);
+
     // Deny beats force. An overlap is an operator error worth stopping for — resolving it
     // silently in either direction hides the fact that two decisions contradict each other.
     static void AssertNoOverlap(List<(string path, string reason)> deny, List<(string path, string reason)> force)
@@ -1283,6 +1292,73 @@ static class Program
         Check(HoledArray(new[] { "0", "3" }) is { } && HoledArray(new[] { "0", "3" })!.Value.Count == 2,
               "a dense low run WITH a gap is a hole (Glove/01082262.img/swingOF = {0,3}; discount it with guard --baseline)");
 
+        // ---- 3. T23: --force at the scale the backport needs (6,112 live-edited images) ----
+        // Everything here is the real gate code, driven in memory. The measured run of the actual
+        // 6,112 rows is in docs/work-plan/tickets/T23-force-at-scale.md; these checks pin the
+        // properties that run depended on, so a later edit cannot quietly take them away.
+        static (string, string) R(string p) => (p, "T23 backport");
+        var bigForce = new List<(string path, string reason)>();
+        for (int i = 0; i < 5075; i++) bigForce.Add(R($"Character.wz/Accessory/{1010000 + i:D8}.img"));
+        for (int i = 0; i < 1037; i++) bigForce.Add(R($"Map.wz/Map/Map1/{100000000 + i}.img"));
+        Check(bigForce.Count == 6112, "force-list fixture is 6,112 roots, the real backport size");
+
+        // A force root is a ROOT: the row itself and anything beneath it. A whole-image row
+        // therefore also authorises every node inside that image.
+        Check(RootOver(bigForce, "Character.wz/Accessory/01010000.img")?.path == "Character.wz/Accessory/01010000.img",
+              "force matches the row that IS the root");
+        Check(RootOver(bigForce, "Character.wz/Accessory/01010000.img/info/islot")?.path == "Character.wz/Accessory/01010000.img",
+              "force matches a node BENEATH the root (a whole-image root covers the image)");
+        Check(RootOver(bigForce, "Character.wz/Accessory/09999999.img") == null,
+              "force does not match a sibling that is not listed");
+        // Under() compares on segment boundaries. Without the '/' it appends, 'Character.wz/Cape2'
+        // would match a root of 'Character.wz/Cape' and force whole directories nobody listed.
+        Check(RootOver(new List<(string, string)> { R("Character.wz/Cape") }, "Character.wz/Cape2/01102000.img") == null,
+              "force matches on SEGMENT boundaries — 'Cape' does not cover 'Cape2'");
+
+        // Deny/force overlap is a hard exit, in BOTH nesting directions. This is the one that
+        // decides whether a 6,112-row force list can be handed to the tool at all.
+        var realDeny = new List<(string path, string reason)> { R("Npc.wz/9000021.img"), R("Quest.wz/Check.img/4940") };
+        static bool Throws(Action a) { try { a(); return false; } catch (BadArgs) { return true; } }
+        Check(!Throws(() => AssertNoOverlap(realDeny, bigForce)),
+              "6,112 force roots disjoint from the deny-list are accepted (no false overlap at scale)");
+        Check(Throws(() => AssertNoOverlap(new List<(string, string)> { R("Character.wz/Accessory/01010000.img/info/islot") }, bigForce)),
+              "a deny root INSIDE a forced image is a hard exit");
+        Check(Throws(() => AssertNoOverlap(new List<(string, string)> { R("Character.wz") }, bigForce)),
+              "a deny root ABOVE a forced image is a hard exit");
+        Check(Throws(() => AssertNoOverlap(bigForce, bigForce)), "deny == force is a hard exit");
+
+        // Deny beats force: the deny gate runs before force is ever consulted, so a row that is
+        // on BOTH lists (were the overlap check ever bypassed) is still refused.
+        Check(GateRefusal(new List<(string, string)> { R("Character.wz/Accessory/01010000.img") },
+                          "Character.wz", "Character.wz/Accessory/01010000.img")?.Contains("DENIED") == true,
+              "deny beats force — a denied row is refused whether or not it is force-listed");
+
+        // THE invariant that makes force safe next to the positional-array gate.
+        Check(ForceHit(null, bigForce, "Character.wz/Accessory/01010000.img") == null,
+              "force never authorises an APPEND (no existing node = no force hit = array gate still runs)");
+        Check(ForceHit(new WzImage("01010000.img"), bigForce, "Character.wz/Accessory/01010000.img") != null,
+              "force DOES authorise a replace-in-place of an existing node");
+
+        // Subtree-replace, not child-merge, and siblings survive. This is the write shape every
+        // one of the 6,112 rows takes: Remove() the target node, AddProperty() the source clone.
+        var dir = new WzImage("holder.img");
+        var victim = new MapleLib.WzLib.WzProperties.WzSubProperty("target");
+        victim.AddProperty(new MapleLib.WzLib.WzProperties.WzIntProperty("v84only", 84));
+        victim.AddProperty(new MapleLib.WzLib.WzProperties.WzIntProperty("shared", 84));
+        dir.AddProperty(victim);
+        dir.AddProperty(Slot("sibling", 7));
+        var replacement = new MapleLib.WzLib.WzProperties.WzSubProperty("target");
+        replacement.AddProperty(new MapleLib.WzLib.WzProperties.WzIntProperty("shared", 83));
+        victim.Remove();
+        dir.AddProperty(replacement.DeepClone());
+        var landed = Kids(dir).FirstOrDefault(k => k.Name == "target");
+        Check(Kids(dir).Count(k => k.Name == "sibling") == 1, "a forced overwrite does NOT drop the node's siblings");
+        Check(Kids(dir).Count(k => k.Name == "target") == 1, "a forced overwrite leaves exactly one node at the path (no duplicate)");
+        Check(landed != null && Kids(landed).All(k => k.Name != "v84only"),
+              "force REPLACES THE SUBTREE WHOLESALE — a child only the target had is gone, not merged");
+        Check(landed != null && Kids(landed).Any(k => k.Name == "shared" && k.ToString() == "83"),
+              "the replacement subtree is the SOURCE's content, not the target's");
+
         Console.WriteLine(fail == 0 ? "selftest: all checks passed" : $"selftest: {fail} CHECK(S) FAILED");
         return fail == 0 ? 0 : 4;
     }
@@ -1434,12 +1510,8 @@ static class Program
             // clearing first. The force-list is the ONLY way past this; there is no flag that
             // turns the gate off wholesale.
             var existing = Resolve(tgt, rel, rel.Length);
-            (string path, string reason)? fHit = null;
-            if (existing != null)
-            {
-                fHit = RootOver(force, manifestPath);
-                if (fHit == null) { Conflict(manifestPath, "already exists in target"); continue; }
-            }
+            var fHit = ForceHit(existing, force, manifestPath);
+            if (existing != null && fHit == null) { Conflict(manifestPath, "already exists in target"); continue; }
 
             var parent = Resolve(tgt, rel, rel.Length - 1);
             if (parent == null) { Conflict(manifestPath, "parent path absent in target — import the parent first"); continue; }
