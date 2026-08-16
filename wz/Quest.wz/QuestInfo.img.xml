@@ -6763,12 +6763,110 @@ Once there, talk to #b#p1200003##k to board the ship.
     <string name="2" value="I&apos;ve eliminated 100 Mixed Golems. I wonder if I&apos;ve made a difference in Victoria Island?"/>
     <int name="area" value="30"/>
   </imgdir>
+  <imgdir name="22000">
+    <string name="name" value="Strange Dream"/>
+    <int name="area" value="7"/>
+    <string name="0" value="A dragon asleep in a forest covered in fog... What a strange dream. \r\n\r\nYou feel a bit tired from dreaming about the dragon but #byou should say good morning to your family.#k."/>
+    <string name="1" value="When you tell your Mom about the dream, she says that it&apos;s a very interesting dream and that you should share it with #b#p1013101##k, who is in the #b#m100030102##k. Hmm... #p1013101# will probably just laugh at you. Still, you should go tell #p1013101#."/>
+    <string name="2" value="#p1013101# just laughed, saying your dream was stupid. Just as you suspected."/>
+    <string name="type" value="[Required]"/>
+    <string name="showLayerTag" value="22000"/>
+  </imgdir>
+  <imgdir name="22001">
+    <string name="name" value="Feeding Bull Dog"/>
+    <int name="area" value="7"/>
+    <string name="type" value="[Required]"/>
+    <string name="0" value="Say good morning to #b#p1013101##k."/>
+    <string name="1" value="#p1013101#, after laughing for awhile, says to stop talking nonsense and asks you to give #p1013102# some breakfast. Give some food to #b#p1013102##k, who is to your #bleft#k, since #p1013101# is too scared to do it himself."/>
+    <string name="2" value="You fed #p1013102# breakfast."/>
+    <string name="showLayerTag" value="22001"/>
+  </imgdir>
+  <imgdir name="22002">
+    <string name="name" value="Sandwich for Breakfast"/>
+    <int name="area" value="7"/>
+    <string name="type" value="[Required]"/>
+    <string name="0" value="You fed breakfast to #p1013102#. Come to think of it, you&apos;re hungry too... Go ask #b#p1013101##k about breakfast."/>
+    <string name="1" value="#p1013101# gave you a sandwich for breakfast. He tells you to #bgo inside the house again once you&apos;re done with your sandwich#k. Mom must have something she wants to ask you to do... In any case, eat your sandwich first."/>
+    <string name="2" value="Mom suddenly handed you a #t1003028#. Huh? Why did she give this to you?"/>
+    <string name="showLayerTag" value="22002"/>
+  </imgdir>
+  <imgdir name="22003">
+    <string name="name" value="Delivering the Lunch Box"/>
+    <int name="area" value="7"/>
+    <string name="type" value="[Required]"/>
+    <string name="0" value="#bMom#k seems to have something she wants you to do. Talk to her."/>
+    <string name="1" value="Mom asks you to deliver the #t4032448# to #bDad#k who is working at the #b#m100030300##k. Go to the #m100030300#. Leave the house and head #bto your left#k."/>
+    <string name="2" value="You delivered the #t4032448# to Dad."/>
+    <string name="showLayerTag" value="22003"/>
+  </imgdir>
+  <imgdir name="22004">
+    <string name="name" value="Fixing the Fence"/>
+    <int name="area" value="7"/>
+    <string name="type" value="[Required]"/>
+    <string name="0" value="#bDad#k seems to have something he wants to ask you to do. Talk to Gustav, your Dad."/>
+    <string name="1" value="Dad says that there&apos;s a hole in the farm fence because some #o1210100#s escaped. He asks you to bring him some #t4032498#es so that he can fix the fence. Defeat some of the #r#o0130100#s#k nearby and bring back some #b#t4032498#es#k.\r\n\r\n#i4032498# #t4032498# #b#c4032498# / 3#k"/>
+    <string name="2" value="When you gave Dad the #t4032498#es, he made you a chair with the wood leftover from fixing the fence."/>
+  </imgdir>
+  <imgdir name="22005">
+    <string name="name" value="Rescuing the Piglet"/>
+    <int name="area" value="7"/>
+    <string name="type" value="[Required]"/>
+    <string name="0" value="#bDad#k seems to have something else he wants to ask you to do. Talk to Dad."/>
+    <string name="1" value="Another #p1013200# ran away while the fence was broken. Go to the #b#m900020100##k and bring back the lost #p1013200#. #rYou must be careful as the recent rain storms may have destroyed the paths#k.\r\n\r\n\r\n#i4032449# #t4032449# #b#c4032449# / 1#k"/>
+    <string name="2" value="While searching for the #p1013200#, you found a strange egg. How will you raise this egg?"/>
+    <string name="showLayerTag" value="22005"/>
+  </imgdir>
+  <imgdir name="22006">
+    <string name="name" value="Returning the Empty Lunch Box"/>
+    <int name="area" value="7"/>
+    <string name="type" value="[Required]"/>
+    <string name="1" value="Dad says that Mom probably knows best about how to raise a egg. He tells you to #bgo home and ask Mom#k. While you&apos;re at it, he asks you to return his #t4032450#."/>
+    <string name="2" value="After delivering the #t4032450#, you asked Mom about raising an egg. She said that you can raise it in an incubator... #p1013101# seems to know something about an incubator."/>
+    <string name="showLayerTag" value="22006"/>
+    <string name="0" value="Looks like Dad has something he wants to say..."/>
+  </imgdir>
+  <imgdir name="22007">
+    <string name="name" value="Collecting Eggs"/>
+    <int name="area" value="7"/>
+    <string name="type" value="[Required]"/>
+    <string name="0" value="#p1013101# seems to have an Incubator that can be used to hatch an egg. Talk to #b#p1013101##k."/>
+    <string name="1" value="#p1013101# says that he will give you an Incubator if you do his chore of collecting #t4032451#s. Go to your #bright#k and collect the #t4032451# that #p1013101# is supposed to collect. You can obtain an #b#t4032451##k by clicking on a #b#p1013104##k.\r\n\r\n#i4032451# #t4032451# #b#c4032451# / 1#k"/>
+    <string name="2" value="You collected the #t4032451# and received an incubator from #p1013101#."/>
+    <string name="showLayerTag" value="22007"/>
+  </imgdir>
+  <imgdir name="22008">
+    <string name="name" value="Chasing away the Foxes"/>
+    <int name="area" value="7"/>
+    <string name="type" value="[Required]"/>
+    <string name="0" value="#b#p1013101##k seems to have something he wants to say."/>
+    <string name="1" value="#p1013101# says that there are too many foxes in #b#m100030103##k these days and suggests eliminating the #r#o9300385#es#k together. #p1013101# tells you to go to the #m100030103# first to start the elimination and that he will follow later... \r\n\r\n#o9300385##r #a220081##k"/>
+    <string name="2" value="#p1013101# never did help you. 10 #o9300385#es were easy to handle... But #p1013101# just can&apos;t be trusted."/>
+    <string name="showLayerTag" value="22008"/>
+  </imgdir>
+  <imgdir name="22009">
+    <string name="name" value="Verifying the Farm Situation"/>
+    <int name="area" value="7"/>
+    <string name="type" value="[Required]"/>
+    <string name="0" value="#p1013101# seems worried that the number of #o9300385#es has grown. Talk to #p1013101#."/>
+    <string name="1" value="#p1013101# says that he is worried whether the number of foxes in the #b#m100030300##k has also grown. He asks that you go to #bDad#k and ask him about the situation. If the number of foxes has grown, some major hunting may be required..."/>
+    <string name="2" value="Dad seems to be more worried about the #o1210100#s than the #o9300385#es."/>
+    <string name="showLayerTag" value="22009"/>
+  </imgdir>
   <imgdir name="2201">
     <string name="name" value="Eliminate the Skeletons"/>
     <string name="0" value="Muirhat is worried about the evil spirits that have infiltrated Victoria Island as of late. I wonder what I could do to help? I should go talk to Muirhat on the top deck of The Nautilus."/>
     <string name="1" value="Victoria Island has already been infused with evil spirits. But I refuse to give up like this. I need to eliminate #r50 Skeleton Solders#k and #r50 Skeleton Generals#k to stop these evil creatures from further spreading their evilness in Victoria Island. \n\n#o 5150001# #r#a22011##k\n#o 6230602# #r#a22012##k"/>
     <string name="2" value="I&apos;ve eliminated 50 Skeleton Soldiers and 50 Skeleton Generals. I wonder if I&apos;ve made a difference in Victoria Island?"/>
     <int name="area" value="30"/>
+  </imgdir>
+  <imgdir name="22010">
+    <string name="name" value="Strange Farm"/>
+    <int name="area" value="7"/>
+    <string name="type" value="[Required]"/>
+    <string name="0" value="Dad seems to have something he wants to ask you to do. Talk to Dad."/>
+    <string name="1" value="Dad asks you to help him calm the #o1210100#s who are jumping around like crazy. Disciplining a few #r#o1210100##ks might calm them down... Go to the #b #m100030310# to your left#k and take care of those pigs.\r\n\r\n\r\n#o1210100##r #a220101##k"/>
+    <string name="2" value="You disciplined the #o1210100#s."/>
+    <string name="showLayerTag" value="22010"/>
   </imgdir>
   <imgdir name="2202">
     <string name="name" value="Eliminate the Drakes"/>
@@ -6832,6 +6930,106 @@ Once there, talk to #b#p1200003##k to board the ship.
     <string name="1" value="I should bring the #bGold Pouch#k to #bMuirhat#k as Bartol asked me to. Muirhat is standing #bin front of the Control Room on the upper deck#k. "/>
     <string name="2" value="I&apos;ve delivered the Gold Pouch to Muirhat."/>
     <int name="area" value="30"/>
+  </imgdir>
+  <imgdir name="22100">
+    <string name="name" value="Dragon Master 1st Job Advancement"/>
+    <int name="area" value="7"/>
+    <string name="type" value="[Job Advancement]"/>
+    <string name="0" value="Dragon Master 1st Job Advancement"/>
+    <string name="1" value="Dragon Master 1st Job Advancement"/>
+    <string name="2" value="Baby Dragon Mir has been born from the Dragon Egg."/>
+    <int name="autoStart" value="1"/>
+    <int name="autoAccept" value="1"/>
+  </imgdir>
+  <imgdir name="22101">
+    <string name="name" value="Dragon Master 2nd Job Advancement"/>
+    <int name="area" value="7"/>
+    <string name="type" value="[Job Advancement]"/>
+    <string name="0" value="Dragon Master 2nd Job Advancement"/>
+    <string name="1" value="Dragon Master 2nd Job Advancement"/>
+    <string name="2" value="Mir has grown?! Mir has grown bigger and taken off the egg shell he was wearing as a hat... Apparently, dragons grow too.\"/>
+    <int name="autoStart" value="1"/>
+    <int name="autoAccept" value="1"/>
+  </imgdir>
+  <imgdir name="22102">
+    <string name="name" value="Dragon Master 3rd Job Advancement"/>
+    <int name="area" value="7"/>
+    <string name="type" value="[Job Advancement]"/>
+    <string name="0" value="Dragon Master 3rd Job Advancement"/>
+    <string name="1" value="Dragon Master 3rd Job Advancement"/>
+    <string name="2" value="Mir has grown again! As Mir grows, you can feel yourself developing as well."/>
+    <int name="autoStart" value="1"/>
+    <int name="autoAccept" value="1"/>
+  </imgdir>
+  <imgdir name="22103">
+    <string name="name" value="Dragon Master 4th Job Advancement"/>
+    <int name="area" value="7"/>
+    <string name="type" value="[Job Advancement]"/>
+    <int name="autoStart" value="1"/>
+    <int name="autoAccept" value="1"/>
+    <string name="0" value="Dragon Master 4th Job Advancement"/>
+    <string name="1" value="Dragon Master 4th Job Advancement"/>
+    <string name="2" value="Mir has grown again and learned a new skill."/>
+  </imgdir>
+  <imgdir name="22104">
+    <string name="name" value="Dragon Master 5th Job Advancement"/>
+    <int name="area" value="7"/>
+    <string name="type" value="[Job Advancement]"/>
+    <string name="0" value="Dragon Master 5th Job Advancement"/>
+    <string name="1" value="Dragon Master 5th Job Advancement"/>
+    <string name="2" value="Mir has grown again. He is getting bigger and bigger... He&apos;s getting kind of scary?!"/>
+    <int name="autoStart" value="1"/>
+    <int name="autoAccept" value="1"/>
+  </imgdir>
+  <imgdir name="22105">
+    <string name="name" value="Dragon Master 6th Job Advancement"/>
+    <int name="area" value="7"/>
+    <int name="autoStart" value="1"/>
+    <int name="autoAccept" value="1"/>
+    <string name="0" value="Dragon Master 6th Job Advancement"/>
+    <string name="1" value="Dragon Master 6th Job Advancement"/>
+    <string name="2" value="Mir has grown again and learned a new skill. Just how much bigger is he going to get?"/>
+    <string name="type" value="[Job Advancement]"/>
+  </imgdir>
+  <imgdir name="22106">
+    <string name="name" value="Dragon Master 7th Job Advancement"/>
+    <int name="area" value="7"/>
+    <string name="type" value="[Job Advancement]"/>
+    <string name="0" value="Dragon Master 7th Job Advancement"/>
+    <string name="1" value="Dragon Master 7th Job Advancement"/>
+    <string name="2" value="Mir has grown again. There&apos;s hardly a trace of his earlier cute appearance. But he does look really cool now..."/>
+    <int name="autoStart" value="1"/>
+    <int name="autoAccept" value="1"/>
+  </imgdir>
+  <imgdir name="22107">
+    <string name="name" value="Dragon Master 8th Job Advancement"/>
+    <int name="area" value="7"/>
+    <string name="type" value="[Job Advancement]"/>
+    <string name="0" value="Dragon Master 8th Job Advancement"/>
+    <string name="1" value="Dragon Master 8th Job Advancement"/>
+    <string name="2" value="Mir has grown and learned a more powerful skill."/>
+    <int name="autoStart" value="1"/>
+    <int name="autoAccept" value="1"/>
+  </imgdir>
+  <imgdir name="22108">
+    <string name="name" value="Dragon Master 9th Job Advancement"/>
+    <int name="area" value="7"/>
+    <string name="type" value="[Job Advancement]"/>
+    <int name="autoStart" value="1"/>
+    <int name="autoAccept" value="1"/>
+    <string name="0" value="Dragon Master 9th Job Advancement"/>
+    <string name="1" value="Dragon Master 9th Job Advancement"/>
+    <string name="2" value="Mir has grown again. His new golden scales show off his newfound strength and you can feel yourself that much stronger as well."/>
+  </imgdir>
+  <imgdir name="22109">
+    <string name="name" value="Dragon Master 10th Job Advancement"/>
+    <int name="area" value="7"/>
+    <string name="type" value="[Job Advancement]"/>
+    <string name="0" value="Dragon Master 10th Job Advancement"/>
+    <string name="1" value="Dragon Master 10th Job Advancement"/>
+    <string name="2" value="Mir is now fully grown. Is this what an Onyx Dragon truly looks like? Looking simultaneously threatening and friendly is a privilege reserved for Dragons."/>
+    <int name="autoStart" value="1"/>
+    <int name="autoAccept" value="1"/>
   </imgdir>
   <imgdir name="2211">
     <string name="name" value="Deliver the Tattered Map to Black Bark"/>
@@ -6984,6 +7182,15 @@ Once there, talk to #b#p1200003##k to board the ship.
     <int name="area" value="30"/>
     <int name="autoStart" value="1"/>
   </imgdir>
+  <imgdir name="22300">
+    <string name="name" value="Hero&apos;s Succession"/>
+    <int name="area" value="7"/>
+    <string name="type" value="[Required]"/>
+    <string name="0" value="When you reach Lv. 200, #p1205000# starts talking to you. What could it be about? Respond to #p1205000#."/>
+    <string name="1" value="#p1205000# says that he didn&apos;t expect you and #p1013000# to grow this strong and asks that come to the #bIsland where he sleeps#b so that he can pass on a forgotten power."/>
+    <string name="2" value="#p1205000# teaches you Hero&apos;s Echo, a skill that was once used by Freud. He says that he is happy another Hero has appeared in Maple World that can take the place of Freud and asks that you continue to fight for Maple World alongside #p1013000#. "/>
+    <int name="autoStart" value="1"/>
+  </imgdir>
   <imgdir name="2231">
     <string name="name" value="Captain Al, Who Are You?"/>
     <string name="0" value="A middle-aged gentleman who laims to have been the leader of a Family for 30 mind-boggling years... the rumors about this man, #bCaptain Al#k, who can be found in #bLith Harbor#k and #bOrbis Park#k, are running rampant. What exactly is a Family and the Leader anyway? It sounds interesting... better ask #bCaptain Al#k that question myself."/>
@@ -7088,6 +7295,82 @@ Once there, talk to #b#p1200003##k to board the ship.
     <int name="order" value="3"/>
     <string name="rewardSummary" value="EXP 50,000"/>
   </imgdir>
+  <imgdir name="22400">
+    <string name="name" value="Rumor about the Dragon Mount"/>
+    <int name="area" value="7"/>
+    <string name="0" value="#b#p1032001##k in #m101000000# starts to talk to you..."/>
+    <string name="1" value="#p1032001# says that he has heard a rumor about a #bDragon mount#k and is curious whether an Onyx Dragon can be mounted. If it seems possible after talking to #b#p1013000##k, return to #p1032001#.\r\n\r\n#y22401# #b(#u22401#)#k"/>
+    <string name="2" value="#p1032001# says that he heard about a very powerful warrior named #p9901000# who knows how to mount a dragon and suggests that you go to #m102000000# and meet with #p9901000#."/>
+    <int name="autoStart" value="1"/>
+    <string name="parent" value="Dragon Mount"/>
+    <int name="order" value="1"/>
+  </imgdir>
+  <imgdir name="22401">
+    <string name="name" value="Is Dragon Mounting Possible?"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Is it possible to mount an Onyx Dragon? Ask #b#p1013000##k."/>
+    <string name="1" value="#p1013000# says that it shouldn&apos;t be too difficult to carry someone your size. Ah, so it is possible to mount an Onyx Dragon."/>
+    <string name="2" value="#p1013000# says that it shouldn&apos;t be too difficult to carry someone your size. Ah, so it is possible to mount an Onyx Dragon. Go inform Grendel the Old of this fact."/>
+  </imgdir>
+  <imgdir name="22402">
+    <string name="name" value="Meeting the Dragon Rider"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Follow #p1032001#&apos;s suggestion and go find the person named #bFangBlade#k in #b#m102000000##k. He is supposed to be very powerful so maybe he is in the Warrior&apos;s Sanctuary."/>
+    <string name="1" value="You meet #p9901000#. He is very friendly, promising to tell you about mounting a Dragon but says you need a saddle first. He mentions that people who came from #b#m130000000##k have very cool saddles. You should go to #m130000000# and bring back a saddle.\r\n\r\n#i1912033# #t1912033# #b#c1912033# / 1#k"/>
+    <string name="2" value="After you went to the Aquarium and brought back a saddle,  #p9901000# taught you the Monster Rider skill."/>
+    <string name="parent" value="Dragon Mount"/>
+    <int name="order" value="2"/>
+  </imgdir>
+  <imgdir name="22403">
+    <string name="name" value="In Search of a Cool Saddle"/>
+    <int name="area" value="7"/>
+    <string name="0" value="When you enter #b#m130000000##k, the home of people who mount birds, someone starts talking to you."/>
+    <string name="1" value="A person named #p1101002#, who is the Tactician in #m130000000#, tells you to leave since this island is only for Knights. He says that all the saddles for the Knights are made by #b#p2060005##k in the #b#m230000000##k... Would he be able to make a Dragon Saddle?"/>
+    <string name="2" value="You met #p2060005# in #m230000000#."/>
+  </imgdir>
+  <imgdir name="22404">
+    <string name="name" value="Making a Saddle"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Ask #b#p2060005##k in #b#m230000000##k to make you a saddle."/>
+    <string name="1" value="#p2060005#, after measuring #p1013000#, says that a Dragon Saddle must be custom made to fit #p1013000#. He says he will make you a saddle if you pay for the materials and labor.\r\n\r\n#i4000155# #t4000155# #b#c4000155# / 50#k\r\n#i4032474# #t4032474# #b#c4032474# / 1#k\r\n#b10000000 mesos#k"/>
+    <string name="2" value="You received a completed saddle from #p2060005#."/>
+  </imgdir>
+  <imgdir name="22405">
+    <string name="name" value="The Lost Saddle"/>
+    <int name="area" value="7"/>
+    <string name="0" value="You lost the Dragon Saddle! What to do? Go to #b#p2060005##k in the #b#m230000000# #m230000003##k and ask for another saddle."/>
+    <string name="1" value="#p2060005# says that he will make you a saddle if you bring her #b50 #t4000155#s#k and #b1 #t4032474##k like before. However, unlike last time, he won&apos;t give you a special discount and will charge the full #b20 million mesos#k. Bring him all the materials.\r\n\r\n#i4000155# #t4000155# #b#c4000155# / 50#k\r\n#i4032474# #t4032474# #b#c4032474# / 1#k\r\n#b20000000 mesos#k"/>
+    <string name="2" value="You received the saddle from #p2060005# again. It&apos;s not cheap so you should be careful not to lose it again."/>
+  </imgdir>
+  <imgdir name="22406">
+    <string name="name" value="Uncomfortable Saddle"/>
+    <int name="area" value="7"/>
+    <string name="0" value="#p1013000# seems to have something he wants to say. What could it be? Talk to #b#p1013000##k."/>
+    <string name="1" value="#p1013000# grumbles that the saddle is painful because he&apos;s gotten too big. He definitely does look very uncomfortable. Maybe you shouldn&apos;t mount him until a new saddle can be made."/>
+    <string name="2" value="#p1013000# grumbles that the saddle is painful because he&apos;s gotten too big. He definitely does look very uncomfortable. Maybe you shouldn&apos;t mount him until a new saddle can be made. Does that mean you have to go to #b#m230000000# again for a new saddle...?"/>
+  </imgdir>
+  <imgdir name="22407">
+    <string name="name" value="Making a Bigger Saddle"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Ask #b#p2060005##k in #b#m230000000##k to make you a bigger saddle."/>
+    <string name="1" value="#p2060005# says that he will make you a saddle that is flexible enough for #p1013000#. However, the materials are quite intimidating.\r\n\r\nYou must obtain #b#t4032475#s#k from #m211000000#, a #b#t4032476#s#k from Shipwreck Treasure Chests deep in the oceans of Aquaroad, and some #b#t4032477##k, a specialty product of #m251000000#, from Captain Hwang.\r\n\r\n#i4032475# #t4032475# #b#c4032475# / 10#k\r\n#i4032476# #t4032476# #b#c4032476# / 2#k\r\n#i4032477# #t4032477# #b#c4032477# / 2#k\r\n#b30000000 mesos"/>
+    <string name="2" value="After receiving all the materials, #p2060005# made you the #t1912034#. With this, you should be able to mount comfortably for awhile."/>
+  </imgdir>
+  <imgdir name="22408">
+    <string name="name" value="Obtaining the Unbreakable Porcelain"/>
+    <int name="area" value="7"/>
+    <string name="0" value="In order to make a bigger saddle, you need to obtain some #t4032477#, a specialty product of #m251000000#. You should ask #b#p2092001##k, who is in charge of trade in #b#m251000000##k."/>
+    <string name="1" value="The #t4032497#, the master artisan who makes the #t4032477#, has been kidnapped by the Red-Nose Pirates. If you want some #t4032477#, you&apos;ll have to rescue #t4032497# first... Enter the Pirate Hideout to rescue the #t4032497#. You can enter from the #b#m251010403##k.\r\n\r\n#i4032497# #t4032497# #b#c4032497# / 1#k"/>
+    <string name="2" value="You rescued the #t4032497#. All you have to do now is ask the #t4032497# to make you some #t4032477#."/>
+    <string name="showLayerTag" value="22408"/>
+  </imgdir>
+  <imgdir name="22409">
+    <string name="name" value="Making the Unbreakable Porcelain"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Ask the #b#t4032497##k, who you rescued from the Red-Nose Pirates, to make you 2 #t4032477#s."/>
+    <string name="1" value="The #t4032497# says that he will need some materials to make the #t4032477# and gives you the names of the items which can be found near #m251000000#. Go find all the materials.\r\n\r\n#i4000291# #t4000291# #b#c4000291# / 100#k\r\n#i4000292# #t4000292# #b#c4000292# / 100#k"/>
+    <string name="2" value="You received 2 #t4032477#s from the #t4032497#."/>
+  </imgdir>
   <imgdir name="2241">
     <string name="name" value="A Request to His Apprentice"/>
     <int name="area" value="30"/>
@@ -7098,6 +7381,35 @@ Once there, talk to #b#p1200003##k to board the ship.
     <string name="parent" value="Manji and Balrog"/>
     <int name="order" value="4"/>
     <string name="rewardSummary" value="EXP 30,000"/>
+  </imgdir>
+  <imgdir name="22410">
+    <string name="name" value="The Lost Big Saddle"/>
+    <int name="area" value="7"/>
+    <string name="0" value="You lost the #t1912034#! What to do? Ask #b#p2060005##k in #b#m230000000##k to make you another saddle."/>
+    <string name="1" value="#p2060005# is angry that you lost the saddle he made you and says that he will make you another saddle only if you give him #b60 million mesos#k in addition to the #bsame materials as before#k.\r\n\r\n#i4032504# #t4032504# #b#c4032504# / 10#k\r\n#i4032505# #t4032505# #b#c4032505# / 2#k\r\n#i4032477# #t4032477# #b#c4032477# / 2#k\r\n#b60000000 mesos#k"/>
+    <string name="2" value="You received the #t1912034# from #p2060005# after getting all the materials again and paying double the mesos. Be careful not to lose it again..."/>
+  </imgdir>
+  <imgdir name="22411">
+    <string name="name" value="Uncomfortable Saddle II"/>
+    <int name="area" value="7"/>
+    <string name="0" value="#p1013000# seems to have something he wants to say. Could it be that he&apos;s gotten too big for the saddle again? Talk to #b#p1013000##k."/>
+    <string name="1" value="#p1013000# says that the saddle is too small and it&apos;s difficult for him to even fly. He&apos;s going to need a new saddle. It&apos;s going to be expensive... Go to #p2060005# in #m230000000# and ask for another saddle."/>
+    <string name="2" value="#p1013000# says that the saddle is too small and it&apos;s difficult for him to even fly. He&apos;s going to need a new saddle. It&apos;s going to be expensive... Go to #p2060005# in #m230000000# and ask for another saddle."/>
+    <int name="autoStart" value="1"/>
+  </imgdir>
+  <imgdir name="22412">
+    <string name="name" value="Making a Really Big Saddle"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Go to #b#p2060005##k in #b#m230000000##k and ask him to make you a Really Big Saddle. "/>
+    <string name="1" value="#p2060005# says that you are the only person who has ever asked him to make three different saddles and agrees to make a saddle big enough for #p1013000#. Bring him the required materials and mesos.\r\n\r\n#i4000270# #t4000270# #b#c4000270# / 300#k\r\n#i4000272# #t4000272# #b#c4000272# / 300#k\r\n#i4000271# #t4000271# #b#c4000271# / 300#k\r\n#b60000000 mesos#k"/>
+    <string name="2" value="You received a Really Big Saddle from #p2060005#. You can only hope that you won&apos;t need any more saddles."/>
+  </imgdir>
+  <imgdir name="22413">
+    <string name="name" value="The Lost Really Big Saddle"/>
+    <int name="area" value="7"/>
+    <string name="0" value="You lost the #t1912035#! What to do? Go to #b#p2060005##k in #b#m230000000##k and ask for another saddle."/>
+    <string name="1" value="#p2060005# is angry that you lost something that he worked hard to make and says that you&apos;ll have to pay double the fee in order for him to make you another one. For some reason, you almost think that he&apos;s happy about this situation... You hope that you&apos;re mistaken.\r\n\r\n#i4000270# #t4000270# #b#c4000270# / 300#k\r\n#i4000272# #t4000272# #b#c4000272# / 300#k\r\n#i4000271# #t4000271# #b#c4000271# / 300#k\r\n#b120000000 mesos#k"/>
+    <string name="2" value="You received the #t1912035# from #p2060005# after finding the materials again and paying double the mesos. Be careful not to lose it again..."/>
   </imgdir>
   <imgdir name="2242">
     <string name="name" value="Stay Away From Strangers"/>
@@ -7189,6 +7501,77 @@ Once there, talk to #b#p1200003##k to board the ship.
     <string name="1" value="Once again, the Rememberer suggests that someone should study Zombie Mushrooms.\r\n\r\n#i4000008:# #t4000008:# #c4000008# / 100"/>
     <string name="rewardSummary" value="EXP 8,000\r\nCan proceed to &apos;Zombie Mushroom Signal 3&apos; quest\r\n"/>
   </imgdir>
+  <imgdir name="22500">
+    <string name="name" value="Baby Dragon Awakens"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Whoa, a dragon really hatched from the egg?! What is he going to say? #bTalk to him by clicking on the Baby Dragon#k."/>
+    <string name="1" value="You&apos;re not really sure but you seem to have made some sort of pact with #p1013000# the baby Dragon. He says that as his master, you must take care of him...\r\n\r\nAs you stand there confused, #p1013000# says that he will show you his power by using his skill to defeat the #o1210100#s. He tells you to simply give the command by using a skill...\r\n\r\n#o1210100##r #a225001##k"/>
+    <string name="2" value="#p1013000# used his incredible power to defeat the monsters!"/>
+  </imgdir>
+  <imgdir name="22501">
+    <string name="name" value="Hungry Baby Dragon"/>
+    <int name="area" value="7"/>
+    <string name="0" value="#p1013000#, the Baby Dragon, seems to be very hungry. But what do Dragon&apos;s eat? Ask #b#p1013000##k."/>
+    <string name="1" value="#p1013000# says that he also doesn&apos;t know what to eat and asks that you be a good master and find him something to eat. Hmm, what would taste good to a Dragon? You have no idea. Maybe #bDad#k would know. Try asking him."/>
+    <string name="2" value="Dad seems to be a bit confused too."/>
+  </imgdir>
+  <imgdir name="22502">
+    <string name="name" value="A Bite of Hay"/>
+    <int name="area" value="7"/>
+    <string name="0" value="What would a Dragon eat? #bDad#k is thinking about it."/>
+    <string name="1" value="Dad says that maybe he will eat a #t4032452# like cows do. Obtain #b3#k #bBundles of Hay#k by #bdoing a normal attack on the Haystack#k nearby and feed it to #p1013000#.\r\n\r\n#i4032452# #t4032452# #b#c4032452# / 3#k"/>
+    <string name="2" value="#p1013000# doesn&apos;t seem to like eating hay..."/>
+  </imgdir>
+  <imgdir name="22503">
+    <string name="name" value="A Bite of Pork"/>
+    <int name="area" value="7"/>
+    <string name="1" value="You guess that Dragons are probably carnivores. Hunt the #r#o1210100##ks  to obtain some #b#t4032453##k for #p1013000#.\r\n\r\n#i4032453# #t4032453# #b#c4032453# / 10#k"/>
+    <string name="2" value="#p1013000# says that he doesn&apos;t think he&apos;ll be able to digest the #t4032453# very well..."/>
+    <string name="0" value="What would a Dragon eat? Talk to Mir."/>
+  </imgdir>
+  <imgdir name="22504">
+    <string name="name" value="Tasty Milk 1"/>
+    <int name="area" value="7"/>
+    <string name="1" value="No matter how much you think, you just can&apos;t figure out what #p1013000# would like. Maybe there is something you missed. Ask #bDad#k again."/>
+    <string name="2" value="After hearing that the &quot;lizard&quot; is still a baby, Dad starts to think again."/>
+    <string name="0" value="You have no idea what Dragons eat. Talk to Mir."/>
+  </imgdir>
+  <imgdir name="22505">
+    <string name="name" value="Tasty Milk 2"/>
+    <int name="area" value="7"/>
+    <string name="1" value="Dad says that if he is still a baby then maybe he should be drinking #bmilk#k. He says that you should ask for some milk from the #b#p1013105##k at the #b#m100030310##k. "/>
+    <string name="2" value="You started talking to #p1013105#. Now ask for some milk."/>
+    <string name="showLayerTag" value="22505"/>
+    <string name="0" value="Maybe Dad would know what Mir likes. Talk to Dad."/>
+  </imgdir>
+  <imgdir name="22506">
+    <string name="name" value="Tasty Milk 3"/>
+    <int name="area" value="7"/>
+    <string name="1" value="You received milk from the #p1013105#. Will #p1013000# like milk? Give the milk to #p1013000#."/>
+    <string name="2" value="#p1013000# really enjoyed the milk. And it seems as if #p1013000# has become a bit stronger."/>
+    <string name="0" value="Maybe Dragon Babies drink milk too. Get some milk from the Dairy Cow."/>
+  </imgdir>
+  <imgdir name="22507">
+    <string name="name" value="What is a Dragon Master?"/>
+    <int name="area" value="7"/>
+    <string name="0" value="It does seem as if #p1013000# has gotten a bit stronger. Ask #b#p1013000##k how it happened."/>
+    <string name="1" value="#p1013000# says that #bonce a Dragon and Human are connected through a pact, when one party grows stronger, the other party grows stronger too#k. With that, he excitedly tells you to use his strength..."/>
+    <string name="2" value="#p1013000# says that once a Dragon and a Human are connected through a pact, when one party grows stronger, the other party grows stronger too. With that, he excitedly tells you to use his strength... but it&apos;s not like you have someone to fight..."/>
+  </imgdir>
+  <imgdir name="22508">
+    <string name="name" value="Strange Pigs 1"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Dad seems to be worried about something... What could he be worried about? Talk to #bDad#k."/>
+    <string name="1" value="Dad says that the sudden increase of #o1210111#s is giving him a headache. They are so strange and strong that it&apos;s no use, no matter how many time he fixes the fences..."/>
+    <string name="2" value="#p1013000# starts getting excited after listening to Dad..."/>
+  </imgdir>
+  <imgdir name="22509">
+    <string name="name" value="Strange Pigs 2"/>
+    <int name="area" value="7"/>
+    <string name="1" value="#p1013000# says that he and you should eliminate the #o1210111#s. No matter how many times you tell him how dangerous that is, #p1013000# just won&apos;t let up. Although it is a bit worrisome, since he is so confident, maybe you should try? Go to the #b#m100030320##k.\r\n\r\n#o1210111##r #a225091##k"/>
+    <string name="2" value="Wow, you were able to eliminate the #o1210111#s much easier than you expected. #p1013000# seems to be pretty strong. When you tell #p1013000# that, he says that when a Master and a Dragon puts their powers together, something like this is easy."/>
+    <string name="0" value="Mir has started arguing strongly for the elimination of the Strange Pigs... What should you do? Talk to Mir."/>
+  </imgdir>
   <imgdir name="2251">
     <string name="name" value="Zombie Mushroom Signal 3"/>
     <int name="area" value="30"/>
@@ -7199,6 +7582,77 @@ Once there, talk to #b#p1200003##k to board the ship.
     <string name="2" value="You finally managed to figure out the signals the mushrooms sent to themselves. #b#e&apos;Mushking of the Mushroom Castle is in danger. Watch out for King Pepe! Request help from the courageous adventurers of Maple World who are at least Level 30.&apos; #n#k What does that mean?"/>
     <string name="rewardSummary" value="EXP 8,000\r\nCan proceed to &apos;Studying the Mushroom Signal 1 (Repeatable)&apos; quest\r\nCan proceed to &apos;Studying the Mushroom Signal 2 (Repeatable)&apos; quest\r\nCan proceed to &apos;Karcasa of the Desert&apos; quest\r\n"/>
   </imgdir>
+  <imgdir name="22510">
+    <string name="name" value="Letter Delivery"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Tell Gustav about defeating the #o1210111#s."/>
+    <string name="1" value="Dad is very surprised and asks you to do something else for him as well. He asks that you deliver a letter to #r#p1012003##k in #b#m100000000# #k, explaining the shortage of #t4032453#. Take the letter that Dad has given you and go to town.\r\n\r\nLarge Forest Trail 1 -&gt; Large Forest Trail 2 -&gt; Farm Entrance -&gt; \r\nThe Forest East of Henesys -&gt; The Rain-Forest East of Henesys -&gt; \r\nThe Hill East of Henesys -&gt; Henesys"/>
+    <string name="2" value="You delivered the letter to #p1012003#."/>
+    <string name="showLayerTag" value="22510"/>
+  </imgdir>
+  <imgdir name="22511">
+    <string name="name" value="Mushrooms Instead of Meat!"/>
+    <int name="area" value="7"/>
+    <string name="0" value="You delivered the letter to #b#p1012003##k. Listen to his response."/>
+    <string name="1" value="Chief Stan says that the town really needs meat and asks that you bring him mushrooms, which will have to do for now. Bring Chief Stan lots of mushrooms.\r\n\r\n#i4000001# #t4000001# #b#c4000001# / 20#k"/>
+    <string name="2" value="After receiving the mushrooms, Chief Stan thanks you and tells you to feel free about asking him for anything. You really don&apos;t have anything to request of him at the moment, though."/>
+  </imgdir>
+  <imgdir name="22512">
+    <string name="name" value="The Dragon Master&apos;s Calling"/>
+    <int name="area" value="7"/>
+    <string name="0" value="#b#p1013000##k seems anxious to tell you something. Talk to #p1013000#."/>
+    <string name="1" value="#p1013000# says that he now knows what the Dragon Master is called to do. It&apos;s to help people in trouble! He came up with that notion after watching you help Chief Stan. \r\n\r\nWith that, #p1013000# wants to look for #btroubled people in #m100000000##k..."/>
+    <string name="2" value="There really was a person in need of help in #m100000000#. #p1010100# seems to be in need of something."/>
+  </imgdir>
+  <imgdir name="22513">
+    <string name="name" value="Rina&apos;s Worries"/>
+    <int name="area" value="7"/>
+    <string name="0" value="#b#p1010100##k in #b#m100000000# seems to be worried about something. Talk to #p1010100#."/>
+    <string name="1" value="#p1010100# says that she wants to make some Blue Mushroom porridge for #p1012101# who is sick but that they are difficult to get because the #o2220100#s have become so violent. You tell her that you will get them for her but #p1010100# says not to because it is so dangerous..."/>
+    <string name="2" value="#p1013000# is quite upset that you won&apos;t be helping Rina."/>
+  </imgdir>
+  <imgdir name="22514">
+    <string name="name" value="Let&apos;s Train"/>
+    <int name="area" value="7"/>
+    <string name="0" value="#p1013000# seems to be very upset that you won&apos;t be assisting #p1010100#. How will you be able to appease #p1013000#? Talk to #b#p1013000##k."/>
+    <string name="1" value="#p1013000# suggests than that you train until you are able to easily defeat the #o2220100#s and asks that you find a training center. Hmm... What to do... Maybe you should ask #b#p1012003##k since he did tell you to ask him if you need anything."/>
+    <string name="2" value="You started talking to Chief Stan."/>
+  </imgdir>
+  <imgdir name="22515">
+    <string name="name" value="Power B. Fore&apos;s Training Center"/>
+    <int name="area" value="7"/>
+    <string name="0" value="#b#p1012003##k in #b#m100000000##k should be able to introduce you to a training center. Talk to Chief Stan."/>
+    <string name="1" value="There is apparently a place called the Bowman Training Center in #m100000000#. It&apos;s normally only available to Bowmen but Chief Stan says that he will write a letter of recommendation to #p1012118#, the Training Instructor, so that an exception can be made for you. Go to #b#p1012118##k in #b#m100010000##k."/>
+    <string name="2" value="You met with Mr. #p1012118#."/>
+  </imgdir>
+  <imgdir name="22516">
+    <string name="name" value="Power B. Fore&apos;s Paranoia"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Did he finish reading the Recommendation Letter? Talk to #b#p1012118##k."/>
+    <string name="1" value="#p1012118# says that there is no way Stan would write such a nice letter and that it is a conspiracy to trick him. He wants to test you to be sure... He&apos;s obviously deluded but what can you do? Accept #p1012118#&apos;s test.\r\n\r\n#o9300274##r #a225161##k"/>
+    <string name="2" value="You passed #p1012118#&apos;s test. But it doesn&apos;t seem like #p1012118# is going to accept the results..."/>
+  </imgdir>
+  <imgdir name="22517">
+    <string name="name" value="Power B. Fore&apos;s Continuing Paranoia"/>
+    <int name="area" value="7"/>
+    <string name="0" value="You defeated the #o9300274#s but it seems that #p1012118# still doesn&apos;t believe you. Talk to #b#p1012118##k."/>
+    <string name="1" value="#p1012118# denies the results and tells you to hunt #r#o9300274##ks once again. This time he wants you to hunt #r80#k of them... What an annoying guy.\r\n\r\n#o9300274##r #a225171##k"/>
+    <string name="2" value="You passed #p1012118#&apos;s second test. Will he accept the results this time?"/>
+  </imgdir>
+  <imgdir name="22518">
+    <string name="name" value="Power B. Fore&apos;s Never Ending Paranoia"/>
+    <int name="area" value="7"/>
+    <string name="0" value="You defeated the #o9300274#s once again but #p1012118# still seems suspicious. Talk to #b#p1012118##k."/>
+    <string name="1" value="#p1012118# says that he still can&apos;t believe you and tells you that if you enter his Training Center and defeat the #r#o9300386#s#k, he will believe you... He will really will this time...right? Defeat the #o9300386#s.\r\n\r\n#o9300386##r #a225181##k"/>
+    <string name="2" value="You defeated the #o9300386#s. This time, it looks like #p1012118# has no choice but to believe you. Now that you&apos;ve received the Certificate of Training, enter the Training Center and start training."/>
+  </imgdir>
+  <imgdir name="22519">
+    <string name="name" value="Power B. Fore&apos;s Training"/>
+    <int name="area" value="7"/>
+    <string name="0" value="It looks like #p1012118# has finally accepted you. Try using #b#p1012118##k&apos;s Training Center."/>
+    <string name="1" value="All of the monsters inside #p1012118#&apos;s Training Center are easy monsters like #o0210100#s and #o1210100#s. When you complain about that,  #p1012118# says that he will train you himself and tells you to hunt #o1210101#s...\r\n\r\n#o1210101##r #a225191##k"/>
+    <string name="2" value="When you finishing hunting all of the #o1210101#s, #p1012118# says that you are amazing and gives you the #p1012118#&apos;s Certificate of Training. Is this thing even useful?"/>
+  </imgdir>
   <imgdir name="2252">
     <string name="name" value="Studying the Mushroom Signals 1 (Repeatable)"/>
     <int name="area" value="30"/>
@@ -7207,6 +7661,76 @@ Once there, talk to #b#p1200003##k to board the ship.
     <string name="2" value="The Rememberer requested your help so he could continue making progress in his research."/>
     <string name="demandSummary" value="#o2230101# #a22521#\r\n#o2110200# #a22522#\r\n"/>
     <string name="rewardSummary" value="EXP 2,000\r\n"/>
+  </imgdir>
+  <imgdir name="22520">
+    <string name="name" value="Receiving Power B. Fore&apos;s Certificate of Training Again"/>
+    <int name="area" value="7"/>
+    <string name="0" value="You lost the Certificate of Training that #p1012118# gave you. Without it, you won&apos;t be able to enter the Training Center. Go see #b#p1012118##k again."/>
+    <string name="1" value="You&apos;ll be able to receive the Certificate of Training from #p1012118# again by training. Hunt 200 #o1210101#s.\r\n\r\n#o1210101##r #a225201##k"/>
+    <string name="2" value="You hunted the #o1210101#s. Hmm... You&apos;re not sure how much longer you&apos;ll be able to train here."/>
+  </imgdir>
+  <imgdir name="22521">
+    <string name="name" value="Become a Hero"/>
+    <int name="area" value="7"/>
+    <string name="0" value="When you complete #p1012118#&apos;s training, #p1013000# flaps his wings wanting to say something to you. Talk to #b#p1013000##k."/>
+    <string name="1" value="#p1013000# says that since you&apos;ve become stronger through training, you should now be able to defeat the #o2220100#! He wants you to obtain the #b#t4000009#s#k and bring them to #p1010100#. Sheesh, he is so impatient. Go to the #m106010100#.\r\n\r\n#i4000009# #t4000009# #b#c4000009# / 20#k"/>
+    <string name="2" value="#p1010100# was very surprised and happy to receive the #t4000009#."/>
+  </imgdir>
+  <imgdir name="22522">
+    <string name="name" value="Delivering Maya&apos;s Porridge"/>
+    <int name="area" value="7"/>
+    <string name="0" value="#p1010100# in #m100000000# seems to have something she wants to say to you. Talk to #b#p1010100##k."/>
+    <string name="1" value="#p1010100# says that the porridge made of #o2220100#s is ready and asks that you deliver the #t4032458# to #p1012101#. Enter #b#m100000001##k and deliver the porridge to #b#p1012101##k."/>
+    <string name="2" value="#p1012101# seems to be feeling a little better after eating the porridge."/>
+  </imgdir>
+  <imgdir name="22523">
+    <string name="name" value="Investigating Strange Mushrooms"/>
+    <int name="area" value="7"/>
+    <string name="0" value="#p1040000#, the guard standing at the #m106010100#, seems to have something he wants to say to you. Go to the #b#m106010100##k and talk to #b#p1040000##k."/>
+    <string name="1" value="#p1040000# says that he heard from #p1010100# how strong you are and asks for you assistance in investigating the Blue Mushrooms that have started acting strange. You simply need to get #b40 #t4000009#s# as samples and bring it to #p1012111#, who studies mushrooms in #m100000000#.\r\n\r\n#i4000009# #t4000009# #b#c4000009# / 40#k"/>
+    <string name="2" value="When you show the #t4000009# to #p1012111#, he gets a serious look on his face."/>
+  </imgdir>
+  <imgdir name="22524">
+    <string name="name" value="Strange Puppet"/>
+    <int name="area" value="7"/>
+    <string name="0" value="#p1012111#&apos;s expression darkened after receiving the #t4000009#s. Is it something serious? Talk to #b#p1012111##k."/>
+    <string name="1" value="#p1012111# says that something similar has also happened with the #o1210102#s near #m100000000# and that the cuprit is probably a puppet that looks like a mushroom. He says that much of the problem should be alleviated if you hunt #r100#k #r#o2220100#s#k and retrieve the #b#t4032459##k... Retrieve the #t4032459# and bring it to #p1040000#.\r\n\r\n#o9101004##r #a225241##k\r\n#i4032459# #t4032459# #b#c4032459# / 1#k"/>
+    <string name="2" value="#p1040000# seems worried about the seriousness of the situation."/>
+  </imgdir>
+  <imgdir name="22525">
+    <string name="name" value="Mike at the Perion Dungeon Entrance"/>
+    <int name="area" value="7"/>
+    <string name="0" value="#p1040000# seems to find it difficult to believe that a puppet could be making the Mushrooms act so strange. Talk to #b#p1040000##k."/>
+    <string name="1" value="#p1040000#, while still doubtful, asks that you warn #b#p1040001##k at the #b#m106000300##k since this can happen in other places as well."/>
+    <string name="2" value="You met #p1040001# at the #m106000300#."/>
+  </imgdir>
+  <imgdir name="22526">
+    <string name="name" value="Mike&apos;s Request"/>
+    <int name="area" value="7"/>
+    <string name="0" value="You have something you need to tell #p1040001#, who is guarding the #b#m106000300##k. Go see #b#p1040001##k."/>
+    <string name="1" value="#p1040001# says that there are problems at the moment but that the Perion Guards are always in need of good people. He asks if you could help since you look pretty strong. Hmm...what should you do? Talk to #b#p1013000##k about it."/>
+    <string name="2" value="#p1013000# says that helping people is always a good thing to do."/>
+  </imgdir>
+  <imgdir name="22527">
+    <string name="name" value="A Guard&apos;s First Assignment: Cleaning up Around the Dungeon"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Since #p1013000# also agrees, you&apos;ve decided to become a #m102000000# Guard. Tell #b#p1040001##k of your decision."/>
+    <string name="1" value="#p1040001# gives you your first assignment. Your job is to clean up around the Dungeon Entrance by eliminating the #r#o2110200#s#k. Sounds simple enough.\r\n\r\n#o2110200##r #a225271##k"/>
+    <string name="2" value="#p1040001# seems very satisfied that you&apos;ve eliminated the #o2110200#s around the Dungeon Entrance."/>
+  </imgdir>
+  <imgdir name="22528">
+    <string name="name" value="A Guard&apos;s Second Assignment: Helping Beginner Adventurers"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Looks as if there is another assignment for the #m102000000# Guard. Find out what it is from #b#p1040001##k at the #b#m106000300##k."/>
+    <string name="1" value="#p1040001# says that new Adventurers sometime enter the #m102000000# Warning Street Deep Valleys and that your job is to patrol #bDeep Valley 1, 2, and 3#k in Warning Street and help Adventurers if you find them.\r\n\r\n#y22529# #b(#u22529#)#k"/>
+    <string name="2" value="You reported helping a beginner Adventurer to #p1040001#."/>
+  </imgdir>
+  <imgdir name="22529">
+    <string name="name" value="Helping Beginner Adventurer Christopher"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Patrol the #m102000000# Warning Street #b#m106000000#, 2, and 3 #k and talk to #banyone who seems to need help#k."/>
+    <string name="1" value="#p1022106#, a beginner adventurer, says that he is so thirsty he can&apos;t move. He asks that you bring him some #t4032460# dropped by the #o0130100#s. Defeat the #rStumps#k and get some #b#t4032460##k for him.\r\n\r\n#i4032460# #t4032460# #b#c4032460# / 3#k"/>
+    <string name="2" value="#p1022106#, whose thirst has been quenched, thanks you and says that he will find is own way from here."/>
   </imgdir>
   <imgdir name="2253">
     <string name="name" value="Studying the Mushroom Signals 2 (Repeatable)"/>
@@ -7217,12 +7741,160 @@ Once there, talk to #b#p1200003##k to board the ship.
     <string name="demandSummary" value="#o2230131# #a22531#\r\n"/>
     <string name="rewardSummary" value="EXP 2,000\r\n"/>
   </imgdir>
+  <imgdir name="22530">
+    <string name="name" value="A Guard&apos;s Third Assignment: Maintaining Warning Signs"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Looks as if there is another assignment for the #m102000000# Guard. Find out what it is from #b#p1040001##k at the #b#m106000300##k."/>
+    <string name="1" value="#p1040001# says that safety requires taking precautions and asks that you review the information in the warning signs located between #bEast Rocky Mountain I#k and #bEast Domain of Perion#k, and fix any mistakes... It&apos;s been a while since they were checked. \r\n\r\n#bCheck on all 5 warning signs located in East Rocky Mountain 1, Rocky Road I, Rocky Road 2, Rocky Road 3, and East Domain of Perion.#k"/>
+    <string name="2" value="You wrote down the monsters displayed in all of the Warning Signs."/>
+  </imgdir>
+  <imgdir name="22531">
+    <string name="name" value="A Guard&apos;s Fourth Assignment: Discovery of Strange Mushrooms"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Looks as if there is another assignment for the #m102000000# Guard. Find out what it is from #b#p1040001##k at the #b#m106000300##k."/>
+    <string name="1" value="#p1040001# says that he&apos;s discovered odd Mushrooms just as #p1040000# described. He says that the #o2230101#s are located inside #m105040300# Dungeon in #b#m105050300##k. He wants you to defeat the #r#o2230101#s#k and retrieve the #bPuppet#k...\r\n\r\n#o2230131##r #a225311##k\r\n#i4032461# #t4032461# #b#c4032461# / 1#k"/>
+    <string name="2" value="You defeated the #o2230101#s. #p1040001# seems worried that #p1040000# is right..."/>
+  </imgdir>
+  <imgdir name="22532">
+    <string name="name" value="A Guard&apos;s Fifth Assignment: Strange Wild Boars"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Looks as if there is another assignment for the #m102000000# Guard. Find out what it is from #b#p1040001##k at the #b#m106000300##k."/>
+    <string name="1" value="#p1040001# says that the same phenomena that occurred with the #o2230101#s is occuring with #r#o2230102#s#k and asks that you defeat the  #o2230112#s and retrieve the #bPuppet#k if found...\r\n\r\n#o2230112##r #a225321##k\r\n#i4032462# #t4032462# #b#c4032462# / 1#k"/>
+    <string name="2" value="#p1040001#, after receiving the #o2230102# Puppet, says that he has requested reinforcements. He says that there is nothing for you to do right now but that you should be training."/>
+  </imgdir>
+  <imgdir name="22533">
+    <string name="name" value="Please Catch the Thief"/>
+    <int name="area" value="7"/>
+    <string name="0" value="#p1061005# in #b#m105040300##k has something he wants to say to you. Go see #b#p1061005##k."/>
+    <string name="1" value="#p1061005# says that #p1040001# has told him that you are a very capable Guard and asks that you help him. According to him, someone has stolen an expensive  herb, and he is sure it is a thief from #m103000000#. He asks that you go to #b#m103000000##k and investigate. You suddenly remember that Alex is in Kerning City. For now go see #bAlex#k.\r\n\r\n1. #y22534# #b(#u22534#)#k\r\n2. #y22535# #b(#u22535#)#k\r\n3. #y22536# #b(#u22536#)#k"/>
+    <string name="2" value="When you tell #p1061005# that you don&apos;t think it was a thief from #m103000000#, he says that he will wait for your investigation for now."/>
+  </imgdir>
+  <imgdir name="22534">
+    <string name="name" value="Kerning City Investigation: Alex"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Come to think of it, there is a person you know in #b#m103000000##k. Go ask #b#p1052000##k in #m100000000# if he knows anything about a thief."/>
+    <string name="1" value="#p1052000# says that he will answer anything for you if you give him some news about #m100000000#. News about #m100000000#, what could you tell him about? Talk to #p1052000#."/>
+    <string name="2" value="#p1052000# doesn&apos;t seem to know anything about the thief. However, #p1052000# did tell you about the person you should question next."/>
+  </imgdir>
+  <imgdir name="22535">
+    <string name="name" value="Kerning City Investigation: JM"/>
+    <int name="area" value="7"/>
+    <string name="0" value="The person that #p1052000# told you about while you were investigating in #b#m103000000##k is JM. Go see JM."/>
+    <string name="1" value="JM says that he will only trade information with you and that he will tell you anything you want if you bring him #t4000042#s. Go into the subway and bring back some #t4000042#s.\r\n\r\n#i4000042# #t4000042# #b#c4000042# / 50#k"/>
+    <string name="2" value="JM says that there haven&apos;t been any recent trading of herbs and that it is possible it just hasn&apos;t been traded yet. He tells you to ask #p1052103#, who watches many people pass, if she has noticed anyone recently who smells of herbs."/>
+  </imgdir>
+  <imgdir name="22536">
+    <string name="name" value="Kerning City Investigation: Nella"/>
+    <int name="area" value="7"/>
+    <string name="0" value="While investigating #b#m103000000##k, you were introduced to #p1052103#, who has a good nose. Talk to #b#p1052103##k."/>
+    <string name="1" value="#p1052103# got angry saying that while the thieves in #m103000000# may be a bit sneaky they are not the type to steal things. She says, to regain the honor of Kerning City, she will catch the thief herself... Looks like you can leave this investigation to #p1052103#. Tell #p1061005# as much and ask him to wait."/>
+    <string name="2" value="#p1052103# got angry saying that while the thieves in #m103000000# may be a bit sneaky they are not the type to steal things. She says, to regain the honor of Kerning City, she will catch the thief herself... Looks like you can leave this investigation to #p1052103#. Tell #p1061005# as much and ask him to wait."/>
+  </imgdir>
+  <imgdir name="22537">
+    <string name="name" value="Investigating the Biology of Dragons"/>
+    <int name="area" value="7"/>
+    <string name="0" value="When you reach Lv. 30, #p1013000# suddenly grew?! How did this happen? Talk to #b#p1013000##k."/>
+    <string name="1" value="#p1013000# doesn&apos;t seem to know how he suddenly changed either. It seems that neither of you really know much about Dragons. You really should find out more...\r\n\r\n #p1013000# suggests that you find someone with more knowledge to tell you more about Dragons. Come to think of it,  #b#p1012109##k in #b#m100000000##k is a total bookworm. Wouldn&apos;t he know something?"/>
+    <string name="2" value="You asked #p1012109# about Dragons."/>
+  </imgdir>
+  <imgdir name="22538">
+    <string name="name" value="Dragon Types and Characteristics (Vol. I)"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Borrow a book about Dragons from #b#p1012109##k in #b#m100000000##k."/>
+    <string name="1" value="#p1012109# loaned you a book called #t4161049#. #p1012109# says that he hasn&apos;t finished reading it himself and asks that you return it after you&apos;re done. Read the book and then talk to #p1013000#.\r\n\r\n#y22539# #b(#u22539#)#k"/>
+    <string name="2" value="You read through all of #t4161049# but there was no information about #p1013000#."/>
+  </imgdir>
+  <imgdir name="22539">
+    <string name="name" value="Knowledge About Dragons 1"/>
+    <int name="area" value="7"/>
+    <string name="0" value="You received the #t4161049#. #p1013000# seems to also be curious about its contents... Talk to #b#p1013000##k."/>
+    <string name="1" value="#p1013000# asks for you to read through the #t4161049# and tell him what it says. Read the book and explain it to #p1013000#."/>
+    <string name="2" value="Unfortunately, the book doesn&apos;t contain any information that pertains to #p1013000#. Maybe the #t4161050# has some information?"/>
+  </imgdir>
   <imgdir name="2254">
     <string name="name" value="Karcasa of the Desert"/>
     <int name="area" value="30"/>
     <string name="0" value="Through research, you discovered that a place known as the Mushroom Castle is in trouble, but even #bThe Rememberer#k doesn&apos;t know anything about the place. You should see what he thinks you should do next."/>
     <string name="1" value="Through research, you discovered that a place known as the Mushroom Castle is in trouble, but even #bThe Rememberer#k had no clue where that is. He recommends you ask #bKarcasa#k in the desert for some information…"/>
     <string name="2" value="You met #bKarcasa#k and asked about the Mushroom Castle, to no avail."/>
+  </imgdir>
+  <imgdir name="22540">
+    <string name="name" value="Ellinia Magic Library"/>
+    <int name="area" value="7"/>
+    <string name="0" value="#t4161049# doesn&apos;t seem to contain any information about #p1013000#. Is it possible to get the second volume? Ask #b#p1012109##k."/>
+    <string name="1" value="#t4161049# seems to have been borrowed from the #b#m101000003##k in #b#m101000000##k. #p1012109# says that you should be able to borrow the second volume from the #m101000003#..."/>
+    <string name="2" value="You met #p1032001# at the #m101000003# in #m101000000#."/>
+  </imgdir>
+  <imgdir name="22541">
+    <string name="name" value="Where&apos;s the Book? 1"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Borrow #t4161049# from #b#p1032001##k at the #b#m101000000# #m101000003##k."/>
+    <string name="1" value="#p1032001# said that #t4161050# has already been borrowed by #b#p1052106##k from #b#m103000000##k. He asks that you get the book from #p1052106# and return it to him after reading it. Go to #m103000000#."/>
+    <string name="2" value="You asked #p1052106# in #m103000000# about #t4161050# but he says that he already let #b#p1002100##k in #bLith Harbor#k borrow it..."/>
+    <string name="parent" value="Where&apos;s the Book?"/>
+    <int name="order" value="1"/>
+  </imgdir>
+  <imgdir name="22542">
+    <string name="name" value="Where&apos;s the Book? 2"/>
+    <int name="area" value="7"/>
+    <string name="1" value="When you ask #p1002100# about the book, she says that she gave it to #b#p1002001##k who said he needed it. Ask #p1002001# about the #t4161050#."/>
+    <string name="2" value="#p1002001# says that he borrowed the book because he thought that #p1012101# might be bored and that he gave it to #p1012101# already. Go to #b#m100000000##k and meet #b#p1012101##k."/>
+    <string name="parent" value="Where&apos;s the Book?"/>
+    <int name="order" value="2"/>
+  </imgdir>
+  <imgdir name="22543">
+    <string name="name" value="Where&apos;s the Book? 3"/>
+    <int name="area" value="7"/>
+    <string name="1" value="#p1012101# says that the book seemed to difficult for her to read and so she gave it to #p1012110#. Go to #m100010000##k and meet #b#p1012110##k."/>
+    <string name="2" value="#p1012110# says that she sent the book to her Mom because she thought that her Mom would need it. She suggests that you meet Dr. #b#p1032104##k in #b#m101000000##k. Back to #m101000000#? You&apos;ve made a full circle!"/>
+    <string name="parent" value="Where&apos;s the Book?"/>
+    <int name="order" value="3"/>
+  </imgdir>
+  <imgdir name="22544">
+    <string name="name" value="Where&apos;s the Book? 4"/>
+    <int name="area" value="7"/>
+    <string name="1" value="When you ask Dr.#p1032104# about the book, she says that she sent it to her professor who really needed it. Go to #b#m102000000#&apos;s East Rock Mountain#k to find #b#p1022006##k, Dr.#p1032104#&apos;s professor."/>
+    <string name="2" value="You met #p1022006# at the East Rocky Mountain."/>
+    <string name="parent" value="Where&apos;s the Book?"/>
+    <int name="order" value="4"/>
+  </imgdir>
+  <imgdir name="22545">
+    <string name="name" value="Where&apos;s the Book? 5"/>
+    <int name="area" value="7"/>
+    <string name="0" value="After searching and searching, you finally found the person who has #t4161050#! It&apos;s #p1022006#, the Archaeologist! Talk to #b#p1022006##k who is at #b#m101030401##k."/>
+    <string name="1" value="#p1022006# says that he hasn&apos;t been able to open the book since being attacked by the #o3210100#s and says that he will give you the book if you eliminate the dangerous #o3210100#s. Go to the #bBurnt Land#k and eliminate the #r#o3210100##ks.\r\n\r\n#o3210100##r #a225451##k"/>
+    <string name="2" value="You eliminated the #o3210100#s. Go get the book from #p1022006#."/>
+    <string name="parent" value="Where&apos;s the Book?"/>
+    <int name="order" value="5"/>
+  </imgdir>
+  <imgdir name="22546">
+    <string name="name" value="Dragon Types and Characteristics (Vol. II)"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Get #t4161050# from #b#p1022006##k in #b#m101030401##k."/>
+    <string name="1" value="You should read through #t4161050#, which you received from Winston. It may help you understand #p1013000# a little bit better. Once you&apos;re finished reading it, be sure to return it to #b#p1032001##k in #m101000000# #m101000003#.\r\n\r\n#y22547# #b(#u22547#)#k"/>
+    <string name="2" value="#p1032001# says that he will let you know if a new book regarding Dragons comes in or if new information arrives from #p2081000#, his friend in #m240000000#."/>
+  </imgdir>
+  <imgdir name="22547">
+    <string name="name" value="Knowledge about the Dragon 2"/>
+    <int name="area" value="7"/>
+    <string name="0" value="You obtained #t4161050#. #b#p1013000##k seems really curious about its contents..."/>
+    <string name="1" value="#p1013000# is very excited about the book possibly containing information about his race. #bRead the book and explain what it contains to #p1013000##k."/>
+    <string name="2" value="#p1013000# appears to be a very special dragon called the Onyx Dragon. The explanation about a pact being necessary seems to confirm it. But it also says that the Onyx Dragons became extinct a long time ago... "/>
+  </imgdir>
+  <imgdir name="22548">
+    <string name="name" value="Clue about the Thief"/>
+    <int name="area" value="7"/>
+    <string name="0" value="#p1052103# in #m103000000# starts talking to you. Could she have caught the thief?"/>
+    <string name="1" value="#p1052103# says that her underling found a clue about the thief in #m105040300#, where the incident occurred. Unfortunately, the clue was lost on it&apos;s way to #m103000000# because a #o3110100# attacked. She asks that you recover the #bClue#k about the thief from the #r#o3110100#s#k... \r\n\r\n#i4032463# #t4032463# #b#c4032463# / 1#k\r\n"/>
+    <string name="2" value="#p1052103# started to read the document with a serious look on her face. You can feel her desire to restore #m103000000#&apos;s honor."/>
+    <int name="autoStart" value="1"/>
+  </imgdir>
+  <imgdir name="22549">
+    <string name="name" value="The Culprit is in the Dungeon"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Did she find out who stole the #t4032464#? Ask #b#p1052103##k in #b#m103000000##k."/>
+    <string name="1" value="#p1052103# says that the culprit is in the Dungeon and that the culprit&apos;s hideout is inside #b#m105070300##k. She wants you to go inside, catch the thief, and restore #m103000000#&apos;s honor."/>
+    <string name="2" value="The dungeon where the thief was supposed to be was quiet. There were no people, only a strange puppet... Could this puppet be the culprit?"/>
   </imgdir>
   <imgdir name="2255">
     <string name="name" value="Karcasa&apos;s Memory"/>
@@ -7234,6 +7906,82 @@ Once there, talk to #b#p1200003##k to board the ship.
     <string name="1" value="Karcasa claims he&apos;ll remember information about the Mushroom Castle if he eats some carrots right now… Really? \r\n\r\n#i4000325:# #t4000325:# #c4000325# / 30\r\n"/>
     <string name="rewardSummary" value="EXP 3,000\r\nCan proceed to &apos;Karcasa&apos;s Memory 2&apos;quest\r\n"/>
   </imgdir>
+  <imgdir name="22550">
+    <string name="name" value="Puppet Caring for his Master 1"/>
+    <int name="area" value="7"/>
+    <string name="0" value="A talking puppet? Could a puppet really have stolen the herbs? Talk to the #b#p1063018##k in the #m910050300##k, the culprit&apos;s hideout that is connected through the #b#m105070300#."/>
+    <string name="1" value="The #p1063018# says that he only stole the herbs to treat his master who was hurt, and that he is sorry. The #p1063018# says that he will return the herbs but asks if you could give him some potions for his master...\r\n\r\n#i2000002# #t2000002# #b#c2000002# / 20#k\r\n#i2000003# #t2000003# #b#c2000003# / 30#k"/>
+    <string name="2" value="You gave the potions to the #p1063018#."/>
+  </imgdir>
+  <imgdir name="22551">
+    <string name="name" value="The Returned Herbs"/>
+    <int name="area" value="7"/>
+    <string name="0" value="You gave the potions to the #p1063018#. Will you now be able to get the herbs back? Go to #b#m105070300##k."/>
+    <string name="1" value="The #p1063018# returned the herbs to you while repeating his apologies. Now take the herbs to #p1061005#."/>
+    <string name="2" value="#p1061005# has now got his possessions back and is no longer suspicious of #m103000000#."/>
+  </imgdir>
+  <imgdir name="22552">
+    <string name="name" value="Kerning City&apos;s Honor Restored"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Is #p1061005#, who got his herbs back, no longer suspicious of the thieves in #m103000000#? Talk to #b#p1061005##k in #b#m105040300##k."/>
+    <string name="1" value="#p1061005# says that he is sorry for being suspicious of the thieves in #m103000000# and ask you to give his apologies. Go to #b#p1052103##k and tell her that #m103000000#&apos;s honor has been restored."/>
+    <string name="2" value="#p1052103# thanks you for clearing #m103000000#&apos;s name."/>
+  </imgdir>
+  <imgdir name="22553">
+    <string name="name" value="Puppet Caring for his Maser 2"/>
+    <int name="area" value="7"/>
+    <string name="0" value="The #p1063018# seems to need help. Go to #b#m105070300##k, where the doll is, and meet the #b#p1063018##k."/>
+    <string name="1" value="The #p1063018# says that he wants to put bandages on his injured master and asks that you bring him some #b#t4000035#s#k so that he can make a bandage. You can obtain #t4000035#s from the #r#o3230101#s#k that appear in the #b#m103000000# Subway#k...\r\n\r\n#i4000035# #t4000035# #b#c4000035# / 60#k"/>
+    <string name="2" value="When you bring him all the #t4000035#s, the #p1063018# is touched and says that someone like you has the qualification to be in the organization that his master is in. He says that when his master returns, he will ask him to allow you into the organization..."/>
+    <int name="autoStart" value="1"/>
+  </imgdir>
+  <imgdir name="22554">
+    <string name="name" value="Nella&apos;s Introductions"/>
+    <int name="area" value="7"/>
+    <string name="0" value="#b#p1052103##k in #b#m103000000##k seems to have something she wants to say..."/>
+    <string name="1" value="The news of you helping #p1052103# seems to have gotten around. #p1052103# says that many people have been asking her to introduce you to them. She says to go see #b#p1012003##k in #b#m100000000##k...\r\n\r\nHuh? That&apos;s your town.. What could it be about? Chief Stan seems to need some help."/>
+    <string name="2" value="Chief Stan doesn&apos;t seem to believe your abilities."/>
+    <int name="autoStart" value="1"/>
+  </imgdir>
+  <imgdir name="22555">
+    <string name="name" value="Chief Stan&apos;s Test"/>
+    <int name="area" value="7"/>
+    <string name="0" value="You meet Chief Stan in #b#m100000000##k through #p1052103#&apos;s introduction. Talk to #bChief Stan#k, who seems a bit doubtful."/>
+    <string name="1" value="Chief Stan questions how the son of a farmer could have gotten so strong and says he wants to test you. The test is to go to the #m910600000#, hunt the #r#o3000001#s#k there, and bring back #b#t4000068#s#k. You can enter #m910600000# through the Warning Sign at the #m106010100#...\r\n\r\n#i4000068# #t4000068# #b#c4000068# / 2"/>
+    <string name="2" value="Even having received the #t4000068#s, Chief Stan still seems a bit doubtful."/>
+  </imgdir>
+  <imgdir name="22556">
+    <string name="name" value="Chief Stan&apos;s Request"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Looks like Chief Stan has decided he wants to ask you a favor. Talk to #bChief Stan#k."/>
+    <string name="1" value="Chief Stan says that some strange commotion has occured in Golem&apos;s Temple, the most dangerous area near #m100000000#, and asks you to investigate. He says to not go in too deep, just up to the #b#m106010102##k, and report back."/>
+    <string name="2" value="Stan says he heard that monsters throughout different towns have been acting strange. He says that while the Mushrooms or #o1210100#s acting acting a little odd isn&apos;t a big deal, it will be a problem if the Golems start turning violent.  "/>
+    <string name="showLayerTag" value="22556"/>
+  </imgdir>
+  <imgdir name="22557">
+    <string name="name" value="Kidnapping of Camila"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Chief Stan is calling you urgently... What could this be about?"/>
+    <string name="1" value="Chief Stan says that #p1012108#, who went out of town to pick strawberries, has been kidnapped by Golems. He asks that you go to Golem&apos;s Temple and rescue #p1012108#."/>
+    <string name="2" value="Fortunately, you were able to rescue #p1012108#, but what was that strange Golem?"/>
+    <int name="autoStart" value="1"/>
+  </imgdir>
+  <imgdir name="22558">
+    <string name="name" value="Reason for the Golem&apos;s Change"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Talk to #bChief Stan#k who is deep in thought about the change in the Golems."/>
+    <string name="1" value="Chief Stan says that it might be able get some hints from #p1012108#. He wants you to ask #b#p1012108##k if she remembers anything. She is a sensitive girl so ask her carefully."/>
+    <string name="2" value="#p1012108# says that she saw Golems jumping out of a door with a strange puppet sitting on top..."/>
+    <string name="parent" value="Protect Henesys!"/>
+    <int name="order" value="1"/>
+  </imgdir>
+  <imgdir name="22559">
+    <string name="name" value="Eliminate the Golems"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Tell Chief Stan what #p1012108# told you."/>
+    <string name="1" value="Chief Stan says the culprit the Golems change may be inside the door with the puppet. He askes you to #benter that door, defeat the Enraged Golems, and bring back the culprit#k. He seems to think it might be a #bdoll or puppet#k...\r\n\r\n#i4032466# #t4032466# #b#c4032466# / 1#k"/>
+    <string name="2" value="You eliminated the Golems and brought the #t4032466# to Chief Stan. Chief Stan says if the puppet had been left alone, the Golems would certainly have attacked  #m100000000#. He thanks you for saving #m100000000#."/>
+  </imgdir>
   <imgdir name="2256">
     <string name="name" value="Karcasa&apos;s Memory 2"/>
     <int name="area" value="44"/>
@@ -7244,6 +7992,86 @@ Once there, talk to #b#p1200003##k to board the ship.
     <string name="1" value="How could an oasis be created with water bought from a store? Anyway, you need to give in to his demands in order to find out more about the castle, but he seems awfully suspicious.\r\n\r\n#i2022000:# #t2022000:# #c2022000# / 1\r\n"/>
     <string name="rewardSummary" value="EXP 2,000\r\nCan proceed to &apos;Karcasa Relents&apos; quest\r\n"/>
   </imgdir>
+  <imgdir name="22560">
+    <string name="name" value="Condition for Joining the Secret Organization 1"/>
+    <int name="area" value="7"/>
+    <string name="0" value="The #b#p1063018##k has suddenly started talking to you... What could it be about?"/>
+    <string name="1" value="The #p1063018# says he told his master about you and that you can join the secret organization if you fulfill a few conditions. He asks that you eliminate the #o3230100#s. Go to the #b#m105040200##k and eliminate the #r#o3230100##ks.\r\n\r\n#o3230100##r #a225601##k"/>
+    <string name="2" value="You elminated the #o3230100#s."/>
+    <int name="autoStart" value="1"/>
+    <int name="autoComplete" value="1"/>
+  </imgdir>
+  <imgdir name="22561">
+    <string name="name" value="Condition for Joining the Secret Organization 2"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Will you be allowed to join the Secret Organization now? Talk to the #b#p1063018##k."/>
+    <string name="1" value="The #p1063018# says that you will be allowed to join the Secret Organization if you meet just one more condition. This time, he wants you bring him #b#t4000031#s#k from the #b#t4000031#s#k. You&apos;re not sure what they need it for but go ahead and get it for them.\r\n\r\n#i4000031# #t4000031# #b#c4000031# / 20#k"/>
+    <string name="2" value="It looks like you&apos;ll be able to join the Secret Organization soon. For now just wait."/>
+    <int name="autoStart" value="1"/>
+    <int name="autoComplete" value="1"/>
+  </imgdir>
+  <imgdir name="22562">
+    <string name="name" value="Onyx Dragon Study"/>
+    <int name="area" value="7"/>
+    <string name="0" value="#b#p1032001##k, who&apos;s agreed to help you study the Onyx Dragon, starts talking to you..."/>
+    <string name="1" value="#p1032001# says that his friend #p2081000# from #m240000000# can identify an Onyx Dragon just by looking at its scales. You may be able to confirm whether  #p1013000# is really an Onyx Dragon by sending one of #p1013000#&apos;s scale. Should you ask #p1013000# if he can spare one?\r\n\r\n#i4032467# #t4032467# #b#c4032467# / 1#k"/>
+    <string name="2" value="After receiving the Dragon&apos;s scale, #p1032001# says it will take time to send the scale to #m240000000# and hear back about it. He asks you to talk to him later."/>
+    <int name="autoStart" value="1"/>
+  </imgdir>
+  <imgdir name="22563">
+    <string name="name" value="The Value of One Scale"/>
+    <int name="area" value="7"/>
+    <string name="0" value="You may be able to confirm whether #p1013000# is really an Onyx Dragon with just one scale. Ask #b#p1013000##k to give you one scale."/>
+    <string name="1" value="#p1013000# says that his defenses will weaken if a scale is removed. He says that he&apos;ll need calcium to compensate and asks that you feed him bones. He says that #b#t4000204#s#k should suffice...\r\n\r\n#i4000204# #t4000204# #b#c4000204# / 50#k"/>
+    <string name="2" value="You fed the #t4000204#s to #p1013000# and took one of his scales."/>
+  </imgdir>
+  <imgdir name="22564">
+    <string name="name" value="Knowledge about Dragons 3"/>
+    <int name="area" value="7"/>
+    <string name="0" value="#b#p1032001##k starts talking to you. Has the #t4032467# been verified?"/>
+    <string name="1" value="According to #p1032001#&apos;s friend Tatamo, it&apos;s certain that #p1013000# is an Onyx Dragon. He asks that you come to #m240000000# if you want more details. Go to #b#m240000000#.#k.\r\n"/>
+    <string name="2" value="You met Tatamo in #m240000000#. He was very happy to see #p1013000# and told you about Onyx Dragons and how they became extinct..."/>
+    <int name="autoStart" value="1"/>
+  </imgdir>
+  <imgdir name="22565">
+    <string name="name" value="Never Give Up!"/>
+    <int name="area" value="7"/>
+    <string name="0" value="You hear that #p1013000# is an Onyx Dragon and that Onyx Dragons are extinct. #p1013000# may be sad. Console #b#p1013000##k."/>
+    <string name="1" value="#p1013000# says that there may be other Onyx Dragons in this world just like him. He wants to continue searching. Your Dragon is so mature! \r\n\r\n#p1013000# is right. It&apos;s too soon go give up hope. There may be more information so wait for #p1032001# to contact you."/>
+    <string name="2" value="#p1013000# says that there may be other Onyx Dragons in this world just like him. He wants to continue searching. Your Dragon is so mature! \r\n\r\n#p1013000# is right. It&apos;s too soon go give up hope. There may be more information so wait for #p1032001# to contact you."/>
+  </imgdir>
+  <imgdir name="22566">
+    <string name="name" value="Permission to Join the Secret Organization"/>
+    <int name="area" value="7"/>
+    <int name="autoStart" value="1"/>
+    <string name="0" value="The #p1063018# starts talking to you. Have you finally been allowed to join the organization that #p1063018#&apos;s master is in? Respond to the #b#p1063018##k."/>
+    <string name="1" value="The #p1063018# says that he hasn&apos;t been able to contact you sooner because his master is in a precarious situation and has been on the run. He says that you&apos;ll be able to join the Secret Organization as a temporary member. Go to the #b#m200080601##k in #b#m200080600##k. He says that it&apos;s the room with a #bwing-shaped sign#k on the entrance..."/>
+    <string name="2" value="You went into the secret room that the #p1063018# mentioned and searched behind the #p2012034#."/>
+  </imgdir>
+  <imgdir name="22567">
+    <string name="name" value="Secret Organization&apos;s First Mission"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Receive your first mission as a Secret Organization Temporary Member. The mission should be contained  behind the  #b#p2012034##k inside the #b#m200080601##k..."/>
+    <string name="1" value="The paper behind the #p2012034# says to bring back a #Growth Accelerant#k made by a person named #b#p2030012##k. This must be your first mission.\r\n\r\n#i4032468# #t4032468# #b#c4032468# / 10#k\r\n"/>
+    <string name="2" value="You placed the Growth Accelerant made for you by #p2030012# behind the brick. The Secret Organization must be group of really good people to make a potion that will help the crops in Maple World."/>
+  </imgdir>
+  <imgdir name="22568">
+    <string name="name" value="Making the Growth Accelerant"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Go to #p2030012# and make the Growth Accelerant as instructed by the mission assignment you found behind the #p2012034#. #b#p2030012##k is in the #b#m200081201##k."/>
+    <string name="1" value="The ingredients for making the Growth Accelerant are #b10 #t4000070#s, 10 #t4000071#s, 10 #t4000072#s, and 10 #t4000068#s#k. Get all of the ingredients and give them to #p2030012#.\r\n\r\n#i4000070# #t4000070# #b#c4000070# / 10#k\r\n#i4000071# #t4000071# #b#c4000071# / 10#k\r\n#i4000072# #t4000072# #b#c4000072# / 10#k\r\n#i4000068# #t4000068# #b#c4000068# / 10#k"/>
+    <string name="2" value="You received the Growth Accelerant from #p2030012#. Go back to the secret room and put the Growth Accelerant behind the brick."/>
+  </imgdir>
+  <imgdir name="22569">
+    <string name="name" value="Another Clue about the Onyx Dragon"/>
+    <int name="area" value="7"/>
+    <int name="autoStart" value="1"/>
+    <string name="0" value="#p1032001# in #m101000000# starts talking to you. Could there be some more information about Onyx Dragons? Respond to #p1032001#&apos;s call."/>
+    <string name="1" value="#p1032001# says that there is a new book that came into the #b#m101000003##k that is very interesting. He says that it may be a clue about the Onyx Dragons and asks that you come check it out."/>
+    <string name="2" value="You met #p1032001# and asked about the book."/>
+    <string name="parent" value="Information about the Slumbering Dragon Island"/>
+    <int name="order" value="1"/>
+  </imgdir>
   <imgdir name="2257">
     <string name="name" value="Karcasa Relents"/>
     <int name="area" value="44"/>
@@ -7253,6 +8081,88 @@ Once there, talk to #b#p1200003##k to board the ship.
     <string name="parent" value="About the Mushroom Castle..."/>
     <int name="order" value="3"/>
     <string name="rewardSummary" value="Complete this quest as the Meerkats Listen During the Day quest.\r\n"/>
+  </imgdir>
+  <imgdir name="22570">
+    <string name="name" value="Crew Member&apos;s Voyage Log"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Get the book containing a clue about Onyx Dragons from #b#p1032001##k in #b#m101000000##k."/>
+    <string name="1" value="The book is a Voyage Log written by some crewmember. #bRead through the book#k and ask #p1032001# about the book&apos;s author."/>
+    <string name="2" value="The book&apos;s author is a person named #p0020000# who lives in #b#m104000000##k. Go see #p0020000#."/>
+    <string name="parent" value="Information about the Slumbering Dragon Island"/>
+    <int name="order" value="2"/>
+  </imgdir>
+  <imgdir name="22571">
+    <string name="name" value="John&apos;s Testimony"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Go see #p0020000#, author of the #t4161051#. #b#p0020000##k lives in #b#m104000000##k."/>
+    <string name="1" value="#p0020000# says that he indeed who wrote the Voyage Log and that not a single word of it is exaggerated. When you ask #p0020000# about the location of the island that is mentioned, he gives you a map that shows where it is. Can you find a ship willing to go there? Go see #b#p1002001##k."/>
+    <string name="2" value="#p1002001# says that he can&apos;t sail to this Island..."/>
+    <string name="parent" value="Information about the Slumbering Dragon Island"/>
+    <int name="order" value="3"/>
+  </imgdir>
+  <imgdir name="22572">
+    <string name="name" value="Teo&apos;s Advice"/>
+    <int name="area" value="7"/>
+    <string name="0" value="#p1002001# says that it won&apos;t be easy getting to the island marked on the map. There must be some other way. Ask #b#p1002001##k again."/>
+    <string name="1" value="#p1002001# says that the only sailor in #m104000000# who has the ability to sail to the island marked on the map is #b#p1002101##k. But #p1002101# stopped sailing a long time ago... If you bring him some #t4032470#, maybe #p1002101# will change his mind. Go to #b#m110000000##k and bring back a #b#t4032470##k.\r\n\r\n#i4032526# #t4032526# #b#c4032526# / 1#k\r\n#i4032470# #t4032470# #b#c4032470# / 1#k\r\n"/>
+    <string name="2" value="#p1002101# gladly agreed to sail after receiving the #t4032470#."/>
+    <string name="parent" value="Information about the Slumbering Dragon Island"/>
+    <int name="order" value="4"/>
+  </imgdir>
+  <imgdir name="22573">
+    <string name="name" value="Tropical Fruit Punch"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Before asking #p1002101# to take you to the Island, prepare some #t4032470# to give him as a gift. The #t4032470# is sold by #b#p1081100##k in #b#m110000000##k."/>
+    <string name="1" value="#p1081100# says that #t4032470# is difficult to make and that she will make you some #t4032470# if you bring her the ingredients and pay her for the labor...\r\n\r\n#i4000136# #t4000136# #b#c4000136# / 5#k\r\n#i4000029# #t4000029# #b#c4000029# / 30#k\r\n#i4000044# #t4000044# #b#c4000044# / 30#k\r\n#b60000 mesos#k"/>
+    <string name="2" value="You received the #t4032470# from #p1081100#."/>
+  </imgdir>
+  <imgdir name="22574">
+    <string name="name" value="Strong Sail Needed"/>
+    <int name="area" value="7"/>
+    <string name="0" value="#p1002101#, who has been looking at the map for awhile, has a grim face... What could it be? Talk to #b#p1002101##k."/>
+    <string name="1" value="#p1002101# says that going to this island with a normal sail is impossible and a stronger sail that won&apos;t rip under strong winds is needed. #p1002101# asks that you bring him some #b#t4000030#s#k... A sail made with #t4000030#s should be able to face strong winds.\r\n\r\n#i4000030# #t4000030# #b#c4000030# / 2#k"/>
+    <string name="2" value="You brought the #t4000030#s to #p1002101#. #p1002101# says that the #t4000030#s are very tough and that it will take a lot of time to make the sail. He will contact you when it is completed."/>
+    <string name="parent" value="Information about the Slumbering Dragon Island"/>
+    <int name="order" value="5"/>
+  </imgdir>
+  <imgdir name="22575">
+    <string name="name" value="Secret Organization&apos;s Second Mission"/>
+    <int name="area" value="7"/>
+    <string name="0" value="#p1013202#, who you&apos;ve never seen before, starts talking to you... Who could this be?"/>
+    <string name="1" value="#p1013202#, introducing himself as a member of the Secret Organization, thanks you for doing a good job on the first mission, and asks you to do a second one. The second mission is to eliminate the #rZombies#k near #m211000000#, collect the #b#t4000069#s#k, deliver them to #b#p2022003##k, and receive what he gives you in return...\r\n\r\n#i4000069# #t4000069# #b#c4000069# / 150#k"/>
+    <string name="2" value="When you gave the #t4000069#s to #p2022003#, he gave you one #t4032471# and laughed eerily."/>
+    <int name="autoStart" value="1"/>
+  </imgdir>
+  <imgdir name="22576">
+    <string name="name" value="Delivering the Black Key"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Once you receive the #t4032471#, #p1013202#, a member of the Secret Organization, starts talking to you again. Respond to #p1013202#."/>
+    <string name="1" value="#p1013202# tells you to place the item you received under the #b#p2030015##k located at the #b#m211040400##k in #m211000000#. Once it is there, another member of the Secret Organization will come retrieve it... Go do as he says."/>
+    <string name="2" value="You placed the #t4032471# under the #p2030015#."/>
+    <int name="autoStart" value="1"/>
+  </imgdir>
+  <imgdir name="22577">
+    <string name="name" value="The Lost Black Key"/>
+    <int name="area" value="7"/>
+    <string name="0" value="You lost the #t4032471#! What should you do? #b#p1013202##k starts talking to you... How did he know?"/>
+    <string name="1" value="#p1013202# says that he will let it pass just this time and tells you to bring more #b#t4000069#s#k to #p2022003#. He will give you the item again...\r\n\r\n#i4000069# #t4000069# #b#c4000069# / 300#k\r\n"/>
+    <string name="2" value="You received the #t4032471# from #p2022003# again."/>
+    <int name="autoStart" value="1"/>
+  </imgdir>
+  <imgdir name="22578">
+    <string name="name" value="Question about the Secret Organization"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Once you complete your delivery of the #t4032471#s, #b#p1013000##k starts talking to you."/>
+    <string name="1" value="You talked to #p1013000# about what the Secret Organization does. This mission seems to be about helping people by eliminating the Zombies. Although you wonder why they are so secret, they seem to be a good organization."/>
+    <string name="2" value="You talked to #p1013000# about what the Secret Organization does. This mission seems to be about helping people by eliminating the Zombies. Although you wonder why they are so secret, they seem to be a good organization."/>
+  </imgdir>
+  <imgdir name="22579">
+    <string name="name" value="Completed Sail"/>
+    <int name="area" value="7"/>
+    <string name="0" value="#p1002101# in #m104000000# starts talking to you. Could he have completed the sail? Talk to #p1002101#."/>
+    <string name="1" value="#p1002101# says that the sail has been completed and tells you to come to #b#m104000000##k if you want to go to the island on #t4032469#."/>
+    <string name="2" value="You met #p1002101# in #m104000000#. #p1002101# said that the ship is ready and for you to let him know whenever you are ready to head out."/>
+    <int name="autoStart" value="1"/>
   </imgdir>
   <imgdir name="2258">
     <string name="name" value="Meerkats Listen During the Day"/>
@@ -7266,6 +8176,82 @@ Once there, talk to #b#p1200003##k to board the ship.
     <string name="demandSummary" value="\r\n"/>
     <string name="rewardSummary" value="Go on to the Scorpions Can&apos;t Listen at Night quest.\r\n"/>
   </imgdir>
+  <imgdir name="22580">
+    <string name="name" value="Slumbering Dragon Island"/>
+    <int name="area" value="7"/>
+    <string name="0" value="You arrive on the island after traveling for a long time on #p1002101#&apos;s ship... #p1013000# seems to feel something. Talk to #p1013000#."/>
+    <string name="1" value="#p1013000# says that he can feel a strange familiar feeling coming from deep within the island. He think that there may be another Onyx Dragon. Head toward the center of the Island."/>
+    <string name="2" value="There was a giant Dragon asleep inside a cave in the center of the island. But you could not enter due to a #o9300391# made with magic. How can you pass this wall? After thinking for awhile, you decide to return to #m104000000# for now."/>
+    <string name="parent" value="Slumbering Dragon Island"/>
+    <int name="order" value="2"/>
+  </imgdir>
+  <imgdir name="22581">
+    <string name="name" value="Before Receiving the Secret Organization&apos;s Third Mission"/>
+    <int name="area" value="7"/>
+    <int name="autoStart" value="1"/>
+    <string name="0" value="#p1013202#, from the Secret Organization, starts talking to you."/>
+    <string name="1" value="#p1013202# thanks you for the good job you&apos;ve done so far and asks you to come to the #b#m922030000##k in #b#m220000300##k if you want to know more about the Secret Organization. He says that he will meet you there in person to tell you more..."/>
+    <string name="2" value="#p1013202#&apos;s name is #p1013203#. He says that the name of the Organization that he is in is called the Black Wings and that they are trying to awaken a great being called the Black Mage in order to make Maple World a better place to live. They are currently in the process of preparing for that event..."/>
+  </imgdir>
+  <imgdir name="22582">
+    <string name="name" value="Secret Organization&apos;s Third Mission"/>
+    <int name="area" value="7"/>
+    <string name="0" value="It&apos;s certain that this Secret Organization called the Black Wings are working for the benefit of Maple World. Go to #b#p1013203##k at the #b#m922030000##k to receive your third mission."/>
+    <string name="1" value="#p1013203# tells you to go deep inside the Clock Tower in #m220000000#, hunt #r#o6230500#s#k, and bring back the #b#t4000144#s#k that come out of the #o6230500#s.\r\n\r\n#i4000144# #t4000144# #b#c4000144# / 100#k"/>
+    <string name="2" value="You collected the #t4000144#s and gave them to #p1013203#. What is he going to do with these..."/>
+  </imgdir>
+  <imgdir name="22583">
+    <string name="name" value="Releasing the Free Spirits"/>
+    <int name="area" value="7"/>
+    <string name="0" value="The item that #p1013203# was talking about seems to be ready. Go to the #b#m922030000##k, the Black Wings hideout in #m220000300#."/>
+    <string name="1" value="#p1013203# gives you the pouch containing the spirits and tells you to go the #b#m922030010##k. He tells you to climb the ladder, placed there in advance by another member, and once there, to #release the Black Pouch and free the #t4000144#s in order to chase everyone away#k. He wants you to return to him once everyone&apos;s gone...\r\n\r\nThis is kind of strange. Why does he want to free the spirits? Why chase everyone away?\r\n\r\n#o9300389##r #a225831##k"/>
+    <string name="2" value="You returned after releasing the spirits at the #m922030010# on top of #m922030000#."/>
+  </imgdir>
+  <imgdir name="22584">
+    <string name="name" value="Elminating Door Blocks"/>
+    <int name="area" value="7"/>
+    <string name="0" value="There seems to be something left for you to do. Talk to #b#p1013203##k at the #b#m922030000##k."/>
+    <string name="1" value="#p1013203# tells you to climb up to the #m922030020# once again while the guard is gone and enter the safe to eliminate the #r#o9300390##k inside. He says that you need to eliminate the monster quicky because it is very dangerous.\r\n\r\n#o9300390##r #a225841##k"/>
+    <string name="2" value="You returned after eliminating the #o9300390#. #p1013203# says that you did a great job and that you played a big role in helping Maple World. But why do you feel so uneasy...?"/>
+  </imgdir>
+  <imgdir name="22585">
+    <string name="name" value="Suspicions about the Secret Organization"/>
+    <int name="area" value="7"/>
+    <string name="0" value="You completed the Secret Organization&apos;s third mission. But #p1013000# gets a serious expression as he talks to you...What could it be about? Talk to #b#p1013000##k."/>
+    <string name="1" value="#p1013000# raises some suspicions about the Black Wings. Come to think of it, you never received any explanation about why you were supposed to release the #t4000144#s at the #m922030010# and eliminate the #o9300390#s, or what significance there was to the #o9300390#&apos;s last words. #bAre the Black Wings really a good organization#k? You are starting to get suspicious..."/>
+    <string name="2" value="#p1013000# raises some suspicions about the Black Wings. Come to think of it, you never received any explanation about why you were supposed to release the #t4000144#s at the #m922030010# and eliminate the #o9300390#s, or what significance there was to the #o9300390#&apos;s last words. #bAre the Black Wings really a good organization#k? You are starting to get suspicious..."/>
+  </imgdir>
+  <imgdir name="22586">
+    <string name="name" value="Secret Organization&apos;s Fourth Mission"/>
+    <int name="area" value="7"/>
+    <string name="0" value="#p1013203# starts talking to you. It must be about the Secret Organization&apos;s fourth mission. Respond to #p1013203#."/>
+    <string name="1" value="#p1013203# tells you to go get the #b#t4032472##k from #b#p2092001##k in #b#m251000000##k. He says he will explain what it will be used for later... Go to #m251000000# for now.\r\n\r\n#i4032472# #t4032472# #b#c4032472# / 1#k"/>
+    <string name="2" value="You gave the map to #p1013203#. #p1013203# asks you to wait as he will give you your next mission..."/>
+    <int name="autoStart" value="1"/>
+  </imgdir>
+  <imgdir name="22587">
+    <string name="name" value="Map of Turtle Island"/>
+    <int name="area" value="7"/>
+    <string name="0" value="For your fourth mission, meet with #b#p2092001##k in #b#m251000000##k to find the #t4032472#."/>
+    <string name="1" value="#p2092001# says that he will give you the map if complete his request. His request is for you to eliminate the bad pirates #r#o7130104##k and #r#o6130208##k who are harrassing #m251000000#. Elminate the pirates and receive the map.\r\n\r\n#o7130104##r #a225871##k\r\n#o6130208##r #a225872##k"/>
+    <string name="2" value="Once you eliminated the #o7130104#s and the #o6130208#s, #p2092001# gave you the #t4032472#. He says that it&apos;s not a place you can normally get to so you shouldn&apos;t even try..."/>
+  </imgdir>
+  <imgdir name="22588">
+    <string name="name" value="Secret Organization&apos;s Fifth Mission"/>
+    <int name="area" value="7"/>
+    <string name="0" value="After seeing the map, #p1013203# smiles as if satisfied... What kind of map is this? Ask #b#p1013203##k."/>
+    <string name="1" value="#p1013203# gives you an item called a #t4032473# and tells you to enter a portal that leads to Turtle Island, where you are to #boffer it on an altar inside a cave in the center of the island#k. You&apos;re not sure what this is about... You just have to #bdrop the #t4032473##k on the altar."/>
+    <string name="2" value="Turtle Island was the island where the Dragon was sleeping! By breaking the #o9300391# as #p1013203# told you, you were able to get close to the sleeping Dragon. But you were told to come out as there was nothing more for you to do there..."/>
+    <int name="autoComplete" value="1"/>
+    <string name="showLayerTag" value="22588"/>
+  </imgdir>
+  <imgdir name="22589">
+    <string name="name" value="Dangerous Premonition"/>
+    <int name="area" value="7"/>
+    <string name="0" value="When you come out of the cave, #p1013000# seems restless. Ask #p1013000# if he is okay."/>
+    <string name="1" value="#p1013000# says that he has a strange feeling about this and that you shouldn&apos;t just leave the island. He may be right. #bTurn around and return to the Peaceful Cave where the Dragon is sleeping#k!"/>
+    <string name="2" value="When you talk to #p1013203#, who suddenly appeared in the cave, he attacked and said he doesn&apos;t need you anymore. What happened? Was he just using you?"/>
+  </imgdir>
   <imgdir name="2259">
     <string name="name" value="Scorpions Can&apos;t Listen at Night"/>
     <int name="area" value="44"/>
@@ -7274,6 +8260,55 @@ Once there, talk to #b#p1200003##k to board the ship.
     <string name="rewardSummary" value="Go on to the To the Mushroom Castle! quest."/>
     <string name="parent" value="About the Mushroom Castle..."/>
     <int name="order" value="5"/>
+  </imgdir>
+  <imgdir name="22590">
+    <string name="name" value="Voice of the Sleeping Dragon"/>
+    <int name="area" value="7"/>
+    <string name="0" value="You aren&apos;t sure why the Black Wings did this or what they are after... Suddenly, #p1013000# seems surprised by something. What is it? Talk to #b#p1013000##k."/>
+    <string name="1" value="#p1013000# says that the sleeping Dragon called to him. He says to try talking to the Dragon. Will that Dragon really respond?"/>
+    <string name="2" value="#p1205000#, the sleeping Dragon, recognized #p1013000#!"/>
+  </imgdir>
+  <imgdir name="22591">
+    <string name="name" value="The Past, Onyx Dragons, Black Mage"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Listen to the Sleeping Dragon #b#p1205000##k."/>
+    <string name="1" value="#p1205000# starts to tell you about what happened hundreds of years ago. About a time when Onyx Dragons and Dragon Masters lived in harmony and how the Onyx Dragon&apos;s suddenly became extinct... After talking for awhile,#p1205000# says that it&apos;s too difficult to explain and that he will show his memory. You are sent to a strange place...\r\n\r\n#bInside #p1205000#&apos;s memory, become Freud, who was his master, and talk to him.#k."/>
+    <string name="2" value="Hundreds of years ago, the Onyx Dragons were destroyed because of the Black Mage. #p1205000# was entrapped in ice by the Black Mage. From the conversation between Freud and #p1205000#, you can guess that #p1013000# is #p1205000#&apos;s child. But it doesn&apos;t seem that #p1205000# wants #p1013000# to know."/>
+  </imgdir>
+  <imgdir name="22592">
+    <string name="name" value="Unavoidable Truth"/>
+    <int name="area" value="7"/>
+    <string name="0" value="There is a lot that #p1013000# doesn&apos;t know because he was not able to enter #p1205000#&apos;s memory. Tell #b#p1013000##k what you saw and heard."/>
+    <string name="1" value="Was it wrong to help the Black Wings who&apos;s mission was to revive the Black Mage? #p1205000# says that he just can&apos;t believe it and wants to look back at all the missions you did for the Black Wings. #bGo to Orbis, El Nath, and Ludibrium to ask about the results of your actions.#k. \r\n\r\n#y22593# #b(#u22593#)#k\r\n#y22594# #b(#u22594#)#k\r\n#y22595# #b(#u22595#)#k"/>
+    <string name="2" value="Everything you did seems to have helped the Black Mage&apos;s goals. None of it helped the townspeople at all. In fact, your actions have caused only problems. How could this be? All the things you did for Maple World were for naught."/>
+  </imgdir>
+  <imgdir name="22593">
+    <string name="name" value="Result of the First Mission"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Did the Black Wing missions really help people? Or were you just being used? Go to #b#m200000000##k and see the results of your first mission to make the #t4032468#."/>
+    <string name="1" value="#p2012012#, the fairy in #m200000000# says that they suffered a lot because of the Nependeath that suddenly grew and that things might have been worse if not for the help of a certain person. You were wrong. This wasn&apos;t to make crops grow bigger to feed more people, the #r#t4032468# only brought harm#k."/>
+    <string name="2" value="#p2012012#, the fairy in #m200000000# says that they suffered a lot because of the Nependeath that suddenly grew and that things might have been worse if not for the help of a certain person. You were wrong. This wasn&apos;t to make crops grow bigger to feed more people, the #r#t4032468# only brought harm#k."/>
+  </imgdir>
+  <imgdir name="22594">
+    <string name="name" value="Result of the Second Mission"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Did the Black Wing missions really help people? Or were you just being used? Go to #b#m211000000##k and find out the result of your second mission of collecting and trading Zombie teeth."/>
+    <string name="1" value="#p2020009#, the Chief in #m211000000#, says that there are traces of the basement key being copied, and though he suspects  p2022003#, he has no proof. He says that the #m211000001# basement is highly guarded because there is a very important item inside. It&apos;s certain that the key you received from #p2022003# has gone into the hands of the Black Wings. #rWhat you thought was going to help #m211000000# has only helped the Black Wings.#k."/>
+    <string name="2" value="#p2020009#, the Chief in #m211000000#, says that there are traces of the basement key being copied, and though he suspects  p2022003#, he has no proof. He says that the #m211000001# basement is highly guarded because there is a very important item inside. It&apos;s certain that the key you received from #p2022003# has gone into the hands of the Black Wings. #rWhat you thought was going to help #m211000000# has only helped the Black Wings.#k."/>
+  </imgdir>
+  <imgdir name="22595">
+    <string name="name" value="Result of the Third Mission"/>
+    <int name="area" value="7"/>
+    <string name="0" value="Did the Black Wing missions really help people? Or were you just being used? Go to #b#m220000000##k and find out the result of your third mission of eliminating the #o9300390#."/>
+    <string name="1" value="When you ask #p2041004# about the #o9300390#, he&apos;s startled and lowers his voice as he asks you to not tell anyone that the guard protecting the #m220000000# storage was attacked, which allowed a thief to enter...#rThe Black Wings had ordered you to eliminate the #o9300390# so that they could steal the treasure.#k"/>
+    <string name="2" value="When you ask #p2041004# about the #o9300390#, he&apos;s startled and lowers his voice as he asks you to not tell anyone that the guard protecting the #m220000000# storage was attacked, which allowed a thief to enter...#rThe Black Wings had ordered you to eliminate the #o9300390# so that they could steal the treasure.#k"/>
+  </imgdir>
+  <imgdir name="22596">
+    <string name="name" value="Rage"/>
+    <int name="area" value="7"/>
+    <string name="0" value="All of the things that the Black Wings had told you to do were bad. #b#p1013000##k, who had wanted you to help people as the Dragon Master, seems very upset..."/>
+    <string name="1" value="#p1013000# says that he can&apos;t just let this go and suggests that you go to the #b#m922030001##k in #m220000300# where you met #p1013203# in person. Maybe #p1013203# is still there... Go teach #p1013203# a lesson.\r\n\r\n\r\n#o9300393##r #a225961##k"/>
+    <string name="2" value="#p1013203# tried to appease you but you fought him without mercy. Unfortunately, he escaped... Having discovered the truth, you and #p1013000# decide to do whatever it takes to fight the Black Wings and stop the Black Mage."/>
   </imgdir>
   <imgdir name="2260">
     <string name="name" value="To the Mushroom Castle!"/>
@@ -7284,6 +8319,20 @@ Once there, talk to #b#p1200003##k to board the ship.
     <string name="parent" value="About the Mushroom Castle..."/>
     <int name="order" value="6"/>
     <string name="2" value="Camel Cab can finally share information about the Mushroom Castle now that you&apos;ve reached Level 30! You&apos;d better undergo job advancement and listen to the Camel Cab talk about the Mushroom Castle."/>
+  </imgdir>
+  <imgdir name="22602">
+    <string name="name" value="After Shedding 1"/>
+    <int name="area" value="7"/>
+    <string name="0" value="When you reach Lv. 80, #p1013000#, who has become much bigger, seems to have something he wants to say. Talk to #p1013000#."/>
+    <string name="1" value="Of the scales that #p1013000# shed, there seems to be one that still contains the power of the Dragon. Since #p1013000# has new scales, he says he doesn&apos;t need it anymore. Try using it for something else. What about making something with it using the #bMaker Skill#k."/>
+    <string name="2" value="Of the scales that #p1013000# shed, there seems to be one that still contains the power of the Dragon. Since #p1013000# has new scales, he says he doesn&apos;t need it anymore. Try using it for something else. What about making something with it using the #bMaker Skill#k."/>
+  </imgdir>
+  <imgdir name="22603">
+    <string name="name" value="After Shedding 2"/>
+    <int name="area" value="7"/>
+    <string name="0" value="When you reach Lv. 120, #p1013000# has once again grown bigger. Could he have some leftover scales like last time? Talk to #p1013000#."/>
+    <string name="1" value="#p1013000# gives you another scale that contains the power of the Dragon. It seems to contain stronger power than the last time. You should be able to make another good item using the #bMake Skill#k.\n\nIn any case, #p1013000# now looks pretty imposing... If you didn&apos;t become strong along with #p1013000#, you might be too afraid to even look him in the eye."/>
+    <string name="2" value="#p1013000# gives you another scale that contains the power of the Dragon. It seems to contain stronger power than the last time. You should be able to make another good item using the #bMake Skill#k.\n\nIn any case, #p1013000# now looks pretty imposing... If you didn&apos;t become strong along with #p1013000#, you might be too afraid to even look him in the eye."/>
   </imgdir>
   <imgdir name="2261">
     <string name="name" value="Camel&apos;s Training Session 1 (Repeatable)"/>

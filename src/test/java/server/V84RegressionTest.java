@@ -43,6 +43,12 @@ class V84RegressionTest {
     private static final Path ADD_LIST = Path.of("docs", "wz-baseline", "add-list", "Quest.txt");
     private static final Path DENY_LIST = Path.of("docs", "wz-baseline", "merge-lists", "COLLISION-DENY.txt");
     private static final Path NINE_PATHS = Path.of("docs", "wz-baseline", "merge-lists", "09", "Quest.paths.txt");
+    /**
+     * Ticket 33's 135 Evan ids. Subtracted alongside ticket 09's for the same reason: this test
+     * counts what PREDATES the v84 merges, so every id a merge added has to come off the total or
+     * the next additive merge turns a deletion check into a "the count moved" check.
+     */
+    private static final Path THIRTY_THREE_PATHS = Path.of("docs", "wz-baseline", "merge-lists", "33", "Quest.paths.txt");
     private static final Path SQL = Path.of("src", "main", "resources", "db", "data");
 
     /**
@@ -64,6 +70,14 @@ class V84RegressionTest {
         return Files.readAllLines(p, StandardCharsets.UTF_8).stream()
                 .map(l -> l.replace("\r", "").trim())
                 .filter(l -> !l.isEmpty() && !l.startsWith("#"))
+                .toList();
+    }
+
+    /** The quest ids a merge path list adds, taken off its {@code QuestInfo.img} rows. */
+    private static List<Integer> questInfoIds(Path pathList) throws IOException {
+        return rows(pathList).stream()
+                .filter(r -> r.startsWith("Quest.wz/QuestInfo.img/"))
+                .map(r -> Integer.parseInt(r.substring(r.lastIndexOf('/') + 1)))
                 .toList();
     }
 
@@ -144,19 +158,21 @@ class V84RegressionTest {
     // ------------------------------------------------------------------ 3. existing quests
 
     /**
-     * The merge added 63 quest ids and must have removed none. Counting rather than listing keeps
-     * this honest: a merge that dropped one live quest and added one of its own would still leave
-     * the total right, so the four category images are checked to agree and the count of ids that
-     * are NOT ticket 09's is what is asserted.
+     * The merges added 63 (ticket 09) + 135 (ticket 33) quest ids and must have removed none.
+     * Counting rather than listing keeps this honest: a merge that dropped one live quest and
+     * added one of its own would still leave the total right, so the four category images are
+     * checked to agree and the count of ids that are NEITHER ticket's is what is asserted.
      */
     @Test
     void the2818QuestsThatPredateTheMergeAreAllStillPresent() throws IOException {
         DataProvider quest = wz("Quest.wz");
-        Set<Integer> merged = new TreeSet<>(rows(NINE_PATHS).stream()
-                .filter(r -> r.startsWith("Quest.wz/QuestInfo.img/"))
-                .map(r -> Integer.parseInt(r.substring(r.lastIndexOf('/') + 1)))
-                .toList());
+        Set<Integer> merged = new TreeSet<>(questInfoIds(NINE_PATHS));
         assertEquals(63, merged.size(), "ticket 09 merged 63 quest ids");
+        Set<Integer> evan = new TreeSet<>(questInfoIds(THIRTY_THREE_PATHS));
+        assertEquals(135, evan.size(), "ticket 33 merged 135 Evan quest ids");
+        assertEquals(Set.of(), evan.stream().filter(merged::contains).collect(java.util.stream.Collectors.toSet()),
+                "the two merges must not claim the same id");
+        merged.addAll(evan);
 
         Set<Integer> preexisting = new TreeSet<>();
         for (Map.Entry<String, Integer> e : QUESTS_BEFORE_THE_MERGE.entrySet()) {

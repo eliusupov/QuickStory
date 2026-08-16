@@ -202,6 +202,10 @@ class V84QuestNodeTest {
      * counts are 2,824 / 2,807 / 2,818 / 2,801 and each must have gained exactly the 63 new ids -
      * asserted as an exact count rather than a floor, because a floor of 2,800 is already satisfied
      * by the un-merged tree and would have made this test green on a merge that never happened.
+     * <p>
+     * Ticket 33 then added the 135 Evan ids on top, to {@code QuestInfo}/{@code Check}/{@code Act}
+     * only - it does not merge {@code Say.img}, which {@code Quest.java:116-118} never opens - so
+     * {@code Say.img} is the one image still sitting at +63.
      */
     @Test
     void thePreExistingQuestsSurvivedTheMerge() {
@@ -209,7 +213,8 @@ class V84QuestNodeTest {
         Map<String, Integer> preMerge = Map.of(
                 "Act.img", 2824, "Check.img", 2807, "QuestInfo.img", 2818, "Say.img", 2801);
         for (String category : CATEGORIES) {
-            assertEquals(preMerge.get(category) + 63, quest.getData(category).getChildren().size(),
+            int evan = category.equals("Say.img") ? 0 : 135;
+            assertEquals(preMerge.get(category) + 63 + evan, quest.getData(category).getChildren().size(),
                     category + " child count after the merge");
         }
         // 3749 is ticket 07's Neo City 2227 gate; 3507 is quest 3540's prerequisite.
@@ -568,14 +573,19 @@ class V84QuestNodeTest {
     /**
      * Ticket 08 handed over that {@code 910060100} becomes reachable once quests 22515-22518 exist,
      * and pointed at this ticket. The data says otherwise: all four are 22xxx, i.e. the Evan chain,
-     * i.e. ticket 13's. Asserted so the handoff is corrected in the tree and not only in prose.
+     * i.e. not this ticket's. Asserted so the handoff is corrected in the tree and not only in prose.
+     * <p>
+     * <strong>The gate is now met, by ticket 33, not by 09.</strong> All four ids exist in the tree
+     * today. What this test still holds is the boundary it was written for: they are not on ticket
+     * 09's path list, and the route that waits on them is untouched. The presence assertion is kept
+     * rather than deleted - inverted, so it fails if the Evan chain is ever dropped again.
      */
     @Test
     void the22515To22518GateIsTicket13sAndIsStillUnmet() throws IOException {
         DataProvider quest = wz("Quest.wz");
         for (int id : new int[]{22515, 22516, 22517, 22518}) {
-            assertNull(quest.getData("QuestInfo.img").getChildByPath(String.valueOf(id)),
-                    "quest " + id + " is on ticket 13's Evan list and must not be merged here");
+            assertNotNull(quest.getData("QuestInfo.img").getChildByPath(String.valueOf(id)),
+                    "quest " + id + " was merged by ticket 33 and must stay in the tree");
             assertFalse(questIds().contains(id), "quest " + id + " leaked onto ticket 09's list");
         }
         // and the pre-written route that waits on them is untouched

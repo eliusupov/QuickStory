@@ -1,0 +1,95 @@
+v84 source - the three images Quest.java reads
+  sizes: QuestInfo=3015  Check=3004  Act=3021   union=3022
+  ids NOT present in all 3: 19
+    4960  present in: QuestInfo,Check
+    9250  present in: Act
+    9251  present in: Act
+    9252  present in: Act
+    9253  present in: Act
+    9254  present in: Act
+    9266  present in: Act
+    9433  present in: Act
+    9800  present in: QuestInfo,Act
+    9809  present in: QuestInfo,Act
+    9810  present in: QuestInfo,Act
+    9811  present in: QuestInfo,Act
+    9812  present in: QuestInfo,Act
+    9813  present in: QuestInfo,Act
+    9814  present in: QuestInfo,Act
+    9815  present in: QuestInfo,Act
+    9816  present in: QuestInfo,Act
+    9817  present in: QuestInfo,Act
+    9820  present in: QuestInfo,Act
+
+v84 source - plus Say.img, which Quest.java never opens
+  sizes: QuestInfo=3015  Check=3004  Act=3021  Say=2998   union=3023
+  ids NOT present in all 4: 45
+    1115  present in: QuestInfo,Check,Act
+    1116  present in: QuestInfo,Check,Act
+    1117  present in: QuestInfo,Check,Act
+    1118  present in: QuestInfo,Check,Act
+    1119  present in: QuestInfo,Check,Act
+    1120  present in: QuestInfo,Check,Act
+    1121  present in: QuestInfo,Check,Act
+    1122  present in: QuestInfo,Check,Act
+    1123  present in: QuestInfo,Check,Act
+    1124  present in: QuestInfo,Check,Act
+    4960  present in: QuestInfo,Check,Say
+    9250  present in: Act,Say
+    9251  present in: Act,Say
+    9252  present in: Act,Say
+    9253  present in: Act,Say
+    9254  present in: Act,Say
+    9266  present in: Act,Say
+    9396  present in: QuestInfo,Check,Act
+    9397  present in: QuestInfo,Check,Act
+    9433  present in: Act,Say
+    9800  present in: QuestInfo,Act,Say
+    9809  present in: QuestInfo,Act,Say
+    9810  present in: QuestInfo,Act,Say
+    9811  present in: QuestInfo,Act,Say
+    9812  present in: QuestInfo,Act,Say
+    9813  present in: QuestInfo,Act,Say
+    9814  present in: QuestInfo,Act,Say
+    9815  present in: QuestInfo,Act,Say
+    9816  present in: QuestInfo,Act,Say
+    9817  present in: QuestInfo,Act,Say
+    9820  present in: QuestInfo,Act,Say
+    20500  present in: QuestInfo,Check,Act
+    20501  present in: QuestInfo,Check,Act
+    20502  present in: QuestInfo,Check,Act
+    20503  present in: QuestInfo,Check,Act
+    20504  present in: QuestInfo,Check,Act
+    20505  present in: QuestInfo,Check,Act
+    20506  present in: QuestInfo,Check,Act
+    20507  present in: QuestInfo,Check,Act
+    20508  present in: QuestInfo,Check,Act
+    20509  present in: QuestInfo,Check,Act
+    20510  present in: QuestInfo,Check,Act
+    20511  present in: QuestInfo,Check,Act
+    20512  present in: QuestInfo,Check,Act
+    28332  present in: Say
+
+this tree, after the merge
+  sizes: QuestInfo=3016  Check=3005  Act=3022   union=3023
+  ids NOT present in all 3: 19
+    4960  present in: QuestInfo,Check
+    9250  present in: Act
+    9251  present in: Act
+    9252  present in: Act
+    9253  present in: Act
+    9254  present in: Act
+    9266  present in: Act
+    9433  present in: Act
+    9800  present in: QuestInfo,Act
+    9809  present in: QuestInfo,Act
+    9810  present in: QuestInfo,Act
+    9811  present in: QuestInfo,Act
+    9812  present in: QuestInfo,Act
+    9813  present in: QuestInfo,Act
+    9814  present in: QuestInfo,Act
+    9815  present in: QuestInfo,Act
+    9816  present in: QuestInfo,Act
+    9817  present in: QuestInfo,Act
+    9820  present in: QuestInfo,Act
+

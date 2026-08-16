@@ -3333,6 +3333,1813 @@
     <imgdir name="1">
     </imgdir>
   </imgdir>
+  <imgdir name="22000">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="22001">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="35"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032447"/>
+          <int name="count" value="-1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22002">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="22003">
+    <imgdir name="0">
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032448"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="175"/>
+      <int name="nextQuest" value="22004"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032448"/>
+          <int name="count" value="-1"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="id" value="2022621"/>
+          <int name="count" value="10"/>
+        </imgdir>
+        <imgdir name="2">
+          <int name="id" value="2022622"/>
+          <int name="count" value="10"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22004">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="22005">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="700"/>
+      <int name="nextQuest" value="22006"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032449"/>
+          <int name="count" value="-1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22006">
+    <imgdir name="0">
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032450"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="270"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032450"/>
+          <int name="count" value="-1"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="id" value="2022621"/>
+          <int name="count" value="20"/>
+        </imgdir>
+        <imgdir name="2">
+          <int name="id" value="2022622"/>
+          <int name="count" value="20"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22007">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="22008">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="nextQuest" value="22009"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22009">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="260"/>
+      <int name="nextQuest" value="22010"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22010">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="980"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="2022621"/>
+          <int name="count" value="30"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="id" value="2022622"/>
+          <int name="count" value="30"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22100">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="22101">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="22102">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="22103">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="22104">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="22105">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="22106">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="22107">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="22108">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="22109">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="22300">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="1142158"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="skill">
+        <imgdir name="0">
+          <int name="id" value="20011005"/>
+          <int name="skillLevel" value="1"/>
+          <int name="masterLevel" value="1"/>
+          <imgdir name="job">
+            <int name="0" value="2218"/>
+          </imgdir>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22400">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="22401">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="22402">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <imgdir name="skill">
+        <imgdir name="0">
+          <int name="id" value="20011004"/>
+          <int name="skillLevel" value="1"/>
+          <int name="masterLevel" value="1"/>
+          <imgdir name="job">
+            <int name="0" value="2200"/>
+            <int name="1" value="2210"/>
+            <int name="2" value="2211"/>
+            <int name="3" value="2212"/>
+            <int name="4" value="2213"/>
+            <int name="5" value="2214"/>
+            <int name="6" value="2215"/>
+            <int name="7" value="2216"/>
+            <int name="8" value="2217"/>
+            <int name="9" value="2218"/>
+          </imgdir>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22403">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="nextQuest" value="22404"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22404">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="money" value="-10000000"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4000155"/>
+          <int name="count" value="-50"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="id" value="4032474"/>
+          <int name="count" value="-1"/>
+        </imgdir>
+        <imgdir name="2">
+          <int name="id" value="1912033"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22405">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="money" value="-20000000"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4000155"/>
+          <int name="count" value="-50"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="id" value="4032474"/>
+          <int name="count" value="-1"/>
+        </imgdir>
+        <imgdir name="2">
+          <int name="id" value="1912033"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22406">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="22407">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="money" value="-30000000"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032475"/>
+          <int name="count" value="-10"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="id" value="4032476"/>
+          <int name="count" value="-2"/>
+        </imgdir>
+        <imgdir name="2">
+          <int name="id" value="4032477"/>
+          <int name="count" value="-2"/>
+        </imgdir>
+        <imgdir name="3">
+          <int name="id" value="1912034"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22408">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032497"/>
+          <int name="count" value="-1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22409">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4000291"/>
+          <int name="count" value="-100"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="id" value="4000292"/>
+          <int name="count" value="-100"/>
+        </imgdir>
+        <imgdir name="2">
+          <int name="id" value="4032477"/>
+          <int name="count" value="2"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22410">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="money" value="-60000000"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032504"/>
+          <int name="count" value="-10"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="id" value="4032505"/>
+          <int name="count" value="-2"/>
+        </imgdir>
+        <imgdir name="2">
+          <int name="id" value="4032477"/>
+          <int name="count" value="-2"/>
+        </imgdir>
+        <imgdir name="3">
+          <int name="id" value="1912034"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22411">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="22412">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="money" value="-60000000"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4000270"/>
+          <int name="count" value="-300"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="id" value="4000272"/>
+          <int name="count" value="-300"/>
+        </imgdir>
+        <imgdir name="2">
+          <int name="id" value="4000271"/>
+          <int name="count" value="-300"/>
+        </imgdir>
+        <imgdir name="3">
+          <int name="id" value="1912035"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22413">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="money" value="-120000000"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4000270"/>
+          <int name="count" value="-300"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="id" value="4000272"/>
+          <int name="count" value="-300"/>
+        </imgdir>
+        <imgdir name="2">
+          <int name="id" value="4000271"/>
+          <int name="count" value="-300"/>
+        </imgdir>
+        <imgdir name="3">
+          <int name="id" value="1912035"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22500">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="1270"/>
+      <int name="nextQuest" value="22501"/>
+      <imgdir name="sp">
+        <imgdir name="0">
+          <int name="sp_value" value="1"/>
+          <imgdir name="job">
+            <int name="0" value="2200"/>
+          </imgdir>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22501">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="180"/>
+      <int name="nextQuest" value="22502"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22502">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="nextQuest" value="22503"/>
+      <int name="exp" value="800"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032452"/>
+          <int name="count" value="-3"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22503">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="nextQuest" value="22504"/>
+      <int name="exp" value="1850"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032453"/>
+          <int name="count" value="-10"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22504">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="nextQuest" value="22505"/>
+      <int name="exp" value="260"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22505">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="nextQuest" value="22506"/>
+      <int name="exp" value="1150"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22506">
+    <imgdir name="0">
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032454"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="1420"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032454"/>
+          <int name="count" value="-1"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="sp">
+        <imgdir name="0">
+          <int name="sp_value" value="1"/>
+          <imgdir name="job">
+            <int name="0" value="2200"/>
+          </imgdir>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22507">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="22508">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="nextQuest" value="22509"/>
+      <int name="exp" value="320"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22509">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="1980"/>
+      <imgdir name="sp">
+        <imgdir name="0">
+          <int name="sp_value" value="1"/>
+          <imgdir name="job">
+            <int name="0" value="2200"/>
+          </imgdir>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22510">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="1500"/>
+      <int name="nextQuest" value="22511"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032455"/>
+          <int name="count" value="-1"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="sp">
+        <imgdir name="0">
+          <int name="sp_value" value="1"/>
+          <imgdir name="job">
+            <int name="0" value="2200"/>
+          </imgdir>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22511">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="3560"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4000001"/>
+          <int name="count" value="-20"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="id" value="2000001"/>
+          <int name="count" value="30"/>
+        </imgdir>
+        <imgdir name="2">
+          <int name="id" value="2000003"/>
+          <int name="count" value="30"/>
+        </imgdir>
+        <imgdir name="3">
+          <int name="id" value="1142152"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="sp">
+        <imgdir name="0">
+          <int name="sp_value" value="1"/>
+          <imgdir name="job">
+            <int name="0" value="2200"/>
+          </imgdir>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22512">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="520"/>
+      <int name="nextQuest" value="22513"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22513">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="nextQuest" value="22514"/>
+      <int name="exp" value="360"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22514">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="420"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22515">
+    <imgdir name="0">
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032456"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="1210"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032456"/>
+          <int name="count" value="-1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22516">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="4390"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="2000001"/>
+          <int name="count" value="20"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="id" value="2000003"/>
+          <int name="count" value="20"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22517">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="2400"/>
+      <int name="nextQuest" value="22518"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="2000001"/>
+          <int name="count" value="20"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="id" value="2000003"/>
+          <int name="count" value="20"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22518">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="2600"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="2000001"/>
+          <int name="count" value="20"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="id" value="2000003"/>
+          <int name="count" value="20"/>
+        </imgdir>
+        <imgdir name="2">
+          <int name="id" value="4032457"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="sp">
+        <imgdir name="0">
+          <int name="sp_value" value="1"/>
+          <imgdir name="job">
+            <int name="0" value="2200"/>
+          </imgdir>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22519">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="2900"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22520">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032457"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22521">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="2950"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4000009"/>
+          <int name="count" value="-20"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="sp">
+        <imgdir name="0">
+          <int name="sp_value" value="1"/>
+          <imgdir name="job">
+            <int name="0" value="2200"/>
+          </imgdir>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22522">
+    <imgdir name="0">
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032458"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="300"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032458"/>
+          <int name="count" value="-1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22523">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="2500"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4000009"/>
+          <int name="count" value="-40"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22524">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="2600"/>
+      <int name="nextQuest" value="22525"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032459"/>
+          <int name="count" value="-1"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="sp">
+        <imgdir name="0">
+          <int name="sp_value" value="1"/>
+          <imgdir name="job">
+            <int name="0" value="2210"/>
+          </imgdir>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22525">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="1700"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22526">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="1200"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22527">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="2900"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="1142153"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="sp">
+        <imgdir name="0">
+          <int name="sp_value" value="1"/>
+          <imgdir name="job">
+            <int name="0" value="2210"/>
+          </imgdir>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22528">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="3400"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="1942000"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="sp">
+        <imgdir name="0">
+          <int name="sp_value" value="1"/>
+          <imgdir name="job">
+            <int name="0" value="2210"/>
+          </imgdir>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22529">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="3100"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032460"/>
+          <int name="count" value="-3"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22530">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="3900"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="1952000"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="sp">
+        <imgdir name="0">
+          <int name="sp_value" value="1"/>
+          <imgdir name="job">
+            <int name="0" value="2210"/>
+          </imgdir>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22531">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="5100"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032461"/>
+          <int name="count" value="-1"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="id" value="1962000"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="sp">
+        <imgdir name="0">
+          <int name="sp_value" value="1"/>
+          <imgdir name="job">
+            <int name="0" value="2210"/>
+          </imgdir>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22532">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="5750"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032462"/>
+          <int name="count" value="-1"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="id" value="1972000"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="sp">
+        <imgdir name="0">
+          <int name="sp_value" value="1"/>
+          <imgdir name="job">
+            <int name="0" value="2210"/>
+          </imgdir>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22533">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="7250"/>
+      <imgdir name="sp">
+        <imgdir name="0">
+          <int name="sp_value" value="1"/>
+          <imgdir name="job">
+            <int name="0" value="2210"/>
+          </imgdir>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22534">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="3250"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22535">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="7250"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4000042"/>
+          <int name="count" value="-50"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22536">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="22537">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="2000"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22538">
+    <imgdir name="0">
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4161049"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="1000"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4161049"/>
+          <int name="count" value="-1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22539">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="5900"/>
+      <imgdir name="sp">
+        <imgdir name="0">
+          <int name="sp_value" value="1"/>
+          <imgdir name="job">
+            <int name="0" value="2211"/>
+          </imgdir>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22540">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="3000"/>
+      <int name="nextQuest" value="22541"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22541">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="2000"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22542">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="1500"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22543">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="1500"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22544">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="3000"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22545">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="8900"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22546">
+    <imgdir name="0">
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4161050"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4161050"/>
+          <int name="count" value="-1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22547">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="6900"/>
+      <imgdir name="sp">
+        <imgdir name="0">
+          <int name="sp_value" value="1"/>
+          <imgdir name="job">
+            <int name="0" value="2211"/>
+          </imgdir>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22548">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="10900"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032463"/>
+          <int name="count" value="-1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22549">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="2500"/>
+      <int name="nextQuest" value="22550"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22550">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="5450"/>
+      <int name="nextQuest" value="22551"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="2000002"/>
+          <int name="count" value="-20"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="id" value="2000003"/>
+          <int name="count" value="-30"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22551">
+    <imgdir name="0">
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032464"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="5450"/>
+      <int name="nextQuest" value="22552"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032464"/>
+          <int name="count" value="-1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22552">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="2500"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="1142154"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="sp">
+        <imgdir name="0">
+          <int name="sp_value" value="1"/>
+          <imgdir name="job">
+            <int name="0" value="2211"/>
+          </imgdir>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22553">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="12100"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4000035"/>
+          <int name="count" value="-60"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="sp">
+        <imgdir name="0">
+          <int name="sp_value" value="1"/>
+          <imgdir name="job">
+            <int name="0" value="2211"/>
+          </imgdir>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22554">
+    <imgdir name="0">
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032465"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="1500"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032465"/>
+          <int name="count" value="-1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22555">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="3200"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4000068"/>
+          <int name="count" value="-2"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22556">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="6600"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22557">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="14500"/>
+      <imgdir name="sp">
+        <imgdir name="0">
+          <int name="sp_value" value="1"/>
+          <imgdir name="job">
+            <int name="0" value="2211"/>
+          </imgdir>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22558">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="1000"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22559">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="14200"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032466"/>
+          <int name="count" value="-1"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="sp">
+        <imgdir name="0">
+          <int name="sp_value" value="1"/>
+          <imgdir name="job">
+            <int name="0" value="2211"/>
+          </imgdir>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22560">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="15800"/>
+      <int name="nextQuest" value="22561"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22561">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="15800"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4000031"/>
+          <int name="count" value="-20"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="sp">
+        <imgdir name="0">
+          <int name="sp_value" value="1"/>
+          <imgdir name="job">
+            <int name="0" value="2211"/>
+          </imgdir>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22562">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="23000"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032467"/>
+          <int name="count" value="-1"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="sp">
+        <imgdir name="0">
+          <int name="sp_value" value="1"/>
+          <imgdir name="job">
+            <int name="0" value="2212"/>
+          </imgdir>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22563">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032467"/>
+          <int name="count" value="1"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="id" value="4000204"/>
+          <int name="count" value="-50"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22564">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="22565">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="22566">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="6100"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="1142155"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="sp">
+        <imgdir name="0">
+          <int name="sp_value" value="1"/>
+          <imgdir name="job">
+            <int name="0" value="2212"/>
+          </imgdir>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22567">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="22568">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4000070"/>
+          <int name="count" value="-10"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="id" value="4000071"/>
+          <int name="count" value="-10"/>
+        </imgdir>
+        <imgdir name="2">
+          <int name="id" value="4000072"/>
+          <int name="count" value="-10"/>
+        </imgdir>
+        <imgdir name="3">
+          <int name="id" value="4000068"/>
+          <int name="count" value="-10"/>
+        </imgdir>
+        <imgdir name="4">
+          <int name="id" value="4032468"/>
+          <int name="count" value="10"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22569">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="3000"/>
+      <imgdir name="sp">
+        <imgdir name="0">
+          <int name="sp_value" value="1"/>
+          <imgdir name="job">
+            <int name="0" value="2213"/>
+          </imgdir>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22570">
+    <imgdir name="0">
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4161051"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="1000"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4161051"/>
+          <int name="count" value="-1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22571">
+    <imgdir name="0">
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032469"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="2000"/>
+      <int name="nextQuest" value="22572"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032469"/>
+          <int name="count" value="-1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22572">
+    <imgdir name="0">
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032526"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="38900"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032526"/>
+          <int name="count" value="-1"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="id" value="4032470"/>
+          <int name="count" value="-1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22573">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="money" value="-60000"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4000136"/>
+          <int name="count" value="-5"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="id" value="4000029"/>
+          <int name="count" value="-30"/>
+        </imgdir>
+        <imgdir name="2">
+          <int name="id" value="4000044"/>
+          <int name="count" value="-30"/>
+        </imgdir>
+        <imgdir name="3">
+          <int name="id" value="4032470"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22574">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="38900"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4000030"/>
+          <int name="count" value="-2"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="sp">
+        <imgdir name="0">
+          <int name="sp_value" value="2"/>
+          <imgdir name="job">
+            <int name="0" value="2213"/>
+          </imgdir>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22575">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="40000"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4000069"/>
+          <int name="count" value="-150"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="id" value="4032471"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="sp">
+        <imgdir name="0">
+          <int name="sp_value" value="1"/>
+          <imgdir name="job">
+            <int name="0" value="2213"/>
+          </imgdir>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22576">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="7400"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032471"/>
+          <int name="count" value="-1"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="sp">
+        <imgdir name="0">
+          <int name="sp_value" value="1"/>
+          <imgdir name="job">
+            <int name="0" value="2213"/>
+          </imgdir>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22577">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4000069"/>
+          <int name="count" value="-300"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="id" value="4032471"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22578">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="22579">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="5200"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22580">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="55200"/>
+      <imgdir name="sp">
+        <imgdir name="0">
+          <int name="sp_value" value="1"/>
+          <imgdir name="job">
+            <int name="0" value="2214"/>
+          </imgdir>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22581">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="6600"/>
+      <int name="nextQuest" value="22582"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22582">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4000144"/>
+          <int name="count" value="-100"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22583">
+    <imgdir name="0">
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="2430032"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="64900"/>
+      <int name="nextQuest" value="22584"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22584">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="64900"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22585">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="22586">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="68100"/>
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032472"/>
+          <int name="count" value="-1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22587">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032472"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22588">
+    <imgdir name="0">
+      <imgdir name="item">
+        <imgdir name="0">
+          <int name="id" value="4032473"/>
+          <int name="count" value="1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="22589">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="68100"/>
+      <int name="nextQuest" value="22590"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22590">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="20000"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22591">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="48100"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22592">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="10000"/>
+      <int name="nextQuest" value="22596"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22593">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="22594">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="22595">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="22596">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <int name="exp" value="68100"/>
+    </imgdir>
+  </imgdir>
+  <imgdir name="22602">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="22603">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
   <imgdir name="2344">
     <imgdir name="0">
     </imgdir>

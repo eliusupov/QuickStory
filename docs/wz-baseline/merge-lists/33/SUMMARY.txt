@@ -1,0 +1,6 @@
+QuestInfo : v84=3015 ours=2881 toAdd=135 oursNotInV84=1
+Check : v84=3004 ours=2870 toAdd=135 oursNotInV84=1
+Act : v84=3021 ours=2887 toAdd=135 oursNotInV84=1
+path rows: 405
+ids added (union): 135
+ids not present in all three v84 images: 0
