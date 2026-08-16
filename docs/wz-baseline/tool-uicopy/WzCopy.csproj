@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <AssemblyName>WzCopy</AssemblyName>
+    <RootNamespace>WzCopy</RootNamespace>
+
+    <!-- Same MapleLib override as the sibling WzMerge / WzDump projects:
+           dotnet build -p:MapleLibProject=<path>\MapleLib.csproj
+
+         Every safety property this tool claims is a property of THAT source:
+           * the additive-only gate relies on WzDirectory / WzImage / property lookups being
+             OrdinalIgnoreCase (WzImage.cs indexer, WzImageProperty.WzProperties);
+           * the copy relies on WzImageProperty.DeepClone() producing a SELF-CONTAINED subtree —
+             WzPngProperty.DeepClone (WzPngProperty.cs:81) clones compressedImageBytes rather than
+             keeping the source's wzReader, which is what makes a renamed clone survive the save;
+           * the staging rules exist because SaveToDisk truncates its destination up front
+             (WzFile.cs:675), streams UNCHANGED images verbatim out of the file's own reader
+             (WzDirectory.cs:347-357 — gated on img.Changed, which is why parsing every image for
+             the baseline census does NOT force a re-serialize) and writes a CWD-relative .TEMP
+             scratch file (WzFile.cs:664).
+           * renaming a clone is legal because WzCanvasProperty/WzSubProperty override
+             `Name` with a public setter (WzCanvasProperty.cs:74, WzSubProperty.cs:60).
+
+         Revision this was read and verified against:
+           HaRepacker-src  a7c38edf7c58e8a8b272af490c51113db76bff08  (2026-08-11) -->
+    <MapleLibProject Condition="'$(MapleLibProject)' == ''">D:\games\MapleStory\Server\porting-resources\reference-sources\HaRepacker-src\MapleLib\MapleLib\MapleLib.csproj</MapleLibProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(MapleLibProject)" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,44 @@
+# Ticket 11d - UI.wz. 20 pairs, srcPath=dstPath, ADDITIVE ONLY (every dst must not exist).
+# Run with: WzCopy <inWz> <outWz> <this file>
+#
+# THE BUG: an Evan (job 2001) opening the skill window crashes the v83 client. Evan's job chain is
+# 11 long (2001,2200,2210..2218); UI.wz/UIWindow.img/Skill/Tab supplies only 5 tab slots. The
+# client indexes past the end during TAB CONSTRUCTION, before a single skill is drawn - job 2000
+# has a 5-long chain, opens fine, and draws zero skills. The format string
+# "UI/UIWindow.img/Skill/Tab/AranButton/Bt%d" lives at 0x00B3B690 in local.exe.
+#
+# ---- block 1: the AranButton tab glyphs ----
+# Live set is Bt1..Bt4 - FOUR buttons for a FIVE-long chain, so whether Bt%d is 0-based or 1-based
+# is genuinely ambiguous from the data alone. Guessing wrong costs a live test, so cover BOTH:
+# Bt5..Bt11 extends a 1-based read to 11 tabs, Bt0 backfills a 0-based one. Bt4 is the source
+# because it is a real distinct glyph (not a duplicate of Bt3) and is the last of the live run.
+# All nine are new names; nothing existing is touched.
+UIWindow.img/Skill/Tab/AranButton/Bt4=UIWindow.img/Skill/Tab/AranButton/Bt0
+UIWindow.img/Skill/Tab/AranButton/Bt4=UIWindow.img/Skill/Tab/AranButton/Bt5
+UIWindow.img/Skill/Tab/AranButton/Bt4=UIWindow.img/Skill/Tab/AranButton/Bt6
+UIWindow.img/Skill/Tab/AranButton/Bt4=UIWindow.img/Skill/Tab/AranButton/Bt7
+UIWindow.img/Skill/Tab/AranButton/Bt4=UIWindow.img/Skill/Tab/AranButton/Bt8
+UIWindow.img/Skill/Tab/AranButton/Bt4=UIWindow.img/Skill/Tab/AranButton/Bt9
+UIWindow.img/Skill/Tab/AranButton/Bt4=UIWindow.img/Skill/Tab/AranButton/Bt10
+UIWindow.img/Skill/Tab/AranButton/Bt4=UIWindow.img/Skill/Tab/AranButton/Bt11
+#
+# ---- blocks 2 and 3: the tab number strips ----
+# Skill/Tab/{enabled,disabled} hold 0..4. SkillEx (the v84 skill window, already present live from
+# ticket 10) holds 0..10 of the same artwork generation. Take 5..10 from SkillEx into Skill.
+#
+# POSITIONAL ARRAY: 0..4 is a consecutive integer run, which this project treats as a positional
+# array. This is a genuine APPEND - contiguous, no hole, every new index >= the baseline count -
+# and the result is still ONE consecutive run, 0..10. WzCopy re-checks that after the copy and
+# refuses if it is not; do not reorder these rows expecting it to matter, the check runs at the end.
+UIWindow.img/SkillEx/Tab/enabled/5=UIWindow.img/Skill/Tab/enabled/5
+UIWindow.img/SkillEx/Tab/enabled/6=UIWindow.img/Skill/Tab/enabled/6
+UIWindow.img/SkillEx/Tab/enabled/7=UIWindow.img/Skill/Tab/enabled/7
+UIWindow.img/SkillEx/Tab/enabled/8=UIWindow.img/Skill/Tab/enabled/8
+UIWindow.img/SkillEx/Tab/enabled/9=UIWindow.img/Skill/Tab/enabled/9
+UIWindow.img/SkillEx/Tab/enabled/10=UIWindow.img/Skill/Tab/enabled/10
+UIWindow.img/SkillEx/Tab/disabled/5=UIWindow.img/Skill/Tab/disabled/5
+UIWindow.img/SkillEx/Tab/disabled/6=UIWindow.img/Skill/Tab/disabled/6
+UIWindow.img/SkillEx/Tab/disabled/7=UIWindow.img/Skill/Tab/disabled/7
+UIWindow.img/SkillEx/Tab/disabled/8=UIWindow.img/Skill/Tab/disabled/8
+UIWindow.img/SkillEx/Tab/disabled/9=UIWindow.img/Skill/Tab/disabled/9
+UIWindow.img/SkillEx/Tab/disabled/10=UIWindow.img/Skill/Tab/disabled/10
