@@ -27,9 +27,12 @@ public record ClientCrashReport(int version, String character, int worldId, int 
     /** Under-read: the client hit the end of the buffer mid-decode. See class javadoc. */
     public static final int ERROR_BUFFER_UNDERRUN = 38;
 
+    // Digit runs are capped at 9 so Integer.parseInt below cannot overflow on hostile input - this
+    // packet arrives before the account logs in and is entirely attacker-controlled.
     private static final Pattern ENTRY = Pattern.compile(
-            "ver\\((-?\\d+)\\), CharacterName\\(([^)]*)\\), WorldID\\((-?\\d+)\\), ChID\\((-?\\d+)\\), "
-                    + "FieldID\\((-?\\d+)\\), ZException \\(error code : (-?\\d+) \\((.*)\\)\\) source\\((.*)\\)");
+            "ver\\((-?\\d{1,9})\\), CharacterName\\(([^)]*)\\), WorldID\\((-?\\d{1,9})\\), "
+                    + "ChID\\((-?\\d{1,9})\\), FieldID\\((-?\\d{1,9})\\), "
+                    + "ZException \\(error code : (-?\\d{1,9}) \\((.*)\\)\\) source\\((.*)\\)");
 
     /**
      * Splits the uploaded blob into entries and parses each one. Lines that do not match the known

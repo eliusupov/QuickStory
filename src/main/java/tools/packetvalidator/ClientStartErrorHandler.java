@@ -40,12 +40,25 @@ public class ClientStartErrorHandler implements PacketHandler {
                 }
             }));
 
+    /** This packet is unauthenticated, so cap how much noise one sender can put in the log. */
+    private static final int MAX_LOGGED_PER_PACKET = 20;
+
     @Override
     public void handlePacket(InPacket p, Client c) {
+        // readString() takes a SIGNED short length; a hostile client can make it negative or
+        // longer than the remaining buffer. Both would throw out of here - just ignore the packet.
         if (p.available() < 2) {
             return;
         }
-        List<ClientCrashReport> entries = ClientCrashReport.parseAll(p.readString());
+        String blob;
+        try {
+            blob = p.readString();
+        } catch (RuntimeException e) {
+            log.debug("Malformed CLIENT_START_ERROR from {}", c.getRemoteAddress());
+            return;
+        }
+
+        List<ClientCrashReport> entries = ClientCrashReport.parseAll(blob);
 
         int fresh = 0;
         for (ClientCrashReport entry : entries) {
@@ -53,6 +66,9 @@ public class ClientStartErrorHandler implements PacketHandler {
                 continue;
             }
             fresh++;
+            if (fresh > MAX_LOGGED_PER_PACKET) {
+                continue;
+            }
             if (entry.version() == ServerConstants.VERSION) {
                 log.warn("*** CLIENT CRASH REPORT (current version v{}) *** {}",
                         ServerConstants.VERSION, entry.describe());

@@ -33,7 +33,7 @@ Decoded from the real 1663-byte capture in `tools/v84/cutover-server.log` line 1
 (opcode `0x19`, string length `0x067B` = 1659, 12 entries + trailing CRLF):
 
 ```
-Client crash log from 127.0.0.1: 12 entries uploaded, 4 new
+Client crash log from 127.0.0.1: 12 entries uploaded, 3 new
 Older client crash report (not v84): client v83 crashed: no character @ no map (not in game yet)
     (world -1, ch -1) error 11001 (No such host is known.)
 *** CLIENT CRASH REPORT (current version v84) *** client v84 crashed: no character
@@ -44,8 +44,9 @@ Older client crash report (not v84): client v83 crashed: no character @ no map (
     -- THE SERVER SENT A PACKET THAT WAS TOO SHORT; the client read past the end of it
 ```
 
-12 entries in that capture: 5 x v83/11001 (DNS noise from before the cutover), 7 x v84/error 38,
-of which 3 name map 40000 - Ellinia, where the owner was standing when drops killed him.
+12 entries in that capture, only 3 distinct: 5 x v83/11001 (DNS noise from before the cutover) and
+7 x v84/error 38, of which 3 name map 40000. The exact wording above is pinned by
+`ClientCrashReportTest.logLinesReadTheWayTheTicketSaysTheyDo`, not transcribed by hand.
 
 Cost on the live server: one `readString` and one regex per connect, on a packet that arrives at
 most once per session. Nothing on the hot path.
@@ -82,8 +83,9 @@ so the `nEnterType != 2` branch is decided server-side. Those are declared as na
 |---|---|
 | sendops in `sendops-84.properties` | 307 |
 | clientbound opcodes in the atlas v84 registry | 330 |
-| modellable at all (candidate rows in the TSV) | 106 |
-| **verified and actually checked against real PacketCreator output** | **29** |
+| modellable at all (rows in the TSV) | 106 |
+| of those, still `candidate` - modelled but nobody vetted the emitter | 77 |
+| **`verified` and actually checked against real PacketCreator output** | **29** |
 
 **29 of 307 sendops, ~9%.** Rejections, by reason:
 
