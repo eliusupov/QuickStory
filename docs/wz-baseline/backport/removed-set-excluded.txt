@@ -1,0 +1,39 @@
+﻿# removed-set rows the OWNER HAS ALREADY DELETED — do NOT backport these (24 rows).
+#
+# removed-list/*.txt is v83-stock minus v84. It answers "what did the patch delete",
+# not "what would the owner lose". These 24 rows are absent from the LIVE client too:
+# the owner removed them himself. Restoring them would UNDO his edits, which is the
+# opposite of the goal. Backport set = 3969 - 24 = 3945.
+#
+# Measured: WzMerge verify D:\games\MapleStory\<X>.wz docs/wz-baseline/removed-list/<X>.txt
+#   Character 136/136 present   Etc 2028/2028   Mob 674/674   Npc 31/31   UI 7/7   Sound 2/2
+#   Item 34/35 (1 missing)      Quest 19/39 (20 missing)      Map 1014/1017 (3 missing)
+#
+# The 20 Quest rows are date windows (start/end) on quests 4300-4309 — the owner stripped
+# the event time-gates. The 3 Map rows are life/ spawns he deleted, and they are POSITIONAL
+# ARRAY slots: re-adding them would also be an index hazard (WZ-MERGE-PROCEDURE 4.4).
+
+Item.wz/Etc/0403.img/04032474/info/quest
+Quest.wz/Check.img/4300/0/end
+Quest.wz/Check.img/4300/0/start
+Quest.wz/Check.img/4301/0/end
+Quest.wz/Check.img/4301/0/start
+Quest.wz/Check.img/4302/0/end
+Quest.wz/Check.img/4302/0/start
+Quest.wz/Check.img/4303/0/end
+Quest.wz/Check.img/4303/0/start
+Quest.wz/Check.img/4304/0/end
+Quest.wz/Check.img/4304/0/start
+Quest.wz/Check.img/4305/0/end
+Quest.wz/Check.img/4305/0/start
+Quest.wz/Check.img/4306/1/end
+Quest.wz/Check.img/4306/1/start
+Quest.wz/Check.img/4307/0/end
+Quest.wz/Check.img/4307/0/start
+Quest.wz/Check.img/4308/0/end
+Quest.wz/Check.img/4308/0/start
+Quest.wz/Check.img/4309/1/end
+Quest.wz/Check.img/4309/1/start
+Map.wz/Map/Map1/102000004.img/life/8
+Map.wz/Map/Map1/103000000.img/life/21/limitedname
+Map.wz/Map/Map1/120000105.img/life/10

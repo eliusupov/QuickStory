@@ -1,0 +1,25 @@
+﻿# v84 base tree — SHA256, verified 2026-08-16 (ticket 23 phase A)
+#
+# Staged at:  D:\games\wz-stage\v84-base
+# Copied from: D:\games\MapleStory\Server\porting-resources\wz-data\v84
+#   which was itself confirmed byte-identical to a fresh carve of GMSSetupv84.exe.
+# Re-verified after staging: 17/17 files byte-identical, 0 mismatches (Get-FileHash, foreground).
+# NOT the live client, NOT D:\games\MSv84\client. Both remain untouched.
+
+08112b086be4131756341b569d2059da6d00b2f75d1beebdcbe3b8f73e7e661e  Base.wz
+33291e11ebfb3f5da0449ee697b659dd56d3df0826e9fe1b15a3c488a717a00f  Character.wz
+4e42789e5c8e2224a49d1c79b97c8e7ff4c98a89df9ab92672757766e3058c3a  Effect.wz
+7a3420d1a70e2d4d145966c9f874fb803284aa4e3fb9de7945e82766887d8bbb  Etc.wz
+d7b6c944258a7c5a597ec7bbb6fb2096af4404e10f1ac7bd242e117746da7056  Item.wz
+7f9b67d010d8901f81b541b4c611f2ffa0b166001e4762d44fedab6ab7dfad8b  List.wz
+38b9aeba8e585f1edddd9c53bb4dc4713a83bf4f0010069505409774e6d5cf99  Map.wz
+65183cfb2a45ff84f8c89876d1f2fc84993d6b681ee6fee487b2e5acc92199bf  Mob.wz
+f4e0ca1026153b08bb0a547b21ddc1c947b2e93ec20442156f37c23dd6c16c1e  Morph.wz
+df861360acee77792d04561bb90a82a2e507cecf5b30da678b36286bc911887b  Npc.wz
+ede58537cd82daf9d601a87ecfc57b3c6ecd4cd157b973cb1a435a61ad819830  Quest.wz
+0fcbc37741531a501657c514115da48cd10ae4fb8592afaa1b7204a304c098fc  Reactor.wz
+29948743850c70bc4886140fce40b2f8ffa3be23e24bdb888073d5ed2a58db67  Skill.wz
+947139f27b85a6f9c0c680f59f974289afa7bec03c688f7c443b8a5dd4e9a2bd  Sound.wz
+b570a80bf6b1299631bdfd8a07008004f827cc0cb477dd008697cf33de85a2a6  String.wz
+20f06862cf1e420ec8e0096bf58e7343ea538673be5f0bee653431aa671ee72c  TamingMob.wz
+0efcaaccb35aac88b852b373af57578d429dfe7082195fb2b715286acaf6a6d9  UI.wz

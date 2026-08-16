@@ -1,0 +1,4 @@
+﻿# ticket 23 phase A — proof slice. ONE removed-set root, copied verbatim from
+# docs/wz-baseline/removed-list/Map.txt. Boss Rush entry map, deleted by GMS v84,
+# implemented by Cosmic (MapId.java:213-214 BOSS_RUSH_MIN = 970030100).
+Map.wz/Map/Map9/970030100.img

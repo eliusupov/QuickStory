@@ -559,6 +559,12 @@ grep -c 'addItemInfo' src/main/java/tools/PacketCreator.java              # 29 c
 
 # WZ
 wc -l docs/wz-baseline/removed-list/*.txt   # 3,969      protect-list/*.txt   # 17,633
+# ^ CORRECTED by ticket 23 phase A (2026-08-16). `wc -l` counts the manifests' comment
+#   headers. protect-list is 16 files x 4 header lines = 64 -> the real count is 17,569,
+#   NOT 17,633, and the backport is 21,514 roots, NOT 21,602. The removed-list figure is
+#   unaffected (3,969 is its content count; wc -l there gives 4,001).
+#   Every "17,633" and "21,602" in this document is wrong. See docs/wz-baseline/backport/README.md.
+grep -hvE '^\s*#|^\s*$' docs/wz-baseline/protect-list/*.txt | wc -l                # 17,569
 grep -c '\.img$'       docs/wz-baseline/removed-list/Map.txt              # 833
 grep -c '98[0-9]\{6\}' docs/wz-baseline/removed-list/Map.txt              # 0   <- Monster Carnival INTACT
 curl -s -o /dev/null -w '%{http_code}' https://maplestory.io/api/GMS/83/map/970030100   # 200
