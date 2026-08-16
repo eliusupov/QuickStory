@@ -37,14 +37,17 @@ static const unsigned char kNops[GATE_LEN] = {
 };
 
 static HMODULE g_self;
-static char    g_log[MAX_PATH];
+static char    g_log[MAX_PATH + 32];   /* headroom: filename is swapped for a longer one */
 
-static int eq(const unsigned char *a, const unsigned char *b) {
+/* volatile on both sides: the read-back after the write must be a real load. Without it /O2
+ * is entitled to fold `eq(p, kNops)` to true right after storing 0x90s, and the whole
+ * Themida-re-encrypt check silently becomes a no-op. */
+static int eq(volatile const unsigned char *a, volatile const unsigned char *b) {
     int i; for (i = 0; i < GATE_LEN; i++) if (a[i] != b[i]) return 0; return 1;
 }
 
 /* append msg (and optionally a hex dump of GATE_LEN bytes) to the log next to this DLL */
-static void logline(const char *msg, const unsigned char *bytes) {
+static void logline(const char *msg, volatile const unsigned char *bytes) {
     static const char hexd[] = "0123456789ABCDEF";
     char buf[512]; int n = 0, i;
     HANDLE h;
@@ -88,7 +91,7 @@ static int readable(void) {
 }
 
 static DWORD WINAPI worker(LPVOID unused) {
-    unsigned char *p = (unsigned char *)GATE_ADDR;
+    volatile unsigned char *p = (volatile unsigned char *)GATE_ADDR;
     unsigned char last[GATE_LEN];
     int tries, have_last = 0;
     DWORD old = 0, tmp = 0;
@@ -114,13 +117,13 @@ static DWORD WINAPI worker(LPVOID unused) {
         logline("GUARD PASS: expected gate pattern found.", NULL);
 
         /* section is already RWX (0xE0000040); call this anyway, cheap insurance */
-        if (!VirtualProtect(p, GATE_LEN, PAGE_EXECUTE_READWRITE, &old))
+        if (!VirtualProtect((LPVOID)GATE_ADDR, GATE_LEN, PAGE_EXECUTE_READWRITE, &old))
             logline("VirtualProtect failed, writing anyway", NULL);
 
         { int i; for (i = 0; i < GATE_LEN; i++) p[i] = 0x90; }
 
-        if (old) VirtualProtect(p, GATE_LEN, old, &tmp);
-        FlushInstructionCache(GetCurrentProcess(), p, GATE_LEN);
+        if (old) VirtualProtect((LPVOID)GATE_ADDR, GATE_LEN, old, &tmp);
+        FlushInstructionCache(GetCurrentProcess(), (LPCVOID)GATE_ADDR, GATE_LEN);
 
         if (eq(p, kNops)) { logline("RESULT: PATCHED and verified.", NULL); return 0; }
 
