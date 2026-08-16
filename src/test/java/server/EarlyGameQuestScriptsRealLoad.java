@@ -125,8 +125,10 @@ class EarlyGameQuestScriptsRealLoad {
         assertNotNull(quest);
 
         Client c = player(1054);
-        // 1054 declares a startscript but has no file and is unreachable anyway (its infoex gates on
-        // quest progress 1055, which nothing in this server ever sets). Missing file -> silence.
+        // 1054 declares a startscript but has no file. It is also unreachable for a reason no
+        // script could fix: Check.img/1054/0/end is "2009020200", already expired when v84 shipped,
+        // so EndDateRequirement refuses it before its infoNumber 1055 is ever read. See
+        // MedalQuestFallbackRealLoad#quests1048To1054AreRetiredEventContent. Missing file -> silence.
         QuestScriptManager.getInstance().start(c, (short) 1054, 1101002);
         verify(c, never()).sendPacket(any(Packet.class));
         assertNull(QuestScriptManager.getInstance().getQM(c),
