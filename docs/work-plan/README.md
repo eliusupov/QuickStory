@@ -12,8 +12,26 @@ produces a long stretch where nothing is playable and the new areas are decorati
 ticket here instead carries its **maps + mobs + NPCs + spawns + drops** together, so finishing one
 means you can walk into the area and play it.
 
-**No expand–contract sequencing is needed.** v84 removed zero nodes, so every import is purely
-additive and nothing breaks call sites. The usual wide-refactor machinery does not apply.
+**No expand–contract sequencing is needed** — but not for the reason originally stated here.
+
+> ~~v84 removed zero nodes, so every import is purely additive and nothing breaks call sites.~~
+> **False. Corrected 2026-08-15 (ticket 02c).** GMS v84 **deleted 832 `Map.wz` nodes** — the entire
+> Monster Carnival battlefield series (`970030100`–`970042717`), Mu Lung Dojo floors, Sheep Ranch.
+> They were still gone in v92. Verified three ways: our `wz-data/v84/` is SHA256-identical to a
+> fresh carve of `GMSSetupv84.exe`, so nothing is damaged; maplestory.io serves `GMS/83/map/970030100`
+> ("Stage 1 <Mano>") and 404s the same id under `GMS/84` while Henesys still resolves; and the byte
+> accounting agrees (−6.49 MB net while adding 2.77 MB ⇒ ~9.3 MB over 832 images ≈ 11 KB each).
+
+The conclusion survives because **we import additions and never delete.** The dropped maps simply
+stay in the live client's tree, where they still work. But the reasoning now has a hard constraint
+attached:
+
+**Never wholesale-swap a WZ file.** Replacing `Map.wz` with v84's copy would provably destroy ~832
+working maps on top of Ezorsia's 2.9 MB of custom content. Every import is node-level and additive,
+by construction, not by assumption.
+
+Only `Map.wz` removals have been characterised. The other ten files show net node *gains*, but a net
+gain does not rule out removals — they are **unmeasured, not measured-clean.**
 
 ## Dependency graph
 
