@@ -7,7 +7,8 @@
 tested against the WZ tree it will actually ship with. Owner: *"hd client can be done last"* —
 so this is the plan, not the build.
 
-**Status:** planned — research complete, build not started
+**Status:** phase 0 **delivered** (2026-08-16, see "Delivered — phase 0" at the end) — unpacked v84
+code in hand, signature transfer measured, U1 and U2 closed. Phases 1–6 not started.
 
 **Owner requirement, verbatim (ticket 17):**
 
@@ -226,7 +227,13 @@ reproduce them.**
 | `0x00A448B0` | `+2` | `05 D4 FE FF FF` = `add eax,-300` | imm is at **+1** |
 | `0x0064061D` | `+1` | `F7 F9` = `idiv ecx` | **not `mov ecx,600` at all** — comment is wrong; drop the site or re-find it |
 
-### 2.6 Signature uniqueness — the relocation key `[FACT-measured]`
+### 2.6 Signature uniqueness — the relocation key ~~`[FACT-measured]`~~ **VOID — see D.3**
+
+> **The numbers in this section are wrong.** The script that produced them measured addresses
+> shifted by `+0x400000` and dropped every site above `0x7F9000`. Exact matching is also the wrong
+> matcher across a relocated image. Superseded by **D.3** (the bug) and **D.4** (the real,
+> measured numbers). Left in place because the *reasoning* about context-vs-bare-immediate is
+> still correct — only the counts are void.
 
 Bare immediates are far too common to key on (`push 600` occurs **30** times in v83 `.text`;
 `push 800` **34**; a raw `600` dword **171**). Context is what disambiguates. Across the 172
@@ -460,6 +467,10 @@ if phase 2 overruns.
 
 ## 7. Unknowns — stated honestly
 
+**U1 — CLOSED 2026-08-16, see D.1/D.2.** Unpacked v84 code obtained by reading the running client's
+memory; no dump-and-rebuild was needed. **U2 — CLOSED, see D.4: 58.2% signature transfer, 80.7%
+mechanically located.** Original text kept below for the record.
+
 **U1 — THE RISKIEST: we do not have an unpacked v84 `MapleStory.exe`.** `[FACT-measured]`
 `D:\games\MSv84\client\MapleStory.exe` is Themida-packed (`.text` raw `0x2FB000` vs virtual
 `0x851000`). The IDA export names its source as `GMS_v84.1_U_DEVM.exe`, but that file is **not on
@@ -599,3 +610,226 @@ tools; re-derive from this appendix if needed):
 All read-only. The only inputs are the cloned source, the `gms-83-dll` memory maps, the paired
 `bypass\` DLLs and `localhome.exe`. Nothing under `D:\games\MapleStory\`, `D:\games\MSv84\client\`
 or `D:\games\dreamms\` was written.
+
+---
+
+# Delivered — phase 0
+
+**Status: U1 CLOSED. U2 CLOSED (measured). One of this ticket's own instruments was found broken
+and its §2.6 numbers are void — replaced below.**
+
+Executed 2026-08-16 on branch `worktree-evan-dualblade`. Tools committed at
+`docs/work-plan/tools/memdump/`.
+
+## D.1 We have unpacked v84 code, and it did not need a dump-and-rebuild
+
+Phase 0 assumed a Themida dump (1–5 days). It cost minutes instead. The client unpacks itself
+into memory on every launch, and **for signature matching you do not need a rebuilt PE — you need
+the unpacked bytes.**
+
+```
+launch D:\games\MSv84\client\MapleStory.exe   (unmodified, its normal ijl15+edits\ path)
+OpenProcess(PROCESS_QUERY_INFORMATION|PROCESS_VM_READ) + ReadProcessMemory over the module image
+```
+
+No debugger attach, no injection, no patching, no anti-anti-debug. `docs/work-plan/tools/memdump/MemDump.cs`
+(~150 lines, builds with in-box `csc.exe`, no SDK).
+
+| | |
+|---|---|
+| bytes read | **12,337,152** (`0xBC4000`, whole image, `ImageBase 0x400000`) |
+| pages | **3012 / 3012, zero failures** |
+| blob arithmetic | file offset = `VA - 0x400000`, same as `localhome.exe` |
+| dump 1 sha256 | `431e3a7bdcab20a2ba2646d2bfc0d503a710950d6ca1a75ce29d4cbf693fbc0e` |
+| dump 2 sha256 | `b8fc370793351cb5c63bc4ce078645a23425e872d34273b38c3ae809402650e7` |
+
+**Themida did NOT block `ReadProcessMemory`.** The one obstacle was mundane: the client's manifest
+is `requestedExecutionLevel level="requireAdministrator"`, so it runs at high integrity and a
+medium-integrity reader gets `ERROR_ACCESS_DENIED`. Diagnosed, not guessed — the granted access
+mask was exactly `QUERY_LIMITED_INFORMATION` + `SYNCHRONIZE` and nothing else, which is the
+mandatory-integrity signature, not a Themida DACL strip (Themida denies limited-info too). This
+machine has `ConsentPromptBehaviorAdmin = 0`, so an elevated dumper needed no prompt and no trick.
+`[FACT-measured]`
+
+The blobs are 12 MB each and are **not committed**; they live in the session scratchpad
+(`…\153450ca-…\scratchpad\v84_mem.bin`, `v84_mem2.bin`). Re-derive in ~30 s with the tool.
+
+## D.2 Proof the read is genuine — five independent checks
+
+Ticket 20 rejected its own PE detector for flagging `notepad.exe`. Same standard applied here.
+
+1. **Control, before the target.** Dumped 32-bit `cmd.exe` and compared to its file on disk:
+   `.reloc` **100%** identical, `.rsrc` **100%**, `.text` 97.7% (the 2.3% is ASLR base relocation —
+   cmd loaded at `0x690000`). The instrument reads the right bytes out of the right process.
+2. **Known plaintext inside the target.** Memory vs disk, per section: Themida's own
+   `oyihhyms` section **99.74% identical over 1.58 MB**, `qytrjskw` **100%** — so the read landed on
+   the right image at the right base. Meanwhile `.text` is **0.4%** identical to its on-disk raw
+   bytes (`raw 0x2FB000` vs `virtual 0x851000`), i.e. what we hold is the **decompressed** code.
+   Packed and unpacked, in one measurement.
+3. **Two independent launches agree.** Killed the client, relaunched, dumped again: over
+   `VA 0x401000–0xB41000` the two dumps are **byte-identical**, first difference at `0xB41000`
+   (past the code, in image data). The unpacked code is stable run-to-run, so signatures over it
+   are meaningful. Every resolved site below was re-verified against dump 2: **zero disagreements**.
+4. **An independent prediction lands.** §1.2 derived v84 `0x00A3A1E1` for `ShowStartUpWndModal` by
+   byte-diffing the paired `bypass\GMS-8{3,4}.1\edits\*.dll`. In the dump, that address holds
+   `90 90 90 90 90` — `no-patcher`'s five NOPs, exactly. A prediction from a completely different
+   method, confirmed in the memory image.
+5. **Cross-image, cross-version.** At the 14 Appendix A anchors the v84 bytes are the v83 bytes
+   modulo operands, e.g. `CInputSystem::Init`:
+   ```
+   v83 0x00599EBF  B8 AC FF A8 00  E8 CF 6C 4C 00  83 EC 10 8B 45 08 53 8B D9 56 89 03 8B 45
+   v84 0x005AA112  B8 C8 DC AD 00  E8 FC 2B 50 00  83 EC 10 8B 45 08 53 8B D9 56 89 03 8B 45
+   ```
+   Identical code; only `mov eax,<VA>` and one `call rel32` differ. Two anchors
+   (`SHOW_CURSOR`, `GENERATE_AUTO_KEY_DOWN`) match **16/16 bytes exactly**.
+
+## D.3 Two broken instruments found — §2.6 of this ticket is void
+
+**B1. `sig.py` measured the wrong addresses.** It parses `0x00XXXXXX` with
+`re.finditer(r'0x00([0-9A-Fa-f]{6})')`, which captures the digits *after* the `0x00` prefix, then
+**adds `0x400000` again**. So Ezorsia's `0x0043717B` became `0x0083717B`, and every true site
+`>= 0x7F9000` — i.e. the whole `0x009Fxxxx` / `0x00A4xxxx` `CWvsApp` half — was silently dropped by
+its range filter.
+
+```
+site 0x0043717B  true bytes  BF 58 02 00 00  = mov edi,600   (what §1.1 verified)
+                 sig.py read 00 C3 6A 18 B9  = unrelated code
+```
+
+This ticket's §2.6 table (`158/172 unique @ 64 B`, and the whole "92% signature uniqueness"
+automation thesis built on it) was computed over 172 wrong locations. It was reproduced here
+exactly — 158/172, 146/26, 133/39, 126/46, 104/68 — which is how the bug was found. **Delete
+§2.6's numbers; use D.4's.** `live.py` and `classify.py` parse correctly (`0x00…` prefix included),
+so **§2.1 (327/319) and §2.4 (220/230 = 96%) stand** — both reproduced exactly here.
+
+**B2. Exact byte matching is the wrong matcher and always was.** Identical x86 code cannot match
+byte-for-byte across a relocated image: absolute VAs and `call rel32` displacements necessarily
+differ (see the prologue above). Measured, for the record: exact 64 B matching transfers
+**8/172 = 4.7%**. That is a property of the technique, not of v84. Signatures must wildcard operand
+bytes. The mask used here needs no length-disassembler: any 4-byte LE dword inside
+`[0x400000,0xC00000)`, plus `E8`/`E9` rel32 whose target lands in that range, becomes a wildcard.
+
+## D.4 The measured number U2 asked for
+
+316 of the 319 distinct live addresses lie in v83 `.text` and are what this measures.
+Widest-window-first, `±32 / ±24 / ±16 / ±12` bytes, masked. `[FACT-measured]`
+
+| tier | method | sites | % |
+|---|---|---|---|
+| **resolved** | globally unique masked context signature | **184** | **58.2%** |
+| **anchored** | nearest-neighbour delta + short local signature in ±0x1000 | **50** | 15.8% |
+| **window-constant** | neighbour delta + the site's own instruction, unique in ±0x300 | **21** | 6.6% |
+| drop-anyway | groups A/B/L — `edits\` already does it on v84 (§3) | 8 | 2.5% |
+| U5 baseline | `localhome.exe` is pre-modified, signature cannot exist in v84 | 5 | 1.6% |
+| **unresolved** | **genuine manual RE** | **48** | **15.2%** |
+
+> **Signature transfer rate: 58.2%.** Mechanically located overall: **255/316 = 80.7%**
+> (**82.8%** of the 308 sites that actually need porting).
+
+§7's `[INFERENCE]` of 70–90% was optimistic for pure signature transfer and about right once
+anchoring is included. It is **not** below 50%, so the phase-2 estimate does not double.
+
+**Cross-checks on the 255:**
+
+- deltas outside the `[0, +0x59688]` anchor envelope: **0**
+- disagreements with the second independent dump: **0**
+- resolution constant preserved at the resolved v84 site: **113 same, 0 different**
+- 54 "non-monotonic" deltas — **the check is wrong, not the results.** Seven sites in `CLogo`
+  resolve at delta **+0x1549A**, which is *exactly* the published `C_LOGO_INIT` anchor delta from
+  Appendix A, derived by an unrelated method. v84 removes code as well as inserting it, so
+  §1.3's "code is only ever inserted" assumption does not hold and monotonicity must not be used
+  as a false-positive filter.
+
+## D.5 Appendix A's headline prediction is falsified — cheaply
+
+> *"`dwApplicationHeight` is `InitializeGr2D + 0xE2`, so `0x00A4121E` on v84 if the body is
+> unchanged… If those two hold, the whole mechanism holds."*
+
+It does not hold. `0x00A4121E` contains `A1 6C AB C4 00` (`mov eax,[0xC4AB6C]`). The body of
+`InitializeGr2D` changed. **But the two sites are alive and unambiguous** — scanning the function
+finds exactly one `push 600` and one `push 800`:
+
+| | v83 | v84 | delta |
+|---|---|---|---|
+| `dwApplicationHeight` | `0x009F7B1D` | **`0x00A4127E`** | `+0x49761` |
+| `dwApplicationWidth` | `0x009F7B23` | **`0x00A41283`** | `+0x49760` |
+
+(v83 has `68 58 02 00 00 A5 68 20 03 00 00`; v84 drops the `A5 movsd`, hence 5 bytes apart not 6.)
+So same-offset interpolation is dead — as §1.3 already argued — but **function-scoped constant
+search is alive**, and it is the tier that should be built first in phase 1.
+
+## D.6 Answers to open unknowns, obtained in passing
+
+- **U1 — closed.** Unpacked v84 code obtained, reproducibly, without a rebuilt PE.
+- **U2 — closed.** 58.2% signature / 80.7% mechanical, above.
+- **U5 — confirmed, and worse than stated.** `localhome.exe` is pre-modified beyond the three keys
+  §7 lists: `0x009F242F` is already `EB` (ad balloon) in the v83 image while v84 memory holds the
+  original `74`. Any site the owner statically patched yields a false miss. 5 sites are affected.
+- **U7 — partly answered.** v84 `C_WVS_APP_RUN` (`0x00A3E7E8`) starts `E9 83 53 1B 7A`
+  (`jmp 0x7ABF3B70`, into DLL space) — the `edits\` loader **already detours `CWvsApp::Run`** by the
+  time the window is up. So §4.2's Themida-wait poll for a `0xB8` first byte would never fire on
+  v84: **drop the poll**, the `edits\` loader demonstrably runs post-unpack.
+- **Known limitation, not yet quantified.** The dump is of a *live* client with the `edits\` DLLs'
+  patches installed, so a window overlapping one of their hooks cannot match. An attempt to count
+  those hooks by scanning for `E9`+rel32 leaving the image produced **31,302 hits** — overwhelmingly
+  random bytes, a useless instrument, discarded rather than reported. To quantify properly: copy the
+  client directory (never modify the original), remove `edits\` from the copy, dump, and diff the two
+  images. That also yields an exact list of the loader's patch sites. ~0.25 day, phase 1.
+
+## D.7 Cost impact
+
+| phase | was | now | why |
+|---|---|---|---|
+| 0 obtain unpacked v84 | 1–5 | **done** | memory read, no rebuild needed |
+| 1 signature harvest | 2 | **1–1.5** | matcher, tiers and `v84-sites.json` schema already exist |
+| 2 resolve the misses | 3–6 | **3–5** | 48 named sites, not ~40 estimated; but 5 clusters, one pattern each |
+| 3–6 build / WZ / bring-up / sign-off | 9.5–13.5 | unchanged | untouched by this work |
+| **total** | **13–22** | **13.5–20** | and the **~40-day branch is eliminated** |
+
+The 48 unresolved are **48 sites, not 48 problems** — they cluster `[FACT-measured]`:
+
+| cluster | sites | | cluster | sites |
+|---|---|---|---|---|
+| `CWvsApp` CreateMainWindow / ResMan / Gr2D (C, M) | 11 | | smega (J) | 2 |
+| pop-up requests (I) — one pattern, 7 copies | 7 | | `CLogo` / `Getcanvas` (E) | 2 |
+| `CLogin::SendCheckPasswordPacket` (E) | 4 | | buff-icon strip (C) | 2 |
+| gain / pick-up messages (H) | 4 | | tooltip clamp (C) | 2 |
+| status bar / quickslot (D) | 4 | | unclassified geometry (C) | 2 |
+| skill / RelMove (C) | 4 | | login descriptor (E), camera VR (C), other | 4 |
+
+Two of the 11 `CWvsApp` sites are already resolved by hand in D.5, and the 7 pop-up copies are one
+pattern found once. §3 predicted the expensive clusters would be **F (cash shop, 10 caves)** and
+**G (Dojo, 11 caves)**; both **located mechanically and appear nowhere in this list.**
+
+**U3 is largely answered, and favourably.** §7 feared the 35 code caves would each become a bespoke
+rewrite. Measured: **29 of 35 caves located (83%)**, marginally *better* than the `WriteInt`
+sites (221/262 = 84%). The remaining risk in a cave is register state at the splice point, which
+still needs eyes on the v84 disassembly — but finding them is no longer the problem. The genuinely
+poor rates are on the tiny op classes that §3 already says to **drop**: `WriteString` 0/1,
+`WriteByteArray` 0/2, `FillBytes` 1/4, `WriteDouble` 0/1 — those are the IP-string, elevation and
+damage-cap sites (groups A/B and U5), not resolution work.
+
+`v84-sites.json` (255 located rows, every one carrying `evidence` and `window`) is committed at
+`docs/work-plan/tools/memdump/v84-sites.json` as the seed for phase 1's acceptance criterion.
+
+## D.8 Rule compliance
+
+- `D:\games\MapleStory\` and `D:\games\dreamms\` — **read-only**, nothing written.
+- `D:\games\MSv84\client\` — launched twice, killed both times, **zero processes left**. File
+  snapshot before/after: 59 files, all identical, **except** `ijl15.dll.bak`, whose mtime the
+  client's own loader updates on every launch (length unchanged, 352,256 B — it had already been
+  rewritten at 18:57 UTC today, before this work started). Nothing here wrote to that directory.
+- Server on 8484/7575 never touched; no Java, no `wz/`, no `PacketCreator.java`.
+
+## D.9 Reproduce
+
+```
+csc.exe /platform:x64 /out:MemDump.exe MemDump.cs
+MemDump.exe dump --pid <client> --base 0x400000 --size 0xBC4000 --out v84_mem.bin   (elevated)
+Compare-Dump.ps1 -File D:\games\MSv84\client\MapleStory.exe -Blob v84_mem.bin
+python phase0.py   # site parsing, instrument proofs, transfer measurement, anchored pass
+python pass3.py    # function-scoped constant tier -> v84-sites.json
+```
+
+`phase0.py` / `pass3.py` expect the Ezorsia clone and both dumps beside them; they are read-only
+against `localhome.exe`.

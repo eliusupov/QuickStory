@@ -14,6 +14,12 @@ halves of the T23 positional-array regression.
 
 Server tree only. Nothing under `D:\games\MapleStory\` was read for writing or written.
 
+**Commits.** `f204941cb` is the merge itself — every byte under `wz/`. The review fixes below
+landed in `f344bdf96`, which carries a **ticket 30 message**: a concurrent agent committed the
+whole index while this ticket's files were staged in it. Nothing is wrong with the content, and
+history was deliberately not rewritten on a branch three agents are committing to, but
+`git log -- docs/work-plan/tickets/28-*` will show a ticket-30 subject and that is why.
+
 ---
 
 ## What landed
