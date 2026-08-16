@@ -8609,12 +8609,6 @@
         <string name="Effect" value="Effect/BasicEff/Event1/Best"/>
         <string name="worldMsg" value="/name has obtained a /item from the Golden Pig&apos;s Egg."/>
       </imgdir>
-      <imgdir name="43">
-        <int name="item" value="2020014"/>
-        <int name="count" value="10"/>
-        <int name="prob" value="50"/>
-        <string name="Effect" value="Effect/BasicEff/Event1/Good"/>
-      </imgdir>
       <imgdir name="5">
         <int name="item" value="2041105"/>
         <int name="count" value="1"/>
@@ -11880,12 +11874,6 @@
         <int name="prob" value="1"/>
         <string name="Effect" value="Effect/BasicEff/Event1/Best"/>
         <string name="worldMsg" value="/name has obtained a /item from the Golden Pig&apos;s Egg."/>
-      </imgdir>
-      <imgdir name="43">
-        <int name="item" value="2020014"/>
-        <int name="count" value="10"/>
-        <int name="prob" value="50"/>
-        <string name="Effect" value="Effect/BasicEff/Event1/Good"/>
       </imgdir>
       <imgdir name="5">
         <int name="item" value="2041105"/>
