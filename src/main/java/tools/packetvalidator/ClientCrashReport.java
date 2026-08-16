@@ -35,9 +35,21 @@ public record ClientCrashReport(int version, String character, int worldId, int 
                     + "ZException \\(error code : (-?\\d{1,9}) \\((.*)\\)\\) source\\((.*)\\)");
 
     /**
+     * A real entry is ~142 characters. The pattern's two trailing {@code (.*)} groups are separated
+     * by literals, which is quadratic on input crafted to keep re-matching them - measured at 0.46 s
+     * for a 44 KB line. Anything this long is not a crash entry, so it never reaches the matcher.
+     */
+    private static final int MAX_ENTRY_LENGTH = 512;
+
+    /** The real upload has 12 entries. This only has to be larger than any plausible history. */
+    private static final int MAX_ENTRIES = 64;
+
+    /**
      * Splits the uploaded blob into entries and parses each one. Lines that do not match the known
      * shape are returned with {@code version == -1} and everything else zeroed, so nothing is silently
      * dropped - {@link #parsed()} tells the two apart.
+     *
+     * <p>Bounded in both directions: this parses an unauthenticated packet that arrives before login.
      */
     public static List<ClientCrashReport> parseAll(String blob) {
         List<ClientCrashReport> out = new ArrayList<>();
@@ -47,6 +59,14 @@ public record ClientCrashReport(int version, String character, int worldId, int 
         for (String line : blob.split("\r\n|\n")) {
             line = line.trim();
             if (line.isEmpty()) {
+                continue;
+            }
+            if (out.size() >= MAX_ENTRIES) {
+                break;
+            }
+            if (line.length() > MAX_ENTRY_LENGTH) {
+                out.add(new ClientCrashReport(-1, "", 0, 0, 0, 0, "",
+                        "", line.substring(0, MAX_ENTRY_LENGTH)));
                 continue;
             }
             Matcher m = ENTRY.matcher(line);

@@ -45,6 +45,10 @@ public final class PacketStructureValidator {
 
     /** {@code bytes} is the full wire packet including its 2-byte opcode header. */
     public static Result validate(DecodeModel model, byte[] bytes) {
+        if (bytes.length < 2) {
+            return new Result(Status.UNDER_SEND, model.opcode(), 0, bytes.length,
+                    "PACKET TOO SHORT: " + bytes.length + " bytes cannot even hold the 2-byte opcode.");
+        }
         ByteBuffer buf = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN);
         int pos = 2; // the client consumes the opcode before dispatching to the handler
 
@@ -60,7 +64,8 @@ public final class PacketStructureValidator {
                 case BUF -> need = f.count();
                 default -> need = f.kind().width;
             }
-            if (pos + need > bytes.length) {
+            // need is model data, not wire data, but a bad model must not silently wrap pos negative
+            if (need < 0 || pos > bytes.length - need) {
                 return under(model, pos, bytes.length, f, need);
             }
             pos += need;

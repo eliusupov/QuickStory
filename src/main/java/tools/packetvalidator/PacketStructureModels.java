@@ -5,6 +5,7 @@ import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,9 +17,8 @@ import java.util.Map;
  * script's mechanical filters but nobody has confirmed the corresponding {@code PacketCreator}
  * method emits exactly one shape, and a wrong model is worse than no model.
  *
- * <p>This is a test/tooling loader: it reads a working-directory-relative file, not a classpath
- * resource, so it is not usable from a deployed server without pointing
- * {@code -Dpacketvalidator.models} at the file.
+ * <p>This is a test/tooling loader: it reads a repo-relative file, not a classpath resource, so it
+ * is not usable from a deployed server.
  */
 public final class PacketStructureModels {
 
@@ -28,7 +28,7 @@ public final class PacketStructureModels {
     }
 
     public static Map<String, DecodeModel> loadVerified() {
-        return loadVerified(Path.of(System.getProperty("packetvalidator.models", DEFAULT_PATH.toString())));
+        return loadVerified(DEFAULT_PATH);
     }
 
     public static Map<String, DecodeModel> loadVerified(Path tsv) {
@@ -49,27 +49,32 @@ public final class PacketStructureModels {
             if (cols.length != 5 || !cols[0].equals("verified")) {
                 continue;
             }
-            DecodeModel.Builder b = DecodeModel.of(cols[1], "gms_v83 IDA export " + cols[3]
-                    + " (v84 opcode " + cols[2] + "), via tools/v84/derive-decode-models.py");
+            List<DecodeModel.Field> fields = new ArrayList<>();
             for (String field : cols[4].split(",")) {
                 int sep = field.lastIndexOf(':');
+                if (sep < 0) {
+                    throw new IllegalStateException("Malformed field '" + field + "' in " + tsv + ": " + line);
+                }
                 String name = field.substring(0, sep);
                 String kind = field.substring(sep + 1);
-                switch (kind) {
-                    case "1" -> b.u8(name);
-                    case "2" -> b.u16(name);
-                    case "4" -> b.u32(name);
-                    case "8" -> b.u64(name);
-                    case "s" -> b.str(name);
+                fields.add(switch (kind) {
+                    case "1" -> new DecodeModel.Field(name, DecodeModel.Kind.U8, 1);
+                    case "2" -> new DecodeModel.Field(name, DecodeModel.Kind.U16, 1);
+                    case "4" -> new DecodeModel.Field(name, DecodeModel.Kind.U32, 1);
+                    case "8" -> new DecodeModel.Field(name, DecodeModel.Kind.U64, 1);
+                    case "s" -> new DecodeModel.Field(name, DecodeModel.Kind.STR, 1);
                     default -> {
                         if (!kind.startsWith("b")) {
                             throw new IllegalStateException("Unknown field kind '" + kind + "' in " + line);
                         }
-                        b.buf(name, Integer.parseInt(kind.substring(1)));
+                        yield new DecodeModel.Field(name, DecodeModel.Kind.BUF,
+                                Integer.parseInt(kind.substring(1)));
                     }
-                }
+                });
             }
-            out.put(cols[1], b.build());
+            out.put(cols[1], new DecodeModel(cols[1], "gms_v83 IDA export " + cols[3]
+                    + " (v84 opcode " + cols[2] + "), via tools/v84/derive-decode-models.py",
+                    List.copyOf(fields)));
         }
         return out;
     }

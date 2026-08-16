@@ -2,6 +2,7 @@ package tools.packetvalidator;
 
 import client.Character;
 import client.inventory.Item;
+import constants.net.ServerConstants;
 import net.packet.Packet;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -43,6 +44,13 @@ class PacketStructureValidatorTest {
 
     @BeforeAll
     static void loadModels() {
+        // The models carry the v84 deltas, and PacketCreator only emits them when VERSION >= 84.
+        // Roll ServerConstants.VERSION back to 83 and these models describe packets the server no
+        // longer sends - the suite would report UNDER_SEND against correct v83 output. Say so
+        // rather than emitting a wall of confusing failures.
+        assertTrue(ServerConstants.VERSION >= 84,
+                "this harness models the v84 client; ServerConstants.VERSION is "
+                        + ServerConstants.VERSION + ". Regenerate the models for that version first.");
         models = PacketStructureModels.loadVerified();
 
         EMITTERS.put("DROP_ITEM_FROM_MAPOBJECT/spawn-item",

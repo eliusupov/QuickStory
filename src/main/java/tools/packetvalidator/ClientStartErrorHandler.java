@@ -48,6 +48,13 @@ public class ClientStartErrorHandler implements PacketHandler {
     /** This packet is unauthenticated, so cap how much noise one sender can put in the log. */
     private static final int MAX_LOGGED_PER_PACKET = 20;
 
+    /**
+     * Dedupe keys are truncated: a real entry is ~135 chars, but an unparsed line can be the whole
+     * 32 KB the length prefix allows, and 512 of those retained would be 16 MB of unauthenticated
+     * garbage. 256 chars is well past where two real entries can still differ.
+     */
+    private static final int MAX_KEY_LENGTH = 256;
+
     @Override
     public void handlePacket(InPacket p, Client c) {
         // readString() takes a SIGNED short length; a hostile client can make it negative or
@@ -67,7 +74,9 @@ public class ClientStartErrorHandler implements PacketHandler {
 
         int fresh = 0;
         for (ClientCrashReport entry : entries) {
-            if (!seen.add(entry.raw())) {
+            String key = entry.raw().length() > MAX_KEY_LENGTH
+                    ? entry.raw().substring(0, MAX_KEY_LENGTH) : entry.raw();
+            if (!seen.add(key)) {
                 continue;
             }
             fresh++;

@@ -94,10 +94,20 @@ V84_DELTAS = {
 
 # Models hand-promoted to `verified`. An entry belongs here only when BOTH hold:
 #   1. this script derived it cleanly (no guard/Delegate/unknown-length buf/conditional prose), AND
-#   2. a human read the PacketCreator method that emits it and confirmed it is straight-line:
-#      no `if` that adds or drops a field, no loop, no variable-arity sub-record helper.
+#   2. a human read every PacketCreator method that writes this opcode and confirmed each one emits
+#      the SAME field list. Precisely: no branch that adds or drops a field for this opcode, no
+#      loop, no variable-arity sub-record helper.
 # Condition 2 cannot be derived from the exports. Adding a name here without doing (2) is exactly
 # how this harness would start lying, so don't.
+#
+# Two promoted entries contain a branch, and the rule is written as "same field list for this
+# opcode" rather than "no branch at all" specifically because of them. Both were checked:
+#   removeDoor(ownerId, town)  - the `if (town)` arm emits a DIFFERENT OPCODE (SPAWN_PORTAL), so
+#       every packet that is actually a REMOVE_DOOR takes the else arm and has one shape.
+#   skillBookResult(...)       - the `if (ServerConstants.VERSION >= 84)` IS the v84 delta this
+#       model encodes. It is a build constant, not a per-call branch. The whole harness assumes
+#       VERSION >= 84; PacketStructureValidatorTest asserts that up front so a rollback to 83
+#       fails with one clear message instead of a wall of false UNDER_SENDs.
 PROMOTED = {
     "DROP_ITEM_FROM_MAPOBJECT/spawn-item",
     "DROP_ITEM_FROM_MAPOBJECT/spawn-meso",
@@ -258,7 +268,7 @@ def main():
     verified = sum(1 for r in rows if r[0] == "verified")
     print("clientbound opcodes in atlas registry gms_v84.yaml : %d" % len(registry))
     print("  no gms_v83 IDA entry to model from               : %d" % no_entry)
-    print("  modelled (candidate rows)                        : %d" % len(rows))
+    print("  modelled rows (verified + candidate)             : %d" % len(rows))
     print("  hand-promoted to verified                        : %d" % verified)
     print("  rejected as not statically modellable            : %d" % (len(wanted) - len(rows)))
     reasons = {}

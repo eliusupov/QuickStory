@@ -5,7 +5,11 @@ import net.packet.ByteBufInPacket;
 import net.packet.InPacket;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -13,26 +17,49 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Fixture is the real CLIENT_START_ERROR (recv 0x19) blob captured from the v84 client on
- * 2026-xx-xx, verbatim from tools/v84/cutover-server.log line 16 (opcode 0x19, string length
- * 0x067B = 1659, 12 CRLF-separated entries + a trailing empty line).
+ * Everything here is driven by the real wire bytes in {@code tools/v84/client-start-error-0x19.hex} -
+ * a verbatim CLIENT_START_ERROR (recv 0x19) uploaded by the live v84 client on 2026-08-17 00:01:38.
+ *
+ * <p>The capture is committed rather than cited by line number, because the server log it came from
+ * rotates while the server runs: the same file that held this packet was rotated to a timestamped
+ * name minutes later, which would have left the citation pointing at a different capture.
  */
 class ClientCrashReportTest {
 
-    private static final String E83 =
-            "ver(83), CharacterName(), WorldID(-1), ChID(-1), FieldID(-1), "
-                    + "ZException (error code : 11001 (No such host is known.)) source((null))";
-    private static final String E84_NOCHR =
-            "ver(84), CharacterName(), WorldID(-1), ChID(-1), FieldID(-1), "
-                    + "ZException (error code : 38 (Reached the end of the file.)) source((null))";
+    private static final Path CAPTURE = Path.of("tools", "v84", "client-start-error-0x19.hex");
+
     private static final String E84_UGUUH =
             "ver(84), CharacterName(uguuh), WorldID(0), ChID(0), FieldID(40000), "
                     + "ZException (error code : 38 (Reached the end of the file.)) source((null))";
 
-    /** Exactly the 12 entries + trailing CRLF the client actually uploaded. */
-    private static final String REAL_BLOB = String.join("\r\n",
-            E83, E84_NOCHR, E83, E83, E83, E83, E84_NOCHR, E84_NOCHR, E84_NOCHR,
-            E84_UGUUH, E84_UGUUH, E84_UGUUH) + "\r\n";
+    /** The captured packet, opcode header included. */
+    private static byte[] capturedPacket() {
+        StringBuilder hex = new StringBuilder();
+        try {
+            for (String line : Files.readAllLines(CAPTURE, StandardCharsets.US_ASCII)) {
+                if (!line.startsWith("#")) {
+                    hex.append(line.trim());
+                }
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+        byte[] out = new byte[hex.length() / 2];
+        for (int i = 0; i < out.length; i++) {
+            out[i] = (byte) Integer.parseInt(hex.substring(i * 2, i * 2 + 2), 16);
+        }
+        return out;
+    }
+
+    /** The crash-log string as the handler would read it off that packet. */
+    private static String realBlob() {
+        byte[] packet = capturedPacket();
+        InPacket p = new ByteBufInPacket(Unpooled.wrappedBuffer(packet));
+        assertEquals(0x19, p.readShort(), "captured packet must be CLIENT_START_ERROR");
+        return p.readString();
+    }
+
+    private static final String REAL_BLOB = realBlob();
 
     @Test
     void parsesTheRealCapturedBlob() {
@@ -73,17 +100,15 @@ class ClientCrashReportTest {
     }
 
     @Test
-    void readsOffTheWireExactlyAsTheClientFramesIt() {
-        // opcode 0x19 then a length-prefixed ASCII string - the real framing.
-        byte[] body = REAL_BLOB.getBytes(StandardCharsets.US_ASCII);
-        InPacket p = new ByteBufInPacket(Unpooled.buffer()
-                .writeShortLE(0x19)
-                .writeShortLE(body.length)
-                .writeBytes(body));
+    void theCaptureIsTheOneTheTicketDescribes() {
+        byte[] packet = capturedPacket();
 
-        assertEquals(0x19, p.readShort());
-        assertEquals(1659, body.length, "matches the captured 0x067B length prefix");
-        assertEquals(12, ClientCrashReport.parseAll(p.readString()).size());
+        assertEquals(1663, packet.length, "captured wire packet size");
+        assertEquals(0x19, packet[0] & 0xFF);
+        assertEquals(0x067B, ((packet[3] & 0xFF) << 8) | (packet[2] & 0xFF), "length prefix, little-endian");
+        assertEquals(1659, REAL_BLOB.getBytes(StandardCharsets.US_ASCII).length);
+        assertEquals(3, ClientCrashReport.parseAll(REAL_BLOB).stream()
+                .filter(e -> e.mapId() == 40000).count());
     }
 
     /** Pins the exact wording quoted in docs/work-plan/tickets/40-packet-error-detection.md. */
@@ -140,11 +165,38 @@ class ClientCrashReportTest {
                                 + "ZException (error code : 38 (x)) source((null))")
                 .getFirst().parsed());
 
-        long start = System.nanoTime();
-        assertEquals(1, ClientCrashReport.parseAll("ver(84), " + ")) source((".repeat(4000)).size());
-        assertTrue(System.nanoTime() - start < 2_000_000_000L, "regex must not backtrack pathologically");
-
-        // 32767 is the largest length readString() can produce from a signed short
+        // 32767 is the largest length readString() can produce from a POSITIVE signed short; a
+        // negative one throws inside readString and is handled by the caller, not here.
         assertEquals(1, ClientCrashReport.parseAll("x".repeat(32767)).size());
+    }
+
+    /**
+     * The entry pattern ends in two greedy {@code (.*)} groups separated by literals, which is
+     * quadratic on input crafted to keep re-matching them. This probe carries a VALID prefix so it
+     * actually reaches those groups - a probe that fails on an earlier literal returns instantly and
+     * proves nothing. Unguarded, the 44 KB case measured 0.46 s per line, pre-login and repeatable.
+     */
+    @Test
+    void longLinesNeverReachTheQuadraticPartOfThePattern() {
+        String validPrefix = "ver(84), CharacterName(x), WorldID(0), ChID(0), FieldID(0), "
+                + "ZException (error code : 38 (";
+        String evil = validPrefix + ")) source((".repeat(4000);
+        assertTrue(evil.length() > 40_000, "probe must be big enough to matter");
+
+        long start = System.nanoTime();
+        List<ClientCrashReport> entries = ClientCrashReport.parseAll(evil);
+        long elapsedMs = (System.nanoTime() - start) / 1_000_000;
+
+        assertEquals(1, entries.size());
+        assertFalse(entries.getFirst().parsed(), "over-long lines are rejected without matching");
+        assertTrue(elapsedMs < 50, "must be gated on length, not matched; took " + elapsedMs + "ms");
+    }
+
+    @Test
+    void entryCountIsBounded() {
+        String line = "ver(84), CharacterName(x), WorldID(0), ChID(0), FieldID(0), "
+                + "ZException (error code : 38 (x)) source((null))";
+        List<ClientCrashReport> entries = ClientCrashReport.parseAll((line + "\r\n").repeat(5000));
+        assertEquals(64, entries.size(), "one packet cannot make us allocate unboundedly");
     }
 }

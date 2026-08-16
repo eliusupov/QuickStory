@@ -26,30 +26,61 @@ the v83/11001 DNS failures cannot drown out live v84 failures.
 Error 38 is `CInPacket::Decode*` running past the end of the buffer (`mov dword ptr [ebp-4], 0x26`
 at v84 `0x4066C9`), so the log line says it in words: *the server sent a packet that was too short*.
 
-De-duplicated by exact entry text against a 512-entry LRU. Without that, every reconnect
-re-screams the entire accumulated history.
+De-duplicated by exact entry text against a 512-entry LRU (keys truncated to 256 chars). Without
+that, every reconnect re-screams the entire accumulated history. That the LRU really bounds -
+`Collections.newSetFromMap` over an access-ordered `LinkedHashMap` with `removeEldestEntry` is easy
+to get subtly wrong - is asserted in `ClientStartErrorHandlerTest`: 10240 unique inserts leave
+exactly 512.
 
-Decoded from the real 1663-byte capture in `tools/v84/cutover-server.log` line 16
-(opcode `0x19`, string length `0x067B` = 1659, 12 entries + trailing CRLF):
+### The real capture, committed rather than cited
+
+The evidence is `tools/v84/client-start-error-0x19.hex` - the verbatim 1663 wire bytes of the
+packet the v84 client uploaded at 2026-08-17 00:01:38 (opcode `0x19`, length prefix `0x067B` =
+1659, 12 CRLF-separated entries).
+
+It is committed, not cited by log line, because the server log rotates while the server runs: the
+file that held this packet was rotated to a timestamped name minutes after it was captured, and a
+line reference would now point at a different capture entirely. `ClientCrashReportTest` decodes
+that hex file - there is no hand-typed fixture.
+
+12 entries, only 3 distinct: 5 x v83/11001 (DNS noise from before the cutover) and 7 x v84/error 38,
+of which 3 name map 40000. Output, in the order the handler emits it (the summary line comes last):
 
 ```
-Client crash log from 127.0.0.1: 12 entries uploaded, 3 new
-Older client crash report (not v84): client v83 crashed: no character @ no map (not in game yet)
-    (world -1, ch -1) error 11001 (No such host is known.)
 *** CLIENT CRASH REPORT (current version v84) *** client v84 crashed: no character
     @ no map (not in game yet) (world -1, ch -1) error 38 (Reached the end of the file.)
     -- THE SERVER SENT A PACKET THAT WAS TOO SHORT; the client read past the end of it
 *** CLIENT CRASH REPORT (current version v84) *** client v84 crashed: uguuh @ map 40000
     (world 0, ch 0) error 38 (Reached the end of the file.)
     -- THE SERVER SENT A PACKET THAT WAS TOO SHORT; the client read past the end of it
+Client crash log from 127.0.0.1: 12 entries uploaded, 3 new
 ```
 
-12 entries in that capture, only 3 distinct: 5 x v83/11001 (DNS noise from before the cutover) and
-7 x v84/error 38, of which 3 name map 40000. The exact wording above is pinned by
-`ClientCrashReportTest.logLinesReadTheWayTheTicketSaysTheyDo`, not transcribed by hand.
+(The five v83/11001 entries go to DEBUG, not shown.) The three `client v... crashed: ...` strings
+are pinned by `ClientCrashReportTest.logLinesReadTheWayTheTicketSaysTheyDo`. The surrounding
+banner and summary text is transcribed from the source and is **not** pinned by a test - it is
+formatting, and it is the only part of this block that could drift.
 
-Cost on the live server: one `readString` and one regex per connect, on a packet that arrives at
-most once per session. Nothing on the hot path.
+### Cost and hostile input
+
+This packet is unauthenticated: it arrives on the login server before the account logs in, and
+nothing stops a client sending it in a loop. Bounds, all asserted by tests:
+
+- entry pattern digit runs capped at 9 digits, so `Integer.parseInt` cannot overflow;
+- lines over 512 chars are rejected without running the regex. The pattern ends in two greedy
+  `(.*)` groups separated by literals, which is quadratic - a crafted 44 KB line measured 0.46 s
+  before this gate. A real entry is ~142 chars;
+- at most 64 entries parsed per packet, at most 20 logged;
+- `readString` takes a **signed** short length; negative or over-long values throw, and the handler
+  catches and drops the packet rather than surfacing a handler error (which would hex-dump the
+  whole packet into the log);
+- the dedupe set holds at most 512 keys of at most 256 chars.
+
+So one packet costs at most 64 regex matches on ≤512-char lines. Nothing on the hot path.
+**Not bounded:** a client that reconnects repeatedly can still emit up to 20 WARN lines per
+connection, since LRU eviction eventually lets old entries look new again. That is packet spam
+against an already-open login socket, no worse than the server's existing behaviour for any other
+opcode, and it is not solved here.
 
 **What this will not catch:** anything that does not crash the client. A packet that is too LONG,
 or one that decodes cleanly into wrong values, produces no crash entry. It also tells you the map,
@@ -83,9 +114,12 @@ so the `nEnterType != 2` branch is decided server-side. Those are declared as na
 |---|---|
 | sendops in `sendops-84.properties` | 307 |
 | clientbound opcodes in the atlas v84 registry | 330 |
-| modellable at all (rows in the TSV) | 106 |
+| modelled rows in the TSV (verified + candidate) | 106 |
 | of those, still `candidate` - modelled but nobody vetted the emitter | 77 |
 | **`verified` and actually checked against real PacketCreator output** | **29** |
+
+(106 + 231 rejected = 337 = 330 registry opcodes + 7 declared variants. Four base opcodes appear
+both as a rejected registry row and as accepted variant rows, so those four are counted twice.)
 
 **29 of 307 sendops, ~9%.** Rejections, by reason:
 
