@@ -4,12 +4,14 @@ import client.Character;
 import client.Client;
 import client.Job;
 import client.QuestStatus;
+import constants.net.ServerConstants;
 import io.netty.buffer.Unpooled;
 import net.packet.ByteBufInPacket;
 import net.packet.Packet;
 import net.server.channel.handlers.QuestActionHandler;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import provider.wz.WZFiles;
 import scripting.quest.QuestScriptManager;
 import server.life.NPC;
@@ -114,6 +116,40 @@ class Quest1021RealLoad {
         verify(c, never()).sendPacket(any(Packet.class));
 
         QuestScriptManager.getInstance().dispose(c);   // don't leak the singleton entry
+    }
+
+    /**
+     * Ticket 31. Drives 1021.js to status 2 - the {@code qm.sendAcceptDecline} the owner never saw -
+     * and reads the dialog-type byte straight off the wire.
+     *
+     * <p>This is the whole diagnosis in one assert: the packet IS built and sent (so the script did
+     * not throw, the conversation was not disposed, and nothing gated the call), and the byte it
+     * carries is the one a v84 client's {@code CScriptMan::OnScriptMessage} switch actually has a
+     * case for. Before the fix this was 0x0C, and the v84 switch has no case 12 - the client dropped
+     * the frame, drew nothing and replied nothing, exactly as observed.
+     *
+     * <p>NPC_TALK layout: opcode(2) speakerType(1) npcId(4) msgType(1) speaker(1) ...
+     */
+    @Test
+    void acceptDeclineCarriesTheDialogTypeThisClientDispatchesOn() {
+        Client c = beginnerAtRoger();
+
+        handle(c);                                                          // status 0: sendNext
+        QuestScriptManager.getInstance().start(c, (byte) 1, (byte) 0, -1);  // status 1: sendNextPrev
+        clearInvocations(c);
+        QuestScriptManager.getInstance().start(c, (byte) 1, (byte) 0, -1);  // status 2: sendAcceptDecline
+
+        ArgumentCaptor<Packet> sent = ArgumentCaptor.forClass(Packet.class);
+        verify(c, atLeastOnce()).sendPacket(sent.capture());
+        byte[] talk = sent.getAllValues().get(sent.getAllValues().size() - 1).getBytes();
+
+        byte expected = ServerConstants.VERSION >= 84 ? (byte) 0x0D : (byte) 0x0C;
+        assertEquals(expected, talk[7],
+                "AskYesNoQuest is 12 in the v83 dialog-type enum and 13 from v84 on; sending the "
+                        + "wrong one lands on a switch case the client does not have and the "
+                        + "dialogue never renders");
+
+        QuestScriptManager.getInstance().dispose(c);
     }
 
     /**

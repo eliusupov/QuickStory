@@ -3403,12 +3403,39 @@ public class PacketCreator {
     }
 
     /**
+     * NPC_TALK dialog-type discriminator, expressed throughout this server in the <b>v83</b> enum
+     * (0=Say, 1=AskYesNo, 2=AskText, 3=AskNumber, 4=AskMenu, 7=AskAvatar, 12=AskYesNoQuest,
+     * 13=AskBoxText, 14=AskSlideMenu). v84 inserted SayImage at 1 and shifted every later case up
+     * by one, so {@code CScriptMan::OnScriptMessage} on a v84 client has no case 12 at all and
+     * silently drops an accept/decline dialogue. Only case 0 (Say) is unchanged, which is why
+     * sendNext/sendPrev were the only script dialogues that ever rendered on v84.
+     *
+     * <p>Evidence: atlas IDA exports, {@code CScriptMan::OnScriptMessage} - v83 @0x74660a (shifted,
+     * no SayImage case), v84 @0x76850a (switch cases 0,1,2..11,13,14,15 - no 12), v87 @0x791666 and
+     * v95 @0x6de0f0 (both v95 ordering). The change survives to v87/v95, so it is not a v84
+     * export artifact. See docs/work-plan/tickets/31-npc-dialogue-v84.md.
+     */
+    private static byte dialogType(byte v83Type) {
+        return ServerConstants.VERSION >= 84 && v83Type >= 1 ? (byte) (v83Type + 1) : v83Type;
+    }
+
+    /**
+     * Inverse of {@link #dialogType(byte)}, for the dialog type the client echoes back in
+     * NPC_TALK_MORE. Everything downstream of {@code NPCMoreTalkHandler} - the {@code lastMsg == 2}
+     * AskText branch and every {@code type == n} test in scripts/ - is written in the v83 enum, so
+     * normalise once at the door rather than in ~40 scripts.
+     */
+    public static byte v83DialogType(byte clientType) {
+        return ServerConstants.VERSION >= 84 && clientType >= 2 ? (byte) (clientType - 1) : clientType;
+    }
+
+    /**
      * Possible values for <code>speaker</code>:<br> 0: Npc talking (left)<br>
      * 1: Npc talking (right)<br> 2: Player talking (left)<br> 3: Player talking
      * (left)<br>
      *
      * @param npc      Npcid
-     * @param msgType
+     * @param msgType  dialog type in the v83 enum; see {@link #dialogType(byte)}
      * @param talk
      * @param endBytes
      * @param speaker
@@ -3418,7 +3445,7 @@ public class PacketCreator {
         final OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
         p.writeByte(4); // ?
         p.writeInt(npc);
-        p.writeByte(msgType);
+        p.writeByte(dialogType(msgType));
         p.writeByte(speaker);
         p.writeString(talk);
         p.writeBytes(HexTool.toBytes(endBytes));
@@ -3429,8 +3456,13 @@ public class PacketCreator {
         final OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
         p.writeByte(4); // ?
         p.writeInt(NpcId.DIMENSIONAL_MIRROR);
-        p.writeByte(0x0E);
+        p.writeByte(dialogType((byte) 0x0E));   // AskSlideMenu
         p.writeByte(0);
+        if (ServerConstants.VERSION >= 84) {
+            // AskSlideMenu gained a leading slideDlgType int: v83 SetSlideMenuDlg@0x76b5c8 reads
+            // menuType+message (2 fields), v87 @0x7b92d1 and v95 @0x6dbe50 read slideDlgType first.
+            p.writeInt(0);
+        }
         p.writeInt(0);
         p.writeString(talk);
         return p;
@@ -3440,7 +3472,7 @@ public class PacketCreator {
         final OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
         p.writeByte(4); // ?
         p.writeInt(npc);
-        p.writeByte(7);
+        p.writeByte(dialogType((byte) 7));   // AskAvatar
         p.writeByte(0); //speaker
         p.writeString(talk);
         p.writeByte(styles.length);
@@ -3454,7 +3486,7 @@ public class PacketCreator {
         final OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
         p.writeByte(4); // ?
         p.writeInt(npc);
-        p.writeByte(3);
+        p.writeByte(dialogType((byte) 3));   // AskNumber
         p.writeByte(0); //speaker
         p.writeString(talk);
         p.writeInt(def);
@@ -3468,7 +3500,7 @@ public class PacketCreator {
         final OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
         p.writeByte(4); // Doesn't matter
         p.writeInt(npc);
-        p.writeByte(2);
+        p.writeByte(dialogType((byte) 2));   // AskText
         p.writeByte(0); //speaker
         p.writeString(talk);
         p.writeString(def);//:D
@@ -3481,7 +3513,7 @@ public class PacketCreator {
         OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
         p.writeByte(nSpeakerTypeID);
         p.writeInt(nSpeakerTemplateID);
-        p.writeByte(0x6);
+        p.writeByte(dialogType((byte) 0x6));   // ponytail: 6 is AskSpeedQuiz in the v83 enum, not AskQuiz (5) - pre-existing, kept byte-exact on v83
         p.writeByte(0);
         p.writeByte(nResCode);
         if (nResCode == 0x0) {//fail has no bytes <3
@@ -3499,7 +3531,7 @@ public class PacketCreator {
         OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
         p.writeByte(nSpeakerTypeID);
         p.writeInt(nSpeakerTemplateID);
-        p.writeByte(0x7);
+        p.writeByte(dialogType((byte) 0x7));   // ponytail: 7 is AskAvatar in the v83 enum, not AskSpeedQuiz (6) - pre-existing, kept byte-exact on v83
         p.writeByte(0);
         p.writeByte(nResCode);
         if (nResCode == 0x0) {//fail has no bytes <3

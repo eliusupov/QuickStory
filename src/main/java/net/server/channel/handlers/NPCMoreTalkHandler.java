@@ -26,6 +26,7 @@ import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import scripting.npc.NPCScriptManager;
 import scripting.quest.QuestScriptManager;
+import tools.PacketCreator;
 
 /**
  * @author Matze
@@ -33,7 +34,9 @@ import scripting.quest.QuestScriptManager;
 public final class NPCMoreTalkHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
-        byte lastMsg = p.readByte(); // 00 (last msg type I think)
+        // v84 shifted the dialog-type enum up by one from index 1 (SayImage inserted); normalise to
+        // v83 numbering so the branch below and every scripts/ `type == n` test keep working.
+        byte lastMsg = PacketCreator.v83DialogType(p.readByte()); // 00 (last msg type I think)
         byte action = p.readByte(); // 00 = end chat, 01 == follow
         if (lastMsg == 2) {
             if (action != 0) {
