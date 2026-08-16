@@ -177,7 +177,10 @@ class V84ContentMergeNodeTest {
             known.add(DataTool.getIntConvert("SN", row));
         }
         Set<String> unresolved = new TreeSet<>();
-        for (Data pkg : wz("Etc.wz").getData("CashPackage.img").getChildren()) {
+        List<Data> allPackages = wz("Etc.wz").getData("CashPackage.img").getChildren();
+        assertTrue(allPackages.size() > 400, "CashPackage.img looks empty: " + allPackages.size()
+                + " - the assertion below would pass by checking nothing");
+        for (Data pkg : allPackages) {
             for (Data sn : pkg.getChildByPath("SN").getChildren()) {
                 int value = DataTool.getIntConvert(sn);
                 if (!known.contains(value)) {
@@ -251,11 +254,20 @@ class V84ContentMergeNodeTest {
         assertNotNull(added, "MonsterBook.img/3400000 (merged by this ticket)");
         assertNotNull(added.getChildByPath("map"), "3400000/map");
         assertNotNull(added.getChildByPath("reward"), "3400000/reward");
-        // a pre-existing entry whose reward list is on COLLISION-DENY.txt - it must be
-        // exactly as it was, which is why that row was never in this ticket's manifest
+        // A pre-existing entry whose reward list is on COLLISION-DENY.txt (line 51) because
+        // it is a positional array v84 would splice onto. assertNotNull would pass on a
+        // wholesale rewrite, so pin the slots this tree actually ships: Cosmic's own list,
+        // ascending item ids, with Nexon's v84 tail absent.
         Data denied = book.getChildByPath("3100101");
         assertNotNull(denied, "MonsterBook.img/3100101 (pre-existing)");
-        assertNotNull(denied.getChildByPath("reward"), "3100101/reward (pre-existing)");
+        Data reward = denied.getChildByPath("reward");
+        assertNotNull(reward, "3100101/reward (pre-existing)");
+        assertEquals(1002156, DataTool.getIntConvert("0", reward), "3100101/reward/0 moved");
+        assertEquals(1002622, DataTool.getIntConvert("1", reward), "3100101/reward/1 moved");
+        assertEquals(260020200, DataTool.getIntConvert("0", denied.getChildByPath("map")),
+                "3100101/map/0 moved");
+        assertEquals(3, denied.getChildByPath("map").getChildren().size(),
+                "3100101/map grew or shrank");
     }
 
     /** Six mobs, three NPCs, three reactors - the plain-data half of the merge. */
@@ -311,6 +323,10 @@ class V84ContentMergeNodeTest {
      */
     @Test
     void forestHallAndItsNpcLocationsStayOut() {
+        // positive control first: a broken Map.wz provider returns null for everything, and
+        // would otherwise satisfy the assertion below by failing to read anything at all
+        assertNotNull(wz("Map.wz").getData("Map/Map1/100030300.img"),
+                "Map.wz is not readable, so the absence below proves nothing");
         assertNull(wz("Map.wz").getData("Map/Map1/100030301.img"),
                 "map 100030301 was merged - read this test's javadoc first");
         Data locations = wz("Etc.wz").getData("NpcLocation.img");

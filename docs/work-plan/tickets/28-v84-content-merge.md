@@ -3,7 +3,7 @@
 **What this is:** the merge ticket 27 costed. It executes against 27's numbers, and it **corrects
 three of them** — one of which was hiding a defect that would have taken the cash shop down.
 
-**Status:** delivered. **416 rows / 7,219 nodes added** across **31 files** under `wz/`.
+**Status:** delivered. **416 rows / 7,165 nodes added** across **31 files** under `wz/`.
 Zero pre-existing nodes changed, proven against `HEAD` with five self-checks that each break a
 proof and require it to notice. Every added node compared node-for-node against the stock v84
 archive: **0 divergences**. Suite **2123 passed, 0 failed**.
@@ -166,7 +166,7 @@ sale is a game-design decision for the owner. If more stock is wanted, the lever
 Two things the merge does **not** fix, both pre-existing and both out of scope here: gift,
 name-change and world-transfer hardcode `NX_PREPAID` instead of the chosen currency
 (`CashOperationHandler` 0x04 / 0x2E / 0x31), and the 105 appended rows carry v84's `Bonus` field
-while the other 8,958 do not — nothing in `src/main/java` reads `Bonus` (`grep '"Bonus"'` → 0 hits).
+while the other 8,947 do not — nothing in `src/main/java` reads `Bonus` (`grep '"Bonus"'` → 0 hits).
 
 ---
 
@@ -193,9 +193,12 @@ closed in the negative: it **is** reachable, and I can name the job, the map and
 `type=n`, `hide=1`), so merging it would put static world placements on ids the server hands out
 at runtime. The map cannot be merged without them either: `WzMerge` copies whole subtrees, and a
 deny root *inside* a copy root refuses the whole row (§4.3). Stripping `life` would be a
-hand-authored map image, which is a different and much larger risk than the map is worth — Forest
-Hall is a ranking hall on Farm Street, reachable only from `100030300`, and this tree has no
-`1000303xx` farm cluster to reach it from.
+hand-authored map image, which is a different and much larger risk than the one map is worth.
+
+**And it would be reachable, so this is not a theoretical refusal.** `100030300` "Farm Center",
+`100030310` and `100030320` are all present server-side (the Evan world merge, `831e9d023`), and
+Forest Hall's `portal/1` runs to `100030300`. If the map were merged, players could walk into it.
+That makes the refusal load-bearing rather than tidy-minded.
 
 **Verdict: stays out.** `V84EvanWorldNodeTest.forestHallIsDeliberatelyNotMerged` keeps the pin;
 `V84ContentMergeNodeTest.forestHallAndItsNpcLocationsStayOut` adds the second half with the trace
@@ -289,11 +292,17 @@ python docs\wz-baseline\merge-lists\28\verify28.py --rev cdaecd678
 `fidelity28.py`, output committed as `fidelity28-report.txt`:
 
 ```
-== 416 manifest rows, 7219 nodes compared against stock v84
+== 416 manifest rows, 7165 nodes compared against stock v84
+   values compared by shape: 1028 vector coordinates, 599 canvas dimensions
+                             (unparsed on either side: 0)
    reader reconciliations: 6 float values compared numerically,
                            78 UOL nodes compared by type+presence only
 == 0 divergences: every added node is what v84 holds (name, type, value, child order)
 ```
+
+**7,165 is the same number `verify28.py` derives independently** (`expectedNew=7165`), by a
+different route — one counts nodes in the v84 dump tree, the other counts new paths in the merged
+XML against the git baseline. They agree to the unit.
 
 Ground truth is `WzMerge dump <v84>.wz <img> 30` — MapleLib's reader plus a six-line `Print`, a
 different code path from the `XmlSerializer` that wrote the files. The comparator is **ticket 33's,
@@ -340,7 +349,8 @@ controls:
   PASS  Quest.wz/Say.img        d=1 absent=135 expected=135  (ticket 33's deliberate decline)
   PASS  Etc.wz/Commodity.img    d=1 absent=110 expected=110  (ticket 27's count)
   PASS  String.wz/Map.img       d=2 absent=40  expected=40   (ticket 27's count, a DEPTH-2 case)
-  PASS  negative control: 3015 v84 ids and 1620 server ids each diff to 0 against themselves
+  PASS  cross-reader control: v84 3015 ids minus server 3016 ids = [], and server minus v84
+        = ['7778'] (must be [] and ['7778'])
   PASS  '22000' occurs in Say.img.xml TEXT but is not one of its 2864 nodes, while it IS one
         of QuestInfo's 3016
 ```
@@ -348,6 +358,12 @@ controls:
 That last one is ticket 27's fault #2 turned into a permanent assertion. Its first form was
 **vacuous** — `"22000" not in s` is trivially true when `s` is empty, and `s` *was* empty on the
 first run because the dump parser was wrong. It now asserts both halves and the set sizes.
+
+**The server side is read from the baseline commit's blob, not the working tree** (`PRE_MERGE_REV`,
+overridable with `--rev`). Without that the instrument destroys its own evidence: the merge closes
+two of the four gaps it asserts, so a post-merge `--selftest` would report `absent=0 expected=110`
+and fail — a measuring tool whose calibration expires the moment it is used. Run it any time with
+`python docs\wz-baseline\merge-lists\28\gap.py --selftest`.
 
 ---
 
@@ -397,7 +413,8 @@ record a decision two committed artefacts already record, is the wrong trade.
 - Nine `WzMerge xml` dry runs, `--deny` on every one, read before the real runs.
 - Idempotence: all nine manifests re-run against their own output → **exit 5** each.
 - `verify28.py` — 31 files, `changed=0 missing=0 unexpectedNew=0 lostLines=0`, 5/5 self-checks.
-- `fidelity28.py` — 416 rows, 7,219 nodes, 0 divergences, 4/4 comparator mutations caught.
+- `fidelity28.py` — 416 rows, 7,165 nodes, 0 divergences, 4/4 comparator mutations caught. The
+  count matches `verify28.py`'s independently-derived `expectedNew=7165` to the unit.
 - `git diff --numstat --diff-algorithm=minimal` — 3,613 insertions, 1 deletion (the BOM).
 - `src/test/java/server/V84ContentMergeNodeTest.java` — 12 tests through `XMLWZFile`, the class
   the running server uses. Manifest-driven (it reads `merge-lists/28/*.paths.txt` rather than
@@ -412,9 +429,49 @@ touched, so `Effect.wz/Direction4.img`, `Map.wz/Back|Tile`, `Quest.wz/PQuestSear
 `Skill.wz/9000.img` are inert here until a client build reads this tree; they were merged for
 completeness, cost ~2,600 nodes in total, and are named here rather than left as a surprise.
 
+## Adversarial review, and what it changed
+
+An independent agent was asked to break the proofs rather than confirm them, with ticket 33's
+vacuous-`HEAD:` failure named as the pattern to hunt for. **`verify28.py` held**: it was attacked
+with five mutations it does not ship — an extra attribute on a pre-existing leaf, a whole
+pre-existing record deleted, a pre-existing leaf *moved into* an added record, two values swapped
+across records with the line multiset intact, and the post-commit self-diff — and caught all five.
+It also independently confirmed the manifest covers exactly the 31 files `git status` reports, and
+reproduced every numeric claim in this ticket.
+
+What it found, all of it fixed in the follow-up commit:
+
+| finding | disposition |
+|---|---|
+| **`fidelity28.py` compared no value for 1,028 `vector` and 599 `canvas` nodes** — ticket 33's `VALUELESS` set has both, so `origin` coordinates and canvas dimensions were dropped on the dump side, and the XML side was only ever asked for a `value=` attribute neither tag has. 2,039 nodes were verified for shape only, undisclosed. | **fixed** — both are normalised to one comparable string (`"400,300"`, `"1234x600"`) and compared. Now 0 divergences with the values actually checked. The png byte count stays out and is stated: `exportbase64:false` means the XML has no payload to compare it to. A counter asserts 0 unparsed, because a regex regression would return `None` on both sides and `None == None` compares equal. |
+| **`sn_collide.py`'s self-check was a tautology** — `probe = next(iter(srv_sn)); probe in srv_sn`. Prints PASS with the detector deleted. This is the script that established the cash-shop merge was unsafe. | **fixed** — it now runs the real detector expression over a planted present SN and a planted absent one, and requires it to fire on one and stay silent on the other. |
+| **`gap.py`'s "negative control" was `v - v`**, a set-theory identity. | **fixed** — replaced with a cross-reader control: v84's QuestInfo ids minus the server's must be `[]` and the reverse exactly `['7778']`. Both readers have to be right. |
+| **`append-commodity.py`'s additive-only assert could not fail** — it asserted a property of a value built three lines above. | **fixed** — it now re-reads the file *from disk* after writing and checks the pre-existing bytes are unchanged and the length is exactly baseline + fragment. |
+| **`gap.py --selftest` and `mkpaths.py` no longer ran**, contradicting the reproducibility claim: the merge consumed two of the four known answers. | **fixed** — `gap.py` reads the server side from `PRE_MERGE_REV` (overridable with `--rev`), so its calibration no longer expires. `mkpaths.py` is a one-shot generator by design and is documented as such below. |
+| **`gap.py` carried the same canvas-regex fault `fidelity28.py` documents.** | **fixed**. It changed no measurement — `compare()` was only ever pointed at `Etc.wz`/`String.wz` id containers, which have no canvases — but the fault was real. |
+| **"7,219 nodes added" was wrong; 7,165 is right.** The extra 54 were UOL descendants `dump` invents by following the link, counted before `reconcile()` pruned them. | **fixed** — counted after reconcile. It now equals `verify28.py`'s independently-derived figure exactly. |
+| **`sn_collide.py` never checked the dump's exit code** — a failed dump would have read as "no SN collisions". | **fixed**, one assert. |
+| **`verify28.py` trusted its own expectation set** — a manifest row naming an already-existing path would have whitelisted everything injected inside a pre-existing record, the §4.5 hazard. Latent, not live: 0 of the 400 sub-row prefixes existed at the baseline. | **fixed** — it now asserts every manifest prefix was absent at the baseline before using it. |
+| **`append-commodity.py`'s close-tag assert matched an indented `</imgdir>`**, so on a file missing its root close the fragment would have spliced *inside* the last record. Its dump parser also had no line-accounting assert. | **fixed** — anchored to `\r\n</imgdir>\r\n`, plus the accounting assert `fidelity28.py` already had. |
+| **`APPEND_BASE = 8958` was hardcoded**, so after the documented `git checkout -- wz/` rollback a re-run would have dropped eleven rows from both generated lists. | **fixed** — the base is computed at append time and persisted in the mapping file's header. |
+| Three weak Java assertions: `everyCashPackageSnResolvesToACommodityRow` passed on an empty image; the Forest Hall absence had no positive control; the deny-listed `3100101` check was `assertNotNull` under a javadoc claiming "exactly as it was". | **fixed** — non-emptiness guard, a positive control on `100030300`, and the deny-listed entry's actual slot values pinned. |
+| Ticket said "the other 8,958 rows lack `Bonus`"; it is 8,947 (the 11 WzMerge rows carry it too). | **fixed** above. |
+| Ticket said this tree has no `1000303xx` cluster for Forest Hall to be reached from. It has three of them. | **fixed** — and it strengthens the refusal, so it is corrected rather than quietly dropped. |
+| `Etc-Commodity.SAFE.txt` was stale and its generator's docstring named two files it no longer writes. | **fixed** — file deleted, docstring corrected, and the generator no longer emits a bare slot list that reads as an invitation to merge at v84's indices. |
+
+**Known and accepted, stated rather than fixed:** `Etc-appended.paths.txt` — `verify28.py`'s
+expected-new set for the 105 re-slotted rows — is derived from the file after the write, so
+`verify28.py` alone cannot independently vouch for those 1,144 nodes. `fidelity28.py` does: it
+compares every one of them against its **v84** original through the recorded mapping, and the v84
+side is an independent source. The two together cover it; neither does alone.
+
 ## Rollback
 
 `git checkout -- wz/` restores current behaviour, and `V84ContentMergeNodeTest` then fails, which
 is the intended coupling. Everything is reproducible from
-`docs/wz-baseline/merge-lists/28/` — `gap.py` measures, `mkpaths.py` regenerates the manifests,
-`append-commodity.py` is idempotent, `verify28.py` and `fidelity28.py` prove the result.
+`docs/wz-baseline/merge-lists/28/`, with one caveat worth stating: `gap.py --selftest`,
+`append-commodity.py`, `sn-detail.py` and `array-align.py` are all re-runnable **after** the merge
+and were re-run to confirm it (the three writers are idempotent and leave `wz/` byte-identical).
+`mkpaths.py` is not — it is a one-shot generator whose whole-image rows assert the target is
+absent, which stops being true the moment the merge lands. Regenerating the manifests means
+rolling back `wz/` first; the committed `*.paths.txt` are the record in the meantime.

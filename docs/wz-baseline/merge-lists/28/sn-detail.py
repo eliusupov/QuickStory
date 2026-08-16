@@ -3,8 +3,7 @@
 
 Emits, for every one of v84's 110 absent slots, whether its SN is already served
 by a row in the server tree and - if so - what that row sells today. Writes
-Etc-Commodity.SAFE.txt (the slots whose SN is genuinely new) and
-Etc-Commodity.COLLIDING.txt (the ones that would overwrite). Read-only w.r.t. wz/.
+Etc-Commodity.TRIAGE.txt, one line per slot, marked NEW or COLLIDES. Read-only w.r.t. wz/.
 """
 import os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))

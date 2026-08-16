@@ -24,7 +24,15 @@ NAME_RE = re.compile(r'name="([^"]*)"')
 # WzMerge dump prints "<indent><name> [WzType]" and optionally " = <value>".
 # A value may contain newlines, so a continuation line is anything that does NOT
 # match this shape; requiring the "[WzType]" bracket is what discriminates them.
-DUMP_RE = re.compile(r"^( *)(\S.*?) \[Wz[A-Za-z]+\](?: = |$)")
+# The trailing alternative matters: a canvas prints "0 [WzCanvasProperty] 1234x600, png N
+# bytes" with no " = ", and requiring " = " or end-of-line would skip every canvas node
+# and, with it, its whole subtree. Same fault fidelity28.py documents.
+DUMP_RE = re.compile(r"^( *)(\S.*?) \[Wz[A-Za-z]+\](?: = | [^=]|$)")
+
+# gap.py measures a gap that a merge then closes, so its known answers expire the moment
+# the merge lands. The selftest therefore reads the SERVER side from this commit unless
+# told otherwise - the tree state ticket 27 measured and ticket 28 merged into.
+PRE_MERGE_REV = "cdaecd678"
 
 
 def v84_paths(archive, imgpath, depth=1):
@@ -45,32 +53,41 @@ def v84_paths(archive, imgpath, depth=1):
     return paths
 
 
-def srv_paths(archive, img, depth=1):
-    """Same, from an already-extracted server .img.xml. None if the image is absent."""
-    p = os.path.join(ROOT, "wz", archive + ".wz", img + ".img.xml")
-    if not os.path.exists(p):
-        return None
+def srv_paths(archive, img, depth=1, rev=None):
+    """Same, from the server .img.xml. `rev` reads that commit's blob instead of the
+    working tree, which is what lets the selftest keep asserting pre-merge answers after
+    the merge has landed. None if the image is absent on that side."""
+    rel = f"wz/{archive}.wz/{img}.img.xml"
+    if rev:
+        r = subprocess.run(["git", "-C", ROOT, "show", f"{rev}:{rel}"], capture_output=True)
+        if r.returncode != 0:
+            return None
+        lines = r.stdout.decode("utf-8-sig").splitlines()
+    else:
+        p = os.path.join(ROOT, rel)
+        if not os.path.exists(p):
+            return None
+        with open(p, "r", encoding="utf-8-sig", newline="") as f:
+            lines = f.read().splitlines()
     paths, stack = [], {}
-    with open(p, "r", encoding="utf-8", newline="") as f:
-        for line in f:
-            line = line.rstrip("\r\n")
-            s = line.lstrip(" ")
-            ind = len(line) - len(s)
-            if ind % 2 or not s.startswith("<") or s.startswith("</") or s.startswith("<?"):
-                continue
-            m = NAME_RE.search(s)
-            if not m:
-                continue
-            lvl = ind // 2
-            stack[lvl] = m.group(1)
-            if lvl == depth:
-                paths.append("/".join(stack[i] for i in range(1, depth + 1)))
+    for line in lines:
+        s = line.rstrip("\r").lstrip(" ")
+        ind = len(line.rstrip("\r")) - len(s)
+        if ind % 2 or not s.startswith("<") or s.startswith("</") or s.startswith("<?"):
+            continue
+        m = NAME_RE.search(s)
+        if not m:
+            continue
+        lvl = ind // 2
+        stack[lvl] = m.group(1)
+        if lvl == depth:
+            paths.append("/".join(stack[i] for i in range(1, depth + 1)))
     return paths
 
 
-def compare(archive, img, depth=1):
+def compare(archive, img, depth=1, rev=None):
     v = v84_paths(archive, img + ".img", depth)
-    s = srv_paths(archive, img, depth)
+    s = srv_paths(archive, img, depth, rev)
     if s is None:
         return dict(archive=archive, img=img, depth=depth, srv_missing_image=True,
                     v84=len(set(v)), srv=0, absent=sorted(set(v)), srv_only=0)
@@ -88,24 +105,30 @@ KNOWN = [
 ]
 
 
-def selftest():
+def selftest(rev=PRE_MERGE_REV):
     ok = True
+    print(f"  (server side read from {rev or 'the working tree'})")
     for arch, img, d, want, why in KNOWN:
-        got = len(compare(arch, img, d)["absent"])
+        got = len(compare(arch, img, d, rev)["absent"])
         if got != want:
             ok = False
         print(f"  {'PASS' if got == want else 'FAIL'}  {arch}.wz/{img}.img depth={d} "
               f"absent={got} expected={want}  ({why})")
-    # negative control: a set diffed against itself is empty in both directions
+    # Negative control. `v - v` would be a set-theory identity that prints PASS with the
+    # readers deleted, so control one reader against the OTHER on a case whose answer is
+    # known: v84's QuestInfo ids are a strict SUBSET of this tree's (ticket 33 merged all
+    # 135 and this tree keeps its own quest 7778), so v84-minus-server must be empty while
+    # server-minus-v84 must be exactly {7778}. Both readers have to be right to pass.
     v = set(v84_paths("Quest", "QuestInfo.img", 1))
-    s = set(srv_paths("String", "Mob", 1))
-    neg = not (v - v) and not (s - s) and len(v) > 0 and len(s) > 0
+    s = set(srv_paths("Quest", "QuestInfo", 1, rev))
+    neg = len(v) > 0 and (v - s) == set() and (s - v) == {"7778"}
     ok = ok and neg
-    print(f"  {'PASS' if neg else 'FAIL'}  negative control: {len(v)} v84 ids and {len(s)} server "
-          f"ids each diff to 0 against themselves")
+    print(f"  {'PASS' if neg else 'FAIL'}  cross-reader control: v84 {len(v)} ids minus server "
+          f"{len(s)} ids = {sorted(v - s)}, and server minus v84 = {sorted(s - v)} "
+          f"(must be [] and ['7778'])")
     # ticket 27 fault #2: an id can occur in dialogue TEXT without being a node.
-    say = set(srv_paths("Quest", "Say", 1))
-    qi = set(srv_paths("Quest", "QuestInfo", 1))
+    say = set(srv_paths("Quest", "Say", 1, rev))
+    qi = set(srv_paths("Quest", "QuestInfo", 1, rev))
     with open(os.path.join(ROOT, "wz", "Quest.wz", "Say.img.xml"), encoding="utf-8") as f:
         in_text = "22000" in f.read()
     disc = in_text and "22000" not in say and "22000" in qi and len(say) > 2000
@@ -117,8 +140,9 @@ def selftest():
 
 if __name__ == "__main__":
     if "--selftest" in sys.argv:
+        rev = sys.argv[sys.argv.index("--rev") + 1] if "--rev" in sys.argv else PRE_MERGE_REV
         print("gap.py selftest:")
-        sys.exit(0 if selftest() else 1)
+        sys.exit(0 if selftest(rev) else 1)
     spec = json.load(open(sys.argv[1], encoding="utf-8"))
     res = [compare(*a) for a in spec]
     with open(sys.argv[2], "w", encoding="utf-8") as f:

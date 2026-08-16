@@ -23,8 +23,8 @@
   Npc.wz/1022107.img: 1 rows, 10 nodes compared
   Npc.wz/2030015.img: 1 rows, 7 nodes compared
   Quest.wz/PQuestSearch.img: 1 rows, 176 nodes compared
-  Reactor.wz/1002008.img: 1 rows, 91 nodes compared
-  Reactor.wz/2302006.img: 1 rows, 103 nodes compared
+  Reactor.wz/1002008.img: 1 rows, 67 nodes compared
+  Reactor.wz/2302006.img: 1 rows, 73 nodes compared
   Reactor.wz/2409000.img: 1 rows, 24 nodes compared
   Skill.wz/9000.img: 1 rows, 410 nodes compared
   String.wz/Cash.img: 23 rows, 69 nodes compared
@@ -38,6 +38,7 @@
   String.wz/ToolTipHelp.img: 16 rows, 55 nodes compared
   Etc.wz/Commodity.img (re-slotted): 105 rows, 1033 nodes compared
 
-== 416 manifest rows, 7219 nodes compared against stock v84
+== 416 manifest rows, 7165 nodes compared against stock v84
+   values compared by shape: 1028 vector coordinates, 599 canvas dimensions  (unparsed on either side: 0)
    reader reconciliations: 6 float values compared numerically, 78 UOL nodes compared by type+presence only (dump resolves the link)
 == 0 divergences: every added node is what v84 holds (name, type, value, child order)

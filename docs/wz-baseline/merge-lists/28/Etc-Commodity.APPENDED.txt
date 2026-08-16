@@ -1,5 +1,6 @@
 # ticket 28 - v84 cash-shop SNs appended to Commodity.img at FRESH slots.
 # v84's own slot indices are NOT usable here - see append-commodity.py.
+# base 8958
 # newslot	SN	v84slot	ItemId
 8958	10002328	2322	1702261
 8959	10002329	2323	1003072

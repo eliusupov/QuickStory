@@ -36,7 +36,42 @@ TYPE2TAG.setdefault("WzBinaryProperty", "sound")
 # swallowed as a value continuation, taking its whole subtree with it. Quest.wz has no
 # canvases, so ticket 33 never met this. Allow a trailing descriptor instead; canvas and
 # sound are both in VALUELESS, so the descriptor is discarded either way.
-LINE = re.compile(r"^((?:  )*)(\S.*?) \[(Wz[A-Za-z]+)\](?: = (.*)| [^=].*)?$")
+LINE = re.compile(r"^((?:  )*)(\S.*?) \[(Wz[A-Za-z]+)\](?: = (.*)| ([^=].*))?$")
+
+# `vector` and `canvas` are in ticket 33's VALUELESS set because Quest.wz has neither.
+# They are NOT valueless: both sides carry real data in different shapes, and leaving them
+# in VALUELESS silently drops 1,028 vector coordinates and 599 canvas dimensions from the
+# comparison. Normalise both sides to one string instead.
+#   vector  dump "X: 400, Y: 300"                     xml  x="400" y="300"   -> "400,300"
+#   canvas  dump "1234x600, png 341206 bytes"         xml  width= height=    -> "1234x600"
+# The png byte count is deliberately NOT compared: this tree is serialised with
+# exportbase64:false (procedure section 9), so the XML carries no pixel payload to compare
+# it against. Dimensions are the whole of what both sides hold.
+VALUELESS = VALUELESS - {"canvas", "vector"}
+VEC = re.compile(r"X:\s*(-?\d+),\s*Y:\s*(-?\d+)")
+DIM = re.compile(r"^(\d+)x(\d+)")
+
+
+def dump_value(tag, after_eq, trailing):
+    """The comparable value of a dump line, per tag."""
+    if tag == "vector":
+        m = VEC.search(after_eq or "")
+        return f"{m.group(1)},{m.group(2)}" if m else None
+    if tag == "canvas":
+        m = DIM.match(trailing or "")
+        return f"{m.group(1)}x{m.group(2)}" if m else None
+    return None if tag in VALUELESS else after_eq
+
+
+def xml_value(el):
+    """The same value, read off the serialised XML element."""
+    if el.tag == "vector":
+        return f"{el.get('x')},{el.get('y')}"
+    if el.tag == "canvas":
+        return f"{el.get('width')}x{el.get('height')}"
+    return None if el.tag in VALUELESS else el.get("value")
+
+
 ARCHIVES = ("Effect", "Etc", "Map", "Mob", "Npc", "Quest", "Reactor", "Skill", "String")
 
 
@@ -63,10 +98,10 @@ def dump_tree(archive, imgpath):
             last.value = (last.value or "") + "\n" + ln
             conts += 1
             continue
-        _, name, wztype, value = m.groups()
+        _, name, wztype, value, trailing = m.groups()
         tag = TYPE2TAG.get(wztype)
         assert tag, f"{imgpath}: unmapped wz type {wztype}"
-        n = Node(tag, name, None if tag in VALUELESS else value)
+        n = Node(tag, name, dump_value(tag, value, trailing))
         del stack[d:]
         if d == 0:
             assert root is None, f"{imgpath}: two roots in one dump"
@@ -95,7 +130,7 @@ def xml_tree(relpath):
     raw = raw.replace(b"\t", b"&#9;")
 
     def conv(el):
-        n = Node(el.tag, el.get("name"), None if el.tag in VALUELESS else el.get("value"))
+        n = Node(el.tag, el.get("name"), xml_value(el))
         n.kids = [conv(c) for c in el]
         return n
 
@@ -114,6 +149,13 @@ def reconcile(src, mrg, stats):
               the literal <uol value="../0/0"/>. Type and presence are checked; the link
               string cannot be checked from a dump, so both sides are pruned and counted.
     """
+    # A regex regression here would return None on BOTH sides, and None == None compares
+    # equal - the failure mode that would quietly un-check every coordinate again. Count
+    # them and require every one to have parsed.
+    if src.tag in ("vector", "canvas"):
+        stats[src.tag] += 1
+        if src.value is None or mrg.value is None:
+            stats["unparsed"] += 1
     if src.tag == "float" and mrg.tag == "float":
         try:
             if float(src.value) == float(mrg.value):
@@ -197,8 +239,11 @@ def main():
             if m is None:
                 findings.append(f"{label}: manifest row ABSENT from the merged XML")
                 continue
-            n_here += count(s)
+            # count AFTER reconcile: it prunes the descendants `dump` invented by
+            # following a UOL, and those are not nodes in the merged tree, so counting
+            # them would overstate what was compared.
             reconcile(s, m, recon)
+            n_here += count(s)
             compare(s, m, label, findings)
         total_nodes += n_here
         say(f"  {arch}.wz/{img}.img: {len(subs)} rows, {n_here} nodes compared")
@@ -222,16 +267,22 @@ def main():
             if s is None or m is None:
                 findings.append(f"Commodity re-slot {v84slot}->{newslot}: missing side")
                 continue
-            n += count(s)
             reconcile(s, m, recon)
+            n += count(s)
             compare(s, m, f"Etc.wz/Commodity.img[{v84slot}->{newslot}]", findings)
         total_rows += rows_n
         total_nodes += n
         say(f"  Etc.wz/Commodity.img (re-slotted): {rows_n} rows, {n} nodes compared")
 
     say(f"\n== {total_rows} manifest rows, {total_nodes} nodes compared against stock v84")
+    say(f"   values compared by shape: {recon['vector']} vector coordinates, "
+        f"{recon['canvas']} canvas dimensions  (unparsed on either side: {recon['unparsed']})")
     say(f"   reader reconciliations: {recon['float']} float values compared numerically, "
         f"{recon['uol']} UOL nodes compared by type+presence only (dump resolves the link)")
+    if recon["unparsed"]:
+        say("== a vector or canvas value failed to parse on one side; None==None would have "
+            "compared equal, so this result is VOID")
+        return 2
     if findings:
         say(f"== {len(findings)} DIVERGENCES")
         for f in findings[:60]:

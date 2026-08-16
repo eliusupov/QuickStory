@@ -37,10 +37,13 @@ def v84_full():
                        capture_output=True, text=True, encoding="utf-8", errors="strict")
     assert r.returncode == 0, r.stdout + r.stderr
     rows, order, cur = {}, [], None
-    for line in r.stdout.splitlines():
+    seen = 0
+    body = [l for l in r.stdout.splitlines() if l.strip()]
+    for line in body:
         m = DUMP_RE.match(line)
         if not m:
             continue
+        seen += 1
         if len(m.group(1)) == 2:
             cur = m.group(2)
             rows[cur] = []
@@ -48,6 +51,12 @@ def v84_full():
         elif len(m.group(1)) == 4 and cur is not None:
             wztype = re.search(r"\[(Wz[A-Za-z]+)\]", line).group(1)
             rows[cur].append((m.group(2), wztype, m.group(3)))
+    # Every dump line must have been recognised as a node. A value containing a newline
+    # would otherwise be silently truncated at the splice, and the header is line 1.
+    # -1 for the "…Etc.wz  iv=GMS  patchVersion=84" banner, the only line that is not a node
+    assert seen == len(body) - 1, (
+        f"parsed {seen} of {len(body) - 1} Commodity dump lines - "
+        "a value may span lines and would be truncated by this writer")
     return rows, order
 
 
@@ -56,21 +65,42 @@ def esc(v):
              .replace('"', "&quot;").replace("'", "&apos;"))
 
 
-APPEND_BASE = 8958   # first slot this script owns; 0..8957 predate it
+MAPPING = "Etc-Commodity.APPENDED.txt"
 
 
-def emit_lists(full):
+def append_base(fresh=None):
+    """First slot this script owns. Persisted in the mapping file's header rather than
+    hardcoded: after the documented rollback (`git checkout -- wz/`) the WzMerge head run
+    at 8947-8957 is gone too, so the next append legitimately starts lower and a constant
+    would silently drop eleven rows from both generated lists."""
+    if fresh is not None:
+        return fresh
+    p = os.path.join(HERE, MAPPING)
+    if os.path.exists(p):
+        first = None
+        for line in open(p, encoding="utf-8"):
+            if line.startswith("# base "):
+                return int(line.split()[2])
+            if first is None and line.strip() and not line.startswith("#"):
+                first = int(line.split("\t")[0])
+        if first is not None:
+            return first        # a mapping file written before the header existed
+    raise SystemExit(f"{MAPPING} names no base slot and no fresh base was computed")
+
+
+def emit_lists(full, fresh=None):
     """Derived from the file on disk, not from what this run happened to do, so the two
     lists are correct whether the append just ran or ran in an earlier session."""
+    base = append_base(fresh)
     sn_to_v84 = {}
     for slot, kids in full.items():
         sn_to_v84.setdefault(dict((n, v) for n, _, v in kids).get("SN"), slot)
     srv = srv_rows()
-    mine = sorted((k for k in srv if k.isdigit() and int(k) >= APPEND_BASE), key=int)
-    with open(os.path.join(HERE, "Etc-Commodity.APPENDED.txt"), "w", encoding="utf-8",
-              newline="\r\n") as f:
+    mine = sorted((k for k in srv if k.isdigit() and int(k) >= base), key=int)
+    with open(os.path.join(HERE, MAPPING), "w", encoding="utf-8", newline="\r\n") as f:
         f.write("# ticket 28 - v84 cash-shop SNs appended to Commodity.img at FRESH slots.\n")
         f.write("# v84's own slot indices are NOT usable here - see append-commodity.py.\n")
+        f.write(f"# base {base}\n")
         f.write("# newslot\tSN\tv84slot\tItemId\n")
         for k in mine:
             sn = srv[k].get("SN")
@@ -124,16 +154,25 @@ def main():
     raw = open(TARGET, "rb").read()
     assert not raw.startswith(b"\xef\xbb\xbf"), "target has a BOM"
     assert raw.count(b"\n") == raw.count(b"\r\n"), "target is not CRLF throughout"
-    close = b"</imgdir>\r\n"
-    assert raw.endswith(close), "target does not end with the root close tag"
-    body = ("\r\n".join(frag) + "\r\n").encode("utf-8")
+    # The ROOT close tag sits at column 0. Matching a bare "</imgdir>\r\n" would also match
+    # an indented "  </imgdir>\r\n", and on a file missing its root close the fragment
+    # would splice INSIDE the last pre-existing record - still valid XML, wrong tree, and
+    # exactly the class this ticket forbids.
+    close = b"\r\n</imgdir>\r\n"
+    assert raw.endswith(close), "target does not end with an unindented root close tag"
+    body = ("\r\n" + "\r\n".join(frag)).encode("utf-8")
     out = raw[:-len(close)] + body + close
-
-    # additive-only, checked before writing: the pre-existing bytes are a strict prefix
-    assert out.startswith(raw[:-len(close)]), "the append would alter pre-existing bytes"
     open(TARGET, "wb").write(out)
 
-    emit_lists(full)
+    # Additive-only, checked against WHAT IS NOW ON DISK. Asserting a property of a value
+    # built three lines above would be a no-op that reads like a safety gate.
+    after = open(TARGET, "rb").read()
+    assert after[:len(raw) - len(close)] == raw[:-len(close)], \
+        "the append altered pre-existing bytes"
+    assert after.endswith(close) and len(after) == len(raw) + len(body), \
+        "the written file is not the target plus exactly the fragment"
+
+    emit_lists(full, fresh=int(mapping[0][1]))
     print(f"appended {len(mapping)} rows, slots {mapping[0][1]}..{mapping[-1][1]}, "
           f"{len(body)} bytes")
     print(f"SN band: {dict(sorted(collections.Counter(sn[:3] for _, _, sn in mapping).items()))}")

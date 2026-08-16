@@ -102,6 +102,13 @@ def check_file(relpath, subs, rev, log, mutate=None):
     rb, rp = records(base), records(post)
     imgname = os.path.basename(relpath)[:-len(".xml")]
     prefixes = [f"{imgname}/{s}" for s in subs if s]
+    # The expectation set is derived from the same manifests that drove the merge, so it
+    # must not be trusted blind: a row naming a path that ALREADY EXISTED would whitelist
+    # everything injected inside a pre-existing record - precisely the section 4.5 hazard
+    # this proof exists to catch. Every manifest row has to be new.
+    stale = [q for q in prefixes if q in rb]
+    assert not stale, (f"{relpath}: manifest rows name paths that already existed at the "
+                       f"baseline, so they cannot be treated as expected-new: {stale[:5]}")
     missing = [p for p in rb if p not in rp]
     new = [p for p in rp if p not in rb]
     expected = set(p for p in new

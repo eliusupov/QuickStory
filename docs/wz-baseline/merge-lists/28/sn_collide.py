@@ -23,6 +23,9 @@ FIELDS = ("SN", "ItemId", "OnSale", "Price", "Count", "Period")
 def v84_rows():
     out = subprocess.run([WZMERGE, "dump", os.path.join(V84, "Etc.wz"), "Commodity.img", "2"],
                          capture_output=True, text=True, encoding="utf-8", errors="replace")
+    # A failed dump would give rows={} -> new_slots=[] -> collide=[] -> "no collisions",
+    # i.e. this detector's silence would mean "the tool broke", not "it is safe".
+    assert out.returncode == 0, f"dump Etc.wz/Commodity.img failed:\n{out.stdout}{out.stderr}"
     rows, cur = {}, None
     for line in out.stdout.splitlines():
         m = DUMP_RE.match(line)
@@ -74,11 +77,21 @@ if __name__ == "__main__":
     for sn in collide[:20]:
         print(f"    SN {sn} already served by a row in the server tree")
 
-    # SELF-CHECK: the collision detector must be able to fire. An SN that IS in the
-    # server tree must be reported as colliding.
-    probe = next(iter(srv_sn))
-    fired = probe in srv_sn
-    print(f"SELF-CHECK: a known-present SN ({probe}) is detected as colliding = {fired}")
+    # SELF-CHECK. Run the ACTUAL detector expression over two planted inputs: one SN the
+    # server certainly has (must be reported) and one it certainly does not (must not be).
+    # Asserting `probe in srv_sn` for a probe drawn from srv_sn would be a tautology that
+    # prints PASS even with the detector deleted - and this is the script that decided the
+    # cash-shop merge was unsafe, so it does not get to be one.
+    def detect(candidates):
+        return sorted(sn for sn in set(candidates) if sn in srv_sn)
+
+    present = next(iter(srv_sn))
+    absent = "999999999"
+    assert absent not in srv_sn, "the negative probe is not actually absent"
+    pos, neg = detect([present]), detect([absent])
+    fired = pos == [present] and neg == []
+    print(f"SELF-CHECK: the detector reports a planted present SN ({present}) and stays "
+          f"silent on a planted absent one ({absent}) = {fired}")
 
     onsale = collections.Counter(r.get("OnSale", "0") for r in s.values())
     print(f"OnSale split, server tree: on={onsale.get('1', 0)}  off/absent="
