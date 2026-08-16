@@ -1,5 +1,10 @@
 # 24 — v84 `SET_FIELD` / `CharacterData` layout, and the Evan-only entry crash
 
+> ## ✅ RESOLVED IN §9 — the v84 equip record needs a 4-byte `nDurability`. Read §9 first.
+>
+> One line in `addItemInfo`, version-gated. §1–§8 are the investigation that got there, including two
+> wrong turns kept on the record. **§9 is the answer; §10 is what is still open.**
+
 > ## ⚠ ROUND 1 WAS WRONG — READ §8 FIRST
 >
 > The fix in §4 was **disproved by the live client** and reverted in `b2eed322c`. Job 2001 *does* use
@@ -531,3 +536,136 @@ the desync starts precisely at the first equip record.
    downstream desync read at a 1-byte-different alignment can easily be fatal in one case and survivable
    in the other — but that is a mechanism, not evidence, and it is only relevant if the ETC-tab check
    comes back "empty".
+
+---
+
+# 9. RESOLVED — the equip record is 4 bytes short at v84
+
+**Status: measured, fixed, one line.** The §8.7 check came back **"Beginner's Guide NOT in the ETC
+tab"**, which put the fault at or before the equips — and a better instrument then named the field.
+
+## 9.1 The finding
+
+**v84's non-cash equip record carries a 4-byte `nDurability` field that v83's does not**, between
+`experience` and `nIUC`/hammers. Cosmic writes the v83 shape, so every non-cash equip is **4 bytes
+short**. A fresh character has **four** starting equips ⇒ the client under-runs by **16 bytes** and
+everything after the first equip is garbage.
+
+`src/main/java/tools/PacketCreator.java`, in `addItemInfo`'s non-cash equip branch:
+
+```java
+p.writeInt((int) expNibble);
+if (ServerConstants.VERSION >= 84) {
+    p.writeInt(-1);   // nDurability, -1 = no durability
+}
+p.writeInt(equip.getVicious());   // nIUC / hammers applied
+```
+
+**Cash equips deliberately do not get it** — their 10-byte `0x40` filler stands in for the whole
+`levelType/level/experience/nIUC` group and is unchanged at v84. Verified against the reference below,
+which gates the cash branch separately and adds no durability there.
+
+`addItemInfo` is the single serialiser for every item-bearing packet in Cosmic (ticket 17 measured **29
+call sites all routing through it**), so this one line fixes the field packet, inventory operations,
+shops, storage and the cash shop together. Root-cause seam, not a patch on one path.
+
+## 9.2 Where the measurement came from — a new instrument, and a good one
+
+`Chronicle20/atlas` — a Go MapleStory server whose packet writers are **explicitly version-gated**
+(`t.MajorAtLeast(84)`) with **IDA-verified comments citing client addresses**. It ships per-version
+packet audits for **nine** GMS versions — `docs/packets/audits/gms_v{48,61,72,79,83,84,87,92,95}/` —
+including `gms_v83/FieldSetField.json` and `gms_v84/FieldSetField.json`.
+
+I found it by accident: a filesystem sweep for the v84 IDB turned up `scratchpad/atlas/tree.json`, a
+GitHub tree listing of the repo left behind by earlier work.
+
+The decisive artifact is `libs/atlas-packet/model/asset_v84_test.go`, a test that exists **because atlas
+shipped this exact bug and had to fix it**:
+
+> *"TestEquipableV84ExtraInt pins the v84+ equip durability field. v84's `GW_ItemSlotEquip::RawDecode`
+> (a v95-era refactor v83 lacks) reads nDurability as an int between experience and hammersApplied;
+> v83's older inline decode does not. atlas wrote the v83 layout for every version, so **a v84 client
+> under-ran each equipped item by 4 bytes (×4 starting equips on a fresh character) → ZException →
+> silent disconnect entering the channel.** The encoded equip must therefore be exactly 4 bytes longer
+> for GMS v84+ than for v83."*
+
+Four starting equips, disconnect entering the channel. That is our bug, described by someone who had
+already measured it. And `libs/atlas-packet/model/asset.go:260-262`:
+
+> `w.WriteInt32(-1) // nDurability (-1 = no durability): GMS v84+ equip field, ordered
+> experience/durability/hammersApplied (GW_ItemSlotEquip::RawDecode +212; absent v83). IDA-verified.`
+
+**This is not a third guess.** It is an independent implementation that (a) is version-parameterised
+rather than pinned to one version, (b) cites client disassembly addresses per field, (c) has a
+regression test pinning this specific delta, and (d) reports the identical symptom.
+
+### Corroboration before trusting it
+
+atlas's v83 equip encoder was walked field-by-field against Cosmic's `addItemInfo` and matches
+**exactly**, including quirks Cosmic inherited from OdinMS: the `writeShort` slot for GMS≥83, the
+`writeBool(isCash)`, the 15 stat shorts, the owner string + flag short, the trailing `writeLong(0)`,
+and the permanent-FILETIME constant (atlas's literal `94354848000000000` is what Cosmic's
+`getTime(-2)` produces). Its `encodeInventory` likewise reproduces Cosmic's inventory framing exactly —
+5 capacity bytes, the 8-byte timestamp under flag `0x100000`, short terminators for GMS≥83, and the
+`WriteInt(0)` that folds the empty 4th (dragon/mechanic) equip-loop terminator (§1.4's discrimination
+win, independently confirmed). **A source that reproduces every field Cosmic already gets right, and
+differs on exactly one, is a source worth believing on that one.**
+
+## 9.3 Where my round-2 reasoning went wrong
+
+§8.5 argued: *"a deficit makes `CInPacket` over-read past `m_uLength` and throw — the client would
+crash, which the explorer does not; therefore the records are not under-sized."* The premise was right
+(atlas confirms the under-run throws) but I applied it backwards — I treated **one** character
+surviving as proof of no deficit, when the correct reading is that the deficit is real and the Evan's
+crash *is* the throw. The explorer surviving is the anomaly, not the evidence.
+
+**I still cannot fully explain why the explorer survived** where the Evan disconnected. Their packets
+differ by exactly one byte (the SP field: 1 for the extended-table Evan, 2 for the explorer), so a
+16-byte under-run lands on different garbage and reaches the buffer end at a different point. That is a
+mechanism, not a measurement, and it is now moot — but it is the reason a symptom-shaped inference was
+never going to settle this, in either direction.
+
+The coordinator's surplus/truncation hypothesis was also wrong, for the same reason: it was inferred
+from symptoms. The direction was **deficit**. Two rounds of symptom-reading, one lookup in a
+version-gated reference — that is the lesson worth keeping.
+
+## 9.4 Verification
+
+- Reference cross-checked field-by-field against Cosmic before adopting (§9.2), not taken on the
+  strength of one comment.
+- Cash-equip branch checked separately and correctly excluded.
+- `mvnw.cmd -o test`: **2090 passed, 0 failed** — baseline held.
+- Compiles clean. **Not deployed**; running server untouched; `ServerConstants.VERSION` still 84.
+- The §8 bisection probe (`-Dv84.diag.skipEquips`) was **removed** — the measurement made it
+  unnecessary, and a live diagnostic that suppresses everyone's equipment should not outlive its use.
+
+**No unit test added.** `ServerConstants.VERSION` is a compile-time constant, so a test cannot encode
+the same record at v83 and v84 to assert the 4-byte delta the way atlas's test does — that would need
+the version threaded through as a parameter. Constructing an `Equip` also drags in
+`ItemInformationProvider` (WZ) and `ExpTable`. Flagged in §10 as the one place a small refactor would
+buy a real regression test.
+
+## 10. Still open after this fix
+
+1. **Confirm live.** Expected: explorer's items and ETC tab populate, Evan enters the world. If the Evan
+   still crashes but the explorer is now correct, the remaining fault is Evan-specific and §8.2 has
+   already cleared its stat block.
+2. **Mine the rest of `Chronicle20/atlas` — this is now the project's best instrument.** It has audits
+   for v83, v84, v87, v92 and v95, version-gated writers with IDA citations, and it plainly encodes
+   deltas this port has not discovered yet. Two already visible in `set_field.go` that Cosmic will hit:
+   GMS≥87 adds a leading `WriteShort(0)` "decode opt" plus four trailing logout-gift ints to
+   `SET_FIELD`, and GMS≥95 adds `m_dwOldDriverID` after the channel id. Neither affects v84, but the
+   same file records `nSubJob` at v87 in the stat block. **A dedicated ticket should diff Cosmic's
+   writers against atlas's v84 gates wholesale** rather than discovering each one by crashing the
+   client — that is the durable fix for this whole class of bug.
+3. **A regression test for the equip record** needs `ServerConstants.VERSION` threaded as a parameter
+   into the packet layer instead of read as a constant (§9.4). Worth doing once more v84 gates land.
+4. **The IDB behind `ida_export_gms_v84.json` does not exist on this machine** — a full sweep of C:, D:
+   and E: for `GMS_v84*`, `*U_DEVM*`, `*.i64`, `*.idb` found nothing. The export references
+   `GMS_v84.1_U_DEVM.i64` from an external `packet-audit` toolchain. `D:\games\dreamms\DreamMS.exe` is
+   a genuinely unpacked v92 client (`.text` raw == virtual) but is **member-obfuscated** (rolling
+   `0xbaadf00d` XOR with tamper checksums, e.g. the 2-byte reader at `0x00479af0`) and stripped of RTTI,
+   so recovering struct layouts from it is a multi-hour job. If anyone tries anyway, the anchor is:
+   only **two** windows in that binary contain all seven `CharacterData` flag immediates —
+   `0x004f5278` and `0x004f841b`. Given atlas covers v92 with audits, this is almost certainly not
+   worth doing.

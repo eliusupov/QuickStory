@@ -513,7 +513,16 @@ public class PacketCreator {
             p.writeByte(0);
             p.writeByte(itemLevel); //Item Level
             p.writeInt((int) expNibble);
-            p.writeInt(equip.getVicious()); //WTF NEXON ARE YOU SERIOUS?
+            if (ServerConstants.VERSION >= 84) {
+                // nDurability, -1 = "no durability". v84's GW_ItemSlotEquip::RawDecode is a v95-era
+                // refactor that reads this int between experience and nIUC; v83's older inline decode
+                // does not, so a v83-shaped record under-runs a v84 client by 4 bytes per non-cash
+                // equip. Four starting equips = 16 bytes, which is what broke entering the world.
+                // Cash equips do NOT get this - their 10-byte 0x40 filler stands in for the whole
+                // levelType/level/exp/nIUC group and is unchanged at v84. See ticket 24 §9.
+                p.writeInt(-1);
+            }
+            p.writeInt(equip.getVicious()); //WTF NEXON ARE YOU SERIOUS? (nIUC / hammers applied)
             p.writeLong(0);
         }
         p.writeLong(getTime(-2));
