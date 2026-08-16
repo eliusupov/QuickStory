@@ -54,8 +54,22 @@ function start(mode, type, selection) {
         qm.sendPrev("Take the portal on the left to reach the Training Forest. There, you will find #p1102000#, the Training Instructor, who will teach you how to become stronger. I don't want to find you wandering around aimlessly until you reach Lv. 10, you hear?");
     } else if (status == 13) {
         qm.dispose();
+    } else {
+        // Closing the window with the X sends mode 0 / type 0, which the guard above lets
+        // through (it only catches type > 0). status then decrements off the end of the chain
+        // and matches nothing, so without this the script returns having neither sent a packet
+        // nor disposed - and QuestActionManager keeps the session in `qms` forever. Every later
+        // QUEST_ACTION then dies at qms.containsKey(c) and NPCTalkHandler refuses every
+        // conversation until the player changes map. Same defect as 1021.js.
+        //
+        // A terminal else is the whole fix: it cannot swallow a legitimate Prev, because every
+        // reachable status still has its own branch above.
+        qm.dispose();
     }
 }
 
 function end(mode, type, selection) {
+    // Nothing routes here - 20016 is start-scripted only - but an empty body would hold the
+    // session open if anything ever did.
+    qm.dispose();
 }
