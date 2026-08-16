@@ -151,6 +151,14 @@ static class Program
     static int Main(string[] args)
     {
         if (args[0] == "uol") return UolCheck.Run(args[1], args[2], args[3].Split(',', StringSplitOptions.RemoveEmptyEntries), args[4]);
+        if (args[0] == "find") return SkillAudit.Find(args[1], args[2], args[3]);
+        if (args[0] == "decode") return SkillAudit.Decode(args[1], args[2].Split(',', StringSplitOptions.RemoveEmptyEntries), args[3]);
+        if (args[0] == "dump") return SkillAudit.Dump(args[1], args[2], int.Parse(args[3]));
+        if (args[0] == "ls") return SkillAudit.Ls(args[1]);
+        if (args[0] == "icons") return SkillAudit.Icons(args[1], args[2].Split(',', StringSplitOptions.RemoveEmptyEntries), args[3]);
+        if (args[0] == "shape") return SkillAudit.Shape(args[1], args[2].Split(',', StringSplitOptions.RemoveEmptyEntries), args[3]);
+        if (args[0] == "strskill") return SkillAudit.StrSkill(args[1], args[2].Split(',', StringSplitOptions.RemoveEmptyEntries), args[3], args[4]);
+        if (args[0] == "links") return SkillAudit.Links(args[1], args[2].Split(',', StringSplitOptions.RemoveEmptyEntries), args[3]);
         string aDir = args[0], bDir = args[1], outDir = args[2];
         string[] wzs = args[3].Split(',', StringSplitOptions.RemoveEmptyEntries);
         Directory.CreateDirectory(outDir);
