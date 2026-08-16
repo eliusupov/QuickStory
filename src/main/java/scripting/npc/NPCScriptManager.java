@@ -166,15 +166,42 @@ public class NPCScriptManager extends AbstractScriptManager {
     public void action(Client c, byte mode, byte type, int selection) {
         Invocable iv = scripts.get(c);
         if (iv != null) {
+            NPCConversationManager invoked = cms.get(c);
+            if (invoked != null) {
+                invoked.resetDialogueSent();
+            }
             try {
                 c.setClickedNPC();
                 iv.invokeFunction("action", mode, type, selection);
+                disposeIfStalled(invoked, c);
             } catch (ScriptException | NoSuchMethodException t) {
                 if (getCM(c) != null) {
                     log.error("Error performing NPC script action for npc: {}", getCM(c).getNpc(), t);
                 }
                 dispose(c);
             }
+        }
+    }
+
+    /**
+     * Safety net for the dialogue-close lockout. Nearly every script guards with
+     * {@code mode == -1 || (mode == 0 && type > 0)}, which does not catch the window X (mode 0,
+     * type 0): the script decrements its status, matches no branch of its if/else-if chain and
+     * returns having neither pushed a dialogue nor disposed. The session then sits in {@code cms}
+     * forever, {@code NPCTalkHandler} refuses every later conversation at its {@code getCM() != null}
+     * check and quest updates never flush - only a map change clears it.
+     *
+     * <p>An invocation that advanced no dialogue and did not dispose has fallen off its state
+     * machine whatever {@code mode} meant, which is decidable here and not in the script. A
+     * legitimate Prev pushes a dialogue and is untouched. The identity check keeps this off a
+     * session some other path now owns - {@code openNpc()} disposes and re-registers a different
+     * manager mid-invocation.
+     */
+    private void disposeIfStalled(NPCConversationManager invoked, Client c) {
+        if (invoked != null && cms.get(c) == invoked && !invoked.isDialogueSent()) {
+            log.debug("NPC {} script disposed: invocation pushed no dialogue and did not dispose",
+                    invoked.getNpc());
+            dispose(invoked);
         }
     }
 

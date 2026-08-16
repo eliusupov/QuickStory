@@ -25,6 +25,7 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -86,20 +87,23 @@ class Quest1021RealLoad {
     }
 
     /**
-     * The black hole. Closing the very first Roger dialogue with the window X instead of clicking
-     * Next leaves the {@link QuestScriptManager} session open forever, and from then on every
-     * QUEST_ACTION this character sends returns at {@code qms.containsKey(c)} - no packet, no log,
-     * no error. Eight clicks, eight silences.
+     * The black hole, now netted. Closing the very first Roger dialogue with the window X used to
+     * leave the {@link QuestScriptManager} session open forever, and from then on every QUEST_ACTION
+     * this character sent returned at {@code qms.containsKey(c)} - no packet, no log, no error.
+     * Eight clicks, eight silences. Only a map change cleared it.
      *
      * <p>Mechanism: the X sends NPC_TALK_MORE with {@code lastMsg=0, action=0}, which
      * {@code NPCMoreTalkHandler} forwards as {@code mode=0, type=0}. 1021.js only disposes on
      * {@code mode == -1} or {@code mode == 0 && type > 0}; here it takes {@code status--}, lands on
-     * -1, matches no branch and returns without disposing. The server cannot tell that
-     * {@code mode == 0} apart from a Prev button, so this is not fixable at the manager - see ticket
-     * 26. A map change or a relog clears it ({@code Character.closePlayerInteractions}).
+     * -1, matches no branch and returns without disposing. mode 0 is the same byte for Prev and for
+     * End chat, so the script cannot tell them apart - but {@code QuestScriptManager} can see that
+     * the invocation pushed no dialogue and did not dispose, and drops the session on that.
+     *
+     * <p>Flip {@code disposeIfStalled} off in {@code QuestScriptManager.start(Client,byte,byte,int)}
+     * and the {@code assertNull} below fails - that is the mutation check for this fix.
      */
     @Test
-    void closingTheFirstDialogueWedgesEveryLaterQuestAction() {
+    void closingTheFirstDialogueDoesNotWedgeLaterQuestActions() {
         Client c = beginnerAtRoger();
 
         handle(c);
@@ -108,14 +112,38 @@ class Quest1021RealLoad {
 
         // The window X: NPCMoreTalkHandler's non-lastMsg-2 branch, action 0.
         QuestScriptManager.getInstance().start(c, (byte) 0, (byte) 0, -1);
-        assertNotNull(QuestScriptManager.getInstance().getQM(c),
-                "1021.js fell off its state machine without disposing - the session is now stuck");
+        assertNull(QuestScriptManager.getInstance().getQM(c),
+                "1021.js fell off its state machine without disposing; the framework safety net must "
+                        + "drop the session or every later QUEST_ACTION from this client is swallowed");
 
+        // The whole point: the character can talk to Roger again immediately, no map change needed.
         handle(c);
-        handle(c);
-        verify(c, never()).sendPacket(any(Packet.class));
+        verify(c, atLeastOnce()).sendPacket(any(Packet.class));
 
         QuestScriptManager.getInstance().dispose(c);   // don't leak the singleton entry
+    }
+
+    /**
+     * The other half of the safety net: a Prev the script genuinely handles must still work. 1021.js
+     * at status 1 is a {@code sendNextPrev}, and mode 0 / type 0 from there walks back to status 0
+     * and pushes {@code sendNext} - identical bytes to the X-close above, opposite correct outcome.
+     * The session must survive.
+     */
+    @Test
+    void prevOnADialogueThatHandlesItKeepsTheSessionAndTalks() {
+        Client c = beginnerAtRoger();
+
+        handle(c);                                                          // status 0: sendNext
+        QuestScriptManager.getInstance().start(c, (byte) 1, (byte) 0, -1);  // status 1: sendNextPrev
+        clearInvocations(c);
+
+        QuestScriptManager.getInstance().start(c, (byte) 0, (byte) 0, -1);  // Prev: back to status 0
+
+        verify(c, atLeastOnce()).sendPacket(any(Packet.class));
+        assertNotNull(QuestScriptManager.getInstance().getQM(c),
+                "the safety net must not dispose a conversation the script kept alive with a dialogue");
+
+        QuestScriptManager.getInstance().dispose(c);
     }
 
     /**

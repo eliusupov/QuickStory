@@ -101,9 +101,14 @@ public class QuestScriptManager extends AbstractScriptManager {
     public void start(Client c, byte mode, byte type, int selection) {
         Invocable iv = scripts.get(c);
         if (iv != null) {
+            QuestActionManager invoked = qms.get(c);
+            if (invoked != null) {
+                invoked.resetDialogueSent();
+            }
             try {
                 c.setClickedNPC();
                 iv.invokeFunction("start", mode, type, selection);
+                disposeIfStalled(invoked, c);
             } catch (final Exception e) {
                 log.error("Error starting quest script: {}", getQM(c).getQuest(), e);
                 dispose(c);
@@ -164,9 +169,14 @@ public class QuestScriptManager extends AbstractScriptManager {
     public void end(Client c, byte mode, byte type, int selection) {
         Invocable iv = scripts.get(c);
         if (iv != null) {
+            QuestActionManager invoked = qms.get(c);
+            if (invoked != null) {
+                invoked.resetDialogueSent();
+            }
             try {
                 c.setClickedNPC();
                 iv.invokeFunction("end", mode, type, selection);
+                disposeIfStalled(invoked, c);
             } catch (final Exception e) {
                 log.error("Error ending quest script: {}", getQM(c).getQuest(), e);
                 dispose(c);
@@ -200,6 +210,28 @@ public class QuestScriptManager extends AbstractScriptManager {
         } catch (final Throwable t) {
             log.error("Error during quest script raiseOpen for quest: {}", questid, t);
             dispose(c);
+        }
+    }
+
+    /**
+     * Safety net for the dialogue-close lockout. Nearly every quest script guards with
+     * {@code mode == -1 || (mode == 0 && type > 0)}, which does not catch the window X (mode 0,
+     * type 0): the script decrements its status, matches no branch of its if/else-if chain and
+     * returns having neither pushed a dialogue nor disposed. The session then sits in {@code qms}
+     * forever, every later QUEST_ACTION dies at the {@code qms.containsKey(c)} check,
+     * {@code NPCTalkHandler} refuses every conversation and quest updates never flush - only a map
+     * change clears it.
+     *
+     * <p>An invocation that advanced no dialogue and did not dispose has fallen off its state
+     * machine whatever {@code mode} meant, which is decidable here and not in the script. A
+     * legitimate Prev pushes a dialogue and is untouched. The identity check keeps this off a
+     * session some other path now owns.
+     */
+    private void disposeIfStalled(QuestActionManager invoked, Client c) {
+        if (invoked != null && qms.get(c) == invoked && !invoked.isDialogueSent()) {
+            log.debug("Quest {} script disposed: invocation pushed no dialogue and did not dispose",
+                    invoked.getQuest());
+            dispose(invoked, c);
         }
     }
 
