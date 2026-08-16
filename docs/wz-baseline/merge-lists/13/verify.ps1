@@ -104,11 +104,20 @@ if (@(Compare-Object $p1.Changed $SPLICED -SyncWindow 0).Count) {
     $fail++; "P1 : FAIL - the changed set is not exactly the two spliced files"
 }
 
-# Untracked additions, so "44 new files" is measured rather than asserted.
-$untracked = @(& git -C $Root status --porcelain --untracked-files=all -- wz/ |
+# The added files, so "44 new files" is measured rather than asserted.
+#
+# Counted as "paths under wz/ that exist NOW and were not in the baseline tree", NOT as "untracked".
+# Those two are the same number only BEFORE the merge is committed; afterwards the 44 are tracked
+# and `git status` reports nothing. The first version of this script used untracked-only and the
+# `-Rev <deliveredSha>~1` recipe printed in the ticket therefore FAILED the moment it was actually
+# run against the delivered commit - found by running it rather than by reading it.
+$baseKeys = (BaselineBlobs $sha).Keys
+$nowTracked = @(& git -C $Root ls-files -- wz/)
+$nowUntracked = @(& git -C $Root status --porcelain --untracked-files=all -- wz/ |
         Where-Object { $_ -match '^\?\? ' } | ForEach-Object { $_.Substring(3).Trim('"') })
+$untracked = @($nowTracked + $nowUntracked | Where-Object { -not $baseKeys.Contains($_) } | Sort-Object -Unique)
 $notXml = @($untracked | Where-Object { $_ -notmatch '\.img\.xml$' })
-"P1 : untracked new files under wz/: $($untracked.Count) (non-.img.xml: $($notXml.Count))"
+"P1 : files under wz/ added since the baseline: $($untracked.Count) (non-.img.xml: $($notXml.Count))"
 if ($notXml.Count) { $fail++; "P1 : FAIL - unexpected untracked non-image files: $($notXml -join ',')" }
 # 44 is hardcoded ON PURPOSE: it is this ticket's manifest total (28 Map + 14 Npc + 2 Mob),
 # written down independently of the tree so that the tree can disagree with it. Deriving it from

@@ -315,3 +315,18 @@ powershell -File docs\wz-baseline\merge-lists\13\fidelity.ps1 -Root <root>
 `verify.ps1` defaults `-Rev` to `HEAD`, which is correct only *before* the merge is committed. After
 the commit, pass `<deliveredSha>~1` — the script prints the baseline it resolved so a self-diff
 cannot hide, and PROOF 2 fails loudly with "0 new ids … the baseline is the merged file itself".
+
+**That recipe was RUN, not just written, and it failed the first time.** PROOF 1 counted the added
+files as *untracked*, which is only the same number before the merge is committed; against
+`831e9d023~1` it reported `0` and exited 1 while every other check passed. It now counts "paths
+under `wz/` that exist now and were not in the baseline tree", which is 44 in both directions.
+Verified against the delivered commit:
+
+```
+baseline: 831e9d023~1 -> 3438720643a87db47bd18b841ea241b1f9310786
+P1 : 22445 baseline files under wz/ re-hashed from disk -> changed 2, missing 0
+P1 : files under wz/ added since the baseline: 44 (non-.img.xml: 0)
+P2 : Map.img/etc : pre-existing 2458 -> changed 0, missing 0; new 18 (expected 18)
+P2 : Npc.img/<root> : pre-existing 7089 -> changed 0, missing 0; new 3 (expected 3)
+RESULT: PASS
+```
