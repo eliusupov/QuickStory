@@ -166,19 +166,26 @@ class V84EvanNodeTest {
     }
 
     /**
-     * {@code Evan.MONSTER_RIDER} is 20011004, and {@code isMonsterRidingSkill} tests
-     * {@code sourceid % 10000000 == 1004}. That arithmetic works for Beginner (1004), Noblesse
-     * (10001004) and Legend (20001004) but gives 11004 for Evan, so the one mount skill that rides
-     * whatever is equipped in slot -18 is not recognised for Evan. Merged by ticket 10, unfixed by
-     * it: no criterion of ticket 10 covers mounts, and the fix is ticket 12's to make with the
-     * rest of the skill work. Pinned so the next reader meets it as a measurement.
+     * FIXED 2026-08-16 — this test used to assert the bug and has been inverted to lock in the fix.
+     * <p>
+     * {@code isMonsterRidingSkill} tested {@code sourceid % 10000000 == 1004}. That arithmetic
+     * works for Beginner (1004), Noblesse (10001004) and Legend (20001004), whose job prefixes are
+     * four digits — but Evan's job block is 2001, so {@code 20011004 % 10000000} is 11004 and the
+     * test failed. The predicate now enumerates the four {@code MONSTER_RIDER} constants.
+     * <p>
+     * Widening to {@code % 10000 == 1004} would also have "worked" and is why the enumeration was
+     * chosen instead: it would match Power Strike (1001004) and every other first-job skill ending
+     * in 1004. The final assertion pins that, so a future simplification back to modulo fails here.
      */
     @Test
-    void evansMonsterRiderIsNotRecognised() {
+    void evansMonsterRiderIsRecognised() {
         assertEquals(20011004, constants.skills.Evan.MONSTER_RIDER);
+        assertTrue(StatEffect.isMonsterRidingSkill(1004), "Beginner MONSTER_RIDER");
+        assertTrue(StatEffect.isMonsterRidingSkill(10001004), "Noblesse MONSTER_RIDER");
         assertTrue(StatEffect.isMonsterRidingSkill(20001004), "Legend MONSTER_RIDER");
-        assertFalse(StatEffect.isMonsterRidingSkill(20011004),
-                "Evan MONSTER_RIDER now recognised — delete this test and its note in ticket 10");
+        assertTrue(StatEffect.isMonsterRidingSkill(20011004), "Evan MONSTER_RIDER");
+        assertFalse(StatEffect.isMonsterRidingSkill(1001004),
+                "Power Strike must not be a mount — the predicate has been widened to % 10000");
     }
 
     /**

@@ -1686,7 +1686,15 @@ public class StatEffect {
     }
 
     static boolean isMonsterRidingSkill(int sourceid) {
-        return sourceid % 10000000 == 1004                                      // MONSTER_RIDER, rides the equip in slot -18
+        // MONSTER_RIDER, rides the equip in slot -18. This was `sourceid % 10000000 == 1004`,
+        // which silently excluded Evan: every other class's id has a 4-digit job prefix
+        // (1004, 10001004, 20001004) so the remainder is 1004, but Evan's job block is 2001, so
+        // 20011004 % 10000000 == 11004 and the test failed. Enumerating the four constants is
+        // safer than widening to `% 10000`, which would also match Power Strike (1001004).
+        return sourceid == Beginner.MONSTER_RIDER
+                || sourceid == Noblesse.MONSTER_RIDER
+                || sourceid == Legend.MONSTER_RIDER
+                || sourceid == Evan.MONSTER_RIDER
                 || sourceid == Corsair.BATTLE_SHIP
                 || sourceid == Beginner.SPACESHIP || sourceid == Noblesse.SPACESHIP
                 || SKILL_MOUNTS.containsKey(sourceid);

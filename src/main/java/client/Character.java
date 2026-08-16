@@ -6156,7 +6156,10 @@ public class Character extends AbstractCharacterObject {
     }
 
     public boolean isBeginnerJob() {
-        return (job.getId() == 0 || job.getId() == 1000 || job.getId() == 2000);
+        // 2001 is Evan's beginner job, the counterpart of 2000 (Aran's). Omitting it made every
+        // Evan beginner miss the beginner branch in levelUp() - so they gained 0 HP/MP per level -
+        // as well as the novice exp rate and starter-AP auto-assign.
+        return (job.getId() == 0 || job.getId() == 1000 || job.getId() == 2000 || job.getId() == 2001);
     }
 
     public boolean isGM() {
@@ -6359,6 +6362,12 @@ public class Character extends AbstractCharacterObject {
             addhp += Randomizer.rand(88, 96);
             int aids = Randomizer.rand(4, 8);
             addmp += aids + Math.floor(aids * 0.1);
+        } else if (job.isA(Job.EVAN1)) {
+            // Evan (2200-2218) is a magician-type class, so it follows the Magician curve. Without
+            // this branch Evan matched no case above and gained 0 HP/MP per level. Evan's beginner
+            // job 2001 is handled by isBeginnerJob() above.
+            addhp += Randomizer.rand(20, 28);
+            addmp += Randomizer.rand(22, 24);
         }
         if (improvingMaxHPLevel > 0 && (job.isA(Job.WARRIOR) || job.isA(Job.PIRATE) || job.isA(Job.DAWNWARRIOR1) || job.isA(Job.THUNDERBREAKER1))) {
             addhp += improvingMaxHP.getEffect(improvingMaxHPLevel).getX();
