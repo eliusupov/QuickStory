@@ -55,6 +55,7 @@ import constants.id.ItemId;
 import constants.id.MapId;
 import constants.id.NpcId;
 import constants.inventory.ItemConstants;
+import constants.net.ServerConstants;
 import constants.skills.Buccaneer;
 import constants.skills.ChiefBandit;
 import constants.skills.Corsair;
@@ -734,6 +735,17 @@ public class PacketCreator {
 
         p.writeByte(YamlConfig.config.server.ENABLE_PIN && !c.canBypassPin() ? 0 : 1); // 0 = Pin-System Enabled, 1 = Disabled
         p.writeByte(YamlConfig.config.server.ENABLE_PIC && !c.canBypassPic() ? (c.getPic() == null || c.getPic().equals("") ? 0 : 1) : 2); // 0 = Register PIC, 1 = Ask for PIC, 2 = Disabled
+
+        if (ServerConstants.VERSION >= 84) {
+            // v84's CLogin::OnCheckPasswordResult (@0x60d368) reads an 8-byte tail after the PIN/PIC
+            // bytes that v83's does not - a login session key. Without it the v84 client over-reads the
+            // end of LOGIN_STATUS; the crash it then takes at the world list is the reported symptom.
+            // Width 8 is from Edelstein v95 and Rebirth95 agreeing (the IDA trace records the read but
+            // not its size). Rebirth sends a constant 0 and works, and we never read the value back.
+            // Surplus trailing bytes are ignored by the client, so 0-padding here fails safe.
+            // Measured: ticket 22.
+            p.writeLong(0);
+        }
 
         return p;
     }

@@ -63,6 +63,14 @@ Landmarks, cross-checked against Cosmic's real values:
 > (clientbound `0x00–0x3E`, serverbound `0x01–0x75`), which is what makes the incremental bring-up in
 > §2 possible: you can reach character select before touching a single field opcode.
 
+> ⚠ **CORRECTION (ticket 22, measured).** "The login band is byte-identical" is true of the *opcode
+> values* and was read here as if it were also true of the *packet bodies*. It is not.
+> `LOGIN_STATUS (0x00)` gained an 8-byte tail between v83 and v84 — v84's
+> `CLogin::OnCheckPasswordResult` decodes it, v83's does not — and omitting it is what killed the v84
+> client at the world list. The related standing belief that "packet structure only breaks at v86" is
+> **wrong**: structure breaks at v84, in the login flow, on the very first packet after the handshake.
+> Ticket 22 has the measured layouts for the whole login flow; the rest of them do check out.
+
 > **The honest correction to the premise:** *"one version away, so the protocol drift is minimal"* is
 > only half right. **64% of opcodes move.** The count is large; the *work* is small, because a
 > staircase is mechanical and the table is published. But nobody should start this expecting a
