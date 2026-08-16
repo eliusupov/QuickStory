@@ -171,18 +171,24 @@ public class PacketCreator {
      * a character's SP ({@code addCharStats} and the stat-delta path) must agree, or the client
      * desyncs mid-game rather than at login.
      *
-     * <p>v84 only: Evan Beginner (job 2001) takes the plain short. It has zero growth stages — both
-     * LucianMS's {@code encodeEvanSkillPoints} and Rebirth95's {@code GetExtendedSPIndexByJob} compute
-     * a slot count of 0 for it — and it is the one job-conditional branch in the whole SET_FIELD
-     * encode path, which is the only structural difference between the Evan that crashes on entering
-     * the world and the explorer that does not. See docs/work-plan/tickets/24-v84-field-packet.md;
-     * this is a deduction, not a measurement, because GW_CharacterStat::Decode is absent from the
-     * v84 IDA export. VERSION 83 keeps the byte-exact old behaviour.
+     * <p><b>MEASURED AGAINST THE LIVE v84 CLIENT, 2026-08-16 19:28 — job 2001 DOES use the extended
+     * table.</b> Ticket 24 deduced the opposite and made 2001 write a plain short; the v84 client then
+     * crashed on <i>character select</i>, one step EARLIER than the entry crash it was meant to fix,
+     * because {@code CHARLIST} serialises every character through this same block. Reverting the
+     * special case restored character select immediately. That is a real measurement of the client's
+     * discriminator, which the IDA export could not supply ({@code GW_CharacterStat::Decode} is absent
+     * from it and the client is packed ~2.8:1, so static analysis was blind here).
+     *
+     * <p>So this predicate now simply follows {@link GameConstants#hasSPTable}, and Cosmic's original
+     * membership ({@code job == 2001 || job / 100 == 22}) is correct for v84. It is kept as a separate
+     * packet-layer function anyway: {@code hasSPTable} also drives SP granting and dragon creation, and
+     * the two encode sites here ({@code addCharStats} and the stat-delta path) must always agree with
+     * each other or the client desyncs mid-game rather than at login.
+     *
+     * <p><b>Therefore the Evan entry crash has a different cause, still unfound.</b> Do not re-try this
+     * branch — it is now excluded by experiment, not by argument.
      */
     private static boolean writesExtendedSp(Character chr) {
-        if (ServerConstants.VERSION >= 84 && chr.getJob().getId() == 2001) {
-            return false;
-        }
         return GameConstants.hasSPTable(chr.getJob());
     }
 
