@@ -41,6 +41,7 @@ import database.note.NoteDao;
 import net.ChannelDependencies;
 import net.PacketProcessor;
 import net.netty.LoginServer;
+import net.opcodes.OpcodeTable;
 import net.packet.Packet;
 import net.server.channel.Channel;
 import net.server.coordinator.session.IpAddresses;
@@ -861,6 +862,8 @@ public class Server {
     public void init() {
         Instant beforeInit = Instant.now();
         log.info("Cosmic v{} starting up.", ServerConstants.VERSION);
+
+        OpcodeTable.verify();   // load the opcode tables now, so a bad one fails here rather than mid-packet
 
         if (YamlConfig.config.server.SHUTDOWNHOOK) {
             Runtime.getRuntime().addShutdownHook(new Thread(shutdown(false)));
