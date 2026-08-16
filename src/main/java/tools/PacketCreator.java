@@ -1863,6 +1863,7 @@ public class PacketCreator {
             addExpirationTime(p, drop.getItem().getExpiration());
         }
         p.writeBool(!drop.isPlayerDrop());
+        writeV84DropSpawnExtra(p);
         return p;
     }
 
@@ -1891,7 +1892,39 @@ public class PacketCreator {
             addExpirationTime(p, drop.getItem().getExpiration());
         }
         p.writeByte(drop.isPlayerDrop() ? 0 : 1); //pet EQP pickup
+        writeV84DropSpawnExtra(p);
         return p;
+    }
+
+    /**
+     * v84 {@code CDropPool::OnDropEnterField} ends with TWO unconditional {@code Decode1} where v83
+     * ends with one, so every DROP_ITEM_FROM_MAPOBJECT we send is exactly one byte short at v84 and
+     * the client throws {@code ZException (error code : 38 (Reached the end of the file.))}.
+     *
+     * <p>Proven from the live v84 process image (12 MB of decompressed {@code .text}, ticket 30),
+     * not from an IDA export:
+     * <pre>
+     * v83 localhome.exe  0x506385  call 0x4065F3 (Decode1) -> [esi+0x88]; next insn builds the
+     *                              CDropPool call. ONE trailing byte.
+     * v84 @0x50F20C      call 0x4066C9 (Decode1) -> [esi+0x88]
+     * v84 @0x50F21D      call 0x4066C9 (Decode1)   <- NEW, straight-line, no branch between;
+     *                              if non-zero it fires a drop effect via vtable+0xB4 (0xC0041F15).
+     * </pre>
+     * {@code CInPacket::Decode1} at v84 0x4066C9 stores {@code 0x26} (=38) as the ZException code on
+     * under-run, which is the exact code in the client's own CLIENT_START_ERROR upload.
+     *
+     * <p>Ticket 32 §5 dismissed this as a coarse-export artifact ("cannot appear at 84, vanish at 87,
+     * reappear at 92, vanish at 95"). The coarse exports (v84, v92) were right and the hand-annotated
+     * ones (v83/v87/v95) simply stop at the documented last field. atlas's
+     * {@code drop/clientbound/spawn.go} has no version gate and is one byte short at v84 too.
+     *
+     * <p>ponytail: written as 0 (no effect). The byte only selects a spawn effect/sound.
+     */
+    private static void writeV84DropSpawnExtra(OutPacket p) {
+        if (ServerConstants.VERSION < 84) {
+            return;
+        }
+        p.writeByte(0);
     }
 
     private static void writeForeignBuffs(OutPacket p, Character chr) {

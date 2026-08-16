@@ -324,3 +324,159 @@ In order, cheapest first:
    log at all.
 4. Only then reach for a hex capture: run a private server on other ports with
    `USE_DEBUG_SHOW_PACKET: true` and replay.
+
+---
+
+# Round 2 — the crash was `DROP_ITEM_FROM_MAPOBJECT`, one byte short
+
+**Status:** fixed. Suite 2125 passed / 0 failed (2123 baseline + 2 new). Running server untouched.
+`ServerConstants.VERSION` still 84. v83 path byte-exact by construction.
+
+## §8 step 1 answered: `Distance Sq to monster` is absent
+
+`tools/v84/cutover-server.log` contains no `Distance Sq` line and **no clientbound `MOVE_MONSTER` at
+all**. §3c never fired. The `writeV84MobMoveExtras` fix (`0f9cee0b1`) is correct but was inert, exactly
+as §8 step 1 predicted for the "absent" branch.
+
+## §8 step 2 answered, and it points at a decoder, not at content
+
+The client's `CLIENT_START_ERROR` upload (log line 16) carries five
+`ver(84) … ZException (error code : 38 (Reached the end of the file.))`, two of them with
+`CharacterName(uguuh), FieldID(40000)`.
+
+That 38 is not a guess about what "38" means. Disassembling the live v84 image:
+
+```
+CInPacket::Decode1  v84 0x4066C9
+  004066DC  cmp esi, 1                 ; bytes remaining >= 1 ?
+  004066E0  jae 0x4066F7
+  004066EB  mov dword ptr [ebp-4], 0x26  ; 0x26 == 38
+  004066F2  call 0xAACD37                ; throw ZException
+```
+Same shape in `Decode2` @0x425200 and `Decode4` @0x4066FF. **Error code 38 IS the packet under-read
+throw.** The client's log line names its own failing primitive.
+
+## The instrument upgrade: stop reading exports, read the binary
+
+`docs/work-plan/tools/memdump/` (ticket 30) leaves a 12,337,152-byte image of the live v84 process at
+base `0x400000`, so **file offset == VA − 0x400000** and every atlas v84 address is directly
+disassemblable. `D:\games\MapleStory\localhome.exe` is a v83 image with the same property. capstone is
+already installed. That retires the whole coarse-vs-annotated argument: both versions can just be read.
+
+Decode primitives: v84 `Decode1 0x4066C9`, `Decode2 0x425200`, `Decode4 0x4066FF`;
+v83 `Decode1 0x4065F3`, `Decode2 0x42470C`, `Decode4 0x406629`.
+
+## The bug
+
+`CDropPool::OnDropEnterField` ends with **two** unconditional `Decode1` at v84 and **one** at v83.
+
+```
+v83 localhome.exe 0x505900                    v84 image 0x50E789
+  00506359 cmp [eax+0x30], ebx  ; isMoney?      0050F1DF cmp [eax+0x30], ebx
+  0050635C push 8                               0050F1E3 push 8
+  00506369 call 0x432257        ; DecodeBuffer  0050F1F0 call 0x432EBE   ; DecodeBuffer 8
+  00506385 call 0x4065F3        ; Decode1       0050F20C call 0x4066C9   ; Decode1 -> [esi+0x88]
+  0050638F mov [esi+0x88], eax                  0050F21D call 0x4066C9   ; Decode1  <-- NEW
+  0050638D push ecx / push ecx  ; -> next call  0050F225 cmp eax, ebx
+  005063A0 call 0x5088FA                        0050F227 je 0x50F25E     ; 0 -> skip
+                                                0050F242 push 0xC0041F15 ; else fire drop effect
+                                                0050F248 call [eax+0xB4]
+```
+
+Straight-line, no branch between the two calls. Byte accounting for the captured packet
+(`enterType=1`, `isMoney=0`, `dropType=2`):
+
+```
+1 enterType + 4 dropId + 1 isMoney + 4 itemId + 4 owner + 1 dropType + 2 x + 2 y + 4 dropperId
++ 2 srcX + 2 srcY + 2 delay          (enterType in {0,1,3})
++ 8 cashItemSN                       (!isMoney)
++ 1 questId/pre-pet
+= 38  <- exactly what Cosmic sends, and exactly what v83 consumes
++ 1                                   <- v84 only
+= 39
+```
+
+Capture, `22:44:52.927`, 40 bytes on the wire = 2 opcode + 38 body:
+```
+13 01 | 01 07CA9A3B 00 3A853D00 31000000 02 FD009B00 03CA9A3B FD009900 4701
+       00 80 05 BB 46 E6 17 02 | 01
+```
+Every field parses to Cosmic's writer exactly (expiration `00 80 05 BB 46 E6 17 02` is
+`PacketCreator.DEFAULT_TIME`). Nothing malformed — just one byte too few.
+
+**This fires on every drop**, which is why the kill batch at `22:44:50` (map reaper, `KILL_MONSTER`
+with no drops) survived and the kill at `22:44:52` did not.
+
+## Where §5 went wrong
+
+§5 recorded this exact packet as a near-miss and dismissed it: *"v84 and v92 carry an extra trailing
+`Decode1`; v83, v87 and v95 do not. A field cannot appear at 84, vanish at 87, reappear at 92 and
+vanish again at 95. **Artifact**."*
+
+The parity argument was applied to the wrong side. **The coarse exports (v84, v92) were right.** They
+are mechanical, so they see both call sites; the annotated exports (v83, v87, v95) are hand-written and
+stop at the last *documented* field. v83's binary independently proves v83 has one — so the v83 column
+is right for the right reason and v87/v95 are simply unverified, not evidence. The general lesson:
+**a coarse export showing MORE than an annotated one is not automatically an artifact; a coarse export
+is a superset of call sites, and the annotated ones are a subset of fields.** Only the binary settles it.
+
+## The fix
+
+`tools/PacketCreator.java` — `writeV84DropSpawnExtra(OutPacket)`, appended to both writers of
+`DROP_ITEM_FROM_MAPOBJECT` (the only two in the tree):
+
+```java
+if (ServerConstants.VERSION < 84) return;
+p.writeByte(0);
+```
+
+- `dropItemFromMapObject` (`PacketCreator.java:1893`) — mob and player drops.
+- `updateMapItemObject` (`PacketCreator.java:1865`) — ownership change, same client function, same
+  missing byte, 32 → 33 bytes.
+
+**ponytail:** written as 0. The byte only gates a drop spawn effect (`vtable+0xB4`, `0xC0041F15`);
+0 means "no effect", which is what v83 renders today.
+
+**Check:** `src/test/java/tools/DropSpawnPacketTest.java` pins the `dropItemFromMapObject` body
+byte-for-byte and the `updateMapItemObject` length, both branched on `VERSION >= 84`.
+
+atlas is short here too: `drop/clientbound/spawn.go:78` writes `WriteBool(!characterDrop)` with **no
+version gate at any version**, so atlas's v84 build has the same bug. Its `audits/gms_v84/` entry for
+this packet is ❌ `Flat-diff-invalid`, consistent with the gap.
+
+## Re-verified against the v84 binary, not against exports — all clean
+
+Every other clientbound packet in the capture window, re-measured by disassembly:
+
+| packet | v84 fn | reads | Cosmic sends | verdict |
+|---|---|---|---|---|
+| `SHOW_MONSTER_HP` | `CMob::OnHPIndicator` 0x68393B | 4 (pool oid) + 1 | 5 | clean |
+| `STAT_CHANGED` | `CWvsContext::OnStatChanged` 0xA6AE08 | 1 + mask + fields; trailing `Decode1` @0xA6AE9F is gated `test eax, 0x180008` (PET) | mask 0x10000 (EXP) → gate not taken, 9 | clean |
+| `SHOW_STATUS_INFO` exp | `#IncreaseExperience` 0xA6CFD7 | 15 in-fn + 1 dispatcher mode; 3 conditionals not taken | 34 | clean |
+| `SPAWN_MONSTER_CONTROL` (release) | `CMobPool::OnMobChangeController` 0x69030D | 1 + 4, early RET @0x690351 when mode 0 | 5 | clean |
+| `KILL_MONSTER` | `CMobPool::OnMobLeaveField` 0x6901B3 | 4 + 1 | 6 (animation byte written twice) | over-read by 1, harmless, unchanged |
+| `MOVE_MONSTER_RESPONSE` | `CMob::OnCtrlAck` | 4+2+1+2+1+1 | 11 | clean |
+
+So the drop packet is the **only** under-read in the window, and the only one that can produce
+error 38.
+
+## Residual uncertainty, stated
+
+The drop packet leaves the server at `22:44:52.927`; the client still writes its periodic
+`PARTY_SEARCH_UPDATE` at `53.531` and the socket resets at `53.541` — ~600 ms later. The under-read
+itself is instantaneous, so those 600 ms are the client's ZException teardown (it has to serialise the
+crash text it later uploads). That is an assumption about *when* the process dies, not about *what*
+threw: the byte count is arithmetic against the disassembly, and no other packet in the window
+under-reads at all.
+
+**Failure direction.** `DROP_ITEM_FROM_MAPOBJECT` is not on the login, character-select or field-entry
+path. If this reading were wrong, the worst case is one extra trailing byte the client ignores — it
+cannot move a crash earlier.
+
+## Carried forward, unchanged
+
+§6.1 (`SHOW_STATUS_INFO` mode enum +1 from index 4 — EXP is mode 3 and unaffected, confirmed again from
+the capture's `03` mode byte), §6.2 (ten `sendops-84` disagreements, `SERVERMESSAGE` first),
+§7 (`CTradingRoomDlg::PutItem`, the `SPAWN_MONSTER` mob-record blind spot). Recv `0xE5` is now
+identified as benign: the client emits it periodically (`22:44:50.228` and `22:44:53.531`), it is not a
+death rattle.
