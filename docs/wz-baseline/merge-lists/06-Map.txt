@@ -1,0 +1,59 @@
+# Ticket 06 — Crimson Sky, Map.wz manifest.
+#
+# ORDER IS LOAD-BEARING (WZ-MERGE-PROCEDURE.md 5.3). Scenery sets first, maps second.
+# Every row below the "--- maps ---" rule references at least one row above it by set name.
+#
+# Dependency evidence: `WzMerge deps <v84>\Map.wz Map/Map2/<id>.img` for all 22 images,
+# verbatim output in D:\games\MapleStory\Server\wz-merge\06\<id>.deps.txt.
+#
+# `deps` reports whole SETS. Three of the eleven distinct sets it named are missing from the
+# live client at the granularity the maps actually use:
+#   Obj/dungeon3.img/skyValley  - whole sub-node, absent from v83 (the case R2-B4 predicted)
+#   Tile/blackTileFly.img       - whole image, absent from v83
+#   Back/dragonRoad.img         - PRESENT, but v84 appended back/42-46 and ani/20-24 and the
+#                                 Crimson Sky maps reference exactly those indices. `deps` says
+#                                 SKIP here; SKIP would have shipped five maps with no sky.
+# The other eight (Back/woodCave, Back/dragonValley, Obj/connect/rope, Obj/dungeon3/dragonValley,
+# Obj/guide/miniD, Obj/Tdungeon/mushCatle, Tile/allblackTile, Tile/woodCave) already exist in the
+# live client and are absent from add-list/Map.txt, so nothing is owed for them.
+#
+# Back/dragonRoad.img is NOT in modified-list/Map.live.txt, i.e. the live copy is stock v83, so
+# appending indices 42-46 / 20-24 cannot collide with Ezorsia content.
+
+# --- scenery sets (must be written before any map) ---
+Map.wz/Tile/blackTileFly.img
+Map.wz/Obj/dungeon3.img/skyValley
+Map.wz/Back/dragonRoad.img/ani/20
+Map.wz/Back/dragonRoad.img/ani/21
+Map.wz/Back/dragonRoad.img/ani/22
+Map.wz/Back/dragonRoad.img/ani/23
+Map.wz/Back/dragonRoad.img/ani/24
+Map.wz/Back/dragonRoad.img/back/42
+Map.wz/Back/dragonRoad.img/back/43
+Map.wz/Back/dragonRoad.img/back/44
+Map.wz/Back/dragonRoad.img/back/45
+Map.wz/Back/dragonRoad.img/back/46
+
+# --- maps (ascending: every `link` target precedes its linker) ---
+Map.wz/Map/Map2/240080000.img
+Map.wz/Map/Map2/240080040.img
+Map.wz/Map/Map2/240080041.img
+Map.wz/Map/Map2/240080050.img
+Map.wz/Map/Map2/240080051.img
+Map.wz/Map/Map2/240080100.img
+Map.wz/Map/Map2/240080101.img
+Map.wz/Map/Map2/240080200.img
+Map.wz/Map/Map2/240080201.img
+Map.wz/Map/Map2/240080300.img
+Map.wz/Map/Map2/240080301.img
+Map.wz/Map/Map2/240080400.img
+Map.wz/Map/Map2/240080401.img
+Map.wz/Map/Map2/240080500.img
+Map.wz/Map/Map2/240080501.img
+Map.wz/Map/Map2/240080600.img
+Map.wz/Map/Map2/240080601.img
+Map.wz/Map/Map2/240080700.img
+Map.wz/Map/Map2/240080701.img
+Map.wz/Map/Map2/240080800.img
+Map.wz/Map/Map2/240080801.img
+Map.wz/Map/Map6/683010000.img

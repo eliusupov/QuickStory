@@ -1,0 +1,58 @@
+# Ticket 06 — Crimson Sky, String.wz manifest.
+#
+# *** CONTENDED FILE. Tickets 04 and 05 also write String.wz, and ticket 03's staged
+# *** String.wz (wz-merge\post\String.wz, tracer 2001500) is likewise not yet installed.
+# *** THIS PATHS FILE, NOT wz-merge\06\String.wz, IS THE DELIVERABLE. Whoever consolidates
+# *** must chain 03/04/05/06 into ONE String.wz from a single `pre` copy; installing two
+# *** independently-merged String.wz files loses whichever is copied first.
+# *** All rows below come from add-list/String.txt and collide zero times (02g: "Map.img:
+# *** 125 new map names, 0 collisions"). Verified again by the 06 dry run.
+#
+# COLLISION-DENY.txt intersection: NONE. The 17 denied MonsterBook `reward` parents are
+# 3100101/3110301/3210203/3210206/3210207/4230125/4230400/4230503/4230504/4250001/5110300/
+# 5120501/6130202/7130102/8140100/8140701/8810018 — none of them is a 06 mob, and 06 adds no
+# MonsterBook rows at all.
+
+# --- map names (fixes the "no blank labels" criterion) ---
+String.wz/Map.img/ossyria/240080000
+String.wz/Map.img/ossyria/240080040
+String.wz/Map.img/ossyria/240080041
+String.wz/Map.img/ossyria/240080050
+String.wz/Map.img/ossyria/240080051
+String.wz/Map.img/ossyria/240080100
+String.wz/Map.img/ossyria/240080200
+String.wz/Map.img/ossyria/240080300
+String.wz/Map.img/ossyria/240080400
+String.wz/Map.img/ossyria/240080500
+String.wz/Map.img/ossyria/240080600
+String.wz/Map.img/ossyria/240080700
+String.wz/Map.img/ossyria/240080800
+String.wz/Map.img/event/683010000
+
+# --- mob names ---
+String.wz/Mob.img/8300000
+String.wz/Mob.img/8300001
+String.wz/Mob.img/8300002
+String.wz/Mob.img/8300003
+String.wz/Mob.img/8300004
+String.wz/Mob.img/8300005
+String.wz/Mob.img/8300006
+String.wz/Mob.img/8300007
+String.wz/Mob.img/9500374
+String.wz/Mob.img/9500375
+String.wz/Mob.img/9500376
+String.wz/Mob.img/9500377
+String.wz/Mob.img/9500378
+String.wz/Mob.img/9500379
+String.wz/Mob.img/9500380
+String.wz/Mob.img/9500381
+String.wz/Mob.img/9500382
+
+# --- npc names ---
+# 9201144 (Shadow Knight Rene) is deliberately absent: the live client already names it, so it
+# is not on add-list/String.txt and merging it would be a refused collision, not an addition.
+String.wz/Npc.img/2085000
+String.wz/Npc.img/2085001
+String.wz/Npc.img/2085002
+String.wz/Npc.img/2085003
+String.wz/Npc.img/9201145

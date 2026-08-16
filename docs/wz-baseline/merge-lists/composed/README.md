@@ -1,17 +1,26 @@
 # The composed install — one merge per `.wz`, all content tickets at once
 
 Built by **ticket 03f**; ticket **08** folded in and re-run end to end by **03g**, ticket **09** by
-**03h**, and re-run again by **03i** with the corrected positional-array gate (two more rows refused
-— see the 03i section at the bottom, which is the current state).
+**03h**, re-run again by **03i** with the corrected positional-array gate, and ticket **10** folded
+in by itself.
+
+> **Read the LAST section first — this file is append-per-ticket and the top is the oldest part.**
+> Current state: **1,750 rows across THIRTEEN files**, staged at `D:\games\MapleStory\Server\wz-merge\10c\`.
+> `Etc.wz` and `UI.wz` joined at ticket 10, so the "eleven files" and "1,662 rows" written
+> throughout the earlier sections are superseded; the per-file counts in the table below are 03h's
+> and are superseded for `Skill` (27 → 39) and `String` (510 → 580).
 Tickets 04, 05, 06, 07, 08 and 09 each staged their own `.wz` **from the same pristine v83 base**, so
 their outputs do not compose: installing two of them loses one set (05's ticket says so at its
 "Human steps → Step 0", 06's at its step 1). The fix is to merge **once per file from the ticket
 path lists**, which is what this directory is.
 
-`compose.ps1` regenerates every `*.paths.txt` here from `..\{04,05,06,07,03f,08,09}\`. Those are the
-source of truth; no `*.paths.txt` here is hand-edited. **`FORCE.txt` and this README are
+`compose.ps1` regenerates every `*.paths.txt` here from `..\{04,05,06,07,03f,08,09,10}\`. Those are
+the source of truth; no `*.paths.txt` here is hand-edited. **`FORCE.txt` and this README are
 hand-maintained** — `compose.ps1` does not touch either, so if you add a ticket, update `FORCE.txt`
-yourself.
+yourself. Since ticket 10 `compose.ps1` also **asserts that every row it emits starts with
+`<Name>.wz/`** and throws naming the offender: a backtick used as a quote mark inside one of its
+`$perFile` comment strings is a PowerShell newline escape, and that shipped half a comment as a
+manifest row without anything downstream looking wrong.
 
 ## What it is
 
@@ -303,3 +312,76 @@ the live client. Nothing else in the composition depends on them. The other 35 f
 **These outputs supersede 03g's and 03h's.** Re-run this composition whenever a ticket is folded in
 — add it to `compose.ps1`'s `$files`, bump the `$expect` total in the same commit, and run §5 again.
 The run is cheap (minutes) and the point of it is that it is repeatable.
+
+## Ticket 10 folded in — 13 files now, and `Etc.wz` / `UI.wz` join the composition
+
+Staging `D:\games\MapleStory\Server\wz-merge\10c\`, deny-list **188 roots** (unchanged), force list
+**41 roots** (unchanged — 10 forces nothing). **1,750 rows**, up from 1,662: `Skill` +12,
+`String` +70, `Etc` +4 (new file), `UI` +2 (new file).
+
+| file | exit | added | forced | refused |
+|---|---:|---:|---:|---:|
+| `Etc` `UI` `Morph` `Reactor` `Npc` `Sound` `Quest` `Mob` `Map` | 0 | 4 / 2 / 25 / 3 / 15 / 24 / 252 / 28 / 133 | 0 | 0 |
+| **`Skill`** | **0** | **39** | 0 | **0** |
+| `String` | 3 | 571 | 41 | 9 |
+| `Item` | 3 | 389 | 0 | 2 |
+| `Character` | 3 | 240 | 0 | 14 |
+
+**`UI.wz` is 2 rows, not 4, and the two it lost are the interesting part.** Ticket 10 first took
+`UIWindow.img/Equip/{DragonEquip,BtDragonEquip}` as well, reasoning that criterion 4 says "has a
+working dragon" and a dragon equip cannot be equipped without them. Review read the criterion back:
+it is *"Dragon spawns, follows, and moves; other players see it"* — nothing about equipping. They
+are neither `SkillEx` nor `SkillMacroEx`, so §11's single exception does not license them, and *"no
+other ticket has claimed it"* is not a reason to widen a scope rule. **Handed to ticket 14**, which
+owns the dragon's appearance and growth stages; both are pure additions to an existing named
+container and will merge clean whenever 14 wants them. The list is now exactly §11's exception.
+
+**Nine of the eleven pre-existing outputs are byte-identical to 03i's** — `Character`, `Item`,
+`Map`, `Mob`, `Morph`, `Npc`, `Quest`, `Reactor`, `Sound`, every SHA-256 in 03i's table reproducing
+exactly, `Quest.wz` still `5F37E5F5…` / 6,083,413 B. Only the two files ticket 10 adds rows to
+differ, which is the whole claim about composition being deterministic, measured rather than
+asserted:
+
+```
+Skill   C2C6CC778BF84D44A9E6317B8DCD79ABA68525E45F07AF8DB64F0CE23C641062   117,744,215
+String  B8DF4BF4D6C761F99DF79DD357F43FA8FA836CF40D85E9C583E2192D545AC61F     3,655,179
+Etc     10F19943398838E821B43890074EC1F0BEADBF41CEDC1EE3C8940576EC65C89A     1,803,928
+UI      E312D8E60A9D739FCF61DAD9F07BEF0A12199D0196EEA9E244DDFC3A4159E28B    28,715,550
+```
+
+The `Etc` and `UI` hashes are also **byte-identical to ticket 10's own standalone `wz-merge\10\`
+output** — same pristine base, same rows, and the merge is deterministic, so those two files
+compose trivially. `Skill` and `String` do not, because 05's and 04–08's rows are in the composed
+ones and not in `10\`. That asymmetry is exactly why the install target is `10c\` and not `10\`.
+
+`Skill.wz` grows 41 MB, almost all of it `Skill.wz/Dragon` — ten images of dragon animation, the
+only whole-`WzDirectory` row in the composition.
+
+Gate re-fire on the composition's own output: `Etc added 0, refused 4` · `UI added 0, refused 2` ·
+`Skill added 0, refused 39`, **exit 5** on all three. `String` is exit 3 with `added 41 (forced 41),
+refused 539` — a force root is *meant* to be re-written on every run, so 41-of-580 re-applying is
+the correct re-fire result for a list that carries `--force`, not a gate failure.
+
+### `WzMerge xml` refuses `Skill.wz/Dragon`, and that is the right answer
+
+`Skill.wz` is the first composed file whose list is **not** identical on the two sides. The binary
+run takes all 39 rows; the XML run takes 38 and refuses `Skill.wz/Dragon` with *a directory row has
+no `.img` segment and cannot map to an XML file*, **exit 3**. `wz\Skill.wz\` is 76 flat
+`<id>.img.xml` files with no subdirectory, and the server resolves skills only as
+`Skill.wz/<jobid>.img/skill/<id>`, so the dragon animation directory has no server-side consumer at
+all. An install script must not read that exit 3 as a failure any more than it reads
+`Character`'s or `String`'s.
+
+### A `compose.ps1` defect this fold-in created and then closed
+
+The first run of the fold-in shipped a **manifest row that was a fragment of a comment**. A
+backtick used as a quote mark inside one of `$perFile`'s double-quoted strings — `` `no `` — is a
+PowerShell newline escape, so the comment block split in two and its second half was emitted as a
+row. Everything downstream stayed plausible: the composed list looked fine, and `WzMerge` reported
+it as one more refusal (`row is rooted at <prose>, not Skill.wz`) inside an exit 3 that the table
+above already expects on other files.
+
+`compose.ps1` now asserts that **every emitted row starts with `<Name>.wz/`** and throws naming the
+offender. Proven both ways — a deliberately leaked line fails the run, and with it removed the
+totals return to 1,750 and `Skill.wz` re-merges **byte-identical** to the run that had the stray
+row, confirming the row had cost nothing but the exit code.

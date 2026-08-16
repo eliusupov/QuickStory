@@ -1,0 +1,8 @@
+# Ticket 06 — Crimson Sky, Reactor.wz manifest.
+#
+# Exactly one reactor is referenced by the 22 maps: 240080800.img/reactor/0 names id 2408005
+# ("heal", reactorTime -1). It is one of 02d's six genuinely-new v84 reactors and is absent
+# from the live client. The other five new reactors belong to other tickets' areas.
+# No other Crimson Sky map has a non-empty `reactor` node.
+
+Reactor.wz/2408005.img

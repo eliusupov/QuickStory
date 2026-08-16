@@ -1,17 +1,18 @@
-# COMPOSED INSTALL LIST - Character.wz. Built by 03f; 08 folded in by 03g, 09 by 03h,
-# from the committed per-ticket lists under ..\{04,05,06,07,03f,08,09}\ - those are the
-# source of truth, this file is a concatenation of them in ticket order with each
-# block's internal order preserved. Every row is unique across the whole composed set
-# and no row is an ancestor of another (checked, all eleven files). Regenerate, never edit.
+# COMPOSED INSTALL LIST - Character.wz. Built by 03f; 08 folded in by 03g, 09 by 03h, 10 by 10.
+# Source of truth is the committed per-ticket lists under ..\{04,05,06,07,03f,08,09,10}\;
+# this file is a concatenation of them in ticket order with each block's internal order
+# preserved. Every row is unique across the whole composed set and no row is an ancestor
+# of another (checked: 1,750 rows across all THIRTEEN files). Regenerate, never edit.
 #
 # 254 rows. 04's 246 cosmetics + 05's 8 mount sprites. Provably disjoint. --force is NOT
 # used on this file: every root in composed\FORCE.txt is a String.wz path. Expect 6 refusals
 # (see README).
 #
-# Ticket 09 is folded in (03h): it owns Quest.wz outright and touches no other file, so
-# every list except Quest.paths.txt is byte-identical to 03g's. FORCE.txt stays at 41
-# roots, all String.wz - 09 forces nothing. Ticket 13 (Evan, the 540 22xxx rows) is next;
-# add "13" to the Quest entry of compose.ps1's $files table and re-run.
+# Ticket 10 is folded in (the Evan tracer): +12 Skill, +70 String, +4 Etc, +2 UI = 88 rows,
+# bringing Etc.wz and UI.wz into the composition for the first time. It forces nothing, so
+# FORCE.txt stays at 41 roots, all String.wz. The other nine lists are unchanged in content.
+# Ticket 13 (Evan's world, the 540 22xxx Quest rows and the 29 Evan map images) is next;
+# add "13" to the Quest and Map entries of compose.ps1's $files table and re-run.
 #
 # Run book: ..\..\..\work-plan\WZ-MERGE-PROCEDURE.md section 5, one file at a time.
 

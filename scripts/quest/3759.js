@@ -6,8 +6,9 @@
  * The four job arrays in the WZ are: explorers (0-522) -> 1026, Cygnus (1000-1512) -> 10001026,
  * Aran (2100-2112) -> 20001026, Evan (2001, 2200-2218) -> 20011026.
  *
- * 20011026 lives in Skill.wz/2001.img, which is NOT merged in this tree (ticket 12/13), so the
- * Evan branch reports instead of teaching a skill that cannot resolve.
+ * 20011026 lives in Skill.wz/2001.img. Ticket 09 wrote the Evan branch as a dropMessage because
+ * that image was unmerged; ticket 10 merged it, so all four variants now resolve and the branch
+ * is a plain teachSkill like the other three.
  *
  * Check.img/3759/0/end is "2000010100" in v84 itself - an already-expired date. Cosmic's
  * EndDateRequirement compares it against the wall clock, so the whole 3756-3761 chain cannot be
@@ -37,11 +38,7 @@ function end(mode, type, selection) {
             soaring = 1026;
         }
 
-        if (soaring == 20011026) {
-            qm.getPlayer().dropMessage(1, "Evan's Soaring (20011026) needs Skill.wz/2001.img, which is not merged yet.");
-        } else {
-            qm.teachSkill(soaring, 1, 1, -1);
-        }
+        qm.teachSkill(soaring, 1, 1, -1);
 
         qm.gainItem(4032531, -1);
         qm.gainExp(11000);

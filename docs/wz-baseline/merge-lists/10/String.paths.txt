@@ -1,0 +1,87 @@
+# Ticket 10 - Evan exists, renders, and has a dragon. String.wz path list.
+# 70 rows, all String.wz/Skill.img/<id>, all from docs\wz-baseline\add-list\String.txt.
+#
+# Derivation, mechanical: add-list/String.txt holds 105 Skill.img rows. 27 are the v84 mount-skill
+# names already claimed by 03f and already ON THE LIVE CLIENT (composed\String.paths.txt). 8 are
+# the GM job 9000 rows (9000, 90000000, 90001001-90001006) - not Evan, claimed by no ticket, left
+# unclaimed deliberately. The remaining 70 are Evan: the job labels 2001/2200/2210-2218, the
+# 2001.img skill names 20010012 + 20011000-20011039 + 20019000-2, and the 22xxxxxx job-skill names.
+#
+# NOT here and deliberately so: String.wz/Eqp.img/Eqp/Dragon (the 12 dragon-equip names) and
+# Eqp/Taming/190204x + 191203x (Mir and its saddles). Ticket 05 claimed all 18 as FORCE roots and
+# they are already applied to the live client - see composed\FORCE.txt. Ticket 10 forces NOTHING.
+#
+# 4.5 check: every row adds a NEW child to String.wz/Skill.img, an id table (2,000+ gapped integer
+# ids, so not a positional array under 4.4's consecutive-run clause). No row edits an existing
+# record. Same shape as 03f's 27 rows, which merged clean.
+
+String.wz/Skill.img/2001
+String.wz/Skill.img/20010012
+String.wz/Skill.img/20011000
+String.wz/Skill.img/20011001
+String.wz/Skill.img/20011002
+String.wz/Skill.img/20011003
+String.wz/Skill.img/20011004
+String.wz/Skill.img/20011005
+String.wz/Skill.img/20011006
+String.wz/Skill.img/20011007
+String.wz/Skill.img/20011009
+String.wz/Skill.img/20011010
+String.wz/Skill.img/20011011
+String.wz/Skill.img/20011018
+String.wz/Skill.img/20011019
+String.wz/Skill.img/20011020
+String.wz/Skill.img/20011025
+String.wz/Skill.img/20011026
+String.wz/Skill.img/20011027
+String.wz/Skill.img/20011028
+String.wz/Skill.img/20011029
+String.wz/Skill.img/20011030
+String.wz/Skill.img/20011031
+String.wz/Skill.img/20011037
+String.wz/Skill.img/20011038
+String.wz/Skill.img/20011039
+String.wz/Skill.img/20019000
+String.wz/Skill.img/20019001
+String.wz/Skill.img/20019002
+String.wz/Skill.img/2200
+String.wz/Skill.img/22000000
+String.wz/Skill.img/22001001
+String.wz/Skill.img/2210
+String.wz/Skill.img/22101000
+String.wz/Skill.img/22101001
+String.wz/Skill.img/2211
+String.wz/Skill.img/22111000
+String.wz/Skill.img/22111001
+String.wz/Skill.img/2212
+String.wz/Skill.img/22121000
+String.wz/Skill.img/22121001
+String.wz/Skill.img/2213
+String.wz/Skill.img/22131000
+String.wz/Skill.img/22131001
+String.wz/Skill.img/2214
+String.wz/Skill.img/22140000
+String.wz/Skill.img/22141001
+String.wz/Skill.img/22141002
+String.wz/Skill.img/22141003
+String.wz/Skill.img/2215
+String.wz/Skill.img/22150000
+String.wz/Skill.img/22151001
+String.wz/Skill.img/22151002
+String.wz/Skill.img/22151003
+String.wz/Skill.img/2216
+String.wz/Skill.img/22160000
+String.wz/Skill.img/22161001
+String.wz/Skill.img/22161002
+String.wz/Skill.img/22161003
+String.wz/Skill.img/2217
+String.wz/Skill.img/22170001
+String.wz/Skill.img/22171000
+String.wz/Skill.img/22171002
+String.wz/Skill.img/22171003
+String.wz/Skill.img/22171004
+String.wz/Skill.img/2218
+String.wz/Skill.img/22181000
+String.wz/Skill.img/22181001
+String.wz/Skill.img/22181002
+String.wz/Skill.img/22181003

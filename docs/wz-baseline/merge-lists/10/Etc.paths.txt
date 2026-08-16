@@ -1,0 +1,22 @@
+# Ticket 10 - Evan exists. Etc.wz path list. 4 rows, from add-list\Etc.txt:10481-10484.
+#
+# Ticket 04 declined ALL of Etc.wz (10,634 add-list roots, 10,459 of them Commodity Bonus fields
+# and 1,518 dead shop SNs) and explicitly left the MakeCharInfo Evan block to the Evan branch.
+# These four are that block. They are creation-UI DATA; the creation FLOW is ticket 15.
+#
+# 4.5 check - both parents already exist in the live client, so this IS a write into an existing
+# record and both sides were dumped:
+#   live MakeCharInfo.img       = Info, Name, PremiumCharMale/Female, OrientCharMale/Female
+#   v84  MakeCharInfo.img       = the same six + EvanCharMale, EvanCharFemale
+#   live MakeCharInfo.img/Name  = CharMale, CharFemale, PremiumCharMale, PremiumCharFemale
+#   v84  MakeCharInfo.img/Name  = the same four + EvanCharMale, EvanCharFemale
+# v84 is a strict superset on both, every shared child is present under the same NAME, and neither
+# container is a positional array (all children are named). Pure named additions.
+#
+# NOTE the brief said the live image has CharMale/CharFemale at the top level. It does not - those
+# live under Name/. The conclusion is unchanged: there is no Evan block anywhere in it.
+
+Etc.wz/MakeCharInfo.img/EvanCharMale
+Etc.wz/MakeCharInfo.img/EvanCharFemale
+Etc.wz/MakeCharInfo.img/Name/EvanCharMale
+Etc.wz/MakeCharInfo.img/Name/EvanCharFemale

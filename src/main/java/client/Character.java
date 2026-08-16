@@ -1243,7 +1243,8 @@ public class Character extends AbstractCharacterObject {
         silentPartyUpdate();
 
         if (dragon != null) {
-            getMap().broadcastMessage(PacketCreator.removeDragon(dragon.getObjectId()));
+            getMap().broadcastMessage(PacketCreator.removeDragon(getId()));
+            getMap().removeMapObject(dragon);
             dragon = null;
         }
 
@@ -10245,6 +10246,13 @@ public class Character extends AbstractCharacterObject {
 
     public void createDragon() {
         dragon = new Dragon(this);
+        // The Dragon constructor only sends the spawn to its own owner. Registering it in the map
+        // and showing it to everyone else used to happen exclusively in MapleMap.addPlayer, which
+        // both callers of this method run AFTER — changeJob() while already in the map, and
+        // PlayerLoggedinHandler after addPlayer — so nobody but the owner ever saw it.
+        // spawnDragon() no-ops if this player is not actually in that map, which matters because
+        // the `map` field survives leaving one; see its javadoc.
+        getMap().spawnDragon(dragon);
     }
 
     public Dragon getDragon() {

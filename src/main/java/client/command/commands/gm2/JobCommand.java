@@ -37,31 +37,36 @@ public class JobCommand extends Command {
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length == 1) {
-            int jobid = Integer.parseInt(params[0]);
-            if (jobid < 0 || jobid >= 2200) {
-                player.message("Jobid " + jobid + " is not available.");
-                return;
-            }
-
-            player.changeJob(Job.getById(jobid));
-            player.equipChanged();
+            changeJob(player, player, params[0]);
         } else if (params.length == 2) {
             Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
 
             if (victim != null) {
-                int jobid = Integer.parseInt(params[1]);
-                if (jobid < 0 || jobid >= 2200) {
-                    player.message("Jobid " + jobid + " is not available.");
-                    return;
-                }
-
-                victim.changeJob(Job.getById(jobid));
-                player.equipChanged();
+                changeJob(player, victim, params[1]);
             } else {
                 player.message("Player '" + params[0] + "' could not be found.");
             }
         } else {
             player.message("Syntax: !job <job id> <opt: IGN of another person>");
         }
+    }
+
+    /**
+     * Accepts exactly the job ids {@link Job} defines and rejects the rest with a message.
+     * <p>
+     * Do not replace this with a numeric range. The guard was {@code jobid < 0 || jobid >= 2200},
+     * which rejected every one of Evan's ten job levels (EVAN1 2200 .. EVAN10 2218) and so made an
+     * Evan unreachable by the only GM route there is, while at the same time letting any unknown id
+     * below 2200 through to {@code changeJob(null)} — an early return with no feedback at all.
+     */
+    private static void changeJob(Character actor, Character target, String rawJobId) {
+        Job job = Job.getById(Integer.parseInt(rawJobId));
+        if (job == null) {
+            actor.message("Jobid " + rawJobId + " is not available.");
+            return;
+        }
+
+        target.changeJob(job);
+        actor.equipChanged();
     }
 }

@@ -143,10 +143,12 @@ class V84MountNodeTest {
             assertEquals("Soaring", DataTool.getString("name", skillNames.getChildByPath(soaring), "").trim(),
                     soaring + " name");
         }
-        // Negative control: Evan's copies are ticket 12/13's, with Skill.wz/2001.img. If a
-        // blanket import ever pulls them in ahead of that ticket, this fails rather than passing.
-        assertNull(skillNames.getChildByPath("20011025"),
-                "20011025 is Evan's and belongs to ticket 12/13, not here");
+        // This used to be a NEGATIVE control asserting 20011025 was absent, because Evan's copies
+        // were held for a later ticket. Ticket 10 is that ticket: it merged Skill.wz/2001.img and
+        // the 70 Evan String.wz/Skill.img names, so the row is now legitimately present and the
+        // assertion is inverted rather than deleted. See V84EvanNodeTest for the rest.
+        assertEquals("Charge! Wooden Pony", DataTool.getString("name", skillNames.getChildByPath("20011025"), "").trim(),
+                "20011025 name (imported by ticket 10)");
     }
 
     /**

@@ -7,7 +7,7 @@ Orchestrator log. State: `in-flight` / `done` / `partial` / `blocked-on-human` /
 
 | # | Ticket | Agent | State | Note | Updated |
 |---|---|---|---|---|---|
-| 01 | Evan client gate patched | `gp-opus-high` | blocked-on-human | Patch done + orchestrator-verified: pattern unique at `0x361714` in both binaries, 21 bytes → `0x90`, originals byte-identical to backup. Criteria 4+5 ticked. 1–3 need a human to launch the client. | 2026-08-15 |
+| 01 | Evan client gate patched | `gp-opus-high` | **done** | **The runtime patch works.** `tools\evan-gate-patch.log` 12:03:49 — attached to the live `MapleStory.exe`, `read:` the exact 21-byte pattern at `0x00761714`, `GUARD PASS`, `RESULT: PATCHED and verified`. Themida did not re-encrypt and the client kept running. The static route is dead: `local.exe`/`localhome.exe` are **memory dumps**, not clients. **Patches memory — re-run every launch.** | 2026-08-16 |
 | 02 | WZ baseline diff | `gp-sonnet-high` | partial | Manifests delivered (commit `550bf8580`) + reusable MapleLib diff tool. **Review found the tool has 5 high-severity defects — manifests must be regenerated.** See R1. | 2026-08-15 |
 | 02b | Map.wz integrity probe | resumed | done | **Verdict: damaged copy.** 832 v83 map paths absent from v84 anywhere by leaf name; 815 resolve to real named content. Commit `62e0026d9`. Keroben `9000071` confirmed genuinely new in v84. | 2026-08-15 |
 | 02c | v84 source integrity | `gp-opus-high` | done | Commit `613dba2e2`. **The dump was never damaged** — byte-identical to `GMSSetupv84.exe`. v84 genuinely deleted 832 maps. Supersedes 02b's inference. Side find: `v83-stock/` was missing `Reactor.wz`, now extracted. | 2026-08-15 |
@@ -26,7 +26,567 @@ Orchestrator log. State: `in-flight` / `done` / `partial` / `blocked-on-human` /
 | 05 | v84 mounts | `gp-opus-high` | in-flight | Corrected data pointers; `Morph.wz` + Mir naming. | 2026-08-16 |
 | 06 | Crimson Sky | `gp-opus-high` | in-flight | Largest content win. `deps`-first merge ordering + SQL drop tables. | 2026-08-16 |
 | R3 | Code review — 02g, 03b–03d | `gp-opus-high` | **partial — main report missing** | Only its *addendum* was delivered. That addendum ends "**Stop 04–06 still stands on B1/B2/B3**" — findings I have never seen. Main body requested. | 2026-08-16 |
+| 10 | Evan exists, renders, has a dragon | `gp-opus-high` | done bar in-game | **The Evan tracer landed.** 88 path rows (`Skill` 12, `String` 70, `Etc` 4, `UI` 2), `added 88 / refused 0 / denied 0 / forced 0`. Composed re-run with 10 folded in → **1,750 rows across 13 files**, nine of eleven byte-identical to 03i. Suite **2,008**. **Two corrections that matter: the client was never installed, and the server side was NOT "only WZ data".** | 2026-08-16 |
 | 03e | Merge-tool safety fixes, round 2 | `gp-opus-high` | done | **R3's B1–B4 + H1–H6, M1–M6 closed, each with before/after output from two real binaries** (`03-verification/safety-guards.md` §G10–G16). Deny/force lists enforced; output-directory guard made absolute; `deps` rewritten to add-list granularity + link/bgm/mapMark; 0-row manifest and "added nothing" are exit 2 / exit 5. **Ticket 05's three merges re-run byte-identical.** | 2026-08-16 |
+
+## Content batch — 04 and 06 landed, orchestrator-verified
+
+**04 cosmetics — done bar two human steps** (`e8b06939a`, `c3bc7d20d`). 1,045 path rows across
+`Character`/`Item`/`String`. Its protect proof is the right kind: `WzMerge hash` over **every
+`Character.wz` image digest**, pre vs post — **exactly 12 changed, all 12 named by its own list**,
+and of the 5,120 images in `protect-list ∪ modified-list.live`, 5,110 are digest-identical and the
+10 that moved only *gained* children. It forced 30 `String.wz` names, every one an id whose live
+value was the literal `MISSING NAME`, and deliberately left the 7 `Eqp/{Dragon,Taming}` rows to 05.
+It also declined `Etc.wz` entirely with reasons (bulk `Bonus` rows, 1,518 SNs pointing at
+out-of-scope items = dead shop buttons). Two honest gaps: `Hair/00034040`–`00034047` ship art with
+**no name in either tree** — it merged the art and refused to invent names — and hair rendering on
+both genders is the one criterion needing a human.
+
+**06 Crimson Sky — done bar the travel route** (`59cb85105`). 95 paths: **95 added, 0 refused, 0
+denied, 0 forced.** The fixed `deps` earned itself here — the maps need 10 individual
+`Back/dragonRoad.img` frames *inside an image v83 already has*, exactly what the old whole-image
+version hid, and the 8 link stubs now walk 2 map images each instead of reporting "0 dependencies".
+
+Two findings from 06 that matter beyond it:
+- **The ticket's mob list was wrong.** `9500374`–`9500382` appear in **no `life` node anywhere** —
+  they are `summonType=1` clones of live Leafre mobs at identical exp. The 22 maps actually spawn
+  **`8300000`–`8300006`**, which is ticket 05's mount list appearing as *mob* ids. Both sets merged;
+  nothing spawns the nine. Handed to 05 to reconcile — likely `193200x` is the worn equip and
+  `830000x` the rendered mob, linked by `info/tamingMob`, but that is a hypothesis to verify.
+- **Drops went into a new changeSet.** `152-drop-data.sql` has already run everywhere, so editing it
+  fails Liquibase checksum validation — `153-crimson-sky-drop-data.sql`, 776 rows, each a **verbatim
+  copy** of a name-matched Leafre analogue with only `dropperid` swapped. It copied `questid != 0`
+  rows only from name-matched analogues, without which Manon's quests `7301`/`7303` would become
+  completable on Dragonica and Leviathan at chance 1000000.
+
+**Orchestrator-verified:** full suite `./mvnw -o test` re-run from a clean shell → **exit 0**
+(1,910 tests); path lists and the 819-line drop file present on disk; all client `.wz` still
+hash-match the backup.
+
+**05 mounts — done** (`4e8c49594`). 67 path rows: Character 8, Skill 27, Morph 25, String 7 (all
+forced). Suite green at **1,928 tests**, orchestrator-re-run → exit 0.
+
+It settled the three-way id confusion by measurement, and **the linking hypothesis I gave it was
+wrong**: `info/tamingMob` is `6` for `01932006` and `7` for the other seven — a 1-based index into
+`TamingMob.wz`'s 797-byte speed/jump/fatigue table, i.e. a **movement class, not a mob id**. v83's
+own Yeti `01932003` already reads `tamingMob=6`. So the three sets are three different things:
+`019320xx` are the mount **sprites** (05), `830000x` are hostile Crimson Sky **mobs**
+(`level=110 maxHP=150000 exp=6000 bodyAttack=1`, 06's, already merged), and `000102x`/`000103x` are
+the **skills** that grant them (05). Skill→sprite pairing is not in the WZ at all — client-hardcoded,
+corroborated against two independent v95 sources.
+
+**It also found and fixed a live regression that had nothing to do with v84.** The inherited
+`StatEffect.java` keyed its mount table on `sourceid % 10000`, a false premise: Explorer's Yeti
+Mount 1 is `1017` but Cygnus/Aran's is `x0001019`, and their Yeti Mount 2 / Broomstick are
+`x0001022`/`x0001023` — so **Cygnus and Aran characters riding Yeti Mount 1 drew a broomstick**, and
+four skills stopped being mounts entirely. Now keyed on whole ids from `constants.skills`. The old
+test passed only because it asserted literals (`20001017`, which is not a skill id).
+
+Riding is **configuration, not new code**, confirmed at `file:line` — `Character.java:7462` sets two
+fields and everything downstream (`BuffStat`, `PacketCreator`, hunger, dismount, field-limit cancel,
+expiry) is id-agnostic; `SkillFactory:152` derives `isBuff` from the WZ so the new skills classify
+themselves.
+
+**It dropped 184 Mir animation rows that merged clean** — dumping them showed they graft v84's
+layers 1–2 onto the live layer 0 at the live delay, because v84 re-authored frame 0 and additive-only
+cannot take an edit. Half-v83/half-v84, which 03c already ruled worse than either whole. Preserved
+commented-out for ticket 13.
+
+**Force-list bookkeeping: 04 took 30 rows, 05 the remaining 7 — consumed exactly once.** 05 claims
+`Eqp/Dragon`'s 12 names for itself rather than 13, and says 13 must not re-add them.
+
+**Open gap it flagged rather than hid:** the 27 `String.wz/Skill.img` mount-skill names are
+unmerged, so the skills will render nameless. Ready-to-paste in `05/String.paths.txt`. **No ticket
+owns `String.wz/Skill.img` — folding it into the composed install pass.** Also: nothing in-game
+*grants* these skills; GM `!skill` is the only entry point today.
+
+**07 Neo City 2227 — done, and it is the first content ticket with no owner decision attached**
+(`8fc0a4b0f`). 14 path rows, **18 added / 0 refused / 0 denied / 0 forced**, 80 drop rows, zero
+overlap with 04–06, suite green at 1,928.
+
+- **The ticket's mob list was right this time** — all four ids genuinely placed across 32 `life`
+  entries. It checked rather than assumed, which is the point: 06's list was wrong. All four carry
+  `summonType=1`, the flag that made 06's nine unspawnable, but here it is a red herring because
+  these *are* placed. Zero `n`/`r` entries, so no `Npc.wz` or `Reactor.wz` work at all.
+- **`deps` owed nothing** — 135 of 135 references already in v83; v84 reuses the Neo City tileset
+  wholesale. (The old hardcoded-`Map2` version would have silently exited 0 here.)
+- **The route works, and for the opposite reason to 06's**: `240070000`'s `TD_neo` portal is
+  byte-identical in v83 and v84, so both halves already shipped — and Cosmic had the warp
+  **pre-written and commented out**, waiting for these maps. One real call: `quests[i]` gates
+  `array[i]`, so it added `3749` as the seventh gate.
+
+**Its own review caught three of its mistakes and it reported them plainly**: a wrong spawn
+breakdown in its report (6×/5× where the data says 9×/4×) that its test missed because the test
+asserted per-map *totals* — now asserts the per-mob matrix, negative-controlled by patching a count
+and confirming failure; `Sound.wz` merged when it belonged to 06 under the batch split — reverted
+clean and handed off; and criterion 1 ticked as "present in client WZ" when nothing is installed —
+reworded to staged-not-installed. That last one matters: it is exactly the class of claim this
+project has to keep honest.
+
+**Could not do:** prove quest `3749` is passable end to end — it needs the `TD_Battle5` two-player
+boss instance, so if that is broken 2227 is unreachable through the front door. Fallback `3748`
+recorded in the human steps.
+
+### R4 — content-batch review (04/05/06): main report received. Verdicts, then the two edits.
+
+**SQL is safe to apply to a live server**, verified mechanically rather than sampled: **776/776 rows
+are verbatim copies** of a `152-drop-data.sql` row under the declared analogue modulo `dropperid`;
+zero mismatches, zero orphan payloads, zero duplicate tuples, zero overlap with dropperids 152
+already covers. **39/39 `questid != 0` rows sit on name-matched analogues**, and the four
+non-name-matched droppers carry zero quest rows — so the Manon-`7301`/`7303`-on-Dragonica risk 06
+guarded against **did not materialise**. The new-changeSet call was right for a reason 06 did not
+state: `DatabaseMigrations.java:39` calls bare `liquibase.update()` with `ValidatingVisitor` and no
+`validCheckSum`/`runOnChange` anywhere, so editing 152 would be a hard `ValidationFailedException`
+**at server startup**. Applies cleanly: columns match `009-drop.sql`, `id` omitted so PK collision is
+impossible, pure ASCII, exactly one semicolon.
+
+**`StatEffect.java` is safe** — exact parity on every v83 mount (deleted `switch` cases map 1:1 onto
+the new predicate ∪ `SKILL_MOUNTS`, same sprites), no id collisions with any advanced-job skill, and
+`MONSTER_RIDER`/`SPACESHIP` behaviour preserved exactly. **But the premise was misstated:** the
+`% 10000` bug 05 described was in *uncommitted inherited work*, not at `f1dbbd85d` — HEAD's code was
+already correct. So this is a refactor of working code plus new mounts, not a fix, which raises the
+parity bar rather than lowering it. It also correctly excluded skill `1026`: nine skills were added
+per job, not eight, and `1026` is `플라잉` (Flying) — flight, not a mount.
+
+**Merge integrity is stronger than the tickets claimed.** A structural diff over **all 291 modified
+files** found: **18 nodes removed anywhere — every one a `MISSING INFO` placeholder** — and 66 value
+changes, being exactly the 37 forced rows' name/desc. `Character`, `Item`, `Map`, `Mob`, `Morph`,
+`Npc`, `Skill`, `Sound`, `Reactor`: **purely additive, 0 removed, 0 changed.** 04's "exactly 12
+Character images" and "5,120 in the union, 10 changed" both reproduce exactly, derived two
+independent ways.
+
+### The two edits that gate the install
+
+**Edit A — 27 rows, and without them the eight new mounts cannot be obtained by any route.**
+Ticket 05 omitted `String.wz/Skill.img`'s 27 mount-skill rows, reasoning that "the server reads
+skills from `Skill.wz`, never `String.wz`". **That is false.** `String.img` is the *enumeration
+source for granting skills*: `MaxSkillCommand.java:44` iterates its children → `SkillFactory.getSkill`
+→ `changeSkillLevel(max)`, and the same loop runs in `ResetSkillCommand` and
+`NPCConversationManager:395`. A skill absent from `String.img` is never visited. Worse, **there is no
+`!skill` command in this codebase** — only `maxskill`/`resetskill`/`mobskill` — so 05's human test
+step names a command that does not exist, and the one real substitute skips exactly these nine
+skills. The half-state is already committed: `Skill.wz/000.img.xml:2224` has `0001025`; the
+`String.wz` side has zero. Pure additions, no `--force`.
+
+**Edit B — the `Sound.wz` verifier is wrong, not the data.** `Program.cs` counted `bad` across the
+whole output including `BgmGL.img`, which MapleLib cannot parse in **any** of the three trees — so
+every `Sound.wz` merge fails verification and exits 4 regardless of correctness. A pre-existing
+defect must not be reported as damage this merge caused. Fix must still fail an image that parses in
+the target and not in the output.
+
+**Composition is verified sound**: 04 ∩ 05 ∩ 06 = ∅ on every shared file, the 37-row force list is
+consumed exactly once (30 + 7, none twice, none missed), and **order is not load-bearing** — the one
+order-sensitive path is the force `Remove()`-then-re-add, and since 04 has zero rows under the
+`Eqp/Dragon` container root, 04→05 and 05→04 give identical trees.
+**Expected composed run: `Character` exit 3 (248 added, 6 refused), `String` exit 3 (427 added, 37
+forced, 9 refused), everything else 0.** Those refusals are 04's deliberate ones — an install script
+that aborts on non-zero will stop there, and it must not read exit 3 as failure.
+
+### 03f install prep — both edits landed, and the composed merge has now actually been run
+
+Commit `02a6be70c`. Suite **1,949 green**; all 18 client `.wz` still bit-identical to the backup
+(orchestrator-verified independently).
+
+- **Edit A done.** 27 mount-skill names merged; `!maxskill` now walks all 27 ids, so **the mounts are
+  grantable**. 05's false "never reads `String.wz`" claim and its non-existent `!skill` human step
+  are corrected in place. New test asserts all 27 plus "Soaring" ×3, with `20011025` held as a
+  **negative** control since it is ticket 12/13's.
+- **Edit B done, and proven in both directions** — the part that matters. The verifier now re-parses
+  only the images that failed, against the *target*, and discounts pre-existing damage:
+  `Sound.wz` → `1 pre-existing, discounted`, exit 0. And a deliberately corrupted `TamingMob.wz`
+  (24 bytes overwritten in a file that parses clean in the target) → `UNPARSEABLE image 0007.img`,
+  exit 4. Suppressing `bad` outright would have passed that; this does not.
+- **The composed merge ran end to end**, which nothing had done before:
+  `String` exit 3 (462 added, 38 forced, 9 refused) · `Character` exit 3 (248 added, 6 refused) ·
+  `Item` 391 · `Map` 37 · `Mob` 21 · `Skill` 27 · `Morph` 25 · `Npc` 6 · `Reactor` 2 · `Sound` 1, all
+  exit 0. It matched the predicted counts once two omissions in the prediction were accounted for —
+  the predicted `String` total had left out 07's 7 rows. **`Morph`, `Skill`, `Npc` and `Reactor` came
+  out byte-identical to 05's and 06's separately recorded hashes, so composition is deterministic.**
+  Gate re-fires on the composed output: `added 0, refused 471`, exit 5.
+- **F2 resolved, and the evidence inverted the premise**: `v83-stock/String.wz` carries the *identical*
+  "Steward" node, so it was never Cosmic content at all — v84 renamed a stock GMS npc. Adopted.
+- All four doc defects fixed; the test helper extracted to `V84Wz` with **zero** copies remaining.
+
+**Carried forward from 03f:**
+1. **08 is deliberately NOT composed in** — its lists were uncommitted and still changing during the
+   run, and folding them in would have shipped an untested list. Every composed file ends with an
+   append marker.
+2. **08 has its own `String.force.txt` with 3 forced rows, so the composed force list becomes 41, not
+   38.** Reusing the current `FORCE.txt` at install time would silently revert them.
+3. Commit `2a89da169` (08's) swallowed two of 03f's files mid-flight. Content on disk is correct and
+   tested; only the attribution is wrong. Third time this has happened — an artefact of concurrent
+   agents sharing one working tree, not of anyone's work being lost.
+
+### 08 misc areas — done, and it found the most dangerous merge shape yet
+
+Commits `2a89da169` → `b7e5a4b47` → `8dd83b3ad`. 174 path rows (Map 95, Mob 7, Npc 9, Reactor 1,
+Sound 23, String 39), **zero overlap with 04–07**, suite 1,949 green, client bit-identical.
+
+**The headline: the additive gate is blind to positional-array writes, and this class corrupts
+content players use today.** `add-list/Map.txt` offers **18 rows writing into `portal`/`obj` arrays
+on maps the live client already has.** 08 dumped every array index by index: **6 are pure appends
+(safe, merged), 12 are not** — v84 reordered or inserted, so the same index means different things
+in the two trees. `220011000/portal/4/*` **would break the working portal into Ludibrium Toy
+Factory.** And **10 of the 12 are the shape `<array>/<n>/<field>` where `<n>` already exists** — the
+parent check passes, the leaf does not exist, so the merge writes onto the wrong sibling and reports
+nothing. Same class as the MonsterBook splice, but on live portals. 03g is deny-listing the 12 and
+adding a general tool check, with 08's 6/12 split as the oracle.
+
+**It also drew the 13 boundary the brief never specified:** of 51 whole-image map rows outside
+06/07's areas, **29 are Evan's world** (`900010000`–`900090104`, Utah's House, Farm Street) → ticket
+13. This ticket took the other 22.
+
+**19 of 22 maps are staged-but-unreachable, each with a reason** — that list is a deliverable, not a
+caveat. 8 blocked on an uncopyable node (06's travel-route problem again), 8 on the Slumbering Dragon
+Island flow, 1 gated on quests `22515`–`22518` that do not exist yet, 1 with no entry point in any
+vendor's data. Three are reachable via merged appends plus a 3-line portal script each.
+
+**It reported a mistake it made and reverted.** It overwrote `scripts/portal/enterDollcave.js`
+believing an unreferenced-looking v83 script had no handler; it had one, warping to `105040201`
+behind two quests. Restored byte-identical, kept out of the commit, guarded by a test. Root cause: a
+glob whose brace syntax matched nothing, read as "no such file". `910050300` moved from reachable to
+staged as a result. This is exactly the failure mode worth knowing about — absence of a grep hit is
+not absence of a reference.
+
+Smaller: six of the seven new mobs give **exp 0** — scripted obstacles, so no drop SQL and no
+changeSet at all. Of 06's ten flagged `mapMark` entries, exactly **1** is owed. And the Christmas NPC
+names are **shipped in Korean by v84 itself** — imported as-is and flagged as the one thing a human
+may want reversed.
+
+### 03g — the positional-array gate, and why a general rule beat an enumeration
+
+Commit `3d7860a28`. Suite 1,949 green; all 18 client `.wz` SHA-256-matched before *and* after.
+
+**It re-derived the 18 rows rather than trusting 08's table and reached the same 6/12 split — with
+one disagreement, and 08 was right.** `Map/Map2/220000300.img/portal/15` **passes** 03c's written
+rule (live has 15 portals `0`–`14`, so index 15 is an append), yet 08 refused it. Measured:
+
+```
+live  portal/14 : pn=in06 pt=2 x=2008 y=103 tm=220000307 tn=out00
+v84   portal/15 : pn=in06 pt=2 x=2008 y=103 tm=220000307 tn=out00   <- byte-identical
+```
+
+v84 has 16 portals only because it inserted `scr00` at index 4; every later slot is the target's own
+content shifted one place, and the last falls off the end **looking like new material**. So the
+implemented rule needed a fourth clause the written rule lacked: *a pure append whose content is
+already in the array is refused.* This is the value of making an agent investigate a disagreement
+instead of adjusting the rule to match.
+
+**The general rule then found 8 more hazardous rows that nobody had enumerated — in lists already
+shipped by ticket 04:**
+- `Item.wz/Consume/0202.img/020225{03,14}/reward/43` — v84's slot 43 is content-identical to the live
+  box's **slot 16**. The MonsterBook hazard, in a different file.
+- 6 × `Character.wz/Glove/01082262.img/…/{l,r}Glove` — the live client ships this glove with
+  *different art* (live `stabTF/2/rGlove` 6×5 @(-7,-15); v84 5×5 @(2,2)). Splicing v84's layer into
+  an Ezorsia frame is the same shape 08 refused on a portal. Cost of refusing: one glove renders
+  without its left-hand layer on four frames. Cosmetic, force-listable if an owner disagrees.
+
+The rule: a container whose children are **exactly** the consecutive integers `0..c-1` is an array —
+"exactly" is load-bearing, since a map `.img` has layers `0`–`7` *alongside* `info`/`portal` and is
+therefore not one. A slot write is refused unless it is a genuine append: last segment, index ≥ the
+**baseline** child count (memoised, so a text-ordered manifest listing `back/10` before `back/9` is
+judged as a set), no hole left, and content not already present. Refusals read `POSITIONAL ARRAY:`,
+never `already exists` — an operator can tell the two apart. Now documented at **§4.4**, with the
+enforced rules, plus a pointer from §5.3 where a map operator actually meets it.
+
+**Composed install re-run with 08 folded in: 1,409 rows, `FORCE.txt` at 41 roots, all ten files
+verified and promoted, no `.partial`.** `String` exit 3 (501 added, 41 forced, 9 refused), `Character`
+exit 3 (242 added, 12 refused — 6 lost to the new gate), `Item` exit 3 (389, 2 refused), `Sound`
+**exit 0** at last, everything else 0. `Morph` and `Skill` reproduce **byte-identical to 03f**; the
+other eight differ for stated reasons. One composition fill was needed — `Obj/effect.img/quest/gate/6`,
+because `deps` emits only what a map *references*, so 08 got `gate/7` alone and the array would have
+been `0-5,7`.
+
+### 09 quests — done, and the honest number is one
+
+Commits `8e740646b`, `56591f8c5`. 252 rows, `added 252 / refused 0 / denied 0 / forced 0`, every
+pre-existing child of all four `Quest.wz` images digest-identical, zero overlap with 04–08. Suite
+**1,991 green**.
+
+`add-list/Quest.txt` is **924 roots, not 198 quests**: 792 whole quest nodes = 198 × 4 category
+images (`Act`/`Check`/`QuestInfo`/`Say` agree exactly on the id sets — the old "798 vs 198" is
+arithmetic, not a defect), of which **135 quests are the `22xxx` Evan chain → ticket 13** and 63 are
+09's, plus **132 rows writing into live content**. Scripts needed: **30, not the ~18 estimated** —
+8 routed to the existing `medalQuest.js`, **22 written**, zero overwrites.
+
+**Only 1 of the 63 quests can be accepted today.** 48 carry an `end` date **v84 itself shipped
+already expired**, 9 name only Evan job ids, 4 sit behind an `infoex` counter, 1 behind a dead
+upstream quest. `19011` is the residue. That is the ticket's real outcome and it is a property of
+v84's own data, not of the merge.
+
+**It reported a misread that review caught**: it had read `2200`–`2218` as Aran and counted three
+acceptable quests; they are `Job.EVAN1`–`EVAN10` (`Job.java:62-63`), Aran is `2100`–`2112`. Chasing
+it surfaced a second bad generalisation (`10480`'s job list *excludes* Evan). Both are now asserted
+as sets derived from the tree rather than written as prose.
+
+**It refused 132 rows, each measured on both sides** — and two of the shapes defeat the new gate:
+- **108 × `Check.img/<id>/0/lvmax = 40`** onto live beginner quests `28162`–`28325`. The live node is
+  v84's minus `lvmax`, so the gate writes every one silently. Effect: **108 currently-startable
+  quests become unavailable above Lv.40.** These have **no numeric array index**, so 03g's
+  index-keyed check misses all of them.
+- **13 date rows** giving currently-ungated working quests a **24-hour window in January 2008**.
+- **`Exclusive.img`** — live has one *named* group `medal` (14 ids); v84 **replaced** it with numeric
+  groups `0`/`1`/`2` holding a different partition. Being additions they merge clean, producing an
+  image with `medal` **and** `0`/`1`/`2` and seven ids in two mutually-exclusive groups.
+  **Depth alone cannot catch this; only dumping both sides does.**
+
+Two corrections it made to other tickets: **08's handoff was addressed to the wrong ticket** —
+`22515`–`22518` are `22xxx`, i.e. 13's, so `910060100` stays unreachable and that win does not
+exist. And quest **`3759` grants Soaring**, which 06's Crimson Sky maps gate on
+(`needSkillForFly=1`) — merged and scripted, but behind one expired `end` node. Owner decision.
+
+**The through-line of this project, now stated three times over:** `conflicts.txt` being empty is
+**not** evidence of safety for writes into existing records. MonsterBook, the portals, and now these.
+
+### 03h — 09 was wrong about the gate, and the real defect was subtler
+
+Commit `f998d58f0`. Deny-list **40 → 156 roots**; composed set **1,662 rows**; suite 1,991 green;
+client 18/18 intact. Orchestrator-verified on disk.
+
+**It contradicted 09 and measured the contradiction rather than arguing it.** 09 said its 108
+`lvmax` rows have no numeric index so the gate would miss all of them. In fact `Check.img/<id>`
+holds exactly children `0` and `1`, which reads as an array, so **all 123 `Check.img` rows already
+refuse structurally** — `added 9, refused 123`. 09 had refused them by omission and never ran them
+past the gate at all.
+
+**The actual defect it found is worse than the one it disproved.** The refusal *message* named one
+hazard — "v84's slot `n` need not be the same entry as the target's" — and for these rows that
+reason is **demonstrably false**: slot 0 is the start block in both trees and the indices line up.
+An operator who does what the message says (compare the arrays by name) **disproves the stated
+reason and overrides a correct refusal.** A right answer with a wrong justification is more dangerous
+than a wrong answer, because it trains people to override the mechanism. Both messages now name both
+hazards — the slot may differ, *and* even when it matches, the row edits an existing record by adding
+a field to it — with `lvmax` as the worked example.
+
+**What it deliberately did not build**, which is the right call: no general "write into an existing
+record" refusal, because the composed install **contains legitimate rows of exactly that shape**
+(08's `String.wz/Npc.img/{1063018,1205000,2012034}` gaining `d0`/`d1`, which are wanted). The shape
+does not discriminate; only the field's meaning to the server does. A refusal there would be a false
+refusal on shipped content. Likewise it left **six non-hazards off the deny-list** on the reasoning
+that a deny-list carrying non-hazards is one operators learn to skim.
+
+**`Exclusive.img` is genuinely uncatchable by any structural rule** — a semantic replacement where
+v84 swapped a named group for numeric ones, and the container is not an array (its only live child
+is `medal`). Denied as a whole image and documented as a gap at the point of use.
+
+`WZ-MERGE-PROCEDURE.md` gained **§4.5 — "An empty `conflicts.txt` is not evidence of safety"** — the
+through-line as a table across MonsterBook, the portals, `lvmax` and `Exclusive.img`, all four of
+which `conflicts.txt` said nothing about.
+
+**Composition is now proven stable:** all ten pre-existing outputs are byte-identical to the previous
+run — not just `Morph` and `Skill` — and **`Quest.wz` reproduces ticket 09's own staged hash exactly**
+(`5F37E5F5…`, 6,083,413 B), so 09's merge re-derives bit-for-bit from the composed manifest. It also
+corrected 03g's row count (1,409 → 1,410) rather than carrying the error forward.
+
+### 16 partial — regression over 04–09. Nothing was lost, and one real gap was found.
+
+Commit `6fd528453`. Suite **1,994 green**; all 18 client `.wz` SHA-256-matched the backup at the
+**start and at the end** of the run.
+
+**The headline is a negative, and it is the one that matters: no content was lost.** A `WzMerge hash`
+sweep across all 11 merged files found **0 images removed and 0 leaf values changed anywhere outside
+`String.wz`**, with all 80 changed images then dumped recursively at depth 40. Ezorsia's ~24.6 MB
+survives.
+
+| criterion | verdict |
+|---|---|
+| protect list present **and unchanged** | met — digests, not presence |
+| existing quests still work | met — server XML and the binary merge *independently* give `removed=0, changed=0`; 2,818 → 2,881 |
+| drops / shops / spawn rates | met — `152-drop-data.sql` byte-untouched, 153/154 INSERT-only with dropperids **disjoint** from 152's 1,004, and **zero `life` nodes added to any pre-existing map** |
+| hairstyles and equips | met **with one regression** — see below |
+| owner's own changes | met — `config.yaml`, `GameConstants.java` and all boss/spawn files byte-identical to `94e66d80c`; upstream divergence still **exactly 3 `wz/` files**, with the quest rebalance and all three retimed coupons intact |
+| four classes **plus Evan** from L1 | **not coverable** — Evan does not exist; nothing installed, client never launched, **no playability claim of any kind is made** |
+| content reconciled | met — 1,662 rows = 1,639 merged + 23 refused, exact |
+
+**Reconciliation with nothing unexplained:** of 16,113 add-list rows offered, 1,662 claimed. The
+unclaimed remainder accounts cleanly — Etc 10,634 declined wholesale by 04, Quest 672 = **540 Evan +
+132 refused by design** (exactly 09's split), Character 184 = **exactly** the Mir animation rows 05
+dropped. Zero `DENIED` fired in the run: the deny-list's 156 roots are the net *under* the lists,
+not part of this arithmetic.
+
+**The regression it found — and it is exactly the class the gate exists to stop.** 03g refused 6
+`Character.wz/Glove/01082262` rows to keep v84 layers out of Ezorsia's frames; the composed list
+carries 11, and **two landed**. `swingT2/2` now holds Ezorsia's `lGlove 12x8` *and* v84's
+`rGlove 12x9` in one frame. Cause: the gate fires only when children are **exactly `0..c-1`**, and
+these arrays are `{1,2}` and `{1}` — not zero-based, so they are not seen as arrays at all. The agent
+enumerated **all 34 indexed parents** in the composed lists and classified each: exactly these two
+are misses, nothing else. **§4.4's rule does not do what it claims.** Routed to 03i with those 34 as
+the oracle.
+
+**Two more worth having:**
+- **`WzMerge hash` stack-overflows (`0xC00000FD`) on `Reactor.wz`.** The project's own
+  protect-verification instrument fails on a whole file, in a way an operator would read as merge
+  damage. Data is fine (depth-12 dumps, all 6 identical); `Canon()` needs a depth bound.
+- **389 `Map.wz` add-list rows write into maps the live client already has and were never triaged.**
+  Harmless today because they are on no list — but **"unclaimed" is not "refused"**, and ticket 13
+  works in `Map.wz`.
+
+Each new test was negative-controlled (mutated deny-list → fails naming the row; `153`→`152` → fails
+with 1,004 overlaps), and the quest test's over-broad first draft genuinely failed and was corrected.
+Stated limit: `Canon()` normalises sibling order away, so **nothing in this project proves order was
+preserved inside a merged container.**
+
+### R5 + 03j — the client output is safe, and the server tree had drifted from it
+
+**R5 verdict: the composed client `.wz` output is safe for a human to install.** The reviewer hashed
+all ten `03g`/`03h` outputs itself rather than trusting the tables — byte-identical, and `Quest.wz`
+bit-for-bit equal to ticket 09's own staged file. It also confirmed the deny-list has **no dead roots
+and no over-coverage** (the 116 Quest roots cover exactly 126 add-list rows, every root with at least
+one row beneath it), and endorsed both judgement calls: `Exclusive.img` denied whole, and the six
+non-hazards deliberately left off.
+
+**Two adjudications:**
+- **03h right, 09 wrong** — independently re-derived: **2,869 of 2,870** `Check.img` quest nodes have
+  children exactly `{0,1}`, so the gate does refuse all 123 rows. 09 asserted a negative it never
+  measured. (The exception, quest `4940` with `{0,1,4961}`, is targeted by no row today.)
+- **The gate does not over-refuse — it *under*-refuses.** All 8 refusals in 04's shipped lists are
+  genuine. The sparse-array hole the regression pass found is real and was reproduced independently.
+
+**The finding nobody had looked for: the server XML had diverged from the client merge.** The gate
+landed in 03g *after* 04 had already spliced its rows into `wz/`, and nothing un-applied the server
+side — so the tree carried rows the merge now refuses. `composed/README.md`'s "the XML tree is already
+composed" covers what a new ticket *adds*, not what a later gate *refuses*.
+
+**03j (commit `7507c71f6`) inventoried all of it** — `docs/wz-baseline/XML-RECONCILE.md`, derived
+mechanically from the run logs and git rather than by eye, with per-file counts matching ticket 16's
+independent enumeration exactly:
+
+| | refused | in XML | divergent | server-readable | **both** |
+|---|---:|---:|---:|---:|---:|
+| Character | 12 | 12 | 6 (8 with 03i's) | 6 | **0** |
+| Item | 2 | 2 | 2 | 2 | **2** |
+| String | 9 | 9 | 0 | 9 | **0** |
+| **total** | **23** | **23** | **8** | **17** | **2** |
+
+**Exactly 2 of 23 could ever have changed behaviour, and both are fixed.** The headline is an
+intersection, not a total — 15 readable rows are read constantly but identical on both sides, and the
+6 divergent Glove rows are genuinely divergent but never read.
+
+- **`Item.wz`**: both boxes carried `2020014` byte-identically at slots 43 *and* 16, so
+  `getItemReward` summed its `prob` twice and rolled it at double weight. Reverted, and proven against
+  the **real post-install binary** rather than against itself: 43 slots `0..42`, `2020014` once,
+  totalprob 19864 / 18363, with every slot's full content compared, not just the totals.
+- **`gate/6` added, not `gate/7` removed** — orchestrator-verified: the array now runs `0..7` on both
+  sides. Removing `7` would have created a divergence to close a hole.
+- **8 Glove rows left permanently**, recorded as art-only: no Java or script reads glove art, and
+  `getData("Obj/` has zero hits repo-wide.
+
+It also accepted a review correction worth noting: its "server-readable" column had been **false** for
+the String and Dragon rows. They *are* read — they are safe because they are unchanged, which is a
+different and more honest reason.
+
+**One follow-up routed to 03i:** both `reward/43` rows are still on `composed/Item.paths.txt` and no
+`Item.wz` row is on the deny-list, so the next `WzMerge xml` run would silently re-break the fix —
+the XML gate is a line scan and cannot see a content-identical append. Two deny rows close it.
+
+### Deferred deliberately, recorded not decided
+
+- **F1 — owner call.** Four *live-customized* weapons (`01382058`, `01452058`, `01472069`,
+  `01492024`) gained v84 combat stats (`incPAD 77`, `tuc 7`, `attack 6`, criticals) into `info` nodes
+  that previously held only cosmetic fields. Three are "… for Transformation" morph props that become
+  real weapons with 7 upgrade slots. The server reads these fields. Practical risk is low — none is
+  in a drop table, shop row or script, all are `cash=1`, and `Etc.wz` was declined so nothing makes
+  them purchasable — but 04 classified it as "new child inside `info`" and stopped, where the
+  `Dragon/…/info/level` case got an explicit decision. This one deserves the same.
+- ~~**F4 — deferred hazard for ticket 13.**~~ **CLOSED by ticket 10, and it inverted.** The code is
+  an explicit **eight-id list**, not a `20011025`–`20011039` range (`StatEffect.java:174-187`), and
+  dumping the now-merged `2001.img` shows **all eight are real Evan skills and each is exactly the
+  mount the table pairs it with** — 8/8 by name. The failure mode cannot occur. `20011026` is
+  "Soaring", flight, correctly outside the list and now the negative control. What it *did* surface:
+  `2001.img` also ships `20011018`/`19`/`31` (Yeti Rider, Witch's Broomstick, Balrog) as real mounts
+  with **no sprite mapping**, and the offsets do not transfer from any other job — recorded for
+  **ticket 12** rather than guessed at, which would have been F4 again.
+- **F2 — a defect 06 created**, now routed: it kept the live name "Steward" over v84's "Shadow Knight
+  Rene" to protect custom content, but `9201144` is referenced by exactly one thing in the repo —
+  the Dragon's Nest `life` node 06 itself just added. The reasoning protected nothing; the player
+  sees a black knight labelled "Steward".
+
+### R4 addendum — independent corroboration and a self-correction
+
+Same delivery failure as R3: only the addendum arrived. It states "no verdict changes — SQL safe,
+`StatEffect` safe, lists composable **after the two edits**", referencing findings I have not seen.
+Main body requested. **Do not treat the batch as reviewed until it lands.**
+
+What the addendum does establish, and it is worth having:
+
+- **The protect claim reproduces by an independent route.** A recursive per-child descent over the
+  12 changed `Character.wz` images found **0 subtrees removed, 0 leaf values changed, 68 added** —
+  matching the digest result via server-XML node sets instead of binary digests.
+- **It names the guarantee the tickets only implied, and it is stronger than what they argued.**
+  All 37 `COLLISION-FORCE.txt` rows are rooted at `String.wz`, and `--force` is the only path past
+  the additive gate — so **nothing in `Character.wz` or `Item.wz` was ever *capable* of being
+  overwritten**. 04 argued from digests instead, and cited a child-level diff file that does not
+  exist.
+- **`WzMerge hash` is confirmed not to be a presence check** — `Canon()` hashes decoded leaf values
+  recursively, so a changed child moves the ancestor digest. One blind spot: sibling order is
+  normalised away, so a pure same-name reorder is invisible.
+
+**Four documentation defects to fold in** — each is the kind that rots into a wrong decision three
+tickets later:
+1. `04-…:121` "`Pet.img` byte-identical" is **false** — `c3bc7d20d` added `String.wz/Pet.img/5000067`.
+   The merge is right; the doc contradicts itself two sections apart.
+2. "7,241 `Character.wz` image digests" is a **line count**; the real image count is **7,207**
+   (7,207 + 17 subdir + 17 `TOTAL` rows). Coverage was genuinely complete; the label was wrong.
+   Corrected in this file above. Ticket 05's "7,215 images" contradicts 04 on the same file.
+3. **06's "95 added" is the XML total — the binary side installed 94**, because `Sound.wz` exited 4
+   and was discarded. 06's own §Sound section says so; the headline number carries no qualifier.
+4. 06's drop-row count: 790 → **776**.
+
+**And it corrected itself, which is the most useful thing in it.**
+`V84MountNodeTest.v84MountSkillsMapToTheirSprites` is a **verbatim copy of
+`StatEffect.buildSkillMounts()`** — same 8-row table, same job list, same arithmetic — so it asserts
+itself and cannot fail unless someone edits one file and not the other. That is structurally the
+same sin ticket 05 accused the *old* test of, just larger. The parts that earn their place are the
+**negative** controls (`assertNull(skillMountItem(1121017))` catches exactly the `% 10000`
+regression class) and `v83MountsStillMapToTheSameSprites`, keyed on `constants.skills.*` symbols.
+Since skill→sprite pairing is client-hardcoded and provable from no WZ node, **no test can be
+evidence for it** — that assertion is a change-detector and should be labelled as one.
+
+One claim is neither confirmable nor refutable: 05's "the old test asserted `20001017`" —
+`git log --all -S'20001017'` is empty, so the string never existed in this repo and the critiqued
+test lived in reverted uncommitted work. The *reasoning* holds (`Legend.YETI_MOUNT1 = 20001019`, and
+`10001019 % 10000 == 1019 == Beginner.WITCH_BROOMSTICK`).
+
+Also worth recording: 05's three output hashes verify byte-identically across **four** independent
+runs, so determinism is real rather than asserted — but the staged binaries live outside the repo,
+so "re-derivable from the committed tree" is overstated. The repo carries only path lists.
+
+### Owner decision needed — Crimson Sky travel route
+
+06 could not deliver criterion 5 and was right not to fake it. The only edge between Crimson Sky and
+existing content is `240080000/left00 → 240030102`, pointing **outward**, and `240030102` has no
+return portal in **either** v83 or v84 — so there is no node to merge and `conflicts.txt` is empty by
+construction rather than by luck. The one Leafre map v84 did edit (`240000000`) gained a scripted
+`tp` portal and lost an NPC; no route. Three options are written up in the ticket. A second gate is
+`needSkillForFly=1`. **Crimson Sky is otherwise complete and unreachable until this is decided.**
+
+## Run order to completion (owner directive 2026-08-16: run until the entire work is done)
+
+**Design rule discovered while re-dispatching, and it changes what a content ticket delivers:**
+**staged merges from the same base do not compose.** If two tickets each stage a full `Character.wz`
+from the same live base, installing both silently loses one set of changes. So from now on a content
+ticket's authoritative deliverable is its **path list** (`docs/wz-baseline/merge-lists/<NN>/<Wz>.paths.txt`)
+plus its server XML and SQL. It still stages and verifies a `.wz` — that is how it proves the list is
+correct — but the client files ship from **one composed merge at install time**, consuming every
+ticket's path list together. A dedicated install pass does that before 16.
+
+Tickets are serialized by **file ownership**, not by the dependency graph alone, because concurrent
+agents editing the same `wz/*.img.xml` was a real source of damage this session.
+
+| batch | tickets | owns | why not parallel with the others |
+|---|---|---|---|
+| A *(running)* | **04**, **06** | 04: `Character`/`Item`/`Etc` + `String.{Eqp,Etc,Consume,Ins,Cash}` · 06: `Map`/`Mob`/`Npc`/`Reactor`/`Sound` + `String.{Map,Mob,Npc}` + drop SQL | disjoint by construction |
+| B | **05**, **07** | 05: `Character/TamingMob`, `Morph`, `Skill`, `Eqp/{Taming,Dragon}` names · 07: Neo City maps | 05 collides with 04 on `Character.wz`; 07 collides with 06 on `Map.wz` + `String/Map.img` |
+| C | **08**, then **09** | 08: misc v84 areas · 09: quests | 08 collides with 06/07 on `Map.wz`; 09 is blocked by 06+07+08 |
+| D | **install pass**, then **16** | composed merge of every path list; regression | needs all content lists |
+| E | **10 → 11 → 12 → 13 → 14 → 15** | the Evan branch | **hard-blocked on ticket 01's human launch test** |
+
+> **Superseded 2026-08-16.** 01's runtime patch ran and verified against the live process, so the
+> Evan branch is unblocked and **10 is done bar the in-game checks**. The collision worry above did
+> not materialise: 10 needed **zero** `Character.wz` rows (04 had already merged all twenty
+> `00002000.img` Evan action rows) and re-added none of 05's `Eqp/Dragon` or `Eqp/Taming` force
+> roots. **11 → 12 → 13 → 14 → 15 now all need the client running and the composed merge installed**
+> — that copy is the highest-value thing the owner can do.
 
 > ### ⛔ 04/05/06 STOPPED AND KILLED, 2026-08-16. Merges frozen again until 03e lands.
 > R3's main report arrived and the stop call was right. **Two blockers I had believed closed were
@@ -560,14 +1120,208 @@ Full procedure: **`docs/work-plan/WZ-MERGE-PROCEDURE.md`**. The four things wort
    Reactor add-list is now producible. Handed to 02d.
 5. NPC `9000071` (Keroben) — closed. Genuinely new in v84, not a naming artifact.
 
+### 03i — gate widened, and the `hash` crash was not what it looked like
+
+Commit `fa1093791`. Suite **1,996 green**; client **18/18** at start and end.
+
+**The corrected rule:** a container is a positional array iff *every* child name is a non-negative
+integer **and** those integers form **one consecutive run** — which need not start at 0. Both
+discriminating clauses survive: *every* child an integer (so a map `.img` with layers `0`–`7` beside
+`info`/`portal` is still not an array) and *consecutive* (so `String.wz/Consume.img`'s 2,290 gapped
+item ids is still not an array — **dropping that clause would have refused 501 legitimate name rows**,
+which is exactly why 03h declined the broader rule and 03i declined it again).
+
+It classified **68** indexed parents, a superset of the regression pass's 34: 29 `ARRAY-0`,
+**2 `ARRAY-N`**, 30 `RUN-WITH-HOLES`, 7 not-all-integer. **Exactly the two glove parents change class,
+and the before/after dry run over all eleven lists differs in exactly those two rows** — `Character`
+242/12 → 240/14, every other file's pair identical.
+
+**It declined to cover `Check.img/4940`** (`{0,1,4961}`), which the review had flagged — covering it
+means allowing holes, which turns every id table into an array. No row targets `4940`. Recorded as a
+stated blind spot rather than quietly widened, and 03h's "the gate refuses all 123 rows structurally"
+is now qualified as true of *those* rows, not a general guarantee.
+
+**The `hash` crash was a UOL cycle, not depth.** `Reactor.wz/1050000.img/0/hit/2` is a `WzUOLProperty`
+pointing at its own ancestor, and `Kids()` on a UOL returns the *resolved target's* children — so
+`Canon()` walked `0 → hit/2 → 0` forever, branching twice per level. **A depth bound alone would still
+have expanded 2^depth lines.** Fixed by digesting a UOL as its link string (the target is digested at
+its own path anyway), plus depth 64 as a backstop that writes a `DEPTH LIMIT` marker *into* the hashed
+text — so a truncated subtree can never digest equal to an untruncated one. `hash <Reactor.wz>` now
+exits 0 in 0.33 s.
+
+**`Map.wz` triage — 395 rows, not 389** (the regression pass subtracted 08's 6 merged rows twice):
+216 refused structurally, 119 safe scenery appends left unclaimed, **55 denied as 28 roots**. Nothing
+untriaged. **14 of the 216 are refused only because of this ticket, and every one is a
+`foothold/<n>`** — v84 numbers footholds from 1, they are collision geometry, and the server reads
+them (`MapFactory.java:197`). That is a bigger practical effect than the glove. Among the 55: eight
+`portal` rows, five of them `pn=sp` spawn points that change **where a player lands**.
+
+The two `Item.wz` `reward/43` deny rows are in, and an XML dry run confirms **both are refused on the
+XML side too** — so 03j's revert cannot silently regress. All of R5's operator-facing text defects are
+fixed, including the install doc's contradictory closing line.
+
+One latent bug left deliberately, with a `ponytail:` comment naming the fix: `PositionalRefusal`
+memoises the baseline before this run's appends, so a manifest containing both `…/obj/25` and
+`…/obj/25/foo` would refuse the second. **It cannot fire** — no composed row is an ancestor of
+another, re-checked — and speculatively fixing it is the thing this codebase is trying not to do.
+
+---
+
+### 10 — the Evan tracer. Small merge, two corrections that are bigger than the merge.
+
+Suite **2,008 green** (1,996 + 12). All **18** client `.wz` SHA-256-match the backup at the start
+**and** at the end. 88 path rows in `merge-lists/10/`, `added 88 / refused 0 / denied 0 / forced 0`
+on all four files, exit 0. Composition re-run with 10 folded in: `compose.ps1` `$expect`
+1,662 → **1,750**, thirteen files, staged at `Server\wz-merge\10c\`.
+
+**Correction 1 — the client was never installed, and my dispatch said it was.** I briefed 10 that
+the composed merge was live on the client and that the composed lists were therefore the live
+contract. It is not: all 18 `.wz` are byte-identical to `_backup\client-v83-EzorsiaV2-2026-08-15\`
+and **none** of the eleven matches its 03i staged output (`String.wz` live `9437DEB8…` 3,561,285 vs
+03i `04ADEF71…` 3,612,239). The ticket's own first check agreed with my brief, was contradicted by
+its second, and it chased the contradiction instead of choosing between them — which is the only
+reason this was caught. **This file's closing line was right all along; my dispatch was the wrong
+one.** The practical consequence is the install target: ticket 10's own `wz-merge\10\` was merged
+from pristine v83, the same base as 03i, so those two sets **do not compose** and installing
+`10\String.wz` would drop tickets 04–08. **Install `10c\`, thirteen files, and nothing else.**
+
+**Correction 2 — "the gap is WZ data, not Java" is false, and it blocked two acceptance criteria.**
+
+- **`JobCommand.java:41,53` rejected `jobid >= 2200`** — i.e. every one of Evan's ten job levels.
+  `!job 2200`, which is literally criterion 2, printed "not available". Now asks `Job.getById`,
+  which is both correct and wider: the old guard let any id under 2200 through to `changeJob(null)`
+  and returned silently with no message at all.
+- **`Character.createDragon():10246` only constructed the Dragon**, and the constructor sends the
+  spawn to its *owner* only; map registration and the broadcast lived solely in
+  `MapleMap.addPlayer:2676`, which **both** callers run after. So a job-changed Evan's dragon was
+  invisible to every other player until the Evan changed map — criterion 4. Extracted to
+  `MapleMap.spawnDragon(Dragon)` and called from both.
+- **`Dragon` overrode `getObjectId()` to return the owner's character id**, while `addMapObject`
+  files objects under a fresh map OID and `removeMapObject(obj)` looks that key up through
+  `getObjectId()` — so **every dragon removal silently missed** and a departed Evan's dragon stayed
+  in `mapobjects` to be spawned for the next arrival (DRAGON is a non-ranged type, `MapleMap:3067`)
+  — criterion 5. Override deleted; its one consumer rewritten; every packet already read the owner
+  id from `getOwner().getId()`. Demonstrated on a real `MapleMap` with the old shape as the negative
+  control in the same test.
+- **And a fourth, which 10 *introduced* and its own code review caught — worth reading as a pattern,
+  not just a bug.** The fix for `createDragon()` registered into `getMap()`, but **`Character.map`
+  is never cleared when a player leaves a map** — the Cash Shop / MTS path runs `removePlayer` and
+  leaves the field set. So `!job <name> 2210` aimed at someone in the Cash Shop would file a dragon
+  into a map its owner is not in, *after* the removal that would have cleaned it up: **the same
+  ghost dragon, re-created by the fix for it.** Guarded inside `MapleMap.spawnDragon` on
+  `characters.contains(owner)` so every caller inherits it, and negative-controlled — deleting the
+  guard fails the test on its assertion, not on an incidental NPE.
+
+Eight more defects were **measured and left alone**, each routed by owner rather than guessed at —
+an Evan gains **0 HP/MP per level** (`levelUp():6327-6361` has no matching branch) and job 2001 is
+awarded *warrior* HP (`changeJob():1190`, `2001 % 1000 == 1`), both **ticket 14**; `Evan.MONSTER_RIDER`
+20011004 fails `sourceid % 10000000 == 1004` (it gives 11004), **ticket 12**; and a latent
+`AIOOBE` in `getJobBranch` for EVAN5–EVAN10. Full table with `file:line` in the ticket. **The DB
+schema claim is true — `002-character.sql:28` is already the ten-slot `sp` column and no SQL was
+written.**
+
+**Hazard F4 is closed, and it inverted.** The worry was that `StatEffect`'s speculative
+`20011025`–`20011039` mapping would turn a real Evan skill into a mount. The code is an **explicit
+eight-id list, not a range**, and dumping the merged `2001.img` shows **all eight are real Evan
+skills and each is exactly the mount the table pairs it with** — Wooden Pony, Croco, Black Scooter,
+Pink Scooter, Nimbus Cloud, Unicorn, Low Rider, Red Truck, 8/8 by name. So the failure mode cannot
+occur. `20011026` is "Soaring" — flight, correctly excluded, and now the negative control that
+fires if anyone widens the list back into a range. The one thing it *did* surface: `2001.img` also
+ships `20011018`/`19`/`31` (Yeti Rider, Witch's Broomstick, Balrog) as real mounts with **no sprite
+mapping**, and the id offsets do not transfer from any other job — so it recorded them for ticket 12
+rather than inventing three sprite ids, which would have been F4 all over again.
+
+**What it did not have to do, and this is the useful part for 11–15:** `Character.wz` needed
+**nothing**. Ticket 04 already merged all twenty `00002000.img/<action>` rows — every Evan body
+animation — and the four `Dragon/*/info/equipTradeBlock` rows. The Evan XML pack at
+`porting-resources/evan-xml/` was **not opened**: v84 carries the lot. And the 2003/2004 dragon-equip
+tiers the scope doc promises **are not in v84 at all**, so they are a later-version artefact of that
+pack.
+
+`Etc.wz` and `UI.wz` join the composition here, both narrowly: 4 and 2 rows. `Etc` is
+`MakeCharInfo.img`'s Evan block, which 04 declined and which **the server genuinely reads**
+(`MakeCharInfoValidator:17-23`) — creation *data*, creation *flow* is 15. `UI` is exactly §11's
+stated `SkillEx`/`SkillMacroEx` exception and nothing else; **59 of 61 UI roots are left**,
+including every `RaceSelect/BtEvan` row, which is 15's. It first took the two `Equip/DragonEquip`
+rows as well and **gave them back to ticket 14 on review** — criterion 4 is "spawns, follows, and
+moves", not "can be equipped", so nothing in 10 earned them, and "no other ticket has claimed it" is
+not a reason to widen a scope rule.
+
+Three smaller things worth carrying:
+
+- **`Skill.wz/Dragon` is the first whole-`WzDirectory` row anyone has written out**, and §5.4 says
+  those are not content-checked. It closed the gap the other way: `WzMerge hash` on the merged
+  directory equals **v84's own digest exactly** (`d27e4899…`) across all ten images and their
+  decoded canvas payloads. `WzMerge xml` refuses that row by design — no `.img` segment — so
+  `Skill.wz`'s XML run is `added 38, refused 1`, **exit 3**, and an install script must not read it
+  as failure. A second XML-only path list was written and then deleted: the tool already draws the
+  line, and two lists that must agree is a divergence waiting to happen.
+- **A `compose.ps1` defect the fold-in created and then closed.** A backtick used as a quote mark
+  inside a double-quoted `$perFile` string is a **newline escape**, so a comment block split in two
+  and shipped its own second half as a manifest row. Everything downstream stayed plausible.
+  `compose.ps1` now asserts every emitted row starts with `<Name>.wz/`, proven both ways, and the
+  re-merge without the stray row is byte-identical — it had cost nothing but an exit code.
+- **09's handoff taken.** `scripts/quest/3759.js` (Soaring, which 06's Crimson Sky maps gate on) had
+  a dropMessage guard for Evan and a test pinning `2001.img.xml`'s *absence* with the message "…can
+  now be replaced by a teachSkill". It appeared; the guard is gone; the assertion is inverted rather
+  than deleted, as was 03f's `assertNull(20011025)` negative control in `V84MountNodeTest`.
+
+
+# WHERE THE PROJECT STANDS
+
+**Everything that can be done without the owner is done.** Tickets **01–10 and 16 (partial)** are
+complete or staged; **11–15 need the client running.** The Evan branch is no longer blocked — 01's
+runtime gate patch reported `GUARD PASS` → `PATCHED and verified` against the live process, and 10
+landed on the back of it.
+
+**Orchestrator-verified at close, independently:** all **18** client `.wz` SHA-256-match the backup —
+compared list against list, not sampled. **Nothing has ever been installed. The game client has not
+been modified once in this entire project.** Ticket 10 re-verified this by enumerating
+`D:\games\MapleStory\*.wz` rather than checking a hard-coded list, after a dispatch of mine claimed
+the opposite; see its section above.
+
+## What is ready and waiting
+
+`docs/wz-baseline/merge-lists/composed/` — **1,750 rows across 13 files** (11 + `Etc.wz` + `UI.wz`,
+both introduced by ticket 10). Nine of the eleven pre-existing outputs reproduce byte-identical
+across four independent runs, `Quest.wz` bit-for-bit equal to ticket 09's separately staged output;
+only `Skill.wz` and `String.wz` move, and only by ticket 10's rows. Server XML and SQL are already
+applied to the repo and green at **2,008** tests. The client half is one deliberate human copy away
+— **`Server\wz-merge\10c\`, thirteen files.**
+
+## What needs the owner — in priority order
+
+1. ~~**Ticket 01's go/no-go.**~~ **DONE.** The runtime patcher ran against the live
+   `MapleStory.exe` and logged `GUARD PASS` → `PATCHED and verified`. Themida did not re-encrypt
+   the region and the client kept running. **It patches memory, so `tools\patch-evan-gate.ps1`
+   must be re-run after every launch** — without it no Evan skill resolves, and the symptom looks
+   exactly like bad WZ data.
+2. **Install the composed client merge — now `Server\wz-merge\10c\`, THIRTEEN files**, with the
+   client closed: `Character Etc Item Map Mob Morph Npc Quest Reactor Skill Sound String UI`.
+   Hashes and sizes in `composed/README.md`, procedure in ticket 10 `## Human steps → Step 0`.
+   Everything downstream of "does it actually work in game" waits on this — it is now the single
+   highest-value thing on this list. **Do not install `wz-merge\10\`** (four files, merged from
+   pristine v83 to prove ticket 10's path lists); it does not compose with 03i's output and
+   `10\String.wz` alone would drop tickets 04–08.
+3. **Crimson Sky's travel route.** The area is complete and unreachable; neither v83 nor v84 ships
+   the return node, so this is a design decision, not a defect. Three options in ticket 06. Related:
+   quest **`3759` grants Soaring**, which those maps gate on, and it sits behind one expired date node.
+4. **Four `Character.wz/Dragon/*/info/level` rows** — adopting v84 switches on a dormant
+   equip-levelling path for four items. Kept local pending your call.
+5. **Four customized weapons** (`01382058`, `01452058`, `01472069`, `01492024`) gained v84 combat
+   stats into previously-cosmetic nodes. Low practical risk; never explicitly decided.
+6. **Six forced `String.wz` names take untranslated Korean over `MISSING NAME`**, and v84's own
+   Christmas NPC names are Korean too. Reversible in one place; listed in the composed README.
+
 ## Human-required queue
 
 Batched; nothing here blocks other tickets.
 
 | From | Step | Staged? |
 |---|---|---|
-| 01 | Double-click `D:\games\MapleStory\local.evan.exe` → login screen? Then `localhome.evan.exe`. Then log a character in and play. Pass/fail signatures + rollback in ticket 01 `## Human steps`. **Before launching, confirm both `.evan.exe` files still exist at 9,920,523 bytes** — antivirus may quarantine a patched Themida binary, and that failure looks identical to a Themida rejection. | **ready** |
-| 03 | Copy `Server\wz-merge\post\{Item,String}.wz` over the live client (client closed), start `launch.bat` and `localhome.exe`, then `!item 2001500` → a Red Potion that heals 50 HP, is named "Red Potion", and cannot be traded. Full pass/fail table + verified rollback in ticket 03 `## Human steps — staged, not performed`. **Use `localhome.exe`, not `localhome.evan.exe`** — mixing 01's binary patch into this test makes a failure ambiguous. | **ready** |
+| ~~01~~ | ~~Double-click `local.evan.exe`~~ — **superseded and done.** `local.exe`/`localhome.exe` turned out to be memory dumps, not clients; the client is `MapleStory.exe`, Themida-compressed, unpatchable on disk. `tools\patch-evan-gate.ps1` patches the live process and has run successfully. **Re-run it after every launch.** | **done** |
+| **10** | **Install `Server\wz-merge\10c\` — 13 files.** This replaces 03's two-file copy and `composed/README.md`'s ten-file one; do this instead of either, not as well as. Then: run the gate patcher, `!job 2001` → `!job 2200`, watch a dragon appear **on a second client's screen** without changing map, walk, change map, log out and have the second client walk back in (no ghost dragon), open the skill window. Full pass/fail in ticket 10 `## Human steps`. | **ready** |
+| ~~03~~ | ~~Copy `Server\wz-merge\post\{Item,String}.wz`~~ — **folded into 10's install.** Those two files predate the deny-list and the positional-array gate. The tracer item `2001500` is in the composed `Item.wz`, so `!item 2001500` remains the right smoke test — just run it after 10's install, not after a separate copy. | superseded |
 
 **Orchestrator verification of 01** (independent): pattern occurs exactly once per binary at
 `0x361714`; each patched copy differs from its original in exactly 21 contiguous bytes

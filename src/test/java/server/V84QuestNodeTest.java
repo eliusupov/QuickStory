@@ -550,10 +550,13 @@ class V84QuestNodeTest {
         assertTrue(body.contains("qm.teachSkill("), "3759.js must teach Soaring");
         assertTrue(body.contains("20011026"), "3759.js must handle the Evan variant");
 
-        // 20011026 lives in Skill.wz/2001.img, which ticket 12/13 owns and which is not here yet;
-        // the other three must resolve, or the script teaches a skill that does not exist.
-        assertFalse(Files.exists(Path.of("wz", "Skill.wz", "2001.img.xml")),
-                "Skill.wz/2001.img.xml appeared - 3759.js's Evan guard can now be replaced by a teachSkill");
+        // All four variants must resolve, or the script teaches a skill that does not exist. When
+        // 09 wrote this, Skill.wz/2001.img was unmerged and the Evan branch was a dropMessage
+        // guard, pinned here by asserting the file's ABSENCE. Ticket 10 merged that image, so the
+        // guard is gone and the assertion is now the positive one it was always waiting to become.
+        assertTrue(Files.readString(Path.of("wz", "Skill.wz", "2001.img.xml"), StandardCharsets.UTF_8)
+                .contains("name=\"20011026\""), "skill 20011026 is missing from Skill.wz/2001.img.xml");
+        assertFalse(body.contains("dropMessage("), "3759.js still carries the pre-ticket-10 Evan guard");
         assertTrue(Files.readString(Path.of("wz", "Skill.wz", "000.img.xml"), StandardCharsets.UTF_8)
                 .contains("name=\"0001026\""), "skill 1026 is missing from Skill.wz/000.img.xml");
         assertTrue(Files.readString(Path.of("wz", "Skill.wz", "1000.img.xml"), StandardCharsets.UTF_8)

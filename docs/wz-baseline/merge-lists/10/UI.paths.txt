@@ -1,0 +1,33 @@
+# Ticket 10 - Evan exists. UI.wz path list. 2 rows, from add-list\UI.txt.
+#
+# UI.wz is out of scope by ticket-03 decree with exactly one stated exception
+# (WZ-MERGE-PROCEDURE.md 11): "Take SkillEx / SkillMacroEx only, never bulk."
+# This list is that exception and nothing else. 59 of the 61 UI.wz add-list roots are left,
+# including every Login.img/RaceSelect/BtEvan and NewCharEvan row - those are ticket 15's.
+#
+# SkillEx / SkillMacroEx are the v84 skill window. Ticket 10 criterion 6 is "skill window opens
+# without crashing" for a job with TEN job levels; v83's window has no such layout. Taken from the
+# v84 UI.wz and NOT from porting-resources\evan-xml - that pack's UIWindow.img is a Big Bang dump
+# and its own author says so.
+#
+# DELIBERATELY NOT HERE, and this was a correction made during review:
+#   UI.wz/UIWindow.img/Equip/DragonEquip
+#   UI.wz/UIWindow.img/Equip/BtDragonEquip
+# The dragon-equipment panel and its button. Ticket 10 merged them on the reasoning that criterion
+# 4 says "has a working dragon" and a dragon equip cannot be equipped without them. That does not
+# survive reading the criterion: it is "Dragon spawns, follows, and moves; other players see it" -
+# nothing about equipping. They are neither SkillEx nor SkillMacroEx, so 11 does not license them,
+# and "the ticket next door has not claimed it" is not a reason to widen a scope rule. They belong
+# with the dragon's appearance and growth stages, i.e. TICKET 14; both are pure additions to an
+# existing named container and will merge clean whenever 14 wants them.
+#
+# 4.5 check: UIWindow.img already exists in the live client, so both rows add a child to a
+# pre-existing container. Neither edits an existing record and neither container is a positional
+# array (all children named). Dumped both sides: live UIWindow.img has 110 children, v84 has the
+# same 110 plus these two. The 6.1 digest confirms it after the fact - 109 of 110 pre-existing
+# children byte-identical, and nothing pre-existing moved.
+# EzorsiaV2_UI.wz was checked in case the HD mod serves the UI instead: it holds no UIWindow.img,
+# Login.img or Basic.img at all, so UI.wz is the file the client reads these from.
+
+UI.wz/UIWindow.img/SkillEx
+UI.wz/UIWindow.img/SkillMacroEx

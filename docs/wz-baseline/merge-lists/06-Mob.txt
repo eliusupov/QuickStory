@@ -1,0 +1,34 @@
+# Ticket 06 — Crimson Sky, Mob.wz manifest.
+#
+# Two sets, and the ticket only named one of them.
+#
+# 9500374-9500382 are the ticket's nine named mobs (Green Cornian .. Leviathan). All nine carry
+# info/summonType=1 and info/category=4: they are SUMMONED clones of the Leafre originals
+# (8150000 etc., which the live client already has), not field spawns. They appear in NO map
+# `life` node anywhere in v84's Map2 - verified by a full scan. They are summoned by the
+# Sky_* / dragonLair_GL field scripts, which Cosmic does not have (see the ticket's ## Gaps).
+# Merged anyway: they are what the drop tables key on and what a GM spawn will use.
+#
+# 8300000-8300007 are what the Crimson Sky maps ACTUALLY spawn - the flying obstacles
+# (Soaring Hawk/Eagle/Red+Blue+Black Wyvern/Griffey, Dragonica). Every `life` row in
+# 240080100-240080600 is one of 8300000-8300006, all at mobTime -1. Absent from the live
+# client entirely (wz/Mob.wz has no 83000xx). Without these the seven flight maps are empty.
+# 8300007 is merged with its block for completeness; no map references it.
+
+Mob.wz/8300000.img
+Mob.wz/8300001.img
+Mob.wz/8300002.img
+Mob.wz/8300003.img
+Mob.wz/8300004.img
+Mob.wz/8300005.img
+Mob.wz/8300006.img
+Mob.wz/8300007.img
+Mob.wz/9500374.img
+Mob.wz/9500375.img
+Mob.wz/9500376.img
+Mob.wz/9500377.img
+Mob.wz/9500378.img
+Mob.wz/9500379.img
+Mob.wz/9500380.img
+Mob.wz/9500381.img
+Mob.wz/9500382.img

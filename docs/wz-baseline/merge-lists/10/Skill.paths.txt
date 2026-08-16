@@ -1,0 +1,31 @@
+# Ticket 10 - Evan exists, renders, and has a dragon. Skill.wz path list.
+# 12 rows, all from docs\wz-baseline\add-list\Skill.txt. Every row is a WHOLE new node at the
+# Skill.wz root: the live client has none of them (verified with `WzMerge dump`, NOT FOUND for
+# 2001.img, 2200.img, 2218.img and Dragon; 2112.img - Aran - is present, so the tree is intact).
+# Nothing here writes into a node the live client already has, so WZ-MERGE-PROCEDURE.md 4.5
+# does not apply to this file.
+#
+# 2001.img       Evan beginner (job 2001). Contains 20011000-20011039 + 20019000-2.
+# 2200-2218.img  the ten Evan job levels (2200, 2210..2218 - note there is no 2219).
+# Skill.wz/Dragon  a whole new WzDirectory holding the ten dragon animation images, one per
+#                job level. This is what makes the dragon RENDER; it is the only row in this
+#                ticket that is a WzDirectory, so it is DeepCloned and is NOT content-checked
+#                by the post-write digest (WZ-MERGE-PROCEDURE.md 5.4). It is also NOT spliced
+#                into the server XML: wz\Skill.wz\ is 76 flat .img.xml files with no
+#                subdirectory, and the server reads Skill.wz only as <jobid>.img/skill/<id>.
+#                On the XML side WzMerge refuses it itself with "no .img segment - cannot map
+#                to an XML file", so the SAME list serves both runs and WzMerge xml on this
+#                file is expected to be "added 11, refused 1", exit 3. That refusal is correct.
+
+Skill.wz/2001.img
+Skill.wz/2200.img
+Skill.wz/2210.img
+Skill.wz/2211.img
+Skill.wz/2212.img
+Skill.wz/2213.img
+Skill.wz/2214.img
+Skill.wz/2215.img
+Skill.wz/2216.img
+Skill.wz/2217.img
+Skill.wz/2218.img
+Skill.wz/Dragon

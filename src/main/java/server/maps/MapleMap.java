@@ -398,6 +398,48 @@ public class MapleMap {
         }
     }
 
+    /**
+     * Registers an Evan's dragon in this map and shows it to everyone else in it.
+     * <p>
+     * Called from two places, and it has to be both: {@link #addPlayer} for a dragon that already
+     * existed when its owner walked in, and {@link client.Character#createDragon()} for one that
+     * comes into being while its owner is already standing here (job change, or the post-login
+     * {@code createDragon()} which runs after {@code addPlayer}). Before this existed only the
+     * first path registered the dragon, so a freshly job-changed Evan's dragon was visible to
+     * nobody but the Evan until they changed maps.
+     * <p>
+     * <b>The membership check is load-bearing, and it lives here rather than in the callers.</b>
+     * {@code Character.map} is never cleared when a player leaves — entering the Cash Shop or MTS
+     * runs {@link #removePlayer} but leaves the field pointing at the map they came from — so
+     * {@code createDragon()} on a player who is away would otherwise file a dragon into a map its
+     * owner is not in, <em>after</em> the removal that would have cleaned it up. Nothing would ever
+     * take it out again and {@link #sendObjectPlacement} would show it to everyone who walked in,
+     * which is the same ghost-dragon shape that deleting {@code Dragon.getObjectId()} fixed,
+     * arrived at through a different door. {@code characters} is the exact invariant: it gains the
+     * player at {@code addPlayer} well before that method's own call below, and loses them at the
+     * top of {@code removePlayer}.
+     */
+    public void spawnDragon(Dragon dragon) {
+        Character owner = dragon.getOwner();
+
+        chrRLock.lock();
+        try {
+            if (!characters.contains(owner)) {
+                return;
+            }
+        } finally {
+            chrRLock.unlock();
+        }
+
+        dragon.setPosition(owner.getPosition());
+        addMapObject(dragon);
+        if (owner.isHidden()) {
+            broadcastGMPacket(owner, PacketCreator.spawnDragon(dragon));
+        } else {
+            broadcastPacket(owner, PacketCreator.spawnDragon(dragon));
+        }
+    }
+
     public void addSelfDestructive(Monster mob) {
         if (mob.getStats().selfDestruction() != null) {
             this.selfDestructives.add(mob.getObjectId());
@@ -2675,13 +2717,7 @@ public class MapleMap {
 
         final Dragon dragon = chr.getDragon();
         if (dragon != null) {
-            dragon.setPosition(chr.getPosition());
-            this.addMapObject(dragon);
-            if (chr.isHidden()) {
-                this.broadcastGMPacket(chr, PacketCreator.spawnDragon(dragon));
-            } else {
-                this.broadcastPacket(chr, PacketCreator.spawnDragon(dragon));
-            }
+            spawnDragon(dragon);
         }
 
         StatEffect summonStat = chr.getStatForBuff(BuffStat.SUMMON);

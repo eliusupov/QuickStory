@@ -47,10 +47,13 @@ public class Dragon extends AbstractAnimatedMapObject {
         client.sendPacket(PacketCreator.spawnDragon(this));
     }
 
-    @Override
-    public int getObjectId() {
-        return owner.getId();
-    }
+    // NOTE: getObjectId() is deliberately NOT overridden to return owner.getId(). It used to be,
+    // and that silently broke removal: MapleMap.addMapObject keys the object by a fresh map OID
+    // while removeMapObject(obj) looks the key up with getObjectId(), so the remove missed and
+    // every departed Evan left a dragon behind in `mapobjects` for the next player to walk in on.
+    // The wire protocol identifies a dragon by its owner's character id, but every packet already
+    // reads that from getOwner().getId() (PacketCreator.spawnDragon/moveDragon/removeDragon), so
+    // nothing needed this override.
 
     @Override
     public void sendDestroyData(Client c) {

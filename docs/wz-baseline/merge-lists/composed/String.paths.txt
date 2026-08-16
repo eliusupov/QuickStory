@@ -1,16 +1,21 @@
-# COMPOSED INSTALL LIST - String.wz. Built by 03f; 08 folded in by 03g, 09 by 03h,
-# from the committed per-ticket lists under ..\{04,05,06,07,03f,08,09}\ - those are the
-# source of truth, this file is a concatenation of them in ticket order with each
-# block's internal order preserved. Every row is unique across the whole composed set
-# and no row is an ancestor of another (checked, all eleven files). Regenerate, never edit.
+# COMPOSED INSTALL LIST - String.wz. Built by 03f; 08 folded in by 03g, 09 by 03h, 10 by 10.
+# Source of truth is the committed per-ticket lists under ..\{04,05,06,07,03f,08,09,10}\;
+# this file is a concatenation of them in ticket order with each block's internal order
+# preserved. Every row is unique across the whole composed set and no row is an ancestor
+# of another (checked: 1,750 rows across all THIRTEEN files). Regenerate, never edit.
 #
-# 510 rows. REQUIRES --force composed\FORCE.txt (41 roots - 38 + ticket 08's 3).
-# Reusing the 38-root file silently reverts 08's three forced names. Expect 9 refusals.
+# 580 rows. REQUIRES --force composed\FORCE.txt, 41 roots = COLLISION-FORCE.txt's 37
+# + 03f's Npc.img/9201144 + ticket 08's 3. (The old wording here said '38 + 08's 3', which is 41
+# by luck and 37+3=40 by arithmetic; 03f's row was the one going unnamed.) Reusing the 37-root
+# COLLISION-FORCE.txt silently reverts four forced names. Expect 9 refusals.
+# Ticket 10 adds 70 Skill.img rows (Evan) and forces NOTHING - the 18 Evan Eqp/Dragon and
+# Eqp/Taming names it would otherwise want are ticket 05's force roots, already on FORCE.txt.
 #
-# Ticket 09 is folded in (03h): it owns Quest.wz outright and touches no other file, so
-# every list except Quest.paths.txt is byte-identical to 03g's. FORCE.txt stays at 41
-# roots, all String.wz - 09 forces nothing. Ticket 13 (Evan, the 540 22xxx rows) is next;
-# add "13" to the Quest entry of compose.ps1's $files table and re-run.
+# Ticket 10 is folded in (the Evan tracer): +12 Skill, +70 String, +4 Etc, +2 UI = 88 rows,
+# bringing Etc.wz and UI.wz into the composition for the first time. It forces nothing, so
+# FORCE.txt stays at 41 roots, all String.wz. The other nine lists are unchanged in content.
+# Ticket 13 (Evan's world, the 540 22xxx Quest rows and the 29 Evan map images) is next;
+# add "13" to the Quest and Map entries of compose.ps1's $files table and re-run.
 #
 # Run book: ..\..\..\work-plan\WZ-MERGE-PROCEDURE.md section 5, one file at a time.
 
@@ -535,5 +540,77 @@ String.wz/Npc.img/2001008
 String.wz/Map.img/ossyria/200090080
 String.wz/Map.img/ossyria/200090090
 String.wz/Npc.img/1013203
+
+# ==== ticket 10 (70 rows, order preserved from 10\String.paths.txt) ====
+String.wz/Skill.img/2001
+String.wz/Skill.img/20010012
+String.wz/Skill.img/20011000
+String.wz/Skill.img/20011001
+String.wz/Skill.img/20011002
+String.wz/Skill.img/20011003
+String.wz/Skill.img/20011004
+String.wz/Skill.img/20011005
+String.wz/Skill.img/20011006
+String.wz/Skill.img/20011007
+String.wz/Skill.img/20011009
+String.wz/Skill.img/20011010
+String.wz/Skill.img/20011011
+String.wz/Skill.img/20011018
+String.wz/Skill.img/20011019
+String.wz/Skill.img/20011020
+String.wz/Skill.img/20011025
+String.wz/Skill.img/20011026
+String.wz/Skill.img/20011027
+String.wz/Skill.img/20011028
+String.wz/Skill.img/20011029
+String.wz/Skill.img/20011030
+String.wz/Skill.img/20011031
+String.wz/Skill.img/20011037
+String.wz/Skill.img/20011038
+String.wz/Skill.img/20011039
+String.wz/Skill.img/20019000
+String.wz/Skill.img/20019001
+String.wz/Skill.img/20019002
+String.wz/Skill.img/2200
+String.wz/Skill.img/22000000
+String.wz/Skill.img/22001001
+String.wz/Skill.img/2210
+String.wz/Skill.img/22101000
+String.wz/Skill.img/22101001
+String.wz/Skill.img/2211
+String.wz/Skill.img/22111000
+String.wz/Skill.img/22111001
+String.wz/Skill.img/2212
+String.wz/Skill.img/22121000
+String.wz/Skill.img/22121001
+String.wz/Skill.img/2213
+String.wz/Skill.img/22131000
+String.wz/Skill.img/22131001
+String.wz/Skill.img/2214
+String.wz/Skill.img/22140000
+String.wz/Skill.img/22141001
+String.wz/Skill.img/22141002
+String.wz/Skill.img/22141003
+String.wz/Skill.img/2215
+String.wz/Skill.img/22150000
+String.wz/Skill.img/22151001
+String.wz/Skill.img/22151002
+String.wz/Skill.img/22151003
+String.wz/Skill.img/2216
+String.wz/Skill.img/22160000
+String.wz/Skill.img/22161001
+String.wz/Skill.img/22161002
+String.wz/Skill.img/22161003
+String.wz/Skill.img/2217
+String.wz/Skill.img/22170001
+String.wz/Skill.img/22171000
+String.wz/Skill.img/22171002
+String.wz/Skill.img/22171003
+String.wz/Skill.img/22171004
+String.wz/Skill.img/2218
+String.wz/Skill.img/22181000
+String.wz/Skill.img/22181001
+String.wz/Skill.img/22181002
+String.wz/Skill.img/22181003
 
 # ==== ticket 13 appends here ====

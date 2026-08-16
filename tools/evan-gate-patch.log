@@ -1,0 +1,15 @@
+﻿[2026-08-16 11:48:46] SELFTEST ok: pattern matches local.exe at 0x361714
+[2026-08-16 11:48:46] SELFTEST ok: VA 0x761714 == offset + ImageBase
+[2026-08-16 11:48:46] SELFTEST ok: 21 bytes in, 21 bytes out
+[2026-08-16 11:48:49] SELFTEST ok: pattern is unique in the image
+[2026-08-16 11:48:49] SELFTEST: all pass
+[2026-08-16 12:03:19] === ticket 01b runtime patch === target VA 0x00761714, 21 bytes, DryRun=True
+[2026-08-16 12:03:33] attached to PID 48100 (MapleStory)
+[2026-08-16 12:03:33] read: 83 F8 16 0F 84 D7 00 00 00 81 FE D1 07 00 00 0F 84 CB 00 00 00
+[2026-08-16 12:03:33] GUARD PASS: expected gate pattern found at 0x00761714.
+[2026-08-16 12:03:33] RESULT: dry run - address confirmed, nothing written.
+[2026-08-16 12:03:49] === ticket 01b runtime patch === target VA 0x00761714, 21 bytes, DryRun=False
+[2026-08-16 12:03:49] attached to PID 48100 (MapleStory)
+[2026-08-16 12:03:49] read: 83 F8 16 0F 84 D7 00 00 00 81 FE D1 07 00 00 0F 84 CB 00 00 00
+[2026-08-16 12:03:49] GUARD PASS: expected gate pattern found at 0x00761714.
+[2026-08-16 12:03:49] RESULT: PATCHED and verified - 21x 90 at 0x00761714.

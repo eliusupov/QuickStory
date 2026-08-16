@@ -1,0 +1,20 @@
+# Ticket 06 — Crimson Sky, Npc.wz manifest.
+#
+# 2085000 Matada (Halflinger Adventurer)   - life of 240080000 Crimson Sky Dock
+# 2085001 Crimson Sky Doorway              - life of 240080000 and 240080100
+# 2085002 Crimson Sky Doorway              - life of 240080800 Crimson Sky Nest
+# 2085003 Dragon Rider                     - placed in NO v84 map (verified by full Map2 scan);
+#                                            merged so the id resolves if a script summons it
+# 9201144 Shadow Knight Rene               - life of 683010000 Dragon's Nest
+# 9201145 Giant Twin Dragon's Egg          - life of 683010000 Dragon's Nest
+#
+# None of these fall in Cosmic's injected 99xxxxx block (PlayerNPC.java:66 -> 9901910-9906599),
+# so the ticket-08 landmine does not apply here. COLLISION-DENY.txt was checked row by row
+# against this manifest: zero intersections.
+
+Npc.wz/2085000.img
+Npc.wz/2085001.img
+Npc.wz/2085002.img
+Npc.wz/2085003.img
+Npc.wz/9201144.img
+Npc.wz/9201145.img
