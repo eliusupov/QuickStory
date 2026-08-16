@@ -59,6 +59,14 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="156" author="evan-chain">
+        <sqlFile path="db/data/156-evan-chain-drop-data.sql"/>
+        <rollback>
+            DELETE FROM drop_data WHERE questid IN (22407, 22410, 22524, 22529, 22531, 22532, 22548, 22559);
+            DELETE FROM reactordrops WHERE reactorid = 2302001 AND questid IN (22407, 22410);
+        </rollback>
+    </changeSet>
+
     <changeSet id="161" author="Ponk">
         <sqlFile path="db/data/161-admin-data.sql"/>
     </changeSet>

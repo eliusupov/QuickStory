@@ -815,6 +815,20 @@
       <int name="rx0" value="1513"/>
       <int name="rx1" value="2073"/>
     </imgdir>
+     <imgdir name="42">
+       <string name="type" value="n"/>
+       <string name="id" value="1022106"/>
+       <int name="x" value="809"/>
+       <int name="y" value="1643"/>
+       <int name="mobTime" value="0"/>
+       <int name="f" value="0"/>
+       <int name="hide" value="0"/>
+       <string name="limitedname" value="q225290"/>
+       <int name="fh" value="76"/>
+       <int name="cy" value="1646"/>
+       <int name="rx0" value="759"/>
+       <int name="rx1" value="859"/>
+     </imgdir>
   </imgdir>
   <imgdir name="0">
     <imgdir name="info">

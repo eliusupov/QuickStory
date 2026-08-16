@@ -18,9 +18,9 @@
 # Precedence, if both lists are ever supplied: deny wins. A path in both is an operator error
 # and should be a hard exit, not a silent resolution.
 #
-# 188 roots. (28 from 03c, +12 from 03g/ticket 08, +116 from 03h/ticket 09, +32 from 03i:
+# 192 roots. (28 from 03c, +12 from 03g/ticket 08, +116 from 03h/ticket 09, +32 from 03i:
 # 2 glove rows in Hazard 2d, 2 Item.wz reward slots in Hazard 2e, and 28 live-map container roots
-# in Hazard 5.)
+# in Hazard 5; +4 from ticket 43, closing the Hazard 1 floor — see below.)
 
 # --- Hazard 1: server-owned id range -----------------------------------------------------
 # PlayerNPC.java:66-67 declares 9901910-9906599 a range the server allocates from AT RUNTIME
@@ -39,6 +39,42 @@ Etc.wz/NpcLocation.img/9901916	# server-allocated id range, PlayerNPC.java:66
 Etc.wz/NpcLocation.img/9901917	# server-allocated id range, PlayerNPC.java:66
 Etc.wz/NpcLocation.img/9901918	# server-allocated id range, PlayerNPC.java:66
 Etc.wz/NpcLocation.img/9901919	# server-allocated id range, PlayerNPC.java:66
+
+# --- Hazard 1b: the SAME range, BELOW the 9901910 floor (ticket 43) ----------------------
+# The ten rows above encode the range as "9901910 and up" because that is where 03c happened to
+# find v84 rows. THE RANGE IS WIDER THAN ITS FLOOR AND ALWAYS WAS. Verified in code, not in a
+# comment:
+#   constants/id/NpcId.java:38                PLAYER_NPC_BASE = 9900000
+#   server/life/PlayerNPC.java:321-323        branchSid = PLAYER_NPC_BASE + branch*100,
+#                                             nextBranchSid = branchSid + (branch < 26 ? 100 : 400)
+#   constants/game/GameConstants.java:386     non-hall-of-fame branch = 26 + 4*(mapid/100000000),
+#                                             so the highest branch is 62 (mapid 990000000)
+#                                             -> 9900000 + 6200 + 400 = 9906600 exclusive.
+# The allocator therefore hands out 9900000-9906599, plus the fixed 9977777
+# (NpcId.CUSTOM_DEV). PlayerNPC.java:66-67's own comment says the same thing; the code confirms
+# both ends of it. Anything Nexon ships anywhere inside that band is a fixed placement or a
+# fixed name landing on ids this server assigns to real players' rank NPCs at runtime.
+#
+# The 149 PlayerNPC rows the ticket-42 audit found in 9901000-9901849 are Map.wz `life` entries
+# and are NOT listed here: a life slot has no id in its path, only an index, so a deny root
+# cannot name one. Those are refused structurally instead, by the positional-array gate (4.4) —
+# and that refusal must be left standing rather than forced. What IS listable is every path in
+# the band that names the id, and this is all of them the pinned v84 source can offer:
+# `grep -rn '99[0-9]\{5\}' docs/wz-baseline/add-list/` returns 58 rows. 17 are out-of-band ids
+# that only LOOK like the band (String.wz/Mob.img/9990000-9990015, Mob.wz/9999999.img). 10 are
+# the NpcLocation rows denied above. 20 more — Npc.wz/990191x.img and String.wz/Npc.img/990191x
+# — are in the band but name whole nodes this tree already has, so the additive gate refuses
+# them on its own; they are left to it rather than duplicated here. The remaining 11 — on ids
+# 9900000, 9900001 and 9901000 — sit BELOW 9901910 and were uncovered by anything until now.
+# All 11 are INTERIOR writes into nodes this server already has (Npc.wz/9900000.img has `reg`
+# but not `reg/name1..3`; String.wz/Npc.img/9901000 has n0/n1/d0 but not `name`), which is the
+# 4.5 shape the additive gate is blind to by construction: no collision fires, conflicts.txt
+# stays empty, and the merge quietly edits a PlayerNPC slot.
+# Re-run that grep if the v84 source is ever re-pinned; the add-list is the enumeration.
+Npc.wz/9900000.img	# PlayerNPC allocator band 9900000-9906599, NpcId.java:38 + PlayerNPC.java:321
+Npc.wz/9900001.img	# PlayerNPC allocator band 9900000-9906599, NpcId.java:38 + PlayerNPC.java:321
+Npc.wz/9901000.img	# PlayerNPC allocator band 9900000-9906599, NpcId.java:38 + PlayerNPC.java:321
+String.wz/Npc.img/9901000	# PlayerNPC allocator band; v84 adds /name to a live rank-NPC slot
 
 # --- Hazard 2: positional arrays cannot be merged slot-by-slot ---------------------------
 # `reward/<n>` is the n-th slot of a monster-book drop list, not an identity. Cosmic rewrote

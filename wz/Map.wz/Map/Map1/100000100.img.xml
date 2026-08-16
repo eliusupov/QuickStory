@@ -111,6 +111,19 @@
       <int name="rx0" value="462"/>
       <int name="rx1" value="562"/>
     </imgdir>
+     <imgdir name="3">
+       <string name="type" value="n"/>
+       <string name="id" value="1011101"/>
+       <int name="x" value="1559"/>
+       <int name="y" value="203"/>
+       <int name="mobTime" value="0"/>
+       <int name="f" value="0"/>
+       <int name="hide" value="0"/>
+       <int name="fh" value="141"/>
+       <int name="cy" value="214"/>
+       <int name="rx0" value="1509"/>
+       <int name="rx1" value="1609"/>
+     </imgdir>
   </imgdir>
   <imgdir name="0">
     <imgdir name="info">

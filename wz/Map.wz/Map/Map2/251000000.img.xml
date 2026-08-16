@@ -4474,5 +4474,18 @@
       <string name="type" value="n"/>
       <int name="fh" value="52"/>
     </imgdir>
+     <imgdir name="16">
+       <string name="type" value="n"/>
+       <string name="id" value="2092100"/>
+       <int name="x" value="-1421"/>
+       <int name="y" value="215"/>
+       <int name="mobTime" value="0"/>
+       <int name="f" value="1"/>
+       <int name="hide" value="0"/>
+       <int name="fh" value="21"/>
+       <int name="cy" value="238"/>
+       <int name="rx0" value="-1421"/>
+       <int name="rx1" value="-1371"/>
+     </imgdir>
   </imgdir>
 </imgdir>
