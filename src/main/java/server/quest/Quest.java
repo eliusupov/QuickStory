@@ -45,6 +45,7 @@ import server.quest.actions.PetSpeedAction;
 import server.quest.actions.PetTamenessAction;
 import server.quest.actions.QuestAction;
 import server.quest.actions.SkillAction;
+import server.quest.actions.SpAction;
 import server.quest.requirements.AbstractQuestRequirement;
 import server.quest.requirements.BuffExceptRequirement;
 import server.quest.requirements.BuffRequirement;
@@ -620,6 +621,9 @@ public class Quest {
                 break;
             case INFO:
                 ret = new InfoAction(this, data);
+                break;
+            case SP:
+                ret = new SpAction(this, data);
                 break;
             default:
                 //FilePrinter.printError(FilePrinter.EXCEPTION_CAUGHT, "Unhandled Action Type: " + type.toString() + " QuestID: " + this.getId());

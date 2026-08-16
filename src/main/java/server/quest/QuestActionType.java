@@ -43,7 +43,8 @@ public enum QuestActionType {
     PETTAMENESS(14),
     PETSPEED(15),
     INFO(16),
-    ZERO(16);
+    ZERO(16),
+    SP(17);
 
     final byte type;
 
@@ -85,6 +86,8 @@ public enum QuestActionType {
             return PETSPEED;
         case "info":
             return INFO;
+        case "sp":
+            return SP;
         case "0":
             return ZERO;
         default:
