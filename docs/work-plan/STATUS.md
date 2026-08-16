@@ -1296,7 +1296,7 @@ content, check the add-list for an unapplied node before disassembling anything.
 "impossible" conclusions (this, and Evan character creation — see ticket 15 below) were both just
 missing nodes we already knew about. `docs/wz-baseline/add-list/` is the first place to look.
 
-### 🐛 WzMerge DEFECT — a partial array refusal LEAVES A HOLE. Found the hard way, still unfixed.
+### ✅ WzMerge DEFECT — a partial array refusal LEAVES A HOLE. Found the hard way, **FIXED** (T23 part 1).
 
 Merging the UI add-list broke the client **before the login screen**. Cause was the merge tool,
 not the data:
@@ -1311,15 +1311,39 @@ a clean append. It is only an append if `48..52` land too. The gate evaluates ro
 instead of against the running state**, so any *partial* refusal within one array silently creates
 a gap — the precise corruption the gate exists to prevent.
 
-**`WzMerge guard` does NOT catch this** (verified: `rc=0` on the broken output). Guard checks
+**`WzMerge guard` did NOT catch this** (verified: `rc=0` on the broken output). Guard checked
 parse/verify, not array continuity.
-
-**Until fixed, the rule is: if the gate SKIPs any index of an array, drop EVERY row of that array
-from the merge.** Never accept a partial array result. Fix would be to re-evaluate appends against
-post-refusal state, and to teach `guard` to assert array continuity.
 
 Rebuilt excluding all of `MapLogin.img` (cosmetic login background): **46 added, 0 refused,
 0 conflicts, 0 drifted** → `Server\wz-merge\11h\UI.wz`.
+
+**FIX — `docs\wz-baseline\tool-merge\Program.cs`, T23 part 1. `[FACT-measured]`**
+
+1. **The gate now runs against the RUNNING state.** Every refusal, for any reason, records the
+   refused slot in one funnel (`Conflict()`), and any later slot of that container is refused with
+   `…slot k was REFUSED earlier in this run…`. Add-list rows are sorted as *text* (`back/10` before
+   `back/9`), so a refusal can also land *after* an append that relied on it: a **continuity sweep**
+   runs after the manifest and before `SaveToDisk` and **undoes** any granted slot sitting above a
+   hole. *If any index of an array is refused, every later index of that array is refused too.*
+2. **`WzMerge guard <outWz> --baseline <pre>` asserts continuity** and exits **4** on a holed array.
+   `--baseline` is required once the file exists, because the client tree legitimately contains
+   gapped integer id tables (UI.wz alone has nine); guard prefilters on shape, then asks the
+   baseline the gate's own question — *was this container a consecutive run there?*
+3. **`WzMerge selftest`** — no arguments, touches no disk — reproduces the exact scenario and fails
+   if either behaviour regresses. Also fixed: a throwing post-write verification exited 1 (contract:
+   "nothing installable was produced") while leaving a plausible `.partial` on disk; it is exit 4 now.
+
+Measured, on the real `wz-data\v84\UI.wz` -> live `UI.wz`:
+
+| run | before | after |
+|---|---|---|
+| `back/48..54` | added 2, refused 5, `verified OK`, **exit 3**, guard rc=0 | **added 0, refused 7, exit 5** |
+| same manifest reversed `54..48` | added 2 (hole) | sweep `UNDONE` 53,54 → **added 0, exit 5** |
+| `guard` on the broken file | **rc=0** | **exit 4**, names `missing 48,49,50,51,52` |
+| known-good 46-row 11h UI merge | added 46, refused 0 | **added 46, refused 0, exit 0** (unchanged) |
+| `guard` on the 11h output | n/a | **exit 0**, 9 gapped id tables discounted |
+
+Details: `WZ-MERGE-PROCEDURE.md` **4.4.1** / **4.4.2**.
 
 ### Where the two ~~dead~~ gate patches actually stand
 

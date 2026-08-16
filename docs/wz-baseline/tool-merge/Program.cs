@@ -12,7 +12,8 @@ using MapleLib.WzLib.Serializer;
 //   WzMerge verify <wz> <pathsFile> [--baseline <targetWz>]
 //   WzMerge hash   <wz> <path/under/wz>
 //   WzMerge deps   <mapWz> <mapId|Map/MapN/<id>.img> <addListDir>
-//   WzMerge guard  <outWz>
+//   WzMerge guard  <outWz> [--baseline <targetWz>]
+//   WzMerge selftest
 //
 // EXIT CODE CONTRACT (scripted callers depend on it; see WZ-MERGE-PROCEDURE.md):
 //   0  success — every requested path was written (or, on a dry run, would be)
@@ -82,6 +83,7 @@ static class Program
                 case "hash": return Hash(args);
                 case "deps": return Deps(args);
                 case "guard": return Guard(args);
+                case "selftest": return SelfTest();
                 default: Usage(); return 2;
             }
         }
@@ -104,10 +106,13 @@ static class Program
         "WzMerge verify <wz> <pathsFile> [--baseline <targetWz>]\n" +
         "WzMerge hash   <wz> <path/under/wz>\n" +
         "WzMerge deps   <mapWz> <mapId|Map/MapN/<id>.img> <addListDir>\n" +
-        "WzMerge guard  <outWz>\n" +
+        "WzMerge guard  <outWz> [--baseline <targetWz>]   (--baseline REQUIRED if <outWz> exists)\n" +
+        "WzMerge selftest\n" +
         "  '-' in the <outWz> slot (merge) or as a trailing arg (xml) = DRY RUN.\n" +
         "  --live is REQUIRED for a real merge: it is hashed against <targetWz> to prove the\n" +
-        "  staging snapshot is not stale. 'guard' answers 'may I write here?' and writes nothing.\n" +
+        "  staging snapshot is not stale. 'guard' answers 'may I write here?' and writes nothing;\n" +
+        "  if a file already exists at <outWz> it ALSO asserts positional-array continuity and\n" +
+        "  exits 4 on a holed array. --baseline discounts holes the merge target already had.\n" +
         "exit: 0 ok | 1 error | 2 bad args/refused by a safety guard | 3 rows refused | 4 verification failed | 5 refused rows and added nothing");
 
     // ---------- open ----------
@@ -274,10 +279,23 @@ static class Program
                         "Deny wins by rule, but an overlap means two decisions contradict each other — fix the lists.");
     }
 
+    // Slots this run REFUSED, keyed by container exactly as RequestedSlots keys it. Recorded
+    // HERE, in the one funnel every refusal passes through, because the hazard does not care WHY
+    // a slot was refused: deny-list, MISSING IN SOURCE, already-exists, unsupported shape and the
+    // array gate itself all remove a slot from the run, and any one of them turns a later slot's
+    // "append" into a HOLE. See RunningRefusal / the continuity sweep in Merge().
+    static readonly Dictionary<string, SortedSet<int>> RefusedSlots = new(StringComparer.OrdinalIgnoreCase);
+
     static void Conflict(string path, string reason)
     {
         Conflicts.Add($"{path}\t{reason}");
         Console.WriteLine($"  SKIP  {path}  ({reason})");
+        int i = path.LastIndexOf('/');
+        if (i > 0 && IsIndex(path[(i + 1)..], out int n))
+        {
+            if (!RefusedSlots.TryGetValue(path[..i], out var s)) RefusedSlots[path[..i]] = s = new SortedSet<int>();
+            s.Add(n);
+        }
     }
 
     static void WriteConflicts(string outFile, string header)
@@ -464,10 +482,23 @@ static class Program
             if (idx < b.Min)
                 return $"POSITIONAL ARRAY: {tell}. Slot {idx} sits BELOW the array's first index {b.Min}, so this is a PREPEND, not an append. A source that numbers this container from a different origin than the target is not aligned with it, and the entry would sit beside slots that belong to a different set. Dump both containers by content and either re-author the row or deny it.";
 
+            // T23: the gap check is against the RUNNING state, not the manifest's wish-list.
+            // `requested` says slot k is ASKED FOR; it does not say slot k LANDS. UI.wz
+            // MapLogin.img/back was `0..47`, the manifest asked for 48..54, the duplicate-content
+            // rule below correctly refused 48..52 — and 53/54 then read as clean appends because
+            // 53 >= 48 against the BASELINE count and 48..52 were "in the manifest". The output
+            // was `{0..47,53,54}`, a five-index hole, and the client died before the login screen.
+            // An index is only an append if every index between the array's end and it actually
+            // lands, so a refused slot poisons every later slot of the same container.
             var want = requested.TryGetValue(container, out var w) ? w : new SortedSet<int>();
+            RefusedSlots.TryGetValue(container, out var gone);
             for (int k = b.Max + 1; k < idx; k++)
+            {
                 if (!want.Contains(k))
                     return $"POSITIONAL ARRAY: {tell}. Slot {idx} would leave a GAP — the array ends at {b.Max} and nothing in this manifest supplies slot {k}. A client that walks the array stops at the hole.";
+                if (gone != null && gone.Contains(k))
+                    return $"POSITIONAL ARRAY: {tell}. Slot {idx} would leave a GAP — the array ends at {b.Max}, this manifest DOES list slot {k}, and slot {k} was REFUSED earlier in this run (read conflicts.txt for its reason). A partial fill is worse than no fill: the array would run {b.Min}..{k - 1} and then jump, and a client that walks it stops at the hole. Every slot from {k} up has to land, or none of them may.";
+            }
 
             // A pure append by index can still be a duplicate by content: if v84 INSERTED an
             // entry earlier in the array, every later slot is the target's own content shifted
@@ -968,17 +999,292 @@ static class Program
         return null;
     }
 
+    // ============ T23: POSITIONAL-ARRAY CONTINUITY, the last thing before an install ============
+    //
+    // The gate in Merge() refuses to CREATE a hole. This refuses to INSTALL one, whoever made it —
+    // a hand edit in HaRepacker, an older build of this tool, a merge run before the gate existed.
+    // The hole that motivated it (`MapLogin.img/back` = {0..47,53,54}) sailed through `guard`
+    // rc=0 and through post-write verification, because both answer "does this parse and resolve",
+    // and a holed array parses and resolves perfectly. It just kills the client.
+    //
+    // ArrayRange() is useless here BY CONSTRUCTION: its definition of an array is "one consecutive
+    // run", so a holed array is not an array and it returns null. Guard needs the converse test,
+    // and the converse test has to separate a broken array from an ID TABLE — String.wz's
+    // `Consume.img` holds 2,290 integer item ids with enormous gaps and every one is legitimate.
+    //
+    // Heuristic, with its ceiling stated:
+    //   * every child name a canonical non-negative integer (the gate's own IsIndex), >= 2 of them
+    //   * the run starts at 0 or 1 — a positional array is walked from the beginning; an id table
+    //     starts wherever the ids start
+    //   * at least half the span occupied (span <= 2*count) — a partial merge leaves a dense
+    //     prefix plus a few stragglers; an id table is orders of magnitude sparser
+    //   * and there is at least one missing index
+    // ponytail: a genuinely SPARSE array that starts at 0 reads as an id table here and is missed
+    // (`Quest.wz/Check.img/4940` = {0,1,4961} is exactly that shape and is legitimate — see
+    // WZ-MERGE-PROCEDURE.md 4.4). Same blind spot the merge gate documents, same answer: the
+    // deny-list stands in front of those. Tightening this instead would refuse real client data.
+    static (int Min, int Max, int Count)? HoledArray(IReadOnlyList<string> childNames)
+    {
+        if (childNames.Count < 2) return null;
+        var seen = new HashSet<int>();
+        int min = int.MaxValue, max = int.MinValue;
+        foreach (var n in childNames)
+        {
+            if (!IsIndex(n, out int v) || !seen.Add(v)) return null;
+            if (v < min) min = v;
+            if (v > max) max = v;
+        }
+        if (min > 1) return null;                       // an id table, not slot 0 of anything
+        long span = (long)max - min + 1;
+        if (span == seen.Count) return null;            // consecutive: this is a healthy array
+        if (span > 2L * seen.Count) return null;        // too sparse to be a walked array
+        return (min, max, seen.Count);
+    }
+
+    // Every container in <wzPath> that HoledArray flags, as "<path>\t<missing indices>".
+    // Read-only: images are parsed, inspected and immediately unparsed, the same bounded walk
+    // VerifyFile uses so Map.wz (629 MB) does not have to be materialised.
+    // path -> the indices the run is MISSING. The missing SET, not just the path, because the
+    // baseline discount has to tell "this hole was already here" from "this merge made it worse".
+    static void ScanHoles(WzObject o, string path, Dictionary<string, SortedSet<int>> found, int depth = 0)
+    {
+        // A UOL's Kids() are the RESOLVED TARGET's children (the cycle that stack-overflowed
+        // `hash`, see CanonMaxDepth). The target is scanned at its own path; do not follow.
+        if (o is MapleLib.WzLib.WzProperties.WzUOLProperty || depth >= CanonMaxDepth) return;
+        var kids = Kids(o).ToList();
+        if (kids.Count == 0) return;
+        if (HoledArray(kids.Select(k => k.Name).ToList()) is { } h)
+        {
+            var have = kids.Select(k => int.Parse(k.Name)).ToHashSet();
+            found[path] = new SortedSet<int>(Enumerable.Range(h.Min, h.Max - h.Min + 1).Where(i => !have.Contains(i)));
+        }
+        foreach (var k in kids) ScanHoles(k, path + "/" + k.Name, found, depth + 1);
+    }
+
+    static Dictionary<string, SortedSet<int>> HoleReport(string wzPath)
+    {
+        var found = new Dictionary<string, SortedSet<int>>(StringComparer.OrdinalIgnoreCase);
+        var (f, _ver) = Open(wzPath);
+        using var _f = f;
+
+        void Walk(WzDirectory d, string prefix)
+        {
+            foreach (var img in d.WzImages)
+            {
+                // An image that will not parse is verify's business, not continuity's.
+                try { if (!img.Parsed && !img.ParseImage()) continue; }
+                catch { continue; }
+                ScanHoles(img, prefix + img.Name, found);
+                img.UnparseImage();
+            }
+            foreach (var sub in d.WzDirectories) Walk(sub, prefix + sub.Name + "/");
+        }
+        Walk(f.WzDirectory, "");
+        return found;
+    }
+
     // Read-only: answers "would a merge be allowed to write here?" and writes nothing, ever.
     // This is how the guard gets tested against the real client directory without a merge that
-    // could land on it if the guard were wrong.
-    static int Guard(string[] args)
+    // could land on it if the guard were wrong. When something already EXISTS at that path it
+    // also answers the second question — "and is what is there installable?" — which as of T23
+    // means: no positional array in it has a hole.
+    static int Guard(string[] rawArgs)
     {
+        var argv = rawArgs.ToList();
+        string? baselineFile = TakeFlag(argv, "--baseline");
+        var args = argv.ToArray();
         if (args.Length < 2) { Usage(); return 2; }
         string full = Path.GetFullPath(args[1]);
         string? why = OutDirRefusal(full);
         if (why != null) return Refuse(why);
         Console.WriteLine($"ALLOWED: {full}  (directory {Path.GetDirectoryName(full)} is acceptable output staging)");
-        return 0;
+
+        if (!File.Exists(full))
+        {
+            Console.WriteLine("no file at that path yet — nothing to check for positional-array continuity.");
+            return 0;
+        }
+        // --baseline is REQUIRED once there is a file to check, for the same reason --deny and
+        // --live are required on a merge: without it this check has no safe default and would
+        // report the wrong answer confidently. Measured on the known-good 11h UI.wz merge, the
+        // LIVE tree carries NINE containers that trip the heuristic and are all legitimate
+        // (`ChatBalloon.img/pet` is missing 16 of 52, `NameTag.img/medal` 43 of 125). Bare, this
+        // refuses every real file; relaxed to "warn only" it would be a false green on exactly
+        // the file it exists to stop. The pre-merge target is what separates the two.
+        if (baselineFile == null)
+            throw new BadArgs($"a file already exists at {full}, so guard also asserts POSITIONAL-ARRAY CONTINUITY on it — " +
+                @"and that needs --baseline <the pre-merge target, e.g. <stage>\<T>\pre\<Name>.wz>. The live client tree " +
+                "itself contains integer containers with gaps that are perfectly legitimate (UI.wz alone has nine), so " +
+                "'holed' is only meaningful as a DIFFERENCE from the file the merge started out from. Without a baseline " +
+                "this check would either refuse every real file or have to be downgraded to a warning, and a warning on " +
+                "the last step before an install is a false green. (Asking 'may I write here?' about a path that does not " +
+                "exist yet still takes no flags.)");
+        Console.WriteLine($"array continuity: scanning {full} …");
+        var holes = HoleReport(full);
+        // The heuristic above is only a PREFILTER. The verdict is the merge gate's own question,
+        // asked of the pre-merge target: was this container a CONSECUTIVE RUN there — i.e. was it
+        // an array at all by ArrayRange's definition?
+        //   * not a consecutive run in the baseline -> it never was an array, it is an id table,
+        //     and adding an id to an id table legitimately widens the gaps. Discount.
+        //     `UI.wz/NameTag.img/medal` is exactly this: 82 medal ids scattered over 0..124, and
+        //     the known-good 46-row 11h merge appends 96 and 124 to it. Any rule phrased as "did
+        //     the missing set grow?" refuses that merge. The question is whether the container is
+        //     an ARRAY, never whether its gaps grew.
+        //   * a consecutive run in the baseline, holed now -> this merge broke a real positional
+        //     array. That is MapLogin.img/back, and it is the entire point of this check.
+        //   * absent from the baseline -> a container this merge brought in whole, arriving holed.
+        //     Nothing to discount it against, so it stands.
+        // Only the handful of candidate paths are resolved in the baseline, so this costs a few
+        // image parses rather than a second full-tree walk.
+        int bad = 0, discounted = 0;
+        if (holes.Count > 0)
+        {
+            var (bf, _bver) = Open(Path.GetFullPath(baselineFile));
+            using var _bf = bf;
+            foreach (var (p, miss) in holes.OrderBy(k => k.Key, StringComparer.Ordinal))
+            {
+                var segs = p.Split('/', StringSplitOptions.RemoveEmptyEntries);
+                var was = Resolve(bf, segs, segs.Length);
+                var run = was == null ? null : ArrayRange(Kids(was).Select(k => k.Name));
+                string msg = $"{p}: missing {miss.Count} index(es) — {string.Join(",", miss)}";
+                if (was != null && run == null)
+                { discounted++; Console.WriteLine($"  not an array: {msg} — this container was ALREADY not a consecutive run in the baseline, so it is an id table, not a positional array; discounted"); }
+                else
+                {
+                    Console.Error.WriteLine($"  HOLED ARRAY {msg} — " + (was == null
+                        ? "this container is not in the baseline at all, so it arrived holed"
+                        : $"the baseline held the consecutive run {run!.Value.Min}..{run.Value.Min + run.Value.Count - 1}, and this file breaks it"));
+                    bad++;
+                }
+            }
+        }
+        if (bad == 0)
+        {
+            Console.WriteLine($"array continuity OK: no holed positional array{(discounted > 0 ? $" ({discounted} gapped id table(s) discounted — not consecutive runs in the baseline either)" : "")}.");
+            return 0;
+        }
+        Console.Error.WriteLine($"REFUSED TO CLEAR {full}: {bad} positional array(s) have a HOLE this merge is responsible for. " +
+            "A client that walks an array stops at the first missing index — this is what turned UI.wz/MapLogin.img/back into a " +
+            "crash before the login screen, past a green `guard` and a green post-write verification. DO NOT INSTALL THIS FILE. " +
+            $"Supply every missing index or drop that container's rows entirely. ({discounted} further gap(s) were discounted: not consecutive runs in {baselineFile} either, so id tables rather than arrays.)");
+        return 4;
+    }
+
+    // ================================ T23: selftest ================================
+    //
+    // Runs against nothing on disk, so it is safe anywhere and needs no client, no staging
+    // directory and no fixture .wz. Same shape as tools\patch-evan-gate.ps1 -SelfTest: assert,
+    // count failures, exit non-zero. `WzMerge selftest` is the check that fails if either half of
+    // the T23 fix regresses.
+    //
+    // What it reproduces is the real incident, exactly: UI.wz/MapLogin.img/back held 0..47, the
+    // manifest asked for 48..54, v84 had inserted five entries earlier so 48..52 are the target's
+    // own 0..4 shifted, and 53/54 are new. Before T23 the gate refused 48..52 and ALLOWED 53/54.
+    static int SelfTest()
+    {
+        int fail = 0;
+        void Check(bool ok, string what)
+        {
+            Console.WriteLine($"  {(ok ? "PASS" : "FAIL")}  {what}");
+            if (!ok) fail++;
+        }
+
+        // ---- 1. the merge gate: MapLogin.img/back, baseline 0..47, manifest 48..54 ----
+        // A slot is a WzSubProperty holding one int, which is what SlotDigest actually digests
+        // (Canon walks the children; the slot's own NAME is excluded, which is what lets slot 48
+        // of the source compare equal to slot 0 of the target).
+        static WzImageProperty Slot(string name, int payload)
+        {
+            var s = new MapleLib.WzLib.WzProperties.WzSubProperty(name);
+            s.AddProperty(new MapleLib.WzLib.WzProperties.WzIntProperty("x", payload));
+            return s;
+        }
+        const string wz = "UI.wz", container = "UI.wz/MapLogin.img/back";
+        var baseline = new Dictionary<string, ArrayBase?>(StringComparer.OrdinalIgnoreCase)
+        {
+            // pre-seeded, so PositionalRefusal never touches a WzFile and this test needs no disk
+            [container] = new ArrayBase
+            {
+                Min = 0,
+                Count = 48,
+                Digests = Enumerable.Range(0, 48).Select(i => SlotDigest(Slot(i.ToString(), i))).ToHashSet()
+            }
+        };
+        var manifest = Enumerable.Range(48, 7).Select(i => $"{container}/{i}").ToList();
+        var requested = RequestedSlots(manifest);
+        Check(requested[container].SetEquals(Enumerable.Range(48, 7)), "manifest requests slots 48..54");
+
+        RefusedSlots.Clear(); Conflicts.Clear();
+        var verdicts = new Dictionary<int, string?>();
+        foreach (var row in manifest)
+        {
+            int idx = int.Parse(row[(row.LastIndexOf('/') + 1)..]);
+            // 48..52 duplicate the target's own 0..4 (v84 inserted five entries earlier);
+            // 53/54 carry content the target does not have.
+            var src = Slot(idx.ToString(), idx <= 52 ? idx - 48 : 1000 + idx);
+            var rel = Rel(row, wz);
+            string? why = PositionalRefusal(null!, wz, rel, src, baseline, requested);
+            verdicts[idx] = why;
+            if (why != null) Conflict(row, why);       // the one funnel that records refused slots
+        }
+        // 48 is the first refusal and it is the content-duplicate rule. From 49 up the RUNNING
+        // state has already been poisoned, so every later slot is refused for the stronger reason
+        // — including 53 and 54, which are the two the broken build let through onto the hole.
+        Check(verdicts[48]?.Contains("content-identical") == true, "slot 48 refused as a content-duplicate");
+        for (int i = 49; i <= 54; i++)
+            Check(verdicts[i]?.Contains("slot 48 was REFUSED earlier in this run") == true,
+                  $"slot {i} refused because slot 48 was refused (running state, not baseline count){(i >= 53 ? " — THE T23 REGRESSION" : "")}");
+        Check(verdicts.Values.All(v => v != null), "no slot of a partially-refused array is allowed through");
+
+        // Same array, nothing refused: the gate must still permit a clean full append, or the fix
+        // has been made by breaking every legitimate merge instead.
+        RefusedSlots.Clear(); Conflicts.Clear();
+        var clean = Enumerable.Range(48, 7).Select(i => PositionalRefusal(
+            null!, wz, Rel($"{container}/{i}", wz), Slot(i.ToString(), 1000 + i), baseline, requested)).ToList();
+        Check(clean.All(v => v == null), "48..54 all-new content is still a clean append (the gate did not get blunt)");
+
+        // ---- 2. guard's continuity assertion ----
+        // The exact holed array the broken merge installed, built as real WzObjects and scanned
+        // by the same ScanHoles() `guard` runs over a finished .wz.
+        var img = new WzImage("MapLogin.img");
+        var back = new MapleLib.WzLib.WzProperties.WzSubProperty("back");
+        foreach (int i in Enumerable.Range(0, 48).Concat(new[] { 53, 54 })) back.AddProperty(Slot(i.ToString(), i));
+        img.AddProperty(back);
+        var holes = new Dictionary<string, SortedSet<int>>(StringComparer.OrdinalIgnoreCase);
+        ScanHoles(img, "MapLogin.img", holes);
+        Check(holes.ContainsKey("MapLogin.img/back"), "guard finds the hole in {0..47,53,54}");
+        Check(holes.TryGetValue("MapLogin.img/back", out var m) && m.SetEquals(new[] { 48, 49, 50, 51, 52 }),
+              "guard names the missing indices 48,49,50,51,52");
+        // The verdict is ArrayRange asked of the BASELINE, not the size of the gap. `back` was
+        // 0..47 there — a consecutive run, a real array — so the hole stands. `NameTag.img/medal`
+        // was already scattered there, so it is an id table and its widening gaps are discounted;
+        // without that, guard refuses the known-good 46-row 11h merge, which appends medal ids
+        // 96 and 124 to a container whose highest id was 87.
+        Check(ArrayRange(Enumerable.Range(0, 48).Select(i => i.ToString())) != null,
+              "the baseline's back = 0..47 IS a consecutive run, so its hole is real damage");
+        Check(ArrayRange(new[] { "0", "35", "87" }) == null,
+              "a scattered id table (NameTag.img/medal) is NOT a run in the baseline, so guard discounts it");
+
+        var healthy = new WzImage("MapLogin.img");
+        var backOk = new MapleLib.WzLib.WzProperties.WzSubProperty("back");
+        foreach (int i in Enumerable.Range(0, 55)) backOk.AddProperty(Slot(i.ToString(), i));
+        healthy.AddProperty(backOk);
+        var none = new Dictionary<string, SortedSet<int>>(StringComparer.OrdinalIgnoreCase);
+        ScanHoles(healthy, "MapLogin.img", none);
+        Check(none.Count == 0, "guard passes the repaired array {0..54}");
+
+        // The blind spot and the false positives, pinned so a future tightening has to face them.
+        Check(HoledArray(new[] { "0", "1", "2" }) == null, "a consecutive run is not a hole");
+        Check(HoledArray(new[] { "1", "2" }) == null, "an array that starts at 1 is not a hole (03i)");
+        Check(HoledArray(new[] { "0" }) == null, "a single child is not a hole");
+        Check(HoledArray(new[] { "0", "04" }) == null, "a non-canonical name ('04') is not an index");
+        Check(HoledArray(new[] { "0", "1", "4961" }) == null, "Quest.wz/Check.img/4940 = {0,1,4961} reads as an id table, not a hole (documented ceiling)");
+        Check(HoledArray(new[] { "2000000", "2000001", "2000003" }) == null, "an id table that starts high is not a hole");
+        Check(HoledArray(new[] { "0", "3" }) is { } && HoledArray(new[] { "0", "3" })!.Value.Count == 2,
+              "a dense low run WITH a gap is a hole (Glove/01082262.img/swingOF = {0,3}; discount it with guard --baseline)");
+
+        Console.WriteLine(fail == 0 ? "selftest: all checks passed" : $"selftest: {fail} CHECK(S) FAILED");
+        return fail == 0 ? 0 : 4;
     }
 
     static string Sha256File(string path)
@@ -1091,6 +1397,15 @@ static class Program
         // first use, and both describe the target as it was BEFORE this run — see ArrayBase.
         var arrayBase = new Dictionary<string, ArrayBase?>(StringComparer.OrdinalIgnoreCase);
         var slotsWanted = RequestedSlots(paths);
+        // T23: slots this run actually ADDED, per array container. The running check inside
+        // PositionalRefusal only sees refusals that happened EARLIER in the manifest, and manifest
+        // rows are sorted as TEXT ('back/10' before 'back/9'), so a refusal can arrive after an
+        // append that depended on it. This is swept after the loop and before the save.
+        // slot -> the manifest row VERBATIM. Not reconstructed as "container/slot": conflicts.txt
+        // and the post-write `expect` list are both keyed on the row exactly as the manifest wrote
+        // it, and an undo logged under a normalised spelling would leave the row in `expect` and
+        // fail verification for the wrong reason.
+        var slotsGranted = new Dictionary<string, SortedDictionary<int, string>>(StringComparer.OrdinalIgnoreCase);
         foreach (var manifestPath in paths)
         {
             // ===================== B1: THE DENY-LIST =====================
@@ -1189,12 +1504,52 @@ static class Program
             added++;
             Console.WriteLine($"  ADD   {manifestPath}");
 
+            // T23: record the append against the container the array gate recognised. Only
+            // containers arrayBase says ARE arrays are tracked — everything else has names, not
+            // positions, and a missing name is not a hole.
+            {
+                string container = string.Join('/', new[] { wzName }.Concat(rel.Take(rel.Length - 1)));
+                if (IsIndex(rel[^1], out int slot) && arrayBase.TryGetValue(container, out var ab) && ab != null)
+                {
+                    if (!slotsGranted.TryGetValue(container, out var g)) slotsGranted[container] = g = new SortedDictionary<int, string>();
+                    g[slot] = manifestPath;
+                }
+            }
+
             // M2: remember which image this landed in. That image is the only one SaveToDisk
             // re-serializes (Changed=true), so it is the only place a serializer bug can live —
             // and the only place a content check is worth paying for.
             int imgIdx = Array.FindIndex(rel, s => s.EndsWith(".img", StringComparison.OrdinalIgnoreCase));
             if (imgIdx >= 0) touched.Add(string.Join('/', new[] { wzName }.Concat(rel.Take(imgIdx + 1))));
             else noContentCheck.Add(manifestPath);   // a whole-directory row: no single image to digest
+        }
+
+        // T23: CONTINUITY SWEEP — the running check, completed. PositionalRefusal can only see
+        // refusals that already happened; add-list rows are sorted as TEXT, so a container can be
+        // appended at 10 and refused at 9 in that order. Nothing has been written yet (SaveToDisk
+        // is below), so an append that turns out to sit above a hole is simply UNDONE here and
+        // reported like any other refusal. "If any index of an array is refused, every later index
+        // of that same array is refused too" — enforced on the result, not on the reading order.
+        foreach (var (container, granted) in slotsGranted)
+        {
+            var b = arrayBase[container]!;
+            int next = b.Max + 1;
+            var orphans = new List<(int slot, string row)>();
+            foreach (var (slot, row) in granted) { if (slot == next) next++; else orphans.Add((slot, row)); }
+            if (orphans.Count == 0) continue;
+            Console.Error.WriteLine($"  HOLE in '{container}': the array ran {b.Min}..{b.Max} and this run fills it only to {next - 1}; " +
+                $"slot(s) {string.Join(",", orphans.Select(o => o.slot))} sit ABOVE the hole and are being UNDONE.");
+            foreach (var (slot, row) in orphans)
+            {
+                var r = Rel(row, wzName);
+                var node = Resolve(tgt, r, r.Length);
+                // The add is this run's own; not finding it back means the bookkeeping is wrong,
+                // and shipping a holed array is exactly what must never happen. Stop.
+                if (node == null) throw new Exception($"INTERNAL: '{row}' was added by this run but cannot be resolved for the continuity undo. Nothing was written.");
+                node.Remove();
+                added--;
+                Conflict(row, $"POSITIONAL ARRAY: UNDONE — '{container}' ran {b.Min}..{b.Max} and this run could only fill it up to {next - 1} (the slot(s) in between were refused; their reasons are elsewhere in this file). Appending {slot} on top of that hole would leave the array discontinuous, which is what broke UI.wz/MapLogin.img/back. Either supply every intermediate slot or drop this container's rows entirely.");
+            }
         }
 
         // THE VERSION TRAP, resolved structurally rather than by remembering a menu option.
@@ -1265,7 +1620,18 @@ static class Program
             // re-resolve every path we claim to have added. Nothing else in this pipeline ever
             // re-read the tool's own output; the first reader used to be the game client.
             var expect = paths.Where(p => !Conflicts.Any(c => c.StartsWith(p + "\t", StringComparison.Ordinal))).ToList();
-            verified = VerifyFile(partial, wzName, expect, digests, tgtPath);
+            // VerifyFile handles a file that will not OPEN, but everything after that point can
+            // still throw — Digest() decodes canvases, and a corrupted payload is exactly what
+            // this check exists to find. Unhandled, that reached Main and exited 1, whose contract
+            // reads "nothing installable was produced" — while a plausible-looking .partial sat on
+            // disk with no DO-NOT-INSTALL line anywhere. A verification that throws IS a failed
+            // verification: exit 4, and say where the file is.
+            try { verified = VerifyFile(partial, wzName, expect, digests, tgtPath); }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"  VERIFICATION THREW: {ex.GetType().Name} {ex.Message}");
+                verified = false;
+            }
             if (verified)
             {
                 File.Move(partial, outPath, true);
@@ -1494,9 +1860,18 @@ static class Program
                     string? why = null;
                     if (leafIdx >= lo && leafIdx <= hi) why = $"slot {leafIdx} is already occupied; this is not an append";
                     else if (leafIdx < lo) why = $"slot {leafIdx} sits BELOW the array's first index {lo} — that is a PREPEND, not an append, and means the source numbers this container from a different origin than the target";
+                    // T23: same running-state rule as the binary side — a slot this run already
+                    // REFUSED is not going to arrive, so every later slot of that container is a
+                    // hole, not an append. ponytail: no undo sweep here, because this side writes
+                    // file-by-file as it goes and cannot take a write back; that leaves the
+                    // out-of-order case (append at 10 refused at 9, in that manifest order)
+                    // uncovered on the XML side alone. Add a stage-and-promote pass if a manifest
+                    // ever needs it — no add-list today lists a container's slots out of order.
                     else for (int k = hi + 1; k < leafIdx && why == null; k++)
                         if (!(xmlSlots.TryGetValue(container, out var w) && w.Contains(k)))
                             why = $"slot {leafIdx} would leave a GAP — the array ends at {hi} and nothing in this manifest supplies slot {k}";
+                        else if (RefusedSlots.TryGetValue(container, out var gone) && gone.Contains(k))
+                            why = $"slot {leafIdx} would leave a GAP — the array ends at {hi}, this manifest lists slot {k}, and slot {k} was REFUSED earlier in this run. Every slot from {k} up has to land, or none of them may";
                     if (why != null)
                     {
                         Conflict(manifestPath, $"POSITIONAL ARRAY: '{container}' holds exactly the consecutive integers {lo}..{hi}, so its children are SLOTS, not identities. {why}.");

@@ -84,6 +84,11 @@ WzMerge guard D:\games\MapleStory\Map.wz          # -> REFUSED, exit 2
 WzMerge guard <stage>\<T>\Map.wz                  # -> ALLOWED, exit 0
 ```
 
+Once a merge has produced `<outWz>`, run it again with `--baseline <stage>\<T>\pre\<Name>.wz`
+as the **last step before installing**: that form also asserts positional-array continuity and
+exits 4 on a holed array. See 4.4.2 — this is the check that would have stopped the
+`MapLogin.img/back` install.
+
 Within staging it writes `<outWz>.partial`, verifies it, and only then moves it onto `<outWz>`.
 The refusals and the corrupted-output test are demonstrated in `03-verification/safety-guards.md`.
 
@@ -105,7 +110,8 @@ WzMerge xml    <sourceWz> <xmlRoot>            <pathsFile> <conflictsTxt> --deny
 WzMerge verify <wz> <pathsFile> [--baseline <targetWz>]
 WzMerge hash   <wz> <path/under/wz>
 WzMerge deps   <mapWz> <mapId|Map/MapN/<id>.img> <addListDir>
-WzMerge guard  <outWz>
+WzMerge guard  <outWz> [--baseline <targetWz>]     # --baseline REQUIRED if <outWz> exists (4.4.2)
+WzMerge selftest                                   # no arguments, touches no disk; exit 0 / 4
 ```
 
 `<pathsFile>` is a manifest: lines exactly as `docs/wz-baseline/add-list/*.txt` writes them
@@ -280,15 +286,73 @@ is refused unless it is a **pure append**:
   `deny`/`force` decision, not the tool, is how you take one anyway). An index *below* the array's
   **lowest** index is refused as a **PREPEND** with its own message: a source that numbers the
   container from a different origin than the target is not aligned with it at all;
-- every index between that highest one and this one must also be somewhere in the same manifest, or the
-  array would be left with a **hole**. `deps` only emits the assets a map *references*, so it will
-  hand you `Obj/effect.img/quest/gate/7` without the `gate/6` that v84 added beside it. Add the
-  missing sibling from `add-list/`; do not work around the refusal;
+- every index between that highest one and this one must also be somewhere in the same manifest **and
+  must actually land**, or the array would be left with a **hole**. `deps` only emits the assets a map
+  *references*, so it will hand you `Obj/effect.img/quest/gate/7` without the `gate/6` that v84 added
+  beside it. Add the missing sibling from `add-list/`; do not work around the refusal;
 - and the appended entry must not be **content-identical to one the array already holds**. That is
   the case an index check alone cannot catch: if v84 *inserted* an entry earlier in the array, every
   later slot is the target's own content shifted one place and the last one looks like new
   material. `Map/Map2/220000300.img/portal/15` is exactly that — byte-identical to the live
   client's `portal/14`, because v84 inserted `scr00` at index 4.
+
+#### 4.4.1 "and must actually land" — the partial-refusal hole (T23) `[FACT-measured]`
+
+**A manifest row is a wish, not an outcome.** Until ticket 23 the gap clause above consulted the
+*manifest*: if slot `k` was listed, slot `k+1` counted as continuous. Every index was therefore
+judged against the **baseline** child count, independently of what the run had already refused.
+
+`UI.wz/MapLogin.img/back` held exactly `0..47`. A merge asked for `48`–`54`. The
+content-identical clause correctly refused `48`–`52` (v84 had inserted five entries earlier, so
+those source slots are the target's own `0`–`4` shifted). `53` and `54` then read as clean
+appends — `53 >= 48` against the baseline, and `48`–`52` were "in the manifest". Output:
+`{0..47, 53, 54}`. `verified OK`, exit 3, `WzMerge guard` rc=0, **and the client died before the
+login screen**. A partial fill is worse than no fill.
+
+Two changes, and both are in the tool now:
+
+- **The gate is evaluated against the RUNNING state.** Every refusal — deny-list, `MISSING IN
+  SOURCE`, `already exists`, the array gate itself — records the refused slot, and any later slot
+  of the same container is refused with `…slot k was REFUSED earlier in this run…`. Because
+  add-list rows are sorted as *text* (`back/10` before `back/9`), a refusal can also arrive *after*
+  an append that depended on it: a **continuity sweep** runs after the manifest and before
+  `SaveToDisk`, finds any granted slot sitting above a hole, and **undoes** it (`UNDONE` in
+  `conflicts.txt`). Either way the rule holds: *if any index of an array is refused, every later
+  index of that array is refused too.*
+- **`guard` asserts continuity on the finished file** — see 4.4.2.
+
+Measured on the real trees (`wz-data\v84\UI.wz` -> the live `UI.wz`): the seven-row `back/48..54`
+manifest is now `added 0 (forced 0), refused 7`, exit 5. Reversed into `54..48`, the sweep fires:
+`HOLE in 'UI.wz/MapLogin.img/back' … slot(s) 53,54 sit ABOVE the hole and are being UNDONE`,
+`added 0`, exit 5. The known-good 46-row 11h UI merge is unchanged: `added 46, refused 0`, exit 0.
+`WzMerge selftest` reproduces both halves and fails if either regresses.
+
+#### 4.4.2 `guard` asserts positional-array continuity
+
+`WzMerge guard <outWz>` used to answer one question — *may I write here?* — and it still does, with
+no flags, for a path that does not exist yet. **Once a file exists at that path it also asserts that
+no positional array in it has a hole**, and exits **4** if one does. That is the net: a holed array
+parses, resolves and content-digests perfectly, so neither `verify` nor the post-write check sees it.
+
+`--baseline <the pre-merge target>` is **required** when the file exists, and it is not a
+convenience. A holed array cannot be recognised on its own: the client tree itself is full of
+integer containers with gaps that are perfectly legitimate id tables (UI.wz alone has nine —
+`ChatBalloon.img/pet` is missing 16 of 52, `NameTag.img/medal` 43 of 125). So guard prefilters on
+shape and then asks the baseline the *gate's own* question — **was this container a consecutive run
+there?**
+
+- not a consecutive run in the baseline -> never an array, it is an id table; adding an id widens
+  its gaps legitimately. Discounted. (Without this, guard refuses the known-good 11h merge, which
+  appends medal ids `96` and `124` to a container whose highest id was `87`.)
+- a consecutive run in the baseline, holed now -> **this file broke a real array.** Refused.
+
+```
+WzMerge guard <stage>\<T>\UI.wz --baseline <stage>\<T>\pre\UI.wz
+```
+
+Measured against the reproduced broken file: `HOLED ARRAY MapLogin.img/back: missing 5 index(es) —
+48,49,50,51,52 — the baseline held the consecutive run 0..47, and this file breaks it`, exit 4,
+with all nine gapped id tables discounted. The same command on the known-good 11h output: exit 0.
 
 **The refusal is structural, so it is not a substitute for reading the data.** When it fires,
 dump both arrays and compare them **by name, not by index**:
