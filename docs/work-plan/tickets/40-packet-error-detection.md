@@ -98,12 +98,20 @@ so the `nEnterType != 2` branch is decided server-side. Those are declared as na
 | `DecodeBuf` / `DecodeBuffer` of unknown length | 14 |
 | `Delegate` into an unfollowed subroutine | 3 |
 
-Structurally un-modellable, and named because these are the ones people will ask about:
-`SERVERMESSAGE` and `SHOW_STATUS_INFO` (dispatcher families - the shape depends on a mode byte),
-`SPAWN_MONSTER` (tail is three `Delegate`s), `MOVE_PLAYER` and `MOVE_MONSTER` (variable-length
-movement path), the whole `NPC_TALK` family (shape depends on dialog type), `LOGIN_STATUS`
-(has both a success and a failure shape; the export models only success), and every packet
-carrying an item record or a character look.
+Named, because these are the ones people will ask about. Reasons are the ones the script actually
+recorded, not a summary:
+
+| opcode | in the TSV? | why |
+|---|---|---|
+| `SERVERMESSAGE` | no | v83 `CWvsContext::OnBroadcastMsg` is `calls: null` - a pure dispatcher; the shape lives in four `#` arms keyed off a mode byte |
+| `SHOW_STATUS_INFO` | no | v83 has no `CWvsContext::OnMessage` key at all, only 24 `#` arms |
+| `SPAWN_MONSTER` | no | v83 tail is `DecodeBuf` "MonsterModel body" with no byte count (the v84 export replaces it with three `Delegate`s) |
+| `MOVE_MONSTER` | no | v83 tail is `DecodeBuf` "Movement body via CMovePath::OnMovePacket" - variable length |
+| `MOVE_PLAYER` | no | serverbound; no v83 entry for `CUserLocal::OnKey` |
+| `NPC_TALK` family | no | shape depends on the dialog type byte |
+| `LOGIN_STATUS` | **yes, as `candidate`** | modelled (17 fields incl. the v84 8-byte `m_aClientKey`) but NOT promoted: `getAuthSuccess` is not straight-line and `getLoginFailed` emits a different, shorter body for the same opcode. The v83 export flattened the branch and describes only the success path. |
+
+Also un-modellable: every packet carrying an item record or a character look.
 
 Four more were modelled cleanly but NOT promoted, because the v83 export entry is a stub:
 `SKILL_EFFECT` and `CANCEL_SKILL_EFFECT` start after the dispatcher-consumed `characterId`,
