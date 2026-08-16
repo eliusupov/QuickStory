@@ -1324,7 +1324,7 @@ public class PacketCreator {
      */
     private static Packet serverMessage(int type, int channel, String message, boolean servermessage, boolean megaEar, int npc) {
         OutPacket p = OutPacket.create(SendOpcode.SERVERMESSAGE);
-        p.writeByte(type);
+        p.writeByte(broadcastMsgMode(type));
         if (servermessage) {
             p.writeByte(1);
         }
@@ -1756,7 +1756,7 @@ public class PacketCreator {
      */
     public static Packet getShowFameGain(int gain) {
         final OutPacket p = OutPacket.create(SendOpcode.SHOW_STATUS_INFO);
-        p.writeByte(4);
+        p.writeByte(statusInfoMode(4));
         p.writeInt(gain);
         return p;
     }
@@ -1784,7 +1784,7 @@ public class PacketCreator {
             p.writeByte(0);
             p.writeShort(1); //v83
         } else {
-            p.writeByte(5);
+            p.writeByte(statusInfoMode(5));
         }
         p.writeInt(gain);
         p.writeShort(0);
@@ -3502,6 +3502,66 @@ public class PacketCreator {
      */
     public static byte v83DialogType(byte clientType) {
         return ServerConstants.VERSION >= 84 && clientType >= 2 ? (byte) (clientType - 1) : clientType;
+    }
+
+    /**
+     * SHOW_STATUS_INFO mode discriminator, expressed throughout this server in the <b>v83</b> enum
+     * (0=drop pickup, 1=quest record, 2=cash item expire, 3=EXP, 4=fame, 5=meso, 6=guild point,
+     * 7=give item, 9=system message, 10=quest record ex). v84 inserted an SP-increase arm at 4 and
+     * shifted every later case up by one. Modes 0-3 are unchanged, which is why the kill path (EXP
+     * is 3) and quest progress (1) kept working on v84 while everything from fame up was wrong.
+     *
+     * <p>Evidence, read out of the binaries rather than inferred - {@code CWvsContext::OnMessage},
+     * reached from {@code CWvsContext::OnPacket} case <b>0x27</b> in both images:
+     * <ul>
+     * <li>v83 {@code localhome.exe} @{@code 0xA209D4}: {@code cmp eax,0xD} / {@code jmp [eax*4+0xA20A88]}
+     *     - <b>14</b> arms, modes 0..13.</li>
+     * <li>v84 client @{@code 0xA6BDD9}: {@code cmp eax,0xE} / {@code jmp [eax*4+0xA6BE9A]}
+     *     - <b>15</b> arms, modes 0..14.</li>
+     * <li>The extra arm is v84 mode 4 @{@code 0xA6CEFA}, a function with no v83 counterpart: it
+     *     reads a short and a byte, then {@code idiv 100} / {@code cmp eax,0x16} / {@code cmp esi,0x7D1}
+     *     - i.e. it special-cases job 2001 and the 22xx family. That is the Evan SP window, which is
+     *     exactly why this arm appears in "the Evan patch".</li>
+     * <li>Handler-to-handler check of the two jump tables: 13 of the 14 v83 arms are
+     *     instruction-for-instruction identical to the v84 arm this mapping sends them to
+     *     (v83 4-&gt;v84 5 @{@code 0xA2212D}/{@code 0xA6D63F}, 5-&gt;6, 6-&gt;7, 7-&gt;8, 8-&gt;9,
+     *     9-&gt;10, 10-&gt;11, 11-&gt;12, 12-&gt;13, 13-&gt;14, plus 0, 2 and 3 in place). The one
+     *     exception, mode 1 (quest record), was rewritten at v84 but keeps index 1 in both.</li>
+     * </ul>
+     *
+     * @param v83Mode mode in the v83 enum
+     */
+    private static int statusInfoMode(int v83Mode) {
+        return ServerConstants.VERSION >= 84 && v83Mode >= 4 ? v83Mode + 1 : v83Mode;
+    }
+
+    /**
+     * SERVERMESSAGE mode discriminator, expressed throughout this server in the <b>v83</b> enum
+     * (0=notice, 1=popup, 2=megaphone, 3=super megaphone, 4=scrolling header, 5=pink, 6=light blue,
+     * 7=NPC broadcast, 8=item megaphone, 10=multi megaphone, 11=gachapon). v84 inserted <b>two</b>
+     * new arms at 12 and 13 and pushed the old 12/13 pair to 14/15. Everything this server actually
+     * sends is 0..11, so this only guards the one caller that takes its mode from the wire
+     * ({@code AdminChatHandler}); all four SERVERMESSAGE write sites are otherwise below the shift.
+     *
+     * <p>Evidence - {@code CWvsContext::OnBroadcastMsg}, reached from {@code CWvsContext::OnPacket}
+     * case 0x44 at v83 and case <b>0x46</b> at v84 (so Cosmic's {@code sendops-84} 0x46 is right and
+     * atlas's 0x44 is wrong - not changed here, opcode tables are another ticket):
+     * <ul>
+     * <li>v83 @{@code 0xA22785}, switch @{@code 0xA229B0}: {@code cmp esi,0xD} /
+     *     {@code jmp [esi*4+0xA236D3]} - <b>14</b> arms, modes 0..13, with 12 and 13 sharing one
+     *     body @{@code 0xA22AA4}.</li>
+     * <li>v84 @{@code 0xA6DC97}, switch @{@code 0xA6DF39}: {@code cmp esi,0xF} /
+     *     {@code jmp [esi*4+0xA6ED68]} - <b>16</b> arms, modes 0..15, with 14 and 15 sharing one
+     *     body @{@code 0xA6E039}.</li>
+     * <li>All 14 v83 arm bodies match their v84 counterpart instruction-for-instruction under this
+     *     mapping, including the 3=8=9=10 shared-body pattern and the shared 12/13 -&gt; 14/15 pair.
+     *     v84's new 12 @{@code 0xA6EA8E} and 13 @{@code 0xA6EAF7} match nothing at v83.</li>
+     * </ul>
+     *
+     * @param v83Mode mode in the v83 enum
+     */
+    private static int broadcastMsgMode(int v83Mode) {
+        return ServerConstants.VERSION >= 84 && v83Mode >= 12 ? v83Mode + 2 : v83Mode;
     }
 
     /**
@@ -6197,7 +6257,7 @@ public class PacketCreator {
 
     public static Packet updateAreaInfo(int area, String info) {
         final OutPacket p = OutPacket.create(SendOpcode.SHOW_STATUS_INFO);
-        p.writeByte(0x0A); //0x0B in v95
+        p.writeByte(statusInfoMode(0x0A)); //0x0B in v84+ and v95
         p.writeShort(area);//infoNumber
         p.writeString(info);
         return p;
@@ -6205,14 +6265,14 @@ public class PacketCreator {
 
     public static Packet getGPMessage(int gpChange) {
         OutPacket p = OutPacket.create(SendOpcode.SHOW_STATUS_INFO);
-        p.writeByte(6);
+        p.writeByte(statusInfoMode(6));
         p.writeInt(gpChange);
         return p;
     }
 
     public static Packet getItemMessage(int itemid) {
         OutPacket p = OutPacket.create(SendOpcode.SHOW_STATUS_INFO);
-        p.writeByte(7);
+        p.writeByte(statusInfoMode(7));
         p.writeInt(itemid);
         return p;
     }
@@ -6462,7 +6522,7 @@ public class PacketCreator {
 
     public static Packet showInfoText(String text) {
         final OutPacket p = OutPacket.create(SendOpcode.SHOW_STATUS_INFO);
-        p.writeByte(9);
+        p.writeByte(statusInfoMode(9));
         p.writeString(text);
         return p;
     }
@@ -6782,7 +6842,7 @@ public class PacketCreator {
 
     public static Packet getDojoInfo(String info) {
         final OutPacket p = OutPacket.create(SendOpcode.SHOW_STATUS_INFO);
-        p.writeByte(10);
+        p.writeByte(statusInfoMode(10));
         p.writeBytes(new byte[]{(byte) 0xB7, 4});//QUEST ID f5
         p.writeString(info);
         return p;
@@ -6790,7 +6850,7 @@ public class PacketCreator {
 
     public static Packet getDojoInfoMessage(String message) {
         final OutPacket p = OutPacket.create(SendOpcode.SHOW_STATUS_INFO);
-        p.writeByte(9);
+        p.writeByte(statusInfoMode(9));
         p.writeString(message);
         return p;
     }
@@ -6835,7 +6895,7 @@ public class PacketCreator {
 
     public static Packet updateDojoStats(Character chr, int belt) {
         final OutPacket p = OutPacket.create(SendOpcode.SHOW_STATUS_INFO);
-        p.writeByte(10);
+        p.writeByte(statusInfoMode(10));
         p.writeBytes(new byte[]{(byte) 0xB7, 4}); //?
         p.writeString("pt=" + chr.getDojoPoints() + ";belt=" + belt + ";tuto=" + (chr.getFinishedDojoTutorial() ? "1" : "0"));
         return p;
@@ -7014,7 +7074,7 @@ public class PacketCreator {
 
     public static Packet bunnyPacket() {
         final OutPacket p = OutPacket.create(SendOpcode.SHOW_STATUS_INFO);
-        p.writeByte(9);
+        p.writeByte(statusInfoMode(9));
         p.writeFixedString("Protect the Moon Bunny!!!");
         return p;
     }
