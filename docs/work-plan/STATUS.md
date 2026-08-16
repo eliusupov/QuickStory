@@ -1,4 +1,163 @@
-# STATUS — GMS v83 → v84 upgrade
+# STATUS — GMS v83 → **v92** upgrade (target changed 2026-08-16)
+
+---
+
+## 🟢 LATEST — 2026-08-16 evening. **The v84 client boots. The opcode table exists.**
+
+Two things changed that make the v84 migration materially easier than this document assumes below.
+Both were verified by the orchestrator directly, not accepted on an agent's report.
+
+### 1. The v84 client reaches its own login screen, localhost-routed
+
+Ticket 20 built it from `GMSSetupv84.exe` into `D:\games\MSv84\client\` and drove it to a rendering
+login window — **spending zero of the owner's client launches**, by answering the v84 handshake with
+a 16-byte stub on port **8485** so the live v83 server on 8484 was never touched. The live v83 client
+was proven untouched, 48/48 files byte-identical to a pre-write baseline.
+
+Rebuild is reproducible: `tools\v84\setup-v84-client.ps1`. Instruments live in `tools\v84\`.
+
+**Installer trap, recorded because it is exactly this project's failure mode:** `GMSSetupv84.exe`
+carries **two spanned cabinets**, not one. Point 7-Zip at the `.exe` and it sees only cabinet 1 and
+**silently truncates `Mob.wz`**. The script carves both volumes at header-verified offsets.
+Separately confirmed: `porting-resources\wz-data\v84\` is genuine, **17/17 byte-identical** to the
+installer's own WZ.
+
+### 2. ⚠ **A public GMS v84 opcode table DOES exist.** This document says otherwise below — that is wrong.
+
+`Chronicle20/atlas`, IDB-derived, now at `D:\games\MSv84\opcodes\gms_v84.yaml`. Orchestrator-verified
+by direct count: **553 rows = 330 clientbound + 223 serverbound**, each with an IDA function name and
+a provenance. The standing claim *"NO PUBLIC GMS v84 OPCODE TABLE EXISTS — expect derivation from the
+owner's own client"* is **dead**. Ticket 21 consumes it.
+
+**But it is not free.** Provenance splits **234 ida-discovered / 222 csv-import / 97 manual**, where
+`csv-import` means *seeded from v83 and never observed*. Below `0x3F` that is safe — that band really
+is unchanged, which is why the handshake works. Above `0x3E` it is the trap, because the v84 shift is
+monotonic but **non-uniform** (cumulative +2/+3/+4/+6/+7/+10). **336 of 549 shared opcodes differ.**
+
+| `csv-import` rows at opcode ≥ `0x3F` | count |
+|---|---|
+| clientbound | 30 |
+| **serverbound** | **80** |
+| **total unverified** | **110 of 553 (20%)** |
+
+Ticket 20's own write-up says 30; it audited only the clientbound half. The orchestrator measured the
+serverbound side and it is nearly three times larger. **All 110 are ticket 21's to adjudicate.**
+
+### Corrections to standing facts (from ticket 20)
+
+| Prior belief | Reality |
+|---|---|
+| No public v84 opcode table | **Wrong** — see above |
+| gms-83-dll v84.1 memory map is 145 keys | **159.** The repo itself carries three conflicting counts |
+| Bypass is a `dinput8.dll` proxy | **`ijl15.dll` + `edits\`.** `dinput8.dll` is the *Ezorsia v2* lineage on the live v83 client — a different project |
+| v84 needs **zero** anti-cheat work | Overstated. `DR::check` (≥87) and `CeTracer` (≥95) genuinely don't apply, but two hooks still install. Correct: **zero *additional* work beyond v83** |
+| `local*.exe` are separately-produced dumps | Four files of **identical size and PE layout** — byte-patched variants of one build. What broke `localhome.evan.exe` was its patches, not its provenance |
+| "live client == backup" is a tamper-check | **False, and was already false.** Only 8/18 `.wz` match, from in-flight merge work predating ticket 20. Use in-session before/after pairs instead |
+
+### New instrument lesson, worth as much as the findings
+
+`notepad.exe` on Win11 exits in **0.44 s with code 0** while the real app runs under a different PID.
+**Tracked-PID lifetime and exit code are lying instruments** — precisely the "0-second lifetime"
+pattern that produced days of worthless `localhome.evan.exe` crash evidence. Trust window presence,
+process count by name, and survivors. Ticket 20 also **rejected its own** PE dump-detector (it flagged
+`notepad.exe` as suspect) and caught three more instruments lying mid-session, including a self-test
+that printed PASS off an errored `Compare-Object` and would have passed regardless.
+
+### Unproven — do not assume
+
+Login never **completed**; character select, world list and in-game are untested. The client's 143-byte
+reply was never decrypted. `HShield` was extracted but deliberately never installed. The client resists
+`Stop-Process` (Themida) — check for stray `MapleStory.exe` after testing.
+
+### In flight right now
+
+| # | Ticket | Why it is unblocked |
+|---|---|---|
+| 21 | v84 opcode table → `{send,recv}ops-84.properties` | ticket 32 built the seam; atlas supplies the data. `VERSION` stays 83 — the files are inert until `-Dopcode-version=84` |
+| 33 | v84 quest data into the **server's** `wz/` XML | carved out of 09/13 as the **route-independent** half. Verified: `QuestInfo.img.xml` has 2881 quests, 103 Aran, **zero Evan** — so all 49 Evan scripts are dead files today |
+| 34 | quest `sp` rewards | verified: `getByWZName` has no `"sp"` case and no `SpAction` exists, so **28 Evan quests silently discard their SP** |
+
+Split out deliberately: the **client** half of 09/13 is work the v84 migration deletes, because stock
+v84 already ships every v84 quest. Only the server half survives the route change, so only it is being
+built now.
+
+---
+
+> ## 🔀 STRATEGIC PIVOT — move to the **v84 CLIENT**. Stop hacking the v83 one.
+>
+> ### FINAL DECISION (2026-08-16, after the owner weighed v84 vs v92)
+> **Target = GMS v84 client, FEATURE-COMPLETE. Dual Blade / v92 is a LATER, SEPARATE phase.**
+> Owner, verbatim: *"i want evan first, dual blade can be after."* → *"v84 feature complete is
+> more important"*. Ranking rule, verbatim: *"i dont want cheaper, i want fully working."*
+> Sourcing rule, verbatim: *"take features from where ever you can, just make sure the workflow is
+> planned correctly."* HD (`dinput8.dll`) is explicitly the **last** phase.
+>
+> **Why v84 and not v92 — the owner's reasoning, which is correct:** v84 is **one** version from
+> v83, so protocol drift is minimal and the bounded risk is as small as it can be. v92 is nine.
+>
+> **Orchestrator correction, recorded because it was argued the other way first:** the claim that
+> staging v83→v84→v92 "pays the migration twice" was **overstated**. v84 and v92 are the *same
+> shape of work* — new client, opcode remap, WZ base swap + backport, new classes server-side — so
+> doing v84 first pays the expensive part (*learning what breaks when this server changes client
+> version*) exactly once, on the easiest possible step, and ends with a working game. Phase 1 is a
+> rehearsal, not waste. Phase 1 must therefore produce **reusable assets**: the opcode-remap
+> procedure + its verification method, the WZ base-swap/backport workflow, the client-validation
+> checklist, the regression suite, and a written record of what broke and how it was fixed.
+> **But where phase-1 completeness and phase-2 convenience conflict, completeness wins.**
+>
+> **Dual Blade is v88 — v84 can never deliver it.** Accepted deliberately, not overlooked.
+>
+> ### Why the v83 route was abandoned as the destination
+> It works — Evan's skill window opens and skills cast — but it has **permanent ceilings**:
+> - The gate patch is **memory-only, every launch, forever** (the exe is Themida-compressed, so it
+>   cannot be patched on disk). Any other player would need the patcher too.
+> - **Character creation is unreachable by data.** The v83 client hardcodes 3 races; installing
+>   `Login.img/RaceSelect/BtEvan` + `NewCharEvan` + `MakeCharInfo/EvanChar*` changed nothing.
+>   Confirmed live: creation still offers only Cygnus / Explorer / Aran.
+> - **Dragon rendering may be unsolvable on v83** — the author of the known v83 Evan release:
+>   *"We were able to process either the character animations, or the dragon but not both."*
+> - Skill-window tabs 5-10 permanently mislabel as "4th job" (5 slots vs 10 advancements).
+> - **v84 cannot ever deliver Dual Blade — that is v88.** The branch is `evan-dualblade`, so v84
+>   would leave half the stated goal permanently unreachable, and staging v83→v84→v92 pays the
+>   entire client migration **twice** for a stage that gets discarded.
+>
+> ### The decisive asset
+> **The client installers are already on disk**, at `Server\porting-resources\clients\`:
+> `GMSSetupv83.exe` (1,681.9 MB), **`GMSSetupv84.exe` (1,760.8 MB)**, `ManualPatcherv84.exe`
+> (94.2 MB), and `GMSSetupv92.exe` (2,082.6 MB) held for phase 2.
+>
+> **On a v84 client Evan is NATIVE** — character creation, skill window, dragon. Every v83 hack
+> built on 2026-08-16 becomes unnecessary: both memory gate patches, `UI.wz/Basic.img/Tab8`, the
+> per-launch `-Watch` patcher, and the race-select RE that had no prior art anywhere.
+> *(v92 is the last version before Big Bang (v93) and is where Dual Blade lives — phase 2.)*
+>
+> ### The three layers — do not conflate them
+> 1. **Client version** — what can be rendered/offered. Cheap once the protocol works.
+> 2. **WZ data** — what content exists. Tooling and manifests already built; direction reverses to
+>    *v92 base + backport what v92 deleted that Cosmic implements*.
+> 3. **Server implementation (Java)** — what actually *functions*. **The dominant cost.** A v92
+>    client does not make Dual Blade work; every skill needs server-side Java. This cost is
+>    identical whether v92 is reached directly or via v84 — which is the argument against staging.
+>
+> **`ServerConstants.java:6` → `VERSION = 83`** is one line. `SendOpcode.java` is 366 lines,
+> `RecvOpcode.java` 216 — that table is the bounded, measurable risk.
+>
+> ### Open — the two tickets that decide the plan
+> - **17** — the phased, costed v92 plan: protocol, client, WZ, classes, skills, quests, items,
+>   cash shop, regression, with real per-phase counts. HD (`dinput8.dll`) is explicitly **last**.
+> - **18** — **DreamMS recon.** The owner reports it is the only working v92 server and is
+>   installing it now. Resolves the critical unknown: *does a v88-v92 server source exist to port
+>   from?* If yes, layer 3 is porting. If no, it is dozens of skills written from scratch.
+>
+> ### Not wasted
+> Everything transfers: `WzMerge` + the additive/deny/positional-array gates, all manifests
+> (`add-list`, `removed-list`, `protect-list`), the census/diff tools, `install-wz.ps1`, the four
+> real server-side Evan bugs fixed by ticket 10, `EvanCreator` + `CreateCharHandler case 3`, and
+> the `config.yaml` Hamachi fix. **Cosmic remains the base — it is extended, never replaced.**
+
+---
+
+# HISTORICAL — GMS v83 → v84 upgrade (the v83-client route)
 
 Orchestrator log. State: `in-flight` / `done` / `partial` / `blocked-on-human` / `failed`.
 
