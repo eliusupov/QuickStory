@@ -62,30 +62,36 @@ public class QuestScriptManager extends AbstractScriptManager {
         try {
             QuestActionManager qm = new QuestActionManager(c, questid, npc, true);
             if (qms.containsKey(c)) {
+                log.debug("START quest {} ignored: {} already has quest script {} open", questid,
+                        c.getPlayer().getName(), qms.get(c).getQuest());
                 return;
             }
-            if (c.canClickNPC()) {
-                qms.put(c, qm);
-
-                if (!quest.hasScriptRequirement(false)) {   // lack of scripted quest checks found thanks to Mali, Resinate
-                    qm.dispose();
-                    return;
-                }
-
-                ScriptEngine engine = getQuestScriptEngine(c, questid);
-                if (engine == null) {
-                    log.warn("START Quest {} is uncoded.", questid);
-                    qm.dispose();
-                    return;
-                }
-
-                engine.put("qm", qm);
-
-                Invocable iv = (Invocable) engine;
-                scripts.put(c, iv);
-                c.setClickedNPC();
-                iv.invokeFunction("start", (byte) 1, (byte) 0, 0);
+            if (!c.canClickNPC()) {
+                log.debug("START quest {} ignored: {} is inside the 500ms npc-click cooldown", questid,
+                        c.getPlayer().getName());
+                return;
             }
+            qms.put(c, qm);
+
+            if (!quest.hasScriptRequirement(false)) {   // lack of scripted quest checks found thanks to Mali, Resinate
+                log.debug("START quest {} disposed: Check.img/{}/0 has no startscript", questid, questid);
+                qm.dispose();
+                return;
+            }
+
+            ScriptEngine engine = getQuestScriptEngine(c, questid);
+            if (engine == null) {
+                log.warn("START Quest {} is uncoded.", questid);
+                qm.dispose();
+                return;
+            }
+
+            engine.put("qm", qm);
+
+            Invocable iv = (Invocable) engine;
+            scripts.put(c, iv);
+            c.setClickedNPC();
+            iv.invokeFunction("start", (byte) 1, (byte) 0, 0);
         } catch (final Throwable t) {
             log.error("Error starting quest script: {}", questid, t);
             dispose(c);
@@ -107,37 +113,48 @@ public class QuestScriptManager extends AbstractScriptManager {
 
     public void end(Client c, short questid, int npc) {
         Quest quest = Quest.getInstance(questid);
-        if (!c.getPlayer().getQuest(quest).getStatus().equals(QuestStatus.Status.STARTED) || (!c.getPlayer().getMap().containsNPC(npc) && !quest.isAutoComplete())) {
+        QuestStatus.Status status = c.getPlayer().getQuest(quest).getStatus();
+        // containsNPC is a locked scan of every map object, so read it once and reuse it below.
+        boolean npcOnMap = c.getPlayer().getMap().containsNPC(npc);
+        if (!status.equals(QuestStatus.Status.STARTED) || (!npcOnMap && !quest.isAutoComplete())) {
+            log.debug("END quest {} disposed: status {}, npc {} on map {} = {}, autoComplete {}", questid,
+                    status, npc, c.getPlayer().getMapId(), npcOnMap, quest.isAutoComplete());
             dispose(c);
             return;
         }
         try {
             QuestActionManager qm = new QuestActionManager(c, questid, npc, false);
             if (qms.containsKey(c)) {
+                log.debug("END quest {} ignored: {} already has quest script {} open", questid,
+                        c.getPlayer().getName(), qms.get(c).getQuest());
                 return;
             }
-            if (c.canClickNPC()) {
-                qms.put(c, qm);
-
-                if (!quest.hasScriptRequirement(true)) {
-                    qm.dispose();
-                    return;
-                }
-
-                ScriptEngine engine = getQuestScriptEngine(c, questid);
-                if (engine == null) {
-                    log.warn("END Quest {} is uncoded.", questid);
-                    qm.dispose();
-                    return;
-                }
-
-                engine.put("qm", qm);
-
-                Invocable iv = (Invocable) engine;
-                scripts.put(c, iv);
-                c.setClickedNPC();
-                iv.invokeFunction("end", (byte) 1, (byte) 0, 0);
+            if (!c.canClickNPC()) {
+                log.debug("END quest {} ignored: {} is inside the 500ms npc-click cooldown", questid,
+                        c.getPlayer().getName());
+                return;
             }
+            qms.put(c, qm);
+
+            if (!quest.hasScriptRequirement(true)) {
+                log.debug("END quest {} disposed: Check.img/{}/1 has no endscript", questid, questid);
+                qm.dispose();
+                return;
+            }
+
+            ScriptEngine engine = getQuestScriptEngine(c, questid);
+            if (engine == null) {
+                log.warn("END Quest {} is uncoded.", questid);
+                qm.dispose();
+                return;
+            }
+
+            engine.put("qm", qm);
+
+            Invocable iv = (Invocable) engine;
+            scripts.put(c, iv);
+            c.setClickedNPC();
+            iv.invokeFunction("end", (byte) 1, (byte) 0, 0);
         } catch (final Throwable t) {
             log.error("Error starting quest script: {}", questid, t);
             dispose(c);

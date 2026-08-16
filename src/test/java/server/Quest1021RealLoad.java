@@ -1,0 +1,161 @@
+package server;
+
+import client.Character;
+import client.Client;
+import client.Job;
+import client.QuestStatus;
+import io.netty.buffer.Unpooled;
+import net.packet.ByteBufInPacket;
+import net.packet.Packet;
+import net.server.channel.handlers.QuestActionHandler;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import provider.wz.WZFiles;
+import scripting.quest.QuestScriptManager;
+import server.life.NPC;
+import server.maps.MapleMap;
+import server.quest.Quest;
+import tools.HexTool;
+
+import java.awt.Point;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.clearInvocations;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+
+/**
+ * Ticket 26. Drives {@link QuestActionHandler} with the <em>exact</em> QUEST_ACTION bytes the owner's
+ * v84 client sent for quest 1021 ("Roger's Apple") and asserts the server answers. Real {@link Quest}
+ * load off the real {@code wz/} tree, real {@code scripts/quest/1021.js} through the real Graal script
+ * manager - only {@link Client}, {@link Character} and {@link MapleMap} are stubbed.
+ *
+ * <pre>
+ *   mvnw.cmd test -Dtest=Quest1021RealLoad
+ * </pre>
+ *
+ * <p><strong>Not a {@code *Test} class on purpose</strong>, same reason as {@link V84EvanQuestRealLoad}:
+ * {@link WZFiles#DIRECTORY} is a {@code static final} resolved once per JVM and
+ * {@code MobSkillFactoryTest} points {@code wz-path} at a {@code @TempDir} with no {@code Quest.wz} in
+ * it. Whichever class touches it first wins for the whole surefire fork.
+ *
+ * <p>Every gate crossed here is one that returned <em>silently</em> in production - no packet, no log -
+ * which is exactly why 1021 looked like a black hole on the live server.
+ */
+class Quest1021RealLoad {
+
+    /** action 4 (scripted start) | quest 1021 | npc 2000 | x/y - verbatim from the live capture. */
+    private static final String QUEST_ACTION_1021 = "04 FD 03 D0 07 00 00 B5 FF 13 01";
+
+    @BeforeAll
+    static void muteGraal() {
+        System.setProperty("polyglot.engine.WarnInterpreterOnly", "false");
+    }
+
+    @Test
+    void scriptedStartOf1021AnswersWithNpcTalk() {
+        assertTrue(Files.isRegularFile(Path.of(WZFiles.DIRECTORY, "Quest.wz", "Check.img.xml")),
+                "wz-path resolved to '" + WZFiles.DIRECTORY + "', which holds no Quest.wz - another test "
+                        + "class won the WZFiles.DIRECTORY race, so this says nothing about quest 1021");
+        assertTrue(Files.isRegularFile(Path.of("scripts", "quest", "1021.js")),
+                "scripts/ is resolved relative to the working directory; it must hold quest/1021.js");
+
+        Quest quest = Quest.getInstance(1021);
+        assertEquals(2000, quest.getNpcRequirement(false));
+        assertTrue(quest.hasScriptRequirement(false),
+                "Check.img/1021/0/startscript must survive the load, or QuestScriptManager disposes silently");
+
+        Client c = beginnerAtRoger();
+        handle(c);
+
+        // sendNext() from 1021.js step 0. Nothing at all here is the live symptom.
+        verify(c, atLeastOnce()).sendPacket(any(Packet.class));
+
+        QuestScriptManager.getInstance().dispose(c);
+    }
+
+    /**
+     * The black hole. Closing the very first Roger dialogue with the window X instead of clicking
+     * Next leaves the {@link QuestScriptManager} session open forever, and from then on every
+     * QUEST_ACTION this character sends returns at {@code qms.containsKey(c)} - no packet, no log,
+     * no error. Eight clicks, eight silences.
+     *
+     * <p>Mechanism: the X sends NPC_TALK_MORE with {@code lastMsg=0, action=0}, which
+     * {@code NPCMoreTalkHandler} forwards as {@code mode=0, type=0}. 1021.js only disposes on
+     * {@code mode == -1} or {@code mode == 0 && type > 0}; here it takes {@code status--}, lands on
+     * -1, matches no branch and returns without disposing. The server cannot tell that
+     * {@code mode == 0} apart from a Prev button, so this is not fixable at the manager - see ticket
+     * 26. A map change or a relog clears it ({@code Character.closePlayerInteractions}).
+     */
+    @Test
+    void closingTheFirstDialogueWedgesEveryLaterQuestAction() {
+        Client c = beginnerAtRoger();
+
+        handle(c);
+        verify(c, atLeastOnce()).sendPacket(any(Packet.class));
+        clearInvocations(c);
+
+        // The window X: NPCMoreTalkHandler's non-lastMsg-2 branch, action 0.
+        QuestScriptManager.getInstance().start(c, (byte) 0, (byte) 0, -1);
+        assertNotNull(QuestScriptManager.getInstance().getQM(c),
+                "1021.js fell off its state machine without disposing - the session is now stuck");
+
+        handle(c);
+        handle(c);
+        verify(c, never()).sendPacket(any(Packet.class));
+
+        QuestScriptManager.getInstance().dispose(c);   // don't leak the singleton entry
+    }
+
+    /**
+     * Negative control: the same packet from a non-beginner must NOT produce a talk. Without this,
+     * "it answered" would also be the result of a handler that answers unconditionally.
+     */
+    @Test
+    void wrongJobStartsNothing() {
+        Client c = beginnerAtRoger();
+        lenient().when(c.getPlayer().getJob()).thenReturn(Job.EVAN1);   // 2200
+
+        handle(c);
+
+        verify(c, never()).sendPacket(any(Packet.class));
+    }
+
+    private static void handle(Client c) {
+        new QuestActionHandler().handlePacket(
+                new ByteBufInPacket(Unpooled.wrappedBuffer(HexTool.toBytes(QUEST_ACTION_1021))), c);
+    }
+
+    /** Job 0, level 1, standing on map 20000 next to NPC 2000, with no queststatus row for 1021. */
+    private static Client beginnerAtRoger() {
+        Client c = mock(Client.class);
+        Character chr = mock(Character.class);
+        MapleMap map = mock(MapleMap.class);
+        NPC roger = mock(NPC.class);
+
+        lenient().when(c.getPlayer()).thenReturn(chr);
+        lenient().when(c.canClickNPC()).thenReturn(true);
+        lenient().when(c.getScriptEngine(anyString())).thenReturn(null);
+        lenient().when(chr.getMap()).thenReturn(map);
+        lenient().when(chr.getMapId()).thenReturn(20000);
+        lenient().when(chr.getName()).thenReturn("Tester");
+        lenient().when(chr.getPosition()).thenReturn(new Point(205, 215));
+        lenient().when(chr.getJob()).thenReturn(Job.BEGINNER);
+        lenient().when(chr.getGender()).thenReturn(0);
+        lenient().when(chr.getQuest(any(Quest.class)))
+                .thenReturn(new QuestStatus(Quest.getInstance(1021), QuestStatus.Status.NOT_STARTED));
+        lenient().when(chr.isGM()).thenReturn(false);
+        lenient().when(map.getNPCById(2000)).thenReturn(roger);
+        lenient().when(roger.getPosition()).thenReturn(new Point(233, 58));
+        return c;
+    }
+}

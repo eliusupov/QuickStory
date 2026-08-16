@@ -287,31 +287,56 @@ public class Quest {
 
     public boolean canStart(Character chr, int npcid) {
         if (!canStartQuestByStatus(chr)) {
+            log.debug("Quest {} start denied for {}: status is {}, repeatable={}", id, chr.getName(),
+                    chr.getQuest(this).getStatus(), repeatable);
             return false;
         }
 
-        for (AbstractQuestRequirement r : startReqs.values()) {
-            if (!r.check(chr, npcid)) {
+        for (Entry<QuestRequirementType, AbstractQuestRequirement> r : startReqs.entrySet()) {
+            if (!r.getValue().check(chr, npcid)) {
+                log.debug("Quest {} start denied for {}: unmet {} requirement (npc {})", id, chr.getName(),
+                        r.getKey(), npcid);
                 return false;
             }
         }
 
-        return canQuestByInfoProgress(chr);
+        if (!canQuestByInfoProgress(chr)) {
+            log.debug("Quest {} start denied for {}: infoEx progress mismatch", id, chr.getName());
+            return false;
+        }
+        return true;
     }
 
     public boolean canComplete(Character chr, Integer npcid) {
+        // A null npcid means this is Character.raiseQuestMobCount probing on every mob kill, not a
+        // player pressing Complete - logging that would be one line per quest per kill. Ticket 26.
+        final boolean explain = npcid != null;
+
         QuestStatus mqs = chr.getQuest(this);
         if (!mqs.getStatus().equals(Status.STARTED)) {
+            if (explain) {
+                log.debug("Quest {} complete denied for {}: status is {}", id, chr.getName(), mqs.getStatus());
+            }
             return false;
         }
 
-        for (AbstractQuestRequirement r : completeReqs.values()) {
-            if (!r.check(chr, npcid)) {
+        for (Entry<QuestRequirementType, AbstractQuestRequirement> r : completeReqs.entrySet()) {
+            if (!r.getValue().check(chr, npcid)) {
+                if (explain) {
+                    log.debug("Quest {} complete denied for {}: unmet {} requirement (npc {})", id,
+                            chr.getName(), r.getKey(), npcid);
+                }
                 return false;
             }
         }
 
-        return canQuestByInfoProgress(chr);
+        if (!canQuestByInfoProgress(chr)) {
+            if (explain) {
+                log.debug("Quest {} complete denied for {}: infoEx progress mismatch", id, chr.getName());
+            }
+            return false;
+        }
+        return true;
     }
 
     public void start(Character chr, int npc) {

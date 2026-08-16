@@ -4,12 +4,17 @@ import org.junit.jupiter.api.Test;
 import provider.wz.WZFiles;
 import provider.wz.XMLWZFile;
 import server.quest.Quest;
+import server.quest.QuestActionType;
+import server.quest.actions.SpAction;
 
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -71,6 +76,46 @@ class V84EvanQuestRealLoad {
      * asked about said true" would also be the result of a {@code hasScriptRequirement} that
      * always says true.
      */
+    /**
+     * Ticket 34 added {@code SpAction} and unit-tested it against hand-written XML, but nothing ever
+     * proved {@link Quest}'s own {@code getAction} switch wires {@code sp} up on a real load - and a
+     * quest whose {@code completeActs} lacks the entry pays nothing however correct the action is.
+     * 22500 is the first of the 28 {@code sp}-carrying Evan quests.
+     *
+     * <p>{@code completeActs} is private with no accessor; adding one to production for a test is
+     * not worth it, hence the reflection.
+     */
+    @SuppressWarnings("unchecked")
+    @Test
+    void anSpRewardQuestLoadsAnSpActionIntoItsCompleteActs() throws Exception {
+        Field completeActs = Quest.class.getDeclaredField("completeActs");
+        completeActs.setAccessible(true);
+
+        Map<QuestActionType, ?> acts = (Map<QuestActionType, ?>) completeActs.get(Quest.getInstance(22500));
+        assertTrue(acts.containsKey(QuestActionType.SP),
+                "Act.img/22500/1/sp did not become a SP action - " + acts.keySet());
+        assertInstanceOf(SpAction.class, acts.get(QuestActionType.SP));
+    }
+
+    /**
+     * The gate the whole Evan chain hangs off. 22100 is not reachable from a fresh character: it
+     * wants job 2001, level 10, and quest 22007 <em>completed</em>. If 22007 is not in the merged
+     * data with a way to finish it, every advancement above it is dead no matter how good the
+     * scripts are. This asserts the link, not the whole chain.
+     */
+    @Test
+    void the1stAdvancementsPrerequisiteQuestExistsAndIsFinishable() {
+        Quest first = Quest.getInstance(22100);
+        assertEquals(1013000, first.getNpcRequirement(false), "22100 is Mir's");
+
+        Quest prereq = Quest.getInstance(22007);
+        assertFalse(prereq.getName().isBlank(), "22100 requires 22007 completed, but 22007 did not load");
+        assertTrue(prereq.hasScriptRequirement(true),
+                "22007 has no endscript, so nothing can complete it and 22100 stays unreachable");
+        assertTrue(Files.isRegularFile(Path.of("scripts", "quest", "22007.js")),
+                "Check.img declares endscript q22007e but scripts/quest/22007.js is absent");
+    }
+
     @Test
     void anIdV84DoesNotShipHasNoScriptRequirement() {
         Quest absent = Quest.getInstance(22110);

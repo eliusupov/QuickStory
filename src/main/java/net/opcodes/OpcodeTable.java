@@ -18,6 +18,7 @@
 */
 package net.opcodes;
 
+import constants.net.ServerConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,6 +69,17 @@ public final class OpcodeTable {
     public static void verify() {
         rejectUnknownKeys(SEND, "sendops", SendOpcode.values());
         rejectUnknownKeys(RECV, "recvops", RecvOpcode.values());
+
+        // launch.bat does not pass -Dopcode-version, so a build that moves ServerConstants.VERSION
+        // without it handshakes as one version and speaks the other. Recv ids largely agree between
+        // 83 and 84, so packets still arrive and decode - it is the send side that silently lands on
+        // the wrong client handler (NPC_TALK 0x130 vs 0x137, SET_FIELD 0x7D vs 0x80). Warn, don't
+        // throw: running a mismatched pair on purpose while bisecting is legitimate. Ticket 26.
+        if (!VERSION.equals(String.valueOf(ServerConstants.VERSION))) {
+            log.warn("Opcode table is v{} but ServerConstants.VERSION is {}. The client will not understand "
+                            + "packets whose id moved between the two tables. Start with -Dopcode-version={}.",
+                    VERSION, ServerConstants.VERSION, ServerConstants.VERSION);
+        }
     }
 
     private static Properties load(String kind) {

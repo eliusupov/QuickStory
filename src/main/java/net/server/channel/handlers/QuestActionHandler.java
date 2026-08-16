@@ -25,6 +25,8 @@ import client.Character;
 import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scripting.quest.QuestScriptManager;
 import server.life.NPC;
 import server.quest.Quest;
@@ -35,6 +37,7 @@ import java.awt.*;
  * @author Matze
  */
 public final class QuestActionHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(QuestActionHandler.class);
 
     // isNpcNearby thanks to GabrielSin
     private static boolean isNpcNearby(InPacket p, Character player, Quest quest, int npcId) {
@@ -53,11 +56,15 @@ public final class QuestActionHandler extends AbstractPacketHandler {
         if (!quest.isAutoStart() && !quest.isAutoComplete()) {
             NPC npc = player.getMap().getNPCById(npcId);
             if (npc == null) {
+                log.debug("Quest {} denied for {}: npc {} is not spawned on map {}", quest.getId(), player.getName(),
+                        npcId, player.getMapId());
                 return false;
             }
 
             Point npcP = npc.getPosition();
             if (Math.abs(npcP.getX() - playerP.getX()) > 1200 || Math.abs(npcP.getY() - playerP.getY()) > 800) {
+                log.debug("Quest {} denied for {}: npc {} at {} too far from {}", quest.getId(), player.getName(),
+                        npcId, npcP, playerP);
                 player.dropMessage(5, "Approach the NPC to fulfill this quest operation.");
                 return false;
             }
@@ -72,6 +79,9 @@ public final class QuestActionHandler extends AbstractPacketHandler {
         short questid = p.readShort();
         Character player = c.getPlayer();
         Quest quest = Quest.getInstance(questid);
+        // QUEST_ACTION sits in LoggingUtil's ignored-recv set, so without this the whole path can
+        // fail through any of the silent returns below and leave no trace at all. Ticket 26.
+        log.debug("QUEST_ACTION action {} quest {} from {}", action, questid, player.getName());
 
         switch (action) {
         case 0: // Restore lost item, Credits Darter ( Rajan )
