@@ -145,6 +145,12 @@ PROMOTED = {
 #       Modelled fine, but Cosmic has no PacketCreator method that emits them, so there is
 #       nothing for the harness to check. Promote if a writer is ever added.
 #
+# NARROWER THAN ITS NAME:
+#   SPAWN_NPC_REQUEST_CONTROLLER has two shapes, selected by the leading localFlag byte: 21 bytes
+#   to assign a controller and 5 bytes to drop one (PacketCreator.removeNPCController writes
+#   localFlag 0 and the client stops reading). The v83 export records no guard for this, so the
+#   model is the 21-byte shape only. Pinned in the test so it is not mistaken for full coverage.
+#
 # KNOWN FINDING, kept promoted on purpose:
 #   KILL_MONSTER/normal - PacketCreator.killMonster writes the animation byte TWICE (a long-
 #   standing OdinMS quirk); the client reads Decode4 + Decode1 and stops. Confirmed identical in

@@ -178,6 +178,23 @@ class PacketStructureValidatorTest {
         assertEquals(1, r.length() - r.consumed());
     }
 
+    /**
+     * Scope boundary, pinned so it is not mistaken for coverage. `SPAWN_NPC_REQUEST_CONTROLLER` has
+     * TWO legitimate shapes, selected by the leading localFlag byte: 21 bytes to assign a
+     * controller (spawnNPCRequestController / spawnPlayerNPC) and 5 bytes to drop one
+     * (removeNPCController, localFlag = 0, after which the client stops reading). The gms_v83
+     * export records no guard for this, so the derived model is the localFlag = 1 shape only and
+     * the short form is NOT covered. Validating it against this model reports a false UNDER_SEND -
+     * that is the model's limit, not a bug in removeNPCController.
+     */
+    @Test
+    void removeNpcControllerIsASecondShapeThisModelDoesNotCover() {
+        Result r = PacketStructureValidator.validate(models.get("SPAWN_NPC_REQUEST_CONTROLLER"),
+                PacketCreator.removeNPCController(300));
+        assertEquals(Status.UNDER_SEND, r.status());
+        assertEquals(5, r.length() - 2, "the localFlag = 0 form is a 5-byte body");
+    }
+
     // ---- mutation checks: a checker that cannot fail is not a checker ----------------------
 
     @Test

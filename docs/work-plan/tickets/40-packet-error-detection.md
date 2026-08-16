@@ -122,6 +122,16 @@ large false OVER_SENDs against correct packets.
 `INCUBATOR_RESULT`, `SPAWN_KITE`, `REMOVE_KITE`, `REMOVE_MIST`, `SHOW_COMBO`,
 `DESTROY_HIRED_MERCHANT`, `MONSTER_BOOK_SET_COVER`.
 
+### One model is narrower than its name
+
+`SPAWN_NPC_REQUEST_CONTROLLER` has two legitimate shapes selected by the leading localFlag byte:
+21 bytes to assign a controller (`spawnNPCRequestController`, `spawnPlayerNPC`) and 5 bytes to drop
+one (`removeNPCController`, localFlag = 0, after which the client stops reading). The gms_v83
+export records no guard for it, so the derived model is the 21-byte shape only. The 5-byte form is
+NOT covered, and running it through this model reports a false UNDER_SEND. Pinned by
+`removeNpcControllerIsASecondShapeThisModelDoesNotCover` so it cannot be mistaken for coverage.
+Every other verified opcode has exactly one writer in `PacketCreator`.
+
 ### One real finding
 
 `PacketCreator.killMonster` writes the animation byte **twice**. `CMobPool::OnMobLeaveField` reads
