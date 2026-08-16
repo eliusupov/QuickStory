@@ -1,0 +1,39 @@
+# evan-min - UI.wz. 3 rows. Ticket 10's 2 + ONE ADDED (Login.img/CharSelect/evan).
+#
+# UI.wz is out of scope by ticket-03 decree with one stated exception (WZ-MERGE-PROCEDURE.md 11):
+# "Take SkillEx / SkillMacroEx only, never bulk." Rows 1-2 are that exception.
+#
+# SkillEx / SkillMacroEx are the v84 skill window. Evan has TEN job levels and v83's skill window
+# has no layout for that. Taken from the v84 UI.wz and NOT from porting-resources\evan-xml, whose
+# UIWindow.img is a Big Bang dump its own author disclaims.
+#
+# ROW 3 IS NEW vs ticket 10 and it is the one thing this list adds that 10 did not have.
+# Login.img/CharSelect in the live client and in v84 are the SAME generation - 17 identically
+# named children (charInfo, effect, scroll, nameTag, BtSelect, BtNew, BtDelete, icon, character,
+# pageR, pageL, knight, aran, adventure, ...). v84 adds exactly one child: `evan`, a single 93x158
+# canvas, the same shape as the live client's `aran` (74x157). It is the class emblem drawn on a
+# character's card on the character-SELECT screen. Once the owner has an Evan, that screen renders
+# it on every login, and a missing emblem at the login screen is the worst-placed failure in the
+# whole ticket. One row, an additive named child of a container the client already reads, in a file
+# this list already touches. Asymmetric bet, taken.
+#
+# DELIBERATELY NOT HERE:
+#   UI.wz/Login.img/RaceSelect/{backgrnd,BtKnight,BtAran,BtEvan,BtNormal,new,confirm}
+#   UI.wz/Login.img/NewCharEvan
+#     PROVABLY USELESS on this client, not merely out of scope. Live RaceSelect is
+#     {BtSelect, knight, normal, aran, aran1, textGL}; v84's is a wholesale replacement in a
+#     different naming generation with no `evan` member at all. The v83 client would look up
+#     `RaceSelect/evan`, which does not exist in v84 either. See evan-min\Etc.paths.txt.
+#   UI.wz/UIWindow.img/{DragonEquip,BtDragonEquip}  - ticket 14 (dragon equipment panel).
+#   UI.wz/tutorial.img/evan                          - ticket 13 (Evan's tutorial/world).
+#   the other 50 UI.wz add-list roots                - unrelated v84 content, later increments.
+#
+# 4.5 check: UIWindow.img and Login.img both already exist in the live client, so all three rows
+# add a child to a pre-existing container. None edits an existing record and no container is a
+# positional array (all children named). Dumped both sides for all three.
+# EzorsiaV2_UI.wz holds no UIWindow.img, Login.img or Basic.img at all, so UI.wz is the file the
+# client reads these from.
+
+UI.wz/UIWindow.img/SkillEx
+UI.wz/UIWindow.img/SkillMacroEx
+UI.wz/Login.img/CharSelect/evan

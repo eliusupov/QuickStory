@@ -1,0 +1,65 @@
+# evan-min - Character.wz. 20 rows, ALL in one image: 00002000.img.
+#
+# TICKET 10 SAID CHARACTER.WZ NEEDED NOTHING. THAT WAS TRUE OF ITS STAGING TREE AND FALSE OF THE
+# LIVE CLIENT. Ticket 04 had merged these twenty rows into wz-merge\04\, but 04 was never
+# installed - the live client is pristine v83 and does not have them. Re-verified by dumping the
+# live D:\games\MapleStory\Character.wz directly.
+#
+# WHY THEY ARE REQUIRED. Every v84 Evan skill names a body action in Skill.wz/<job>.img/skill/
+# <id>/action/0, and the client resolves that name against Character.wz/00002000.img. Extracted
+# all 27 action names the v84 Evan skill images reference and checked each against the live body:
+#
+#   PRESENT in live (11): alert2 bamboo pyramid magicmissile dragonBreathe dragonIceBreathe
+#                         elementalReset magicBooster magicFlare illusion
+#   MISSING from live (17): Awakening(2217) blaze(2218) darkFog(2218) dragonThrust(2214)
+#                         Earthquake(2216) fireCircle(2210) flameWheel(2217) ghostLettering(2216)
+#                         killingWing(2215) lightingBolt(2211) magicRegistance(2215)
+#                         magicShield(2213) mapleHero(2217) OnixBlessing(2218) recoveryAura(2216)
+#                         slow(2214) soulStone(2218)
+#
+# `fireCircle` is skill 22101000 - Evan's FIRST attack skill, taken at the first job advance.
+# Without this file Evan casts an animation the client has no frames for.
+#
+# The remaining 3 rows (fly2, fly2Move, fly2Skill) are not named by any skill's action node; they
+# are Evan's dragon-flight actions. They are in the same image, which is re-serialised either way,
+# so they cost nothing measurable and are taken with the rest.
+#
+# ONLY 00002000.img NEEDS THIS. Measured: the other body images (00002001.img etc.) have 43
+# children and the head images 36, in BOTH the live client and v84, and neither carries any Evan
+# action. 00002000.img is the canonical action table (169 children in v84, 149 live) and the
+# client falls back to it for the extended actions. No other image in Character.wz is touched.
+#
+# 4.5 check: 00002000.img exists live, so every row adds a child to a pre-existing container.
+# It is NOT a positional array - its children are action names (`walk1`, `stand1`, `info`, ...),
+# not integers, so 4.4's every-child-is-an-integer clause does not fire. No row edits an existing
+# record: all 20 names are absent from the live image (verified by dump).
+#
+# BISECT NOTE FOR THE INSTALLER. Evan is playable to level 10 WITHOUT this file - job 2001's own
+# skills (20011xxx) use alert2 / bamboo / pyramid, all of which the live client already has. So
+# this is the one file in evan-min that can be dropped without losing "Evan exists and renders".
+# INSTALL IT LAST. If the client fails after a five-file install, re-test with the other four
+# only - that costs no extra staging work and halves the search space for free.
+#
+# Rows are the twenty Character.wz rows from composed\Character.paths.txt (ticket 04's block).
+# The other 234 rows of that block are v84 cosmetics and mount sprites - a later increment.
+
+Character.wz/00002000.img/Awakening
+Character.wz/00002000.img/blaze
+Character.wz/00002000.img/darkFog
+Character.wz/00002000.img/dragonThrust
+Character.wz/00002000.img/Earthquake
+Character.wz/00002000.img/fireCircle
+Character.wz/00002000.img/flameWheel
+Character.wz/00002000.img/fly2
+Character.wz/00002000.img/fly2Move
+Character.wz/00002000.img/fly2Skill
+Character.wz/00002000.img/ghostLettering
+Character.wz/00002000.img/killingWing
+Character.wz/00002000.img/lightingBolt
+Character.wz/00002000.img/magicRegistance
+Character.wz/00002000.img/magicShield
+Character.wz/00002000.img/mapleHero
+Character.wz/00002000.img/OnixBlessing
+Character.wz/00002000.img/recoveryAura
+Character.wz/00002000.img/slow
+Character.wz/00002000.img/soulStone

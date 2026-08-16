@@ -1,0 +1,36 @@
+# evan-min - Etc.wz. 4 rows. UNCHANGED from merge-lists\10\Etc.paths.txt.
+#
+# The MakeCharInfo Evan block: the character-creation DATA for Evan (which hair/face/starting
+# gear an Evan may be made with). Ticket 04 declined ALL of Etc.wz (10,634 add-list roots) and
+# left this block to the Evan branch.
+#
+# READ THIS BEFORE EXPECTING EVAN IN CHARACTER CREATION. These four rows are NECESSARY BUT NOT
+# SUFFICIENT. Measured against the live client:
+#   UI.wz/Login.img/RaceSelect  live = { BtSelect, knight, normal, aran, aran1, textGL }
+#                               v84  = { backgrnd, BtKnight, BtAran, BtEvan, BtNormal, new, confirm }
+# Those are two different UI generations. The live client's race-select code reads `knight` /
+# `normal` / `aran`; v84 has no `RaceSelect/evan` at all, so v84's `BtEvan` cannot serve a v83
+# code path. Live Login.img also has NewCharKnight and NewCharAran and no NewCharEvan, and the
+# unpacked client image (local.exe, a memory dump of MapleStory.exe) contains the string "Aran"
+# but ZERO occurrences of "Evan" in any encoding. Ticket 01's gate is in CSkillInfo::GetSkill -
+# it un-gates Evan SKILLS, not Evan creation.
+#
+# Conclusion: Evan is reached by GM job-change (ticket 10's JobCommand fix), not by the creation
+# screen, until ticket 15 does the client-side work. These four rows are kept anyway because they
+# cost 4 rows in the smallest .wz in the set, they are the prerequisite ticket 15 needs, and the
+# string evidence above is strong but not proof (the same scan finds no "RaceSelect" either, and
+# the client demonstrably reads that).
+#
+# 4.5 check - both parents already exist in the live client, so this IS a write into an existing
+# record and both sides were dumped:
+#   live MakeCharInfo.img       = Info, Name, PremiumCharMale/Female, OrientCharMale/Female
+#   v84  MakeCharInfo.img       = the same six + EvanCharMale, EvanCharFemale
+#   live MakeCharInfo.img/Name  = CharMale, CharFemale, PremiumCharMale, PremiumCharFemale
+#   v84  MakeCharInfo.img/Name  = the same four + EvanCharMale, EvanCharFemale
+# v84 is a strict superset on both, every shared child is present under the same NAME, and neither
+# container is a positional array (all children are named). Pure named additions.
+
+Etc.wz/MakeCharInfo.img/EvanCharMale
+Etc.wz/MakeCharInfo.img/EvanCharFemale
+Etc.wz/MakeCharInfo.img/Name/EvanCharMale
+Etc.wz/MakeCharInfo.img/Name/EvanCharFemale

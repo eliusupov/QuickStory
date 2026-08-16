@@ -1,0 +1,29 @@
+# evan-min - Skill.wz. 12 rows. UNCHANGED from merge-lists\10\Skill.paths.txt.
+#
+# Every row is a WHOLE new node at the Skill.wz root; the live client has none of them
+# (re-verified against the LIVE client, not a staging tree: `WzMerge dump` reports NOT FOUND
+# for 2001.img, 2200.img, 2218.img and Dragon). Nothing here writes into a node the live
+# client already has, so WZ-MERGE-PROCEDURE.md 4.5 does not apply to this file.
+#
+# 2001.img       Evan beginner (job 2001). 20011000-20011039 + 20019000-2.
+# 2200-2218.img  the ten Evan job levels (2200, 2210..2218 - there is no 2219).
+# Skill.wz/Dragon  a whole new WzDirectory holding the ten dragon animation images, one per
+#                job level. This is what makes the dragon RENDER. It is a WzDirectory, so it is
+#                DeepCloned and is NOT content-checked by the post-write digest (5.4), and it is
+#                NOT spliced into the server XML (wz\Skill.wz\ is 76 flat .img.xml files with no
+#                subdirectory). `WzMerge xml` refuses it itself with "no .img segment"; the SAME
+#                list therefore serves both runs and the xml run is expected to be
+#                "added 11, refused 1", exit 3. That refusal is correct.
+
+Skill.wz/2001.img
+Skill.wz/2200.img
+Skill.wz/2210.img
+Skill.wz/2211.img
+Skill.wz/2212.img
+Skill.wz/2213.img
+Skill.wz/2214.img
+Skill.wz/2215.img
+Skill.wz/2216.img
+Skill.wz/2217.img
+Skill.wz/2218.img
+Skill.wz/Dragon

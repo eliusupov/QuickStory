@@ -1,0 +1,87 @@
+﻿# evan-min - String.wz. 70 rows. UNCHANGED from merge-lists\10\String.paths.txt.
+#
+# All rows are String.wz/Skill.img/<id>: the job labels 2001/2200/2210-2218, the 2001.img skill
+# names 20010012 + 20011000-20011039 + 20019000-2, and the 22xxxxxx job-skill names.
+#
+# ZERO FORCES. This list deliberately does NOT carry the 18 force roots that made the composed
+# String.wz merge the only file in the whole set that DELETES live data (CRASH-ANALYSIS.md rank 1:
+# 18 `desc` nodes destroyed because the force roots sit at item-id level where v84 carries only
+# `name`). Nothing here is a force root and nothing here is an ancestor of a live node.
+#   NOT here: String.wz/Eqp.img/Eqp/Dragon (the 12 dragon-equip names) and
+#             Eqp/Taming/190204x + 191203x (Mir and its saddles) - all 18 are FORCE roots on
+#             composed\FORCE.txt. Cost of leaving them out: those equips read "MISSING NAME" in
+#             the UI. That is cosmetic and it is the exact defect that cost 18 `desc` nodes.
+#
+# 4.5 check: every row adds a NEW child to String.wz/Skill.img, an id table (2,000+ gapped integer
+# ids, so not a positional array under 4.4's consecutive-run clause). No row edits an existing
+# record.
+String.wz/Skill.img/2001
+String.wz/Skill.img/20010012
+String.wz/Skill.img/20011000
+String.wz/Skill.img/20011001
+String.wz/Skill.img/20011002
+String.wz/Skill.img/20011003
+String.wz/Skill.img/20011004
+String.wz/Skill.img/20011005
+String.wz/Skill.img/20011006
+String.wz/Skill.img/20011007
+String.wz/Skill.img/20011009
+String.wz/Skill.img/20011010
+String.wz/Skill.img/20011011
+String.wz/Skill.img/20011018
+String.wz/Skill.img/20011019
+String.wz/Skill.img/20011020
+String.wz/Skill.img/20011025
+String.wz/Skill.img/20011026
+String.wz/Skill.img/20011027
+String.wz/Skill.img/20011028
+String.wz/Skill.img/20011029
+String.wz/Skill.img/20011030
+String.wz/Skill.img/20011031
+String.wz/Skill.img/20011037
+String.wz/Skill.img/20011038
+String.wz/Skill.img/20011039
+String.wz/Skill.img/20019000
+String.wz/Skill.img/20019001
+String.wz/Skill.img/20019002
+String.wz/Skill.img/2200
+String.wz/Skill.img/22000000
+String.wz/Skill.img/22001001
+String.wz/Skill.img/2210
+String.wz/Skill.img/22101000
+String.wz/Skill.img/22101001
+String.wz/Skill.img/2211
+String.wz/Skill.img/22111000
+String.wz/Skill.img/22111001
+String.wz/Skill.img/2212
+String.wz/Skill.img/22121000
+String.wz/Skill.img/22121001
+String.wz/Skill.img/2213
+String.wz/Skill.img/22131000
+String.wz/Skill.img/22131001
+String.wz/Skill.img/2214
+String.wz/Skill.img/22140000
+String.wz/Skill.img/22141001
+String.wz/Skill.img/22141002
+String.wz/Skill.img/22141003
+String.wz/Skill.img/2215
+String.wz/Skill.img/22150000
+String.wz/Skill.img/22151001
+String.wz/Skill.img/22151002
+String.wz/Skill.img/22151003
+String.wz/Skill.img/2216
+String.wz/Skill.img/22160000
+String.wz/Skill.img/22161001
+String.wz/Skill.img/22161002
+String.wz/Skill.img/22161003
+String.wz/Skill.img/2217
+String.wz/Skill.img/22170001
+String.wz/Skill.img/22171000
+String.wz/Skill.img/22171002
+String.wz/Skill.img/22171003
+String.wz/Skill.img/22171004
+String.wz/Skill.img/2218
+String.wz/Skill.img/22181000
+String.wz/Skill.img/22181001
+String.wz/Skill.img/22181002
+String.wz/Skill.img/22181003
