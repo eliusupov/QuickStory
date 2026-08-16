@@ -16,15 +16,11 @@
 var status = -1;
 
 function end(mode, type, selection) {
-    if (mode == -1 || (mode == 0 && type > 0)) {
+    if (mode != 1) {   // no sendNextPrev here, so "back" is unreachable - anything but OK ends it
         qm.dispose();
         return;
     }
-    if (mode == 1) {
-        status++;
-    } else {
-        status--;
-    }
+    status++;
 
     if (status == 0) {
         qm.sendNext("Okay. If you're ready, I'll finish up the potion and sprinkle it on you. Then, you'll be able to fly.");

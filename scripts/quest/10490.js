@@ -8,15 +8,11 @@
 var status = -1;
 
 function start(mode, type, selection) {
-    if (mode == -1 || (mode == 0 && type > 0)) {
+    if (mode != 1) {   // no sendNextPrev here, so "back" is unreachable - anything but OK ends it
         qm.dispose();
         return;
     }
-    if (mode == 1) {
-        status++;
-    } else {
-        status--;
-    }
+    status++;
 
     if (status == 0) {
         qm.sendNext("Ahhh! I'm so bored! Is there anything fun do to? No? In that case, I have a plan. Wanna listen?");

@@ -18,7 +18,7 @@ own — so refusing them costs this ticket nothing and the measurement is what i
 | `Check.img/3845/0/end` | 1 | **refuse — disables a working v83 quest** |
 | `Check.img/10109/0/interval` | 1 | refuse — inert (the quest is already date-dead), no benefit |
 | `Check.img/9260/0/dayByDay` | 1 | refuse — inert (same), no benefit |
-| `QuestInfo.img/{1008,9260}/{demandSummary,rewardSummary}`, `QuestInfo.img/{20012,20311}/type` | 5 | refuse — client-side display text on quests this ticket does not own |
+| `QuestInfo.img/1008/demandSummary`, `QuestInfo.img/9260/{demandSummary,rewardSummary}`, `QuestInfo.img/{20012,20311}/type` | 5 | refuse — client-side display text on quests this ticket does not own |
 | `Exclusive.img/{0,1,2}` | 3 | **refuse — the two trees group this image differently; merging duplicates seven ids** |
 | `PQuestSearch.img` | 1 | refuse — a whole new image indexing a party-search window the v83 client does not have |
 | **total** | **132** | |
@@ -37,9 +37,11 @@ Challenging Training-1", "Secret of Astaroth", "How to Avoid the Stink", "Dirty 
 Dumped for every one of them; the live node is the v84 node **minus `lvmax`**, e.g.
 
 ```
-v84  Check.img/28266/0 : npc 1061011, lvmin 25, lvmax 40, quest{}, job{}
-live Check.img/28266/0 : npc 1061011, lvmin 25,           quest{}, job{}
+v84  Check.img/28266/0 : npc 1061011, lvmin 25, lvmax 40, quest{...}, job{...}
+live Check.img/28266/0 : npc 1061011, lvmin 25,           quest{...}, job{...}
 ```
+
+(`quest` and `job` are non-empty in both and identical; `lvmax` is the only difference.)
 
 `QuestRequirementType.getByWZName("lvmax")` → `MAX_LEVEL`, and `Quest.canStart` fails the whole
 quest if any start requirement fails. So merging these 108 rows makes **108 currently-startable
@@ -86,6 +88,11 @@ groups at once. Exactly 03c's `MonsterBook/<mob>/reward` splice, one file over.
 Nothing in `src/` reads `Exclusive.img` (grepped — zero hits), so this is a client-side rule and the
 cost of refusing is that v84's new `10415`–`10420` exclusivity group is not enforced by the client.
 That is strictly better than an image with two contradictory partitions in it.
+
+*(Symmetrically: the 5 `QuestInfo` display rows are as free to take as to refuse — `Quest`'s
+constructor never reads `type`, and `demandSummary` / `rewardSummary` have no server reader at all.
+They are refused for consistency with the other 127, not because taking them would have cost
+anything. That is the one row of this table where "zero cost" cuts both ways.)*
 
 ## `PQuestSearch.img`
 

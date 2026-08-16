@@ -7,7 +7,9 @@ verify, and the scoping judgement this ticket exists to make is made and listed.
 not the merge, it is what the data turned out to contain:** of v84's 198 new quests, **135 are the
 Evan chain (ticket 13's) and 63 are this ticket's**, and **48 of those 63 carry an `end` date that
 had already passed when v84 shipped**, so Cosmic's `EndDateRequirement` refuses to start them.
-In-game acceptance and completion are human steps (`## Human steps — staged, not performed`).
+Nine more name only Evan job ids. **Exactly one of the 63 — `19011` — can be accepted by a
+character this tree can create.** In-game acceptance and completion are human steps
+(`## Human steps — staged, not performed`).
 
 **Merge procedure: [`../WZ-MERGE-PROCEDURE.md`](../WZ-MERGE-PROCEDURE.md)** — executed as written
 under the post-03e tool (`--deny` mandatory, per-ticket `pre\`, `--live` hash check). Staging
@@ -29,14 +31,15 @@ The v84 quests that are not part of Evan's chain can be accepted, progressed and
       non-blank `QuestInfo/name`, but **8 of them are untranslated Korean in v84 itself** (listed
       below), so "correct text" is only as correct as Nexon shipped.
 - [x] **Quests requiring scripts have them written** — **30 of the 63 carry a script requirement;
-      9 of those are medal quests that `QuestScriptManager:53` routes to the existing
+      8 of those are medal quests that `QuestScriptManager:53` routes to the existing
       `medalQuest.js`; the remaining 22 are written**, one file per quest id, all new files, zero
-      overwrites.
+      overwrites. (There are **nine** `viewMedalItem` quests, but `10487` carries no script field at
+      all, so it never enters the script path — 30 = 22 + 8, not 22 + 9.)
 - [ ] **A representative sample across the new areas is accepted and completed end to end** —
       **cannot be met by this ticket's data, and the reason is a measurement, not an excuse.** 48 of
-      63 are behind an expired `end`; of the 15 that are not, 7 are gated on Evan-chain quests that
-      do not exist and 5 on an `infoex` event counter nothing in this tree produces. **Three quests
-      — `2344`, `3540`, `19011` — have no unmet gate.** Staged as human steps.
+      63 are behind an expired `end`; of the 15 that are not, **9 name only Evan job ids** (Evan is
+      unimplemented in this tree), 4 are behind an `infoex` event counter and 1 behind a date-dead
+      upstream quest. **Exactly one quest — `19011` — has no unmet gate.** Staged as a human step.
 - [x] **Existing quests still work — no regression from the `Quest.wz` merge** — this is the
       criterion that drove the biggest decision here. `add-list/Quest.txt` offers **132 rows that
       write into quests the live client already has**, including 108 that would cap working
@@ -70,12 +73,22 @@ The 63, by block:
 | ids | n | what |
 |---|---:|---|
 | `3756`–`3761` | 6 | **the Crimson Sky chain** — ticket 06's area, and the chain that grants Soaring |
-| `2344` | 1 | Mushking Empire in Danger (Aran, Lv.30–38) |
-| `3540` | 1 | In Search of Lost Memories (Aran / Evan beginner, needs quest `3507`) |
+| `2344` | 1 | Mushking Empire in Danger (**Evan**, Lv.30–38) |
+| `3540` | 1 | In Search of Lost Memories (**Evan**, needs quest `3507`) |
 | `10480`–`10521` | 28 | Evan launch-event quests (Maple Administrator / Cassandra) |
 | `19011` | 1 | The 3rd Honorable Mesoranger (medal) |
 | `28346`–`28365` | 19 | Evan gift + Dragon's Nest quests, incl. `28353`/`28354` on **06's NPC `9201144`** |
-| `29934`–`29940` | 7 | Aran/Evan medal quests |
+| `29934`–`29940` | 7 | Evan medal quests |
+
+**A correction worth stating loudly, because this ticket got it wrong first and code review caught
+it.** Job ids `2200`–`2218` and `2001` are **Evan**, not Aran — `client/Job.java:59-63` reads
+`EVAN(2001)`, `ARAN1(2100)…ARAN4(2112)`, `EVAN1(2200), EVAN2(2210)…EVAN10(2218)`. **31 of the 63
+name only those ids**, including `2344` and `3540`, which the first draft of this report called
+"Aran quests playable today". They are not playable at all: `JobRequirement.check` is a start
+requirement, Evan is unimplemented in this tree, and no character can hold one of those job ids.
+Two quests go the other way — **`10480`'s job list excludes Evan entirely** and `10520`'s includes
+everyone — and both are asserted, because "the job requirements are all Evan-only" is the wrong
+generalisation and was already made once here.
 
 **Most of the 63 are Evan-*adjacent* without being Evan-*chain*.** The ticket's exclusion is by id
 (`22xxx`), and these are not; drawing a second boundary on vibes would have been inventing one. They
@@ -110,12 +123,17 @@ both the plain and the scripted accept path).
 (2010-05-05). The Crimson Sky chain's is `2000010100` — the same sentinel shape the live client
 already uses 43 times as `2000010200`.
 
+The full classification — each quest by the **first** start requirement this tree cannot satisfy,
+disjoint, summing to 63, and asserted as sets rather than counts
+(`exactlyOneOfTheSixtyThreeHasNoUnmetGate`):
+
 | gate | quests |
 |---|---|
 | expired `end` | **48** — `3756`–`3761`, `10480`–`10487`, `10490`, `10496`, `10500`–`10507`, `10510`, `10514`, `10516`, `10520`, `10521`, `28346`–`28365` |
-| gated on an Evan-chain quest (`22300`/`22511`/`22527`/`22552`/`22566`/`22602`/`22603`) **and** Evan job ids | 7 — `29934`–`29940` |
-| gated on `infoex` value `99999`, an event counter nothing in this tree produces | 5 — `10491`–`10494`, `10497` |
-| **no unmet gate** | **3 — `2344`, `3540`, `19011`** |
+| job list is Evan-only (`2001`, `2200`–`2218`), and Evan is unimplemented here | **9** — `2344`, `3540`, `29934`–`29940`. The seven medals are *also* gated on Evan-chain quests `22300`/`22511`/`22527`/`22552`/`22566`/`22602`/`22603` |
+| `infoex` value `99999` on the start block, an event counter nothing in this tree produces | 4 — `10491`–`10494` |
+| requires quest `10490`, which is itself date-dead | 1 — `10497` |
+| **no unmet gate** | **1 — `19011`** (needs medal `1142170` in inventory, which is a normal quest requirement, not a gate this tree cannot meet) |
 
 This is not a merge fault and it is not fixable by merging: the merge tool only copies, and the
 node to remove is one v84 ships. **The one-node fix, stated so it is an owner decision rather than a
@@ -284,9 +302,9 @@ check that actually discriminates is "is every old line still there", not the st
 and no `.partial`, `.TEMP` or `.merged` exists beside them. `porting-resources\wz-data\**` was
 opened read-only. Nothing was written to `D:\games\MapleStory\` at any point.
 
-**§5.8 server-side**, `src/test/java/server/V84QuestNodeTest.java`, **18 tests, all green**;
-**full suite 1,989 tests, 0 failures, 0 errors** (`./mvnw -o test` → BUILD SUCCESS). The arithmetic
-reconciles exactly: **1,949** (STATUS's baseline) + 18 in the new class + **22 free**, because
+**§5.8 server-side**, `src/test/java/server/V84QuestNodeTest.java`, **20 tests, all green**;
+**full suite 1,991 tests, 0 failures, 0 errors** (`./mvnw -o test` → BUILD SUCCESS). The arithmetic
+reconciles exactly: **1,949** (STATUS's baseline) + 20 in the new class + **22 free**, because
 `ScriptEvaluationTest` walks `scripts/quest/` and now evaluates the 22 new files — so a syntax error
 in any of them fails the suite. It uses `V84Wz.wz`; no copy was made.
 
@@ -296,31 +314,43 @@ What the class proves:
   **no row is deeper than `Quest.wz/<Img>.img/<id>`** — the structural guard against the hazard above
 - `924 = 252 + 540 + 132` reading `add-list/Quest.txt` itself, so a regenerated manifest that moves
   the split fails here instead of three tickets later; and no `22xxx` row is on this list
-- all 63 parse in all four images with a non-blank, non-`MISSING NAME` name, and every category image
-  still holds more than 2,800 quests, including `3749` (07's Neo City gate) and `3507` (3540's
-  prerequisite)
+- all 63 parse in all four images with a non-blank, non-`MISSING NAME` name, and each category image
+  holds **exactly** its pre-merge count plus 63 (2,824/2,807/2,818/2,801 → +63), including `3749`
+  (07's Neo City gate) and `3507` (3540's prerequisite)
 - **the refusals are asserted, not just documented** — `28162`/`28200`/`28266`/`28282`/`28325` have
   no `lvmax`; `2208`–`2211` have no `start`/`end`/`interval` and `3845` no `end`; `Exclusive.img`
   still has its 14-id `medal` group and none of `0`/`1`/`2`
 - every NPC these quests name has an image, with `2001006` asserted as the single known gap
 - **no quest has a `mob` requirement** — and the same traversal is asserted non-empty on the NPC
   side, so the mob assertion is not vacuous
-- **48 of 63 are date-gated**, derived from the tree, with the `3756`–`3761` chain asserted to be
-  among them
+- **the gate classification above is asserted as four disjoint sets summing to 62, leaving exactly
+  `{19011}`** — this is the ticket's headline claim, and it is derived from the tree rather than
+  restated; `10480`'s Evan-excluding job list and `10520`'s all-inclusive one are asserted separately
 - the set of quests needing a hand-written script is re-derived from the merged WZ and must equal the
-  22 files written; each file defines exactly the half the WZ asks for and disposes
-- the nine medal quests deliberately have **no** file, and `medalQuest.js` still exists
-- `3759` names all four Soaring variants and its script teaches one; `Skill.wz/2001.img` is asserted
-  **absent**, so the Evan guard inside `3759.js` becomes a failing test the moment ticket 12/13 lands
-  it — which is when the guard should be replaced
+  22 files written; **which half each file defines is read from `Check.img` blocks 0 and 1**, not
+  from a literal set beside the assertion, and every `start`/`end` body must contain a `dispose`
+- **8** medal quests reach the `medalQuest.js` fallback and `10487` is asserted to be the ninth that
+  carries no script field at all, so `30 = 22 + 8` cannot silently become `22 + 9` again
+- `3759` names all four Soaring variants, its script teaches one, and **the three skills it can
+  actually teach are asserted present in `Skill.wz`** while `2001.img` is asserted **absent** — so the
+  Evan guard inside `3759.js` becomes a failing test the moment ticket 12/13 lands it
 - **`22515`–`22518` are absent and are ticket 13's**, and `scripts/npc/1012118.js` still gates on
   them, untouched
+- no file in `scripts/quest/` is named after a WZ `startscript` string (`q<id>[se].js`), which would
+  look right and never load
 
-**It failed twice for real while being written**, both times on my arithmetic rather than the data
-(`String.split("/")` length off by one in two assertions). Recorded because the fix was mine and not
-the tree's.
+**Honest limit, since "20 green" reads stronger than it is:** roughly half of these assertions are
+about *refusals* and *path-list arithmetic*, and those pass on an un-merged tree by construction —
+that is inherent to a ticket whose main deliverable is 132 rows it did not write. The ones that
+genuinely require the merge are the exact child counts, the 63-in-four-images check, the gate
+classification, the NPC/item/mob traversals and the `3759` Act node.
 
-## The scripts — 22 written, 9 declined, and why the ticket's estimate was low
+**It failed five times for real while being written**, and three of those were the data winning:
+`String.split("/")` off by one (twice, mine), `10487` proving there are eight scriptable medal quests
+and not nine, `10480` proving a job requirement in this set can exclude Evan, and the medal count
+double-counting `10487`.
+
+## The scripts — 22 written, 8 declined, and why the ticket's estimate was low
 
 The ticket predicted "on the order of 18". The data says **30 of the 63 carry a script requirement**
 — 20 `startscript`, 13 `endscript`, 33 script names across 30 quests. The estimate was low because
@@ -335,9 +365,15 @@ are script-heavy.
 scripted path at `QuestActionHandler:125` never calls it). So a script owns its own rewards, which
 is why the existing `scripts/quest/2001.js` hands out items by hand.
 
-**Nine of the 30 are medal quests** (`viewMedalItem`), and `QuestScriptManager:53` already routes
-those to `scripts/quest/medalQuest.js`. Writing nine more files would have shadowed a working
+**Eight of the 30 are medal quests** (`viewMedalItem`), and `QuestScriptManager:53` already routes
+those to `scripts/quest/medalQuest.js`. Writing eight more files would have shadowed a working
 fallback for no gain. Asserted as an absence so it stays a decision.
+
+**There are nine `viewMedalItem` quests, not eight, and the ninth is why this paragraph is worded
+carefully.** `Check.img/10487` carries **neither** `startscript` nor `endscript`, so
+`hasScriptRequirement` is false, `QuestScriptManager` returns at `:70`/`:122`, and it never reaches
+the `medalQuest.js` fallback at all. So the 30 split **22 written + 8 declined**, and `10487` is in
+neither half. An earlier draft of this report said 22 + 9, which is 31.
 
 **The 22 written**, one file per quest id, all new (`git status` shows 22 × `??`, zero `M`):
 
@@ -407,18 +443,19 @@ I cannot launch the client, open a quest window or talk to an NPC. Everything be
    the next person gets it wrong. Its hash is in "Merge results" so the merge can be reproduced and
    checked rather than trusted.
 2. **No DB migration.** This ticket adds no SQL and registers no changeSet.
-3. **Check the three quests that have no unmet gate.** These are the only end-to-end runs the data
-   supports today.
+3. **Run the one quest that has no unmet gate.** This is the only end-to-end run the data supports
+   today, and it is the whole of criterion 4 that can be demonstrated.
    - **`19011` "The 3rd Honorable Mesoranger"** — talk to the **Maple Administrator (`9010000`)**
-     holding medal `1142170`. **Pass:** the quest is offered and completes through `medalQuest.js`,
-     which pops "<name> is not coded" and awards the title. That message is Cosmic's existing
-     behaviour for every medal quest, not a fault of this merge.
-   - **`2344` "Mushking Empire in Danger"** — an **Aran** (job `2210`–`2218`) at **Lv.30–38**. Accept
-     from **Manji (`1040001`)**, complete at **`1300005`** holding 1 `#t4032375#`. **Pass:** both
-     halves complete. **Expect no reward** — `Act.img/2344` is empty in v84 and `2344.js` deliberately
-     hands out nothing. A reward appearing would mean someone "improved" the script.
-   - **`3540` "In Search of Lost Memories"** — an Aran or Evan-beginner with quest `3507` **started**
-     (not completed). Both halves at NPC `1012003`. Same: no reward, by design.
+     on a character holding medal `1142170`. **Pass:** the quest is offered and completes through
+     `medalQuest.js`, which pops "<name> is not coded" and awards the title. That message is
+     Cosmic's existing behaviour for every medal quest, not a fault of this merge.
+   - **`2344` and `3540` cannot be run and are not a step.** Their job lists are `2200`–`2218` /
+     `2001`, which are Evan (`Job.java:59-63`), and this tree cannot create an Evan. An earlier
+     draft of this report listed them here as "Aran" quests; they are ticket 13's to demonstrate,
+     and their scripts are written and waiting. If you want to prove the scripts run before then,
+     `JobRequirement.check` returns true for `chr.isGM()` (`JobRequirement.java:58-60`), so a **GM
+     character is the only way to exercise `2344.js` and `3540.js` today** — and that proves the
+     script, not the gate.
 4. **Confirm the quest list renders.** Open the quest window on any character and look for the new
    entries. **8 of the 63 will read as Korean** — `10487`, `10490`–`10494`, `10496`, `10497` — because
    **v84 itself ships them untranslated**, exactly as ticket 08 found for the Christmas NPCs. That is
@@ -448,10 +485,16 @@ I cannot launch the client, open a quest window or talk to an NPC. Everything be
 
 - **Launch the game.** Every claim about the quest list, dialogue, rendering and end-to-end
   completion is staged, not observed.
-- **Make 60 of the 63 quests acceptable.** 48 are behind an `end` date v84 itself shipped already
-  expired, 7 behind Evan-chain quests that are ticket 13's, and 5 behind an `infoex` event counter
-  nothing in this tree produces. Merging cannot fix any of the three: the tool copies, and the fix
-  for the first is a deletion. Stated as an owner decision with the exact node named.
+- **Make 62 of the 63 quests acceptable.** 48 are behind an `end` date v84 itself shipped already
+  expired, 9 name only Evan job ids and Evan does not exist in this tree, 4 are behind an `infoex`
+  event counter nothing produces, and 1 behind a date-dead upstream quest. Merging cannot fix any of
+  them: the tool copies, and the fix for the largest bucket is a *deletion*. Stated as an owner
+  decision with the exact node named.
+- **Read the job arrays correctly the first time.** I classified `2200`–`2218` as Aran and reported
+  three quests as playable today; they are Evan (`Job.java:62-63`) and the real number is **one**.
+  Code review caught it, the tree now asserts the corrected classification as four disjoint sets,
+  and chasing it down turned up a second thing I had generalised wrongly — `10480`'s job list
+  *excludes* Evan, so "the job requirements here are all Evan-only" was never true either.
 - **Unblock `910060100`.** Ticket 08 handed this ticket the `22515`–`22518` gate. The data says all
   four are Evan-chain ids and therefore ticket 13's, so the handoff was addressed to the wrong
   ticket and the map stays unreachable. **This is the one place this ticket was expected to deliver

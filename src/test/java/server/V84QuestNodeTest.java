@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -54,15 +55,28 @@ class V84QuestNodeTest {
             10493, 10494, 10497, 10500, 10510, 10514, 10516, 28353, 28354, 28361, 28362, 28363,
             28364, 28365};
 
-    /** Which half of each scripted quest the WZ actually requires. */
-    private static final Set<Integer> NEEDS_START = Set.of(2344, 3540, 10480, 10481, 10490, 10497,
-            10500, 10510, 10514, 10516, 28353, 28354);
-    private static final Set<Integer> NEEDS_END = Set.of(2344, 3759, 10491, 10492, 10493, 10494,
-            10510, 28354, 28361, 28362, 28363, 28364, 28365);
-
-    /** The nine quests carrying {@code viewMedalItem}, i.e. {@code GameConstants.isMedalQuest}. */
+    /**
+     * The nine quests carrying {@code viewMedalItem}, i.e. {@code GameConstants.isMedalQuest}.
+     * <strong>Only eight of them carry a script field</strong> — {@code Check.img/10487} has
+     * neither {@code startscript} nor {@code endscript}, so {@code hasScriptRequirement} is false
+     * and {@code QuestScriptManager} returns at {@code :70} / {@code :122} without ever reaching
+     * the {@code medalQuest.js} fallback at {@code :53}. So 30 script-requiring quests split
+     * 22 written + 8 declined, not 22 + 9.
+     */
     private static final int[] MEDAL_QUESTS = {10487, 19011, 29934, 29935, 29936, 29937, 29938,
             29939, 29940};
+
+    /** The medal quest that carries no script field at all — see {@link #MEDAL_QUESTS}. */
+    private static final int MEDAL_QUEST_WITHOUT_A_SCRIPT_FIELD = 10487;
+
+    /**
+     * The one quest of the 63 with no unmet gate. Everything else is behind an expired date, an
+     * Evan-only job requirement, an {@code infoex} event counter, or a dead upstream quest — see
+     * {@link #exactlyOneOfTheSixtyThreeHasNoUnmetGate}. An earlier draft of the ticket read job ids
+     * {@code 2210}-{@code 2218} as Aran and claimed three quests were playable today; those ids are
+     * {@code Job.EVAN2}-{@code EVAN10} ({@code Job.java:62-63}) and Aran is {@code 2100}-{@code 2112}.
+     */
+    private static final int ONLY_UNGATED_QUEST = 19011;
 
     /**
      * The 48 of 63 quests whose start block carries an already-expired {@code end} date. Not a
@@ -184,16 +198,19 @@ class V84QuestNodeTest {
     }
 
     /**
-     * The merge must not have disturbed the quests the live client already had. 2,818 is what v83
-     * ships in each category image; 63 new ids makes 2,881, and every pre-v84 id must still be
-     * there. Spot-checks the ids other tickets depend on by name.
+     * The merge must not have disturbed the quests the live client already had. The pre-merge child
+     * counts are 2,824 / 2,807 / 2,818 / 2,801 and each must have gained exactly the 63 new ids -
+     * asserted as an exact count rather than a floor, because a floor of 2,800 is already satisfied
+     * by the un-merged tree and would have made this test green on a merge that never happened.
      */
     @Test
     void thePreExistingQuestsSurvivedTheMerge() {
         DataProvider quest = wz("Quest.wz");
+        Map<String, Integer> preMerge = Map.of(
+                "Act.img", 2824, "Check.img", 2807, "QuestInfo.img", 2818, "Say.img", 2801);
         for (String category : CATEGORIES) {
-            long count = quest.getData(category).getChildren().size();
-            assertTrue(count > 2800, category + " lost quests: only " + count + " children");
+            assertEquals(preMerge.get(category) + 63, quest.getData(category).getChildren().size(),
+                    category + " child count after the merge");
         }
         // 3749 is ticket 07's Neo City 2227 gate; 3507 is quest 3540's prerequisite.
         assertNotNull(quest.getData("QuestInfo.img").getChildByPath("3749"));
@@ -355,35 +372,162 @@ class V84QuestNodeTest {
         }
     }
 
-    /** Each script defines exactly the half (or halves) the WZ asks for. */
+    /**
+     * Each script defines exactly the half (or halves) the WZ asks for — and which halves those are
+     * is read out of {@code Check.img} rather than from a literal set beside the assertion, so the
+     * test cannot agree with a stale copy of itself. {@code Quest} builds start requirements from
+     * block {@code 0} and complete requirements from block {@code 1}, and
+     * {@code getByWZName} maps both {@code startscript} and {@code endscript} to {@code SCRIPT}, so
+     * "block 0 names a script field" is exactly {@code hasScriptRequirement(false)}.
+     */
     @Test
     void eachScriptDefinesTheFunctionTheWzRequires() throws IOException {
+        DataProvider quest = wz("Quest.wz");
         for (int id : SCRIPTED) {
+            boolean needsStart = hasScriptField(quest, id, "0");
+            boolean needsEnd = hasScriptField(quest, id, "1");
+            assertTrue(needsStart || needsEnd, id + " is on SCRIPTED but names no script field");
+
             String body = Files.readString(Path.of("scripts", "quest", id + ".js"), StandardCharsets.UTF_8);
-            assertEquals(NEEDS_START.contains(id), body.contains("function start("),
-                    "scripts/quest/" + id + ".js start() presence");
-            assertEquals(NEEDS_END.contains(id), body.contains("function end("),
-                    "scripts/quest/" + id + ".js end() presence");
-            assertTrue(body.contains("qm.dispose()"),
-                    "scripts/quest/" + id + ".js never disposes - the client would hang on the NPC");
+            assertEquals(needsStart, body.contains("function start("),
+                    "scripts/quest/" + id + ".js start() presence vs Check.img/" + id + "/0");
+            assertEquals(needsEnd, body.contains("function end("),
+                    "scripts/quest/" + id + ".js end() presence vs Check.img/" + id + "/1");
+
+            // every function must dispose on every path: one dispose per branch that can be entered.
+            for (String fn : body.split("function ")) {
+                if (fn.startsWith("start(") || fn.startsWith("end(")) {
+                    assertTrue(fn.contains("qm.dispose()"),
+                            "scripts/quest/" + id + ".js: a function never disposes - the client hangs on the NPC");
+                }
+            }
         }
     }
 
+    private static boolean hasScriptField(DataProvider quest, int id, String block) {
+        Data step = quest.getData("Check.img").getChildByPath(id + "/" + block);
+        return step != null
+                && (step.getChildByPath("startscript") != null || step.getChildByPath("endscript") != null);
+    }
+
     /**
-     * The nine medal quests are deliberately NOT given a file: {@code QuestScriptManager:53} falls
-     * back to {@code medalQuest.js} for them. Asserting the absence keeps that a decision.
+     * The medal quests are deliberately NOT given a file. Eight of the nine reach
+     * {@code QuestScriptManager:53}'s {@code medalQuest.js} fallback; {@code 10487} carries no
+     * script field at all, so it never enters the script path in the first place. Both facts are
+     * asserted, because the ticket originally reported the split as 22 + 9 and it is 22 + 8.
      */
     @Test
     void theMedalQuestsRelyOnTheGenericFallbackAndHaveNoFileOfTheirOwn() {
         assertTrue(Files.exists(Path.of("scripts", "quest", "medalQuest.js")),
                 "the medal fallback script this ticket relies on is gone");
         DataProvider quest = wz("Quest.wz");
+        int withScriptField = 0;
         for (int id : MEDAL_QUESTS) {
             assertNotNull(quest.getData("QuestInfo.img").getChildByPath(id + "/viewMedalItem"),
                     "QuestInfo.img/" + id + "/viewMedalItem - not a medal quest after all");
             assertFalse(Files.exists(Path.of("scripts", "quest", id + ".js")),
                     "scripts/quest/" + id + ".js exists; medalQuest.js already covers it");
+            if (hasScriptField(quest, id, "0") || hasScriptField(quest, id, "1")) {
+                withScriptField++;
+            } else {
+                assertEquals(MEDAL_QUEST_WITHOUT_A_SCRIPT_FIELD, id,
+                        "a second medal quest turned out to carry no script field");
+            }
         }
+        assertEquals(8, withScriptField, "medal quests that actually reach the medalQuest.js fallback");
+        assertEquals(30, SCRIPTED.length + withScriptField,
+                "the 30 script-requiring quests split 22 written + 8 declined - 10487 is a medal quest "
+                        + "with no script field, so it is in neither half");
+    }
+
+    /**
+     * The ticket's most load-bearing claim, and the one it originally got wrong: how many of the 63
+     * a real character can actually accept today. Each quest is classified by the first start
+     * requirement that cannot be satisfied in this tree, and the residue must be exactly
+     * {@link #ONLY_UNGATED_QUEST}.
+     * <p>
+     * The Evan rule is the one that moved: {@code JobRequirement} ({@code Quest.canStart}) demands
+     * one of the listed job ids, and 31 of the 63 list only {@code 2001} / {@code 2200}-{@code 2218}
+     * — {@code Job.EVAN} and {@code Job.EVAN1}-{@code EVAN10}. Evan is unimplemented here, so no
+     * character can hold one. Note two quests are the other way round: {@code 10480} lists every job
+     * <em>except</em> Evan, and {@code 10520} lists everything except the two beginner ids.
+     */
+    @Test
+    void exactlyOneOfTheSixtyThreeHasNoUnmetGate() throws IOException {
+        DataProvider quest = wz("Quest.wz");
+
+        Set<Integer> dateGated = new TreeSet<>();
+        Set<Integer> evanJobGated = new TreeSet<>();
+        Set<Integer> infoExGated = new TreeSet<>();
+        Set<Integer> upstreamGated = new TreeSet<>();
+
+        for (int id : questIds()) {
+            Data start = quest(quest, "Check.img", id).getChildByPath("0");
+            if (start == null) {
+                continue;
+            }
+            String end = DataTool.getString("end", start, null);
+            if (end != null && Integer.parseInt(end.substring(0, 4)) < 2020) {
+                dateGated.add(id);
+                continue;
+            }
+            Data jobs = start.getChildByPath("job");
+            if (jobs != null && jobs.getChildren().stream()
+                    .allMatch(j -> DataTool.getInt(j, -1) == 2001
+                            || (DataTool.getInt(j, -1) >= 2200 && DataTool.getInt(j, -1) <= 2218))) {
+                evanJobGated.add(id);
+                continue;
+            }
+            if (start.getChildByPath("infoex") != null) {
+                infoExGated.add(id);
+                continue;
+            }
+            Data prereqs = start.getChildByPath("quest");
+            if (prereqs != null && prereqs.getChildren().stream()
+                    .anyMatch(q -> dateGated.contains(DataTool.getInt("id", q, 0)))) {
+                upstreamGated.add(id);
+            }
+        }
+
+        assertEquals(EXPECTED_DATE_GATED, dateGated.size(), "date-gated: " + dateGated);
+        assertEquals(Set.of(2344, 3540, 29934, 29935, 29936, 29937, 29938, 29939, 29940),
+                new TreeSet<>(evanJobGated), "Evan-job-gated");
+        assertEquals(Set.of(10491, 10492, 10493, 10494), new TreeSet<>(infoExGated), "infoex-gated");
+        assertEquals(Set.of(10497), new TreeSet<>(upstreamGated), "gated on a date-dead upstream quest");
+
+        Set<Integer> ungated = new TreeSet<>(questIds());
+        ungated.removeAll(dateGated);
+        ungated.removeAll(evanJobGated);
+        ungated.removeAll(infoExGated);
+        ungated.removeAll(upstreamGated);
+        assertEquals(Set.of(ONLY_UNGATED_QUEST), ungated,
+                "the set of quests a character can accept today");
+    }
+
+    /**
+     * {@code 10480} is the one quest of the 63 whose job list <em>excludes</em> Evan entirely, and
+     * {@code 10520} the one that includes both Evan and everyone else. Recorded because "all the
+     * job requirements are Evan-only" is the wrong generalisation and was already made once.
+     */
+    @Test
+    void twoOfTheJobRequirementsAreNotEvanOnly() throws IOException {
+        DataProvider quest = wz("Quest.wz");
+        Set<Integer> jobs10480 = jobIds(quest, 10480);
+        assertTrue(jobs10480.contains(0) && jobs10480.contains(2112),
+                "10480 should list beginners and Aran");
+        assertTrue(jobs10480.stream().noneMatch(j -> j == 2001 || (j >= 2200 && j <= 2218)),
+                "10480's job list is supposed to exclude Evan");
+
+        Set<Integer> jobs10520 = jobIds(quest, 10520);
+        assertTrue(jobs10520.contains(2218) && jobs10520.contains(100),
+                "10520 should list Evan and explorers alike");
+    }
+
+    private static Set<Integer> jobIds(DataProvider quest, int id) {
+        Data jobs = quest.getData("Check.img").getChildByPath(id + "/0/job");
+        assertNotNull(jobs, "Check.img/" + id + "/0/job");
+        return jobs.getChildren().stream().map(j -> DataTool.getInt(j, -1))
+                .collect(Collectors.toCollection(TreeSet::new));
     }
 
     /**
@@ -406,10 +550,16 @@ class V84QuestNodeTest {
         assertTrue(body.contains("qm.teachSkill("), "3759.js must teach Soaring");
         assertTrue(body.contains("20011026"), "3759.js must handle the Evan variant");
 
-        // 20011026 lives in Skill.wz/2001.img, which ticket 12/13 owns and which is not here yet.
+        // 20011026 lives in Skill.wz/2001.img, which ticket 12/13 owns and which is not here yet;
+        // the other three must resolve, or the script teaches a skill that does not exist.
         assertFalse(Files.exists(Path.of("wz", "Skill.wz", "2001.img.xml")),
                 "Skill.wz/2001.img.xml appeared - 3759.js's Evan guard can now be replaced by a teachSkill");
-        assertTrue(Files.exists(Path.of("wz", "Skill.wz", "000.img.xml")));
+        assertTrue(Files.readString(Path.of("wz", "Skill.wz", "000.img.xml"), StandardCharsets.UTF_8)
+                .contains("name=\"0001026\""), "skill 1026 is missing from Skill.wz/000.img.xml");
+        assertTrue(Files.readString(Path.of("wz", "Skill.wz", "1000.img.xml"), StandardCharsets.UTF_8)
+                .contains("name=\"10001026\""), "skill 10001026 is missing from Skill.wz/1000.img.xml");
+        assertTrue(Files.readString(Path.of("wz", "Skill.wz", "2000.img.xml"), StandardCharsets.UTF_8)
+                .contains("name=\"20001026\""), "skill 20001026 is missing from Skill.wz/2000.img.xml");
     }
 
     /**
@@ -430,9 +580,15 @@ class V84QuestNodeTest {
         assertTrue(npc.contains("22515"), "scripts/npc/1012118.js no longer gates on 22515");
     }
 
-    /** No quest script this ticket wrote overwrote an existing one - all 22 ids were free. */
+    /**
+     * Every script is named after its quest id and carries its provenance. The second half is the
+     * one that earns its place: {@code QuestScriptManager:52} resolves {@code quest/<questid>.js}
+     * and ignores the WZ's {@code startscript} / {@code endscript} <em>string</em>, so a file named
+     * after that string ({@code q2344s.js}) would look right and never load. Checked across the
+     * whole directory rather than against one hardcoded name.
+     */
     @Test
-    void theTwentyTwoScriptsAreAllNewFilesNamedAfterTheirQuestId() throws IOException {
+    void everyScriptIsNamedAfterItsQuestIdAndCarriesItsProvenance() throws IOException {
         for (int id : SCRIPTED) {
             Path p = Path.of("scripts", "quest", id + ".js");
             assertTrue(Files.exists(p), p + " missing");
@@ -440,9 +596,15 @@ class V84QuestNodeTest {
             assertTrue(body.contains("ticket 09") || body.contains("v84"),
                     p + " carries no provenance comment");
         }
-        // the WZ script NAMES (q2344s, ...) are not how Cosmic resolves scripts - QuestScriptManager:52
-        // uses "quest/<questid>.js". Guard against someone "fixing" that by adding the WZ names.
-        assertFalse(Files.exists(Path.of("scripts", "quest", "q2344s.js")),
-                "scripts are resolved by quest id, not by the WZ's startscript string");
+
+        List<String> wzNamed;
+        try (var files = Files.list(Path.of("scripts", "quest"))) {
+            wzNamed = files.map(p -> p.getFileName().toString())
+                    .filter(n -> n.matches("q\\d+[se]\\.js"))
+                    .sorted()
+                    .toList();
+        }
+        assertEquals(List.of(), wzNamed,
+                "quest scripts are resolved by quest id, not by the WZ's startscript/endscript string");
     }
 }
