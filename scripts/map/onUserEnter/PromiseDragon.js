@@ -20,7 +20,15 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+// Map 900090101. Effect/Direction4.img/PromiseDragon has ONLY Scene0 - unlike its siblings
+// meetWithDragon / getDragonEgg / crash, which each carry Scene0 AND Scene1. PromiseDragon's
+// Scene0 is a gender-neutral "word" text effect (visual .../effect/PromiseDragon/word) plus a
+// type=2 warp to field 100030100; there is no character sprite in it, so v84 never needed a
+// second gendered copy. Appending getGender() therefore built ".../Scene1" for a FEMALE Evan -
+// a path that does not exist - and showIntro on a missing path crashes the client. Since map
+// 900090101 has no portal (only `sp`), that Scene0 warp is the map's ONLY exit, so the crash
+// also stranded the character. Always use Scene0. Same defect class as incubation_dragon.js.
 function start(ms) {
     ms.lockUI();
-    ms.showIntro("Effect/Direction4.img/PromiseDragon/Scene" + ms.getPlayer().getGender());
+    ms.showIntro("Effect/Direction4.img/PromiseDragon/Scene0");
 }

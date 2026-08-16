@@ -130,6 +130,32 @@ public final class ChangeMapHandler extends AbstractPacketHandler {
                             if (targetMapId == MapId.ARAN_TUTO_2 || targetMapId == MapId.ARAN_TUTO_3 || targetMapId == MapId.ARAN_TUTO_4 || targetMapId == MapId.ARAN_INTRO) {
                                 warp = true;
                             }
+                        } else if (divi == 9000900 || divi == 9000901) { // Evan introduction
+                            // Every Evan cutscene map ends in a client-side type-2 scene warp -
+                            // Effect/Direction4.img/<scene>/SceneN carries an <int name="field">
+                            // and the client asks to move itself, with no portal. That arrives here,
+                            // and without a branch it falls through to enableActions() and the player
+                            // is stranded: these maps have no portal, only `sp`. Exactly the same
+                            // shape as the Cygnus (9130401) and Aran (9140900) branches above, whose
+                            // whitelisted targets likewise come straight out of Direction3.img.
+                            //
+                            //   900090100 meetWithDragon    -> 900010200
+                            //   900090101 PromiseDragon     -> 100030100   (Evan's room)
+                            //   900090102 crash_Dragon      -> 900020200
+                            //   900090103 getDragonEgg      -> 900020110   (the piglet hollow, and
+                            //                                  the ONLY route to it - it has no
+                            //                                  inbound portal anywhere in Map.wz)
+                            //   900090000..3 evanPromotion  -> 900090001..4 (the teaser chain)
+                            //
+                            // 900090104 (incubation) is absent on purpose: its Direction4 node is
+                            // empty, so scripts/map/onUserEnter/incubation_dragon.js warps by hand.
+                            if (targetMapId / 100 == 9000900
+                                    || targetMapId == 900010200
+                                    || targetMapId == 100030100
+                                    || targetMapId == 900020200
+                                    || targetMapId == 900020110) {
+                                warp = true;
+                            }
                         } else if (divi / 10 == 1020) { // Adventurer movie clip Intro
                             if (targetMapId == 1020000) {
                                 warp = true;

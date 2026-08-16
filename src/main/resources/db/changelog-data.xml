@@ -52,6 +52,12 @@
     <changeSet id="154" author="v84-ticket-07">
         <sqlFile path="db/data/154-neo-city-2227-drop-data.sql"/>
     </changeSet>
+    <changeSet id="155" author="evan-chain">
+        <sqlFile path="db/data/155-evan-tutorial-drop-data.sql"/>
+        <rollback>
+            DELETE FROM drop_data WHERE dropperid = 130100 AND itemid = 4032498 AND questid = 22004;
+        </rollback>
+    </changeSet>
 
     <changeSet id="161" author="Ponk">
         <sqlFile path="db/data/161-admin-data.sql"/>

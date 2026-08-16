@@ -1,0 +1,62 @@
+-- Evan tutorial chain - the ONE genuinely missing drop row: item 4032498 "Thick Branch",
+-- required x3 by quest 22004 "Fixing the Fence". Without it the Evan chain dead-ends at level 5,
+-- because 22004 gates 22005 -> 22006 -> 22007, and 22007 gates 22100 (1st job advancement).
+--
+-- Additive only. This file does NOT touch 152/153/154-drop-data.sql: those are Liquibase
+-- changeSets that have already run, so editing one in place would fail checksum validation at
+-- startup. A new changeSet is the only form that both deploys and leaves applied history intact.
+--
+-- ============================================================================================
+-- WHY MOB 130100, AND WHY THIS IS NOT A GUESS.
+-- ============================================================================================
+-- The drop source was NOT chosen; it is stated in plain words by four independent nodes of the
+-- game's own client data, which is a stronger authority than any fan wiki:
+--
+--   1. wz/String.wz/Etc.img.xml:9421-9424  - item 4032498 is named "Thick Branch", described as
+--      "A tree branch from a Stump. You can use it to repair the fence."
+--   2. wz/String.wz/Mob.img.xml:63-65      - mob 130100 is named "Stump".
+--   3. wz/Quest.wz/QuestInfo.img.xml:6806  - quest 22004 objective text: "Defeat some of the
+--      #r#o0130100#s#k nearby and bring back some #b#t4032498#es#k."  (#o0130100# = mob 130100)
+--   4. scripts/quest/22004.js:22           - Gustav's accept dialogue: "You'll be able to find
+--      #b#t4032498#es#k from the nearby #r#o0130100#s#k."
+--
+-- And mob 130100 is actually SPAWNED where the quest expects it: wz/Map.wz/Map/Map1/
+-- 100030300.img.xml (the Evan farm map) carries Stump life entries. Map life nodes zero-pad mob
+-- ids to 7 chars, hence "0130100".
+--
+-- IT MUST BE A DROP, NOT A GRANT. wz/Quest.wz/Act.img.xml:3389-3393 - quest 22004's Act nodes
+-- "0" (start) and "1" (complete) are BOTH EMPTY, so the quest hands the player nothing. Compare
+-- its neighbours 22003 (Act.img.xml:3362-3369) and 22006 (Act.img.xml:3410-3417), which DO grant
+-- their fetch items (4032448 / 4032450) on the start node. That contrast is decisive: 22003 and
+-- 22006 are self-contained, 22004 is not, so 4032498 has to come from the world.
+-- Nor is it a reactor: map 100030300 has exactly one reactor, 1002008
+-- (wz/Map.wz/Map/Map1/100030300.img.xml:520-528), whose only reactordrops row is 4032452
+-- "Bundle of Hay" for quest 22502. So: mob drop, mob 130100. No alternative survives the data.
+--
+-- ============================================================================================
+-- WHY chance 80000, AND WHY THIS RATE IS NOT INVENTED EITHER.
+-- ============================================================================================
+-- GMS drop rates were server-side and are not present in any WZ file, so the exact v84 number is
+-- not recoverable from the client. Rather than invent one, this row copies the rate that THIS
+-- SERVER ALREADY USES FOR A QUEST ITEM DROPPED BY THIS EXACT MOB. drop_data already holds three
+-- quest-gated rows on dropperid 130100, and all three are chance 80000:
+--
+--   (130100, 4031773, 1, 1, questid 2145, 80000)   -- "Stump Research"  (collect 100)
+--   (130100, 4032374, 1, 1, questid 2405, 80000)   -- "The Lost Letter of Commendation"
+--   (130100, 4032378, 1, 1, questid 2408, 80000)   -- "The Lost Letter of Commendation"
+--
+-- Same mob, same table, same purpose - so 80000 is this mob's established quest-item rate, and
+-- using anything else would be the invention. It also lands in a sane place for a tutorial:
+-- 4032498 is an ETC item, and server/maps/MapleMap.java:722-728 multiplies ETC drop chance by
+-- 2.0, so the effective roll is 160000/1000000 = 16% per Stump before the server drop rate,
+-- i.e. roughly 19 kills for the 3 branches the quest wants. Reliable, not a 1% grind.
+--
+-- questid 22004 makes the drop quest-gated rather than permanent world loot:
+-- client/Character.java:5810-5830 needQuestItem() only lets the item spawn while 22004 is in
+-- progress AND the player holds fewer than the 3 required, so it cannot leak into the economy
+-- and it stops dropping the moment the quest is satisfiable. Same shape as the three rows above.
+--
+-- 1 row, 1 dropperid.
+
+INSERT INTO drop_data (dropperid, itemid, minimum_quantity, maximum_quantity, questid, chance)
+VALUES (130100, 4032498, 1, 1, 22004, 80000);

@@ -39,6 +39,17 @@ import java.awt.*;
 public final class QuestActionHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(QuestActionHandler.class);
 
+    /**
+     * Mir, the Evan player's dragon. He is <em>not</em> a field NPC and never was one in GMS v84:
+     * {@code Etc.wz/NpcLocation.img} gives 1013000 the location {@code -1} (no field), where his
+     * neighbour 1013001 gets a real {@code 900010200}. This server models him the same way Nexon
+     * did - as a per-player summon, {@link server.maps.Dragon} with {@code MapObjectType.DRAGON},
+     * created for every Evan past job 2001 in {@code PlayerLoggedinHandler} and on job change.
+     * Quest 22500's own objective text says it outright: "Talk to him by clicking on the Baby
+     * Dragon". So he is never in any map's {@code life}, and {@code getNPCById} can never find him.
+     */
+    private static final int MIR = 1013000;
+
     // isNpcNearby thanks to GabrielSin
     private static boolean isNpcNearby(InPacket p, Character player, Quest quest, int npcId) {
         Point playerP;
@@ -54,6 +65,15 @@ public final class QuestActionHandler extends AbstractPacketHandler {
         }
 
         if (!quest.isAutoStart() && !quest.isAutoComplete()) {
+            // A summoned Mir is always at his owner's position, so "is the npc nearby" is answered
+            // by "does this player have their dragon out" - the map lookup below never can. Without
+            // this, 25 Evan quest starts and 22 ends are refused outright, beginning with 22500
+            // "Baby Dragon Awakens", the quest immediately after the 1st job advancement. The ten
+            // job advancements survive only because they are autoStart and skip this whole block.
+            if (npcId == MIR && player.getDragon() != null) {
+                return true;
+            }
+
             NPC npc = player.getMap().getNPCById(npcId);
             if (npc == null) {
                 log.debug("Quest {} denied for {}: npc {} is not spawned on map {}", quest.getId(), player.getName(),

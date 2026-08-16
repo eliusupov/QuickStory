@@ -3,6 +3,7 @@ package server;
 import client.Character;
 import client.Client;
 import client.QuestStatus;
+import net.packet.InPacket;
 import net.packet.Packet;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -12,10 +13,13 @@ import provider.DataProviderFactory;
 import provider.DataTool;
 import provider.wz.WZFiles;
 import scripting.quest.QuestScriptManager;
+import server.maps.Dragon;
 import server.maps.MapleMap;
 import server.quest.Quest;
 
+import java.awt.Point;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -129,18 +133,20 @@ class EvanChainRealLoad {
     }
 
     /**
-     * <strong>The chain's top blocker.</strong> Mir is the quest npc of all ten job advancements and
-     * of every quest in the 22500 chain, and he is spawned on no map in this WZ at all - the literal
-     * does not occur anywhere under {@code Map.wz/Map}. {@code plife}, the only other source
-     * {@code MapFactory} reads, cannot rescue him for the {@code 22500} chain either, because nothing
-     * in the repo seeds it.
+     * <strong>Mir is on no map, and that is CORRECT.</strong> This test's assertion is unchanged; its
+     * conclusion is the opposite of what it used to be. Mir was never a field NPC in v84 -
+     * {@code Etc.wz/NpcLocation.img} gives 1013000 the location {@code -1}, where his immediate
+     * neighbour 1013001 gets a real {@code 900010200} - because he is the Evan's own summoned
+     * {@link server.maps.Dragon}, spawned per-player for every Evan past job 2001. Quest 22500's
+     * objective text says "Talk to him by clicking on the Baby Dragon".
      *
-     * <p>{@code QuestActionHandler.isNpcNearby} lets an {@code autoStart} or {@code autoComplete}
-     * quest past without an npc on the map, which is the only reason 22100..22109 still work. 22500
-     * is neither, so it is refused at {@code getNPCById(1013000) == null} before {@code canStart}.
+     * <p>So seeding {@code plife} with a Mir would have been a hack: a static statue of Mir parked on
+     * one map while the real Mir flies beside the player. The faithful fix is in
+     * {@code QuestActionHandler.isNpcNearby}, which now treats an owned dragon as the npc being
+     * present - see {@link #isNpcNearbyAcceptsTheOwnedDragonAsMir()}.
      */
     @Test
-    void mirIsSpawnedOnNoMapWhichKillsTheEntire22500Chain() throws IOException {
+    void mirIsSpawnedOnNoMapBecauseHeIsASummonNotAFieldNpc() throws IOException {
         List<String> found = new ArrayList<>();
         Path maps = Path.of(WZFiles.DIRECTORY, "Map.wz", "Map");
         assertTrue(Files.isDirectory(maps), "no Map.wz/Map under '" + WZFiles.DIRECTORY + "'");
@@ -166,8 +172,55 @@ class EvanChainRealLoad {
         assertEquals(MIR, babyDragonAwakens.getNpcRequirement(false), "22500 start npc");
         assertEquals(MIR, babyDragonAwakens.getNpcRequirement(true), "22500 end npc");
         assertFalse(babyDragonAwakens.isAutoStart() || babyDragonAwakens.isAutoComplete(),
-                "22500 is neither autoStart nor autoComplete, so isNpcNearby demands Mir on the map "
-                        + "and he is nowhere - the first quest after the 1st job advancement is dead");
+                "22500 is neither autoStart nor autoComplete, so it goes through the isNpcNearby "
+                        + "dragon guard rather than around it - if it ever became autoStart that "
+                        + "would be a convenience hack, not v84");
+
+        // Nexon's own index agrees Mir has no field location, so this is data, not an accident.
+        String npcLocation = Files.readString(
+                Path.of(WZFiles.DIRECTORY, "Etc.wz", "NpcLocation.img.xml"), StandardCharsets.ISO_8859_1);
+        int at = npcLocation.indexOf("<imgdir name=\"" + MIR + "\">");
+        assertTrue(at > 0, "NpcLocation.img has no entry for Mir at all");
+        assertTrue(npcLocation.substring(at, at + 120).contains("value=\"-1\""),
+                "NpcLocation.img now gives Mir a real field map; if that is genuine v84 data then he "
+                        + "should be placed rather than treated as a summon");
+    }
+
+    /**
+     * <strong>The fix for the 25 blocked starts and 22 blocked ends.</strong> Exercises the real
+     * {@code QuestActionHandler.isNpcNearby} against the real quest 22500. With a dragon out the
+     * check passes; without one it still refuses, so the guard is scoped to actual Evans and cannot
+     * be used by anything else to claim an arbitrary npc is nearby.
+     *
+     * <p>Reflection because the method is private static - that is the smallest thing that fails if
+     * the guard is removed, and it beats asserting on source text.
+     */
+    @Test
+    void isNpcNearbyAcceptsTheOwnedDragonAsMir() throws Exception {
+        Method isNpcNearby = Class.forName("net.server.channel.handlers.QuestActionHandler")
+                .getDeclaredMethod("isNpcNearby", InPacket.class, Character.class, Quest.class, int.class);
+        isNpcNearby.setAccessible(true);
+
+        Quest babyDragonAwakens = Quest.getInstance(22500);
+        InPacket p = mock(InPacket.class);
+        lenient().when(p.available()).thenReturn(0);
+
+        Character chr = mock(Character.class);
+        MapleMap map = mock(MapleMap.class);
+        lenient().when(chr.getPosition()).thenReturn(new Point(0, 0));
+        lenient().when(chr.getMap()).thenReturn(map);
+        lenient().when(chr.getName()).thenReturn("evan");
+        lenient().when(chr.getMapId()).thenReturn(910150000);
+        lenient().when(map.getNPCById(MIR)).thenReturn(null);   // he is on no map, by design
+
+        lenient().when(chr.getDragon()).thenReturn(mock(Dragon.class));
+        assertEquals(true, isNpcNearby.invoke(null, p, chr, babyDragonAwakens, MIR),
+                "an Evan with their dragon out must be allowed to talk to Mir; without this every "
+                        + "quest in the 22500 chain is refused before canStart ever runs");
+
+        lenient().when(chr.getDragon()).thenReturn(null);
+        assertEquals(false, isNpcNearby.invoke(null, p, chr, babyDragonAwakens, MIR),
+                "with no dragon the guard must not fire - it is not a blanket exemption for 1013000");
     }
 
     /** All ten advancements ride the same exemption; if one lost it, that job level would be lost. */
@@ -184,38 +237,46 @@ class EvanChainRealLoad {
     }
 
     /**
-     * <strong>The blocker the owner hits first.</strong> 22004, 22005 and 22007 each complete on an
-     * etc item that the player must find in the world - the quest's own {@code Act.img/0} hands out
-     * nothing - and no mob drop and no reactor drop in this server grants any of the three. 22007 is
-     * the prerequisite of 22100, so the chain cannot reach the job advancement at all.
+     * <strong>Superseded, and kept only as the control it always really was.</strong> This method
+     * used to assert that 22004, 22005 and 22007 were all dead because none of their completion items
+     * had a row in {@code drop_data} or {@code reactordrops}. The absence was real; the CONCLUSION was
+     * wrong, and wrong in the expensive direction - it would have had someone invent three drop rows.
      *
-     * <p>4032452 is the control: the same kind of item, for 22502, wired to reactor 1002008. Without
-     * it, "no seed file mentions these ids" would also be the result of reading the wrong files.
+     * <p>Only 4032498 was ever a drop. 4032449 and 4032451 are obtained by CLICKING AN NPC, which is
+     * why searching the drop tables for them found nothing and always would have:
+     * QuestInfo 22007 says in plain words "You can obtain an Egg by clicking on a Hen", and the Hen
+     * (npc 1013104) and the Baby Pig (npc 1013200) are both already placed, with working scripts.
+     * {@link EvanFarmChainSourcesRealLoad} now pins all three real sources.
+     *
+     * <p>What survives here is the part that was load-bearing: 4032452 as the control proving these
+     * seed files are the right ones to read, and the fact that 22004/22005/22007 grant nothing
+     * themselves, so their items genuinely have to come from the world.
      */
     @Test
-    void threeFarmChainCompletionItemsHaveNoDropSourceAtAll() throws IOException {
-        String drops = Files.readString(Path.of("src", "main", "resources", "db", "data",
-                "152-drop-data.sql"), StandardCharsets.ISO_8859_1);
+    void theFarmChainCompletionItemsAreNotGrantedByTheQuestsThemselves() throws IOException {
         String reactorDrops = Files.readString(Path.of("src", "main", "resources", "db", "data",
                 "131-reactordrops-data.sql"), StandardCharsets.ISO_8859_1);
-
         assertTrue(reactorDrops.contains("4032452"),
                 "control failed: 4032452 (Bundle of Hay, quest 22502) should be on reactor 1002008");
 
-        // 4032498 Thick Branch x3 (22004), 4032449 Piglet (22005), 4032451 Egg (22007)
-        for (String itemId : new String[]{"4032498", "4032449", "4032451"}) {
+        // The two click-an-npc items must stay OUT of the drop tables - a drop row for either would
+        // be an invented source that quietly duplicates the authentic one.
+        String drops = Files.readString(Path.of("src", "main", "resources", "db", "data",
+                "152-drop-data.sql"), StandardCharsets.ISO_8859_1);
+        for (String itemId : new String[]{"4032449", "4032451"}) {
             assertFalse(drops.contains(itemId) || reactorDrops.contains(itemId),
-                    "item " + itemId + " now has a drop source; the farm-chain blocker may be fixed");
+                    "item " + itemId + " now has a DROP source, but in v84 it came from clicking an "
+                            + "npc; adding a drop row for it invents content that never existed");
         }
 
-        // and the quests really do demand them, so the absence above is load-bearing
+        // and the quests really do demand them, so the above is load-bearing
         for (int id : new int[]{22004, 22005, 22007}) {
             Quest q = Quest.getInstance(id);
             assertFalse(q.getName().isBlank(), "quest " + id + " did not load");
         }
         assertTrue(Quest.getInstance(22007).hasScriptRequirement(true),
-                "22007 completes through q22007e, which does a gainItem(4032451, -1) the player "
-                        + "can never satisfy");
+                "22007 completes through q22007e, whose gainItem(4032451, -1) assumes the player "
+                        + "already picked the Egg up off the Hen");
     }
 
     /**
