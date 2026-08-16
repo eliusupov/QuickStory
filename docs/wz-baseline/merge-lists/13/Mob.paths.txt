@@ -1,0 +1,5 @@
+# Ticket 13 - the two mobs the merged Evan maps spawn that this tree does not have.
+# 100030103 life -> 9300385 (x6); 100030320 life -> 1210111 (x21).
+# 0130100 (100030300), 1210100 (100030310) and 1210101 (100030320) are already here.
+Mob.wz/1210111.img
+Mob.wz/9300385.img

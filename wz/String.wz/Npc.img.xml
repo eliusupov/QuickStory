@@ -314,6 +314,17 @@
   <imgdir name="1013106">
     <string name="name" value="Glowing Stele"/>
   </imgdir>
+  <imgdir name="1013204">
+    <string name="name" value="Hiver"/>
+  </imgdir>
+  <imgdir name="1013205">
+    <string name="name" value="Afrien"/>
+    <string name="d0" value="(A large Onyx Dragon with its eyes peacefully shut as if in a deep sleep.)"/>
+    <string name="d1" value="(A large Onyx Dragon with its eyes peacefully shut as if in a deep sleep.)"/>
+  </imgdir>
+  <imgdir name="1013206">
+    <string name="name" value="Hiver"/>
+  </imgdir>
   <imgdir name="1013207">
     <string name="name" value="Olaf"/>
     <string name="s0" value="Just let me know if you decide you want to return."/>

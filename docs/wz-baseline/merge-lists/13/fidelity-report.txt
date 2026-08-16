@@ -1,0 +1,6 @@
+﻿SELF-CHECK: a node renamed -> caught = True  [NAME MULTISET differs]
+SELF-CHECK: a node dropped -> caught = True  [COUNT dump=1555 xml=1554; NAME MULTISET differs]
+SELF-CHECK: a node duplicated -> caught = True  [COUNT dump=1555 xml=1556; NAME MULTISET differs]
+SELF-CHECK: a SCALAR VALUE edited, name untouched -> caught = True  [SCALAR name=value MULTISET differs]
+compared 44 images, 50670 nodes, 42284 scalar name=value pairs
+RESULT: PASS

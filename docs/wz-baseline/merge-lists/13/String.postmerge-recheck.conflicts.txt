@@ -1,0 +1,32 @@
+# String.wz: additive-only XML export — DRY RUN, nothing was written -> wz, 0 nodes would be added (0 by force-list), 21 refused
+# Every row is a v84 node this merge REFUSED to write. Two reasons appear here:
+#   * 'already exists in target' — the additive-only gate, enforced in the write path.
+#     A v84 EDIT to an existing node (renamed mob, portal added to an existing map)
+#     looks exactly like this and is silently lost unless someone decides otherwise.
+#   * 'DENIED by deny-list' — a v84 ADDITION the target lacks and must keep lacking.
+#     The gate is structurally blind to these; only the deny-list catches them.
+# Additive-only is enforced in the write path, so this file is the exhaustive list of
+# v84 changes that were dropped. Read it before shipping.
+# Columns: path, reason.
+
+String.wz/Map.img/etc/900010000	already exists in wz\String.wz\Map.img.xml
+String.wz/Map.img/etc/900010100	already exists in wz\String.wz\Map.img.xml
+String.wz/Map.img/etc/900010200	already exists in wz\String.wz\Map.img.xml
+String.wz/Map.img/etc/900020100	already exists in wz\String.wz\Map.img.xml
+String.wz/Map.img/etc/900020110	already exists in wz\String.wz\Map.img.xml
+String.wz/Map.img/etc/900020200	already exists in wz\String.wz\Map.img.xml
+String.wz/Map.img/etc/900020210	already exists in wz\String.wz\Map.img.xml
+String.wz/Map.img/etc/900020220	already exists in wz\String.wz\Map.img.xml
+String.wz/Map.img/etc/900030000	already exists in wz\String.wz\Map.img.xml
+String.wz/Map.img/etc/900090000	already exists in wz\String.wz\Map.img.xml
+String.wz/Map.img/etc/900090001	already exists in wz\String.wz\Map.img.xml
+String.wz/Map.img/etc/900090002	already exists in wz\String.wz\Map.img.xml
+String.wz/Map.img/etc/900090003	already exists in wz\String.wz\Map.img.xml
+String.wz/Map.img/etc/900090004	already exists in wz\String.wz\Map.img.xml
+String.wz/Map.img/etc/900090100	already exists in wz\String.wz\Map.img.xml
+String.wz/Map.img/etc/900090101	already exists in wz\String.wz\Map.img.xml
+String.wz/Map.img/etc/900090102	already exists in wz\String.wz\Map.img.xml
+String.wz/Map.img/etc/900090103	already exists in wz\String.wz\Map.img.xml
+String.wz/Npc.img/1013204	already exists in wz\String.wz\Npc.img.xml
+String.wz/Npc.img/1013205	already exists in wz\String.wz\Npc.img.xml
+String.wz/Npc.img/1013206	already exists in wz\String.wz\Npc.img.xml

@@ -1,0 +1,13 @@
+# Mob.wz: additive-only XML export — DRY RUN, nothing was written -> wz, 0 nodes would be added (0 by force-list), 2 refused
+# Every row is a v84 node this merge REFUSED to write. Two reasons appear here:
+#   * 'already exists in target' — the additive-only gate, enforced in the write path.
+#     A v84 EDIT to an existing node (renamed mob, portal added to an existing map)
+#     looks exactly like this and is silently lost unless someone decides otherwise.
+#   * 'DENIED by deny-list' — a v84 ADDITION the target lacks and must keep lacking.
+#     The gate is structurally blind to these; only the deny-list catches them.
+# Additive-only is enforced in the write path, so this file is the exhaustive list of
+# v84 changes that were dropped. Read it before shipping.
+# Columns: path, reason.
+
+Mob.wz/1210111.img	xml file already exists: wz\Mob.wz\1210111.img.xml
+Mob.wz/9300385.img	xml file already exists: wz\Mob.wz\9300385.img.xml

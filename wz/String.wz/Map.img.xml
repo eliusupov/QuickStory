@@ -7632,6 +7632,78 @@
     </imgdir>
   </imgdir>
   <imgdir name="etc">
+    <imgdir name="900010000">
+      <string name="streetName" value="Dream World"/>
+      <string name="mapName" value="Dream Forest Entrance"/>
+    </imgdir>
+    <imgdir name="900010100">
+      <string name="streetName" value="Dream World"/>
+      <string name="mapName" value="Dream Forest Trail "/>
+    </imgdir>
+    <imgdir name="900010200">
+      <string name="streetName" value="Dream World"/>
+      <string name="mapName" value="Dream Forest "/>
+    </imgdir>
+    <imgdir name="900020100">
+      <string name="streetName" value="Hidden Street"/>
+      <string name="mapName" value="Lush Forest"/>
+    </imgdir>
+    <imgdir name="900020110">
+      <string name="streetName" value="Hidden Street"/>
+      <string name="mapName" value="Lush Forest"/>
+    </imgdir>
+    <imgdir name="900020200">
+      <string name="streetName" value="Hidden Street"/>
+      <string name="mapName" value="Lost Forest Entrance "/>
+    </imgdir>
+    <imgdir name="900020210">
+      <string name="streetName" value="Hidden Street"/>
+      <string name="mapName" value="Lost Forest Trail "/>
+    </imgdir>
+    <imgdir name="900020220">
+      <string name="streetName" value="Hidden Street"/>
+      <string name="mapName" value="Lost Forest "/>
+    </imgdir>
+    <imgdir name="900030000">
+      <string name="streetName" value="Afrien&apos;s Memory "/>
+      <string name="mapName" value="Behind the Stronghold "/>
+    </imgdir>
+    <imgdir name="900090000">
+      <string name="streetName" value="Video"/>
+      <string name="mapName" value="Teaser"/>
+    </imgdir>
+    <imgdir name="900090001">
+      <string name="streetName" value="Video"/>
+      <string name="mapName" value="Teaser"/>
+    </imgdir>
+    <imgdir name="900090002">
+      <string name="streetName" value="Video"/>
+      <string name="mapName" value="Teaser"/>
+    </imgdir>
+    <imgdir name="900090003">
+      <string name="streetName" value="Video"/>
+      <string name="mapName" value="Teaser"/>
+    </imgdir>
+    <imgdir name="900090004">
+      <string name="streetName" value="Video"/>
+      <string name="mapName" value="Teaser"/>
+    </imgdir>
+    <imgdir name="900090100">
+      <string name="streetName" value="Video"/>
+      <string name="mapName" value="Tutorial 0 "/>
+    </imgdir>
+    <imgdir name="900090101">
+      <string name="streetName" value="Video"/>
+      <string name="mapName" value="Tutorial 1 "/>
+    </imgdir>
+    <imgdir name="900090102">
+      <string name="streetName" value="Video"/>
+      <string name="mapName" value="Tutorial 2"/>
+    </imgdir>
+    <imgdir name="900090103">
+      <string name="streetName" value="Video"/>
+      <string name="mapName" value="Job Advancement"/>
+    </imgdir>
     <imgdir name="910050300">
       <string name="streetName" value="Hidden Street"/>
       <string name="mapName" value="Abandoned Cave "/>

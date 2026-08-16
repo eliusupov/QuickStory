@@ -102,6 +102,11 @@ public class MapId {
     public static final int ARAN_POLEARM = 914090100;
     public static final int ARAN_MAHA = 914090200; // Black screen when warped to
 
+    // Evan
+    // "Dream Forest Entrance", street "Dream World" - v84 String.wz/Map.img/etc/900010000.
+    // Where a newly created Evan starts, exactly as ARAN_TUTORIAL_START is for Aran.
+    public static final int EVAN_TUTORIAL_START = 900010000;
+
     // Starting map
     public static final int STARTING_MAP_NOBLESSE = 130030000;
 

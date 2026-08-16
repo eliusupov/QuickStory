@@ -1,0 +1,37 @@
+# Ticket 13 - Evan world, SERVER XML side (wz/) only.
+# Every row is a whole new .img -> a whole new .img.xml file. Nothing pre-existing is touched.
+#
+# Map9: the complete Evan 9000xxxxx range as add-list/Map.txt holds it (19 images).
+# None of them has info/link, so no further map is pulled in.
+# 900010000 (Dream Forest Entrance) is the character-creation start map.
+Map.wz/Map/Map9/900010000.img
+Map.wz/Map/Map9/900010100.img
+Map.wz/Map/Map9/900010200.img
+Map.wz/Map/Map9/900020100.img
+Map.wz/Map/Map9/900020110.img
+Map.wz/Map/Map9/900020200.img
+Map.wz/Map/Map9/900020210.img
+Map.wz/Map/Map9/900020220.img
+Map.wz/Map/Map9/900030000.img
+Map.wz/Map/Map9/900090000.img
+Map.wz/Map/Map9/900090001.img
+Map.wz/Map/Map9/900090002.img
+Map.wz/Map/Map9/900090003.img
+Map.wz/Map/Map9/900090004.img
+Map.wz/Map/Map9/900090100.img
+Map.wz/Map/Map9/900090101.img
+Map.wz/Map/Map9/900090102.img
+Map.wz/Map/Map9/900090103.img
+Map.wz/Map/Map9/900090104.img
+# Henesys-farm Evan story maps. 100030000/100030001 already exist in this tree.
+# 100030301 (Forest Hall) is DELIBERATELY ABSENT - its life/ places static NPCs on ids
+# 9901910-9901919, which is inside PlayerNPC.java:66's runtime allocator range.
+Map.wz/Map/Map1/100030100.img
+Map.wz/Map/Map1/100030101.img
+Map.wz/Map/Map1/100030102.img
+Map.wz/Map/Map1/100030103.img
+Map.wz/Map/Map1/100030200.img
+Map.wz/Map/Map1/100030300.img
+Map.wz/Map/Map1/100030310.img
+Map.wz/Map/Map1/100030320.img
+Map.wz/Map/Map1/100030400.img

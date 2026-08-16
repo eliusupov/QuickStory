@@ -1,0 +1,25 @@
+# Npc.wz: additive-only XML export — DRY RUN, nothing was written -> wz, 0 nodes would be added (0 by force-list), 14 refused
+# Every row is a v84 node this merge REFUSED to write. Two reasons appear here:
+#   * 'already exists in target' — the additive-only gate, enforced in the write path.
+#     A v84 EDIT to an existing node (renamed mob, portal added to an existing map)
+#     looks exactly like this and is silently lost unless someone decides otherwise.
+#   * 'DENIED by deny-list' — a v84 ADDITION the target lacks and must keep lacking.
+#     The gate is structurally blind to these; only the deny-list catches them.
+# Additive-only is enforced in the write path, so this file is the exhaustive list of
+# v84 changes that were dropped. Read it before shipping.
+# Columns: path, reason.
+
+Npc.wz/1013001.img	xml file already exists: wz\Npc.wz\1013001.img.xml
+Npc.wz/1013002.img	xml file already exists: wz\Npc.wz\1013002.img.xml
+Npc.wz/1013100.img	xml file already exists: wz\Npc.wz\1013100.img.xml
+Npc.wz/1013101.img	xml file already exists: wz\Npc.wz\1013101.img.xml
+Npc.wz/1013102.img	xml file already exists: wz\Npc.wz\1013102.img.xml
+Npc.wz/1013103.img	xml file already exists: wz\Npc.wz\1013103.img.xml
+Npc.wz/1013104.img	xml file already exists: wz\Npc.wz\1013104.img.xml
+Npc.wz/1013105.img	xml file already exists: wz\Npc.wz\1013105.img.xml
+Npc.wz/1013200.img	xml file already exists: wz\Npc.wz\1013200.img.xml
+Npc.wz/1013201.img	xml file already exists: wz\Npc.wz\1013201.img.xml
+Npc.wz/1013202.img	xml file already exists: wz\Npc.wz\1013202.img.xml
+Npc.wz/1013204.img	xml file already exists: wz\Npc.wz\1013204.img.xml
+Npc.wz/1013205.img	xml file already exists: wz\Npc.wz\1013205.img.xml
+Npc.wz/1013206.img	xml file already exists: wz\Npc.wz\1013206.img.xml

@@ -1,0 +1,29 @@
+# Ticket 13 - names. These are the ONLY rows in this ticket that splice into a file that
+# already exists, so they are the only ones the zero-change proof has to work on.
+#
+# MapFactory.getMapStringName() routes every id >= 900000000 to "etc", which is where v84
+# puts them too. Map.img/etc's children are a sparse id table, not a positional array.
+# 900090104 has no String.wz entry in v84 - not a row, not an omission.
+String.wz/Map.img/etc/900010000
+String.wz/Map.img/etc/900010100
+String.wz/Map.img/etc/900010200
+String.wz/Map.img/etc/900020100
+String.wz/Map.img/etc/900020110
+String.wz/Map.img/etc/900020200
+String.wz/Map.img/etc/900020210
+String.wz/Map.img/etc/900020220
+String.wz/Map.img/etc/900030000
+String.wz/Map.img/etc/900090000
+String.wz/Map.img/etc/900090001
+String.wz/Map.img/etc/900090002
+String.wz/Map.img/etc/900090003
+String.wz/Map.img/etc/900090004
+String.wz/Map.img/etc/900090100
+String.wz/Map.img/etc/900090101
+String.wz/Map.img/etc/900090102
+String.wz/Map.img/etc/900090103
+# The three Evan NPC names this tree is missing. 1013000-1013002, 1013100-1013106,
+# 1013200-1013203 and 1013207 are already here.
+String.wz/Npc.img/1013204
+String.wz/Npc.img/1013205
+String.wz/Npc.img/1013206

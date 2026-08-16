@@ -1,0 +1,39 @@
+# Map.wz: additive-only XML export — DRY RUN, nothing was written -> wz, 0 nodes would be added (0 by force-list), 28 refused
+# Every row is a v84 node this merge REFUSED to write. Two reasons appear here:
+#   * 'already exists in target' — the additive-only gate, enforced in the write path.
+#     A v84 EDIT to an existing node (renamed mob, portal added to an existing map)
+#     looks exactly like this and is silently lost unless someone decides otherwise.
+#   * 'DENIED by deny-list' — a v84 ADDITION the target lacks and must keep lacking.
+#     The gate is structurally blind to these; only the deny-list catches them.
+# Additive-only is enforced in the write path, so this file is the exhaustive list of
+# v84 changes that were dropped. Read it before shipping.
+# Columns: path, reason.
+
+Map.wz/Map/Map9/900010000.img	xml file already exists: wz\Map.wz\Map\Map9\900010000.img.xml
+Map.wz/Map/Map9/900010100.img	xml file already exists: wz\Map.wz\Map\Map9\900010100.img.xml
+Map.wz/Map/Map9/900010200.img	xml file already exists: wz\Map.wz\Map\Map9\900010200.img.xml
+Map.wz/Map/Map9/900020100.img	xml file already exists: wz\Map.wz\Map\Map9\900020100.img.xml
+Map.wz/Map/Map9/900020110.img	xml file already exists: wz\Map.wz\Map\Map9\900020110.img.xml
+Map.wz/Map/Map9/900020200.img	xml file already exists: wz\Map.wz\Map\Map9\900020200.img.xml
+Map.wz/Map/Map9/900020210.img	xml file already exists: wz\Map.wz\Map\Map9\900020210.img.xml
+Map.wz/Map/Map9/900020220.img	xml file already exists: wz\Map.wz\Map\Map9\900020220.img.xml
+Map.wz/Map/Map9/900030000.img	xml file already exists: wz\Map.wz\Map\Map9\900030000.img.xml
+Map.wz/Map/Map9/900090000.img	xml file already exists: wz\Map.wz\Map\Map9\900090000.img.xml
+Map.wz/Map/Map9/900090001.img	xml file already exists: wz\Map.wz\Map\Map9\900090001.img.xml
+Map.wz/Map/Map9/900090002.img	xml file already exists: wz\Map.wz\Map\Map9\900090002.img.xml
+Map.wz/Map/Map9/900090003.img	xml file already exists: wz\Map.wz\Map\Map9\900090003.img.xml
+Map.wz/Map/Map9/900090004.img	xml file already exists: wz\Map.wz\Map\Map9\900090004.img.xml
+Map.wz/Map/Map9/900090100.img	xml file already exists: wz\Map.wz\Map\Map9\900090100.img.xml
+Map.wz/Map/Map9/900090101.img	xml file already exists: wz\Map.wz\Map\Map9\900090101.img.xml
+Map.wz/Map/Map9/900090102.img	xml file already exists: wz\Map.wz\Map\Map9\900090102.img.xml
+Map.wz/Map/Map9/900090103.img	xml file already exists: wz\Map.wz\Map\Map9\900090103.img.xml
+Map.wz/Map/Map9/900090104.img	xml file already exists: wz\Map.wz\Map\Map9\900090104.img.xml
+Map.wz/Map/Map1/100030100.img	xml file already exists: wz\Map.wz\Map\Map1\100030100.img.xml
+Map.wz/Map/Map1/100030101.img	xml file already exists: wz\Map.wz\Map\Map1\100030101.img.xml
+Map.wz/Map/Map1/100030102.img	xml file already exists: wz\Map.wz\Map\Map1\100030102.img.xml
+Map.wz/Map/Map1/100030103.img	xml file already exists: wz\Map.wz\Map\Map1\100030103.img.xml
+Map.wz/Map/Map1/100030200.img	xml file already exists: wz\Map.wz\Map\Map1\100030200.img.xml
+Map.wz/Map/Map1/100030300.img	xml file already exists: wz\Map.wz\Map\Map1\100030300.img.xml
+Map.wz/Map/Map1/100030310.img	xml file already exists: wz\Map.wz\Map\Map1\100030310.img.xml
+Map.wz/Map/Map1/100030320.img	xml file already exists: wz\Map.wz\Map\Map1\100030320.img.xml
+Map.wz/Map/Map1/100030400.img	xml file already exists: wz\Map.wz\Map\Map1\100030400.img.xml

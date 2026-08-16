@@ -1,0 +1,10 @@
+﻿baseline: HEAD -> 3438720643a87db47bd18b841ea241b1f9310786
+P1 : 22445 baseline files under wz/ re-hashed from disk -> changed 2, missing 0
+P1 :   changed: wz/String.wz/Map.img.xml
+P1 :   changed: wz/String.wz/Npc.img.xml
+P1 : untracked new files under wz/: 44 (non-.img.xml: 0)
+P2 : Map.img/<root> : pre-existing 12 categories -> changed 1 [etc], missing 0, new 0
+SELF-CHECK 1: PROOF 1 calls the real tree clean AND catches a one-byte edit to wz/Npc.wz/1013000.img.xml = True (restored = True)
+SELF-CHECK 2: PROOF 2 reports 0 changed on the real file AND flags a streetName edit to pre-existing id 910050300 = True
+SELF-CHECK 3: PROOF 2 flags a dropped child of pre-existing id 910050300 = True
+RESULT: PASS

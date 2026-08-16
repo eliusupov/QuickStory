@@ -33,10 +33,7 @@ import constants.id.MapId;
  */
 public class EvanCreator extends CharacterFactory {
 
-    // Evan's own v84 tutorial maps are not installed yet (Map.wz v84 rows are still unmerged), so
-    // starting there would strand the character in a map the client cannot load. Mushroom Town is
-    // v83 stock and always present. Change to the Evan tutorial once Map.wz lands.
-    private static final int START_MAP = MapId.MUSHROOM_TOWN;
+    private static final int START_MAP = MapId.EVAN_TUTORIAL_START;
 
     private static CharacterFactoryRecipe createRecipe(Job job, int level, int map, int top, int bottom, int shoes, int weapon) {
         CharacterFactoryRecipe recipe = new CharacterFactoryRecipe(job, level, map, top, bottom, shoes, weapon);

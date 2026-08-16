@@ -1,0 +1,19 @@
+# Ticket 13 - Evan NPCs, SERVER XML side. All whole-new images.
+# 1013000 already exists here; its add-list rows (condition1-6, stand/1-11) are interior writes
+# into an existing record and a positional array, and are NOT taken - see the ticket.
+# 1013106, 1013203 and 1013207 already exist here, so they are not listed - the dry run named
+# them and the post-merge re-run of this same manifest proves the gate still refuses.
+Npc.wz/1013001.img
+Npc.wz/1013002.img
+Npc.wz/1013100.img
+Npc.wz/1013101.img
+Npc.wz/1013102.img
+Npc.wz/1013103.img
+Npc.wz/1013104.img
+Npc.wz/1013105.img
+Npc.wz/1013200.img
+Npc.wz/1013201.img
+Npc.wz/1013202.img
+Npc.wz/1013204.img
+Npc.wz/1013205.img
+Npc.wz/1013206.img

@@ -161,16 +161,15 @@ public class StatEffect {
 
         // The eight GMS v84 mounts. Unlike the v83 ones these ARE job-stable: v84 ships each at
         // 000102x, 1000102x, 2000102x and 2001102x — see docs/wz-baseline/add-list/Skill.txt and
-        // String.wz/Skill.img. (2001 = Evan; its Skill.wz/2001.img is ticket 13's to merge, so the
-        // row is inert until then.) Sprite ids corroborated against two reimplementations of this
+        // String.wz/Skill.img. Sprite ids corroborated against two reimplementations of this
         // client era: Rebirth95 BuffSkill.cs:310-323 and HaRepacker SkillManager.cs:8762-8774.
         //
-        // HAZARD for ticket 13 (recorded by 03f, review finding F4): the 2001 rows are
-        // SPECULATIVE — they come from add-list naming, not from node-level data, because
-        // Skill.wz/2001.img is unmerged. If 13 merges a 2001.img where 20011025 (or 27-30, 37-39)
-        // is a REAL Evan skill, it silently becomes a mount: casting it applies MONSTER_RIDING and
-        // draws a wooden pony, with no error and no failing test. Dump those nine ids before
-        // merging that image, and drop 2001 from the loop below if any of them is taken.
+        // The 2001 (Evan) rows were flagged SPECULATIVE by 03f (finding F4) while
+        // Skill.wz/2001.img was unmerged. That image has been merged since ticket 10 and the
+        // eight ids read back by name: 8/8 are the mount this table pairs them with, and 20011026
+        // (Soaring, flight) is correctly absent. Hazard closed — do NOT re-raise it from the id
+        // pattern. V84EvanNodeTest#evansEightMountIdsAreTheMountsStatEffectSaysTheyAre asserts
+        // the pairing against the WZ, so this comment cannot drift without that test failing.
         int[][] v84 = {
                 {1025, 1932006},    // Charge! Wooden Pony
                 {1027, 1932007},    // Croco
