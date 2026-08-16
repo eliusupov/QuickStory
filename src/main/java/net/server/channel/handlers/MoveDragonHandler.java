@@ -32,6 +32,25 @@ import java.awt.*;
 
 
 public class MoveDragonHandler extends AbstractMovementPacketHandler {
+    // NO v84 gate here, and that is measured, not assumed. MOVE_PLAYER needed one (9 -> 33 bytes,
+    // 404ec864d) because the v84 anti-cheat "dr words" pass rewrote CVecCtrlUser::EndUpdateActive
+    // alone - and virtualised it, which is why only that one encoder is unreadable in the image.
+    // It did NOT touch the shared movement blob or the dragon's own encoder:
+    //
+    //   CMovePath::Encode   v83 0x0068A563   v84 0x006A121A   instruction-for-instruction identical
+    //     Encode2 startX    v83 0x0068A57C   v84 0x006A1233
+    //     Encode2 startY    v83 0x0068A592   v84 0x006A1249
+    //     Encode1 count     v83 0x0068A5C3   v84 0x006A127A
+    //
+    //   CVecCtrlDragon::EndUpdateActive   v83 0x009B7B9C   v84 0x009FF057
+    //     opcode push       v83 0x009B7BBD (0xB5)   v84 0x009FF078 (0xBA)
+    //     COutPacket ctor   v83 0x009B7BC5          v84 0x009FF080
+    //     CMovePath::Flush  v83 0x009B7BD8          v84 0x009FF093
+    //   Zero Encode* calls between the ctor and the Flush in EITHER version: the dragon writes no
+    //   packet-level prologue at all, so the header is just CMovePath's 4-byte origin. 4 == 4.
+    //
+    // Getting this wrong is silent: updatePosition throws EmptyMovementException, the catch below
+    // swallows it, the dragon never moves and nothing is logged. MovementHeaderTest pins it.
     @Override
     public void handlePacket(InPacket p, Client c) {
         final Character chr = c.getPlayer();

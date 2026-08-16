@@ -32,6 +32,25 @@ import java.awt.*;
 import java.util.Collection;
 
 public final class MoveSummonHandler extends AbstractMovementPacketHandler {
+    // NO v84 gate here, and that is measured. The v84 "dr words" pass rewrote (and virtualised)
+    // CVecCtrlUser::EndUpdateActive alone - MOVE_PLAYER 9 -> 33, 404ec864d. The summon's encoder and
+    // the shared movement blob were both left alone:
+    //
+    //   CVecCtrlSummoned::EndUpdateActive   v83 0x009C84E9   v84 0x00A0FD89
+    //     opcode push      v83 0x009C8523 (0xAF)   v84 0x00A0FDC3 (0xB4)
+    //     COutPacket ctor  v83 0x009C852B          v84 0x00A0FDCB
+    //     Encode4 owner cid ([this+0x248])  v83 0x009C853D   v84 0x00A0FDDD   <- the readInt below
+    //     CMovePath::Flush v83 0x009C854C          v84 0x00A0FDEC
+    //   CMovePath::Encode  v83 0x0068A563          v84 0x006A121A  - identical instruction for
+    //     instruction; Encode2 startX / Encode2 startY / Encode1 count at v83 0x0068A57C, 0x0068A592,
+    //     0x0068A5C3 and v84 0x006A1233, 0x006A1249, 0x006A127A. 4 + 4 == 8 in both versions.
+    //
+    // The opcode push at 0x00A0FDC3 is 0xB4, and recvops-84.properties used to say 0xB2 - so until
+    // 6ea21ac2d this handler was never reached at v84 at all and the header below was moot. That is
+    // fixed; the header is now what decides whether summon movement works.
+    //
+    // Getting the header wrong is silent: updatePosition throws EmptyMovementException, the catch
+    // below swallows it, the summon never moves and nothing is logged. MovementHeaderTest pins it.
     @Override
     public final void handlePacket(InPacket p, Client c) {
         int oid = p.readInt();
