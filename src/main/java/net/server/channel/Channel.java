@@ -140,8 +140,10 @@ public final class Channel {
             expedType.addAll(Arrays.asList(ExpeditionType.values()));
 
             if (Server.getInstance().isOnline()) {  // postpone event loading to improve boot time... thanks Riizade, daronhudson for noticing slow startup times
+                // The EventScriptManager constructor already runs init() on every script; calling it
+                // again here ran each script's init() twice, double-arming self-rescheduling events
+                // (AreaBoss spawners, timed exp) on any channel added while the server was online.
                 eventSM = new EventScriptManager(this, getEvents());
-                eventSM.init();
             } else {
                 String[] ev = {"0_EXAMPLE"};
                 eventSM = new EventScriptManager(this, ev);

@@ -288,7 +288,10 @@ server:
     USE_WHOLE_SERVER_RANKING: false     #Enables a ranking pool made from every character registered on the server for the "ranks" command, instead of separated by worlds.
 
     EQUIP_EXP_RATE: 1.0                  #Rate for equipment exp gain, grows linearly. Set 1.0 for default (about 100~200 same-level range mobs killed to pass equip from level 1 to 2).
-    PQ_BONUS_EXP_RATE: 0.5               #Rate for the PQ exp reward.
+    PQ_BONUS_EXP_RATE: 0                 #Extra PQ exp on top of the base reward, as a fraction (0.5 = +50%). 0 = off.
+                                         #Was 0.5, but EVENT_END_TIMESTAMP (2015) had gated it off since 2015-04-13, so
+                                         #no PQ has actually paid it. Kept at the real in-game value (off) to avoid a
+                                         #silent balance change; set 0.5 to restore the originally-intended bonus.
 
     EXP_SPLIT_LEVEL_INTERVAL: 5            #Non-contributing players must be within N level between the mob to receive EXP.
     EXP_SPLIT_LEECH_INTERVAL: 5            #Non-contributing players must be within N level between any contributing party member to receive EXP.
@@ -441,8 +444,18 @@ server:
     # Login timeout by shavit
     TIMEOUT_DURATION: 3600000               # Kicks clients who don't send any packet to the game server in due time (in millisseconds).
 
-    #Event End Timestamp
-    EVENT_END_TIMESTAMP: 1428897600000
+    #Event End Timestamp: epoch millis after which EVENT-gated bonuses stop applying. 0 = no end date.
+    #Was 1428897600000 (2015-04-13), which had silently disabled the PQ_BONUS_EXP_RATE reward since then.
+    #PQ_BONUS_EXP_RATE is now the only switch for that bonus; set a future timestamp here to time-box it.
+    EVENT_END_TIMESTAMP: 0
+
+    #Timed world-wide EXP event. Run by scripts/event/2xEvent.js on channel 1 only, in SERVER LOCAL TIME.
+    #DEFAULT OFF: an empty day list means the event never fires and world rates are never touched.
+    #To enable, list weekdays, e.g. TIMED_EXP_EVENT_DAYS: "SATURDAY,SUNDAY"
+    TIMED_EXP_EVENT_DAYS: ""            #Comma-separated weekday names (MONDAY..SUNDAY). Empty = disabled.
+    TIMED_EXP_EVENT_START_HOUR: 20      #Hour 0-23 the event starts on each listed day.
+    TIMED_EXP_EVENT_DURATION_HOURS: 2   #How long the boosted rate lasts.
+    TIMED_EXP_EVENT_MULTIPLIER: 2       #World exp rate is multiplied by this while the event runs.
 
     # GM Security Configuration
     MINIMUM_GM_LEVEL_TO_TRADE: 4

@@ -802,7 +802,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
                 Party lobbyParty = getPlayer().getParty(), challengerParty = challenger.getParty();
                 int status = canStartCPQ(lobbyMap, lobbyParty, challengerParty);
                 if (status == 0) {
-                    new MonsterCarnival(lobbyParty, challengerParty, mapid, true, (field / 100) % 10);
+                    // "field" is an arena map id here, not a field index. Previously this derived the
+                    // room as (field / 100) % 10, one higher than the 0-based index fieldTaken() asks
+                    // about, so field 0 was never marked busy and field N+1 read as full while N ran.
+                    new MonsterCarnival(lobbyParty, challengerParty, mapid, true, MonsterCarnival.roomOf(field, true));
                 } else {
                     warpoutCPQLobby(lobbyMap);
                 }
@@ -854,7 +857,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
                 Party lobbyParty = getPlayer().getParty(), challengerParty = challenger.getParty();
                 int status = canStartCPQ(lobbyMap, lobbyParty, challengerParty);
                 if (status == 0) {
-                    new MonsterCarnival(lobbyParty, challengerParty, mapid, false, (field / 1000) % 10);
+                    // Same 1-based-map-id vs 0-based-field-index mismatch as startCPQ; see the note there.
+                    new MonsterCarnival(lobbyParty, challengerParty, mapid, false, MonsterCarnival.roomOf(field, false));
                 } else {
                     warpoutCPQLobby(lobbyMap);
                 }

@@ -36,6 +36,26 @@ public class MonsterCarnival {
     private int redCP, blueCP, redTotalCP, blueTotalCP, redTimeupCP, blueTimeupCP;
     private boolean cpq1;
 
+    /**
+     * Room index for the arena the players are being sent to.
+     * <p>
+     * Arena map ids are 1-based within their series ({@code 980000101..980000601} for CPQ1,
+     * {@code 980031001..980033001} for CPQ2) while every live CPQ call site - {@code fieldTaken},
+     * {@code cpqLobby}, the NPC scripts' {@code selection} - uses a 0-based field index. The room
+     * number handed to {@link net.server.channel.Channel#initMonsterCarnival} has to be on the
+     * 0-based side, or reservations are recorded against a field nobody ever queries.
+     * <p>
+     * One exception, and it is dead code: {@code MonsterCarnivalParty.warpOut()} computes
+     * {@code 980000003 + room * 100}, which only lands on a real winner map for a 1-based room.
+     * {@code MonsterCarnivalParty} is never instantiated anywhere and {@code warpOut()} has no
+     * callers - the live end-of-CPQ warp is {@link #finish()} using {@code map.getId() + 2/+3} - so
+     * it is left alone rather than "fixed" blind. Revive that class and it needs {@code room + 1}.
+     */
+    public static int roomOf(int arenaMapId, boolean cpq1) {
+        int series = cpq1 ? 100 : 1000;
+        return ((arenaMapId / series) % 10) - 1;
+    }
+
     public MonsterCarnival(Party p1, Party p2, int mapid, boolean cpq1, int room) {
         try {
             this.cpq1 = cpq1;

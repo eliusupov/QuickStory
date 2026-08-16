@@ -289,8 +289,14 @@ public class ServerConfig {
     // Login timeout by shavit
     public long TIMEOUT_DURATION;
 
-    //Event End Timestamp
+    //Event End Timestamp. 0 = no end date, the gated bonus stays on for good.
     public long EVENT_END_TIMESTAMP;
+
+    //Timed world-wide EXP event, driven by scripts/event/2xEvent.js. Empty TIMED_EXP_EVENT_DAYS = never runs.
+    public String TIMED_EXP_EVENT_DAYS;
+    public int TIMED_EXP_EVENT_START_HOUR;
+    public int TIMED_EXP_EVENT_DURATION_HOURS;
+    public int TIMED_EXP_EVENT_MULTIPLIER;
 
     //GM Security Configuration
     public int MINIMUM_GM_LEVEL_TO_TRADE;

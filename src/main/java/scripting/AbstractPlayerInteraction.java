@@ -847,10 +847,21 @@ public class AbstractPlayerInteraction {
             int base = PartyQuest.getExp(PQ, player.getLevel());
             int exp = base * bonus / 100;
             player.gainExp(exp, true, true);
-            if (YamlConfig.config.server.PQ_BONUS_EXP_RATE > 0 && System.currentTimeMillis() <= YamlConfig.config.server.EVENT_END_TIMESTAMP) {
+            // EVENT_END_TIMESTAMP <= 0 means "no end date". Without that, the shipped config's 2015
+            // epoch silently zeroed this bonus forever; PQ_BONUS_EXP_RATE is the real on/off switch.
+            if (YamlConfig.config.server.PQ_BONUS_EXP_RATE > 0 && isWithinEventWindow()) {
                 player.gainExp((int) (exp * YamlConfig.config.server.PQ_BONUS_EXP_RATE), true, true);
             }
         }
+    }
+
+    /**
+     * Whether EVENT_END_TIMESTAMP-gated bonuses are currently live. A configured end timestamp of 0
+     * (or negative) means the bonus has no end date rather than "expired at the epoch".
+     */
+    public static boolean isWithinEventWindow() {
+        long endTimestamp = YamlConfig.config.server.EVENT_END_TIMESTAMP;
+        return endTimestamp <= 0 || System.currentTimeMillis() <= endTimestamp;
     }
 
     public void removeFromParty(int id, List<Character> party) {

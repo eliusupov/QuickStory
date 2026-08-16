@@ -176,6 +176,11 @@ function action(mode, type, selection) {
                     var lvlOk = 0;
                     var isOutMap = 0;
                     for (var i = 0; i < party.size(); i++) {
+                        // getPlayer() is null for an offline member; without this guard the script threw
+                        // and the NPC silently did nothing for any leader with an offline party member.
+                        if (!party.get(i).isOnline()) {
+                            continue;
+                        }
                         if (party.get(i).getLevel() >= cpqMinLvl && party.get(i).getLevel() <= cpqMaxLvl) {
                             lvlOk++;
 
