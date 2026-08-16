@@ -155,33 +155,72 @@ is the genuine v84 one ticket 20 hash-verified.
 
 ## Proof that zero pre-existing quest ids changed
 
-Run: `docs\wz-baseline\merge-lists\33\verify.ps1`. Verbatim output:
+Run: `docs\wz-baseline\merge-lists\33\verify.ps1`. Verbatim output, post-review script:
 
 ```
-A  QuestInfo : stripped 135/135 added top-level blocks; remainder identical to HEAD = True  (chars after strip=2168433, HEAD=2168433)
+baseline: 9ea79e6f3~1 -> 189c779a2cddd27bec9fd803a03436f445421ab7
+A  QuestInfo : stripped 135 (expected 135); remainder identical to baseline = True  (chars after strip=2168433, baseline=2168433)
 B  QuestInfo : pre-existing ids 2881 -> changed 0, missing 0; new ids 135
-A  Check : stripped 135/135 added top-level blocks; remainder identical to HEAD = True  (chars after strip=2371828, HEAD=2371828)
+A  Check : stripped 135 (expected 135); remainder identical to baseline = True  (chars after strip=2371828, baseline=2371828)
 B  Check : pre-existing ids 2870 -> changed 0, missing 0; new ids 135
-A  Act : stripped 135/135 added top-level blocks; remainder identical to HEAD = True  (chars after strip=1688932, HEAD=1688932)
+A  Act : stripped 135 (expected 135); remainder identical to baseline = True  (chars after strip=1688932, baseline=1688932)
 B  Act : pre-existing ids 2887 -> changed 0, missing 0; new ids 135
-SELF-CHECK 1: proof A rejects a one-character value edit to a pre-existing quest = True
-SELF-CHECK 2: proof A rejects a 22xxx block nested inside a pre-existing quest = True
+SELF-CHECK 1: A accepts the real file AND rejects a one-character edit to a pre-existing quest = True
+SELF-CHECK 2: A accepts the real file AND rejects a 22xxx block nested at 4-space indent = True
+SELF-CHECK 3: same-indent nesting into pre-existing quest '1000' -> A blind = True, B catches it = True
 RESULT: PASS
 ```
 
-**Proof A (bytes).** Strip exactly the top-level `<imgdir>` blocks whose name is in the added-id
-list; the remainder must be byte-identical to `HEAD`'s blob. This is stronger than a presence diff
-because it fails on any edit anywhere, including an added block nested inside an existing quest.
+**Proof A (text).** Strip exactly the top-level `<imgdir>` blocks whose name is in the added-id
+list; the remainder must be identical to the baseline blob.
 
-**Proof B (parse).** Load `HEAD` and the new file with an XML parser and compare a canonical,
-whitespace-independent digest of every pre-existing id's entire subtree. Also proves the files
+**Proof B (parse).** Compare a canonical, whitespace-independent digest of every pre-existing id's
+entire subtree, and assert the set of *new* ids is exactly the added-id list. Also proves the files
 still parse.
 
+**Neither proof is sound alone, and an earlier draft of this section claimed otherwise.** Code
+review reproduced both holes on the real file:
+
+- **A is blind to a block nested inside a pre-existing quest at the *same* 2-space indent** — the
+  nested block's own close line is consumed as A's strip terminator and the host quest's real close
+  survives into the remainder, so A reports `stripped 135/135, identical = True` on a file where
+  quest `1000` has grown a `22100` subtree. B catches it.
+- **B is blind to a *duplicated* pre-existing block**, because its per-id digest map is keyed by
+  name and the duplicate overwrites its own key. A catches it (extra bytes).
+
+The pair is what proves it: A is exact everywhere outside the 135 stripped ranges, so any
+modification must live inside one of them, and inside a range it is either XML-nested in a
+pre-existing quest (B's digest moves) or an extra top-level element (B's new-id set moves).
+**Neither half may be quoted on its own.** The ticket's earlier wording — "A fails on any edit
+anywhere, including an added block nested inside an existing quest" — was false and is retracted.
+
 **The self-checks exist because the project's rule is that a check which can only print PASS is not
-a check.** Both mutate the real merged file and both must come out "different from HEAD":
-one changes a single character of an `lvmin` inside a pre-existing quest; the other re-inserts the
-whole `22100` block *nested inside* a pre-existing quest instead of at top level — the exact
-failure a presence-based diff would not see.
+a check** — and the first version of them broke that rule in a way worth recording: they asserted
+only "the mutated file differs", never "the unmutated file matches", so they printed `True` even
+when the baseline was meaningless. They now assert both halves, and `SELF-CHECK 3` *demonstrates*
+A's hole rather than describing it: it builds the same-indent nesting and asserts
+`A blind = True, B catches it = True`.
+
+**A bug in the proof script itself, found by review after delivery.** `verify.ps1` hardcoded
+`HEAD:` as its baseline. Once the merge was committed, `HEAD` *is* the merge, so re-running the
+committed script compared each file against itself and printed **`changed 0, missing 0`** — the
+exact phrase this ticket quotes as its headline evidence — with both self-checks green. Fixed: a
+`-Rev` parameter (resolved to a full SHA first, because `cmd /c` eats `^` and would silently return
+the wrong blob for `<sha>^`), plus an assertion that the count of new ids equals the count of ids
+the merge claims to have added. That second line is what makes B falsifiable; the self-diff now
+fails loudly:
+
+```
+B  QuestInfo : pre-existing ids 3016 -> changed 0, missing 0; new ids 0
+B  QuestInfo : FAIL - 0 new ids, expected 135. If this is 0, the baseline is the merged file itself and B proved nothing.
+RESULT: FAIL (8)
+```
+
+**Reproduce the delivered result with:**
+
+```
+.\docs\wz-baseline\merge-lists\33\verify.ps1 <root> <root>\docs\wz-baseline\merge-lists\33 <scratch> -Rev 9ea79e6f3~1
+```
 
 **Third, independent confirmation — and a trap worth recording.** `git diff --stat` reports
 **190 deletions** in `Check.img.xml`, which flatly contradicts the above. It is a Myers artefact,
@@ -356,6 +395,41 @@ Every one of these produced a confident, wrong number first:
    new id (must be added). It returned exactly `SKIP / SKIP / ADD`, exit 3, with both refusals
    named in `conflicts.txt`, before the real 405 were run.
 
+## Code review — what it found, and what was declined
+
+Reviewed after the first commit. It **reproduced the PASS against the correct baseline**, and then
+broke each proof individually. Fixed in a follow-up commit:
+
+| finding | disposition |
+|---|---|
+| `verify.ps1` hardcoded `HEAD:` → vacuous self-diff printing `changed 0, missing 0` | **fixed** — `-Rev` param + a new-id-count assertion; the self-diff now exits 1 |
+| Proof A alone passes on a same-indent nested block; the ticket claimed otherwise | **fixed** — claim retracted above, and `SELF-CHECK 3` now demonstrates it |
+| Self-checks asserted only "differs", never the positive control | **fixed** — both halves asserted |
+| Off-by-one at `verify.ps1:125` — `"\r\n  </imgdir>".Length` is 13, not 14 | **fixed** |
+| `the22515To22518Gate…IsStillUnmet` asserts the opposite of its own name | **fixed** — renamed to `…IsNotTicket09sAndIsNowMetByTicket33` |
+| Two duplicate test methods + one dead local in `V84EvanQuestDataTest` | **deleted** — 7 tests down to 5 |
+| `cmd /c` eats `^`, so `<sha>^:path` silently returns the wrong blob | **avoided** — `-Rev` is resolved to a full SHA before it reaches `cmd` |
+
+**Declined, with reasons:**
+
+- **The subsumed `assertNotNull` in `V84QuestNodeTest`** — technically covered by
+  `everyAddedIdIsPresentInAllThreeImages`, but it is the assertion that encodes *ticket 08's
+  handoff is now met*, in ticket 09's own file. Two lines, and deleting it moves that fact out of
+  the file that records it.
+- **Deriving the literal `135` in `V84QuestNodeTest` from the path list** — would add a file read
+  to another ticket's test to remove one literal. `V84RegressionTest` already derives it.
+- **Proof A compares decoded chars, not bytes** (a BOM or a UTF-16 re-encode would decode
+  identically). True, and noted in the script. Not reachable from WzMerge, which refuses
+  non-CRLF and BOM-bearing targets outright.
+- **`Digest` is not injective** for pathological attribute names. Not reachable from a merge tool.
+
+**Not fixed, and worth stating plainly: nothing verifies that the 405 added nodes match v84.**
+Proof A ignores the stripped ranges entirely and Proof B only checks the new ids' *names*. The Java
+tests spot-check `lvmin` and `startscript` on 10 of the 135, the reward-id sweep below covers what
+they hand out, and the nodes were serialised directly from the v84 archive by a tool that only
+copies — but "what landed is what v84 has" is **not** proven to the standard "nothing pre-existing
+changed" is. If that matters to a later ticket, it is a fresh id-by-id digest against the source.
+
 ## Acceptance criteria
 
 - [x] Every v84 quest id absent from this tree is present in `QuestInfo`, and in `Check`/`Act` —
@@ -366,8 +440,9 @@ Every one of these produced a confident, wrong number first:
       output above, plus three git diff algorithms agreeing on a pure insertion
 - [~] The three files still parse (proven three ways: `XMLWZFile`, `XmlDocument`, and a real
       `Quest` load) — **the server start itself was not performed**, see above
-- [x] Full suite green — **2092 passed, 0 failed** (baseline 2072; the delta is this ticket's 7
-      plus concurrent agents' tests in the same worktree)
+- [x] Full suite green — **2092 passed, 0 failed** at delivery, **2090 passed, 0 failed** after
+      review deleted two duplicate test methods (baseline 2072; the rest of the delta is concurrent
+      agents' tests in the same worktree). `V84EvanQuestRealLoad` 2/2 separately.
 - [x] Every declined or inconsistent quest listed with its reason
 
 ## Rollback

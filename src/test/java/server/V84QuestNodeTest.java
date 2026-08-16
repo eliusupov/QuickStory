@@ -581,7 +581,7 @@ class V84QuestNodeTest {
      * rather than deleted - inverted, so it fails if the Evan chain is ever dropped again.
      */
     @Test
-    void the22515To22518GateIsTicket13sAndIsStillUnmet() throws IOException {
+    void the22515To22518GateIsNotTicket09sAndIsNowMetByTicket33() throws IOException {
         DataProvider quest = wz("Quest.wz");
         for (int id : new int[]{22515, 22516, 22517, 22518}) {
             assertNotNull(quest.getData("QuestInfo.img").getChildByPath(String.valueOf(id)),

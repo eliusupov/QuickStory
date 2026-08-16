@@ -11,13 +11,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static server.V84Wz.wz;
@@ -138,48 +136,10 @@ class V84EvanQuestDataTest {
     @Test
     void theAdvancementLadderIsTheLevelsEvanActuallyUses() {
         Data check = wz("Quest.wz").getData("Check.img");
-        int[] expected = {10, 20, 30, 40, 50, 60, 80, 100, 120, 160};
         List<Integer> actual = new ArrayList<>();
         for (int id : ADVANCEMENTS) {
             actual.add(DataTool.getInt("lvmin", check.getChildByPath(id + "/0"), 0));
         }
         assertEquals(List.of(10, 20, 30, 40, 50, 60, 80, 100, 120, 160), actual);
-        assertEquals(expected.length, ADVANCEMENTS.length);
-    }
-
-    /**
-     * Every added id is present in all three images, so nothing here is one-sided. Kept as its own
-     * test because v84 is not uniform in general and the script layer keys off {@code Check} alone
-     * — if a later merge adds a QuestInfo-only id, this is what says so.
-     */
-    @Test
-    void noAddedIdIsPresentInOnlySomeOfTheThreeImages() throws IOException {
-        DataProvider quest = wz("Quest.wz");
-        Set<String> ids = addedIds();
-        Set<String> partial = new LinkedHashSet<>();
-        for (String id : ids) {
-            long present = CATEGORIES.stream().filter(c -> quest.getData(c).getChildByPath(id) != null).count();
-            if (present != CATEGORIES.size()) {
-                partial.add(id + " in " + present + "/" + CATEGORIES.size());
-            }
-        }
-        assertEquals(Set.of(), partial);
-    }
-
-    /**
-     * The same check {@code Quest.hasScriptRequirement} makes, one level below it: a
-     * {@code startscript} on the start block is what {@code QuestRequirementType.SCRIPT} is built
-     * from, and before this merge {@code Check.img} had no {@code 22100} node at all.
-     * <p>
-     * The real {@link server.quest.Quest} load that closes the ticket's verification gate lives in
-     * {@link V84EvanQuestRealLoad}, which surefire does not auto-run — see that class for why.
-     */
-    @Test
-    void everyAdvancementsStartBlockIsWhatMakesHasScriptRequirementTrue() {
-        Data check = wz("Quest.wz").getData("Check.img");
-        for (int id : ADVANCEMENTS) {
-            assertFalse(DataTool.getString("startscript", check.getChildByPath(id + "/0"), "").isBlank(),
-                    id + ": no startscript, so hasScriptRequirement(false) would be false");
-        }
     }
 }

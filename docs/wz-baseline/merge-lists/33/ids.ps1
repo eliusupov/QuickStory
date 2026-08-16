@@ -72,4 +72,5 @@ Emit "$Out\INCONSISTENT.txt" @($incon)
 $report += "path rows: $($rows.Count)"
 $report += "ids added (union): $($union.Count)"
 $report += "ids not present in all three v84 images: $(@($incon).Count)"
-$report | Tee-Object "$Out\SUMMARY.txt"
+Emit "$Out\SUMMARY.txt" $report          # Emit, not Tee-Object: Tee is the one write that would bypass $U8
+$report
