@@ -2,7 +2,82 @@
 
 ---
 
-## 🟢 LATEST — 2026-08-16 evening. **The v84 client boots. The opcode table exists.**
+## 🏁 THE CUTOVER HAPPENED — 2026-08-16, 19:06. **An Evan exists on a v84 client.**
+
+`characters` row **id=50, name `evan`, job `2001`, map 10000** — created in game, by the owner, on
+the GMS v84 client, against this server running `VERSION = 84` and `-Dopcode-version=84`.
+
+That is the goal this entire migration was defined by. On v83 it was **provably impossible** — the
+v83 client hardcodes three races and no amount of WZ data changes it (verified by installing the
+race-select nodes and observing no change).
+
+### What now works that never had before
+
+| Stage | Status |
+|---|---|
+| v84 client boots, localhost-routed | ✅ |
+| Login completes, account written to DB | ✅ `evantest1`, auto-registered |
+| World list / channel select | ✅ |
+| Character list | ✅ |
+| **Character creation, with Evan offered** | ✅ |
+| **Evan character created, `job 2001`** | ✅ |
+| Explorer enters the world and plays | ✅ |
+| **Evan enters the world** | ❌ crashes — ticket 24 |
+| Equipped items render | ❌ in DB correctly, not drawn — ticket 24 |
+
+Full suite **2090 passed, 0 failed** with every change below applied.
+
+### The four bugs fixed to get here, in order
+
+1. **`Wizet\ExecPath` registry collision.** Both clients read one machine-wide
+   `HKLM\SOFTWARE\WOW6432Node\Wizet\MapleStory\ExecPath`, and **MapleStory.exe writes its own folder
+   there on every run**. So launching one client silently repointed the other, which then loaded the
+   wrong version's WZ and died before drawing a window. This caused BOTH the owner's v83 client
+   "not opening" AND the v84 client's respawn storm (19 processes in 25s → 1 stable process once
+   fixed). `tools\v84\switch-client.ps1` flips it deliberately. **Needs elevation.**
+2. **`LOGIN_STATUS` missing an 8-byte tail** (commit `4f864bba1`). v84's
+   `CLogin::OnCheckPasswordResult` reads 8 bytes after the PIN/PIC bytes that v83 does not. The
+   client over-read and then died at the *next* step — the world list — which is why the crash
+   looked like a world-list bug. **All six world-list packets turned out byte-identical v83→v84.**
+3. **`MakeCharInfoValidator` had no case for Evan** (commit `355592aba`). It switched on job with
+   cases for explorers, Cygnus and Aran; Evan fell to `default -> null`, and the caller reads null as
+   a packet edit. **Every Evan was rejected as a cheat**, while explorers created fine. The data was
+   already present as `EvanCharMale`/`EvanCharFemale`.
+4. Earlier the same day: Evan's quest data (135 ids), the `sp` quest reward gap, `isBeginnerJob`
+   omitting 2001, and the mount predicate.
+
+### ⚠ Correction that overturns a standing plan assumption
+
+Ticket 17 recorded that **"packet structure only breaks at v86"**. **That is wrong.** It breaks at
+**v84**, on `LOGIN_STATUS` — the first packet after the handshake. The claim was true of opcode
+*values* and got read as covering packet *bodies*. Corrected in ticket 17 in place. Expect further
+body differences; opcode-table parity is not protocol parity.
+
+### Open, with agents running
+
+- **Evan crashes entering the world.** Explorer works on the *same map* (10000), so the map is
+  exonerated and `SET_FIELD`'s general layout is fine. Prime suspect: `GameConstants.hasSPTable`
+  returns true for `EVAN` (2001), so a fresh Evan gets the 1-byte SP-table form where the client may
+  expect a 2-byte short — a 1-byte desync that would hit Evan and nothing else. Aran's beginner job
+  2000 is *not* in that list, which makes 2001's inclusion look like an inherited OdinMS error.
+- **Equipped items do not render.** They are in the DB in the right slots for both characters, so
+  creation and persistence are correct; the equip section of the field packet is mis-read.
+- **WZ base swap (ticket 23).** The v84 client is currently **stock** — none of the owner's custom
+  content is on it. 21,602 roots to carry across, of which **17,633 are the owner's own**.
+- **Evan's start map is a placeholder.** `EvanCreator` uses `MapId.MUSHROOM_TOWN` because Evan's real
+  `9000901xx` tutorial maps are absent from the server's map data. Aran, by contrast, correctly uses
+  `MapId.ARAN_TUTORIAL_START = 914000000`. Fix when the WZ work lands the maps; read the exact id
+  from the v84 archive, not from ticket prose.
+
+### Rollback, still one commit
+
+`ServerConstants.VERSION` back to 83, drop `-Dopcode-version=84`, rebuild, restart, and flip
+`ExecPath` to `D:\games\MapleStory`. Every v84 change is version-gated; the `-83` opcode tables are
+untouched; the live v83 client was never written to.
+
+---
+
+## 🟢 EARLIER — 2026-08-16 evening. **The v84 client boots. The opcode table exists.**
 
 Two things changed that make the v84 migration materially easier than this document assumes below.
 Both were verified by the orchestrator directly, not accepted on an agent's report.
