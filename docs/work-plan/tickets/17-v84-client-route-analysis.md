@@ -1,648 +1,612 @@
-# Ticket 17 — Client route analysis: stay on v83, move to v84, or move to v92
+# Ticket 17 — The v84 migration plan (primary), with a v92 sketch
 
-**Question this decides:** how to reach *"v84 feature-complete with all current features intact"* —
-and, after the owner's directive, how to reach **"fully working"** rather than "cheapest".
+**Owner decisions, verbatim, in order given (2026-08-16):**
 
-> **Owner directive, verbatim (2026-08-16):** *"i dont want cheaper, i want fully working."*
-> Everything below is therefore ranked by **end-state completeness**, not by effort. Effort is
-> still reported, but it is not the deciding variable.
+> *"i dont want cheaper, i want fully working."*
+> *"i want evan first, dual blade can be after."*
+> *"v84 feature complete is more important"*
+> *"i do want to keep cosmic working tho, with added features."*
+> *"take features from where ever you can, just make sure the workflow is planned correctly."*
+> *"hd client can be done last"*
 
-**Evidence labels:** `[FACT-measured]` = measured on this machine, command shown or reproducible ·
-`[FACT-sourced]` = external source with URL · `[INFERENCE]` = reasoning from the above, marked as
-such · `[NOT-FOUND]` = searched for, not found (reported as a gap, not filled with plausible prose).
+**Therefore: v84 is a FULL DESTINATION — complete, verified, playable. Not a stepping stone.**
+Cosmic is extended, never replaced. Everything working today keeps working, including the content
+v84 *deleted*. Dual Blade is v88 and is deferred; it must not constrain phase 1. HD client is last.
 
----
-
-## 0. The three routes
-
-| | Route A | Route B | Route C |
-|---|---|---|---|
-| **Client** | keep v83 | install v84 | install v92 (or v90 — see §8.2) |
-| **WZ direction** | merge v84 content *into* v83 tree | ship v84 tree, backport v83-only content | ship v92 tree, backport v83-only content |
-| **Evan** | binary gate patches + WZ | native | native |
-| **Dual Blade** | **impossible** | **impossible** (DB is v88) | native |
-| **Server protocol** | unchanged | version bump + opcode delta | version bump + full opcode remap |
-| **Work already banked** | ~30 commits, tickets 04–11 | partially transferable | mostly discarded |
+**Labels:** `[FACT-measured]` = measured here (Appendix A) · `[FACT-sourced]` = URL given ·
+`[INFERENCE]` = reasoning, marked · `[NOT-FOUND]` = searched, not found.
 
 ---
 
-## 1. Q1 — How much did the opcodes actually change, v83 → v84?
+## 1. THE CRUX NUMBER — the v83→v84 opcode delta, measured
 
-### 1.1 What this repo actually has `[FACT-measured]`
+This was named the single most important number in the plan. **I measured it rather than assuming it,
+and the honest answer is more nuanced than "one version, so barely anything changed."**
 
-```
-src/main/java/net/opcodes/SendOpcode.java   307 enum entries
-src/main/java/net/opcodes/RecvOpcode.java   178 enum entries
-                                            485 total
-```
+### 1.1 Method — prove the instrument first `[FACT-measured]`
 
-The prior claim of *"308 send + 180 recv = 488 hand-mapped values"* is **very slightly
-overstated but essentially correct**: the true count is **307 + 178 = 485**.
-
-**Only a subset is live** `[FACT-measured]`:
+[Chronicle20/atlas](https://github.com/Chronicle20/atlas) publishes IDA-derived opcode tables per GMS
+version. Before trusting its **v84** table I validated its **v83** table against Cosmic's own file —
+ground truth on this disk:
 
 ```
-distinct SendOpcode.* constants referenced in src/  247  (of 307)
-distinct RecvOpcode.* constants referenced in src/  170  (of 178)
-                                                    417  actually load-bearing
+atlas v83 clientbound values found in Cosmic SendOpcode: 213/221 (96.4%)
+atlas v83 serverbound values found in Cosmic RecvOpcode: 129/143 (90.2%)
 ```
 
-**This repo's opcode table is stock HeavenMS v83, byte-identical** `[FACT-measured]`:
+Good enough to trust. Then the diff:
+
+### 1.2 The result `[FACT-measured]`
 
 ```
-diff <cosmic SendOpcode> <HeavenMS-v83-upstream SendOpcode>   -> no output
-diff <cosmic RecvOpcode> <HeavenMS-v83-upstream RecvOpcode>   -> no output
-```
-(`porting-resources/reference-sources/HeavenMS-v83-upstream/src/net/opcodes/`)
+clientbound (server->client)   shared=220   same= 44   DIFFER=176  (80%)
+serverbound (client->server)   shared=143   same= 88   DIFFER= 55  (38%)
+                                            TOTAL      DIFFER=231 of 363  (64%)
 
-So Cosmic has inherited, unmodified, the community's v83 table. Nothing bespoke to preserve.
-
-### 1.2 The packet layer is genuinely well isolated `[FACT-measured]`
-
-Files referencing `SendOpcode` outside `net/opcodes/` — **10 files total**:
-
-```
-constants/net/OpcodeConstants.java          net/packet/out/ShowNotesPacket.java
-net/packet/ByteBufOutPacket.java            net/packet/OutPacket.java
-net/packet/logging/OutPacketLogger.java     net/server/channel/handlers/NPCAnimationHandler.java
-net/packet/out/SendNoteSuccessPacket.java   net/server/guild/GuildPackets.java
-tools/PacketCreator.java  (7,462 lines)     tools/packets/WeddingPackets.java
+clientbound shift distribution: {0:44, +2:12, +3:42, +4:33, +5:4, +6:18, +7:56, +9:3, +10:8}
+serverbound shift distribution: {0:88, +2:8, +3:3, +4:14, +5:12, +6:14, +7:4}
 ```
 
-498 reference sites, but they are concentrated. **The opcode *names* never change — only the
-*values*.** A remap therefore edits **two enum files**, not 498 call sites. That is the good news,
-and it is real.
+Landmarks, cross-checked against Cosmic's real values:
 
-**The bad news, and it is the larger half:** the opcode value is only the packet's first two bytes.
-The **structures** behind them live in `PacketCreator.java`'s 7,462 lines and in the 147 inbound
-handlers. A version-up that shifts a struct — buff masks especially, where the whole bit-ordering
-moves — is not found by any diff of enum values. `[INFERENCE]`
+| | Cosmic v83 | v84 | | | Cosmic v83 | v84 |
+|---|---|---|---|---|---|---|
+| `SET_FIELD` | `0x7D` | `0x80` | | `SPAWN_MONSTER` | `0xEC` | `0xF2` |
+| `SPAWN_PLAYER` | `0xA0` | `0xA3` | | `SPAWN_NPC` | `0x101` | `0x108` |
+| `MOVE_PLAYER` | `0xB9` | `0xBD` | | | | |
 
-### 1.3 The v83 table already contains dragon opcodes `[FACT-measured]`
+### 1.3 What this actually means — read this carefully
 
-```
-SendOpcode:  SPAWN_DRAGON 0xB5,  MOVE_DRAGON 0xB6,  REMOVE_DRAGON 0xB7
-RecvOpcode:  MOVE_DRAGON 0xB5
-```
-They sit contiguously in the sequence (`SUMMON_SKILL 0xB4` → dragon `0xB5–0xB7` → `MOVE_PLAYER
-0xB9`), i.e. they are **not** appended placeholders — they occupy their natural slot in the v83
-numbering. `[FACT-measured]`
+> **The good news, and it is the load-bearing fact of this plan:** the drift is a **clean monotonic
+> insertion staircase**. v84 inserts ~10 opcodes; everything above each insertion point moves by a fixed
+> amount. It is not scattered remapping — it is arithmetic. And **the login band is byte-identical**
+> (clientbound `0x00–0x3E`, serverbound `0x01–0x75`), which is what makes the incremental bring-up in
+> §2 possible: you can reach character select before touching a single field opcode.
 
-### 1.4 The mechanism of opcode drift between adjacent versions `[FACT-sourced]`
+> **The honest correction to the premise:** *"one version away, so the protocol drift is minimal"* is
+> only half right. **64% of opcodes move.** The count is large; the *work* is small, because a
+> staircase is mechanical and the table is published. But nobody should start this expecting a
+> ten-line change.
 
-From the archived RaGEZONE thread *Updating OPCODES*
-(<https://forum.ragezone.com/threads/updating-opcodes.1112067/>, archived locally at
-`porting-resources/docs/13-updating-opcodes.md`), **Eric**:
+**Comparison for context** — the v92 figure reported by a peer session is **421 of 468 (~90%)**
+`[REPORT-peer, not verified by me]`. So v84 is meaningfully smaller *and* far better-shaped. The owner's
+instinct to take the small step first is sound.
 
-> *"Most opcodes follow a shift after a certain point, making them all become +1 from v83 or +2, etc."*
-
-and, on a concrete v83→v90 case:
-
-> *"Guest Login isn't in v90. Nexon keeps the packets for most things but the actual UI for it won't
-> draw anymore so there's no real need."*
-
-**This is the decisive structural fact about opcode drift** `[FACT-sourced]`: changes are
-**insertions and deletions that shift every subsequent value**, not scattered random remapping.
-Consequences:
-
-- A single removed packet (`GUEST_LOGIN`) shifts the *entire* remainder of the table by −1.
-- The work is therefore *mechanical* once you know **where** the insertion points are — but you
-  cannot guess them, and being wrong by one silently mis-routes every packet after that point.
-- It also means **"how many differ"** is a misleading metric. If v84 inserted one packet at index
-  5, then ~300 values "differ" while the actual edit is one insertion. Report the **insertion
-  points**, not the diff count.
-
-> ⚠️ **Correction to the brief's framing.** The brief asks *"how many differ, and which"*. Per the
-> sourced mechanism above, a large differ-count would **not** mean the job is large. Conversely a
-> small differ-count is only meaningful if the shifts are identified. This ticket reports both.
-
-### 1.5 Live-web opcode findings
-
-*(see §1.6 — external research)*
+> ⚠ **And the fact that decides §9:** a peer measured that **exactly zero v84 opcode values survive to
+> v92** `[REPORT-peer]`. This is consistent with my own staircase measurement — the shifts are
+> cumulative, so v84's `+2→+10` table is not a partial v92 table, it is a different one. **Phase 1 is a
+> rehearsal of the *procedure*, never of the *values*.** §9 says exactly what does and does not carry.
 
 ---
 
-## 2. Q2 — What else does a v84 client require of the server?
+## 2. THE WORKFLOW — the deliverable
 
-### 2.1 The version constant is one line `[FACT-measured]`
+Design rules, from the owner's instructions and this project's own scar tissue:
 
+1. **Cosmic never stops working.** Every phase ends launchable and testable.
+2. **Prove the instrument before trusting the measurement.** This project has been burned three times
+   already — a wrong client binary (`local.exe` turned out to be a memory dump, not a client), a
+   self-defeating debug trap, and a merge tool that silently punched a hole in a positional array. Every
+   gate below tests the *tool* before the *result*. §1.1 is that rule applied to the crux number.
+3. **The v83 install stays the fallback until v84 is proven.** Verified present `[FACT-measured]`:
+   `_backup\client-v83-EzorsiaV2-2026-08-15\` (2.5 GB) and `_backup\Cosmic-2026-08-15\`.
+   v84 is built on a branch, in a **separate server instance and a separate client directory**.
+4. **The owner's client launches are the scarce resource.** Batched into named gates, never scattered.
+
+### 2.1 Phases
+
+| # | Phase | Needs | Gate — "pass" means | Owner | Size |
+|---|---|---|---|:-:|---|
+| **0** | **Recon & instrument-proofing** | — | v84 client installed, localhost-routed, reaches **its own** login screen offline; `wz-data/v84` re-hashed against `GMSSetupv84.exe`; opcode table cross-validated against a **second** source (Riremito `GMS_v84_*.properties`) | 1 launch | **2–4 d** |
+| **1** | **Protocol A — login** | 0 | **v84 client reaches character select.** Free-ish: login band is identical (§1.3) | 1 launch | **2–3 d** |
+| **2** | **Protocol B — the field** | 1 | **character spawns, moves, attacks, loots; no desync over 10 min.** Includes the movement/attack prefix change (§3.3) | 1 launch | **1–2 w** |
+| **3** | **WZ base swap + backport** | 0 | `WzMerge hash` over every image: **only named rows changed**; all 3,969 removed-roots + 17,633 protect-roots present; **Boss Rush, Monster Carnival, Mu Lung Dojo, Sheep Ranch all enterable** | 1 launch | **2–3 w** |
+| **4** | **Parity — everything we have today** | 2,3 | **regression suite passes at parity with the v83 server** (§8) | 1 launch | **1–2 w** |
+| **5** | **Evan, complete** | 4 | creation → 2001 → 2200 → 2210–2218; **all 58 skills**; dragon; mounts; the six named defects fixed (§6) | batched | **2–3 w** |
+| **6** | **v84 content, complete and *reachable*** | 4 | every v84 map/mob/NPC/item/quest reachable in game — **no staged-but-unreachable rows** (§7) | batched | **2–3 w** |
+| **7** | **Cash shop + items** | 4 | v84 catalogue purchasable; new equips/cosmetics usable | batched | **3–5 d** |
+| **8** | **CUTOVER** | 4–7 | live switch; v83 retained; soak | yes | **2–3 d** |
+| **9** | **HD client (LAST)** | 8 | 1024/1280/1366/1600/1920 render on the v84 exe | — | **open-ended** |
+
+**Phases 0–7 → v84 feature-complete: ≈ 8–12 weeks focused.** Phase 9 gates nothing.
+
+### 2.2 Ordering — what is sequential, what runs in parallel
+
+```
+0 Recon ──┬─► 1 Login ─► 2 Field ──┬─► 4 Parity ──┬─► 5 Evan ────┐
+          │                         │              ├─► 6 Content ─┼─► 8 CUTOVER ─► 9 HD client
+          └─► 3 WZ base + backport ─┘              └─► 7 Cash/items ┘
+```
+
+- **Strictly sequential: 0 → 1 → 2.** Nothing content-related can even be *tested* until a character
+  spawns in a field. This is the one hard dependency in the plan.
+- **Parallel with protocol: Phase 3 (WZ).** It needs only Phase 0's extracted tree, is pure data
+  engineering on tooling that already exists, and shares no files with Phases 1–2. **Running 3 alongside
+  1–2 is the single biggest schedule saving available.**
+- **Parallel after Phase 4: 5, 6, 7** are largely independent. One ordering constraint: **classes before
+  their quests** — Evan's job-advancement quests belong in Phase 5, not 6. (This matters concretely:
+  9 of the 63 v84 non-Evan quests are Evan-locked, §7.)
+- **Phase 9 is deliberately terminal** so no earlier decision is shaped by it.
+
+### 2.3 Rollback points
+
+| After | Known-good state | How to return |
+|---|---|---|
+| 0–7 | live v83 server + client, untouched | nothing to undo — v84 lives on a branch and a separate instance |
+| 3 | v84 WZ tree pre-backport | rebuilt from `wz-data/v84`, which is hash-matched to the installer |
+| 8 | full v83 client + server backup (2.5 GB, verified) | restore both `_backup\` trees; **keep them for one full soak period** |
+
+### 2.4 Owner decisions vs autonomous work
+
+**Needs the owner** — ~6 client launches total, one per gate: Phase 0 client validation; the two protocol
+gates; the Phase 3 content playthrough; the Phase 4 parity sign-off; the Phase 8 cutover. Plus judgement
+calls on the **quest-expiry policy** (§7.2) and **whether the HD mod is worth its cost** (§9).
+
+**Autonomous:** all opcode/struct work, all WZ merging, all Java, all scripts, all SQL.
+
+---
+
+## 3. PROTOCOL
+
+### 3.1 The seam is narrow `[FACT-measured]`
+
+```
+SendOpcode.java  307 entries (247 referenced)    RecvOpcode.java  178 (170 referenced)
+                          485 total, 417 load-bearing
+ServerConstants.java:6   public static final short VERSION = 83;
+```
+Both files are **byte-identical to stock HeavenMS v83** — `diff` against
+`reference-sources/HeavenMS-v83-upstream/` returns no output. Nothing bespoke to preserve.
+Only **10 files** reference `SendOpcode` outside `net/opcodes/`. **Opcode names never change, only
+values — a remap edits two enum files, not the 498 reference sites.**
+
+### 3.2 Crypto and handshake — free `[FACT-measured]`
+
+`MapleAESOFB.java:38-47` holds the static GMS UserKey `13 00 00 00 08 00 00 00 06 00 00 00 B4 …`,
+**unchanged v83→v95** across every source checked. `:97` byte-swaps the version into the cipher state, so
+bumping `VERSION` produces correct header encoding automatically. `getHello()`
+(`PacketCreator.java:600`) writes `0x0E`, version, maple-string `"1"`, IVs, locale `8` — and v84 keeps
+**the same subversion `"1"` and locale `8`**. **A one-line change.**
+
+### 3.3 The structure change v84 forces `[FACT-sourced]`
+
+**Movement and attack packets gained ~20 bytes** of debug-register anti-cheat prefix. This is *not* a
+v92-only cost — *"GMS v84–v98 clients had the ugly debug register bytes at the beginning of every attack
+& player movement packet"* ([Localhost Workshop](https://forum.ragezone.com/threads/localhost-workshop.1202021/)).
+
+> **Mitigation, measured `[FACT-measured]`:** parsing is centralised —
+> `AbstractMovementPacketHandler.parseMovement()` is the shared parser and the prefix sits at
+> `MovePlayerHandler.java:32` (`p.skip(9)`). A handful of edits, not a sweep.
+> **This is the highest-risk item in Phase 2** because a wrong offset produces silent desync rather than
+> an exception. The gate is explicitly "no desync over 10 minutes", not "it moved once".
+
+**Not required at v84:** the Potential/Enhancement equip-serialiser rewrite. That is v88, and therefore
+a v92 problem. `[INFERENCE from FACT-sourced]` *(Noted for §9: Cosmic's equip serialisation is
+centralised in **one** function — `PacketCreator.addItemInfo()` at `:396/400` with **29 call sites all
+routing through it** `[FACT-measured]` — so when v92 does force it, it is a single-function edit.)*
+
+### 3.4 NGS / CRC / Themida `[FACT-sourced]`
+
+- **No NGS.** nProtect GameGuard was removed at GMS v0.69 and replaced by AhnLab HackShield, which stayed
+  until v115. NGS/BlackCipher is a 2017+ system — **irrelevant to v83 and v84 alike.**
+- **HackShield ships as deletable files** (`HShield/`, `ASPLnchr.exe`); the standard v83 recipe this
+  project already follows deletes them. Same for v84.
+- **CRC is unchanged.** `CHECK_CRC_RESULT` exists identically in both v83 and v84 tables; Cosmic already
+  implements it (`SendOpcode.java:50`).
+- **Themida generation is the same** (2.x CISC-2, the "fully unvirtualizable" tier through ~v111).
+- **v84's one new gate is trivial:** v84 introduced the GameLauncher — *"Running MapleStory.exe will now
+  take players to the Nexon website"*. It is an `argv` check, bypassed with `MapleStory.exe GameLaunching`
+  ([msupdate](https://msupdate.wordpress.com/2010/03/30/gms-v84-content-notes-neo-city-expansion-ui-updates/),
+  [RaGEZONE 2010](https://forum.ragezone.com/threads/discussion-no-more-login-screen-for-v84.657229/)).
+
+### 3.5 Sourcing the v84 table
+
+| Source | What it gives |
+|---|---|
+| [Chronicle20/atlas](https://github.com/Chronicle20/atlas) | `gms_v84.yaml`, `template_gms_84_1.json`, `discover_gms_v84.md` — IDA-derived, switch-case constants read from the binary |
+| [Riremito/JMSv186](https://github.com/Riremito/JMSv186/tree/master/properties/packet) | `GMS_v84_{Client,Server}Packet.properties` — **an independent second table** |
+
+**Phase 0 cross-validates the two against each other.** Two independent tables that agree is the
+strongest position available, and it removes IDA work from the critical path entirely.
+
+> ⚠ **Known caveat to carry into Phase 2:** atlas's earlier `v84-packet-delta.md` claimed the *serverbound*
+> enum was stable v83→v84, then **retracted it** after decompiling each sender: *"that assumption was
+> wrong… the authoritative inbound opcodes live in `template_gms_84_1.json`, not this table."*
+> **Use the deployed template, not the prose analysis.** `[FACT-sourced]`
+
+---
+
+## 4. CLIENT
+
+| | v83 (today) | **v84 (target)** |
+|---|---|---|
+| Retail installer on disk | ✅ | ✅ `GMSSetupv84.exe` (1.76 GB) + `ManualPatcherv84.exe` |
+| Public localhost-patched client | ✅ ubiquitous | ⚠ **one login-walled entry** (Riremito's bundle: v61–v111 incl. **83, 84**, 91, 95) |
+| Public IDB | ✅ | ✅ (RaGEZONE IDB library covers v61–v89) |
+| Emulator targeting the v84 client | — | ✅ [Riremito/JMSv186](https://github.com/Riremito/JMSv186) — `GMS084 \| 2010-03-30 \| Evan`, active |
+
+> **Phase 0's real job is de-risking client acquisition**, because it is the one place v84 is *worse*
+> supplied than v83. Three independent routes, tried in order:
+> 1. Riremito's `GMS_v84.1_L.exe` localhost build.
+> 2. Patch `GMSSetupv84.exe` ourselves — same Themida generation as v83, same technique, and **a public
+>    v84 IDB exists**, which is exactly what the v83 client patching already relied on.
+> 3. [Riremito/LocalHost](https://github.com/Riremito/LocalHost) — a **version-agnostic** connection
+>    redirector that rewrites outbound connections to 127.0.0.1 without touching the packed exe.
+>
+> Route 3 means **client acquisition cannot hard-block the project**, which is why Phase 0 is only 2–4
+> days despite this being the weakest link. `[INFERENCE from FACT-sourced]`
+
+---
+
+## 5. WZ — base swap and backport
+
+### 5.1 What v84 actually deletes — the record, corrected `[FACT-measured]`
+
+Settled against real WZ nodes, then confirmed against maplestory.io's **detail** endpoint (which reads
+actual map data; the *list* endpoint is built from `String.wz` names and wrongly reports deleted maps as
+present — a trap this project should not fall into twice):
+
+```
+GMS/83/map/970030100 -> 200      GMS/84/map/970030100 -> 404      GMS/92/map/970030100 -> 404
+```
+
+| map | v83 | v84 | verdict |
+|---|:-:|:-:|---|
+| `970030100` / `970042711` Boss Rush | 200 | 404 | **deleted** |
+| `109090001` Sheep Ranch **Lobby** | 200 | 404 | **deleted** |
+| `925020610` Mu Lung Dojo **6th Floor** | 200 | 404 | **deleted** |
+| `925020000` Dojo entrance | 200 | 200 | intact |
+| `980000000` **Monster Carnival** | 200 | 200 | **intact — never deleted** |
+| `970030000` Exclusive Training Center | 200 | 200 | intact |
+| `910040000` Sheep Ranch main | 200 | 200 | intact |
+
+> **Correction that matters for scoping:** the long-standing claim that *"the whole Monster Carnival
+> series, Mu Lung Dojo and Sheep Ranch"* were deleted is **wrong**. Monster Carnival is fully intact;
+> only **one** Dojo floor and only the Sheep Ranch **lobby** maps went.
+> **832 map `.img` nodes are deleted, and 810 of them (97%) are one feature: Boss Rush.**
+
+| Group | count | What |
+|---|---:|---|
+| `970030100`–`970042711` | **810** | **Boss Rush** |
+| `Map0/0000xxxxx`,`0010xxxxx` | 17 | unnamed/dev maps |
+| `109090001`–`109090004` | 4 | Sheep Ranch Lobby |
+| `925020610` | 1 | Mu Lung Dojo 6th Floor |
+| `Map.wz/Obj/tutorial_jp.img` | 1 | JP tutorial objects |
+
+Cosmic genuinely implements Boss Rush `[FACT-measured]`:
+```
+constants/id/MapId.java:213-214   BOSS_RUSH_MIN = 970030100;  BOSS_RUSH_MAX = 970042711;   <- exact match
+scripts/event/BossRushPQ.js · scripts/npc/{9000021,9000037,9977777}.js
+scripts/portal/{raid_rest,raid_stage}.js · server/life/MobSkill.java
+```
+
+### 5.2 Backport volume `[FACT-measured]`
+
+| .wz | removed (v83-only) | protect (live custom) | | .wz | removed | protect |
+|---|---:|---:|---|---|---:|---:|
+| Etc | 2,028 | 10 | | Quest | 39 | 229 |
+| Map | 1,017 | 403 | | Npc | 31 | 5,985 |
+| Mob | 674 | 172 | | String | 0 | **7,608** |
+| Character | 136 | 2,991 | | UI | 7 | 45 |
+| Item | 35 | 110 | | others | 2 | 68 |
+| | | | | **TOTAL** | **3,969** | **17,633** |
+
+**Client-side WZ work = 21,602 copy-roots.**
+
+> **The *protect* set is the half nobody had counted, and it is the larger half.** It is the owner's own
+> custom content — `Npc.wz/2112018.img/info/script`, `String.wz/Cash.img/5120033`,
+> `Map.wz/Map/Map1/100000003.img/info/onUserEnter`. Under Route A it is untouched because the live tree
+> *is* the base; under a v84 base **all 17,633 roots must travel.** This is the main reason Phase 3 is
+> 2–3 weeks rather than days.
+
+### 5.3 Two mitigations `[INFERENCE from FACT-measured]`
+
+1. **The server's XML tree does not move.** Cosmic reads a 599 MB XML tree at `wz/`; the server does not
+   care what version the *client* is. **All merge work already landed into `wz/` transfers unchanged.**
+   Only the **client-side** binary WZ is rebuilt.
+2. **`removed-list` + `protect-list` ARE the backport manifest.** Built for the opposite direction, but
+   direction-agnostic, as is `WzMerge`. The deny/force lists and the 735-row collision triage are
+   direction-specific and get redone.
+
+---
+
+## 6. EVAN — complete, with the known defects fixed
+
+### 6.1 What v84 gives us for free
+
+Everything the v83 work fought for becomes unnecessary: **both memory gate patches, `Basic.img/Tab8`,
+the per-launch watch-daemon patcher, and the unreachable race-select RE.** On v84 Evan's creation
+screen, skill window and dragon are native.
+
+Specifically, the v83 character-creation blocker evaporates. v84 did not add a button — **it replaced
+the screen** `[FACT-measured]`: `RaceSelect/{normal,knight,aran,aran1,BtSelect,textGL}` deleted;
+`RaceSelect/{backgrnd,BtKnight,BtAran,BtEvan}` + `NewCharEvan` + `CharSelect/evan` added. That is why
+adding `BtEvan` to a v83 client did nothing — v83's code never looks up `Bt*` names at all.
+
+**And the server side is already done** `[FACT-measured]`:
 ```java
-// constants/net/ServerConstants.java:6
-public static final short VERSION = 83;
-```
-
-### 2.2 The handshake `[FACT-measured]`
-
-`tools/PacketCreator.java:600`:
-
-```java
-public static Packet getHello(short mapleVersion, InitializationVector sendIv, InitializationVector recvIv) {
-    OutPacket p = new ByteBufOutPacket();
-    p.writeShort(0x0E);          // handshake header
-    p.writeShort(mapleVersion);  // <- ServerConstants.VERSION
-    p.writeShort(1);             // maple-string length 1
-    p.writeByte(49);             // '1'  == the patch/subversion string
-    p.writeBytes(recvIv.getBytes());
-    p.writeBytes(sendIv.getBytes());
-    p.writeByte(8);              // locale: GMS
-    return p;
-}
-```
-
-So there **is** a subversion string beyond `VERSION`: the literal **`"1"`**, and a locale byte
-**`8`** (GMS). Both are hardcoded here. `[FACT-measured]`
-
-### 2.3 The crypto `[FACT-measured]`
-
-`net/encryption/MapleAESOFB.java:38-47` — the AES key is the long-standing static GMS UserKey:
-
-```
-13 00 00 00  08 00 00 00  06 00 00 00  B4 00 00 00
-1B 00 00 00  0F 00 00 00  33 00 00 00  52 00 00 00
-```
-
-Critically, `MapleAESOFB.java:97` byte-swaps the version into the cipher state:
-
-```java
-this.mapleVersion = (short) (((mapleVersion >> 8) & 0xFF) | ((mapleVersion << 8) & 0xFF00));
-```
-
-**Therefore changing `VERSION` to 84 automatically produces the correct packet-header encoding.**
-No crypto edit is required for a version bump *per se*. `[FACT-measured]` + `[INFERENCE]`
-
-### 2.4 Character creation — the server is already done `[FACT-measured]`
-
-`net/server/handlers/login/CreateCharHandler.java:62`:
-
-```java
+// CreateCharHandler.java:62
 case 3: // Evan - v84 port. The v83 client does not send 3 on its own; ticket 15b is
     status = EvanCreator.createCharacter(c, name, face, hair + haircolor, skincolor, top, bottom, shoes, weapon, gender);
 ```
+plus `client/Job.java:59-63` — `LEGEND(2000), EVAN(2001)`, `EVAN1(2200)…EVAN10(2218)`, all ten
+advancements — and `server/maps/Dragon.java`, `MoveDragonHandler`, `Character.createDragon()`,
+`SPAWN/MOVE/REMOVE_DRAGON` opcodes, `remainingSp[10]`, `sp VARCHAR(128)`.
 
-`client/creator/novice/EvanCreator.java` exists and is complete. `client/Job.java:59-63` enumerates
-`LEGEND(2000), EVAN(2001)` and **all ten** advancements `EVAN1(2200) … EVAN10(2218)`.
+### 6.2 The skill numbers `[FACT-measured]`
 
-> **This is one of the most important findings in this ticket.** The server side of Evan character
-> creation is *finished*. Route A's remaining blocker is **purely the v83 client's inability to
-> send race `3`**. Under Route B or C the client sends it natively and the existing server code
-> answers it with zero further work.
-
-### 2.5 New mandatory packets on login/char-select
-
-*(see §2.6 — external research)*
-
----
-
-## 3. Q3 — The WZ direction reverses under Route B/C. What does that cost?
-
-This is fully measurable from the existing manifests and is the section where the brief's premise
-needed correcting.
-
-### 3.1 What v84 actually deletes `[FACT-measured]`
-
-`docs/wz-baseline/removed-list/` — nodes present in v83-stock, absent from v84. **Copy-roots per
-file** (each row is a root; everything beneath it travels with it):
-
-| .wz | removed roots | | .wz | removed roots |
-|---|---:|---|---|---:|
-| Etc | **2,028** | | Quest | 39 |
-| Map | **1,017** | | Npc | 31 |
-| Mob | **674** | | UI | 7 |
-| Character | 136 | | Sound | 2 |
-| Item | 35 | | Base/Effect/Morph/Reactor/Skill/String/TamingMob | **0** |
-| | | | **TOTAL** | **3,969** |
-
-### 3.2 ⚠️ The brief's content claim is wrong — corrected here `[FACT-measured]`
-
-> The brief states: *"the whole Monster Carnival series, Mu Lung Dojo, Sheep Ranch"* were deleted.
-> **Two of those three are incorrect.**
-
-Measured against `docs/wz-baseline/removed-list/Map.txt` and
-`docs/wz-baseline/map-missing-names-v83.txt`:
-
+Counted from the server's own `wz/Skill.wz` XML:
 ```
-Monster Carnival (98xxxxxxx) in removed list:  0        <- NOT deleted. Fully intact in v84.
-Mu Lung Dojo     (925xxxxxx) in removed list:  1        <- ONE floor only: 925020610, "Mu Lung Dojo 6th Floor"
-Sheep Ranch      (109090001-4)              :  4        <- correct, deleted
+2001.img = 27   +   (2200, 2210..2218) = 31   =   58 total entries
 ```
+**The often-quoted "58 Evan skills" conflates two things.** `2001.img` is mount buffs (reusing
+`MONSTER_RIDING`), event entries, and beginner-common skills Cosmic already implements. **The real Evan
+job skills are 31**, of which ~22 are data-driven (`StatEffect` reads them straight from `Skill.wz`) and
+**9 need Java — and Cosmic already implements 6 of those.** `constants/skills/Evan.java` declares 43
+ids; 22 are referenced in effect logic.
 
-**833 whole `.img` maps are deleted; 832 are genuinely absent (1 was relocated).** Grouped:
+**Remaining new skill work: 3** — Critical Magic `22140000`, Dragon Fury `22160000`, Soul Stone `22181003`.
+Plus **16 missing id constants** to declare.
 
-| Group | count | What it is |
-|---|---:|---|
-| `970030100`–`970042711` | **810** | **Boss Rush** — "Stage 1 &lt;Mano&gt;" etc. |
-| `Map0/0000xxxxx`, `0010xxxxx` | 17 | no `String.wz` entry — unnamed/dev maps |
-| `109090001`–`109090004` | 4 | **Sheep Ranch Lobby** |
-| `925020610` | 1 | **Mu Lung Dojo 6th Floor** |
-| `Map.wz/Obj/tutorial_jp.img` | 1 | JP tutorial object set |
+### 6.3 The six defects to fix — all verified in code, not accepted
 
-**The real story is Boss Rush, not Monster Carnival.** 810 of the 832 deletions (97%) are one
-feature.
+Phase 5 fixes these rather than shipping around them.
 
-### 3.3 The server does implement the deleted content `[FACT-measured]`
-
-```
-constants/id/MapId.java:213   private static final int BOSS_RUSH_MIN = 970030100;
-constants/id/MapId.java:214   private static final int BOSS_RUSH_MAX = 970042711;
-```
-
-The range matches the deleted set **exactly**. Live consumers:
-
-```
-scripts/event/BossRushPQ.js
-scripts/npc/9000021.js   scripts/npc/9000037.js   scripts/npc/9977777.js
-scripts/portal/raid_rest.js   scripts/portal/raid_stage.js
-server/life/MobSkill.java
-```
-
-So yes — shipping a bare v84 `Map.wz` would delete a **fully implemented, script-backed PQ**.
-
-### 3.4 The much larger cost nobody has counted: the *protect* set `[FACT-measured]`
-
-`docs/wz-baseline/protect-list/` — nodes in the **live client** present in **neither** stock tree.
-This is the server's own custom content and the HD mod's work.
-
-| .wz | protect roots | | .wz | protect roots |
-|---|---:|---|---|---:|
-| String | **7,608** | | Item | 110 |
-| Npc | **5,985** | | Reactor | 53 |
-| Character | **2,991** | | UI | 45 |
-| Map | 403 | | Etc | 10 |
-| Quest | 229 | | Skill | 7 |
-| Mob | 172 | | Base/Effect/Morph/Sound/TamingMob | 4 each |
-| | | | **TOTAL** | **17,633** |
-
-Samples confirm these are genuine custom content, not diff noise `[FACT-measured]`:
-
-```
-Npc.wz/2112018.img/info/script          <- custom NPC scripts
-String.wz/Cash.img/5120033              <- custom cash-shop names
-Character.wz/Accessory/01012011.img/info/cash
-Map.wz/Map/Map1/100000003.img/info/onUserEnter   <- custom map hooks
-```
-
-### 3.5 Route B/C WZ job vs Route A WZ job `[FACT-measured]`
-
-| | Route A (current) | Route B/C |
-|---|---:|---:|
-| v84 content to merge in | 16,177 add-list roots — **curated to 1,791** composed rows | 0 (free with the tree) |
-| v83-only content to backport | 0 (already in place) | **3,969** |
-| custom/HD content to re-merge | 0 (already in place, untouched) | **17,633** |
-| **total roots to move** | **1,791** (largely already executed) | **21,602** |
-
-> **This is a ~12× difference in WZ merge volume, in Route A's favour** — and it is the opposite of
-> what the brief anticipated. The reason is the *protect* set: Route A never has to move custom
-> content because custom content is already in the tree being edited. Route B/C start from a clean
-> retail tree and must re-import every custom node the server has ever added. `[INFERENCE from FACT-measured]`
-
-### 3.6 Two mitigations that reduce the above `[INFERENCE]`
-
-1. **The server's XML tree does not need to move.** Cosmic reads a 599 MB XML tree at `wz/`
-   (`Base.wz … Quest.wz`). The server does not care what version the *client* is; it needs data for
-   what it simulates. The Route A merge work already landed into `wz/` **transfers unchanged to
-   Route B or C.** Only the **client-side** binary WZ must be rebuilt.
-2. **The tooling transfers.** `docs/wz-baseline/tool-merge/` (`WzMerge`) is direction-agnostic —
-   it copies node subtrees between trees. The deny/force lists and collision triage
-   (`03c`: 735 collisions triaged) are direction-*specific* and would need redoing.
-
-### 3.7 v84 modified nodes arrive as v84's version `[FACT-measured]`
-
-1,435 images differ between v83 and v84 without being adds or removes
-(`docs/wz-baseline/modified-list/`): Mob 1,173 · Map 128 · Character 43 · Item 30 · String 14 ·
-Npc 12 · Etc 12 · UI 10 · Quest 7 · Skill 6. Under Route B these silently become v84's version.
-Server-side stats come from the XML tree so gameplay is unaffected, but **client-side visuals and
-any `life`/`portal` node the server reads positionally would shift.** Not quantified here.
-
-### 3.8 Route C has no baseline at all `[FACT-measured]`
-
-```
-porting-resources/wz-data/   ->   v83-stock/   v84/     (both complete, 17 .wz each)
-```
-
-**There is no v92 tree.** Route C requires extracting `GMSSetupv92.exe` and **regenerating every
-manifest from scratch** — the whole of tickets 02, 02b, 02c, 02d, 02f, 02g redone against a third
-tree, plus a fresh 735-row collision triage.
-
----
-
-## 4. Q4 — Does the HD mod survive? **No.** `[FACT-sourced]`
-
-The Ezorsia v2 HD mod (<https://github.com/444Ro666/MapleEzorsia-v2>) is **hard-pinned to one
-specific v83 `MapleStory.exe`**.
-
-- Repo tagline is literally *"v83 Standalone HD dll client/localhost"*; the only wiki page is
-  [v83‐Client‐Setup‐and‐Development‐Guide](https://github.com/444Ro666/MapleEzorsia-v2/wiki/v83%E2%80%90Client%E2%80%90Setup%E2%80%90and%E2%80%90Development%E2%80%90Guide),
-  which mandates a **specific pre-modified exe**. No other version is claimed anywhere.
-- [`ezorsia/AddyLocations.h`](https://github.com/444Ro666/MapleEzorsia-v2/blob/main/ezorsia/AddyLocations.h)
-  is ~120–130 `const DWORD` **raw absolute virtual addresses**:
-  ```c
-  const DWORD dwDInput8DLLInject      = 0x00796357;
-  const DWORD dwMovementFlushInterval = 0x0068A83F;
-  const DWORD dwRemoteAddress         = 0x00AFE084;
-  const DWORD dwVersionNumberFix      = 0x005F464D;
-  ```
-  An in-file comment gives their provenance: *"taken from released semi-named v83 IDB"*.
-- [`ezorsia/Memory.cpp`](https://github.com/444Ro666/MapleEzorsia-v2/blob/main/ezorsia/Memory.cpp)
-  contains **no pattern or signature scanning of any kind** — only `WriteByte`, `WriteInt`,
-  `CodeCave` at a caller-supplied absolute address.
-- [`ezorsia/Client.cpp`](https://github.com/444Ro666/MapleEzorsia-v2/blob/main/ezorsia/Client.cpp)
-  applies resolution as ~200 writes with hand-computed instruction-operand offsets
-  (`WriteInt(dwViewPortHeight + 3, …)`). **No base-relative math, no version check, no hash check.**
-  It patches blind.
-
-`dinput8.dll` is only the **injection vector**, not the hooking mechanism. The README's *"compatible
-with any set of WZ or IMG files"* claim refers to **WZ data only** — and is true, because
-`EzorsiaV2_UI.wz` is a prebuilt blob extracted from the DLL's own resources (`FindResource(…,
-IDR_RCDATA2, RT_RCDATA)`), never generated from the client's `UI.wz`. It says nothing about the exe.
-
-| Client | HD mod survives? | Why |
+| # | Defect | Verified |
 |---|---|---|
-| **v83** | **yes** — the only target | addresses derived from a v83 IDB |
-| **v84** | **no** | different build ⇒ all ~125 addresses land on unrelated code; `CodeCave` writes 5-byte JMPs mid-instruction ⇒ expect an immediate crash, not degraded rendering `[INFERENCE, high confidence]` |
-| **v92** | **no, worse** | same address problem **plus** v89+ clients rewrote the Gr2D resolution path, so the *technique* changes, not just the offsets — <https://forum.ragezone.com/threads/all-addresses-for-v83-resolution-change.1161938/page-3> |
+| 1 | **Evan gains 0 HP/MP per level** | `[FACT-measured]` `Character.java:6328-6362` — the `levelUp()` if/else chain covers Beginner, WARRIOR/DAWNWARRIOR1, MAGICIAN/BLAZEWIZARD1, BOWMAN/THIEF/(1299–1500), GM, PIRATE/THUNDERBREAKER1, ARAN1 — **and has no Evan branch.** Evan's parent chain is `LEGEND(2000)→EVAN(2001)→EVAN1(2200)`, never `MAGICIAN(200)`, so `job.isA(Job.MAGICIAN)` is false and both `addhp`/`addmp` stay 0. **Fix: one `else if` branch.** |
+| 2 | **`20011004` not recognised as a mount** | `[FACT-measured]` the mount test is `sourceid % 10000000 == 1004` (`StatEffect.java:1689`, `Character.java:2788`). For Evan's `MONSTER_RIDER = 20011004` that yields **11004, not 1004** → test fails. Same root cause at `Character.java:7345`: `mountid = getJobType() * 10000000 + 1004` gives `20001004`, not `20011004`. **Fix at the shared predicate, not per caller.** |
+| 3–5 | **Three mounts cast and do nothing** — `20011018` Yeti Rider, `20011019` Witch's Broomstick, `20011031` Balrog | flagged by ticket 11; almost certainly downstream of #2 `[INFERENCE]` — verify after fixing #2 before writing separate code |
+| 6 | **Dragon equips / Mir saddles show `MISSING NAME`** | `String.wz` `Eqp/{Dragon,Taming}` rows deliberately left by ticket 04 for ticket 05; also `UIWindow.img/Equip/{DragonEquip,BtDragonEquip}` handed to ticket 14. **Fold both into Phase 5.** |
 
-`[NOT-FOUND]` Zero issues, forks, or discussions anywhere about running it on a non-v83 client.
-~10 forks, all v83. v1 (`izarooni/MapleEzorsia`) is also v83-only.
-
-### 4.1 Why this is worse than it looks — the IDB availability problem `[FACT-sourced]`
-
-Re-deriving ~125 addresses requires an IDA database for the target exe, or the RE work from scratch.
-Searching the local archive (`porting-resources/docs/`) for which client IDBs exist publicly:
-
-```
-v83 IDB  — exists (3 references)
-v90 IDB  — exists (2 references, incl. "I downloaded the V90 IDB")
-v95 IDB  — exists (the RaGEZONE archive's ".idb leak version")
-v84 IDB  — NOT FOUND
-v92 IDB  — NOT FOUND
-```
-
-> **This inverts the version ordering.** The HD mod is *more* portable to **v90** (IDB exists) than
-> to **v84** or **v92** (no IDB). The owner has `GMSSetupv92.exe` on disk, but **v92 is the worst
-> supported** of the candidate versions. See §8.2.
+> Defects 2–5 are one bug wearing four hats. Fix the shared predicate once — patching each mount
+> separately would leave every future mount broken the same way.
 
 ---
 
-## 5. Q5 — Is the v84 client usable for a private server?
+## 7. v84 CONTENT — complete means *reachable*
 
-*(see §5.1 — external research)*
+Per the owner: content that cannot be reached in game is a **phase-1 problem to solve, not defer**.
+
+### 7.1 The delta `[FACT-measured]`
+
+| Category | v83 | v84 | added |
+|---|---:|---:|---:|
+| Maps | 4,411 | 4,504 | **93** |
+| Mobs | 1,597 | 1,638 | **41** |
+| NPCs | 1,733 | 1,760 | **27** |
+| Items | 12,578 | 12,990 | **412** |
+| Quests | 2,817 | 3,015 | **198** |
+| **TOTAL** | | | **771** |
+
+Content: Evan's world (Dream/Lush/Lost Forest), **Crimson Sky** (Leafre dragon expansion — Skelegon,
+Skelosaurus, Leviathan, Cornians), **Neo City 2227**, 8 mounts, and a large share of the 412 items being
+hairstyles/cosmetics.
+
+### 7.2 The three known reachability problems — with proposed fixes
+
+These are already-discovered, real, and are Phase 6 work items:
+
+| Problem | Detail | Proposed fix |
+|---|---|---|
+| **Crimson Sky has no travel route** in *either* v83 or v84 | 22 maps merged and confirmed present, but nothing in the WZ routes a player there | Add a portal/NPC travel route. This is **custom content by necessity** — v84 shipped it unreachable too, so there is no "correct" upstream to copy. Owner decision on where it hangs (Leafre is the natural anchor). |
+| **48 of 63 v84 non-Evan quests shipped pre-expired** | v84 itself shipped them with end dates already in the past | Policy call, owner's: (a) strip the date gate, (b) rewrite dates to a live window, or (c) leave them out. **Recommend (b)** — it preserves the content and the quest text without pretending the dates never existed. |
+| **9 Evan-locked, 5 behind a dead upstream quest, 1 (`19011`) currently acceptable** | of the same 63 | The 9 unblock automatically once Phase 5 lands (**this is why classes precede their quests, §2.2**). The 5 need their upstream prerequisite supplied or the chain re-rooted. |
+
+### 7.3 Quest scripting load `[FACT-measured]`
+
+```
+scripts/ total .js = 1,940     npc 708 · portal 461 · reactor 292 · quest 275 · event 108 · map 90 · item 2
+```
+**275 quest scripts serve 2,817 quests = 9.8%.** Applied to +198 new quests → **≈19 new scripts**; the
+rest are pure WZ data.
+
+### 7.4 Cash shop — data-driven, so nearly free `[FACT-measured]`
+
+```
+server/CashShop.java:242    for (Data item : etc.getData("Commodity.img").getChildren())
+UseCashItemHandler.java:102 int itemType = itemId / 10000;     // 24 types handled, 0 per-id special cases
+```
+`CashItemFactory` loads the **whole catalogue from `Etc.wz/Commodity.img`**, and effects dispatch by
+**type**, not id. **New cash items of an existing type work with zero Java.** Only genuinely new *types*
+need a branch. Ticket 04's decision to decline most of the 10,638 Etc roots (1,518 SNs pointing at
+out-of-scope items = dead shop buttons) stays correct **until Phase 6 makes those items exist** — then
+re-run that decision. `[INFERENCE]`
+
+### 7.5 Drops and SQL
+
+Precedent already set and it works: `153-crimson-sky-drop-data.sql`, 776 rows, as a **new Liquibase
+changeset** — editing `152-drop-data.sql` in place fails checksum validation because it has already run.
+New v84 mobs follow the same pattern.
 
 ---
 
-## 6. Route A's permanent ceilings
+## 8. REGRESSION — how "keep what we have working" is proven
 
-Assessed against *"fully working"*, not *"cheap"*.
+Acceptance criterion for Phases 3, 4 and 8. Existing assets: 27 test files under `src/test/java`, 39
+Liquibase changesets, and the **`WzMerge hash` digest technique proven in ticket 04** — digest every
+image in a `.wz` before and after a merge, assert only the named rows moved. `[FACT-measured]`
 
-### 6.1 (a) Memory-only gate patch — **real, but mitigable** `[FACT-measured]`
-
-`tools/evan-gate-patch.log` shows the patcher running as a **watch daemon**, re-attaching to every
-`MapleStory.exe` launch:
-
-```
-[2026-08-16 15:44:45] attached to PID 42484 (MapleStory)
-[2026-08-16 15:44:45] GUARD PASS: GetSkill gate pattern found at 0x0075C776.
-[2026-08-16 15:44:45] RESULT: GetSkill PATCHED and verified at 0x0075C776
-[2026-08-16 15:44:45] GUARD PASS: GetSkillLevel gate pattern found at 0x00761714.
-[2026-08-16 15:44:45] WATCH: 18 process(es) patched. Watching for more.
-```
-
-Two gates, both patched, verified by read-back, 18 processes in one session. `STATUS.md` records
-that the static route is dead: *"`local.exe`/`localhome.exe` are memory dumps, not clients"*.
-
-> **But the brief overstates this ceiling.** `tools/evan-gate-dll/evan-gate.c` already exists — a
-> kernel32-only DLL that NOPs the gate, designed to be loaded **by Ezorsia's own `dinput8.dll`**
-> via its `use_custom_dll_1` config hook. From its header comment `[FACT-measured]`:
->
-> > *"Loaded by dinput8.dll via config.ini `use_custom_dll_1`. … NAME MATTERS. dinput8.dll at
-> > 0x10008BAF does strcmp(value, "CUSTOM.dll") and SKIPS loading when they are equal."*
->
-> The client **already ships an injected DLL**. Folding the gate patch into it makes the patch
-> automatic, invisible, and distributable with the client — no separate patcher, nothing for a
-> player to run. **It is written but not yet built.** This ceiling is an unfinished task, not a
-> permanent defect.
-
-**Verdict on (a): not disqualifying.**
-
-### 6.2 (b) Character creation — **genuinely blocked, and now explained** `[FACT-measured]`
-
-The brief notes that adding `UI.wz/Login.img/RaceSelect/BtEvan` did nothing. The manifests explain
-exactly why. v84 did not *add a button* to the v83 screen — **it replaced the screen**:
-
-```
-removed-list/UI.txt  (v83 -> v84, deleted):        add-list/UI.txt  (v83 -> v84, added):
-  Login.img/RaceSelect/normal                        Login.img/RaceSelect/backgrnd
-  Login.img/RaceSelect/knight                        Login.img/RaceSelect/BtKnight
-  Login.img/RaceSelect/aran                          Login.img/RaceSelect/BtAran
-  Login.img/RaceSelect/aran1                         Login.img/RaceSelect/BtEvan
-  Login.img/RaceSelect/BtSelect                      Login.img/NewCharEvan
-  Login.img/RaceSelect/textGL                        Login.img/CharSelect/evan
-```
-
-> **The asset contract changed completely.** v83's binary drives `normal` / `knight` / `aran` /
-> `BtSelect`. v84's drives a shared `backgrnd` plus `Bt*` buttons. Adding `BtEvan` to a v83 client
-> does nothing **because the v83 code never looks up `Bt*` names at all.** `[INFERENCE from FACT-measured]`
->
-> `Login.img/NewCharEvan` is an entire creation *screen* with no v83 counterpart — the same pattern
-> as `UIWindow.img/SkillEx`.
-
-This is a code-level feature, not data. It requires code-cave work in a Themida-packed binary, and
-`porting-resources/docs/08-new-job-v83-help.md`
-(<https://forum.ragezone.com/threads/new-job-v83-help.1131763/>) is the only prior art: **Eric**
-says a real new class needs *"code-cave"* work and *"your own functions and checks for each job"* —
-**no addresses given**. `[FACT-sourced]`
-
-**Verdict on (b): a genuine blocker with no published prior art. `[NOT-FOUND]` for any solution.**
-
-### 6.3 (c) Dragon rendering
-
-*(see §6.3.1 — external research; this is the decisive ceiling)*
-
-### 6.4 (d) Skill-window tabs — **partly refuted, mechanism identified** `[FACT-measured]`
-
-Ticket `11b` disassembled `CUISkill::CreateTabs` @ `0x008AD2D1` and proved the naive form of this
-concern **false**:
-
-```
-008AD4A5  xor  edi, edi              ; edi = tab INDEX
-008AD4B5  cmp  edi, [eax-4]          ; index < roots array COUNT
-008AD4C1  push edi                   ; <-- the INDEX, not roots[edi]
-008AD4C5  push 0xaf2444              ; "%d"
-008AD4CF  call 0x445b4b              ; sprintf(buf, "%d", index)
-```
-
-`roots[edi]` is never read; the tab resource name is the **decimal loop index**. So jobs 0, 2000 and
-2001 build identical tab names — *"The tab strip cannot differ between the three jobs. Job 0 works,
-so the tab strip works."* The `AranButton` special case never runs for Evan **or** Aran-beginner.
-
-**But the count comes from `[roots-4]`.** `[INFERENCE from FACT-measured]` For Evan the roots array
-has 10 entries, so the loop creates tabs `"0"`…`"9"` and looks each up under
-`UIWindow.img/Skill/Tab/enabled`. The manifests show v84 **did not extend** `Skill/Tab/enabled` —
-the only v84 UI additions are `Basic.img/Tab8`, `UIWindow.img/SkillEx`, `UIWindow.img/SkillMacroEx`.
-v84 gave Evan a **separate skill window class** (`CUISkillEx`, 11 tabs) rather than widening the old
-one (5 tabs).
-
-Since a v83 client has no `CUISkillEx`, Evan renders in the **old 5-slot window**, and tabs 5–9 look
-up resources that do not exist. Ticket 10 has already merged `SkillEx`/`SkillMacroEx` into the tree
-— **but merging the data cannot add the class to a Themida-packed binary.**
-
-**Verdict on (d): cosmetic, permanent, low severity — but confirms the pattern.** v84's Evan support
-is repeatedly *new UI classes in the executable*, which is precisely what WZ merging cannot supply.
+1. **Instrument check, FIRST.** Run the whole suite against the **current v83 server** and confirm it
+   passes there. A suite that fails on both proves nothing. *(This is the rule this project learned the
+   hard way, three times.)*
+2. **Data integrity (automated).** Every root in `removed-list` ∪ `protect-list` present and
+   digest-identical post-merge; any image that gained children appears on the manifest by name.
+3. **Deleted-content playthrough (manual, batched).** Boss Rush, Monster Carnival, Mu Lung Dojo, Sheep
+   Ranch — enter, fight, complete, exit.
+4. **Class parity (scripted).** Every existing v83 class to 4th job; every 4th-job skill fires.
+5. **Economy.** Shops, cash shop, storage, trade, hired merchant, drops — re-tested after Phase 2.
+6. **Evan acceptance (Phase 5).** Creation → 2001 → 2200 → 2210–2218; all 58 entries; dragon renders and
+   moves; all 8 mounts ride; **HP/MP increases on level-up** (defect #1); no `MISSING NAME`.
 
 ---
 
-## 7. What Route A has already banked `[FACT-measured]`
+## 9. WHAT PHASE 1 LEAVES BEHIND FOR PHASE 2 — and what it does not
 
-Not a reason to continue, but it must be priced honestly when comparing.
+The instruction was to make phase 1 a rehearsal, not a throwaway. It largely is — **but I will not
+overstate it**, because one part is genuinely non-transferable.
 
-~30 commits on `worktree-evan-dualblade`, tickets **04, 05, 06, 07, 08, 09, 10, 11, 16** landed:
+### ✅ Reusable assets — name them, build them deliberately
 
-```
-4e8c49594  05: v84 mounts — 8 sprites, 27 skills, 25 morph states
-59cb85105  06: Crimson Sky — 22 maps, 17 mobs, 6 NPCs, 2 reactors; drop tables added
-8fc0a4b0f  07: Neo City Year 2227 playable
-2a89da169  08: the tail of the v84 map delta — 22 misc areas
-8e740646b  09: merge the 63 non-Evan v84 quests
-15f1e81fe  10: Evan exists, renders, and has a dragon
-```
-
-**Split by what survives a client change** `[INFERENCE]`:
-
-| Work | Survives Route B/C? |
+| Asset | Why it carries |
 |---|---|
-| `wz/` XML server tree merges (599 MB) | **yes** — server tree is version-independent (§3.6) |
-| SQL drop tables (`153-crimson-sky-drop-data.sql`, 776 rows) | **yes** |
-| quest scripts, constants, `EvanCreator`, `Job.java` | **yes** |
-| `WzMerge` tooling | **yes**, direction-agnostic |
-| client-side binary WZ merges (1,791 composed rows) | **no** — unnecessary under B/C |
-| collision triage / deny+force lists (735 rows) | **no** — direction-specific |
-| both Evan gate patches + `evan-gate.c` | **no** — v83-only, and unnecessary under B/C |
+| **The opcode-remap procedure** — validate a published table against ground truth *before* using it (§1.1), then remap two enum files, then bring up login before field | version-independent method; it is exactly what v92 needs |
+| **The two-source cross-validation habit** — atlas × Riremito at v84; atlas × Vertisy × Riremito at v92 | the discipline is the asset |
+| **The WZ base-swap + backport workflow** — `WzMerge`, the `hash` regression gate, the deny/force list procedure | direction-agnostic tooling, already built |
+| **`removed-list` + `protect-list`** | the 832 deleted maps are **still absent at v92** (§5.1) — the *same* manifest serves both migrations unchanged |
+| **The client-validation checklist** (§4's three acquisition routes, localhost routing, protection removal) | identical shape at v92 |
+| **The regression suite** (§8) | grows, never rewritten |
+| **A written record of what actually broke** | the real deliverable — this project's failures have all been instrument failures, and that knowledge is version-independent |
+| **The centralised-seam findings** — `addItemInfo()` 1 function/29 call sites; `parseMovement()` shared | pre-scouts v92's equip-serialiser and movement work |
+| **All server-side Java**: `EvanCreator`, `Job.EVAN1–10`, extended SP, the six defect fixes, drop SQL, 1,940 scripts, the 599 MB `wz/` XML tree | version-independent by construction |
 
-**The majority of the banked work is server-side and transfers.** The discarded portion is the
-client-WZ merge and the gate patching. `[INFERENCE]`
+### ❌ What phase 1 will NOT teach us — stated plainly
 
----
+- **Not one opcode value.** Zero v84 values survive to v92 `[REPORT-peer]`, which my own staircase
+  measurement corroborates — the shifts are cumulative. The v84 table is a *different* table, not a
+  partial v92 one.
+- **Not the equip serialiser.** Potential/Enhancement is v88. Phase 1 never touches it, so the single
+  largest v92 structural change gets **no** rehearsal. It is scouted (§3.3) but not exercised.
+- **Not Dual Blade.** No katara, no dual-wield, no `getWeaponType()` work.
+- **Not the ~15 new v92 packet families**, nor the Family/MTS/Hammer unknowns.
+- **Not the HD mod's portability.** v84 and v92 break it for *different* reasons — v84 by offsets alone,
+  v92 by offsets **plus** the v89+ Gr2D resolution-path rewrite.
 
-## 8. Route C — the v92 client
-
-### 8.1 Dual Blade is absent from this server entirely `[FACT-measured]`
-
-```
-grep -rli "dualblade|dual_blade|katara" src/main/java   ->   (no matches)
-client/Job.java: THIEF(400), ASSASSIN(410)…NIGHTLORD(412), BANDIT(420)…SHADOWER(422)
-                 <- no 430/431/432/433/434
-```
-
-Evan by contrast is **fully enumerated**: `LEGEND(2000), EVAN(2001)` and `EVAN1(2200) … EVAN10(2218)`.
-
-> **Route C is not "Route B plus a bigger opcode delta". It is Route B plus a bigger opcode delta
-> plus implementing an entire character class server-side from zero** — job IDs, advancement, the
-> katara second-weapon slot, and the full skill set. None of it exists. `[FACT-measured]`
-
-### 8.2 ⚠️ The owner has the wrong installer for Route C `[FACT-sourced]`
-
-From `porting-resources/docs/16-source-that-have-evan-dualblade.md`
-(<https://forum.ragezone.com/threads/source-that-have-evan-dualblade.1069427/>), asked directly
-about *"Evan + DB + Pre bb"*:
-
-> *"LocalMS. Or v90 - TropikMS"* · *"v88 LotusMS Source: Currently not working, you have to fix it
-> yourself"* · *"Last time I checked, LocalMS was pretty much playable."*
-
-Combined with the IDB availability finding (§4.1) and `porting-resources/docs/13-updating-opcodes.md`
-referencing **"sunnyboys V90.3 sendops"** — a *published v90 opcode table*:
-
-| Version | Evan | Dual Blade | Pre-BB | Public IDB | Public opcode table | Existing source |
-|---|:-:|:-:|:-:|:-:|:-:|---|
-| v83 | gated | ✗ | ✓ | **✓** | ✓ | HeavenMS/Cosmic — mature |
-| **v84** | **✓** | ✗ | ✓ | **✗** | ? (§1.6) | none specifically |
-| v88 | ✓ | ✓ | ✓ | ✗ | ? | LocalMS, LotusMS ("buggy", "not working") |
-| **v90** | **✓** | **✓** | **✓** | **✓** | **✓ (sunnyboy v90.3)** | **TropikMS, FusionSource** |
-| **v92** | ✓ | ✓ | ✓ | **✗** | **✗** | **none** |
-| v95 | ✓ | ✓ | **✗ post-BB** | ✓ | ✓ | Kinoko, Rebirth95 (incomplete) |
-
-`docs/EVAN-DUALBLADE-SCOPE.md:282` already concedes the v92 gap in this repo's own words:
-
-> *"**The one resource with no ready-made answer: there is no public v92 opcode table.** You
-> generate it."*
-
-> **Finding:** if the owner goes down the version-up path, the evidence points at **v90, not v92**.
-> v92 is newer but is an **orphan version** — no IDB, no opcode table, no source. v90 has all three.
-> The `GMSSetupv92.exe` on disk is not the asset Route C wants. `[INFERENCE from FACT-sourced]`
->
-> This matches this repo's own earlier research (`11e:171`): *"v90 is the pragmatic pick inside it:
-> it is the only one in that band with both a source and a working localhost."*
-
-### 8.3 No Cosmic-class server exists above v83 `[FACT-sourced]`
-
-From `docs/work-plan/tickets/11e-evan-v83-feasibility-research.md`, with URLs:
-
-- **Kinoko v95** (<https://forum.ragezone.com/threads/kinoko-v95.1233229/>) — written from scratch,
-  *"still missing a bunch of stuff like actual progression, but enough for people to flash jump
-  around Henesys"*
-- **Rebirth95** (<https://github.com/67-6f-64/Rebirth95.Server>) — C#/Python
-- **Xeon v97**, **v90 FusionSource**
-
-> *"The client is not the scarce resource. The scarce resource is the **server**. Every mature
-> open-source HeavenMS-lineage server is v83-locked."* `[FACT-sourced]`
-
-Route C therefore means **porting Cosmic**, not adopting an existing v90/v92 server. The 7,462-line
-`PacketCreator` and 147 handlers are the real surface, not the 485 enum values.
-
-### 8.4 Big Bang boundary `[FACT-sourced]`
-
-`docs/EVAN-DUALBLADE-SCOPE.md:28-30` and
-<https://msupdate.wordpress.com/2011/01/19/gms-v91v93v94v95-ratings/>:
-
-| Version | Content | Date |
-|---|---|---|
-| v0.83 | "Year of the Tiger" | 2010-02-22 |
-| v0.84 | **Evan / "Dragon Master"** | 2010-03-31 |
-| v0.88 | **Dual Blade**, Chaos Bosses, Item Potential | 2010-07-21 |
-| v0.93 | **Big Bang** — formula/map/job rewrite | 2010-12-07 |
-
-Also **Eric**, on sourcing Evan data (`11e:47`): *"from v84, not anything above v92 because skill
-data changed."* v88–v92 is confirmed as the only window with both classes and pre-BB gameplay.
+> **Honest summary:** phase 1 rehearses the **workflow** thoroughly and the **protocol content** not at
+> all. That is still worth having — the workflow is where this project has actually been getting hurt —
+> but nobody should expect the v92 opcode work to be cheaper for having done v84.
 
 ---
 
-## 9. Verdict
+## 10. PHASE 2 — v92 sketch only
 
-*(completed in §9 below once external research lands)*
+Recorded so it is not lost. **Not costed here, and its scope must not leak into phase 1.**
+
+- **Protocol is the cliff**, not the classes: **421 of 468 opcodes differ (~90%)** `[REPORT-peer]`, plus
+  the Potential-driven equip-serialiser rewrite touching every item-bearing packet, plus the movement
+  prefix (already solved at v84 — one genuine carry-over).
+- **Classes are a known-size port, not research** `[REPORT-peer]`: **Dual Blade = 26 skills** (430:3,
+  431:4, 432:4, 433:6, 434:9) + 2 DB-exclusive Rogue ids (`4001334`, `4001344`) = 32.
+  **`PHANTOM_BLOW` is post-Big-Bang — explicitly out of scope.**
+- **Sourcing** (all AGPLv3, same licence as Cosmic, so porting is permitted):
+  [MapleStoryA/orion-server](https://github.com/MapleStoryA/orion-server) (v90, OdinMS lineage, active
+  2026-07, **complete Dual Blade**, ships `Skill/430-434.img.xml`) for the *mechanics*;
+  [Chronicle20/Vertisy](https://github.com/Chronicle20/Vertisy) (v92, **Cosmic's exact package layout**,
+  ~60% of DB logic, **zero katara**) for the *idiom*. [iw2d/kinoko](https://github.com/iw2d/kinoko) has
+  **no licence → cannot be ported.**
+- **Cosmic's concrete one-line blocker:** `ItemInformationProvider.getWeaponType()` maps category 34 →
+  `NOT_A_WEAPON`; orion has `case 34: return MapleWeaponType.KATARA`. Trivial, but it gates everything.
+  Also: no 430–434 in `client/Job.java`, and **watch the autoban** — Cosmic bans a weapon in a non
+  −10/−11 slot, so the katara must be whitelisted or legitimate Dual Blades get banned.
+- **Katara needs three things:** equip forced to slot −10 for `itemId/10000 == 134`, rejected unless job
+  430–434 with a dagger in −11; mastery read from the **shield** slot; `attackCount *= 2` on basic
+  attacks (again for Mirror Image).
+- **Dead ends, do not chase:** LotusMS v88 (*"currently not working"*), TropikMS v90 (author:
+  *"i don't recommend anyone use this source"*), FusionSource v90 (*"Recvs are wrong"*), LocalMS v88
+  server source **not public**, maplestorylibary.weebly.com repack list dead.
+- **Note:** the 832 deleted maps are gone at v92 too, so **§5's backport is needed either way** — doing
+  it at v84 is not wasted.
+
+---
+
+## 11. RECOMMENDATION
+
+**Deliverable 3 was answered by the owner** — *"v84 feature complete is more important"* — so this is not
+re-litigated. **v84 as a full destination.** I agree with it, and here is why it holds up under the
+"fully working" rule rather than the "cheaper" one:
+
+- v84 makes Evan **native**. Every v83 workaround — two memory gate patches, `Tab8`, the per-launch
+  patcher, and a character-creation blocker with *no published prior art anywhere* — stops existing
+  rather than being worked around. That is a completeness argument, not a cost argument.
+- The protocol step is bounded and published: **231 of 363 opcodes**, a clean staircase, two independent
+  tables, identical login band, unchanged crypto.
+- Nothing found is a showstopper. The weakest link is **client acquisition** (§4), and it has three
+  independent routes, one of which (`Riremito/LocalHost`) does not require patching the binary at all.
+
+**Honest cost: ≈8–12 weeks focused** for Phases 0–7, plus the HD client as a separately-scoped,
+open-ended, gate-nothing tail.
+
+**One thing I would push back on, gently and once:** phase 1 is a real rehearsal of the *workflow* and
+not at all of the *protocol content* (§9). If the long-run goal is v92, the v84 protocol work is
+genuinely spent, not banked. That is an acceptable price for having Evan working properly and soon — and
+the owner has explicitly chosen it — but it should be a known price, not a surprise later.
+
+**Start with Phase 0.** 2–4 days, one client launch, touches nothing live, and it retires the only
+genuinely weak link before any irreversible work begins.
 
 ---
 
 ## Appendix A — Reproducing the measurements
 
 ```bash
-# opcode counts and stock-v83 identity
+# the crux number
+python scratchpad/verify17.py     # atlas-vs-Cosmic validation, then the v83->v84 shift map
+                                  # -> clientbound 176/220 differ, serverbound 55/143, staircase 0..+10
+
+# opcodes
 grep -cE '^\s*[A-Z_0-9]+\(' src/main/java/net/opcodes/SendOpcode.java     # 307
 grep -cE '^\s*[A-Z_0-9]+\(' src/main/java/net/opcodes/RecvOpcode.java     # 178
-grep -rhoE 'SendOpcode\.[A-Z_0-9]+' --include='*.java' src/main/java | sort -u | wc -l   # 247
-grep -rhoE 'RecvOpcode\.[A-Z_0-9]+' --include='*.java' src/main/java | sort -u | wc -l   # 170
+diff <(cosmic SendOpcode) <(HeavenMS-v83-upstream SendOpcode)             # no output
+grep -c 'addItemInfo' src/main/java/tools/PacketCreator.java              # 29 call sites, 1 function
 
-# WZ manifest volumes
-wc -l docs/wz-baseline/removed-list/*.txt    # 3,969 + 16 header lines
-wc -l docs/wz-baseline/protect-list/*.txt    # 17,633 + 16 header lines
-wc -l docs/wz-baseline/add-list/*.txt        # 16,177 + 16 header lines
-cat docs/wz-baseline/merge-lists/composed/*.txt | grep -vc '^#\|^$'   # 1,791
+# WZ
+wc -l docs/wz-baseline/removed-list/*.txt   # 3,969      protect-list/*.txt   # 17,633
+grep -c '\.img$'       docs/wz-baseline/removed-list/Map.txt              # 833
+grep -c '98[0-9]\{6\}' docs/wz-baseline/removed-list/Map.txt              # 0   <- Monster Carnival INTACT
+curl -s -o /dev/null -w '%{http_code}' https://maplestory.io/api/GMS/83/map/970030100   # 200
+curl -s -o /dev/null -w '%{http_code}' https://maplestory.io/api/GMS/84/map/970030100   # 404
 
-# what v84 deletes
-grep -c '\.img$' docs/wz-baseline/removed-list/Map.txt                   # 833
-grep -c '98[0-9]\{6\}' docs/wz-baseline/removed-list/Map.txt             # 0  (Monster Carnival intact)
-grep '\.img$' docs/wz-baseline/removed-list/Map.txt | grep -o '[0-9]\{9\}' | cut -c1-6 | sort | uniq -c
+# Evan
+python scratchpad/skillcount.py   # 87 books, 620 ids; Evan 2001=27 + 2200..2218=31 = 58
+python scratchpad/skillratio.py   # 562 constants declared, 394 referenced, 168 pure data
+sed -n '6328,6362p' src/main/java/client/Character.java     # levelUp(): no Evan branch -> 0 HP/MP
+grep -n '10000000' src/main/java/server/StatEffect.java     # :1689 sourceid % 10000000 == 1004
+
+# content / scripts
+python scratchpad/delta92.py      # v83/v84/v92 content deltas (+771 at v84)
+python scratchpad/probe92.py      # per-map 83/84/92 presence probe
+find scripts -name '*.js' | wc -l                           # 1,940 (quest 275 of 2,817 = 9.8%)
 ```
+
+Helper scripts in this session's scratchpad: `verify17.py`, `skillcount.py`, `skillratio.py`,
+`delta92.py`, `probe92.py`.
 
 ## Appendix B — Sources
 
-**Local archives** (`porting-resources/docs/`, archived 2026-08-15, each carries its source URL):
+**v84 protocol** [Chronicle20/atlas](https://github.com/Chronicle20/atlas) —
+[discover_gms_v84.md](https://github.com/Chronicle20/atlas/blob/master/docs/packets/registry/discover_gms_v84.md),
+[v83 template](https://github.com/Chronicle20/atlas/blob/master/services/atlas-configurations/seed-data/templates/template_gms_83_1.json),
+[v84 template](https://github.com/Chronicle20/atlas/blob/master/services/atlas-configurations/seed-data/templates/template_gms_84_1.json) ·
+[Riremito/JMSv186](https://github.com/Riremito/JMSv186) ([version list](https://github.com/Riremito/JMSv186/blob/master/Readme_VersionList.md), `properties/packet/GMS_v84_*`) ·
+[Riremito/LocalHost](https://github.com/Riremito/LocalHost)
 
-| File | Thread |
-|---|---|
-| `02-v83-in-evan-feasibility.md` | <https://forum.ragezone.com/threads/v83-in-evan.1107098/> |
-| `08-new-job-v83-help.md` | <https://forum.ragezone.com/threads/new-job-v83-help.1131763/> |
-| `13-updating-opcodes.md` | <https://forum.ragezone.com/threads/updating-opcodes.1112067/> |
-| `16-source-that-have-evan-dualblade.md` | <https://forum.ragezone.com/threads/source-that-have-evan-dualblade.1069427/> |
-| `07-client-localhost-archive.md` | <https://forum.ragezone.com/threads/maplestory-client-localhost-archive.1101897/> |
+**Phase-2 sourcing (AGPLv3)** [MapleStoryA/orion-server](https://github.com/MapleStoryA/orion-server) ·
+[Chronicle20/Vertisy](https://github.com/Chronicle20/Vertisy) ·
+[odasm/maplev90](https://github.com/odasm/maplev90) ·
+[xDazedGamingx/LostStoryV90](https://github.com/xDazedGamingx/LostStoryV90) ·
+[iw2d/kinoko](https://github.com/iw2d/kinoko) *(no licence — not portable)*
 
-**Repo evidence:** `docs/wz-baseline/{SUMMARY.md,removed-list,protect-list,add-list,modified-list,merge-lists}`,
-`docs/work-plan/tickets/11b`, `11e`, `docs/EVAN-DUALBLADE-SCOPE.md`,
-`porting-resources/SCOPE-V84-UPGRADE.md`, `tools/evan-gate-patch.log`, `tools/evan-gate-dll/evan-gate.c`.
+**Client / protections** [Localhost Workshop](https://forum.ragezone.com/threads/localhost-workshop.1202021/) ·
+[some localhost clients (incl. v84)](https://forum.ragezone.com/threads/some-localhost-clients-kms-jms-cms-twms.1225637/) ·
+[Client/Localhost Archive](https://forum.ragezone.com/threads/maplestory-client-localhost-archive.1101897/) ·
+[IDB library v61–v89](https://forum.ragezone.com/threads/library-of-idbs-for-different-versions-with-named-addresses.987815/) ·
+[v84 GameLauncher](https://forum.ragezone.com/threads/discussion-no-more-login-screen-for-v84.657229/) ·
+[P0nk/Cosmic-client](https://github.com/P0nk/Cosmic-client) ·
+[444Ro666/MapleEzorsia-v2](https://github.com/444Ro666/MapleEzorsia-v2)
+
+**Patch record** [msupdate v84](https://msupdate.wordpress.com/2010/03/30/gms-v84-content-notes-neo-city-expansion-ui-updates/) ·
+[msupdate v88](https://msupdate.wordpress.com/2010/07/20/gms-v88-update-notes/) ·
+[msupdate v92](https://msupdate.wordpress.com/2010/11/22/gms-v92-compatibility-update/) ·
+[Big Bang = v93](https://maplenewsnetwork.wordpress.com/2010/12/06/gmsv-93-patch-notes-big-bang-part-1/) ·
+[DigitalTQ patch history](https://www.digitaltq.com/maplestory-patch-history-what-came-when)
+
+**v83 Evan prior art (now moot under v84)**
+[Twdtwd quote](https://forum.ragezone.com/threads/v83-in-evan.1107098/post-8658081) ·
+[[Release] [v83] Evans](https://forum.ragezone.com/threads/release-v83-evans.1108138/) ·
+[Evan class for v83 (2024)](https://forum.ragezone.com/threads/evan-class-for-v83.1226050/) ·
+[New job v83 help](https://forum.ragezone.com/threads/new-job-v83-help.1131763/)
+
+**This repo** `docs/wz-baseline/{SUMMARY.md,removed-list,protect-list,add-list,modified-list,merge-lists}` ·
+`docs/work-plan/tickets/{11,11b,11e}` · `docs/EVAN-DUALBLADE-SCOPE.md` ·
+`porting-resources/SCOPE-V84-UPGRADE.md` · `porting-resources/docs/{02,07,08,13,16}` ·
+`tools/evan-gate-patch.log` · `tools/evan-gate-dll/evan-gate.c`
