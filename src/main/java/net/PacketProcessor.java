@@ -193,6 +193,7 @@ import net.server.handlers.login.ViewAllCharSelectedHandler;
 import net.server.handlers.login.ViewAllCharSelectedWithPicHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tools.packetvalidator.ClientStartErrorHandler;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -273,6 +274,7 @@ public final class PacketProcessor {
     private void registerCommonHandlers() {
         registerHandler(RecvOpcode.PONG, new KeepAliveHandler());
         registerHandler(RecvOpcode.CUSTOM_PACKET, new CustomPacketHandler());
+        registerHandler(RecvOpcode.CLIENT_START_ERROR, new ClientStartErrorHandler());
     }
 
     private void registerLoginHandlers() {
