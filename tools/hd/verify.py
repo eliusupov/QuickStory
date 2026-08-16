@@ -36,29 +36,102 @@ OPTIONAL_GROUPS = {'K'}
 
 
 def insn_run(img, va, n):
-    """Do whole instructions tile exactly n bytes starting at va?"""
-    off, tot, seq = va - paths.BASE, 0, []
+    """Do whole instructions tile exactly n bytes starting at va?
+
+    Returns (tiles, sequence, start addresses) -- the addresses are what lets
+    norm_seq render relative branch targets relative.
+    """
+    off, tot, seq, at = va - paths.BASE, 0, [], []
     while tot < n:
         got = None
         for ins in MD.disasm(img[off + tot:off + tot + 16], va + tot):
             got = ins.size
             seq.append(f'{ins.mnemonic} {ins.op_str}')
+            at.append(ins.address)
             break
         if not got:
-            return False, seq
+            return False, seq, at
         tot += got
-    return tot == n, seq
+    return tot == n, seq, at
 
 
-def norm_seq(seq):
-    """Instruction sequence with struct offsets and immediates left in place.
+BRANCH = {'jmp', 'call', 'je', 'jne', 'jz', 'jnz', 'ja', 'jae', 'jb', 'jbe', 'jg',
+          'jge', 'jl', 'jle', 'js', 'jns', 'jo', 'jno', 'jp', 'jnp', 'loop',
+          'loope', 'loopne', 'jcxz', 'jecxz'}
 
-    A cave body REPLAYS the instructions it displaced. If v84 displaced a different
-    sequence -- a different member offset, a different addressing form, a different
-    instruction count -- the naked asm in codecaves.h has to be edited, not just
-    re-pointed. Comparing the raw text is exactly the right sensitivity here.
+
+def norm_seq(seq, base):
+    """Instruction sequence with struct offsets and immediates left in place, but
+    relative branch targets rendered RELATIVE.
+
+    A cave body REPLAYS the instructions it displaced, so a different member offset,
+    addressing form or instruction count means the naked asm has to be edited. But a
+    relative branch is *not* such a difference: `74 06` is the same two bytes in both
+    images and capstone only prints its absolute destination, which of course differs.
+    Phase 1 compared the raw text and so reported AlwaysViewRestoreFix as needing its
+    `je` re-pointed -- it does not; the bytes are identical and the cave body does not
+    even replay that branch (it uses a local label). Normalising to `<mnem> +N` is what
+    makes this check mean what its name says.
     """
-    return tuple(s.strip() for s in seq)
+    out = []
+    for addr, s in zip(base, seq):
+        m, _, ops = s.strip().partition(' ')
+        if m in BRANCH and ops.startswith('0x'):
+            try:
+                out.append(f'{m} pc{int(ops, 16) - addr:+#x}')
+                continue
+            except ValueError:
+                pass
+        out.append(s.strip())
+    return tuple(out)
+
+
+REL8 = {0x70 | i for i in range(16)} | {0xEB, 0xE0, 0xE1, 0xE2, 0xE3}
+
+
+def jumps_into(img, origin, size, span=0x8000):
+    """Does any real instruction branch to strictly inside origin+1 .. origin+size-1?
+
+    That is the classic code-cave bug: the cave overwrites the range with a 5-byte jmp
+    plus NOPs, so a control path arriving mid-range lands inside our jmp, or on NOPs
+    that fall through into the following instruction with the wrong stack. CAVE tiling
+    does not test this -- it only proves the range ends on a boundary.
+
+    Sources are filtered to real instruction starts: a linear decode from origin-span
+    that passes exactly through origin has resynchronised (x86 resyncs within a few
+    bytes), so every boundary it emitted is trustworthy. Returns (hits, aligned); an
+    unaligned scan is reported rather than silently trusted.
+    """
+    # A decode that runs into a data blob or a bad byte stops early and never reaches
+    # the origin. Shrink the look-back until it does; a shorter proven window beats a
+    # longer unproven one, and the answer is reported either way.
+    starts, aligned, lo, hi = set(), False, origin, origin
+    for span in (span, span // 4, 0x800, 0x200, 0x80):
+        lo = max(paths.BASE, origin - span)
+        hi = min(paths.BASE + len(img), origin + span)
+        starts, aligned = set(), False
+        for ins in MD.disasm(img[lo - paths.BASE:hi - paths.BASE], lo):
+            starts.add(ins.address)
+            if ins.address == origin:
+                aligned = True
+        if aligned:
+            break
+    rng = range(origin + 1, origin + size)
+    hits = []
+    for o in range(lo - paths.BASE, hi - paths.BASE - 6):
+        if o + paths.BASE not in starts:
+            continue
+        op, t = img[o], None
+        if op in REL8:
+            d = img[o + 1]
+            t = o + 2 + (d - 256 if d >= 128 else d) + paths.BASE
+        elif op in (0xE8, 0xE9):
+            t = o + 5 + int.from_bytes(img[o + 1:o + 5], 'little', signed=True) + paths.BASE
+        elif op == 0x0F and 0x80 <= img[o + 1] <= 0x8F:
+            t = o + 6 + int.from_bytes(img[o + 2:o + 6], 'little', signed=True) + paths.BASE
+        if t in rng:
+            hits.append((o + paths.BASE, t))
+    return hits, aligned
 
 
 def fits(value, size):
@@ -144,19 +217,30 @@ def main():
         if r.get('data'):
             c['SHAPE'] = c['SLOT'] = None            # data site: nothing to decode
         elif p['op'] == 'CodeCave':
-            ok83, seq83 = insn_run(V83, p['site'], p['size'])
-            ok84, seq = insn_run(V84, v84_anchor, p['size'])
+            # v84 may need a DIFFERENT number of displaced bytes than v83: if v84
+            # recompiled the construct, the whole-instruction tiling at the v84 origin
+            # is not the v83 one. data/manual-sites.json carries the override.
+            n84 = row['size84'] = (man['sites'].get(f'0x{p["site"]:08X}', {})
+                                   .get('cave_size_v84') or p['size'])
+            ok83, seq83, at83 = insn_run(V83, p['site'], p['size'])
+            ok84, seq, at84 = insn_run(V84, v84_anchor, n84)
             c['SHAPE'] = same_shape(shape(V83, p['site']), shape(V84, v84_anchor))
             c['CAVE83'], c['CAVE'] = ok83, ok84
             row['cave_v84_seq'] = seq
             row['cave_v83_seq'] = seq83
-            row['cave_retn_v84'] = v84_anchor + p['size']
+            row['cave_retn_v84'] = v84_anchor + n84
             # informational, not a pass/fail: it says whether the naked asm body in
             # codecaves.h has to be EDITED for v84 or only re-pointed
-            row['cave_body_same'] = norm_seq(seq83) == norm_seq(seq)
+            row['cave_body_same'] = norm_seq(seq83, at83) == norm_seq(seq, at84)
+            # JMPIN: nothing may branch into the range we are about to overwrite
+            h84, al84 = jumps_into(V84, v84_anchor, n84)
+            h83, al83 = jumps_into(V83, p['site'], p['size'])
+            c['JMPIN'] = not (h84 or h83)
+            row['jmpin'] = [(hex(s), hex(t)) for s, t in h83 + h84]
+            row['jmpin_aligned'] = bool(al83 and al84)
             c['SLOT'] = None
         elif p['op'] in ('FillBytes', 'WriteString', 'WriteByteArray'):
-            ok84, seq = insn_run(V84, v84_anchor, p['size'])
+            ok84, seq, _ = insn_run(V84, v84_anchor, p['size'])
             c['SHAPE'] = same_shape(shape(V83, p['site']), shape(V84, v84_anchor))
             c['BLOCK'] = ok84
             c['SLOT'] = None
@@ -226,12 +310,25 @@ def main():
 
     caves = [r for r in rows if r['op'] == 'CodeCave' and r['verdict'] == 'PASS']
     edit = [r for r in caves if not r.get('cave_body_same')]
-    print(f'\n--- CODE CAVES: {len(caves)} resolved, NOP run tiles v84 instructions in all')
-    print(f'    {len(edit)} need the naked asm BODY edited, not just re-pointed ---')
+    resized = [r for r in caves if r.get('size84') != r['size']]
+    unal = [r for r in caves if not r.get('jmpin_aligned')]
+    print(f'\n--- CODE CAVES: {len(caves)} resolved; NOP run tiles v84 instructions in all,')
+    print('    and nothing branches into any displaced range (JMPIN) ---')
+    print(f'    {len(edit)} need the naked asm BODY edited, not just re-pointed:')
     for r in edit:
-        print(f'  {r["id"]} {r["group"]} 0x{r["v83"]:08X} -> 0x{r["v84"]:08X} ({r["size"]}B)')
+        n = r.get('size84', r['size'])
+        print(f'  {r["id"]} {r["group"]} 0x{r["v83"]:08X} -> 0x{r["v84"]:08X} '
+              f'({r["size"]}B v83 / {n}B v84, retn 0x{r["cave_retn_v84"]:08X})')
         print(f'      v83 displaced: {" ; ".join(r["cave_v83_seq"])}')
         print(f'      v84 displaced: {" ; ".join(r["cave_v84_seq"])}')
+    if resized:
+        print(f'    {len(resized)} needed a DIFFERENT v84 displacement length:')
+        for r in resized:
+            print(f'      {r["id"]} {r["size"]}B -> {r["size84"]}B '
+                  f'({r["size84"] - 5} nops after the jmp)')
+    if unal:
+        print(f'    !! {len(unal)} caves: JMPIN scan could not prove its decode was aligned '
+              f'({", ".join(r["id"] for r in unal)}) -- treat their JMPIN as UNPROVEN')
 
     unres = [r for r in rows if r['verdict'] == 'UNRESOLVED']
     print(f'\n--- STILL NEEDING MANUAL RE ({len(unres)} ops, '

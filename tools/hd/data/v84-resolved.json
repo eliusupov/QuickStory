@@ -8339,9 +8339,9 @@
   },
   {
    "v83": 9248613,
-   "v84": null,
-   "tier": null,
-   "status": "unresolved",
+   "v84": 9465145,
+   "tier": "M-manual",
+   "status": "resolved",
    "shape83": {
     "m": "push",
     "ops": "0x16",
@@ -8352,14 +8352,27 @@
     "disp_size": 0,
     "bytes": "6a16"
    },
-   "shape84": null,
+   "shape84": {
+    "m": "push",
+    "ops": "0x16",
+    "len": 2,
+    "imm_off": 1,
+    "imm_size": 1,
+    "disp_off": 0,
+    "disp_size": 0,
+    "bytes": "6a16"
+   },
    "window": null,
-   "delta": null,
-   "dual_dump": null,
+   "delta": 216532,
+   "dual_dump": true,
    "fn_ok": null,
-   "note": "",
+   "note": "AdjustStatusBarBG. Four independent lines, all checked in both dumps. (1) MEMBER: v83 reads the object through `add eax,",
    "fn83": 9239256,
-   "fn84": 9455103
+   "fn84": 9455103,
+   "data": false,
+   "regalloc": false,
+   "shape_ok": true,
+   "mono_ok": true
   },
   {
    "v83": 9248756,

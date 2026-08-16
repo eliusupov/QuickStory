@@ -109,16 +109,18 @@
    "v84": "0x00C3BA84",
    "tier": "M-manual",
    "evidence": "No absolute code xref exists for this dword, but its sibling 0x00BE2738 resolved by xref to 0x00C3BA80 and 0x00BE2DF0/0x00BE2DF4 resolved to 0x00C3C138/0x00C3C13C -- all three at the same delta 0x59348. 0x00BE273C = 0x00BE2738 + 4 therefore maps to 0x00C3BA84."
+  },
+  "0x008D1F65": {
+   "v84": "0x00906D39",
+   "tier": "M-manual",
+   "evidence": "AdjustStatusBarBG. Four independent lines, all checked in both dumps. (1) MEMBER: v83 reads the object through `add eax,0xCCC` at 0x008D1F46; v84 through `lea ecx,[esi+0xD04]` at 0x00906D3C. 0xCCC+0x38=0xD04, and +0x38 is the measured shift for every CUIStatusBar member above ~0xC40 (v83 0xCD0->v84 0xD08 and 0xCD4->0xD0C are the two confirmed cave sites; the 0xCD4 group is 11 sites in v83 and 11 in v84 in the same order). (2) SEH ALIGNMENT: the `mov [ebp-4],state` unwind markers run 0x72,0x73,0x74,0x73,0x75,0x76,0x75,0x77,0x78,0x77,0x79,0x7A,0x7B in v83 and 0x7E,0x7F,0x80,0x7F,0x81,0x82,0x81,0x83,0x84,0x83,0x85,0x86,0x87 in v84 -- a constant +0xC with NO insertion or deletion across the whole 0x008D1E7B..0x008D2185 / 0x00906CE5..0x00906EC7 span. The anchor at the far end of that run is P248 0x008D217C->0x00906EBE, already verified independently. 0x008D1F65 and 0x00906D39 sit in the corresponding sub-block (v83 0x73/0x74, v84 0x7F/0x80). (3) PREAMBLE: both blocks construct the same pair of ZXString temporaries into [ebp-0x28] and [ebp-0x50]/[ebp-0x4c] with the same `push ebx ; lea ecx ; call <ctor>` twice, and both are followed by `mov ecx,eax ; call`. (4) ARGUMENT POSITION: 0x16 is the same argument in the same position in both. Ordinally it is also the 2nd of 3 `push 0x16` in each image's status-bar region, which is how phase 1 guessed it -- that alone was NOT sufficient evidence, because the 2nd v84 site has the shape of the *Input* cave, not the BG cave.",
+   "cave_size_v84": 9,
+   "cave_body_v84": "push nStatusBarY ; push edi ; lea ecx,[esi+0x0D04] ; jmp [dwStatusBarBackgroundPosRetn]",
+   "caveat": "REDESIGNED CAVE, NOT A RE-POINT. v84 recompiled the call: v83 was a vtable call `call [ecx+0x90]` taking both ZXStrings BY VALUE (4x movsd each), v84 is a direct thiscall `call 0x428CEF` with `this = esi+0xD04` taking them BY POINTER. So the v83 displaced run (`push 0x16 ; movsd ; push 0` = 5 bytes) does not exist in v84. The v84 run is `push 0x16 ; push edi ; lea ecx,[esi+0xD04]` = 2+1+6 = 9 bytes, which is the SAME shape as AdjustStatusBarInput. Cave size is therefore 9 (5-byte jmp + 4 nops), retn 0x00906D42. Phase 1's note proposed `nops 3` -- that is arithmetically impossible, a 5-byte E9 does not fit in 3 bytes, and 3 was the only other whole-instruction tiling at this address. UNPROVEN: that 0x16 still drives the background layer's Y in v84's UI.wz. The address, the tiling and the body are proven at the binary; the visual effect is not."
   }
  },
  "not_portable_as_is": {
-  "0x008D1F65": {
-   "v84_logical": "0x00906D39",
-   "tier": "M-manual-needs-rewrite",
-   "evidence": "AdjustStatusBarBG cave. v83 and v84 each hold exactly the set of `push 0x16` sites in their status-bar region -- v83 has three (0x008CFD55, 0x008D1F65, 0x008D217C), v84 has two in the matching range plus 0x00904888 for 0x008CFD55. By order and by function, 0x008D1F65 corresponds to v84 0x00906D39.",
-   "why_not_shipped": "v84 recompiled this construct. v83 displaces `push 0x16 ; movsd ; push 0` (a vtable call at [ecx+0x90] with an inline struct copy) = 5 bytes. v84 0x00906D39 is `push 0x16 ; push edi ; lea ecx,[esi+0xD04]` -- a direct thiscall. A 5-byte NOP run does not tile there (2+1=3, or 2+1+6=9). Porting it means REWRITING the cave: nops 3, body `push nStatusBarY ; push edi ; jmp 0x00906D3C`. Left out of the shipping set until that rewrite is made and re-verified.",
-   "confidence": "address high, cave design not yet done"
-  }
+  "_": "Empty. 0x008D1F65 (AdjustStatusBarBG) lived here through phase 1; phase 2 resolved and redesigned it -- see sites/0x008D1F65. Nothing else in the set is a known-unportable construct; the remaining gaps are unresolved addresses."
  },
  "source_bugs": {
   "P113": {
