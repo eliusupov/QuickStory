@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <MapleLibProject Condition="'$(MapleLibProject)' == ''">D:\games\MapleStory\Server\porting-resources\reference-sources\HaRepacker-src\MapleLib\MapleLib\MapleLib.csproj</MapleLibProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(MapleLibProject)" />
+  </ItemGroup>
+
+</Project>
