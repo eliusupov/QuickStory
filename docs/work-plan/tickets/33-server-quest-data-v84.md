@@ -302,6 +302,19 @@ the merged tree's asymmetry list is the same 19, unchanged, so the merge introdu
 - **`22100`'s prerequisite is `22007`** (state 2), which is inside the merged `220xx` block, so the
   chain's own upstream is present.
 
+## The rewards the 135 hand out all resolve — measured, not assumed
+
+Not an acceptance criterion, but it is the failure this data would produce at runtime if it were
+wrong (a quest completing and awarding an item id nothing can build), and it was cheap:
+
+- **77 distinct item ids** are named across the 135 `Act.img` nodes. Checked against every id in
+  `wz/Item.wz` and `wz/Character.wz` (13,592 ids): **0 unresolved.**
+- **2 skill ids** — `20011004` and `20011005`, the Evan beginner skills. Both present in
+  `wz/Skill.wz/2001.img.xml`, which ticket 10 merged. **0 unresolved.**
+
+So the Evan chain is not waiting on any further WZ merge. It is waiting on a character that can
+hold job `2001`.
+
 ## Independent corroboration — Hidden Street (pre-Big-Bang archive)
 
 Used as cross-check only; the WZ is the authority. The live site is behind a Cloudflare JS
