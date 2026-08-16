@@ -217,7 +217,7 @@ static class Program
         }
         if (rows.Count == 0)
             throw new BadArgs($"{kind}-list {file} holds 0 rows. An empty {kind}-list is never what was meant; " +
-                (kind == "force" ? "omit --force instead." : "the committed COLLISION-DENY.txt has 28."));
+                (kind == "force" ? "omit --force instead." : "the committed COLLISION-DENY.txt has 40."));
         return rows;
     }
 
@@ -340,6 +340,121 @@ static class Program
         WzImageProperty p => (IEnumerable<WzObject>?)p.WzProperties ?? Array.Empty<WzObject>(),
         _ => Array.Empty<WzObject>()
     };
+
+    // ---------- B5: the positional-array gate ----------
+    //
+    // 03c's rule, made executable: "any manifest row that is one slot of a positional array is
+    // unsafe to merge piecemeal — the tell is a parent whose children are consecutive integers."
+    // The additive-only gate is structurally blind to this and cannot be taught to see it: a row
+    // like `220011000.img/portal/4/script` names a leaf the target does NOT have, under a parent
+    // it DOES have, so the gate is satisfied and the write lands on whatever portal happens to
+    // occupy index 4 in THIS tree. v84 reindexed that array; index 4 is `scr00` there and the
+    // working portal into Ludibrium Toy Factory here. Ten of the twelve rows ticket 08 refused by
+    // hand are that shape, and nothing in the pipeline said a word about any of them.
+
+    // A container is a positional array iff EVERY child name is a non-negative integer and they
+    // are exactly 0..c-1. "Every" is load-bearing: a map .img has children `0`-`7` (the layers)
+    // ALONGSIDE info/portal/foothold/life, and calling that an array would refuse every row that
+    // writes into a layer — including the six appends ticket 08 correctly merged.
+    static int? ArrayCount(IEnumerable<string> childNames)
+    {
+        var seen = new HashSet<int>();
+        int c = 0;
+        foreach (var n in childNames)
+        {
+            if (!IsIndex(n, out int v) || !seen.Add(v)) return null;
+            c++;
+        }
+        if (c == 0) return null;
+        for (int i = 0; i < c; i++) if (!seen.Contains(i)) return null;
+        return c;
+    }
+
+    // "4" yes; "04", "+4", "-4", "4 " no. A leading zero is a different NAME than the integer it
+    // parses to, and WZ lookup is by name — treating `04` as slot 4 would misjudge the array.
+    static bool IsIndex(string s, out int v) =>
+        int.TryParse(s, out v) && v >= 0 && s == v.ToString();
+
+    // Digest of a node's CONTENT with its own name excluded, so slot 15 of one array can be
+    // compared with slot 14 of another. Canon() already keys every descendant by its path
+    // relative to the prefix it is handed.
+    static string SlotDigest(WzObject o)
+    {
+        var sb = new StringBuilder();
+        Canon(o, "", sb);
+        return Sha(Encoding.UTF8.GetBytes(sb.ToString()));
+    }
+
+    // What the target's array looked like BEFORE this run touched it. Memoised per container:
+    // the whole check has to be answered against the baseline, or the answer depends on the
+    // order the manifest happens to list its slots in (add-list rows are sorted as TEXT, so
+    // `back/10` arrives before `back/9`).
+    sealed class ArrayBase
+    {
+        public int Count;
+        public HashSet<string> Digests = new();
+    }
+
+    // Refusal reason, or null. `requested` is every slot index this run asks for, per container,
+    // so a manifest that appends 9..28 in text order is judged on the set, not on the row.
+    static string? PositionalRefusal(WzFile tgt, string wzName, string[] rel, WzObject srcObj,
+        Dictionary<string, ArrayBase?> baseline, Dictionary<string, SortedSet<int>> requested)
+    {
+        for (int i = 0; i < rel.Length; i++)
+        {
+            if (!IsIndex(rel[i], out int idx)) continue;
+            string container = string.Join('/', new[] { wzName }.Concat(rel.Take(i)));
+            if (!baseline.TryGetValue(container, out var b))
+            {
+                var node = Resolve(tgt, rel, i);
+                int? c = node == null ? null : ArrayCount(Kids(node).Select(k => k.Name));
+                b = c == null ? null : new ArrayBase
+                {
+                    Count = c.Value,
+                    Digests = Kids(node!).Select(SlotDigest).ToHashSet()
+                };
+                baseline[container] = b;   // a null is memoised too: "not an array, stop asking"
+            }
+            if (b == null) continue;
+
+            string tell = $"'{container}' holds exactly the consecutive integers 0..{b.Count - 1}, so its children are SLOTS OF A POSITIONAL ARRAY, not identities";
+
+            if (i != rel.Length - 1)
+                return $"POSITIONAL ARRAY: {tell}. This row writes '{string.Join('/', rel.Skip(i + 1))}' INTO slot {idx}, which already exists — and v84's slot {idx} need not be the same entry as the target's. Merging it attaches the field to whichever entry sits at that index HERE. Compare the two arrays element by element (by name, not by index) and either re-author the row against the target's index or deny it.";
+
+            if (idx < b.Count)
+                return $"POSITIONAL ARRAY: {tell}. Slot {idx} is already occupied; this is not an append.";
+
+            var want = requested.TryGetValue(container, out var w) ? w : new SortedSet<int>();
+            for (int k = b.Count; k < idx; k++)
+                if (!want.Contains(k))
+                    return $"POSITIONAL ARRAY: {tell}. Slot {idx} would leave a GAP — the array ends at {b.Count - 1} and nothing in this manifest supplies slot {k}. A client that walks the array stops at the hole.";
+
+            // A pure append by index can still be a duplicate by content: if v84 INSERTED an
+            // entry earlier in the array, every later slot is the target's own content shifted
+            // one place, and the last one lands past the end and looks like new material.
+            // `220000300.img/portal/15` is exactly that — byte-identical to the target's
+            // portal/14 (`in06` -> 220000307), because v84 inserted `scr00` at index 4.
+            if (b.Digests.Contains(SlotDigest(srcObj)))
+                return $"POSITIONAL ARRAY: {tell}. Index {idx} IS a pure append onto {b.Count} entries, but the source entry is content-identical to one the array already holds — the two arrays have diverged (the source inserted earlier and every later slot is shifted), so this appends a DUPLICATE rather than new content.";
+        }
+        return null;
+    }
+
+    // row "…/portal/15" -> requested["…/portal"] += 15. Rows whose last segment is not an index
+    // contribute nothing; a container that is not an array is never looked up.
+    static Dictionary<string, SortedSet<int>> RequestedSlots(IEnumerable<string> paths)
+    {
+        var d = new Dictionary<string, SortedSet<int>>(StringComparer.OrdinalIgnoreCase);
+        foreach (var p in paths)
+        {
+            int i = p.LastIndexOf('/');
+            if (i <= 0 || !IsIndex(p[(i + 1)..], out int n)) continue;
+            if (!d.TryGetValue(p[..i], out var s)) d[p[..i]] = s = new SortedSet<int>();
+            s.Add(n);
+        }
+        return d;
+    }
 
     // ---------- verify (B1: the tool checks its own output) ----------
 
@@ -910,6 +1025,10 @@ static class Program
         int added = 0, forced = 0;
         var touched = new SortedSet<string>(StringComparer.OrdinalIgnoreCase);   // images to content-check (M2)
         var noContentCheck = new List<string>();
+        // B5: state for the positional-array gate. Both are read-only once built / memoised on
+        // first use, and both describe the target as it was BEFORE this run — see ArrayBase.
+        var arrayBase = new Dictionary<string, ArrayBase?>(StringComparer.OrdinalIgnoreCase);
+        var slotsWanted = RequestedSlots(paths);
         foreach (var manifestPath in paths)
         {
             // ===================== B1: THE DENY-LIST =====================
@@ -947,6 +1066,13 @@ static class Program
 
             var parent = Resolve(tgt, rel, rel.Length - 1);
             if (parent == null) { Conflict(manifestPath, "parent path absent in target — import the parent first"); continue; }
+
+            // B5: THE POSITIONAL-ARRAY GATE, reported as its own reason so an operator can tell
+            // "this index would land on a different entry" from "already exists". A force-list row
+            // is an explicit operator decision about a named node and is left alone; deny the row
+            // instead if the decision was wrong.
+            if (fHit == null && PositionalRefusal(tgt, wzName, rel, srcObj, arrayBase, slotsWanted) is string aRefusal)
+            { Conflict(manifestPath, aRefusal); continue; }
 
             // The `existing?.Remove()` calls live INSIDE the branches, immediately before the add
             // that replaces the removed node, and never on the `default:` path. Removing before
@@ -1160,6 +1286,8 @@ static class Program
                           (forceFile == null ? "; no force-list (nothing may be overwritten)" : $"; force-list {forceFile}: {force.Count} roots"));
 
         int added = 0, forced = 0, unverified = 0;
+        var xmlArrayBase = new Dictionary<string, int?>(StringComparer.OrdinalIgnoreCase);   // B5
+        var xmlSlots = RequestedSlots(paths);
         foreach (var manifestPath in paths)
         {
             string rowRoot = manifestPath.Split('/')[0];
@@ -1232,6 +1360,16 @@ static class Program
             bool located = true;
             foreach (var seg in inImg[..^1])
             {
+                // B5: the positional-array gate, same rule as the binary side (see
+                // PositionalRefusal) against the one structure this scan can see: the names of
+                // the container's children at this indent. Descending THROUGH an integer segment
+                // whose container is an array means the row writes a field into an existing slot,
+                // and slot n here need not be slot n in the source.
+                if (IsIndex(seg, out int segIdx) && ArrayCount(ChildNames(lines, start, end, indent)) is int ac0)
+                {
+                    Conflict(manifestPath, $"POSITIONAL ARRAY: the container of '{seg}' holds exactly the consecutive integers 0..{ac0 - 1}, so its children are SLOTS, not identities. This row writes into slot {segIdx}, which already exists — the source's slot {segIdx} need not be the same entry. Re-author the row against this tree's index or deny it.");
+                    located = false; break;
+                }
                 int i = FindChild(lines, start, end, indent, seg);
                 if (i < 0) { Conflict(manifestPath, $"parent '{seg}' absent in {xmlFile} — import the parent first"); located = false; break; }
                 if (!lines[i].AsSpan(indent).StartsWith("<imgdir"))
@@ -1277,6 +1415,34 @@ static class Program
                                     // in one place instead of a move
                 Console.WriteLine($"  FORCE {manifestPath} -> {xmlFile} (replacing {last - at + 1} line(s); {fHit.reason})");
                 forced++;
+            }
+
+            // B5, the append half. Only reached when the name is absent — an occupied slot is
+            // already the additive gate's business and keeps its own wording. The count is
+            // memoised per container so that a manifest listing `9..28` in TEXT order (`10`
+            // before `9`) is judged as a set, exactly as the binary side judges it.
+            if (at < 0 && IsIndex(name, out int leafIdx))
+            {
+                string container = manifestPath[..manifestPath.LastIndexOf('/')];
+                if (!xmlArrayBase.TryGetValue(container, out var ac))
+                    xmlArrayBase[container] = ac = ArrayCount(ChildNames(lines, start, end, indent));
+                if (ac is int c0)
+                {
+                    string? why = null;
+                    if (leafIdx < c0) why = $"slot {leafIdx} is already occupied; this is not an append";
+                    else for (int k = c0; k < leafIdx && why == null; k++)
+                        if (!(xmlSlots.TryGetValue(container, out var w) && w.Contains(k)))
+                            why = $"slot {leafIdx} would leave a GAP — the array ends at {c0 - 1} and nothing in this manifest supplies slot {k}";
+                    if (why != null)
+                    {
+                        Conflict(manifestPath, $"POSITIONAL ARRAY: '{container}' holds exactly the consecutive integers 0..{c0 - 1}, so its children are SLOTS, not identities. {why}.");
+                        continue;
+                    }
+                    // NOTE: the binary side additionally refuses an append whose CONTENT already
+                    // exists elsewhere in the array (a source that inserted earlier shifts every
+                    // later slot). That comparison needs decoded nodes on both sides; this scan
+                    // has text. Deny-list the row — one deny-list serves both subcommands.
+                }
             }
 
             // Insert in sorted position purely so the git diff reads naturally — the server
@@ -1356,6 +1522,13 @@ static class Program
         i += marker.Length;
         int j = line.IndexOf('"', i);
         return j < 0 ? null : line[i..j];
+    }
+
+    // names of the elements opened at EXACTLY this indent inside [start,end) — the container's
+    // own children, which is all the B5 gate needs to recognise a positional array in text.
+    static IEnumerable<string> ChildNames(List<string> lines, int start, int end, int indent)
+    {
+        for (int i = start; i < end; i++) if (NameAt(lines[i], indent) is string n) yield return n;
     }
 
     static int FindChild(List<string> lines, int start, int end, int indent, string name) =>

@@ -1,14 +1,15 @@
-# COMPOSED INSTALL LIST - String.wz. Built by ticket 03f from the committed per-ticket
-# lists under ..\{04,05,06,07,03f}\ - those are the source of truth, this file is a
-# concatenation of them in ticket order with each block's internal order preserved.
-# Every row is unique across the whole composed set and no row is an ancestor of
-# another (checked, all ten files). Regenerate rather than hand-edit.
+# COMPOSED INSTALL LIST - String.wz. Built by ticket 03f, ticket 08 folded in by 03g,
+# from the committed per-ticket lists under ..\{04,05,06,07,03f,08}\ - those are the
+# source of truth, this file is a concatenation of them in ticket order with each
+# block's internal order preserved. Every row is unique across the whole composed set
+# and no row is an ancestor of another (checked, all ten files). Regenerate, never edit.
 #
-# 471 rows. REQUIRES --force composed\FORCE.txt (38 roots). Expect 9 refusals (see README).
+# 510 rows. REQUIRES --force composed\FORCE.txt (41 roots - 38 + ticket 08's 3).
+# Reusing the 38-root file silently reverts 08's three forced names. Expect 9 refusals.
 #
-# Ticket 08 is in flight and owns Map.wz, Mob.wz, Npc.wz, Reactor.wz, Sound.wz and the
-# String.wz/{Map,Mob,Npc}.img path lists. It appends its own '# ==== ticket 08 ====' block
-# at the foot of the relevant files; nothing above it needs to move.
+# Ticket 09 owns Quest.wz and appends its own block at the foot of this file; nothing
+# above the marker needs to move. Add "09" to compose.ps1's $files table and re-run -
+# and if 09 forces anything, regenerate FORCE.txt too (41 roots today, all String.wz).
 #
 # Run book: ..\..\..\work-plan\WZ-MERGE-PROCEDURE.md section 5, one file at a time.
 
@@ -493,4 +494,45 @@ String.wz/Skill.img/20001038
 String.wz/Skill.img/20001039
 String.wz/Npc.img/9201144
 
-# ==== ticket 08 appends here ====
+# ==== ticket 08 (39 rows, order preserved from 08\String.paths.txt) ====
+String.wz/Map.img/etc/910050300
+String.wz/Map.img/etc/910060100
+String.wz/Map.img/etc/910060101
+String.wz/Map.img/etc/910600000
+String.wz/Map.img/etc/910600010
+String.wz/Map.img/etc/914100000
+String.wz/Map.img/etc/914100010
+String.wz/Map.img/etc/914100020
+String.wz/Map.img/etc/914100021
+String.wz/Map.img/etc/914100022
+String.wz/Map.img/etc/914100023
+String.wz/Map.img/etc/922030000
+String.wz/Map.img/etc/922030001
+String.wz/Map.img/etc/922030010
+String.wz/Map.img/etc/922030011
+String.wz/Map.img/etc/922030020
+String.wz/Map.img/etc/922030021
+String.wz/Map.img/etc/922030022
+String.wz/Map.img/etc/925110000
+String.wz/Mob.img/9300395
+String.wz/Mob.img/9300396
+String.wz/Npc.img/1011101
+String.wz/Npc.img/1013106
+String.wz/Npc.img/1013207
+String.wz/Npc.img/2080007
+String.wz/Npc.img/2092101
+String.wz/Npc.img/9000071
+String.wz/Npc.img/1063018/d0
+String.wz/Npc.img/1063018/d1
+String.wz/Npc.img/1205000/d0
+String.wz/Npc.img/1205000/d1
+String.wz/Npc.img/2012034/d0
+String.wz/Npc.img/2012034/d1
+String.wz/Npc.img/2001006
+String.wz/Npc.img/2001007
+String.wz/Npc.img/2001008
+String.wz/Map.img/ossyria/200090080
+String.wz/Map.img/ossyria/200090090
+String.wz/Npc.img/1013203
+
+# ==== ticket 09 appends here ====

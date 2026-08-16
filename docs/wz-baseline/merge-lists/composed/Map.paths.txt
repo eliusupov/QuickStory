@@ -1,15 +1,18 @@
-# COMPOSED INSTALL LIST - Map.wz. Built by ticket 03f from the committed per-ticket
-# lists under ..\{04,05,06,07,03f}\ - those are the source of truth, this file is a
-# concatenation of them in ticket order with each block's internal order preserved.
-# Every row is unique across the whole composed set and no row is an ancestor of
-# another (checked, all ten files). Regenerate rather than hand-edit.
+# COMPOSED INSTALL LIST - Map.wz. Built by ticket 03f, ticket 08 folded in by 03g,
+# from the committed per-ticket lists under ..\{04,05,06,07,03f,08}\ - those are the
+# source of truth, this file is a concatenation of them in ticket order with each
+# block's internal order preserved. Every row is unique across the whole composed set
+# and no row is an ancestor of another (checked, all ten files). Regenerate, never edit.
 #
-# 37 rows. 06's 34 (12 dependency rows FIRST, then 22 map images) then 07's 3.
+# 132 rows. 06's 34 (12 dependency rows FIRST, then 22 map images), 07's 3, 08's 95
+# (67 asset rows, then 22 map images, then 6 route rows that append onto EXISTING v83 maps).
 # THE ORDER INSIDE EACH TICKET BLOCK IS LOAD-BEARING - deps before the maps that draw them.
+# 08's twelve UNSAFE route rows are not here and are on COLLISION-DENY.txt; the tool refuses
+# that shape structurally as well (POSITIONAL ARRAY, see WZ-MERGE-PROCEDURE.md 4.4).
 #
-# Ticket 08 is in flight and owns Map.wz, Mob.wz, Npc.wz, Reactor.wz, Sound.wz and the
-# String.wz/{Map,Mob,Npc}.img path lists. It appends its own '# ==== ticket 08 ====' block
-# at the foot of the relevant files; nothing above it needs to move.
+# Ticket 09 owns Quest.wz and appends its own block at the foot of this file; nothing
+# above the marker needs to move. Add "09" to compose.ps1's $files table and re-run -
+# and if 09 forces anything, regenerate FORCE.txt too (41 roots today, all String.wz).
 #
 # Run book: ..\..\..\work-plan\WZ-MERGE-PROCEDURE.md section 5, one file at a time.
 
@@ -54,4 +57,106 @@ Map.wz/Map/Map6/683070400.img
 Map.wz/Map/Map6/683070401.img
 Map.wz/Map/Map6/683070402.img
 
-# ==== ticket 08 appends here ====
+# ==== ticket 08 (95 rows, order preserved from 08\Map.paths.txt) ====
+Map.wz/Back/grassySoil.img/ani/1
+Map.wz/Back/grassySoil.img/ani/2
+Map.wz/Back/grassySoil.img/ani/3
+Map.wz/Back/grassySoil.img/ani/4
+Map.wz/Back/grassySoil.img/ani/5
+Map.wz/Back/grassySoil.img/ani/6
+Map.wz/Back/grassySoil.img/ani/7
+Map.wz/Back/grassySoil.img/back/10
+Map.wz/Back/grassySoil.img/back/11
+Map.wz/Back/grassySoil.img/back/12
+Map.wz/Back/grassySoil.img/back/13
+Map.wz/Back/grassySoil.img/back/14
+Map.wz/Back/grassySoil.img/back/15
+Map.wz/Back/grassySoil.img/back/16
+Map.wz/Back/grassySoil.img/back/17
+Map.wz/Back/grassySoil.img/back/18
+Map.wz/Back/grassySoil.img/back/19
+Map.wz/Back/grassySoil.img/back/20
+Map.wz/Back/grassySoil.img/back/21
+Map.wz/Back/grassySoil.img/back/22
+Map.wz/Back/grassySoil.img/back/23
+Map.wz/Back/grassySoil.img/back/24
+Map.wz/Back/grassySoil.img/back/25
+Map.wz/Back/grassySoil.img/back/26
+Map.wz/Back/grassySoil.img/back/27
+Map.wz/Back/grassySoil.img/back/28
+Map.wz/Back/grassySoil.img/back/9
+Map.wz/Back/Rien.img/back/30
+Map.wz/Back/Rien.img/back/31
+Map.wz/Back/Rien.img/back/32
+Map.wz/Back/Rien.img/back/33
+Map.wz/Back/Rien.img/back/34
+Map.wz/Back/Rien.img/back/35
+Map.wz/Back/Rien.img/back/36
+Map.wz/Back/Rien.img/back/37
+Map.wz/Back/Rien.img/back/38
+Map.wz/Back/Rien.img/back/39
+Map.wz/Back/Rien.img/back/40
+Map.wz/Back/Rien.img/back/41
+Map.wz/Back/Rien.img/back/42
+Map.wz/Back/Rien.img/back/43
+Map.wz/Back/Rien.img/back/44
+Map.wz/Back/Rien.img/back/45
+Map.wz/Back/Rien.img/back/46
+Map.wz/Back/Rien.img/back/47
+Map.wz/Back/Rien.img/back/48
+Map.wz/Back/toyCastleB1.img/back/10
+Map.wz/Back/toyCastleB1.img/back/8
+Map.wz/Back/toyCastleB1.img/back/9
+Map.wz/MapHelper.img/mark/SnowDragon
+Map.wz/Obj/acc1.img/grassySoil/golem/20
+Map.wz/Obj/acc1.img/grassySoil/golem/21
+Map.wz/Obj/acc12.img/dragon
+Map.wz/Obj/dungeon.img/darkCave/acc/41
+Map.wz/Obj/dungeon.img/darkCave/acc/42
+Map.wz/Obj/dungeon.img/darkCave/acc/43
+Map.wz/Obj/effect.img/quest/gate/7
+Map.wz/Obj/insideTC.img/inside0/blackroom
+Map.wz/Obj/tower.img/marineTower/gate/11
+Map.wz/Obj/tower.img/marineTower/gate/12
+Map.wz/Tile/grassySoil.img/edD/1
+Map.wz/Tile/grassySoil.img/enH0/2
+Map.wz/Tile/grassySoil.img/enH0/3
+Map.wz/Tile/grassySoil.img/enH1/2
+Map.wz/Tile/grassySoil.img/enH1/3
+Map.wz/Tile/grassySoil.img/enV0/2
+Map.wz/Tile/grassySoil.img/enV1/2
+Map.wz/Map/Map2/200080601.img
+Map.wz/Map/Map2/200090080.img
+Map.wz/Map/Map2/200090090.img
+Map.wz/Map/Map9/910050300.img
+Map.wz/Map/Map9/910060100.img
+Map.wz/Map/Map9/910060101.img
+Map.wz/Map/Map9/910600000.img
+Map.wz/Map/Map9/910600010.img
+Map.wz/Map/Map9/914100000.img
+Map.wz/Map/Map9/914100010.img
+Map.wz/Map/Map9/914100020.img
+Map.wz/Map/Map9/914100021.img
+Map.wz/Map/Map9/914100022.img
+Map.wz/Map/Map9/914100023.img
+Map.wz/Map/Map9/922030000.img
+Map.wz/Map/Map9/922030001.img
+Map.wz/Map/Map9/922030010.img
+Map.wz/Map/Map9/922030011.img
+Map.wz/Map/Map9/922030020.img
+Map.wz/Map/Map9/922030021.img
+Map.wz/Map/Map9/922030022.img
+Map.wz/Map/Map9/925110000.img
+Map.wz/Map/Map2/200080600.img/1/obj/25
+Map.wz/Map/Map2/200080600.img/1/obj/26
+Map.wz/Map/Map2/200080600.img/portal/6
+Map.wz/Map/Map2/251010403.img/4/obj/33
+Map.wz/Map/Map2/251010403.img/portal/4
+Map.wz/Map/Map1/106010102.img/portal/8
+
+# ==== composition fill (1 row(s)) - rows no ticket claimed that the
+#      composition NEEDS. Each is an add-list row, a pure addition, and is here
+#      because leaving it out puts a HOLE in a positional array (see below).
+Map.wz/Obj/effect.img/quest/gate/6
+
+# ==== ticket 09 appends here ====

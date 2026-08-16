@@ -18,7 +18,7 @@
 # Precedence, if both lists are ever supplied: deny wins. A path in both is an operator error
 # and should be a hard exit, not a silent resolution.
 #
-# 28 rows.
+# 40 rows.
 
 # --- Hazard 1: server-owned id range -----------------------------------------------------
 # PlayerNPC.java:66-67 declares 9901910-9906599 a range the server allocates from AT RUNTIME
@@ -63,6 +63,31 @@ String.wz/MonsterBook.img/7130102/reward	# positional array
 String.wz/MonsterBook.img/8140100/reward	# positional array
 String.wz/MonsterBook.img/8140701/reward	# positional array
 String.wz/MonsterBook.img/8810018/reward	# positional array
+
+# --- Hazard 2b: the same hazard, on portals players currently use -------------------------
+# Ticket 08. `add-list/Map.txt` offers 18 rows that write into a `portal`/`obj` array on a map
+# the LIVE CLIENT ALREADY HAS. Six are pure appends and were merged; these twelve are not —
+# v84 reordered or inserted entries, so the same index names a different portal in each tree.
+# Ten are the shape `<array>/<n>/<field>` where `<n>` already exists in the target, which the
+# additive gate passes (parent exists, leaf does not) and then writes onto the wrong sibling.
+# Every live/v84 pair below was dumped index by index; ROUTE-ROWS.md in `08/` records the
+# comparison and the cost of refusing them (three staged areas have no route in).
+# SINCE TICKET 03g THE TOOL ALSO REFUSES THESE STRUCTURALLY — a write into a container whose
+# children are exactly 0..c-1 must be a pure append (index == c) whose content is not already
+# in the array, and the refusal is reported as `POSITIONAL ARRAY:` rather than as a collision.
+# These rows stay listed anyway: they are a decision about data, and a deny row says WHY.
+Map.wz/Map/Map1/106010101.img/portal/5/horizontalImpact	# positional array: live slot 5 is out00 (-> 106010100), v84's is in00; would move the exit portal
+Map.wz/Map/Map1/106010101.img/portal/5/script	# positional array: would attach evanGolemDoor to the exit portal back to Golem's Temple 1
+Map.wz/Map/Map1/106010102.img/portal/4/horizontalImpact	# positional array: v84 moved out00 to index 3, so live 4=in04 but v84 4=in03 — one portal off
+Map.wz/Map/Map1/106010102.img/portal/5/horizontalImpact	# positional array: live 5=in05, v84 5=in04
+Map.wz/Map/Map1/106010102.img/portal/6/horizontalImpact	# positional array: live 6=in06, v84 6=in05
+Map.wz/Map/Map1/106010102.img/portal/7/horizontalImpact	# positional array: live 7=out00, v84 7=in06
+Map.wz/Map/Map2/220000300.img/portal/4/horizontalImpact	# positional array: v84 inserted scr00 at 4; live 4 is the hidden town point h000
+Map.wz/Map/Map2/220000300.img/portal/4/script	# positional array: would attach enterBlackFrog to hidden town portal h000. This row IS v84's Frog House entrance and is simply unusable at this index
+Map.wz/Map/Map2/220000300.img/portal/6/image	# positional array: live 6=west00 (-> 220000400), v84 6=h001
+Map.wz/Map/Map2/220000300.img/portal/15	# positional array: appends a DUPLICATE in06 — v84 has 16 portals only because it inserted scr00 at 4, so its slot 15 is byte-identical to live's slot 14
+Map.wz/Map/Map2/220011000.img/portal/4/horizontalImpact	# positional array: live slot 4 is the WORKING portal into Ludibrium Toy Factory (in00 pt=2 -> 220011001)
+Map.wz/Map/Map2/220011000.img/portal/4/script	# positional array: would attach enterBlackBC, a script that does not exist, to that working portal — i.e. break it
 
 # --- Hazard 3: partial merge of one entity ------------------------------------------------
 # v84 rebuilt this NPC around UOL links (Npc.txt:7 — 60238 -> 21146 bytes, it shrank by two

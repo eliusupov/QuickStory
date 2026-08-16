@@ -1,6 +1,7 @@
 # COMPOSED FORCE-LIST. Pass this as --force for the composed String.wz merge and for the
-# composed String.wz xml run. 38 roots: COLLISION-FORCE.txt's 37 verbatim, plus one row
-# ticket 03f adds. Same format and same parser as COLLISION-FORCE.txt / COLLISION-DENY.txt.
+# composed String.wz xml run. 41 roots: COLLISION-FORCE.txt's 37 verbatim, plus one row
+# ticket 03f adds and three ticket 08 adds. Same format and same parser as
+# COLLISION-FORCE.txt / COLLISION-DENY.txt.
 #
 # Why a separate file instead of a row appended to COLLISION-FORCE.txt: that file is one rule
 # end to end - "the live value is the literal MISSING NAME / MISSING INFO stub" - and its 37
@@ -8,7 +9,14 @@
 # live value is a real name. Mixing it in would make the file's own stated invariant false and
 # would silently change what every other ticket's --force means.
 #
-# Nothing else in the composed set needs --force: all 38 roots are String.wz.
+# Ticket 08's three are a THIRD rule again ("the live value is untranslated Korean for content
+# GMS v83 had not released yet; v84 is the English translation of the same node"), which is why
+# they live in ..\08\String.force.txt and are copied here rather than merged into either file.
+#
+# REGENERATE THIS FILE WHEN YOU ADD A TICKET. compose.ps1 does not touch it. Reusing an older
+# copy at install time silently reverts the forces of every ticket added since.
+#
+# Nothing else in the composed set needs --force: all 41 roots are String.wz.
 
 # ---- COLLISION-FORCE.txt, 37 roots, verbatim (ticket 03c) ----
 String.wz/Cash.img/5500005	# live "MISSING NAME" -> v84 "[50days] Magical Sandglass"
@@ -51,3 +59,13 @@ String.wz/Ins.img/3994180	# live "MISSING NAME" -> v84 name is untranslated KMS 
 
 # ---- ticket 03f, 1 root ----
 String.wz/Npc.img/9201144	# live "Steward" -> v84 "Shadow Knight Rene". NOT Cosmic content: v83-stock ships the identical Steward node, so v84 renamed a stock GMS npc. Placed only by 683010000 (the life node 06 added), no script, no other reference. 06 merged the blackKnight_GL sprite under the old name.
+
+# ---- ticket 08, 3 roots (verbatim from ..\08\String.force.txt) ----
+# The live value of each is untranslated Korean shipped in the GMS v83 client for content that
+# had not been released yet; v84 is the English translation of the SAME node, same shape, no
+# field lost. Nothing in src/, scripts/ or wz/ reads any of the three live values.
+String.wz/Map.img/ossyria/200090080	# live is Korean; v84 = 'Olaf's Voyage' / 'To the Slumbering Dragon Island'
+String.wz/Map.img/ossyria/200090090	# live is Korean; v84 = 'Olaf's Voyage' / 'To Lith Harbor'
+String.wz/Npc.img/1013203	# live is Korean; v84 = 'Hiver' / 'Black Wing Captain' + 4 dialogue lines
+
+# ==== ticket 09 appends here ====

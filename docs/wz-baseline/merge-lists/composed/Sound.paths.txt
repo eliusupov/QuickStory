@@ -1,18 +1,44 @@
-# COMPOSED INSTALL LIST - Sound.wz. Built by ticket 03f from the committed per-ticket
-# lists under ..\{04,05,06,07,03f}\ - those are the source of truth, this file is a
-# concatenation of them in ticket order with each block's internal order preserved.
-# Every row is unique across the whole composed set and no row is an ancestor of
-# another (checked, all ten files). Regenerate rather than hand-edit.
+# COMPOSED INSTALL LIST - Sound.wz. Built by ticket 03f, ticket 08 folded in by 03g,
+# from the committed per-ticket lists under ..\{04,05,06,07,03f,08}\ - those are the
+# source of truth, this file is a concatenation of them in ticket order with each
+# block's internal order preserved. Every row is unique across the whole composed set
+# and no row is an ancestor of another (checked, all ten files). Regenerate, never edit.
 #
-# 1 row, ticket 06 alone. Needs the post-03f verifier - see README.
+# 24 rows. 06's 1 (Bgm14.img/DragonRider) + 08's 23 Mob.img SFX banks. Needs the
+# post-03f verifier, which discounts BgmGL.img - unparseable in all three trees. Expect exit 0.
 #
-# Ticket 08 is in flight and owns Map.wz, Mob.wz, Npc.wz, Reactor.wz, Sound.wz and the
-# String.wz/{Map,Mob,Npc}.img path lists. It appends its own '# ==== ticket 08 ====' block
-# at the foot of the relevant files; nothing above it needs to move.
+# Ticket 09 owns Quest.wz and appends its own block at the foot of this file; nothing
+# above the marker needs to move. Add "09" to compose.ps1's $files table and re-run -
+# and if 09 forces anything, regenerate FORCE.txt too (41 roots today, all String.wz).
 #
 # Run book: ..\..\..\work-plan\WZ-MERGE-PROCEDURE.md section 5, one file at a time.
 
 # ==== ticket 06 (1 rows, order preserved from 06\Sound.paths.txt) ====
 Sound.wz/Bgm14.img/DragonRider
 
-# ==== ticket 08 appends here ====
+# ==== ticket 08 (23 rows, order preserved from 08\Sound.paths.txt) ====
+Sound.wz/Mob.img/9300386
+Sound.wz/Mob.img/9300387
+Sound.wz/Mob.img/9300389
+Sound.wz/Mob.img/9300390
+Sound.wz/Mob.img/9300392
+Sound.wz/Mob.img/9300395
+Sound.wz/Mob.img/9300396
+Sound.wz/Mob.img/9400658
+Sound.wz/Mob.img/9400659
+Sound.wz/Mob.img/9400660
+Sound.wz/Mob.img/9400661
+Sound.wz/Mob.img/8300005
+Sound.wz/Mob.img/8300006
+Sound.wz/Mob.img/8300007
+Sound.wz/Mob.img/9500374
+Sound.wz/Mob.img/9500375
+Sound.wz/Mob.img/9500376
+Sound.wz/Mob.img/9500377
+Sound.wz/Mob.img/9500378
+Sound.wz/Mob.img/9500379
+Sound.wz/Mob.img/9500380
+Sound.wz/Mob.img/9500381
+Sound.wz/Mob.img/9500382
+
+# ==== ticket 09 appends here ====

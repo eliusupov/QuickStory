@@ -1,14 +1,14 @@
-# COMPOSED INSTALL LIST - Reactor.wz. Built by ticket 03f from the committed per-ticket
-# lists under ..\{04,05,06,07,03f}\ - those are the source of truth, this file is a
-# concatenation of them in ticket order with each block's internal order preserved.
-# Every row is unique across the whole composed set and no row is an ancestor of
-# another (checked, all ten files). Regenerate rather than hand-edit.
+# COMPOSED INSTALL LIST - Reactor.wz. Built by ticket 03f, ticket 08 folded in by 03g,
+# from the committed per-ticket lists under ..\{04,05,06,07,03f,08}\ - those are the
+# source of truth, this file is a concatenation of them in ticket order with each
+# block's internal order preserved. Every row is unique across the whole composed set
+# and no row is an ancestor of another (checked, all ten files). Regenerate, never edit.
 #
-# 2 rows, ticket 06 alone. Expect exit 0.
+# 3 rows. 06's 2 + 08's 1. Expect exit 0.
 #
-# Ticket 08 is in flight and owns Map.wz, Mob.wz, Npc.wz, Reactor.wz, Sound.wz and the
-# String.wz/{Map,Mob,Npc}.img path lists. It appends its own '# ==== ticket 08 ====' block
-# at the foot of the relevant files; nothing above it needs to move.
+# Ticket 09 owns Quest.wz and appends its own block at the foot of this file; nothing
+# above the marker needs to move. Add "09" to compose.ps1's $files table and re-run -
+# and if 09 forces anything, regenerate FORCE.txt too (41 roots today, all String.wz).
 #
 # Run book: ..\..\..\work-plan\WZ-MERGE-PROCEDURE.md section 5, one file at a time.
 
@@ -16,4 +16,7 @@
 Reactor.wz/2408005.img
 Reactor.wz/2408006.img
 
-# ==== ticket 08 appends here ====
+# ==== ticket 08 (1 rows, order preserved from 08\Reactor.paths.txt) ====
+Reactor.wz/1409000.img
+
+# ==== ticket 09 appends here ====

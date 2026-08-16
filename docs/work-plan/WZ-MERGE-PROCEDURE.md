@@ -193,13 +193,14 @@ construction. Ticket 03c found three, all of which the tool used to write withou
 | `Etc.wz/NpcLocation.img/9901910`–`9901919` | 10 | `PlayerNPC.java:66` — `9901910`–`9906599` is a range the **server allocates from at runtime**. Writing fixed world placements onto it puts a static NPC on ids the server hands out. |
 | `String.wz/MonsterBook.img/<mob>/reward` | 17 roots | `reward/<n>` is the n-th **slot of a positional array**, not an identity. Of 689 v84 reward slots, 653 collide and 36 do not — those 36 append onto 17 Cosmic drop lists, giving Cosmic's entries at indices 0–22 and Nexon's at 23–28. A list neither vendor ever shipped. |
 | `Npc.wz/9000021.img` | 1 | 24 of its nodes refuse as `unsupported shape: parent=WzUOLProperty`; the rest merge, leaving the NPC half-v83/half-v84 — worse than either whole version. |
+| `Map.wz/Map/Map{1,2}/…/portal/<n>[/<field>]` | 12 | Ticket 08. Same positional-array hazard, on portals players use today: v84 reindexed four arrays, so index `n` names a different portal in each tree. Ten are the `<n>/<field>` shape the gate passes. One would attach a non-existent script to the working portal into Ludibrium Toy Factory. Since 03g the tool refuses this **shape** as well — see 4.4 — but the rows stay listed, because a deny row records the decision and the reason. |
 
 **`--deny` is therefore mandatory on every `merge` and every `xml` run, dry runs included** (the
 dry run is what you read before deciding, so a dry run without it produces the wrong decision).
 The tool refuses to start without it.
 
 ```
---deny docs\wz-baseline\merge-lists\COLLISION-DENY.txt        28 roots
+--deny docs\wz-baseline\merge-lists\COLLISION-DENY.txt        40 roots
 --force docs\wz-baseline\merge-lists\COLLISION-FORCE.txt      37 roots, OPTIONAL
 ```
 
@@ -218,10 +219,64 @@ N deletions in one place. The 37 committed force rows are exactly the ids whose 
 literal placeholder `MISSING NAME` / `MISSING INFO` — including the twelve `Eqp/Dragon` names and
 Evan's Mir and saddles, which additive-only cannot repair and tickets 04 and 13 need.
 
-**The 28 deny rows are not of equal confidence and the tool cannot tell you that.** The 10
-`NpcLocation` rows are hard evidence; the 17 `reward` roots are a mechanical consequence;
-`Npc.wz/9000021.img` is a judgement call made on the operator's behalf, marked as such in the file,
-and is the one to revisit if the tool ever learns to write through a UOL parent.
+**The 40 deny rows are not of equal confidence and the tool cannot tell you that.** The 10
+`NpcLocation` rows are hard evidence; the 17 `reward` roots and ticket 08's 12 portal rows are a
+mechanical consequence; `Npc.wz/9000021.img` is a judgement call made on the operator's behalf,
+marked as such in the file, and is the one to revisit if the tool ever learns to write through a
+UOL parent.
+
+### 4.4 Positional arrays — the index is not an identity, and the tool now says so
+
+**A WZ container whose children are exactly the consecutive integers `0..c-1` is an array, and its
+child names are POSITIONS, not ids.** `portal`, a map layer's `obj`, `Back/<set>.img/back`, a
+monster-book `reward`, an item box's `reward`, an equip animation's frames — all of them. Two trees
+can hold the same entry at different indices, and then **index `n` means a different thing in each
+tree**. Nothing in 4.1–4.3 can see that: the row does not collide, it lands in the wrong place.
+
+Two shapes, and the second is the dangerous one:
+
+| add-list row | what the additive gate sees | what actually happens |
+|---|---|---|
+| `<img>/portal/15` | new child, write it | appends — safe *only* if the arrays agree up to 15 |
+| `<img>/portal/4/script` | parent `4` exists, leaf `script` does not, write it | **writes onto whichever portal sits at index 4 in the target** |
+
+`WzMerge merge` and `WzMerge xml` both enforce this now, and report it as
+`POSITIONAL ARRAY: …` in `conflicts.txt` — deliberately distinct from `already exists in target`,
+so "this index would land on a different entry" is never read as "the target already had it". A row
+is refused unless it is a **pure append**:
+
+- the row must name the array's **last** segment (a row that writes a field *into* an existing slot
+  is always refused — the slot exists, so it is one of the target's own entries);
+- the index must be **≥ the target's child count as it was before this run** (a `deny`/`force`
+  decision, not the tool, is how you take one anyway);
+- every index between that count and this one must also be somewhere in the same manifest, or the
+  array would be left with a **hole**. `deps` only emits the assets a map *references*, so it will
+  hand you `Obj/effect.img/quest/gate/7` without the `gate/6` that v84 added beside it. Add the
+  missing sibling from `add-list/`; do not work around the refusal;
+- and the appended entry must not be **content-identical to one the array already holds**. That is
+  the case an index check alone cannot catch: if v84 *inserted* an entry earlier in the array, every
+  later slot is the target's own content shifted one place and the last one looks like new
+  material. `Map/Map2/220000300.img/portal/15` is exactly that — byte-identical to the live
+  client's `portal/14`, because v84 inserted `scr00` at index 4.
+
+**The refusal is structural, so it is not a substitute for reading the data.** When it fires,
+dump both arrays and compare them **by name, not by index**:
+
+```
+WzMerge dump D:\games\MapleStory\Map.wz          Map/Map2/220000300.img/portal 2
+WzMerge dump <v84>\Map.wz                        Map/Map2/220000300.img/portal 2
+```
+
+Then either re-author the row against *this* tree's index (a hand-authored node, not a merge — the
+tool only ever copies from the source `.wz`) or put it on the deny-list with the reason. Ticket 08's
+twelve are on `COLLISION-DENY.txt`; the six it merged are pure appends and are in the composed
+`Map.paths.txt`. `merge-lists/08/ROUTE-ROWS.md` is the worked example, including the cost of
+refusing: three staged areas have no route in.
+
+**The XML side enforces the same rule with one gap**: it is a line-text scan, so it can see the
+container's child names but cannot digest two nodes and compare them. It catches the interior write,
+the occupied slot and the hole; it does **not** catch the content-identical append. The deny-list is
+shared by both subcommands, so denying the row is what closes that gap on both sides.
 
 ---
 
@@ -348,6 +403,14 @@ WzMerge merge <v84>\Map.wz <stage>\<T>\pre\Map.wz - <stage>\<T>\<id>.deps.txt <s
   groups its rows under `# ==== <Name>.wz ====` banners; take that group to that file's own merge.
 
 Worked example, verbatim, in `03-verification/safety-guards.md` §G9.
+
+**`deps` output can be one row short of a whole array, and 4.4 is where you find out.** It emits the
+assets a map *references*, so if v84 appended `Obj/effect.img/quest/gate/6` and `/7` and the map only
+draws `7`, that is the only row you get — and merging it alone leaves a hole in the array. The
+positional-array gate refuses the row and names the missing index; take the sibling from
+`add-list/`, do not route around the refusal. Same section for what to do when a row targets a
+`portal/<n>/…` or `<layer>/obj/<n>/…` slot on a map the live client **already has**: those are the
+rows that quietly land on the wrong entry, and `merge-lists/08/ROUTE-ROWS.md` is the worked example.
 
 `deps` does **not** resolve mob, npc, reactor or portal-script ids — still a deliberate scope cut,
 but state it to yourself honestly rather than reading the banner as an all-clear: **a v84-only mob
@@ -641,6 +704,11 @@ all until ticket 03e produced one (it refuses **nothing**: 61 roots, 61 importab
 > previously sailed through as clean additions. `Etc.wz` 6 → 16 and `String.wz` 711 → 747 are those
 > rows appearing for the first time. `Npc.wz` stays at 34 but 24 of them are reclassified from
 > `unsupported shape` (a tool capability gap) to `DENIED` (a decision that has been made).
+
+> **The 805 predates ticket 03g** and is a floor, not the current number: the deny-list gained 12
+> rows and the positional-array gate (4.4) refuses a shape nothing used to count. Measured on the
+> composed lists rather than the whole add-lists, it found 8 more — 6 in `Character.wz`, 2 in
+> `Item.wz` — none of which appear in this table. Re-run the sweep before quoting the figure.
 
 > Re-measured by ticket 02g after the diff tool's expansion went from 1 level to 3. The old figures
 > — 41 collisions across 2,172 roots — were computed over manifests that could not see any node
