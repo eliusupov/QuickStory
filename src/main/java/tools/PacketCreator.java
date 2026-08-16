@@ -163,6 +163,29 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * Whether the char-stats block writes the extended ten-slot SP array instead of a plain SP short.
+     *
+     * <p>Packet-layer only — deliberately NOT {@link GameConstants#hasSPTable}, which also drives SP
+     * granting and dragon creation and must keep its current membership. Both places that serialise
+     * a character's SP ({@code addCharStats} and the stat-delta path) must agree, or the client
+     * desyncs mid-game rather than at login.
+     *
+     * <p>v84 only: Evan Beginner (job 2001) takes the plain short. It has zero growth stages — both
+     * LucianMS's {@code encodeEvanSkillPoints} and Rebirth95's {@code GetExtendedSPIndexByJob} compute
+     * a slot count of 0 for it — and it is the one job-conditional branch in the whole SET_FIELD
+     * encode path, which is the only structural difference between the Evan that crashes on entering
+     * the world and the explorer that does not. See docs/work-plan/tickets/24-v84-field-packet.md;
+     * this is a deduction, not a measurement, because GW_CharacterStat::Decode is absent from the
+     * v84 IDA export. VERSION 83 keeps the byte-exact old behaviour.
+     */
+    private static boolean writesExtendedSp(Character chr) {
+        if (ServerConstants.VERSION >= 84 && chr.getJob().getId() == 2001) {
+            return false;
+        }
+        return GameConstants.hasSPTable(chr.getJob());
+    }
+
     private static void addRemainingSkillInfo(final OutPacket p, Character chr) {
         int[] remainingSp = chr.getRemainingSps();
         int effectiveLength = 0;
@@ -210,7 +233,7 @@ public class PacketCreator {
         p.writeShort(chr.getMp()); // mp (?)
         p.writeShort(chr.getClientMaxMp()); // maxmp
         p.writeShort(chr.getRemainingAp()); // remaining ap
-        if (GameConstants.hasSPTable(chr.getJob())) {
+        if (writesExtendedSp(chr)) {
             addRemainingSkillInfo(p, chr);
         } else {
             p.writeShort(chr.getRemainingSp()); // remaining sp
@@ -1039,7 +1062,7 @@ public class PacketCreator {
                 } else if (statupdate.getLeft().getValue() < 0x20) {
                     p.writeByte(statupdate.getRight().shortValue());
                 } else if (statupdate.getLeft().getValue() == 0x8000) {
-                    if (GameConstants.hasSPTable(chr.getJob())) {
+                    if (writesExtendedSp(chr)) {
                         addRemainingSkillInfo(p, chr);
                     } else {
                         p.writeShort(statupdate.getRight().shortValue());
