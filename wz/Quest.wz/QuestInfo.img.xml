@@ -2787,6 +2787,77 @@
     <int name="area" value="20"/>
     <int name="autoStart" value="1"/>
   </imgdir>
+  <imgdir name="10480">
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="name" value="The Birth of a New Hero"/>
+    <string name="0" value="The #p9010000# wants to talk to you. What could it be about?"/>
+    <string name="1" value="A new Maple World Hero, Dragon Master Evan, has appeared! To celebrate Evan, #p9010010# has prepared a gift...\n\n#i1022097#\n\n#bYou can receive a gift by reaching Lv. 30 as Evan before #bMay 5#k, and then talking to #p9010010#.#k You can also receive #bScrolls#k that can be used on the #t1022097# by reaching higher levels as Evan, so don&apos;t miss out!"/>
+    <string name="2" value="A new Maple World Hero, Dragon Master Evan, has appeared! To celebrate Evan, #p9010010# has prepared a gift...\n\n#i1022097#\n\n#bYou can receive a gift by reaching Lv. 30 as Evan before #bMay 5#k, and then talking to #p9010010#.#k You can also receive #bScrolls#k that can be used on the #t1022097# by reaching higher levels as Evan, so don&apos;t miss out!"/>
+  </imgdir>
+  <imgdir name="10481">
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="name" value="The Maple Administrator&apos;s Congratulations"/>
+    <string name="0" value="When you reach Lvl. 20, the #p9010000# starts talking to you..."/>
+    <string name="1" value="The Maple Administrator congratulates you for reaching Lvl. 20 and casts the Dragon&apos;s Blessing on you. According to her, #p9010010# is also very excited about the growth of the Dragon Master... #bShe says that you can receive a gift from #b#p9010010##k by reaching #bLv. 30#k by May 5."/>
+    <string name="2" value="The Maple Administrator congratulates you for reaching Lvl. 20 and casts the Dragon&apos;s Blessing on you. According to her, #p9010010# is also very excited about the growth of the Dragon Master... #bShe says that you can receive a gift from #b#p9010010##k by reaching #bLv. 30#k by May 5."/>
+  </imgdir>
+  <imgdir name="10482">
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="name" value="A Gift for the Dragon Master"/>
+    <string name="0" value="When you reach Lvl. 30, #p9010000# starts talking to you..."/>
+    <string name="1" value="#p9010000# says that you can now receive a gift from #p9010010# and that you should go to town and meet #b#p9010010##k. She will be very happy to see you..."/>
+    <string name="2" value="You received a #t1022097# that #p9010010# made herself. Work harder and reach Lv. 50 before #bMay 5#k to receive a scroll that can be used on it."/>
+  </imgdir>
+  <imgdir name="10483">
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="name" value="A Second Gift for the Dragon Master"/>
+    <string name="0" value="When you reach Lvl. 50, #p9010010# starts talking to you..."/>
+    <string name="1" value="#b#p9010010##k congratulates you for reaching Lv. 50 and asks that you come see her so that she can give you a scroll that can be used."/>
+    <string name="2" value="You received a scroll from #p9010010#. She says she will give you another scroll if you reach Lv. 60 by #bMay 5#k."/>
+  </imgdir>
+  <imgdir name="10484">
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="name" value="A Third Gift for the Dragon Master"/>
+    <string name="0" value="When you reach Lv. 60, #p9010010# starts talking to you..."/>
+    <string name="1" value="#p9010010# congratulates you for reaching Lv. 60 and asks that you come see her so that she can give you another scroll. Just how many scrolls has #p9010010# prepared? In any case, go to town and meet #p9010010#."/>
+    <string name="2" value="You received a scroll from #p9010010#. She says that she will give you an even better scroll if you reach Lv. 80 by #bMay 5#k."/>
+  </imgdir>
+  <imgdir name="10485">
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="name" value="A Fourth Gift for the Dragon Master"/>
+    <string name="0" value="When you reach Lv. 80, #p9010010# starts talking to you..."/>
+    <string name="1" value="#p9010010# congratulates you for reaching Lv. 80 and asks that you come see her so that she can give you the scroll she mentioned before. How will she react after seeing how much the Dragon she called cute before has grown? Go to town and meet with #b#p9010010##k."/>
+    <string name="2" value="You received a scroll from #p9010010#. She says that she will give you another scroll if you reach Lv. 100 by #bMay 5#k."/>
+  </imgdir>
+  <imgdir name="10486">
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="name" value="A Fifth Gift for the Dragon Master"/>
+    <string name="0" value="When you reach Lv. 100, #p9010010# starts talking to you..."/>
+    <string name="1" value="#p9010010#, in a sincere voice, congratulates you for reaching Lv. 100 and asks that you come see her so that she can give you the final scroll. Go to town and meet with #p9010010#."/>
+    <string name="2" value="You received a scroll from #p9010010#. #p9010010# says that she has given you everything she could and that all that is left is for you to work hard and believe in yourself."/>
+  </imgdir>
+  <imgdir name="10487">
+    <string name="name" value="2009 루돌프의 훈장"/>
+    <int name="area" value="51"/>
+    <int name="medalCategory" value="3"/>
+    <int name="viewMedalItem" value="1142166"/>
+    <int name="autoStart" value="1"/>
+    <int name="autoAccept" value="1"/>
+    <string name="demandSummary" value="[퀘스트] 토르의 뿔 5회 수행\r\n[퀘스트] 크리스마스 요정은 어디에?! 25회 수행\r\n[퀘스트] 산타고양이의 선물상자 25회 수행"/>
+    <string name="rewardSummary" value="#Wbasic#
+#i1142166:# #t1142166:# 1 개
+"/>
+    <string name="0" value="2009 크리스마트 이벤트를 즐기고 루돌프의 훈장에 도전하자!"/>
+    <string name="1" value="2009 크리스마스 이벤트를 즐기고 루돌프의 훈장에 도전하자! 재밌고 신나게 크리스마스 이벤트를 즐기고 훈장을 획득해 보는 것은 어떨까?\r\n#b&lt;획득 조건&gt;\n[퀘스트] 토르의 뿔 5회 수행\n[퀘스트] 크리스마스 요정은 어디에?! 25회 수행\n[퀘스트] 산타고양이의 선물상자 25회 수행\r\n모든 미션을 수행하고 행복한 마을에 있는 #b빨간코 루돌프#k를 찾아가보자."/>
+    <string name="2" value="2009 크리스마스 이벤트를 즐기고 루돌프의 훈장을 획득했다! #e#r메리 크리스마스!!#k#n"/>
+  </imgdir>
   <imgdir name="1049">
     <string name="name" value="Becoming a Warrior"/>
     <string name="0" value="The Maple Administrator told me that I may be best suited to be a Warrior."/>
@@ -2794,6 +2865,66 @@
     <string name="2" value="Should I go ahead and make the job advancement as a Warrior?"/>
     <int name="area" value="20"/>
     <int name="autoStart" value="1"/>
+  </imgdir>
+  <imgdir name="10490">
+    <string name="name" value="카산드라의 심술"/>
+    <int name="area" value="50"/>
+    <string name="0" value="심심해진 카산드라가 재미난 일을 생각한듯 하다. 카산드라를 찾아가 보자."/>
+    <string name="1" value="슬러쉬로 골탕을 먹이라고? 30분동안 물약을 잘 보관하여 #b#t2430035##k 만들고, 카산드라가 말했던 사람을 찾아가 먹여서 골탕을 먹이자.
+골탕먹여야 할 상대를 잊었다면 진행중인 퀘스트를 살펴보도록 하자."/>
+    <string name="2" value="눈사람으로 변하는 물약? 꽤 재미난 장난인데?"/>
+  </imgdir>
+  <imgdir name="10491">
+    <string name="name" value="가가 골탕 먹이기"/>
+    <int name="area" value="50"/>
+    <string name="0" value="카산드라의 이상한 슬러쉬를 가가에게 먹이자."/>
+    <string name="1" value="카산드라의 이상한 슬러쉬를 가가에게 먹이자."/>
+    <string name="2" value="카산드라의 이상한 슬러쉬를 가가에게 먹이자 눈사람으로 변신했다. 꽤 재미있는 장난인걸?"/>
+    <string name="demandSummary" value="#i3994185:# #t3994185:# #c3994185# / 1
+"/>
+  </imgdir>
+  <imgdir name="10492">
+    <string name="name" value="메이플운영자 골탕먹이기"/>
+    <int name="area" value="50"/>
+    <string name="0" value="카산드라의 이상한 슬러쉬를 메이플 운영자님께 드리자."/>
+    <string name="1" value="카산드라의 이상한 슬러쉬를 메이플 운영자님께 드리자."/>
+    <string name="2" value="카산드라의 이상한 슬러쉬를 드신 메이플 운영자님이 눈사람으로 변해버렸다."/>
+    <string name="demandSummary" value="#i3994185:# #t3994185:# #c3994185# / 1
+"/>
+  </imgdir>
+  <imgdir name="10493">
+    <string name="name" value="클리프 골탕먹이기"/>
+    <int name="area" value="50"/>
+    <string name="0" value="카산드라의 이상한 슬러쉬를 행복한 마을에 살고 계신 클리프 할아버지께 드리자."/>
+    <string name="1" value="카산드라의 이상한 슬러쉬를 행복한 마을에 살고 계신 클리프 할아버지께 드리자."/>
+    <string name="2" value="카산드라의 이상한 슬러쉬를 클리프 할아버지께서 드시자 눈사람으로 변신했다. 꽤 재미있는 장난인걸?"/>
+    <string name="demandSummary" value="#i3994185:# #t3994185:# #c3994185# / 1
+"/>
+  </imgdir>
+  <imgdir name="10494">
+    <string name="name" value="토르 골탕먹이기"/>
+    <int name="area" value="50"/>
+    <string name="0" value="카산드라의 이상한 슬러쉬를 토르에게 먹이자."/>
+    <string name="1" value="카산드라의 이상한 슬러쉬를 토르에게 먹이자."/>
+    <string name="2" value="카산드라의 이상한 슬러쉬를 토르에게 먹이자 눈사람으로 변신했다. 꽤 재미있는 장난인걸?"/>
+    <string name="demandSummary" value="#i3994185:# #t3994185:# #c3994185# / 1
+"/>
+  </imgdir>
+  <imgdir name="10496">
+    <string name="name" value="가가의 월동준비"/>
+    <int name="area" value="50"/>
+    <string name="0" value="추운 겨울 옆구리가 유난히도 시릴 #b가가#k를 찾아가 보자."/>
+    <string name="1" value="가가는 추운날씨에는 빨간 내복이 최고라며 옷감을 준비해 달라고 했다. 옷감은 몬스터들에게서 얻을수 있다고?"/>
+    <string name="2" value="빨간색 내복을 입은 가가. 생각만 해도 너무 웃긴걸?"/>
+    <string name="demandSummary" value="#i4032532:# #t4032532:# #c4032532# / 20
+"/>
+  </imgdir>
+  <imgdir name="10497">
+    <string name="name" value="이상한 물약을 다시 만들어 주세요."/>
+    <int name="area" value="50"/>
+    <string name="0" value="카산드라가 골탕을 먹일때 필요하다고 만들어준 #b#t3994184##k를 잃어버렸다면, 카산드라에게 다시 부탁하자."/>
+    <string name="1" value="카산드라가 골탕을 먹일때 필요하다고 만들어준 #b#t3994184##k는 잃어버리지 말자."/>
+    <string name="2" value="카산드라가 골탕을 먹일때 필요하다고 만들어준 #b#t3994184##k 잃어버리지 말자."/>
   </imgdir>
   <imgdir name="1050">
     <string name="name" value="Becoming a Magician"/>
@@ -2803,12 +2934,127 @@
     <int name="area" value="20"/>
     <int name="autoStart" value="1"/>
   </imgdir>
+  <imgdir name="10500">
+    <int name="area" value="50"/>
+    <string name="name" value="A Sign of the Dragon Master&apos;s Return"/>
+    <string name="0" value="If you&apos;re curious about #bDragon Master Evan#k, go see Cassandra in town."/>
+    <string name="1" value="#bCassandra#k says that she has some information for you regarding Dragon Master Evan. Go see her now."/>
+    <string name="2" value="You found out that the return of Dragon Master Evan is close at hand."/>
+  </imgdir>
+  <imgdir name="10501">
+    <string name="name" value="Searcing for Remnants of the Dragon Master 1"/>
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="demandSummary" value="#i4032533:# #t4032533:# #c4032533# / 1
+"/>
+    <string name="rewardSummary" value="
+"/>
+    <string name="0" value="Search for remnants of Dragon Master Evan"/>
+    <string name="1" value="Find a #b#t4032533##k in Maple World and bring it to #bCassandra#k."/>
+    <string name="2" value="You discovered a #b#t4032533##k, a remnant of Dragon Master Evan."/>
+  </imgdir>
+  <imgdir name="10502">
+    <string name="name" value="Searching for Remnants of the Dragon Master 2"/>
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="demandSummary" value="#i4032534:# #t4032534:# #c4032534# / 1
+"/>
+    <string name="rewardSummary" value="
+"/>
+    <string name="0" value="Search for remnants of Dragon Master Evan"/>
+    <string name="1" value="Find an #b#t4032534##k in Maple World and bring it #bCassandra#k."/>
+    <string name="2" value="You discovered an #b#t4032534##k, a remnant of Dragon Master Evan."/>
+  </imgdir>
+  <imgdir name="10503">
+    <string name="name" value="Searching for Remnants of the Dragon Master 3"/>
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="demandSummary" value="#i4032535:# #t4032535:# #c4032535# / 1
+"/>
+    <string name="rewardSummary" value="
+"/>
+    <string name="0" value="Search for remnants of Dragon Master Evan"/>
+    <string name="1" value="Find an #b#t4032535##k in Maple World and bring it to #bCassandra#k."/>
+    <string name="2" value="You discovered an #b#t4032535##k, a remnant of Dragon Master Evan."/>
+  </imgdir>
+  <imgdir name="10504">
+    <string name="name" value="Searching for Remnants of the Dragon Master 4"/>
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="demandSummary" value="#i4032536:# #t4032536:# #c4032536# / 1
+"/>
+    <string name="rewardSummary" value="
+"/>
+    <string name="0" value="Search for remnants of Dragon Master Evan"/>
+    <string name="1" value="Find an #b#t4032536##k in Maple World and bring it to #bCassandra#k."/>
+    <string name="2" value="You discovered an #b#t4032536##k, a remnant of Dragon Master Evan."/>
+  </imgdir>
+  <imgdir name="10505">
+    <string name="name" value="Searching for Remnants of the Dragon Master 5"/>
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="demandSummary" value="#i4032537:# #t4032537:# #c4032537# / 1
+"/>
+    <string name="rewardSummary" value="
+"/>
+    <string name="0" value="Search for remnants of Dragon Master Evan"/>
+    <string name="1" value="Find an #b#t4032537##k in Maple World and bring it to #bCassandra#k."/>
+    <string name="2" value="You discovered an #b#t4032537##k, a remnant of Dragon Master Evan."/>
+  </imgdir>
+  <imgdir name="10506">
+    <string name="name" value="Searching for Remnants of the Dragon Master 6"/>
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="demandSummary" value="#i4032538:# #t4032538:# #c4032538# / 1
+"/>
+    <string name="rewardSummary" value="
+"/>
+    <string name="0" value="Search for remnants of Dragon Master Evan"/>
+    <string name="1" value="Find an #b#t4032538##k in Maple World and bring it to #bCassandra#k."/>
+    <string name="2" value="You discovered an #b#t4032538##k, a remnant of Dragon Master Evan."/>
+  </imgdir>
+  <imgdir name="10507">
+    <string name="name" value="Searching for Remnants of the Dragon Master 7"/>
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="demandSummary" value="#i4032539:# #t4032539:# #c4032539# / 1
+"/>
+    <string name="rewardSummary" value="EXP 660\r\n#Wprob#\r\n#i1942001:# #t1942001:# 1\r\n#i1952001:# #t1952001:# 1\r\n#i1962001:# #t1962001:# 1\r\n#i1972001:# #t1972001:# 1\r\n#i2043701:# #t2043701:# 1\r\n#i2043801:# #t2043801:# 1\r\n"/>
+    <string name="0" value="Search for remnants of Dragon Master Evan"/>
+    <string name="1" value="Find an #b#t4032539##k in Maple World and bring it to #bCassandra#k."/>
+    <string name="2" value="You completed the search for remnants of Dragon Master Evan."/>
+  </imgdir>
   <imgdir name="1051">
     <string name="name" value="Becoming a Bowman"/>
     <string name="0" value="The Maple Administrator told me that I may be best suited to be a Bowman."/>
     <string name="1" value="The Maple Administrator told me she&apos;ll take me to Henesys now to help me make the job advancement as a Bowman."/>
     <string name="2" value="Should I go ahead and make the job advancement as a Bowman?"/>
     <int name="area" value="20"/>
+    <int name="autoStart" value="1"/>
+  </imgdir>
+  <imgdir name="10510">
+    <string name="name" value="Evan Everyday Event"/>
+    <int name="area" value="50"/>
+    <string name="0" value="Cassandra has something to talk to you about. What could she want?"/>
+    <string name="1" value="Cassandra says that she&apos;s decided to raise a Mini Dragon as a way of commemorating the launch of Dragon Master Evan. But she says that she doesn&apos;t think she will do a good job and asks that you take care of the Dragon Egg for her. She says that if you #bhatch the egg by taking good care of it for 1 hour#k, she will give you a nice gift... \r\n\r\nIf the egg disappears because you log out, forfeit the quest and accept it again."/>
+    <string name="2" value="Cassandra seems to be raising a Mini Dragon in order to commemorate the launch of Dragon Master Evan. She is planning to hatch new Dragons from #bMarch 31 to May 4#k, so keep helping her until then."/>
+    <int name="autoStart" value="1"/>
+    <int name="autoComplete" value="1"/>
+  </imgdir>
+  <imgdir name="10514">
+    <string name="name" value="Evan Launch Commemoration 2PM Event"/>
+    <int name="area" value="50"/>
+    <string name="0" value="Go to Cassandra to receive the gift she has prepared to celebrate the launch of Dragon Master Evan."/>
+    <string name="1" value="You have to go grab Cassandra&apos;s gift that you didn&apos;t get earlier. If you don&apos;t go get it by 4:30, you won&apos;t be able to get it at all."/>
+    <string name="2" value="You received the gift that Cassandra prepared in celebration of the launch of Dragon Master Evan."/>
+    <int name="autoStart" value="1"/>
+  </imgdir>
+  <imgdir name="10516">
+    <string name="name" value="Evan Launch Commemoration 2PM Event"/>
+    <int name="area" value="50"/>
+    <string name="0" value="Go to Cassandra to receive the gift she has prepared to celebrate the launch of Dragon Master Evan."/>
+    <string name="1" value="You have to go grab Cassandra&apos;s gift that you didn&apos;t get earlier. You have to get it within the alloted time. \r\n"/>
+    <string name="2" value="You received the gift that Cassandra prepared in celebration of the launch of Dragon Master Evan."/>
     <int name="autoStart" value="1"/>
   </imgdir>
   <imgdir name="1052">
@@ -2818,6 +3064,28 @@
     <string name="2" value="Should I go ahead and make the job advancement as a Thief?"/>
     <int name="area" value="20"/>
     <int name="autoStart" value="1"/>
+  </imgdir>
+  <imgdir name="10520">
+    <string name="name" value="Teo&apos;s Nostalgic Reminiscing I"/>
+    <string name="0" value="You hear that you can receive help from #b#p1002001##k in Lith Harbor..."/>
+    <string name="1" value="You meet #b#p1002001##k at Lith Harbor. #b#p1002001##k says you remind him of when he was younger, and he wants to help you. He says that he will recognize your potential and support you if you bring him #b100 #t4000016#s#k and #b50#t4000004#s#k... For an awesome adventurer like you, this should be a piece of cake."/>
+    <string name="2" value="You showed your potential to #b#p1002001##k, who you met in Lith Harbor. #b#p1002001##k recognized your potential and gave you some mesos that should come handy during your adventures. "/>
+    <int name="area" value="50"/>
+    <string name="demandSummary" value="#i4000016:# #t4000016:# #c4000016# / 100
+#i4000004:# #t4000004:# #c4000004# / 50
+"/>
+    <string name="rewardSummary" value="100,000 mesos\r\n"/>
+  </imgdir>
+  <imgdir name="10521">
+    <string name="name" value="Teo&apos;s Nostalgic Reminiscing II"/>
+    <string name="0" value="Go to #b#p1002001##k, who helped you before."/>
+    <string name="1" value="#b#p1002001##k wants you to prove how strong you&apos;ve become."/>
+    <string name="2" value="You proved to #b#p1002001##k that you&apos;ve gotten much stronger."/>
+    <int name="area" value="50"/>
+    <string name="demandSummary" value="#i4000024:# #t4000024:# #c4000024# / 80
+#i4000020:# #t4000020:# #c4000020# / 100
+"/>
+    <string name="rewardSummary" value="200,000 mesos\r\n"/>
   </imgdir>
   <imgdir name="1053">
     <string name="name" value="Becoming a Pirate"/>
@@ -3072,6 +3340,16 @@
     <string name="0" value="신규 월드 #b&lt;류호&gt;#k을 맞아 메이플스토리에서 준비항 특별한 칭호 선물!\r\n각 마을에 위치한 #b#p9010010##k를 찾아가 보자."/>
     <string name="1" value="#e#b류호 개척자 칭호에 도전#k#n\r\n* 획득 조건 : 이벤트 기간동안 #b레벨 50#k을 달성하여 아래의 칭호들을 차례로 획득\r\n#b● 이벤트 기간 : 2009년 9월 22일 ~ 10월 28일#k\r\n● 진행 상황\n#y10395# : #u10395#\n#y10396# : #u10396#\n#y10397# : #u10397#\n#y10398# : #u10398#\n#k"/>
     <string name="2" value="#b&lt;류호 개척자&gt;#k의 칭호를 획득하였다."/>
+  </imgdir>
+  <imgdir name="19011">
+    <string name="name" value="The 3rd Honorable Mesoranger"/>
+    <int name="area" value="51"/>
+    <int name="medalCategory" value="3"/>
+    <int name="viewMedalItem" value="1142170"/>
+    <int name="autoStart" value="1"/>
+    <int name="autoAccept" value="1"/>
+    <string name="1" value="You received the #b&lt;Honorable Mesoranger&gt;#k title from the MapleStory Administrator because of your outstanding performance in the Administrator Event.\r\n"/>
+    <string name="2" value="You received the #b&lt;Honorable Mesoranger&gt;#k title from the MapleStory Administrator because of your outstanding performance in the Administrator Event.\r\n"/>
   </imgdir>
   <imgdir name="2000">
     <string name="name" value="Fixing Blackbull&apos;s House"/>
@@ -7656,6 +7934,14 @@ Once there, talk to #b#p1200003##k to board the ship.
     <string name="0" value="#bPrincess Violetta#k says she has something for you."/>
     <string name="2" value="You recovered the lost #t4001318#."/>
   </imgdir>
+  <imgdir name="2344">
+    <string name="name" value="Mushking Empire in Danger"/>
+    <int name="area" value="30"/>
+    <string name="0" value="The Mushking Empire is in danger!"/>
+    <string name="1" value="Take the #bRecommendation Letter#k that Mike has written and go to #b#p1300005##k in the Mushking Empire."/>
+    <string name="2" value="You took the Job Instructor&apos;s Recommendation Letter and met with the Mushking Empire Head Security Officer."/>
+    <int name="autoStart" value="1"/>
+  </imgdir>
   <imgdir name="2400">
     <string name="name" value="Training Center for Beginner Warriors"/>
     <int name="area" value="10"/>
@@ -10319,6 +10605,206 @@ Able to proceed to &apos;For the peace of Victoria Island...&apos; as next quest
     <string name="1" value="So Scadur is going to set-up a &quot;Leather Festival&quot; on El Nath... I&apos;m out to find and collect all these items for him. Hope the reward of this mission is really worth it...\n\n#i4000021# #t4000021# #c4000021# / #r60#k\n#i4000264# #t4000264# #c4000264# / #r30#k\n#i4000281# #t4000281# #c4000281# / #r30#k\n#i4000295# #t4000295# #c4000295# / #r30#k\n#i4000030# #t4000030# #c4000030# / #r15#k\n#i4032475# #t4032475# #c4032475# / #r10#k"/>
     <string name="2" value="I helped Scadur in his &quot;Leather Festival&quot;, held on El Nath."/>
   </imgdir>
+  <imgdir name="28346">
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="name" value="A Gift for the Dragon Master"/>
+    <string name="1" value="#p9010000# says that you can now receive a gift from #p9010010# and that you should go to town and meet #b#p9010010##k. She will be very happy to see you..."/>
+    <string name="demandSummary" value="Reach Lv. 30"/>
+    <string name="0" value="When you reach Lvl. 25, #p9010000# starts talking to you..."/>
+    <string name="2" value="You received a #t1022097# that #p9010010# made herself. Work harder and reach Lv. 50 before #bMay 4#k to receive a scroll that can be used on it."/>
+  </imgdir>
+  <imgdir name="28347">
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="name" value="A Second Gift for the Dragon Master"/>
+    <string name="0" value="When you reach Lvl. 45, #p9010010# starts talking to you..."/>
+    <string name="1" value="#b#p9010010##k congratulates you for reaching Lv. 45 and tells you that she will give you a scroll that can be used when you reach Lv. 50."/>
+    <string name="2" value="You received a scroll from #p9010010#. She says she will give you another scroll if you reach Lv. 60 by #bMay 4#k."/>
+    <string name="demandSummary" value="Reach Lv. 50"/>
+  </imgdir>
+  <imgdir name="28348">
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="name" value="A Third Gift for the Dragon Master"/>
+    <string name="0" value="When you reach Lv. 55, #p9010010# starts talking to you..."/>
+    <string name="1" value="#p9010010# congratulates you for reaching Lv. 55 and tells you that she will give you another scroll when you are ready. Just how many scrolls has #p9010010# prepared? In any case, go to town and meet #p9010010# when you reach Lv. 60."/>
+    <string name="2" value="You received a scroll from #p9010010#. She says that she will give you an even better scroll if you reach Lv. 70 by #bMay 4#k."/>
+    <string name="demandSummary" value="Reach Lv. 60"/>
+  </imgdir>
+  <imgdir name="28349">
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="name" value="A Fourth Gift for the Dragon Master"/>
+    <string name="0" value="When you reach Lv. 65, #p9010010# starts talking to you..."/>
+    <string name="1" value="#p9010010# congratulates you for reaching Lv. 65 and tells you that she will give you the scroll she mentioned before when you reach Lv. 70. How will she react after seeing how much the Dragon she called cute before has grown? Go to town and meet with #b#p9010010##k when you are Lv. 70."/>
+    <string name="2" value="You received a scroll from #p9010010#. She says that she will give you another scroll if you reach Lv. 80 by #bMay 4#k."/>
+    <string name="demandSummary" value="Reach Lv. 70"/>
+  </imgdir>
+  <imgdir name="28350">
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="name" value="A Fifth Gift for the Dragon Master"/>
+    <string name="2" value="You received a scroll from #p9010010#. #p9010010# says that she has given you everything she could and that all that is left is for you to work hard and believe in yourself."/>
+    <string name="0" value="When you reach Lv. 75, #p9010010# starts talking to you..."/>
+    <string name="1" value="#p9010010#, in a sincere voice, congratulates you for reaching Lv. 75 and asks you to reach Lv. 80 to receive the final scroll. Go to town and meet with #p9010010# when you reach Lv. 80."/>
+    <string name="demandSummary" value="Reach Lv. 80"/>
+  </imgdir>
+  <imgdir name="28351">
+    <string name="name" value="Dragon Master&apos;s Treasure Chest"/>
+    <int name="area" value="7"/>
+    <string name="0" value="The Administrator says that she will give anyone who hatches a Mini Dragon Egg the chance to obtain some precious treasures.
+"/>
+    <string name="1" value="You can receive the Onyx Dragon Treasure Chest from the Administrator by bringing her all 7 symbols of the Ancient Onyx Dragon. You can find symbols of the Ancient Onyx Dragon inside the Evan Gift Box given by Cassandra. "/>
+    <string name="2" value="You received the Onyx Dragon Treasure Chest from the Administrator. Rumor has it that it belonged to an ancient Dragon Master."/>
+    <int name="autoStart" value="1"/>
+    <string name="summary" value="Collect the 7 symbols of the Ancient Onyx Dragon."/>
+    <string name="demandSummary" value="#i4032632:# #t4032632:# #c4032632# / 1
+#i4000566:# #t4000566:# #c4000566# / 1
+#i4000567:# #t4000567:# #c4000567# / 1
+#i4000568:# #t4000568:# #c4000568# / 1
+#i4000569:# #t4000569:# #c4000569# / 1
+#i4000570:# #t4000570:# #c4000570# / 1
+#i4000571:# #t4000571:# #c4000571# / 1"/>
+    <string name="rewardSummary" value="#i2022695:# #t2022695:# 1
+#Wprob#
+#i3010107:# #t3010107:#
+#i3010108:# #t3010108:#
+#i1382009:# #t1382009:#
+#i1382012:# #t1382012:#
+#i1372034:# #t1372034:#
+#i1382039:# #t1382039:#
+#i2043700:# #t2043700:#
+#i2043701:# #t2043701:#
+#i2043702:# #t2043702:#
+#i2043800:# #t2043800:#
+#i2043801:# #t2043801:#
+#i2043802:# #t2043802:#"/>
+  </imgdir>
+  <imgdir name="28353">
+    <string name="name" value="The Shadow Knight in Dragon&apos;s Nest"/>
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="0" value="The #p9010000# says that there is some news you should know about. Click on the lightbulb over the #p9010000#&apos;s head to hear the news!"/>
+    <string name="1" value=" The #p9010000# says to go through the Dimensional Mirror to get to Dragon&apos;s Nest, where you will find #p9201144#."/>
+    <string name="2" value="You spoke to #p9201144# in Dragon&apos;s Nest. He told you about some eggs you can obtain from the Dragon&apos;s Nest."/>
+    <string name="rewardSummary" value="Exp 2,000"/>
+    <string name="summary" value="Go to Dragon&apos;s Nest and look for #p9201144#."/>
+  </imgdir>
+  <imgdir name="28354">
+    <string name="name" value="The Shadow Knight&apos;s Request for Help"/>
+    <int name="area" value="50"/>
+    <string name="summary" value="Bring back a Twin Dragon&apos;s Egg from Dragon&apos;s Nest."/>
+    <string name="rewardSummary" value="Popularity 3"/>
+    <string name="0" value=" #p9201144# in #m683010000# needs your help. Go to #m683010000# via the Dimensional Mirror and talk to #p9201144#."/>
+    <string name="1" value="#p9201144# says that he is in need of a Twin Dragon&apos;s Egg and asks you to bring one back for him. You&apos;ll have to be quick before the mother dragon returns to the nest!"/>
+    <string name="2" value="You&apos;ve brought back a Twin Dragon&apos;s Egg for #p9201144#. He thanks you and tells you that you can gain precious treasures from the Twin Dragon&apos;s Egg by using a special Incubator found in the Cash Shop."/>
+  </imgdir>
+  <imgdir name="28355">
+    <string name="name" value="Confused Evan"/>
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="0" value="In celebration of the launch of Dragon Master Evan, #rthe Trailblazer Evan event#k is currently running. Go talk to #bCassandra.#k"/>
+    <string name="1" value="Collect as many #b#t4001435##ks as you can. You&apos;ll get a great reward!\r\n\r\n#b#t4001435##k x 100"/>
+    <string name="2" value="So you&apos;ve finally become a #rConfused Evan#k, eh?"/>
+    <string name="demandSummary" value="#i4001435:# #t4001435:# #c4001435# / 100"/>
+    <string name="rewardSummary" value="#Wbasic##i1142198:# #t1142198:#"/>
+  </imgdir>
+  <imgdir name="28356">
+    <string name="name" value="Beginner Evan"/>
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="0" value="In celebration of the launch of Dragon Master Evan, #rthe Trailblazer Evan event#k is currently running. Go talk to #bCassandra.#k"/>
+    <string name="1" value="Collect as many #b#t4001435##ks as you can. You&apos;ll get a great reward!\r\n\r\n#b#t4001435##k x 400"/>
+    <string name="2" value="So you&apos;ve finally become a #rBeginner Evan!#k Seeing you with the upgraded medal makes me feel so proud!"/>
+    <string name="demandSummary" value="#i4001435:# #t4001435:# #c4001435# / 400"/>
+    <string name="rewardSummary" value="#Wbasic##i1142199:# #t1142199:#"/>
+  </imgdir>
+  <imgdir name="28357">
+    <string name="name" value="Confident Evan"/>
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="0" value="In celebration of the launch of Dragon Master Evan, #rthe Trailblazer Evan event#k is currently running. Go talk to #bCassandra.#k"/>
+    <string name="1" value="Collect as many #b#t4001435##ks as you can. You&apos;ll get a great reward!\r\n\r\n#b#t4001435##k x 800"/>
+    <string name="2" value="So you&apos;ve finally become a #rConfident Evan!#k Seeing you with the upgraded medal makes me feel so proud!"/>
+    <string name="demandSummary" value="#i4001435:# #t4001435:# #c4001435# / 800"/>
+    <string name="rewardSummary" value="#Wbasic##i1142200:# #t1142200:#"/>
+  </imgdir>
+  <imgdir name="28358">
+    <string name="name" value="Elite Evan"/>
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="0" value="In celebration of the launch of Dragon Master Evan, #rthe Trailblazer Evan event#k is currently running. Go talk to #bCassandra.#k"/>
+    <string name="1" value="Collect as many #b#t4001435##ks as you can. You&apos;ll get a great reward!\r\n\r\n#b#t4001435##k x 1200"/>
+    <string name="2" value="So you&apos;ve finally become a #rElite Evan!#k Seeing you with the upgraded medal makes me feel so proud!"/>
+    <string name="demandSummary" value="#i4001435:# #t4001435:# #c4001435# / 1200"/>
+    <string name="rewardSummary" value="#Wbasic##i1142201:# #t1142201:#"/>
+  </imgdir>
+  <imgdir name="28359">
+    <string name="name" value="Evan Trailblazer"/>
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="0" value="In celebration of the launch of Dragon Master Evan, #rthe Trailblazer Evan event#k is currently running. Go talk to #bCassandra.#k"/>
+    <string name="1" value="Collect as many #b#t4001435##ks as you can. You&apos;ll get a great reward!\r\n\r\n#b#t4001435##k x 3000"/>
+    <string name="2" value="You&apos;ve paved the way for all Evans as a #rtrailblazer.#k"/>
+    <string name="demandSummary" value="#i4001435:# #t4001435:# #c4001435# / 3000"/>
+    <string name="rewardSummary" value="#Wbasic##i1142202:# #t1142202:#"/>
+  </imgdir>
+  <imgdir name="28360">
+    <string name="name" value="Evan&apos;s Eternal Trailblazer"/>
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="0" value="In celebration of the launch of Dragon Master Evan, #rthe Trailblazer Evan event#k is currently running. Go talk to #bCassandra.#k"/>
+    <string name="1" value="Collect as many #b#t4001435##ks as you can. You&apos;ll get a great reward!\r\n\r\n#b#t4001435##k x 3000"/>
+    <string name="2" value="You&apos;ve paved the way for all Evans as an #rimportant trailblazer,#k not to mention that you&apos;ve earned the honorable title too. A title that lasts forever!"/>
+    <string name="demandSummary" value="#i4001435:# #t4001435:# #c4001435# / 3000"/>
+    <string name="rewardSummary" value="#Wbasic##i1142203:# #t1142203:#"/>
+  </imgdir>
+  <imgdir name="28361">
+    <string name="name" value="First Evan Launch Gift from the Admin"/>
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="0" value="The Maple Admin has prepared a gift for you to celebrate the launch of Evan. If you&apos;re curious about the gift, talk to the Maple Admin."/>
+    <string name="1" value="The Maple Admin has prepared 5 different cash items that look especially good on Evan. You can get the first item from the Maple Admin when you reach Lv. 17."/>
+    <string name="2" value="You have received your first Evan Launch Gift from the Admin."/>
+    <string name="rewardSummary" value="#i1702268:# #t1702268:# 1"/>
+  </imgdir>
+  <imgdir name="28362">
+    <string name="name" value="Second Evan Launch Gift from the Admin"/>
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="0" value="The Maple Admin has prepared a gift for you to celebrate the launch of Evan. If you&apos;re curious about the gift, talk to the Maple Admin."/>
+    <string name="1" value="The Maple Admin has prepared 5 different cash items that look especially good on Evan. You can get the second item from the Maple Admin when you reach Lv. 18."/>
+    <string name="2" value="You have received your second Evan Launch Gift from the Admin."/>
+    <string name="rewardSummary" value="For Male Evan #i1050168:# #t1050168:# 1\r\nFor Female Evan #i1051209:# #t1051209:# 1"/>
+  </imgdir>
+  <imgdir name="28363">
+    <string name="name" value="Third Evan Launch Gift from the Admin"/>
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="0" value="The Maple Admin has prepared a gift for you to celebrate the launch of Evan. If you&apos;re curious about the gift, talk to the Maple Admin."/>
+    <string name="1" value="The Maple Admin has prepared 5 different cash items that look especially good on Evan. You can get the third item from the Maple Admin when you reach Lv. 19."/>
+    <string name="2" value="You have received your third Evan Launch Gift from the Admin."/>
+    <string name="rewardSummary" value="#i1003089:# #t1003089:# 1"/>
+  </imgdir>
+  <imgdir name="28364">
+    <string name="name" value="Fourth Evan Launch Gift from the Admin"/>
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="0" value="The Maple Admin has prepared a gift for you to celebrate the launch of Evan. If you&apos;re curious about the gift, talk to the Maple Admin."/>
+    <string name="1" value="The Maple Admin has prepared 5 different cash items that look especially good on Evan. You can get the fourth item from the Maple Admin when you reach Lv. 20."/>
+    <string name="2" value="You have received your fourth Evan Launch Gift from the Admin."/>
+    <string name="rewardSummary" value="#i1072443:# #t1072443:# 1"/>
+  </imgdir>
+  <imgdir name="28365">
+    <string name="name" value="Fifth Evan Launch Gift from the Admin"/>
+    <int name="area" value="50"/>
+    <int name="autoStart" value="1"/>
+    <string name="0" value="The Maple Admin has prepared a gift for you to celebrate the launch of Evan. If you&apos;re curious about the gift, talk to the Maple Admin."/>
+    <string name="1" value="The Maple Admin has prepared 5 different cash items that look especially good on Evan. You can get the fifth item from the Maple Admin when you reach Lv. 21."/>
+    <string name="2" value="You have received all five Evan Launch Gifts from the Admin!"/>
+    <string name="rewardSummary" value="#i1082272:# #t1082272:# 1"/>
+  </imgdir>
   <imgdir name="29000">
     <string name="name" value="Title Challenge - PQ Mania"/>
     <string name="0" value="#b#eTitle Challenge - PQ Mania#n\n#kYIf I achieve rank S in 5 party quests, I can get the #e#bPQ Mania#k# title? Dalair is waiting for a Warrior that can earn this honorable title."/>
@@ -11034,6 +11520,62 @@ Able to proceed to &apos;For the peace of Victoria Island...&apos; as next quest
     <int name="medalCategory" value="2"/>
     <int name="viewMedalItem" value="1142030"/>
     <string name="2" value="Charity is key to a prosperous life. Acquired the title #b&lt;Lith Harbor Donor&gt;#k.\r\n"/>
+  </imgdir>
+  <imgdir name="29934">
+    <string name="name" value="Well Behaved Child"/>
+    <int name="area" value="51"/>
+    <int name="viewMedalItem" value="1142152"/>
+    <string name="2" value="You helped Chief Stan in Henesys and he called you a #bWell Behaved Child#k."/>
+    <int name="autoStart" value="1"/>
+    <int name="autoAccept" value="1"/>
+  </imgdir>
+  <imgdir name="29935">
+    <string name="name" value="Perion Guard"/>
+    <int name="area" value="51"/>
+    <int name="viewMedalItem" value="1142153"/>
+    <int name="autoStart" value="1"/>
+    <int name="autoAccept" value="1"/>
+    <string name="2" value="You decided to work as a #bPerion Guard#k at the request of Mike who guards the Perion Dungeon Entrance."/>
+  </imgdir>
+  <imgdir name="29936">
+    <string name="name" value="Kerning City Honorary Citizen"/>
+    <int name="area" value="51"/>
+    <int name="viewMedalItem" value="1142154"/>
+    <string name="2" value="You helped Nella clear Kerning City&apos;s name and became a #bKerning City Honorary Citizen#k."/>
+    <int name="autoStart" value="1"/>
+    <int name="autoAccept" value="1"/>
+  </imgdir>
+  <imgdir name="29937">
+    <string name="name" value="Secret Organization Temporary Member"/>
+    <int name="area" value="51"/>
+    <int name="viewMedalItem" value="1142155"/>
+    <string name="2" value="You passed the Secret Organization admissions test as suggested by the Puppet Left Behind and became a #bSecret Organization Temporary Member#k."/>
+    <int name="autoStart" value="1"/>
+    <int name="autoAccept" value="1"/>
+  </imgdir>
+  <imgdir name="29938">
+    <string name="name" value="Dragon Master"/>
+    <int name="area" value="51"/>
+    <int name="viewMedalItem" value="1142156"/>
+    <int name="autoStart" value="1"/>
+    <int name="autoAccept" value="1"/>
+    <string name="2" value="You used the scale you got from Mir to make a #bDragon Master#k medal."/>
+  </imgdir>
+  <imgdir name="29939">
+    <string name="name" value="Dragon Master"/>
+    <int name="area" value="51"/>
+    <int name="viewMedalItem" value="1142157"/>
+    <string name="2" value="You received a more powerful scale from Mir and made a golden #bDragon Master#k medal."/>
+    <int name="autoStart" value="1"/>
+    <int name="autoAccept" value="1"/>
+  </imgdir>
+  <imgdir name="29940">
+    <string name="name" value="Hero&apos;s Successor"/>
+    <int name="area" value="51"/>
+    <int name="viewMedalItem" value="1142158"/>
+    <int name="autoStart" value="1"/>
+    <int name="autoAccept" value="1"/>
+    <string name="2" value="You went to Afrien and received a medal that was used by Dragon Master Freud. With this, you became recognized as the #bHero&apos;s Successor#k."/>
   </imgdir>
   <imgdir name="3000">
     <string name="name" value="Missing Staff Sergeant Charlie"/>
@@ -13926,6 +14468,13 @@ Can proceed to the &quot;The Secrets Behind the Ring?&quot; quest.
     <string name="1" value="You met with #p1201000# for the first time in a while. Lilin seemed genuinely happy to see you work hard to regain your previous form, both physically and mentally. You were glad as she reminisced about the first time you met."/>
     <string name="2" value="You met with #p1201000# for the first time in a while. Lilin seemed genuinely happy to see you work hard to regain your previous form, both physically and mentally. You were glad as she reminisced about the first time you met."/>
   </imgdir>
+  <imgdir name="3540">
+    <string name="name" value="In Search of Lost Memories"/>
+    <int name="area" value="46"/>
+    <string name="0" value="According to the Memorykeeper, you must return the the point where you started your adventure in order to regain your lost memory. Hmm... Wouldn&apos;t that be the time you left the farm and went to Chief Stan on an errand? Go to #bHenesys#k  and meet with #bChief Stan#k."/>
+    <string name="1" value="You met with Chief Stan. Chief Stan, who only knew you to be the second child of the Gustav, was very happy that you became a Maple World Hero. Talking to Chief Stan, who still remembers your childhood, warms your heart."/>
+    <string name="2" value="You met with Chief Stan. Chief Stan, who only knew you to be the second child of the Gustav, was very happy that you became a Maple World Hero. Talking to Chief Stan, who still remembers your childhood, warms your heart."/>
+  </imgdir>
   <imgdir name="3600">
     <string name="name" value="Tae Gong&apos;s Love For His Wife"/>
     <string name="0" value="I should go visit Tae Gong, who&apos;s gone fishing floating around in the middle of Aqua Road."/>
@@ -14734,6 +15283,59 @@ Can proceed to the &quot;The Secrets Behind the Ring?&quot; quest.
     <string name="demandSummary" value="#o8220015# #a37491#
 "/>
     <string name="rewardSummary" value="EXP 220,000\r\n#Wbasic#\r\n#i1003039:# #t1003039:# 1\r\n"/>
+  </imgdir>
+  <imgdir name="3756">
+    <string name="name" value="The Dragon Rider&apos;s Identity 1"/>
+    <int name="area" value="41"/>
+    <string name="0" value="According to rumors, an something has been appearing near Leafre and causing problems for the town. Go see #bChief Tatamo#k to find out more details."/>
+    <string name="1" value="Go meet #bChief Tatamo#k in Leafre and found out about what&apos;s been happening in there."/>
+    <string name="2" value="You met with #bChief Tatamo#k and received a request to investigate the strange case happening in the town."/>
+    <int name="autoStart" value="1"/>
+  </imgdir>
+  <imgdir name="3757">
+    <string name="name" value="The Dragon Rider&apos;s Identity 2"/>
+    <int name="area" value="41"/>
+    <string name="0" value="Learn about the strange things that have been happening in Leafre from #bChief Tatamo#k."/>
+    <string name="1" value="Go into #bThe Forest That Disappeared#k in Minar Forest and investigate the whereabouts of the Dragon Rider."/>
+    <string name="2" value="You discovered the identity of the Dragon Rider from #bMatada#k, the Halflinger Adventurer."/>
+  </imgdir>
+  <imgdir name="3758">
+    <string name="name" value="Towards the Sky 1"/>
+    <int name="area" value="41"/>
+    <string name="demandSummary" value="#i4000240:# #t4000240:# #c4000240# / 1
+#i2020015:# #t2020015:# #c2020015# / 1
+#i4001402:# #t4001402:# #c4001402# / 10
+"/>
+    <string name="rewardSummary" value="EXP 48,000\r\n"/>
+    <string name="0" value="In order to chase the Dragon Rider, you&apos;re going to need to learn to fly... Discover the secret to flight from Matada, the Halflinger Adventurer."/>
+    <string name="1" value="Bring Matada the items he needs so that he can teach you how to fly."/>
+    <string name="2" value="You brought #bMatada#k the items that he wanted."/>
+  </imgdir>
+  <imgdir name="3759">
+    <string name="name" value="Towards the Sky 2"/>
+    <int name="area" value="41"/>
+    <string name="0" value="Will you now be able to fly? Only one more item is required to fly..."/>
+    <string name="1" value="Go to #bChief Tatamo#k in Leafre and bring back a Dragon Moss Extract."/>
+    <string name="2" value="You learned the #bSoaring#k skill and are able to fly now."/>
+    <string name="demandSummary" value="#i4032531:# #t4032531:# #c4032531# / 1
+"/>
+    <string name="rewardSummary" value="EXP 11,000\r\nSoaring skill"/>
+  </imgdir>
+  <imgdir name="3760">
+    <string name="name" value="Dragonica&apos;s Horn"/>
+    <int name="area" value="41"/>
+    <string name="demandSummary" value="#i4001401:# #t4001401:# #c4001401# / 1
+"/>
+    <string name="1" value="Chief Tatamo has asked that you defeat the Dragon Rider and bring back the Dragon&apos;s horn."/>
+    <string name="2" value="You brought back the horn as Tatamo requested. You just hope that the injured animals get better soon..."/>
+    <string name="0" value="Chief Tatamo has one more thing to ask you..."/>
+  </imgdir>
+  <imgdir name="3761">
+    <string name="name" value="Tears of Repentance"/>
+    <int name="area" value="41"/>
+    <string name="0" value="The identity of the Dragon Rider has been revealed. Talk to #b#p2085003##k who seems to have something to say."/>
+    <string name="1" value="That such a horrible thing could happen to one of the Halflingers... You kind of feel sorry for #p2085003#. Go to #bChief Tatamo#k and tell him his story."/>
+    <string name="2" value="You protected Leafre, though now that you know the whole story, you&apos;re not entirely sure the townspeople deserved it."/>
   </imgdir>
   <imgdir name="3800">
     <string name="name" value="No Gong&apos;s Teaching 1"/>

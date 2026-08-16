@@ -2104,6 +2104,516 @@
     <imgdir name="1">
     </imgdir>
   </imgdir>
+  <imgdir name="10480">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="10481">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="10482">
+    <imgdir name="0">
+      <string name="0" value="Hello Evan! Congratulations on reaching Lv. 30! Do you remember what I told you before? #p9010010# has a gift for you!"/>
+      <string name="1" value="Please go see #b#p9010010##k to receive the #bgift#k that she has personally prepared."/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="yes">
+        <string name="0" value="Congratulations once again for reaching Lv. 30! I look forward to seeing you becoming even more powerful!"/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="Oh, you must not like the gift. I really thought you would like it... "/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <string name="0" value="Oh, you must be Evan! Nice to meet you! You really do look like a Dragon Master! Maybe I shouldn&apos;t refer to a Dragon Master as cute, but you&apos;re adorable!"/>
+      <string name="1" value="You heard from the #p9010000# right? I, #p9010010#, have made this gift especially for you! I&apos;m sure you&apos;re going to love it! Tada! A #t1022097#!"/>
+      <imgdir name="yes">
+        <string name="0" value="I made it because I thought it might be fitting for a Dragon Master. Actually I also prepared a #bscroll#k that can be used on the #t1022097#, but I can&apos;t give it to you yet. I will give it to you when you reach #bLv. 50#k so be sure to come back to me before #bMay 5#k."/>
+      </imgdir>
+      <imgdir name="stop">
+        <imgdir name="npc">
+          <string name="0" value="Have you not gone to see #p9010010# yet? #p9010010# should be somewhere in town..."/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="10483">
+    <imgdir name="0">
+      <string name="0" value="Wow! Evan, you&apos;ve already reached Lv. 50? That was much faster than I expected! In that case, let me give you the scroll that can be used on the Dragon Glasses as I promised before. Be sure to come see me!"/>
+      <string name="1" value="You do know where I am right? Just come to a town. I&apos;m always here."/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="Hmm. You&apos;re not implying that you don&apos;t like the gift that I, #p9010010#, prepared for you, right?"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <string name="0" value="You&apos;ve come! My, you really have grown! And the Dragon also looks nothing like it used to. Although, it&apos;s still really cute..."/>
+      <string name="1" value="Now, let me give you the gift that I&apos;ve prepared. It&apos;s a scroll that can only be used on a Dragon Glasses. I made it myself, of course."/>
+      <imgdir name="yes">
+        <string name="0" value="Hehehe... Acutally, this isn&apos;t #bthe end#k of my scrolls. I&apos;m never cheap with my gifts! I can give it to you now, but that&apos;d be no fun. Get to #bLv. 60 before May 5#k this time. I will give you another scroll that you can use on the #t1022097#."/>
+      </imgdir>
+      <imgdir name="stop">
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="10484">
+    <imgdir name="0">
+      <string name="0" value="Wow, Evan! You&apos;re Lv. 60 already? You really are fast... This is all so that you can get my gifts right? Hehehe, I guess everyone need a little motivation. Come #bfind me in town#k so that I can give you the scroll."/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="Hmm. Why are you acting like you weren&apos;t expecting the scroll? Now, now, I can see through that. I know exactly what you&apos;re thinking, so no need to pretend to refuse."/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <string name="0" value="I&apos;m glad you&apos;re here Evan. Let&apos;s just cut to the chase. Here is the scroll that you so desired!"/>
+      <imgdir name="yes">
+        <string name="0" value="You probably expected this...but this is not #bthe end#k of the scrolls! I will give you the next scroll if you can reach #bLevel 80 by May 4th#k. The next scroll will be better than the previous ones! See you next time, Evan."/>
+      </imgdir>
+      <imgdir name="stop">
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="10485">
+    <imgdir name="0">
+      <string name="0" value="Watching someone develop really warms my heart! Congratulations on reaching Lv. 80, Evan! The really awesome scroll that I told you about before is ready so come find me!"/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="Huh? That was a mistake right? You&apos;re not really refusing my gift. Get the quest again, and this time make sure you press the ACCEPT button!"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <string name="0" value="Hi Evan! Whoa, that huge Dragon next to you... How did that cute Dragon get so big? I don&apos;t think I can call him cute anymore..."/>
+      <string name="1" value="A Dragon Master that has such an awesome Dragon surely deserves better equipment. Now use this scroll to improve your #t1022097#."/>
+      <imgdir name="yes">
+        <string name="0" value="#bI still have more scrolls#k! I will give you the next scroll if you reach #bLv. 100 by May 4#k. Lv. 100 seems really far away. I believe in ya! You can do it!"/>
+      </imgdir>
+      <imgdir name="stop">
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="10486">
+    <imgdir name="0">
+      <string name="0" value="Wow... You really did it, Evan. You really reached Lv. 100! Truth is, I didn&apos;t actually think you were going to do it... Luckily, I have one more scroll prepared for you anyway. Come find me in #btown#k."/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="Hmm... You refuse? Please rethink your decision."/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <string name="0" value="Although I&apos;ve been encouraging you and cheering you on, I really didn&apos;t think you were going to do it this time. But you did it! Although I was mistaken about you, I don&apos;t feel bad at all."/>
+      <string name="1" value="This is the last scroll that I&apos;ve prepared for you. I really didn&apos;t think I would be giving you this. Hehehe, you really are amazing!"/>
+      <imgdir name="yes">
+        <string name="0" value="I&apos;ve given you everything that I could. What&apos;s left is for you to do on your own. But I&apos;m not worried. From what I&apos;ve seen you do so far, I know that you will only get better and better!"/>
+      </imgdir>
+      <imgdir name="stop">
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="10487">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <string name="0" value="Have you enjoyed Christmas? I hope that everyone&apos;s heart will be filled with delight! I will give you a gift for having the Christmas spirit!"/>
+      <imgdir name="yes">
+        <string name="0" value="Be happy like the name of this town! Hehe!"/>
+      </imgdir>
+      <imgdir name="stop">
+        <imgdir name="default">
+          <string name="0" value="You can receive a medal by completing the Torr&apos;s Antler quest 5 times, the Where is the Christmas Fairy quest 25 times, and the Maple Claws&apos;s Gift Box quest 25 times."/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="10490">
+    <imgdir name="0">
+      <string name="0" value="Ahhh! I&apos;m so bored! Is there anything fun do to? No? In that case, I have a plan. Wanna listen?"/>
+      <imgdir name="stop">
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <imgdir name="stop">
+        <imgdir name="default">
+          <string name="0" value="Freeze the Weird Medicine that I gave you for 30 minutes and then turn it into slush. Then give it to the person I told you about. You do know who that person is, right?"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="10491">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <imgdir name="stop">
+        <imgdir name="npc">
+          <string name="0" value="Freeze the Weird Medicine for 30 minutes and then turn it into slush. Then give it to Gaga!"/>
+        </imgdir>
+        <imgdir name="item">
+          <string name="0" value="#b#t3994185##k? I wonder what that tastes like..."/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="10492">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <imgdir name="stop">
+        <imgdir name="npc">
+          <string name="0" value="Freeze the Weird Medicine for 30 minutes and then turn it into slush. Then give it to the Maple Administrator!"/>
+        </imgdir>
+        <imgdir name="item">
+          <string name="0" value="#b#t3994185##k? I wonder what that tastes like..."/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="10493">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <imgdir name="stop">
+        <imgdir name="npc">
+          <string name="0" value="Freeze the Weird Medicine for 30 minutes and then turn it into slush. Then give it to Cliff, who lives in Happyville!"/>
+        </imgdir>
+        <imgdir name="item">
+          <string name="0" value="#b#t3994185##k... I want to taste that... Will you get one for me?"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="10494">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <imgdir name="stop">
+        <imgdir name="npc">
+          <string name="0" value="Freeze the Weird Medicine for 30 minutes and then turn it into slush. Then give it to Torr in Happyville!"/>
+        </imgdir>
+        <imgdir name="item">
+          <string name="0" value="#b#t3994185##k? I wonder what that tastes like..."/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="10496">
+    <imgdir name="0">
+      <string name="0" value="Whoa! It&apos;s so cold! I feel like I&apos;m going to freeze! How about you, #b#h0##k?"/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="yes">
+        <string name="0" value="When the wind chills you like it&apos;s doing now, Red Thermals are the best. Just thinking about wearing a soft and warm Red Thermal makes me happy."/>
+        <string name="1" value="I really want to wear some Red Thermals. They are supposed to make you warm as well as stylish! Please gather #b20 #t4032532# so that I can wear some pretty Red Thermals! Thank you!"/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="Ooh... I&apos;m so cold!"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <string name="0" value="Yeah! That beautiful red fabric... Exactly what I asked for! Please give it to me and I will give you a Guitar Case that I used to use when I was preparing to become...an idol...when I was younger. You&apos;ll find a gift inside the Guitar Case."/>
+      <imgdir name="yes">
+        <string name="0" value="If you don&apos;t open the Guitar Case, a mysterious energy will transform the Guitar Case into a better one the next day. That Guitar Case will contain an even better gift. \r\nAlso, I need to make many, many thermals so please bring me more fabric every hour."/>
+      </imgdir>
+      <imgdir name="stop">
+        <imgdir name="item">
+          <string name="0" value="You didn&apos;t find #b20 #t4032532#s#k? You should be able get them while hunting monsters..."/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="10497">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="10500">
+    <imgdir name="0">
+      <string name="0" value="Have you heard about the #bDragon Master#k? No? Hehe, that&apos;s what I figured. If you&apos;re curious about #bDragon Master Evan#k, come talk to me."/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="yes">
+        <string name="0" value="You do know where I am right? I can be found in any of the major towns in Maple World."/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="I called you so that I could give you info about the #bDragon Master#k and give you a gift as a bonus but you don&apos;t want it? You&apos;re going to regret it..."/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="10501">
+    <imgdir name="0">
+      <string name="0" value="Dragon Master Evan... Exciting, right? Let me give you a mission. Go find the Onyx Dragon Remnants scattered throughout Maple World."/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="yes">
+        <string name="0" value="What&apos;s an Onyx Dragon? You&apos;ll slowly find out as you complete your missions. First, find the #b#t4032533##k. Once you complete the mission, you&apos;ll receive some really great #bDragon Equipment#k, too."/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="It&apos;s good chance to receive some great Dragon Equipment, so don&apos;t miss out."/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <string name="0" value="Did you bring the #b#t4032533##k that I asked for?"/>
+      <imgdir name="yes">
+        <string name="0" value="Yes, this is it. This is the horn of an infant Onxy Dragon. This was probably left behind when the Onyx Dragon grew a larger horn. You did a good job. Be sure to talk to me again tomorrow."/>
+      </imgdir>
+      <imgdir name="stop">
+        <imgdir name="item">
+          <string name="0" value="Hmm... You didn&apos;t bring back the #b#t4032533##k. Hurry up and go find one!"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="10502">
+    <imgdir name="0">
+      <string name="0" value="We are a day closer to the introduction of the Dragon Master. Please find another remnant of the Onyx Dragon."/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="yes">
+        <string name="0" value="Please find an #b#t4032534##k this time. Thanks."/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="Don&apos;t miss out on the chance to receive some great Dragon Equipment."/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <string name="0" value="Did you bring the #b#t4032534##k that I asked for?"/>
+      <imgdir name="yes">
+        <string name="0" value="Ahh, you found it. This is the Onyx Dragon Footprint. That such things are being found throughout Maple World is a sign that the revival of the Dragon Master is not far. I will ask you for another favor soon..."/>
+      </imgdir>
+      <imgdir name="stop">
+        <imgdir name="item">
+          <string name="0" value="Hmm, you didn&apos;t bring back the #b#t4032534##k. Hurry up and go find it."/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="10503">
+    <imgdir name="0">
+      <string name="0" value="I have another mission for you! You will accept, right?"/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="yes">
+        <string name="0" value="Okay, this time, go find an #b#t04032535##k. Start!"/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="Hmm... Don&apos;t miss out on the chance to receive some great Dragon Equipment."/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <string name="0" value="Did you bring the #b#t4032535##k that I asked for?"/>
+      <imgdir name="yes">
+        <string name="0" value="I&apos;m glad you found it. This is the horn of a teenage Onyx Dragon. The Onyx Dragon develops in sync with its Dragon Master, and they both get stronger together. I will see at the next mission."/>
+      </imgdir>
+      <imgdir name="stop">
+        <imgdir name="item">
+          <string name="0" value="You didn&apos;t bring back the #b#t4032535##k. Hurry up and go find one."/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="10504">
+    <imgdir name="0">
+      <string name="0" value="It&apos;s that time again. I don&apos;t have to tell you, right? You have to find another remnant."/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="yes">
+        <string name="0" value="The remnant that you&apos;ll have to find this time is an #b#t4032536##k. It looks different from the footprint you found last time so pay attention."/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="You&apos;ve done so much already, don&apos;t give up now! Just imagine the great #bDragon Equipment#k you&apos;ll get!"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <string name="0" value="Did you bring the #b#t4032536##k that I asked for?"/>
+      <imgdir name="yes">
+        <string name="0" value="Yes, this is it. This is a footprint found in a different area than the last one. Good job. The time of the Dragon Master&apos;s revival is close at hand. See you soon!"/>
+      </imgdir>
+      <imgdir name="stop">
+        <imgdir name="item">
+          <string name="0" value="Hmm... You didn&apos;t bring back the #b#t4032536##k. Hurry up and go find it."/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="10505">
+    <imgdir name="0">
+      <string name="0" value="The missions continue! This time you need to find an #b#t4032537##k! It shouldn&apos;t be too hard."/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="yes">
+        <string name="0" value="Bring me an #b#t4032537##k. I&apos;m running low on #bDragon Equipment#k so speed it up!"/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="You&apos;ve done so much already, don&apos;t give up now! Just imagine the great #bDragon Equipment#k you&apos;ll get."/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <string name="0" value="Did you bring the #b#t4032537##k that I asked for?"/>
+      <imgdir name="yes">
+        <string name="0" value="Okay, this is the Onyx Dragon Scale. It&apos;s very rare. Good job."/>
+      </imgdir>
+      <imgdir name="stop">
+        <imgdir name="item">
+          <string name="0" value="Hmm... You didn&apos;t bring back the #b#t4032537##k. Hurry up and go find it."/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="10506">
+    <imgdir name="0">
+      <string name="0" value="Only a few missions left! This time, bring back another #b#t4032538##k. Good luck."/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="yes">
+        <string name="0" value="Please go find the #b#t4032538##k. I&apos;m running low on #bDragon Equipment#k so speed it up!"/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="I don&apos;t think you want to miss out on the Dragon Equipment, right? So reconsider!"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <string name="0" value="Did you bring the #b#t4032538##k that I asked for?"/>
+      <imgdir name="yes">
+        <string name="0" value="Okay, this is another footprint of the Onyx Dragon. Good job. The time is really almost here. I&apos;ll see you again soon."/>
+      </imgdir>
+      <imgdir name="stop">
+        <imgdir name="item">
+          <string name="0" value="Hmm... You didn&apos;t bring back the #b#t4032538##k. Hurry up and go find it."/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="10507">
+    <imgdir name="0">
+      <string name="0" value="Time for the last mission. Go find an #b#t4032539##k. I will give you some great #bDragon Equipment#k after you do!"/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="yes">
+        <string name="0" value="Please bring back an #b#t4032539##k. Thank you."/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="Hmm. saying no now is a little...strange. Don&apos;t you want the Dragon Equipment?"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <string name="0" value="Did you bring the #b#t4032539##k that I asked for?"/>
+      <imgdir name="yes">
+        <string name="0" value="Yes, this is it. An Onyx Dragon Horn! You did a great job. Now I will give you the Dragon Equipment that you&apos;ve worked so hard for. Since Dragon Master Evan is part of the Magician class and uses Magician weapons, you may also get related scrolls. Why don&apos;t you try your luck?"/>
+        <string name="1" value="Now, we can look forward to the introduction of Dragon Master Evan this spring!"/>
+      </imgdir>
+      <imgdir name="stop">
+        <imgdir name="item">
+          <string name="0" value="Hmm... You didn&apos;t bring back the #b#t4032539##k. Hurry up and go find it."/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="10510">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <imgdir name="stop">
+        <imgdir name="item">
+          <string name="0" value="It looks like you haven&apos;t hatched the Dragon Egg yet. If you take care of it for #babout 1 hour#k, it will hatch for sure! If you disconnect, the egg will disappear so be careful! If the egg has disappeared, forfeit the quest and accept it again!"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="10514">
+    <imgdir name="0">
+      <string name="0" value="You weren&apos;t able to receive the gift because you had no space left in your inventory. You&apos;re not too late. Here is your gift!"/>
+      <imgdir name="stop">
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="10516">
+    <imgdir name="0">
+      <string name="0" value="You weren&apos;t able to receive the gift because you had no space left in your inventory. You&apos;re not too late. Here is your gift!"/>
+      <imgdir name="stop">
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="10520">
+    <imgdir name="1">
+      <string name="0" value="Wow, this is great! You got all of them so quickly. I definitely have an eye for talent. You&apos;ll become a great adventurer. I&apos;m sure of it."/>
+      <imgdir name="yes">
+        <string name="0" value="Did you get the money? It&apos;s not much but it should be useful for someone just starting out. I hope you get stronger and come back soon."/>
+      </imgdir>
+      <imgdir name="stop">
+        <imgdir name="item">
+          <string name="0" value="Hmm... It looks like you haven&apos;t been able to gather it all yet. Did I expect too much of you? Please gather #b100 #t4000016#s#k and #b50 #t4000004#s#k. I know that you can do it."/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+    <imgdir name="0">
+      <string name="0" value="Hey! Are you about to start an adventure? But you look a bit weak. When I was younger, I also used to roam the world. I miss those days."/>
+      <string name="1" value="At first, it was difficult because I was so ill prepared. Seeing you reminds me of all the hardships I faced as a young adventurer."/>
+      <string name="2" value="For some reason, I like you. If you can prove that you have the makings of a great adventurer, I will support you financially. Interested?"/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="yes">
+        <string name="0" value="Great, bring me #b100 #t4000016#s#k and #b50 #t4000004#s#k. If you can gather all of these, I will acknowledge your talent."/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="I was only trying to help... If you change your mind, feel free to come back."/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="10521">
+    <imgdir name="1">
+      <string name="0" value="Wow, that&apos;s amazing! You gathered them so quickly... You&apos;ve definitely become much stronger."/>
+      <imgdir name="yes">
+        <string name="0" value="Did you get the money? It should be very useful to you in your travels. Take care of yourself."/>
+      </imgdir>
+      <imgdir name="stop">
+        <imgdir name="item">
+          <string name="0" value="Hmm... It looks like you haven&apos;t been able to gather them all yet. Did I expect too much of you? Please gather #b80 #t04000024#s#k and #b100 #t04000020#s#k. I know that you can do it!"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+    <imgdir name="0">
+      <string name="0" value="#b#h0#!#k It&apos;s good to see you again. How have your adventures been? I&apos;d like to test just how strong you&apos;ve become. Will you accept?"/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="yes">
+        <string name="0" value="Okay, then please gather #b80 #t04000024#s#k and #b100 #t04000020#s#k. If you can do that, I will acknowldege that you have truly become stronger."/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="I guess you&apos;re not confident enough yet. If you want to prove your strength, feel free to come back anytime."/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="19011">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="2344">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <imgdir name="stop">
+        <imgdir name="item">
+          <string name="0" value="Who are you? You look like an adventurer exploring Maple World. Our kingdom needs true warriors to rescue us from our desperately dangerous situation. If you have no business here, be on your way."/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
   <imgdir name="28333">
     <imgdir name="0">
     </imgdir>
@@ -3450,6 +3960,654 @@
     <imgdir name="0">
     </imgdir>
     <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="28346">
+    <imgdir name="0">
+      <string name="0" value="Hello, Evan! Congratulations on reaching Level 25! Do you remember what I told you before?  #p9010010# will give you a gift when you reach Level 30!"/>
+      <string name="1" value="Please go see #b#p9010010##k when you reach Level 30 to receive the #bgift#k that she has personally prepared."/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="yes">
+        <string name="0" value="Congratulations once again for reaching Level 25! I look forward to seeing you become even more powerful!"/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="Oh, you must not like the gift. I really thought you would like it... "/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <string name="0" value="Oh, you must be Evan! Nice to meet you! You really do look like a Dragon Master! Maybe I shouldn&apos;t refer to a Dragon Master as cute, but you&apos;re adorable!"/>
+      <string name="1" value="You heard from the #p9010000# right? I, #p9010010#, have made this gift especially for you! I&apos;m sure you&apos;re going to love it! Tada! #t1022097#!"/>
+      <imgdir name="yes">
+        <string name="0" value="I made it because I thought it might be fitting for a Dragon Master. Actually, I also prepared a #bscroll#k that can be used on the #t1022097#, but I can&apos;t give it to you yet. I will give it to you when you reach #bLevel 50#k, so be sure to come back to me before #bMay 5th#k."/>
+      </imgdir>
+      <imgdir name="stop">
+        <imgdir name="npc">
+          <string name="0" value="Have you not gone to see #p9010010# yet? #p9010010# should be somewhere in town..."/>
+        </imgdir>
+        <imgdir name="default">
+          <string name="0" value="Your Level is still a bit low. When you reach Level 30, you can receive a special gift that will only be given out during the event period. The event ends on May 4th, so be sure to hurry."/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="28347">
+    <imgdir name="0">
+      <string name="0" value="Wow! Evan, you&apos;ve already reached Level 45? That was much faster than I expected! When you reach Level 50, be sure to come see me and I will give you a scroll that can be used on the #t1022097#, as I promised before!"/>
+      <string name="1" value="You do know where I am, right? Just come to a town. I&apos;m always here."/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="Hmm. You&apos;re not implying that you don&apos;t like the gift that I, #p9010010#, prepared for you, right?"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <string name="0" value="You&apos;ve come! My, you really have grown! And the Dragon also looks nothing like it used to. Although, it&apos;s still really cute..."/>
+      <string name="1" value="Now, let me give you the gift that I&apos;ve prepared. It&apos;s a scroll that can only be used on the #t1022097#. I made it myself, of course."/>
+      <imgdir name="yes">
+        <string name="0" value="Hehehe... Actually, this isn&apos;t the end of my scrolls. I&apos;m never cheap with my gifts! I could give another one to you now, but that&apos;d be no fun. Get to #bLevel 60 before May 5th#k this time. I will give you another scroll that you can use on the #t1022097#."/>
+      </imgdir>
+      <imgdir name="stop">
+        <imgdir name="default">
+          <string name="0" value="Your Level is still a bit low; When you reach Level 50, you can receive a special gift that will only be given out during the event period. The event ends on May 4th, so be sure to hurry."/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="28348">
+    <imgdir name="0">
+      <string name="0" value="Wow, Evan! You&apos;re Level 55 already? You really are fast... This is all so that you can get my gifts right? Hehehe, I guess everyone needs a little motivation. When you reach Level 60, come #bfind me in town#k so that I can give you the scroll."/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="Hmm. Why are you acting like you weren&apos;t expecting the scroll? Now, now, I can see through that. I know exactly what you&apos;re thinking, so no need to pretend to refuse."/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <string name="0" value="I&apos;m glad you&apos;re here, Evan. Let&apos;s just cut to the chase. Here is the scroll that you so desired!"/>
+      <imgdir name="yes">
+        <string name="0" value="You probably expected this...but this is not the end of the scrolls! I will give you the next scroll if you can reach #bLevel 70 by May 4th#k. The next scroll will be better than the previous ones! See you next time, Evan."/>
+      </imgdir>
+      <imgdir name="stop">
+        <imgdir name="default">
+          <string name="0" value="Your Level is still a bit low. When you reach Level 60, you can receive a special gift that will only be given out during the event period. The event ends on May 4th, so be sure to hurry."/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="28349">
+    <imgdir name="0">
+      <string name="0" value="Watching someone develop really warms my heart! Congratulations on reaching Level 65, Evan! When you reach Level 70, I&apos;ll give you a really awesome scroll!"/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="Huh? That was a mistake right? You&apos;re not really refusing my gift. Get the quest again, and this time make sure you press the ACCEPT button!"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <string name="0" value="Hi, Evan! Whoa, that huge Dragon next to you... How did that cute Dragon get so big? I don&apos;t think I can call him cute anymore..."/>
+      <string name="1" value="A Dragon Master that has such an awesome Dragon surely deserves better equipment. Now use this scroll to improve your #t1022097#."/>
+      <imgdir name="yes">
+        <string name="0" value="#bI still have more scrolls#k! I will give you the next scroll if you reach #bLevel 80 by May 4th#k. Level 80 seems really far away. I believe in ya! You can do it!"/>
+      </imgdir>
+      <imgdir name="stop">
+        <imgdir name="default">
+          <string name="0" value="Your Level is still a bit low. When you reach Level 70, you can receive a special gift that will only be given out during the event period. The event ends on May 4th, so be sure to hurry."/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="28350">
+    <imgdir name="0">
+      <string name="0" value="Wow... You really did it, Evan. You really reached Level 75! Truth is, I didn&apos;t actually think you were going to do it... Luckily, I have one more scroll prepared for you anyway. When you reach Level 80, I will give you another really awesome scroll. Watching someone grow really warms my heart!"/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="Hmm... You refuse? Please rethink your decision."/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <string name="0" value="Although I&apos;ve been encouraging you and cheering you on, I really didn&apos;t think you were going to do it this time. But you did it! Although I was mistaken about you, I don&apos;t feel bad at all."/>
+      <string name="1" value="This is the last scroll that I&apos;ve prepared for you. I really didn&apos;t think I would be giving you this. Hehehe, you really are amazing!"/>
+      <imgdir name="yes">
+        <string name="0" value="I&apos;ve given you everything that I could. What&apos;s left is for you to do on your own. But I&apos;m not worried. From what I&apos;ve seen you do so far, I know that you will only get better and better!"/>
+      </imgdir>
+      <imgdir name="stop">
+        <imgdir name="default">
+          <string name="0" value="Your Level is still a bit low. When you reach Level 80, you can receive a special gift that will only be given out during the event period. The event ends on May 4th, so be sure to hurry."/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="28351">
+    <imgdir name="1">
+      <string name="0" value="Wow, you collected all 7 symbols of the Ancient Onyx Dragon. Please take this Onyx Dragon Treasure Chest."/>
+      <imgdir name="stop">
+        <imgdir name="item">
+          <string name="0" value="You haven&apos;t collected all 7 symbols of the Onyx Dragon. Press &apos;Q&apos; to find out which symbols you still need."/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="yes">
+        <string name="0" value="I gave you the Onyx Dragon Treasure Chest as I promised. Inside, you will find an awesome treasure that was once used by an ancient Dragon Master."/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="0">
+      <string name="0" value="Wow! You hatched the Mini Dragon Egg. I have some information that can only be revealed to those who have hatched a Mini Dragon Egg. Want to hear?"/>
+      <string name="1" value="Have you heard about the Onyx Dragon Treasure Chest, which contains treasures left by an ancient Dragon Master? If you collect 7 symbols of the Ancient Onyx Dragon and bring them to me, I will give you a chance to get one of those treasures! "/>
+      <string name="2" value="Do you want to try to get an Onyx Dragon Treasure Chest?"/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="yes">
+        <string name="0" value="I&apos;ll give you one of the symbols of the ancient Onyx Dragon, the Baby Onyx Dragon Horn. Now, please collect the remaining 6 symbols and bring them to me. "/>
+        <string name="1" value="You can get the remaining 6 symbols from Evan&apos;s Gift Box, which is given by Cassandra to anyone who&apos;s hatched a Mini Dragon Egg!"/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="That is sad to hear. If you want to obtain an Onyx Dragon Treasure Chest, be more courageous!"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="28353">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <string name="0" value="I suppose you heard about me through the #p9010000#. It&apos;s nice to meet you."/>
+      <imgdir name="stop">
+        <imgdir name="npc">
+          <string name="0" value="What? You couldn&apos;t find #p9201144#? Go through the Dimensional Mirror and go to #m683010000#. You&apos;ll find him there."/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="28354">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+      <imgdir name="stop">
+        <imgdir name="item">
+          <string name="0" value="I guess you couldn&apos;t get me a #b#t4032639##k yet. The #p9201145# is at the very top of Dragon&apos;s Nest. Climb up the rope over there and get my one #t4032639#."/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="28355">
+    <imgdir name="0">
+      <string name="0" value="Evans are popping up everywhere! Whoa, so you&apos;ve become an Evan too, eh? Haha!As you know, the first steps you take in anything make all the difference. All I&apos;m saying is that I want to give you a hand in trailblazing your way through your adventures as an Evan."/>
+      <string name="1" value="But you know there&apos;s a cost to everything, right? Wanna hear my offer?"/>
+      <imgdir name="yes">
+        <string name="0" value="If you wish to become a real trailblazer, you need to work hard. So, go collect 100 #b#t4001435##ks."/>
+        <string name="1" value="You can collect #b#t4001435##ks by hunting monsters. But you can collect them by trading with other players too! Teehee! "/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="The Trailblazer Event event will run until #rMay 5, 2010.#k So don&apos;t miss it!"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <string name="0" value="Wow, that was quick! Maybe I was being too easy on you. Whoa, all the Sweat Droplets really reek of your hard work. "/>
+      <string name="1" value="Teehee. Are you ready to accept your reward? Tada!"/>
+      <imgdir name="yes">
+        <string name="0" value="Congratulations, you&apos;ve become a #rConfused Evan!#k Haha. Wear this medal and you&apos;ll get lots of beneficial effects. Just remember that you can only use it for a set period of time, so keep talking to me if you want to upgrade it!"/>
+      </imgdir>
+      <imgdir name="stop">
+        <imgdir name="item">
+          <string name="0" value="You must collect 100 #b#t4001435##ks. Don&apos;t give up!"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="28356">
+    <imgdir name="0">
+      <string name="0" value="Hey, there, #bConfused Evan!#k You&apos;re so confused, I feel almost embarrassed for you. Haha. What? It makes you mad to hear me talk like that? Well, then you need to get stronger!"/>
+      <string name="1" value="Wanna know what you have to do to get stronger?"/>
+      <imgdir name="yes">
+        <string name="0" value="If you wish to become a real trailblazer, you need to work hard. So, go collect 400 #b#t4001435##ks."/>
+        <string name="1" value="You can collect #b#t4001435##ks by hunting monsters. But you can collect them by trading with other players too! Teehee! "/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="The Trailblazer Event event will run until #rMay 5, 2010.#k So don&apos;t miss it!"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <string name="0" value="Wow, that was quick! Maybe I was being too easy on you. Whoa, all the Sweat Droplets really reek of your hard work. "/>
+      <string name="1" value="Teehee. Are you ready to accept your reward? Tada!"/>
+      <imgdir name="yes">
+        <string name="0" value="Congratulations, you&apos;ve become a #rBeginner Evan!#k Haha. Wear this medal and you&apos;ll get lots of beneficial effects. Just remember that you can only use it for a set period of time, so keep talking to me if you want to upgrade it!"/>
+      </imgdir>
+      <imgdir name="stop">
+        <imgdir name="item">
+          <string name="0" value="You must collect 400 #b#t4001435##ks. Don&apos;t give up!"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="28357">
+    <imgdir name="0">
+      <string name="0" value="Hey, #bBeginner Evan!#k You&apos;re starting to really look like an Evan now! I trust that the medal I gave you is proving to be helpful."/>
+      <string name="1" value="I have to say, though, you&apos;re going to have to put in some more work! Wanna know what you&apos;re lacking?"/>
+      <imgdir name="yes">
+        <string name="0" value="If you wish to become a real trailblazer, you need to work hard. So, go collect 800 #b#t4001435##ks."/>
+        <string name="1" value="You can collect #b#t4001435##ks by hunting monsters. But you can collect them by trading with other players too! Teehee! "/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="The Trailblazer Event event will run until #rMay 5, 2010.#k So don&apos;t miss it!"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <string name="0" value="Wow, that was quick! Maybe I was being too easy on you. Whoa, all the Sweat Droplets really reek of your hard work. "/>
+      <string name="1" value="Teehee. Are you ready to accept your reward? Tada!"/>
+      <imgdir name="yes">
+        <string name="0" value="Congratulations, you&apos;ve become a #rConfident Evan!#k Haha. Wear this medal and you&apos;ll get lots of beneficial effects. Just remember that you can only use it for a set period of time, so keep talking to me if you want to upgrade it!"/>
+      </imgdir>
+      <imgdir name="stop">
+        <imgdir name="item">
+          <string name="0" value="You must collect 800 #b#t4001435##ks. Don&apos;t give up!"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="28358">
+    <imgdir name="0">
+      <string name="0" value="Oh, hey, #bConfident Evan!#k Unfortunately, you still have a long way to go. You must work harder to become a stronger Evan! Just listen to my offer!"/>
+      <imgdir name="yes">
+        <string name="0" value="If you wish to become a real trailblazer, you need to work hard. So, go collect 1200 #b#t4001435##ks."/>
+        <string name="1" value="You can collect #b#t4001435##ks by hunting monsters. But you can collect them by trading with other players too! Teehee! "/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="The Trailblazer Event event will run until #rMay 5, 2010.#k So don&apos;t miss it!"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <string name="0" value="Wow, that was quick! Maybe I was being too easy on you. Whoa, all the Sweat Droplets really reek of your hard work. "/>
+      <string name="1" value="Teehee. Are you ready to accept your reward? Tada!"/>
+      <imgdir name="yes">
+        <string name="0" value="Congratulations, you&apos;ve become a #rElite Evan!#k Haha. Wear this medal and you&apos;ll get lots of beneficial effects. Just remember that you can only use it for a set period of time, so keep talking to me if you want to upgrade it!"/>
+      </imgdir>
+      <imgdir name="stop">
+        <imgdir name="item">
+          <string name="0" value="You must collect 1200 #b#t4001435##ks. Don&apos;t give up!"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="28359">
+    <imgdir name="0">
+      <string name="0" value="Hi, #bElite Evan!#k Wow! You made it this far! Impressive! I didn&apos;t think you had it in you to grow this fast. You just have one last hurdle to get through! "/>
+      <string name="1" value="This time, #rthere is a choice you must make.#k Just know that you cannot change your mind once you pick your road and complete the task."/>
+      <string name="2" value="Complete the task that I am assigning to you now and you will get to enjoy #r+10% EXP and a 10% discount on potions for a whopping 60 days!#k Not to mention that you&apos;ll get to wear the very groovy #bTrailblazer Evan title,#k too!\r\n#i1142202:##t1142202#"/>
+      <string name="3" value="#rBut if you complete this quest, you couldn&apos;t get the Evan&apos;s Eternal Trailblazer quest.#k"/>
+      <string name="4" value="If you&apos;re ready, hear my final offer!"/>
+      <imgdir name="yes">
+        <string name="0" value="If you wish to become a real trailblazer, you need to work hard. So, go collect 3000 #b#t4001435##ks."/>
+        <string name="1" value="You can collect #b#t4001435##ks by hunting monsters. But you can collect them by trading with other players too! Teehee! "/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="The Trailblazer Event event will run until #rMay 5, 2010.#k So don&apos;t miss it!"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <string name="0" value="Wow, that was quick! Maybe I was being too easy on you. Whoa, all the Sweat Droplets really reek of your hard work. "/>
+      <string name="1" value="Teehee. Are you ready to accept your reward? Tada!"/>
+      <imgdir name="yes">
+        <string name="0" value="You&apos;ve become a #rTrailblazer Evan!#k Haha. Congratulations on all the rewards you&apos;ve earned! Now, go and enjoy all the fantastic benefits for #b60 days!#k Good work! "/>
+      </imgdir>
+      <imgdir name="stop">
+        <imgdir name="item">
+          <string name="0" value="You must collect 3000 #b#t4001435##ks. Don&apos;t give up!"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="28360">
+    <imgdir name="0">
+      <string name="0" value="Hi, #bElite Evan!#k Wow! You made it this far! Impressive! I didn&apos;t think you had it in you to grow this fast. You just have one last hurdle to get through! "/>
+      <string name="1" value="This time, #rthere is a choice you must make.#k Just know that you cannot change your mind once you pick your road and complete the task."/>
+      <string name="2" value="Complete this task and you&apos;ll receive a great reward. Too bad you can&apos;t enjoy the benefits of a medal, but the reward is worth it! You&apos;ll earn the #rEternal Trailblazer Evan title.#k And just as the name says, you get to keep the title forever! \r\n#i1142203:##t1142203#"/>
+      <string name="3" value="#rBut if you complete this quest, you couldn&apos;t get the Evan Trailblazer quest.#k"/>
+      <string name="4" value="If you&apos;re ready, hear my final offer!"/>
+      <imgdir name="yes">
+        <string name="0" value="If you wish to become a real trailblazer, you need to work hard. So, go collect 3000 #b#t4001435##ks."/>
+        <string name="1" value="You can collect #b#t4001435##ks by hunting monsters. But you can collect them by trading with other players too! Teehee! "/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="The Trailblazer Event event will run until #rMay 5, 2010.#k So don&apos;t miss it!"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <string name="0" value="Wow, that was quick! Maybe I was being too easy on you. Whoa, all the Sweat Droplets really reek of your hard work. "/>
+      <string name="1" value="Teehee. Are you ready to accept your reward? Tada!"/>
+      <imgdir name="yes">
+        <string name="0" value="You&apos;ve become a #rEvan&apos;s EternalTrailblazer !#k Haha.Congratulations on achieving such an awesome feat! Hope you wear your title with pride. You&apos;ll be the object of everyone&apos;s envy!"/>
+      </imgdir>
+      <imgdir name="stop">
+        <imgdir name="item">
+          <string name="0" value="You must collect 3000 #b#t4001435##ks. Don&apos;t give up!"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="28361">
+    <imgdir name="0">
+      <string name="0" value="Hello, Evan! I love to deliver good news! So I&apos;m thrilled to tell you that I&apos;m handing out special gifts to celebrate the launch of Evan. Are you interested?"/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="yes">
+        <string name="0" value="You must be super curious, hehe. I&apos;ve prepared a little something for those who are diligently playing Evan."/>
+        <string name="1" value="I am giving away 5 different pieces of Evan gear to Evans that are between Lv. 17 and 21. When you equip all five Evan cash items, you&apos;ll get a special effect! Talk to me once you&apos;re Lv. 17 and ready to collect your first gift!"/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="It&apos;s a special gift that will be given out only until May 4th, so hurry over if you want it!"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="28362">
+    <imgdir name="0">
+      <string name="0" value="Hello, this is the Maple Admin. It&apos;s wonderful to see that you&apos;re getting stronger day by day. Are you curious what my second gift is?"/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="yes">
+        <string name="0" value="You know that during this special event, I&apos;m giving away 5 different Evan cash items to Evans between Lv. 17 and 21, don&apos;t you? When you equip all the Evan cash items, you will get a special effect that is exclusively for Evans!"/>
+        <string name="1" value="Please come see me when you&apos;re ready to receive my second gift."/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="It&apos;s a special gift that will be given out only until May 4th, so hurry over if you want it!"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="28363">
+    <imgdir name="0">
+      <string name="0" value="Hello, this is the Maple Admin. Congratulations on reaching Lv. 19. I see Mir has gotten stronger, too. Are you curious what my third gift is?"/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="yes">
+        <string name="0" value="Please come see me when you&apos;re ready to receive my third gift."/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="It&apos;s a special gift that will be given out only until May 4th, so hurry over if you want it!"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="28364">
+    <imgdir name="0">
+      <string name="0" value="Wow, you&apos;ve already reached Lv. 20? It&apos;s time for me to give you my fourth gift then."/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="yes">
+        <string name="0" value="Please come see me when you&apos;re ready to receive my fourth gift."/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="It&apos;s a special gift that will be given out only until May 4th, so hurry over if you want it!"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="28365">
+    <imgdir name="0">
+      <string name="0" value="Hello, Evan! This is the Maple Admin. Congratulations on reaching Lv. 21. Are you ready to receive my last gift?"/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="yes">
+        <string name="0" value="The is the last of the 5 gifts I&apos;m passing out to Evans who are between Lv. 17 and 21. As you know, when you equip all five Evan cash items, you will see a special effect!"/>
+        <string name="1" value="Please come see me when you&apos;re ready to receive my fifth gift."/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="It&apos;s a special gift that will be given out only until May 4th, so hurry over if you want it!"/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="29934">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="29935">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="29936">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="29937">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="29938">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="29939">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="29940">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="3540">
+    <imgdir name="0">
+    </imgdir>
+    <imgdir name="1">
+    </imgdir>
+  </imgdir>
+  <imgdir name="3756">
+    <imgdir name="0">
+      <string name="0" value="Ahem... Can you hear me? #b#h0##k, my town is in dire need of help. Please listen to my plea. I beg you."/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="yes">
+        <string name="0" value="Many strange things have been happening in Leafre. As the town chief, I have been trying to handle it, but I haven&apos;t been able to do much. We need a true warrior like you, #b#h0##k to help us!"/>
+        <string name="1" value="Please consider my plea, and then talk to me, #bTatamo#k, the chief of Leafre."/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="In that case, our town is doomed for sure..."/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <string name="0" value="Have you made your decision? I had no doubt #b#h0##k, that you would help."/>
+      <imgdir name="yes">
+        <string name="0" value="My town has remained peaceful by maintaining good relations with the Dragon race. But recently, strange things have happened."/>
+      </imgdir>
+      <imgdir name="stop">
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="3757">
+    <imgdir name="0">
+      <string name="0" value="Like I said, we Halflingers have enjoyed years of peace thanks to our smart diplomacy with the Dragon face. But recently, we&apos;ve discovered that some of our grain storages were destroyed and our livestock killed. We were horrified."/>
+      <string name="1" value="For our own safety, we formed security groups. That&apos;s when we discovered who was attacking our livestock. A dragon! The twist is that there was someone riding and controlling the dragon..."/>
+      <string name="2" value="We call him the #bDragon Rider#k. We chased him, but lost him during a fierce battle in #b#eThe Forest That Disappeared#k#n. Many Halflingers were hurt, so we can&apos;t continue the investigation ourselves. #b#h0##k, would you assist us?"/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="yes">
+        <string name="0" value="Thank you. The Dragon Rider was last seen in #bThe Forest That Disappeared#k. Please investigate there first."/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="The problem is bigger than it may seem. Please reconsider."/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <int name="ask" value="1"/>
+      <string name="0" value="Is there something I can do for you?\r\n#L0##bI&apos;m here in pursuit of the Dragon Rider.#l\n#k"/>
+      <string name="1" value="The Dragon Rider... Ah. You must be here at the request of the Halflingers.\r\n#L0##bYes. Chief Tatamo in Leafre asked me to come.#l\n#k"/>
+      <string name="2" value="I see. I&apos;m investigating that myself. I&apos;m also a Halflinger born in Leafre. I&apos;ve been exploring the world and just happened to be returning home when I felt a strange energy within the Dragon race."/>
+      <imgdir name="yes">
+        <string name="0" value="So. They call him the #bDragon Rider#k, eh? I observed some of his movements from here, though I couldn&apos;t quite make out his features. In any case, he headed with the Dragon toward the #b&lt;Crimson Sky Doorway&gt;#k."/>
+      </imgdir>
+      <imgdir name="stop">
+        <imgdir name="0">
+          <int name="answer" value="1"/>
+          <int name="flip" value="1"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="answer" value="1"/>
+          <int name="flip" value="1"/>
+        </imgdir>
+        <imgdir name="default">
+          <string name="0" value="Investigate where the Dragon Rider could have escaped to from #bThe Forest That Disappeared#k in Minar Forest. Perhaps someone saw him?"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="3758">
+    <imgdir name="0">
+      <int name="ask" value="1"/>
+      <string name="0" value="To pursue the Dragon Rider, you&apos;ll have to enter through the &lt;Crimson Sky Doorway&gt; to the Crimson Sky area where the Dragons live . To do that, you&apos;ll have know how to fly...\r\n#L0##bFly? Like, flap flap flap my arms? In the sky?#l\n#k"/>
+      <string name="1" value="Yes. Normally, flying is impossible for humans.\r\n#L0##bNo kidding. So is all hope lost, then?#l\n#k"/>
+      <string name="2" value="Well... There is a way. Many years ago, I came across a recipe for a potion that supposedly allows humans to fly. Ancient documents also contain records of humans that were able to fly.\r\n#L0##bI knew there had to be a way! So what do I need to do?#l\n#k"/>
+      <string name="3" value="I can teach you the secret to flying if you bring me a few ingredients. The ingredients that you must bring me are #b1 #t04000240:#, 1 #t02020015:# and 10 #t4001402:#s#k."/>
+      <imgdir name="stop">
+        <imgdir name="0">
+          <int name="answer" value="1"/>
+          <int name="flip" value="1"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="answer" value="1"/>
+          <int name="flip" value="1"/>
+        </imgdir>
+        <imgdir name="2">
+          <int name="answer" value="1"/>
+          <int name="flip" value="1"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="yes">
+        <string name="0" value="Please bring me the ingredients that I mentioned."/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="Well, you can&apos;t go after the #bDragon Rider#k if you can&apos;t fly."/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <string name="0" value="Have you brought all the ingredients I need?"/>
+      <imgdir name="yes">
+        <string name="0" value="Aha, looks like you&apos;ve got it all. Please give me a moment to mix these together."/>
+      </imgdir>
+      <imgdir name="stop">
+        <imgdir name="item">
+          <string name="0" value="Looks like you&apos;re still missing a few things. Please bring me all of the ingredients."/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="3759">
+    <imgdir name="0">
+      <string name="0" value="Hmm...something&apos;s missing. I need you to gather just one more thing."/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="yes">
+        <string name="0" value="It&apos;s a very rare liquid made from the extracts of moss that grows where the Dragons live. Fortunately, the Halflingers should have some, since it&apos;s used to treat various diseases. Ask Chief Tatamo about it."/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="Hmm... Without that moss, I won&apos;t be able to help you."/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <string name="0" value="Were you able to obtain the #b#t4032531##k that I asked for?"/>
+      <imgdir name="yes">
+        <string name="0" value="Okay. If you&apos;re ready, I&apos;ll finish up the potion and sprinkle it on you. Then, you&apos;ll be able to fly."/>
+        <string name="1" value="Now you can fly! One word of caution, the Soaring skill can only be used in the Crimson Sky area, including the &lt;Crimson Sky Dock&gt;. Also, your MP will be continuously depleted while you&apos;re flying, so keep an eye on your MP bar. Good luck!"/>
+      </imgdir>
+      <imgdir name="stop">
+        <imgdir name="item">
+          <string name="0" value="Aah... You haven&apos;t been able to obtain the #b#t4032531##k. If you talk to #bChief Tatamo#k in Leafre, I&apos;m sure he will give it to you."/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="3760">
+    <imgdir name="0">
+      <string name="0" value="#b#h0##k, you&apos;ve done so much already but do you mind doing one more thing for me?"/>
+      <imgdir name="stop">
+      </imgdir>
+      <imgdir name="yes">
+        <string name="0" value="The animals that were attacked by the Dragon are not recovering from their injuries. So, that Dragon the #bDragon Rider#k is riding... We need it&apos;s horn! It&apos;s the only medicine that might work!"/>
+        <string name="1" value="Please eliminate him and bring back 1 #b#t4001401##k."/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="You&apos;re the only one who can help us..."/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <string name="0" value="You finally defeated him. Now please pass me the horn before the animals die."/>
+      <imgdir name="yes">
+        <string name="0" value="Yes, making a tonic with this horn is sure to help them recover. Thank you so much for all that you have done."/>
+      </imgdir>
+      <imgdir name="stop">
+        <imgdir name="item">
+          <string name="0" value="Please eliminate the Dragon Rider and bring back the #b#t4001401##k."/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="3761">
+    <imgdir name="0">
+      <int name="ask" value="1"/>
+      <string name="0" value="Ugh, adventurer... Please... Hear me out...\r\n#L0##bWhat? How are you alive?!#l\n#k"/>
+      <string name="1" value="Actually... I&apos;m a Halflinger that was born in Leafre. Leafre was a peaceful town with a rich soil and lush trees before I was born...\r\n#L0##bNo kidding! At least, it was until you rode around on your fancy dragon and destroyed it all!#l\n#k"/>
+      <string name="2" value="Truth is, I wasn&apos;t always like this. It&apos;s just that, when I was born, strange things started to happen in our peaceful little town, and everyone blamed me, saying I was born with cursed blood! It got so bad that I left town in a fury, vowing to get revenge.\r\n#L0##bYes, getting teased as a kid justifies destroying an entire town... You kind of overreacted, don&apos;t you think?#l\n#k"/>
+      <string name="3" value="Argh, your words are like a slap to the face, adventurer. Yes, I know now that I was wrong! It was foolish to take revenge on my own people... Will you please tell the Halflingers that I deeply regret my actions?"/>
+      <imgdir name="stop">
+        <imgdir name="0">
+          <int name="answer" value="1"/>
+          <int name="flip" value="1"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="answer" value="1"/>
+          <int name="flip" value="1"/>
+        </imgdir>
+        <imgdir name="2">
+          <int name="answer" value="1"/>
+          <int name="flip" value="1"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="yes">
+        <string name="0" value="Thank you. I will now exile myself and live out the rest of my days quietly in remorse. Please return to Leafre and tell my story to #Chief Tatamo#k."/>
+      </imgdir>
+      <imgdir name="no">
+        <string name="0" value="Adventurer... Please..."/>
+      </imgdir>
+    </imgdir>
+    <imgdir name="1">
+      <int name="ask" value="1"/>
+      <string name="0" value="Have you finally discovered the Dragon Rider&apos;s identity?\r\n#L0##bYes, the Dragon Rider was actually a Halflinger who was kicked out of Leafre.#l\n#k"/>
+      <string name="1" value="Kicked out? Then, could he be... Oh no. The child who was born with cursed blood?\r\n#L0##bYup, that&apos;s the guy. You guys blamed him when he hadn&apos;t done anything wrong, so he responded with vengeance. You kind of brought it on yourself, if you ask me.#l\n#k"/>
+      <string name="2" value="I understand. You&apos;re right. It... It was my ignorance that caused this horrible situation... I will have to think deeply upon this. Thank you."/>
+      <imgdir name="yes">
+        <string name="0" value="#h0#. I will never forget what you did for us."/>
+      </imgdir>
+      <imgdir name="stop">
+        <imgdir name="0">
+          <int name="answer" value="1"/>
+          <int name="flip" value="1"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="answer" value="1"/>
+          <int name="flip" value="1"/>
+        </imgdir>
+        <imgdir name="npc">
+          <string name="0" value="Please tell my story to Chief Tatamo."/>
+        </imgdir>
+      </imgdir>
     </imgdir>
   </imgdir>
   <imgdir name="7778">
