@@ -44,7 +44,6 @@ class MissingMapImageGuardRealLoad {
      */
     private static final Set<Integer> KNOWN_DEAD_WARP_TARGETS = new TreeSet<>(Set.of(
             3000000,        // scripts/quest/2573.js:20
-            100030301,      // scripts/portal/inDragonEgg.js:8 - "Forest Hall", see MapAndPortalScriptsRealLoad
             103000897,      // scripts/npc/1052007.js:67
             211060010,      // scripts/portal/lionCastle_enter.js:3
             912060200,      // scripts/quest/2568.js:19

@@ -63,8 +63,13 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author XoticStory
  * @author Ronan
  */
-// TODO: remove dependency on custom Npc.wz. All NPCs with id 9901910 and above are custom additions for player npcs.
-// In summary: NPCs 9901910-9906599 and 9977777 are custom additions to HeavenMS that should be removed.
+// TODO: remove dependency on custom Npc.wz. The server allocates 9901910-9906599 and 9977777 for player npcs
+// at runtime (see fetchAvailableScriptIdsFromDb below), and most of that band is a HeavenMS addition.
+// NOT all of it: 9901910-9901919 are genuine GMS v84 nodes - Nexon's own Lv.200 fame statues for map
+// 100030301 "Forest Hall" (v84 String.wz/Npc.img/9901910 = "I am /name, who has reached Lv. 200.",
+// v84 Etc.wz/NpcLocation.img/9901910/0 = 100030301). HeavenMS overwrote their String.wz text and took
+// the ids for its own allocator, so the overlap is ours, not Nexon's. That is why 100030301 ships here
+// without its ten static life rows - see MissingMapImageGuardRealLoad / ForestHallRealLoad.
 public class PlayerNPC extends AbstractMapObject {
     private static final Logger log = LoggerFactory.getLogger(PlayerNPC.class);
     private static final Map<Byte, List<Integer>> availablePlayerNpcScriptIds = new HashMap<>();

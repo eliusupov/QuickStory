@@ -26,6 +26,10 @@ Map.wz/Map/Map9/900090104.img
 # Henesys-farm Evan story maps. 100030000/100030001 already exist in this tree.
 # 100030301 (Forest Hall) is DELIBERATELY ABSENT - its life/ places static NPCs on ids
 # 9901910-9901919, which is inside PlayerNPC.java:66's runtime allocator range.
+# SUPERSEDED (ticket 41): the map is in the tree now, imported by a separate WzMerge xml run with
+# exactly those ten life rows dropped, so the reason above no longer applies. It is still not
+# listed here, because this manifest records what ticket 13 merged. See
+# V84EvanWorldNodeTest.forestHallIsMergedWithoutItsPlayerNpcAnchorRows.
 Map.wz/Map/Map1/100030100.img
 Map.wz/Map/Map1/100030101.img
 Map.wz/Map/Map1/100030102.img

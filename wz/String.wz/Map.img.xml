@@ -282,7 +282,7 @@
     </imgdir>
     <imgdir name="100030301">
       <string name="streetName" value="Farm Street"/>
-      <string name="mapName" value="Forest Hall "/>
+      <string name="mapName" value="Forest Hall"/>
     </imgdir>
     <imgdir name="100030320">
       <string name="streetName" value="Farm Street"/>

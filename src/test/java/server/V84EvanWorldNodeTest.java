@@ -184,20 +184,37 @@ class V84EvanWorldNodeTest {
     }
 
     /**
-     * A DELIBERATE ABSENCE, pinned so that merging it is a decision and not an accident.
+     * A DELIBERATE PARTIAL MERGE, pinned so that the part left out stays left out.
      * <p>
-     * {@code Map/Map1/100030301.img} ("Forest Hall") has ten {@code life} entries on NPC ids
-     * {@code 9901910}–{@code 9901919}. That is inside the range {@code PlayerNPC} allocates from at
-     * runtime ({@code PlayerNPC.java:66}: {@code 9901910}–{@code 9906599} are HeavenMS's own
-     * injected player-NPC ids), which is the same reason {@code Etc.wz/NpcLocation.img/990191x} is
-     * on {@code COLLISION-DENY.txt}. Merging the map would put fixed Nexon NPCs on ids this server
-     * hands out. If it is ever wanted, the ten {@code life} slots have to go first — and that is a
-     * hand-authored node, not a merge.
+     * {@code Map/Map1/100030301.img} ("Forest Hall") is genuine v84 — absent from v83-stock,
+     * named in {@code String.wz/Map.img/victoria/100030301}, and its npc {@code 1013106}
+     * ("Glowing Stele") carries Nexon's own script name {@code evan_lv200}. It is Nexon's Evan
+     * Lv.200 hall of fame, so it belongs here and {@code scripts/portal/inDragonEgg.js:8} warps
+     * to it.
+     * <p>
+     * What did NOT come with it: v84's ten {@code life} rows on npc ids
+     * {@code 9901910}–{@code 9901919}. Those ids are inside the run {@code PlayerNPC} hands out
+     * at runtime (branch 19, {@code 9901900}–{@code 9901999}), and this server's hall of fame is
+     * DB-driven — {@code PlayerNPCPodium} computes every position and never reads map
+     * {@code life}. Upstream {@code fca7b2ada} stripped 149 such static rows from exactly the ten
+     * {@code GameConstants.isHallOfFameMap} ids for that reason. Re-adding them here would put
+     * fixed NPCs on ids the allocator can hand out the same day.
      */
     @Test
-    void forestHallIsDeliberatelyNotMerged() {
-        assertNull(wz("Map.wz").getData(mapNode(100030301)),
-                "100030301 was merged — read this test's javadoc before keeping it");
+    void forestHallIsMergedWithoutItsPlayerNpcAnchorRows() {
+        Data forestHall = wz("Map.wz").getData(mapNode(100030301));
+        assertNotNull(forestHall, "100030301 is gone — inDragonEgg.js:8 warps to it, so it must exist");
+
+        List<Data> life = new ArrayList<>(forestHall.getChildByPath("life").getChildren());
+        assertEquals(1, life.size(), "100030301 life should hold only the Glowing Stele");
+        assertEquals("1013106", DataTool.getString(life.get(0).getChildByPath("id")),
+                "the one life row is no longer npc 1013106");
+        for (Data row : life) {
+            int id = Integer.parseInt(DataTool.getString(row.getChildByPath("id")));
+            assertFalse(id >= 9900000 && id <= 9906599,
+                    "life row on npc " + id + " is inside the PlayerNPC allocator band — read "
+                            + "this test's javadoc before keeping it");
+        }
     }
 
     /**

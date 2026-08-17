@@ -43,7 +43,7 @@ import static server.V84Wz.wz;
  *       refusal permanent. 87 of v84's 110 "absent" {@code Commodity.img} slots carry an SN a
  *       server row already serves, and {@code CashItemFactory.loadAllCashItems} keys its map by
  *       SN, so merging them would silently replace 87 live rows in HashMap order.</li>
- *   <li>{@link #forestHallAndItsNpcLocationsStayOut()} - the deliberate absences.</li>
+ *   <li>{@link #forestHallsNpcLocationsStayOutEvenThoughTheMapCameIn()} - the deliberate absence.</li>
  * </ul>
  */
 class V84ContentMergeNodeTest {
@@ -308,27 +308,28 @@ class V84ContentMergeNodeTest {
     // ---- the deliberate absences ------------------------------------------------------------
 
     /**
-     * Two absences this ticket kept, both for the same reason.
+     * The absence this ticket kept — now the only one of the two.
      * <p>
      * {@code PlayerNPC} allocates script ids from {@code 9900000 + branch*100}; branch 19 is
      * {@code THUNDERBREAKER1}, so {@code 9901900}-{@code 9901999} is handed out at runtime to
      * Thunder Breakers who max out on a Hall of Fame map, and the only things gating it are the
      * {@code playernpcs} table and the existence of {@code Npc.wz/<id>.img} - which this tree
-     * has for all ten. Map {@code 100030301} ("Forest Hall") places fixed NPCs on
-     * {@code 9901910}-{@code 9901919}, i.e. squarely inside that run, and
-     * {@code Etc.wz/NpcLocation.img/990191x} does the same. Both stay out.
+     * has for all ten. {@code Etc.wz/NpcLocation.img/990191x} would nail v84's fame statues to
+     * fixed world positions on exactly those ids, so it stays out.
      * <p>
-     * {@code V84EvanWorldNodeTest.forestHallIsDeliberatelyNotMerged} pins the map; this pins the
-     * NpcLocation half and the reason, so neither can be taken without a test going red.
+     * Map {@code 100030301} ("Forest Hall") itself is now IN, because the collision was only ever
+     * its ten {@code life} rows and those were droppable: see
+     * {@code V84EvanWorldNodeTest.forestHallIsMergedWithoutItsPlayerNpcAnchorRows}. The map is
+     * genuine v84 and {@code scripts/portal/inDragonEgg.js:8} needs it.
      */
     @Test
-    void forestHallAndItsNpcLocationsStayOut() {
+    void forestHallsNpcLocationsStayOutEvenThoughTheMapCameIn() {
         // positive control first: a broken Map.wz provider returns null for everything, and
-        // would otherwise satisfy the assertion below by failing to read anything at all
+        // would otherwise satisfy the assertions below by failing to read anything at all
         assertNotNull(wz("Map.wz").getData("Map/Map1/100030300.img"),
-                "Map.wz is not readable, so the absence below proves nothing");
-        assertNull(wz("Map.wz").getData("Map/Map1/100030301.img"),
-                "map 100030301 was merged - read this test's javadoc first");
+                "Map.wz is not readable, so the assertions below prove nothing");
+        assertNotNull(wz("Map.wz").getData("Map/Map1/100030301.img"),
+                "map 100030301 is gone - inDragonEgg.js:8 warps to it");
         Data locations = wz("Etc.wz").getData("NpcLocation.img");
         for (int npc = 9901910; npc <= 9901919; npc++) {
             assertNull(locations.getChildByPath(String.valueOf(npc)),
