@@ -65,9 +65,50 @@
 -- 166 stay: a guaranteed 5000000 mesos purchase and a sub-1% drop are different things, and
 -- every Explorer skill book is likewise both bought from Sly and dropped.
 --
--- Web check, as the owner asked, treated as corroboration and not as authority: see the report.
--- Where a site and these files disagree, the files win, because only the files describe THIS
--- server. No row below was taken from a web source.
+-- ============================================================================================
+-- WEB CHECK, as the owner asked. Corroboration, not authority. No row below came from a source.
+-- ============================================================================================
+-- bbb.hidden-street.net is behind a Cloudflare challenge and returns 403 to every fetch, so this
+-- was read through Wayback captures of it and of global.hidden-street.net. GMS Big Bang landed
+-- 2010-12-14, so captures from Apr-Dec 2010 describe the pre-Big-Bang table this server models
+-- and 2011+ captures do not. MapleSEA has a different regional table and was ignored except
+-- where noted.
+--
+-- IT AGREES ON SHAPE, which is the part that mattered:
+--   * There is no level threshold. Each book has a hand-authored dropper list, exactly like the
+--     697 rows already in drop_data. MapleStory Wiki, verbatim: "Upon release of the 4th Job
+--     Advancement prior to the Big Bang Update, Mastery Books were difficult to obtain, with
+--     each book dropped by certain mobs and/or Bosses."
+--   * Droppers are ordinary monsters and bosses from about Lv 65 to Lv 160, with the 30 books
+--     skewing to the highest end. That is the same band this changeSet writes into.
+--   * All four Evan SKILL books came off Zakum arm 3, with no quest and no shop, and Aran's four
+--     behave identically on the same site. Every row below already puts all four on Zakum3 at
+--     60000, inherited from the Aran copy, so canon and this changeSet agree on the one dropper
+--     canon names.
+--   * Independent confirmation of the item data: the wiki records 70 percent success for the 20
+--     books and 50 percent for the 30 books, which is exactly what Consume/0229.img carries for
+--     all 13 Evan books.
+--   * Several copied droppers coincide with canon without being aimed at it - Flame Wheel 20 on
+--     Griffey, Blaze 20 on Pianus, Onyx 20 on Qualm Monk Trainee, Dark Fog 30 on Lyka, and Onyx
+--     30 on the Oblivion Guardian tier are all both canonical and in the Aran set.
+--
+-- IT WAS NOT ADOPTED AS THE DROPPER LIST, for four reasons, and the files win on all of them:
+--   1. It carries no rates at all. Every row would still need a chance, so switching droppers
+--      would replace a fully derived row with a canonical mob plus an invented number.
+--   2. Two of the thirteen lists come only from 2011-01-01 captures, three weeks after Big Bang,
+--      and one - Illusion 30 - has no populated pre-Big-Bang list anywhere. Canon is incomplete.
+--   3. Canon reaches down to Lv 54-90 mobs such as Sr. Bellflower Root, Yeti, Beetle and
+--      Overlord A, which this server does not use for mastery books at all.
+--   4. The owner asked for these to drop like the other books IN THIS PROJECT. This project is
+--      already more generous than canon - it gives Aran's skill books ordinary-mob rows that
+--      canon does not have either - so matching the project is what was asked for.
+--
+-- One loose end it closes. Three ids carry a String.wz name and Job Evan but have no node in
+-- Consume/0229.img, so they cannot exist as items: 2290162 Magic Guard 20, 2290163 Magic Booster
+-- 20 and 2290164 Critical Magic 10. The wiki explains them - "With the release of Evan in March
+-- 2010 in GlobalMS, certain Mastery Books were sold in the Cash Shop, but this was not the case
+-- in any other server" - and the Cash Shop set was the pre-120 Magic Guard, Magic Booster and
+-- Critical Magic books. They are correctly absent here and from the shop.
 --
 -- Each row is annotated with its dropper name and level. The analogue book is named per group.
 
