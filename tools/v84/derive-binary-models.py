@@ -34,7 +34,37 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from binmodel import cfgtrace, dispatch, model as pmodel  # noqa: E402
 
 STAGES = ('CField', 'CLogin')
-INCOMPLETE = ('BUDGET', 'TIMEOUT', 'PATH_EXPLOSION', 'DEPTH', 'CAP', 'RECURSION')
+# Hard limits only. DEPTH and RECURSION fire on almost every packet (they mark a sub-call that was
+# not followed, which is usually a UI or allocator path that consumes nothing) and treating them as
+# truncation would mark every result unusable. These four mean the walk actually stopped early.
+INCOMPLETE = ('BUDGET', 'TIMEOUT', 'PATH_EXPLOSION', 'CAP')
+
+# Flags that mean control flow was NOT followed. A shape derived past one of these can be SHORT -
+# the client may read more down the path we could not walk - and a short model reports a huge false
+# OVER_SEND against a correct packet. SPAWN_PLAYER is the worked example: its body is CUser::Init
+# behind a virtual call, so the walk stops after the 4-byte character id and the shape looks
+# complete. Emission rejects these; the v83-vs-v84 diff does NOT, because there the same blindness
+# applies to both sides and a difference is still a difference.
+UNFOLLOWED = ('INDIRECT_CALL', 'INDIRECT_JMP', 'UNRESOLVED_CALL', 'MULTISHAPE_CALL',
+              'DECODE_LOOP', 'BADCODE', 'OOB')
+# Promoted to `verified`, which is all the Java harness loads. An entry belongs here only when ALL
+# THREE hold, and the third is the one that cannot be automated:
+#   1. this script derived exactly one fixed shape for it from the v84 binary, AND
+#   2. a human read the handler's disassembly and confirmed it is a single Decode* then a store -
+#      no branch, no sub-call that reads further, AND
+#   3. a human read the PacketCreator method and it emits exactly that.
+# (2) matters because the resolver can stop on an early-out arm and report the DISPATCHER prefix as
+# if it were the whole packet - SPAWN_DRAGON traced as 4 bytes (just the character id) against a
+# 16-byte writer, and the handler it had landed on turned out to be a destructor. Anything
+# pool-dispatched must be eyeballed before it goes in here.
+PROMOTED = {
+    'AUTO_HP_POT',             # v84 0x0059DE20  Decode4 -> [this+3C0]        ; ret
+    'AUTO_MP_POT',             # v84 0x0059DE46  Decode4 -> [this+3C4]        ; ret
+    'SET_GENDER',              # v84 0x00A6F416  Decode1 -> [this+202C]       ; ret 4
+    'CLAIM_STATUS_CHANGED',    # v84 0x00A7331C  Decode1 -> bool [this+3110]  ; ret 4
+    'SET_EXTRA_PENDANT_SLOT',  # v84 0x00A5E1CA  Decode1 -> [this+38CC]       ; ret 4
+    'REMOVE_NPC',              # v84 0x006F0BC8  Decode4 (npc object id)      ; no further read
+}
 W = {'Decode1': 1, 'Decode2': 2, 'Decode4': 4, 'Decode8': 8, 'DecodeStr': 's'}
 BUF = re.compile(r'\((\d+)\s*bytes?\)')
 
@@ -98,27 +128,33 @@ def export_shapes(entry, maxguard=8):
 
 
 # ------------------------------------------------------------------ extraction
-def shapes(v, opcode, otr, dtr, fixed_only=False):
+def shapes(v, opcode, otr, dtr, fixed_only=False, decoders_only=False):
     """(shapes, handler set, chain set, incomplete?)
 
     fixed_only drops shapes containing a variable-length field (a string, or a DecodeBuffer whose
     length could not be recovered). Emission needs that; the self-check must NOT use it, or every
     packet carrying a string would look like a miss."""
-    out, handlers, chains, bad = [], set(), set(), False
+    out, handlers, chains, flags = [], set(), set(), set()
     for stg in STAGES:
         for h, c, s, f in pmodel.model(v, opcode, stg, otr, dtr):
-            if any(x.split('@')[0] in INCOMPLETE for x in f):
-                bad = True
+            flags |= {x.split('@')[0] for x in f}
             if len(c) < 2:
                 continue
             handlers.add(h)
+            if decoders_only and h not in dtr.decoding:
+                # The resolver stops at the first opcode-selected call that is not handed the
+                # opcode. On an early-out path (object not in the pool) that call is a destructor,
+                # and the shape then contains only the DISPATCHER prefix while looking complete.
+                # SPAWN_DRAGON is the worked example: 4 bytes, which is just the character id.
+                # A function that cannot reach a Decode* cannot be the handler.
+                continue
             chains |= {x[1] for x in c}
             if not s or (fixed_only and dispatch.nbytes(s) is None):
                 continue
             w = tuple(s)
             if w not in out:
                 out.append(w)
-    return sorted(out, key=lambda x: (dispatch.nbytes(x) or 9999, x)), handlers, chains, bad
+    return sorted(out, key=lambda x: (dispatch.nbytes(x) or 9999, x)), handlers, chains, flags
 
 
 def tracers(v, seconds, depth):
@@ -137,7 +173,7 @@ def selfcheck(atlas, seconds, depth, only):
             continue
         entry = funcs.get(d['fname'])
         want = int(entry['address'], 16) if (entry and entry.get('address')) else None
-        got, handlers, chains, _ = shapes('83', int(d['opcode']), otr, dtr)
+        got, handlers, chains, _fl = shapes('83', int(d['opcode']), otr, dtr)
         if want is None:
             na += 1
         elif want in handlers or want in chains:
@@ -173,8 +209,10 @@ def delta(atlas, seconds, depth, only):
             continue
         if only and op not in only:
             continue
-        s83, _, _, bad83 = shapes('83', int(a['opcode']), o83, d83, fixed_only=True)
-        s84, _, _, bad84 = shapes('84', int(b['opcode']), o84, d84, fixed_only=True)
+        s83, _, _, f83 = shapes('83', int(a['opcode']), o83, d83, fixed_only=True)
+        s84, _, _, f84 = shapes('84', int(b['opcode']), o84, d84, fixed_only=True)
+        bad83 = any(x in INCOMPLETE for x in f83)
+        bad84 = any(x in INCOMPLETE for x in f84)
         if not s83 or not s84:
             novar += 1
             continue
@@ -203,18 +241,23 @@ def emit(atlas, out, seconds, depth, only):
             continue
         if only and op not in only:
             continue
-        got, handlers, _, bad = shapes('84', int(d['opcode']), otr, dtr, fixed_only=True)
+        got, handlers, _, fl = shapes('84', int(d['opcode']), otr, dtr, fixed_only=True,
+                                      decoders_only=True)
         if not got:
             rejected[op] = 'no fixed-size shape (variable-length or unresolved)'
             continue
         if len(got) > 1:
             rejected[op] = '%d shapes - the client branches on packet data' % len(got)
             continue
-        if bad:
-            rejected[op] = 'trace incomplete (budget/timeout/depth)'
+        if any(x in INCOMPLETE for x in fl):
+            rejected[op] = 'trace hit a budget or timeout'
+            continue
+        unfollowed = sorted(x for x in fl if x in UNFOLLOWED)
+        if unfollowed:
+            rejected[op] = 'control flow not followed (%s) - model could be short' % unfollowed[0]
             continue
         fields = ','.join('f%d:%s' % (i, t) for i, t in enumerate(got[0]))
-        rows.append(('candidate', op, d['opcode'],
+        rows.append(('verified' if op in PROMOTED else 'candidate', op, d['opcode'],
                      'v84 image handler ' + ' '.join('0x%08X' % h for h in sorted(handlers)),
                      fields))
     header = [

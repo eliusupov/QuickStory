@@ -24,6 +24,14 @@ public final class PacketStructureModels {
 
     public static final Path DEFAULT_PATH = Path.of("tools", "v84", "decode-models-v84.tsv");
 
+    /**
+     * Models derived from the v84 CLIENT BINARY rather than from the atlas export - see
+     * {@code tools/v84/derive-binary-models.py}. Same format, different and INDEPENDENT source,
+     * which is the whole point: where this table and {@link #DEFAULT_PATH} agree, two unrelated
+     * derivations agree; where they disagree, one of them is a finding.
+     */
+    public static final Path BINARY_PATH = Path.of("tools", "v84", "decode-models-v84-binary.tsv");
+
     private PacketStructureModels() {
     }
 
@@ -32,6 +40,24 @@ public final class PacketStructureModels {
     }
 
     public static Map<String, DecodeModel> loadVerified(Path tsv) {
+        return loadVerified(tsv, "gms_v83 IDA export ");
+    }
+
+    /**
+     * Every row including {@code candidate}. For CROSS-CHECKING two tables against each other only
+     * - a candidate row has not been read by a human and may be short. Never validate a packet
+     * against one.
+     */
+    public static Map<String, DecodeModel> loadAll(Path tsv, String sourcePrefix) {
+        return load(tsv, sourcePrefix, false);
+    }
+
+    /** {@code sourcePrefix} names where column 4 came from, so a failure says which table lied. */
+    public static Map<String, DecodeModel> loadVerified(Path tsv, String sourcePrefix) {
+        return load(tsv, sourcePrefix, true);
+    }
+
+    private static Map<String, DecodeModel> load(Path tsv, String sourcePrefix, boolean verifiedOnly) {
         List<String> lines;
         try {
             lines = Files.readAllLines(tsv, StandardCharsets.UTF_8);
@@ -46,7 +72,7 @@ public final class PacketStructureModels {
                 continue;
             }
             String[] cols = line.split("\t", -1);
-            if (cols.length != 5 || !cols[0].equals("verified")) {
+            if (cols.length != 5 || (verifiedOnly && !cols[0].equals("verified"))) {
                 continue;
             }
             List<DecodeModel.Field> fields = new ArrayList<>();
@@ -72,8 +98,8 @@ public final class PacketStructureModels {
                     }
                 });
             }
-            out.put(cols[1], new DecodeModel(cols[1], "gms_v83 IDA export " + cols[3]
-                    + " (v84 opcode " + cols[2] + "), via tools/v84/derive-decode-models.py",
+            out.put(cols[1], new DecodeModel(cols[1], sourcePrefix + cols[3]
+                    + " (v84 opcode " + cols[2] + "), via " + tsv,
                     List.copyOf(fields)));
         }
         return out;
