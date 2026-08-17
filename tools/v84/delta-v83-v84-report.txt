@@ -1,0 +1,66 @@
+# v83 vs v84 client-binary shape diff - raw output, committed as evidence rather than cited.
+#
+# Produced by:  python tools/v84/derive-binary-models.py --delta <atlas>
+# Both sides derived from the client images only; no server code is read on either side, so a
+# difference here is a property of the clients, not of Cosmic.
+#
+# "INCOMPLETE TRACE - NOT EVIDENCE" means the walk hit a budget, timeout or path explosion on at
+# least one side, so the shape lists are not exhaustive and a difference between them may be an
+# artifact of where the walker stopped. Read the ticket before treating one as a finding.
+#
+# Every finding below was re-derived from a SECOND, independently taken v84 memory dump
+# (COSMIC_V84_IMAGE_B) and reproduced identically:
+#   DROP_ITEM_FROM_MAPOBJECT   [5, 23, 25, 29, 31, 33, 39]
+#   SKILL_LEARN_ITEM_RESULT    [5, 16]
+#   SHOW_STATUS_INFO           includes the 12-byte arm that v83 does not have
+#
+# Adjudication of each row: docs/work-plan/tickets/41-binary-derived-packet-models.md
+
+DROP_ITEM_FROM_MAPOBJECT               v83 op 268  [5, 23, 24, 29, 30, 32, 38]   *** INCOMPLETE TRACE - NOT EVIDENCE ***
+                                       v84 op 275  [5, 23, 25, 29, 31, 33, 39]
+                                                1,4
+                                                1,4,1,4,4,1,2,2,4
+                                                1,4,1,4,4,1,2,2,4,1,1
+                                                1,4,1,4,4,1,2,2,4,2,2,2
+                                                1,4,1,4,4,1,2,2,4,2,2,2,1,1
+                                                1,4,1,4,4,1,2,2,4,b8,1,1
+                                                1,4,1,4,4,1,2,2,4,2,2,2,b8,1,1
+MOVE_MONSTER                           v83 op 239  [4, 7]   *** INCOMPLETE TRACE - NOT EVIDENCE ***
+                                       v84 op 245  [4]
+                                                4
+PARTY_OPERATION                        v83 op 62   [1, 2, 5, 6, 10, 13, 14, 17, 19]   *** INCOMPLETE TRACE - NOT EVIDENCE ***
+                                       v84 op 62   [1, 2, 5, 6, 10, 13, 14, 17]
+                                                1
+                                                1,1
+                                                1,4
+                                                1,4,1
+                                                1,4,4,1
+                                                1,4,4,4
+                                                1,1,4,4,2,2
+                                                1,4,4,4,2,2
+SHOW_STATUS_INFO                       v83 op 39   [1, 2, 5, 6, 9, 10, 34, 35, 36, 37]   *** INCOMPLETE TRACE - NOT EVIDENCE ***
+                                       v84 op 39   [1, 2, 4, 5, 6, 9, 10, 34, 35, 36, 37]
+                                                1
+                                                1,1
+                                                1,2,1
+                                                1,4
+                                                1,1,4
+                                                1,1,1,4,2
+                                                1,1,4,4
+                                                1,1,4,1,4,1,1,4,1,4,4,4,4
+                                                1,1,4,1,4,1,1,4,1,1,4,4,4,4
+                                                1,1,4,1,4,1,1,4,1,1,1,4,4,4,4
+                                                1,1,4,1,4,1,1,4,1,1,1,1,4,4,4,4
+SKILL_LEARN_ITEM_RESULT                v83 op 51   [4, 15]   *** INCOMPLETE TRACE - NOT EVIDENCE ***
+                                       v84 op 51   [5, 16]
+                                                1,4
+                                                1,4,1,4,4,1,1
+VIEW_ALL_CHAR                          v83 op 8    [1, 9, 113, 223, 333, 443]   *** INCOMPLETE TRACE - NOT EVIDENCE ***
+                                       v84 op 8    [1, 9, 113, 223, 333]
+                                                1
+                                                1,4,4
+                                                1,1,1,4,b13,1,1,4,4,b24,1,2,2,2,2,2,2,2,2,2,2,2,4,2,4,4,1,4,1,b16
+                                                1,1,1,4,b13,1,1,4,4,b24,1,2,2,2,2,2,2,2,2,2,2,2,4,2,4,4,1,4,1,b16,4,b13,1,1,4,4,b24,1,2,2,2,2,2,2,2,2,2,2,2,4,2,4,4,1,4,1,b16
+                                                1,1,1,4,b13,1,1,4,4,b24,1,2,2,2,2,2,2,2,2,2,2,2,4,2,4,4,1,4,1,b16,4,b13,1,1,4,4,b24,1,2,2,2,2,2,2,2,2,2,2,2,4,2,4,4,1,4,1,b16,4,b13,1,1,4,4,b24,1,2,2,2,2,2,2,2,2,2,2,2,4,2,4,4,1,4,1,b16
+
+identical in both binaries: 187   DIFFERENT: 6   no fixed shape on a side: 134
