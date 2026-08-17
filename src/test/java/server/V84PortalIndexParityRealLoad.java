@@ -37,8 +37,13 @@ import static server.V84Wz.wz;
  *       never an arrival. El Nath's block of six was rotated by one against v84 anyway.
  * </ol>
  *
- * <p>Every section below was taken from the pristine v84 archive verbatim rather than hand-edited,
- * for the reason {@code 070e4f883} gives: a hand-authored move already lost a leaf once.
+ * <p>Every section below was taken from the pristine v84 archive rather than hand-edited, for the
+ * reason {@code 070e4f883} gives: a hand-authored move already lost a leaf once. "From v84" means
+ * one specific thing here - <b>v84 owns the client-facing fields, we own {@code script}</b>.
+ * {@code pn/pt/x/y/tm/tn} and the slot number are resolved by the client against its own copy, so
+ * they are v84's; {@code script} is read only by {@code PortalScriptManager} and never reaches the
+ * wire, so ours survives unless v84 names one we actually have on disk. That division is what lets
+ * the PQ maps take v84's data without losing the scripts that drive their stages.
  *
  * <p><strong>Not a {@code *Test} class on purpose</strong>: {@link WZFiles#DIRECTORY} is a
  * {@code static final} resolved once per JVM and {@code MobSkillFactoryTest} repoints
@@ -211,6 +216,88 @@ class V84PortalIndexParityRealLoad {
         }
         assertEquals(Map.of(), broken,
                 "a gap in the portal array shifts every later index against the client");
+    }
+
+    /**
+     * The division of authority, as data: {@code pn/pt/x/y/tm/tn} and the slot number are what the
+     * client resolves against its own copy, so they are v84's; {@code script} is read only by
+     * {@code PortalScriptManager} and never reaches the wire, so it stays ours unless v84 names a
+     * script we actually have on disk.
+     *
+     * <p>Taking v84's {@code tm}/{@code tn} costs nothing where we keep a script:
+     * {@code GenericPortal.enterPortal} runs the script and <em>returns</em> - it only falls through
+     * to {@code tm}/{@code tn} when {@code getScriptName()} is null. {@code MapPortal} is a bare
+     * subclass that overrides nothing, so a {@code pt} of 2 does not change that.
+     *
+     * <p>{@code mapId, slot, pn, pt, tm, tn, script} - script {@code null} means no leaf.
+     */
+    private static final Object[][] CLIENT_FIELDS_V84_SCRIPT_OURS = {
+            {970030001, 1, "out00", 2, 970030000, "out00", "raid_rest"},
+            {990000000, 4, "st00", 2, 101030104, "st00", "guildwaitingexit"},
+            {990000000, 5, "join00", 5, 990000100, "st00", "guildwaitingenter"},
+            // slot 2 was our `sp`, a name the client never sends, leaving this map's only named
+            // exit unclickable. Same x/y, so nothing about arriving here changes.
+            {921100300, 2, "out00", 2, 211000000, "in01", ""},
+            {921100300, 3, "out01", 7, 999999999, "", "s4common1_exit"},   // v84 wants s4common1_clear
+            {300000010, 3, "in01", 8, 999999999, "", "jail_in"},           // v84 wants cellar
+    };
+
+    @Test
+    void v84OwnsTheClientFacingFieldsAndWeKeepTheScript() {
+        Map<String, String> wrong = new TreeMap<>();
+        for (Object[] row : CLIENT_FIELDS_V84_SCRIPT_OURS) {
+            Data node = section((Integer) row[0], "portal").getChildByPath(String.valueOf(row[1]));
+            String key = row[0] + "/" + row[1];
+            if (node == null) {
+                wrong.put(key, "<no such slot>");
+                continue;
+            }
+            String actual = DataTool.getString("pn", node, "<none>") + " pt=" + DataTool.getInt("pt", node, -1)
+                    + " tm=" + DataTool.getInt("tm", node, -1) + " tn=" + DataTool.getString("tn", node, "<none>")
+                    + " script=" + DataTool.getString("script", node, "<none>");
+            String expected = row[2] + " pt=" + row[3] + " tm=" + row[4] + " tn=" + row[5] + " script=" + row[6];
+            if (!expected.equals(actual)) {
+                wrong.put(key, actual + "  (want " + expected + ")");
+            }
+        }
+        assertEquals(Map.of(), wrong, "a portal stopped following v84 on a client-facing field, "
+                + "or lost the script that is the only thing making it work");
+    }
+
+    /**
+     * The five slots deliberately NOT taken from v84, each for a measured reason. Four of them name
+     * a {@code tn} that does not exist in the destination map <em>in v84's own archive either</em> -
+     * they are dangling in v84 and our values are repairs. Following v84 there would send the
+     * player through {@code GenericPortal}'s {@code to.getPortal(0)} fallback and dump him at slot
+     * 0. The fifth, {@code 220011000}, is a working warp that v84 replaces with a script
+     * ({@code enterBlackBC}) appearing exactly once in all 4848 v84 images, so there is nothing to
+     * derive its gate from; taking v84's data would make {@code 220011001} unreachable, as
+     * {@code 220011000/in00} is its only entrance.
+     */
+    @Test
+    void theFiveSlotsWeRefusedStillCarryOurWorkingRouting() {
+        Map<String, String> wrong = new TreeMap<>();
+        for (Object[] row : new Object[][]{
+                {220011000, 4, "in00", 220011001, "out00"},     // v84: pt 7, no destination, enterBlackBC
+                {300000100, 1, "out00", 222020400, "in01"},     // v84 says in00; 222020400 has no in00
+                {610010000, 6, "U1_3", 682000000, "right01"},   // v84 says right00; 682000000 has no right00
+                {610030020, 3, "out00", 610030010, "in06"},     // v84 says in00; 610030010 has no in00
+                {914000200, 1, "east00", 914000100, "out00"}}) {  // v84 says west00; 914000100 has no west00
+            Data node = section((Integer) row[0], "portal").getChildByPath(String.valueOf(row[1]));
+            String key = row[0] + "/" + row[1];
+            if (node == null) {
+                wrong.put(key, "<no such slot>");
+                continue;
+            }
+            String actual = DataTool.getString("pn", node, "<none>")
+                    + " -> " + DataTool.getInt("tm", node, -1) + "/" + DataTool.getString("tn", node, "<none>");
+            String expected = row[2] + " -> " + row[3] + "/" + row[4];
+            if (!expected.equals(actual)) {
+                wrong.put(key, actual + "  (want " + expected + ")");
+            }
+        }
+        assertEquals(Map.of(), wrong, "one of the five refused slots was 'corrected' to v84 - v84 is "
+                + "wrong on all five, see this method's javadoc before changing it back");
     }
 
     private static List<String> portalOrder(int mapId, int size) {
