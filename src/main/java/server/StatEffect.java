@@ -657,6 +657,7 @@ public class StatEffect {
                     break;
                 case Evan.SLOW:
                     statups.add(new Pair<>(BuffStat.SLOW, x));
+                    break;
                     // BOWMAN
                 case Priest.MYSTIC_DOOR:
                 case Hunter.SOUL_ARROW:
@@ -888,6 +889,7 @@ public class StatEffect {
                     break;
                 case Evan.PHANTOM_IMPRINT:
                     monsterStatus.put(MonsterStatus.PHANTOM_IMPRINT, x);
+                    break;
                     //ARAN
                 case Aran.COMBO_ABILITY:
                     statups.add(new Pair<>(BuffStat.ARAN_COMBO, 100));

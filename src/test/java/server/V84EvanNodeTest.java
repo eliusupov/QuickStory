@@ -1,9 +1,12 @@
 package server;
 
+import client.BuffStat;
 import client.Character;
 import client.Client;
 import client.Job;
+import client.status.MonsterStatus;
 import constants.game.GameConstants;
+import constants.skills.Evan;
 import org.junit.jupiter.api.Test;
 import provider.Data;
 import provider.DataProvider;
@@ -15,6 +18,7 @@ import server.maps.Dragon;
 import server.maps.MapObjectType;
 import server.maps.MapleMap;
 import tools.PacketCreator;
+import tools.Pair;
 
 import java.awt.Point;
 import java.util.List;
@@ -334,6 +338,37 @@ class V84EvanNodeTest {
         // nothing filed, and the dragon was never even asked where it should stand
         assertTrue(map.getMapObjects().isEmpty(), "a dragon was filed for a player who is not here");
         verify(dragon, never()).setPosition(any());
+    }
+
+    /**
+     * Two Evan cases were spliced into {@code StatEffect}'s {@code switch (sourceid)} directly above
+     * a section header — {@code // BOWMAN} and {@code //ARAN} — and neither got a {@code break;}, so
+     * each fell through into the next class's arm and granted its buff as well:
+     * <ul>
+     *   <li>{@code Evan.SLOW} also produced {@code BuffStat.SOULARROW} with Slow's own {@code x},
+     *       which is negative (−12 at level 1);</li>
+     *   <li>{@code Evan.PHANTOM_IMPRINT} also produced {@code BuffStat.ARAN_COMBO} 100, which
+     *       {@code Character.reapplyLocalStats} adds straight into {@code localwatk}.</li>
+     * </ul>
+     * A fall-through is invisible in review and silent at runtime, so this pins the effect rather
+     * than the syntax: whatever the arms are rearranged into, an Evan skill must not emit another
+     * class's buff stat.
+     */
+    @Test
+    void evanDebuffsDoNotLeakTheNextSwitchArmsBuff() {
+        DataProvider skills = wz("Skill.wz");
+
+        StatEffect slow = StatEffect.loadSkillEffectFromData(
+                skills.getData("2214.img").getChildByPath("skill/22141003/level/1"), Evan.SLOW, true);
+        assertEquals(List.of(BuffStat.SLOW), slow.getStatups().stream().map(Pair::getLeft).toList(),
+                "Slow leaked into the Soul Arrow arm");
+
+        StatEffect imprint = StatEffect.loadSkillEffectFromData(
+                skills.getData("2216.img").getChildByPath("skill/22161002/level/1"), Evan.PHANTOM_IMPRINT, true);
+        assertTrue(imprint.getMonsterStati().containsKey(MonsterStatus.PHANTOM_IMPRINT),
+                "Phantom Imprint stopped applying its own monster status");
+        assertFalse(imprint.getStatups().stream().anyMatch(s -> s.getLeft() == BuffStat.ARAN_COMBO),
+                "Phantom Imprint leaked into the Aran Combo Ability arm");
     }
 
     /**
