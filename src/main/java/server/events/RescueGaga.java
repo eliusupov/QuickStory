@@ -43,6 +43,10 @@ public class RescueGaga extends Events {
                 break;
             case 1:
             case 2:
+                // jobType 2 is Aran AND Evan, and both are handed the Cygnus ids on purpose: neither
+                // 20001014-16 nor 20011014-16 exist in Skill.wz (2000.img stops at 20001013, 2001.img
+                // has no 1013-1016 at all), so there is no Legend-side reward to point them at.
+                // Giving Evan its "own" id here would hand changeSkillLevel a null skill.
                 skillid = 10001014;
         }
 
