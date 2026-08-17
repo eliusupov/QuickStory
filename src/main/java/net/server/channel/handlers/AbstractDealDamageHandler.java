@@ -578,6 +578,21 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
      * @0x9942f3 has both blocks). Skipping the magic block leaves the per-mob damage loop reading
      * garbage monster ids, i.e. magic attacks that deal no damage. See ticket 25.
      */
+    /**
+     * Whether this character can land a critical hit, which both doubles the damage ceiling the
+     * autoban checks against and lets parseDamage() invert the damage so the client draws a crit.
+     *
+     * <p>The job list cannot cover Evan: Critical Magic 22140000 arrives at Evan7 and Job.isA()
+     * keys on id/100, which puts all ten Evan jobs in one bucket - Evan1 through Evan6 included,
+     * and they cannot have the skill. Asking for the skill itself is exact.
+     */
+    static boolean canCrit(Character chr) {
+        return chr.getJob().isA(Job.BOWMAN) || chr.getJob().isA(Job.THIEF) || chr.getJob().isA(Job.NIGHTWALKER1)
+                || chr.getJob().isA(Job.WINDARCHER1) || chr.getJob() == Job.ARAN3 || chr.getJob() == Job.ARAN4
+                || chr.getJob() == Job.MARAUDER || chr.getJob() == Job.BUCCANEER
+                || chr.getSkillLevel(Evan.CRITICAL_MAGIC) > 0;
+    }
+
     protected static void skipV84AttackWords(InPacket p, int words) {
         if (ServerConstants.VERSION >= 84) {
             p.skip(words * 4);
@@ -757,7 +772,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
             calcDmgMax += 80000; // Aran Tutorial.
         }
 
-        boolean canCrit = chr.getJob().isA((Job.BOWMAN)) || chr.getJob().isA(Job.THIEF) || chr.getJob().isA(Job.NIGHTWALKER1) || chr.getJob().isA(Job.WINDARCHER1) || chr.getJob() == Job.ARAN3 || chr.getJob() == Job.ARAN4 || chr.getJob() == Job.MARAUDER || chr.getJob() == Job.BUCCANEER;
+        boolean canCrit = canCrit(chr);
 
         if (chr.getBuffEffect(BuffStat.SHARP_EYES) != null) {
             // Any class that has sharp eyes can crit. Also, since it stacks with normal crit go ahead
