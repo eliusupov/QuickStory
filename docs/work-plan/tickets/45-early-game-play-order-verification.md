@@ -120,8 +120,10 @@ Fix is one word, and does not need a manager at all: `MapScriptMethods extends
 AbstractPlayerInteraction`, which already carries `forceStartQuest(int)`, so
 `ms.forceStartQuest(22015);`. **Not applied here - this ticket is verification.**
 
-Pinned by `EarlyGamePlayOrderRealLoad#theBabyPigMapScriptCannotStartItsMarkerQuestSoQuest22005IsUnfinishable`.
-That test expects the *broken* behaviour; when the fix lands it goes red and its javadoc must flip.
+**FIXED** in the commit that follows this ticket: `babyPigMap.js` now calls `ms.forceStartQuest(22015)`.
+Pinned by `EarlyGamePlayOrderRealLoad#theBabyPigMapScriptStartsItsMarkerQuestSoQuest22005IsFinishable`,
+whose assertions were inverted at the same time - it now guards the fix instead of the bug, and
+additionally asserts the script never routes through `getQM()` again.
 
 ### B2 - v84 client crashes on Maple Road map 40000 (client-side, already being worked)
 

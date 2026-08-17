@@ -22,5 +22,11 @@
 
 function start(ms) {
     ms.unlockUI();
-    ms.getClient().getQM().forceStartQuest(22015);
+    // ms is a MapScriptMethods, which extends AbstractPlayerInteraction and so already carries
+    // forceStartQuest. getClient().getQM() is the map of OPEN QUEST-SCRIPT SESSIONS - arriving on a
+    // map is not a quest script, so it is null here and the call threw inside Graal.
+    // MapScriptManager swallows that, leaving only the unlockUI above: 22015 never started, the
+    // Baby Pig answered "you are too far from the Piglet" forever, and the Evan chain hard-stopped
+    // at 22005. The bug was invisible until 7d291d814 made this map reachable at all.
+    ms.forceStartQuest(22015);
 }

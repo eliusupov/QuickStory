@@ -48,7 +48,7 @@ import static org.mockito.Mockito.verify;
  * proves each fetch item has a <em>real source</em>; {@link MapAndPortalScriptsRealLoad} proves
  * thirteen individual hooks behave. None of them walks a route end to end, and the route is where
  * the composition bug turned out to be - see
- * {@link #theBabyPigMapScriptCannotStartItsMarkerQuestSoQuest22005IsUnfinishable()}.
+ * {@link #theBabyPigMapScriptStartsItsMarkerQuestSoQuest22005IsFinishable()}.
  *
  * <p><strong>Not a {@code *Test} class on purpose</strong>, same reason as {@link Quest1021RealLoad}:
  * {@link WZFiles#DIRECTORY} is a {@code static final} resolved once per JVM and
@@ -388,14 +388,19 @@ class EarlyGamePlayOrderRealLoad {
      * refuses to open until 22015 is COMPLETE, so the player is additionally stuck on the map until
      * they log out (Character.java:8328 saves them at the map's forcedReturn, 100030300).
      *
-     * <p><strong>Not fixed here on purpose</strong> - this class is a verifier. The fix is one word:
-     * {@code MapScriptMethods extends AbstractPlayerInteraction}, which already carries
-     * {@code forceStartQuest(int)}, so {@code ms.forceStartQuest(22015)} needs no manager at all.
-     * When that lands, this test flips to the opposite expectation and its javadoc has to change with
-     * it; that is intended.
+     * <p><strong>FIXED, and this test now guards the fix.</strong> {@code MapScriptMethods extends
+     * AbstractPlayerInteraction}, which already carries {@code forceStartQuest(int)}, so
+     * {@code ms.forceStartQuest(22015)} needs no manager at all. The assertions below were inverted
+     * when that landed, exactly as this javadoc previously said they would be.
+     *
+     * <p>Worth remembering why it was invisible for so long: the script is old, but 900020110 has no
+     * inbound portal anywhere in Map.wz, so the map was unreachable and the script had never once
+     * run. Teaching {@code ChangeMapHandler} to honour Evan's client-side scene warps is what made
+     * the map reachable - and immediately exposed a latent bug on arrival. A composition failure,
+     * not a regression in either change.
      */
     @Test
-    void theBabyPigMapScriptCannotStartItsMarkerQuestSoQuest22005IsUnfinishable() throws IOException {
+    void theBabyPigMapScriptStartsItsMarkerQuestSoQuest22005IsFinishable() throws IOException {
         // 1. The production reason, exercised as production code and not stubbed: with no quest
         //    script session open, this is what Client.getQM() returns.
         assertNull(QuestScriptManager.getInstance().getQM(mock(Client.class)),
@@ -407,24 +412,32 @@ class EarlyGamePlayOrderRealLoad {
                         mapData(900020110).getChildByPath("info/onUserEnter"), ""),
                 "900020110 lost its babyPigMap onUserEnter");
         String script = body(Path.of("scripts", "map", "onUserEnter", "babyPigMap.js"));
-        assertTrue(script.contains("getQM().forceStartQuest(22015)"),
-                "babyPigMap.js no longer starts 22015 through getQM(); if it was fixed, flip this test");
+        // Match the CALL, not the bare name: the script's comment explains why getQM() was wrong,
+        // and this reads the whole file including comments.
+        assertFalse(script.contains("getQM().forceStartQuest"),
+                "babyPigMap.js is routing through getQM() again - that is null on map entry, so 22015 "
+                        + "would never start and the Evan chain would hard-stop at 22005 once more");
+        assertTrue(script.contains("ms.forceStartQuest(22015)"),
+                "babyPigMap.js must start 22015 through MapScriptMethods' own inherited "
+                        + "forceStartQuest; without it the Piglet is unobtainable");
 
-        // 3. Positive control: an onUserEnter script that does NOT go through getQM runs to
-        //    completion under the exact same harness, so `false` below is about this script and not
-        //    about the harness.
+        // 3. Positive control: an onUserEnter script that never went through getQM runs to
+        //    completion under the exact same harness, so the result below is about babyPigMap and
+        //    not about the harness.
         assertTrue(MapScriptManager.getInstance().runMapScript(
                         mock(Client.class), "onUserEnter/evanTogether", false),
                 "control failed: evanTogether.js did not run, so this harness proves nothing");
 
-        // 4. The failure itself. A packet DID leave first - that is the unlockUI() on line 24 - so
-        //    the file was found and was executing; it then died on line 25.
+        // 4. The fix itself. Before f4bccbc0f's successor this returned false: a packet left first
+        //    (the unlockUI) and the script then died on the next line inside Graal, swallowed by
+        //    MapScriptManager. It must now run to completion.
         Client c = mock(Client.class);
         boolean ran = MapScriptManager.getInstance().runMapScript(c, "onUserEnter/babyPigMap", false);
         verify(c, atLeastOnce()).sendPacket(any(Packet.class));
-        assertFalse(ran,
-                "babyPigMap.js completed - either getQM() started answering or the script was fixed. "
-                        + "Either way quest 22005 may now be finishable and this blocker is resolved");
+        assertTrue(ran,
+                "babyPigMap.js did not run to completion, so marker quest 22015 never starts, the "
+                        + "Baby Pig keeps answering \"you are too far from the Piglet\", and quest "
+                        + "22005 - and with it 22006, 22007 and the 22100 job advancement - is unfinishable");
     }
 
     /**

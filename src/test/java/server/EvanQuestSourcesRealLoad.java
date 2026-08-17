@@ -107,18 +107,24 @@ class EvanQuestSourcesRealLoad {
 
     /**
      * 22532 was blocked twice over: no drop AND no spawn. v84 places 24 Terrified Wild Boars on
-     * 101030001 "The Land of Wild Boar II"; this tree had none. The placement is a pure APPEND onto
-     * the existing life array - v84 replaced the v83 Wild Boars, this tree keeps both, which is the
-     * only form the additive-only rule allows. Deliberate, documented deviation.
+     * 101030001 "The Land of Wild Boar II"; this tree had none.
+     *
+     * <p><strong>This started as an append and is now a replacement.</strong> ce3895453 could only
+     * add, so the map briefly carried 57 spawns - v84's 26 plus 31 held over from v83 - and this
+     * test asserted that deviation. The owner then authorised the deletion explicitly ("do the map
+     * replacment"), so f4bccbc0f replaced the whole life array with v84 stock and the expectations
+     * below were inverted to match. The additive-only rule still governs everything else; map life
+     * arrays are the one carve-out, and only because exact v84 parity is impossible without it.
      */
     @Test
-    void theTerrifiedWildBoarSpawnIsAnAppendThatKeptEveryV83Boar() {
+    void theTerrifiedWildBoarSpawnMatchesV84Exactly() {
         assertEquals(24, lifeCount(101030001, "m", 2230112),
                 "101030001 must carry v84's 24 Terrified Wild Boars");
-        assertEquals(30, lifeCount(101030001, "m", 2230102),
-                "the 30 v83 Wild Boars must still be there - this placement is additive, not a swap");
-        assertEquals(3, lifeCount(101030001, "m", 2130100),
-                "the 3 v83 Fire Boars must still be there");
+        assertEquals(1, lifeCount(101030001, "m", 2230102),
+                "v84 keeps exactly ONE Wild Boar here; the 30 v83 ones were removed by the "
+                        + "owner-authorised replacement, so seeing 30 again means it regressed");
+        assertEquals(1, lifeCount(101030001, "m", 2130100),
+                "v84 keeps exactly ONE Fire Boar here");
     }
 
     /**
