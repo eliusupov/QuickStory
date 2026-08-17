@@ -78,7 +78,16 @@ class MapAndPortalScriptsRealLoad {
         PORTAL_HOOKS.put("investigate1", 106020300);
         PORTAL_HOOKS.put("tutorWorldmap", 130030006);
         PORTAL_HOOKS.put("piramid_in00", 926010000);
+        PORTAL_HOOKS.put("outSDI", 914100022);
     }
+
+    /**
+     * {@code scripts/portal/inDragonEgg.js} warps a player who has not started quest 22005 to
+     * {@code 100030301} ("Forest Hall"), and that map is deliberately NOT in this tree - its
+     * {@code life} places fixed NPCs on 9901910-9901919, the band {@code PlayerNPC.java:66}
+     * allocates at runtime. See {@code V84EvanWorldNodeTest.forestHallIsDeliberatelyNotMerged}.
+     */
+    private static final int FOREST_HALL = 100030301;
 
     /** The Leafre / Temple of Time flight morph, applied by scripts/npc/2082003.js. */
     private static final int DRAGON_FLIGHT_MORPH = 2210016;
@@ -154,6 +163,43 @@ class MapAndPortalScriptsRealLoad {
             verify(pi).showInfo("UI/tutorial.img/26");
             verify(pi).blockPortal();
         });
+
+        // 914100022's out00 is the only exit of the Cave of Silence ice-wall room and it is
+        // scripted, so without this file the room is a one-way trip. The destination is taken from
+        // the three sibling rooms, which put out00 on the same pixel as a plain tm/tn portal.
+        runPortal("outSDI", pi -> {
+            verify(pi).playPortalSound();
+            verify(pi).warp(914100010, "in00");
+        });
+    }
+
+    /**
+     * A KNOWN-BROKEN warp, pinned so it cannot be quietly "fixed" by inventing a destination.
+     *
+     * <p>{@code scripts/portal/inDragonEgg.js} is upstream Cosmic, not written here, and its
+     * else-branch is what {@code Map.wz} says it should be: {@code 100030300}'s {@code in00}
+     * leads to {@code 100030301}, whose own only portal ({@code out00}) leads straight back to
+     * {@code 100030300/in00}. But {@code 100030301} is the one map this backport deliberately
+     * refused, so today that branch throws inside {@code MapFactory.loadMapFromWz}
+     * ({@code mapData} is null), {@code PortalScriptManager.executePortalScript} catches it and
+     * logs, and the portal is inert. Every player who has not started quest 22005 - i.e. every
+     * non-Evan - can reach {@code 100030300} by walking from Henesys.
+     *
+     * <p>The fix is to hand-author {@code 100030301} without its ten {@code life} slots, in
+     * {@code wz/Map.wz}; the script is already correct and must not be re-pointed. This test
+     * fails on the day either half changes, so the two are re-checked together.
+     */
+    @Test
+    void inDragonEggStillWarpsToTheOneMapThisTreeRefusedToMerge() throws IOException {
+        assertTrue(bodyOf("portal/inDragonEgg.js").contains("warp(" + FOREST_HALL + ", 0)"),
+                "inDragonEgg.js no longer warps to " + FOREST_HALL + " - if " + FOREST_HALL
+                        + " was hand-authored, say so here; if the destination was changed, that is "
+                        + "invented content, because Map.wz says out00 of " + FOREST_HALL
+                        + " returns to 100030300/in00");
+        assertFalse(Files.exists(Path.of(WZFiles.DIRECTORY, "Map.wz", "Map", "Map1",
+                        FOREST_HALL + ".img.xml")),
+                FOREST_HALL + " is now in the tree, so inDragonEgg's else-branch is live again - "
+                        + "confirm its life array carries no 9901910-9901919 entry and drop this test");
     }
 
     /**
