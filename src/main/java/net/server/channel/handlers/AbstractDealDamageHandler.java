@@ -248,6 +248,8 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                         distanceToDetect += 250000;
                     } else if (attack.skill == Shadower.BOOMERANG_STEP) {
                         distanceToDetect += 60000;
+                    } else if (attack.skill == Evan.FLAME_WHEEL || attack.skill == Evan.DARK_FOG) {
+                        distanceToDetect += 850000; // Flame Wheel reaches (-815,-100) = 674225 sq, past the 400000 a magic attack gets, so the alert fired on every legit cast.
                     }
 
                     if (distance > distanceToDetect) {
