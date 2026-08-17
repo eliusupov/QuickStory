@@ -33,6 +33,7 @@ import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.WeaponType;
 import config.YamlConfig;
+import constants.game.GameConstants;
 import constants.id.ItemId;
 import constants.inventory.EquipSlot;
 import constants.inventory.ItemConstants;
@@ -1464,7 +1465,7 @@ public class ItemInformationProvider {
         return new Pair<>(ret, retSkill);
     }
 
-    public Map<String, Integer> getSkillStats(int itemId, double playerJob) {
+    public Map<String, Integer> getSkillStats(int itemId, int playerJob) {
         Pair<Map<String, Integer>, Data> retData = getSkillStatsInternal(itemId);
         if (retData.getLeft().isEmpty()) {
             return null;
@@ -1478,7 +1479,12 @@ public class ItemInformationProvider {
             if (curskill == 0) {
                 break;
             }
-            if (curskill / 10000 == playerJob) {
+            // exact job equality holds for every class whose 4th-job id is also its skill prefix,
+            // which is all of them but Evan: an Evan10 is job 2218 while Illusion, Flame Wheel and
+            // Magic Mastery stay in the 2217 block, so its own books stopped working the moment it
+            // advanced. isInJobTree() is the same "skill belongs to this character" test
+            // AssignSPProcessor.canSPAssign() already gates SP with.
+            if (GameConstants.isInJobTree(curskill, playerJob)) {
                 ret.put("skillid", curskill);
                 break;
             }
@@ -2234,7 +2240,7 @@ public class ItemInformationProvider {
 
     public List<Integer> usableMasteryBooks(Character player) {
         List<Integer> masterybook = new LinkedList<>();
-        for (Integer i = 2290000; i <= 2290139; i++) {
+        for (Integer i = 2290000; i <= 2290152; i++) {   // 2290140-2290152 are Evan's, added in v84
             if (canUseSkillBook(player, i)) {
                 masterybook.add(i);
             }
