@@ -710,10 +710,28 @@ static class Program
         // ponytail: leaf value via ToString(), which is the decoded scalar for every property
         // type these manifests carry (int/short/long/float/double/string/uol/vector). Canvases
         // hash their compressed pixel bytes instead — that is the payload a broken merge loses.
+        //
+        // T23c: the canvas payload is hashed in the SAME form the writer emits, i.e. through
+        // GetCompressedBytesForExtraction, NOT the raw stored bytes. WzCanvasProperty.WriteValue
+        // (WzCanvasProperty.cs:183) serialises every canvas through that call, and it is not a
+        // pass-through: a payload stored in listWz form (XOR-blocked, non-standard zlib header)
+        // is decrypted, INFLATED to exactly Format.GetDecodedSize(w,h) bytes, and re-DEFLATED at
+        // CompressionLevel.Optimal behind a standard 78 9C header. The pixel buffer is bit-
+        // identical across that — only the deflate encoding changes — and Width/Height/Format are
+        // written verbatim beside it. Hashing the raw stored bytes therefore reported a merge that
+        // had changed nothing as CONTENT DRIFT: measured, Mob.wz phase B, 230 of 735 inserted-into
+        // images, dimensions and every scalar identical, payload -0.38%. Npc.wz drifted 0 in the
+        // same run because its canvases are already standard zlib — the false positive fires per
+        // canvas, on whichever archive Nexon happened to pack in listWz form.
+        // This does NOT weaken the check. A truncated or garbled payload still fails: the inflate
+        // is length-validated and throws, the function falls back to the raw bytes, and those
+        // differ. It strengthens it — the digest is now "what this canvas serialises to", so the
+        // pre-save/post-save comparison is an identity the writer itself guarantees, and a
+        // cross-tree `hash` no longer reports a difference that is only a packing difference.
         string val = o switch
         {
             MapleLib.WzLib.WzProperties.WzCanvasProperty c =>
-                $"canvas {c.PngProperty?.Width}x{c.PngProperty?.Height} png:{Sha(c.PngProperty?.GetCompressedBytes(false) ?? Array.Empty<byte>())}",
+                $"canvas {c.PngProperty?.Width}x{c.PngProperty?.Height} png:{Sha(c.PngProperty?.GetCompressedBytesForExtraction(false) ?? Array.Empty<byte>())}",
             MapleLib.WzLib.WzProperties.WzUOLProperty u => $"UOL -> {u.Value}",
             WzImageProperty p when (p.WzProperties?.Count ?? 0) == 0 => $"{p.PropertyType} = {p}",
             _ => o.GetType().Name
