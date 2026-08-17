@@ -495,3 +495,41 @@ Capture a fresh memory dump while the client is running
 (`docs/work-plan/tools/memdump/MemDump.exe`) and re-run `verify.py` against it — that
 converts "verified against two dumps of an unpatched client" into "verified against the
 client that is actually running".
+
+## The HD archive (v3.0.0)
+
+`EzorsiaV2_UI.wz` is **not** in this repo — it is a 1.3 MB binary built from the owner's
+two clients. Rebuild it with the existing `WzMerge`, which already does additive
+cross-file image copy and inherits the target's patchVersion:
+
+```
+WzMerge.exe merge \
+  D:\games\MapleStory\EzorsiaV2_UI.wz     <- source, v83 / encVer 172, READ-ONLY \
+  <scratch>\Base.wz                       <- target: a COPY of v84's Base.wz \
+  <scratch>\out\EzorsiaV2_UI.wz           <- build to scratch, never into a client dir \
+  <paths.txt: EzorsiaV2_UI.wz/MapleEzorsiaV2wzfiles.img>
+```
+
+then copy the result to `D:\games\MSv84\client\EzorsiaV2_UI.wz`.
+
+**Why v84's `Base.wz` is the target rather than Ezorsia's archive.** The WZ field at file
+offset 60 is `wzVersionHeader` — a *checksum* of the patch version, 172 for v83 and 173
+for v84 — and it seeds the hash that XOR-obfuscates every offset in the file. 84 is not in
+172's collision set, so a v84 client cannot decode a v83-keyed archive at all; forcing it
+throws `WZ directory entry offset is outside the stream`. Building **onto v84's own
+Base.wz** makes the output natively patchVersion 84, so no version conversion happens.
+Encryption is *not* the discriminator — all of these are GMS IV (`4D23C72B`).
+
+The load-bearing detail: `WzDirectory.AddImage(si.DeepClone())` sets `Changed = true`, so
+`WzImage.SaveImage` takes the **re-serialize** branch instead of the raw `CopyBytes`
+branch. A raw block copy would carry v83's offset encoding into a v84 file.
+
+Verified after build: reopens as patchVersion 84 / encVer 173 / GMS; root equals v84
+`Base.wz`'s 18 entries plus `MapleEzorsiaV2wzfiles.img`; all 10 canvases decode at their
+stated dimensions and are SHA-256 identical to those extracted from the v83 source.
+
+**What the archive actually buys.** Ten canvases, of which upstream wires up four: the
+login frame (`Common/frame<width>`) and three cash-shop backgrounds. The `Stat/*` pair is
+dead — those cases are commented out upstream. So this is a correctly-sized login frame
+plus a cash-shop backdrop; it is *not* an HD art overhaul. What makes the client look HD
+is the 288 resolution patches, which are independent of all of this.
