@@ -139,6 +139,7 @@ public class ItemInformationProvider {
     protected Map<Integer, Integer> makerCatalystCache = new HashMap<>();
     protected Map<Integer, Map<String, Integer>> skillUpgradeCache = new HashMap<>();
     protected Map<Integer, Data> skillUpgradeInfoCache = new HashMap<>();
+    protected Map<Integer, Pair<Data, Data>> tabletRatesCache = new HashMap<>();
     protected Map<Integer, Pair<Integer, Set<Integer>>> cashPetFoodCache = new HashMap<>();
     protected Map<Integer, QuestConsItem> questItemConsCache = new HashMap<>();
 
@@ -1062,6 +1063,49 @@ public class ItemInformationProvider {
         return freeUpgradeCount + appliedScrollCount < totalUpgradeCount + viciousCount;
     }
 
+    /**
+     * The success and cursed rates of a tablet scroll at a given applied-scroll count.
+     *
+     * <p>The 25 tablets in {@code Item.wz/Consume/0204.img} are the only items in the tree that
+     * table their odds instead of stating one flat {@code info/success} + {@code info/cursed}: the
+     * rates worsen with every scroll the equip has already taken, from 70% success / 10% cursed on
+     * an untouched item down to 7% / 100% on the eighth. 02047101 names its table
+     * {@code successes} rather than {@code successRates} - Nexon's own typo, its eight values are
+     * identical to the other 24 - so both spellings are read here or that one tablet stays broken.
+     *
+     * @return success and cursed rate, or {@code null} if this scroll has no such table
+     */
+    private Pair<Integer, Integer> getTabletRates(int scrollId, int appliedScrollCount) {
+        Pair<Data, Data> tables = tabletRatesCache.computeIfAbsent(scrollId, id -> {
+            Data item = getItemData(id);
+            Data info = item == null ? null : item.getChildByPath("info");
+            if (info == null) {
+                return new Pair<>(null, null);
+            }
+
+            Data success = info.getChildByPath("successRates");
+            if (success == null) {
+                success = info.getChildByPath("successes");
+            }
+            return new Pair<>(success, info.getChildByPath("cursedRates"));
+        });
+
+        if (tables.getLeft() == null) {
+            return null;
+        }
+        return new Pair<>(rateAtScrollCount(tables.getLeft(), appliedScrollCount),
+                rateAtScrollCount(tables.getRight(), appliedScrollCount));
+    }
+
+    /** Tables run 0..n; a count past the end holds at the last, worst entry. */
+    private static int rateAtScrollCount(Data rates, int appliedScrollCount) {
+        if (rates == null) {
+            return 0;
+        }
+        int last = rates.getChildren().size() - 1;
+        return DataTool.getInt(Integer.toString(Math.min(appliedScrollCount, last)), rates, 0);
+    }
+
     public Item scrollEquipWithId(Item equip, int scrollId, boolean usingWhiteScroll, int vegaItemId, boolean isGM) {
         boolean assertGM = (isGM && YamlConfig.config.server.USE_PERFECT_GM_SCROLL);
 
@@ -1070,6 +1114,20 @@ public class ItemInformationProvider {
 
             if (((nEquip.getUpgradeSlots() > 0 || ItemConstants.isCleanSlate(scrollId))) || assertGM) {
                 double prop = (double) stats.get("success");
+                int cursed = stats.get("cursed");
+
+                // Tablet scrolls (2047xxx) hold their odds in info/successRates + info/cursedRates,
+                // one entry per scroll the equip already took, instead of a flat info/success +
+                // info/cursed. getEquipStats reads those absent flat nodes as 0, and
+                // rollSuccessChance(0) can never return true, so all 25 failed every time forever.
+                // Only reached when success is 0, which no working scroll has.
+                if (prop == 0) {
+                    Pair<Integer, Integer> tabletRates = getTabletRates(scrollId, nEquip.getLevel());
+                    if (tabletRates != null) {
+                        prop = tabletRates.getLeft();
+                        cursed = tabletRates.getRight();
+                    }
+                }
 
                 switch (vegaItemId) {
                     case ItemId.VEGAS_SPELL_10:
@@ -1126,7 +1184,7 @@ public class ItemInformationProvider {
                     if (!YamlConfig.config.server.USE_PERFECT_SCROLLING && !usingWhiteScroll && !ItemConstants.isCleanSlate(scrollId) && !assertGM && !ItemConstants.isModifierScroll(scrollId)) {
                         nEquip.setUpgradeSlots((byte) (nEquip.getUpgradeSlots() - 1));
                     }
-                    if (Randomizer.nextInt(100) < stats.get("cursed")) {
+                    if (Randomizer.nextInt(100) < cursed) {
                         return null;
                     }
                 }
