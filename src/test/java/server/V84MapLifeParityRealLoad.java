@@ -76,13 +76,19 @@ class V84MapLifeParityRealLoad {
         assertSlotsAreConsecutive(926100203, 5);
     }
 
-    /** v84 rebalances Ant Tunnel IV onto 2230131; the 20 it adds sit on top of our own rows. */
+    /**
+     * The one authorised deletion. v84 rebalances Ant Tunnel IV onto 2230131 by substitution:
+     * 17 -> 37, against 42 -> 15 Horny and 6 -> 2 Zombie Mushrooms. Additive-only would have left
+     * 86 spawn points against v84's 55, so this map was taken verbatim instead. Safe because the
+     * 31 dropped rows are duplicate spawn slots of mobs that all remain on the map - unlike
+     * 196000000 below, where the deletion would have removed the only instance of something.
+     */
     @Test
-    void map105050300GainsV84AnnoyedZombieMushrooms() {
-        assertEquals(Map.of("n 1063007", 1, "m 2110200", 42, "m 2230101", 6, "m 2230131", 37),
+    void map105050300MatchesV84Stock() {
+        assertEquals(Map.of("n 1063007", 1, "m 2110200", 15, "m 2230101", 2, "m 2230131", 37),
                 composition(105050300),
-                "105050300 lost either v84's 20 added 2230131 or our own pre-existing rows");
-        assertSlotsAreConsecutive(105050300, 86);
+                "105050300 life no longer matches the v84 dump (55 entries)");
+        assertSlotsAreConsecutive(105050300, 55);
     }
 
     /** v84 swaps 9010021 for 1202010 here; additive-only keeps both. */
