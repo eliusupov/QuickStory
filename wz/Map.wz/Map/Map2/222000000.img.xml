@@ -13422,8 +13422,8 @@
     <imgdir name="24">
       <string name="pn" value="tp"/>
       <int name="pt" value="6"/>
-      <int name="x" value="98"/>
-      <int name="y" value="320"/>
+      <int name="x" value="96"/>
+      <int name="y" value="332"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
     </imgdir>

@@ -8311,15 +8311,15 @@
     <imgdir name="18">
       <string name="pn" value="tp"/>
       <int name="pt" value="6"/>
-      <int name="x" value="-863"/>
-      <int name="y" value="93"/>
+      <int name="x" value="-464"/>
+      <int name="y" value="94"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
     </imgdir>
     <imgdir name="19">
       <string name="pn" value="tp"/>
       <int name="pt" value="6"/>
-      <int name="x" value="-782"/>
+      <int name="x" value="-863"/>
       <int name="y" value="93"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
@@ -8327,7 +8327,7 @@
     <imgdir name="20">
       <string name="pn" value="tp"/>
       <int name="pt" value="6"/>
-      <int name="x" value="-705"/>
+      <int name="x" value="-782"/>
       <int name="y" value="93"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
@@ -8335,7 +8335,7 @@
     <imgdir name="21">
       <string name="pn" value="tp"/>
       <int name="pt" value="6"/>
-      <int name="x" value="-621"/>
+      <int name="x" value="-705"/>
       <int name="y" value="93"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
@@ -8343,15 +8343,15 @@
     <imgdir name="22">
       <string name="pn" value="tp"/>
       <int name="pt" value="6"/>
-      <int name="x" value="-545"/>
-      <int name="y" value="94"/>
+      <int name="x" value="-621"/>
+      <int name="y" value="93"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
     </imgdir>
     <imgdir name="23">
       <string name="pn" value="tp"/>
       <int name="pt" value="6"/>
-      <int name="x" value="-464"/>
+      <int name="x" value="-545"/>
       <int name="y" value="94"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>

@@ -295,6 +295,14 @@
       <string name="tn" value=""/>
     </imgdir>
     <imgdir name="3">
+      <string name="pn" value="hiden00"/>
+      <int name="pt" value="1"/>
+      <int name="x" value="2119"/>
+      <int name="y" value="503"/>
+      <int name="tm" value="221030301"/>
+      <string name="tn" value="west00"/>
+    </imgdir>
+    <imgdir name="4">
       <string name="pn" value="east00"/>
       <int name="pt" value="2"/>
       <int name="x" value="2984"/>
@@ -302,14 +310,6 @@
       <int name="tm" value="221030200"/>
       <string name="tn" value="west00"/>
       <string name="script" value=""/>
-    </imgdir>
-    <imgdir name="4">
-      <string name="pn" value="hiden00"/>
-      <int name="pt" value="1"/>
-      <int name="x" value="2119"/>
-      <int name="y" value="503"/>
-      <int name="tm" value="221030301"/>
-      <string name="tn" value="west00"/>
     </imgdir>
     <imgdir name="5">
       <string name="pn" value="west00"/>

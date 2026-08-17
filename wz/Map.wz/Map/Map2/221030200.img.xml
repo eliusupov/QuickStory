@@ -318,21 +318,21 @@
       <string name="tn" value=""/>
     </imgdir>
     <imgdir name="4">
-      <string name="pn" value="west00"/>
-      <int name="pt" value="2"/>
-      <int name="x" value="-750"/>
-      <int name="y" value="803"/>
-      <int name="tm" value="221030300"/>
-      <string name="tn" value="east00"/>
-      <string name="script" value=""/>
-    </imgdir>
-    <imgdir name="5">
       <string name="pn" value="east00"/>
       <int name="pt" value="2"/>
       <int name="x" value="3270"/>
       <int name="y" value="802"/>
       <int name="tm" value="221030100"/>
       <string name="tn" value="west00"/>
+      <string name="script" value=""/>
+    </imgdir>
+    <imgdir name="5">
+      <string name="pn" value="west00"/>
+      <int name="pt" value="2"/>
+      <int name="x" value="-750"/>
+      <int name="y" value="803"/>
+      <int name="tm" value="221030300"/>
+      <string name="tn" value="east00"/>
       <string name="script" value=""/>
     </imgdir>
   </imgdir>

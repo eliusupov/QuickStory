@@ -257,13 +257,12 @@
       <string name="tn" value=""/>
     </imgdir>
     <imgdir name="2">
-      <string name="pn" value="west00"/>
-      <int name="pt" value="2"/>
-      <int name="x" value="-1434"/>
-      <int name="y" value="801"/>
-      <int name="tm" value="221030500"/>
-      <string name="tn" value="hiden00"/>
-      <string name="script" value=""/>
+      <string name="pn" value="sp"/>
+      <int name="pt" value="0"/>
+      <int name="x" value="-132"/>
+      <int name="y" value="170"/>
+      <int name="tm" value="999999999"/>
+      <string name="tn" value=""/>
     </imgdir>
     <imgdir name="3">
       <string name="pn" value="sp"/>
@@ -274,12 +273,13 @@
       <string name="tn" value=""/>
     </imgdir>
     <imgdir name="4">
-      <string name="pn" value="sp"/>
-      <int name="pt" value="0"/>
-      <int name="x" value="-132"/>
-      <int name="y" value="170"/>
-      <int name="tm" value="999999999"/>
-      <string name="tn" value=""/>
+      <string name="pn" value="west00"/>
+      <int name="pt" value="2"/>
+      <int name="x" value="-1434"/>
+      <int name="y" value="801"/>
+      <int name="tm" value="221030500"/>
+      <string name="tn" value="hiden00"/>
+      <string name="script" value=""/>
     </imgdir>
   </imgdir>
   <imgdir name="life">
