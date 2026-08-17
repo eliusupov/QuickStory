@@ -1522,7 +1522,11 @@ public class Monster extends AbstractLoadedLife {
     }
 
     public boolean canUseSkill(MobSkill toUse, boolean apply) {
-        if (toUse == null || isBuffed(MonsterStatus.SEAL_SKILL)) {
+        // SEAL is what the three mage Seals write (the client's mob seal icon); SEAL_SKILL is the
+        // crash skills and mob skill 157. Both mean "no skills" - Seal's own help text says so.
+        // SEAL is what the three mage Seals write (the client's mob seal icon); SEAL_SKILL is the
+        // crash skills and mob skill 157. Both mean "no skills" - Seal's own help text says so.
+        if (toUse == null || isBuffed(MonsterStatus.SEAL_SKILL) || isBuffed(MonsterStatus.SEAL)) {
             return false;
         }
 
