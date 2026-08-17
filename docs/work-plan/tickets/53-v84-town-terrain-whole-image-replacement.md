@@ -1,114 +1,216 @@
-# 53 - eleven maps whose NPCs stay misplaced until their whole v84 image is taken
+# 53 - the maps whose NPCs stayed misplaced until their whole v84 foothold table was taken
 
-**Owner decision required. No code in this ticket.** Follow-on to `b3cb60503`.
+**Done.** Follow-on to `b3cb60503` (8 towns) and `V84RenumberedFootholdParityRealLoad` (20 maps).
+This ticket was written as an owner decision with no code; the decision was given
+("do what's needed for this to work... we are trying to be feature paired to v84") and the work is
+applied. Pinned by `src/test/java/server/V84TerrainFootholdParityRealLoad.java`.
 
-## What is already fixed, and what these eleven still have wrong
+## The class is 52 maps, not 11
 
-`b3cb60503` corrected two index-addressed references that the server sends the client as bare
-numbers for the client to resolve against *its own* copy of the map:
+The original eleven came from a hand-picked sample. A whole-archive digest of
+`D:\games\MSv84\client\Map.wz` against our XML tree found **52** maps whose foothold *geometry*
+differs, not merely its numbering; the eleven were a subset. One of the eleven, `251010403`, is not
+in this class at all - its geometry is identical and it belonged to the renumber batch, where it was
+handled.
 
-* **portal array position** - `PacketCreator.getWarpToMap` writes `portal.getId()`, and
-  `PortalFactory.loadPortal` takes that id from the node's *name*, i.e. its array slot. Fixed on all
-  17 towns, plus `220000300` and `100030000` in the follow-up.
-* **foothold id** - `life/*/fh`, and every runtime `map.getFootholds().findBelow(pos).getId()`
-  (scripted npc spawns, pets, PlayerNPCs, mobs). Fixed on eight maps by taking v84's foothold table
-  verbatim, because v84 had **renumbered those tables without moving a single platform**.
+The digest is the one `WzPeek digest` prints: per map, a hash of the foothold multiset with ids
+**excluded** (`fhgeom`) and one with ids **included** (`fhid`). `fhid` differing while `fhgeom`
+matches is a renumber; both differing is a terrain edit.
 
-On the eleven maps below that second fix is not available. v84 did not merely renumber their
-footholds - it **re-laid the terrain**, so no id-to-id mapping exists. Their portal indices are
-correct; their NPCs and mobs are still drawn on the wrong platforms in the v84 client, because the
-server keeps sending v83 foothold ids.
+## The physics framing in the first draft of this ticket was wrong
 
-## Why a renumber is impossible (and where it actually is possible)
+That draft called replacing the `foothold` table a physics risk - *"a wrong swap does not misdraw an
+NPC, it drops players through the floor"*. It does not, and the reason is what made the work safe:
 
-A renumber is only sound when our table and v84's describe the *same set of platforms* - then each
-of our ids has exactly one v84 id with identical `(layer, group, x1, y1, x2, y2)` and the swap is
-provably geometry-preserving. Measured against `D:\games\MSv84\client\Map.wz`:
+* `AbstractMovementPacketHandler.updatePosition:174,231` - the only path a player's position takes -
+  reads the client's absolute x/y and **`p.skip`s the foothold id the client sends with it**. There
+  is no server-side collision, no gravity, and no validation of either. Movement is
+  client-authoritative and the client uses **its own** terrain, which is v84's.
+* Every `findBelow(...).getId()` in the tree exists to mint an id **to send**: scripted npc spawns
+  (`AbstractPlayerInteraction:980`), pets (`SpawnPetProcessor:84`), mobs, `PlayerNPC:303,442`.
+  `PacketCreator:1402` writes it raw.
+* `Character.getFh:5264` is not a foothold id at all - it returns `getY1()`, a coordinate, read only
+  by magic-door placement. The player's own spawn packet sends `writeShort(0)` in its place
+  (`PacketCreator:2073`).
+* `calcPointBelow:539` yields a coordinate, for drop landing and mob spawn anchoring.
 
-| map | | ours | v84 | added | removed | verdict |
-|---|---|---:|---:|---:|---:|---|
-| 100030000 | Evan farm entrance | 489 | 511 | +22 | **0** | **v84 only ADDS platforms - nothing of ours disappears** |
-| 251010403 | Herb Town area | 105 | 105 | 0 | **0** | **identical geometry; a plain renumber - DONE, `789fc548d`** |
-| 102000000 | Perion | 521 | 521 | +1 | -1 | genuine terrain edit |
-| 251000000 | Herb Town | 333 | 333 | +3 | -3 | genuine terrain edit |
-| 103000000 | Kerning City | 519 | 518 | +3 | -4 | genuine terrain edit |
-| 200080600 | Orbis Tower | 200 | 206 | +8 | -2 | genuine terrain edit |
-| 106010102 | Golem's Temple | 104 | 141 | +43 | -6 | genuine terrain edit |
-| 261000000 | Magatia | 741 | 739 | +5 | -7 | genuine terrain edit |
-| 250000000 | Mu Lung | 597 | 590 | +2 | -9 | genuine terrain edit |
-| 109090000 | Battle Square | 48 | 60 | +22 | -10 | genuine terrain edit |
-| 101000000 | Ellinia | 1203 | 1238 | +160 | **-125** | genuine terrain edit, by far the largest |
+So a foothold our table had and the client did not was a **phantom platform** - the server anchored
+npcs, mobs and item drops to ground the player could never see - and a platform the client draws
+that we lacked was invisible ground. Both were already-broken states. Taking v84's table verbatim is
+what makes server and client agree; no path exists by which it can move a player.
 
-"removed" counts platforms present in our tree whose exact geometry does not exist anywhere in v84's
-table for that map.
+## What was applied
 
-**The top two rows are not terrain edits and should be split off from this ticket.** `100030000` is
-strictly additive - every platform we have survives, v84 just adds 22 more that our server does not
-know about (so the client already draws ground the server does not have). `251010403` has identical
-geometry and is a plain renumber. Both are low-risk and both would fix their maps outright. They were
-**not** applied here because the instruction was to write this up rather than attempt a partial
-renumber - but they need none of the risk discussion below.
+v84's `foothold` section verbatim on all 52 - **99,556 leaves**, gated key-for-key and
+value-for-value against the archive so "absent" and "present but empty" stay distinct - and every
+`life` row re-pointed onto it, 718 rows, by three rules in order:
 
-**Correction (`789fc548d`).** This ticket first said `251010403` "fails only because one foothold
-pair shares coordinates, which a `(layer, group, geometry)` tie-break resolves". There is no such
-hazard and no tie-break ever fires. Ids 63 and 64 do share their coordinates - both are
-`-166,-177` to `-164,-177` - but they sit in different **groups** (`4/4` and `4/0`), so the
-`(layer, group, geometry)` key is already unique and every mapping on the map is forced. Measured
-across all twenty maps of the renumber batch: zero duplicate keys. `251010403` was taken in
-`789fc548d` and its `life` array is now byte-identical to v84's, `fh` included.
+1. **the row's own `cy`** (84 rows). `cy` records the y the row stands at and survives a renumber
+   untouched. Where our v83 `fh` named the *neighbouring, overlapping* platform rather than the one
+   the row is on, `cy` settles it - and on all 84 it agrees with the foothold v84's own life row
+   cites. Without this rule a geometry remap faithfully carries the wrong platform forward.
+2. **v84's id for the same geometry**, where that platform survives (631 rows).
+3. **the nearest v84 ground at or below the row** (3 rows), where v84 deleted the platform outright.
 
-## What taking the whole v84 image would require
+`fh=0` was left alone on 26 rows. It is our own "unanchored" sentinel; v84 emits it on none of its
+832 rows across these maps, so it predates this work and is not part of this defect.
 
-For the remaining nine, the only route to correct NPC placement is replacing the image's
-**`foothold` section together with its `life` section**, from `porting-resources/wz-data/v84/Map.wz`
-(byte-identical to `D:\games\MSv84\client\Map.wz`, read with `docs/wz-baseline/tool-peek`). The two
-must move together: v84's `life` rows cite v84 foothold ids, and ours cite ours. Taking one without
-the other is worse than taking neither.
+### Per-map delta
 
-`portal` is already at v84 parity on all eleven and must not be re-derived. `back` / `tile` / `obj` /
-`info` are client-side render data the server never reads; leaving them alone keeps the diff to what
-the server actually consumes.
+Platforms compared by `(x1,y1,x2,y2)` alone, which is all `MapFactory:196-217` reads - layer and
+group names are iterated and discarded. Comparing *with* layer/group inflates both columns equally,
+which is why nine maps show `+0/-0` here yet still failed the `fhgeom` digest.
 
-### The risk, stated plainly
+| map | | ours | v84 | added | removed |
+|---|---|---:|---:|---:|---:|
+| 101000000 | Ellinia | 1203 | 1238 | +160 | -125 |
+| 922010800 | Abandoned Tower Stage 8 | 450 | 450 | +90 | -90 |
+| 610030300 | The Test of Agility | 996 | 1028 | +77 | -45 |
+| 610030700 | Grandmaster Secret Chamber | 59 | 108 | +67 | -18 |
+| 670010200 | Amorian Stage 1 | 464 | 481 | +56 | -39 |
+| 610030510 | Warrior Mastery Room | 367 | 385 | +52 | -34 |
+| 106010102 | Entrance of Golem's Temple | 104 | 141 | +43 | -6 |
+| 670010600 | Amorian Stage 5 | 337 | 351 | +40 | -26 |
+| 106010101 | The Breathing Rock | 80 | 93 | +27 | -14 |
+| 100030000 | Evan farm entrance | 489 | 511 | +22 | **0** |
+| 109090000 | Sheep Ranch Lobby | 48 | 60 | +22 | -10 |
+| 674030000 | Treasure Dungeon | 395 | 397 | +21 | -19 |
+| 541010110 | The Peaceful Ship | 157 | 154 | +13 | -16 |
+| 120000105 | Nautilus Training Room | 32 | 12 | +12 | -32 |
+| 220011001 | Ludibrium Sky Terrace | 2 | 11 | +9 | **0** |
+| 200080600 | Orbis Tower 16F | 200 | 206 | +8 | -2 |
+| 541000000 | Boat Quay Town | 277 | 275 | +6 | -8 |
+| 261000000 | Magatia | 741 | 739 | +5 | -7 |
+| 240070502 | Neo City emergency exit | 49 | 49 | +4 | -4 |
+| 211000102 | El Nath Dept. Store | 25 | 25 | +4 | -4 |
+| 610030530 | Thief Mastery Room | 259 | 263 | +4 | **0** |
+| 103000000 | Kerning City | 519 | 518 | +3 | -4 |
+| 251000000 | Herb Town | 333 | 333 | +3 | -3 |
+| 101000004 | Hall of Magicians | 85 | 67 | +3 | -21 |
+| 102000004 | Hall of Warriors | 24 | 6 | +3 | -21 |
+| 103000008 | Hall of Thieves | 22 | 3 | +2 | -21 |
+| 250000000 | Mu Lung | 597 | 590 | +2 | -9 |
+| 106020000 | Mushroom Forest Field | 44 | 40 | +2 | -6 |
+| 100000204 | Hall of Bowmen | 22 | 2 | +1 | -21 |
+| 102000000 | Perion | 521 | 521 | +1 | -1 |
+| 551000000 | Kampung Village | 301 | 301 | +1 | -1 |
+| 551000200 | Hibiscus Road 2 | 146 | 147 | +1 | **0** |
+| 541000100 | Mysterious Path 1 | 281 | 278 | +1 | -4 |
+| 600000000 | New Leaf City | 706 | 699 | **0** | -7 |
+| 670010400 | Amorian Stage 3 | 88 | 84 | **0** | -4 |
+| 195000000 | Dangerous Ant-Hole | 762 | 758 | **0** | -4 |
+| 541000300, 610010002, 610030010, 670010100, 670010750, 910510100, 921110000, 926120200 | | | | +1..+12 | same |
+| 101030101, 105090310, 130000101, 140010110, 270000100, 300000012, 610030000, 930000300 | | | | **0** | **0** |
 
-1. **Terrain replacement is a new authorisation.** The owner has authorised deleting *map life
-   arrays* for exact v84 parity (ticket 46). `foothold` is not a life array. Replacing it changes
-   where players stand, walk and fall on nine live maps - including Ellinia, Perion, Kerning and Mu
-   Lung. On Ellinia that is 125 platforms this tree has and v84 does not.
-2. **Physics is server-side.** `FootholdTree.findBelow` drives `calcPointBelow`, mob spawn
-   placement, drop landing and `Character.getFh`. A wrong swap does not misdraw an NPC - it drops
-   players through the floor.
-3. **`life` replacement deletes rows.** Per map, what disappears (ids that appear only on our side;
-   an id on *both* sides means v84 merely moved it, which is a coordinate change, not a loss):
+The last row is maps where v84 moved every platform to a different `layer`/`group` without changing
+one coordinate - a pure renumber that only the layer-aware digest separates from this class.
 
-   | map | rows deleted | what they are |
-   |---|---|---|
-   | 101000000 | 1022101, 9250052 | seasonal `limitedname=xmasvillage` decorations |
-   | 102000000 | 1022101, 9250052 | same two |
-   | 103000000 | 1022101, 1052012, 9000036 | seasonal, plus **npc 1052012** and **9000036** |
-   | 250000000 | 1022101 | seasonal |
-   | 251000000 | 1022101, 9000036 | seasonal, plus **9000036** |
-   | 106010102 | 7x mob 5130101 | ours holds 8, v84 holds 1 |
-   | 100030000, 109090000, 200080600, 251010403, 261000000 | none | life arrays already match v84 row for row |
+## What was refused, and why
 
-   Only `103000000` and `251000000` lose a non-seasonal NPC. **`1052012` and `9000036` must be
-   checked against `scripts/npc/` and the quest tables before either map is replaced** - the
-   `196000000` precedent in ticket 46 is exactly this: v84 parity there would have deleted the Cafe
-   PQ entry NPC, so it was refused.
-4. **Five of the eleven need no life change at all** (last row of the table above). For those the
-   ask is narrower: swap `foothold`, remap `life/*/fh` by geometry where it still resolves, and
-   delete nothing.
+**1. v84's 96 static `9901xxx` life rows on the seven Hall of Fame maps.** These are genuine Nexon
+rows - the archive is pristine v84, SHA-256 matched against `porting-resources/wz-data/v84/Map.wz`.
+They are refused on a mechanical ground, not a provenance one:
+`PlayerNPC.fetchAvailableScriptIdsFromDb:319-323` allocates PlayerNPC scriptids from
+`NpcId.PLAYER_NPC_BASE + 100 * branch`, so **every id v84 places on those maps sits inside a live
+PlayerNPC branch**. changeSet 163 already seats real PlayerNPCs at 9901000, 9901100, 9901200,
+9901300, 9901301 and 9901400 on those same maps; v84's rows are 9901001-9901008, 9901100-9901107,
+9901200, 9901300-9901301, 9901740-9901749, 9901800-9901849 and 9901600-9901616. Adding them puts a
+static npc on the exact id the allocator hands the next deployment.
+`HallOfFameSeedRealLoad.seededIdsStayInsideTheBand` records that a prior pass already proved this
+collision is real corruption. Cosmic fills these halls dynamically instead - that *is* the v84
+feature, implemented live rather than statically. **If the owner would rather have v84's static
+rows, the route is to drop changeSet 163 and the PlayerNPC halls with it. That is a bigger decision
+than this ticket and is not taken here.**
 
-### Order of work, cheapest and safest first
+**2. `106010101`, the mob mix.** A first sweep read this as "v84 adds 7 mobs". It is not: v84
+rebalanced the map's whole population - Blue Mushroom 12 -> 8, Stone Golem 4 -> 1, Fairy 2 -> 9 -
+and moved **every** coordinate. Under additive-only the result would be 25 mobs at 25 spawn points,
+which is neither our layout nor v84's. Our 18 rows are kept and re-pointed; taking v84's is an
+all-or-nothing life swap needing its own authorisation. `106010102` is the same shape (our 8 Stone
+Golems against v84's 1).
 
-1. `100030000`, ~~`251010403`~~ - not terrain edits; no deletions; no new authorisation needed.
-   `251010403` is done (`789fc548d`); `100030000` is still open.
-2. `109090000`, `200080600`, `261000000` - terrain edit but zero life deletions.
-3. `102000000`, `101000000`, `250000000`, `106010102` - deletions are seasonal decorations or
-   surplus mobs only.
-4. `103000000`, `251000000` - **blocked** until `1052012` and `9000036` are shown to be unreferenced.
+**3. Portals.** 34 of the 52 also differ from v84 in `portal`, and
+`docs/wz-baseline/protect-list/Map.txt` lists custom portal nodes on many of them - `674030000`
+alone has 32 protected portal slots, plus `910510100` @26-32, `106020000` @4-9, `610030000` @3-8,
+and `670010600`. A verbatim portal take would delete them. Portals are untouched here; they need the
+protect-list as an input, not a whole-section copy.
 
-Whatever subset is taken, the check is the one `b3cb60503` already uses: after the write, every
-`life` row must cite a foothold its own map has, `portal`/`life` slots must stay consecutive from 0,
-and `V84TownIndexParityRealLoad` must stay green. A restart is required either way - `Map.wz` is read
-at map load.
+### Everything the first draft listed as a casualty is still present
+
+None were deleted - the `196000000` precedent from ticket 46 governs. All are kept and re-pointed,
+pinned by `theRowsAVerbatimLifeTakeWouldHaveDeletedAreStillHere`: `1022101` and `9250052` (seasonal
+`limitedname=xmasvillage`) on `101000000`/`102000000`/`103000000`/`250000000`/`251000000`,
+**`1052012` Mong from Kong** and **`9000036` Agent E** on `103000000`, `9000036` on `251000000`,
+plus `9000040`/`9000041`/`9010009` on `600000000`, `9010021` on `140010110`, `9201047` on
+`670010100`, `9100110` on `211000102`, and `1052013` Computer on `195000000`.
+
+## Custom terrain this did delete, stated plainly
+
+12 protect-listed `foothold` nodes fall inside the 52. Of the 195 footholds they cover, **67 have no
+counterpart in v84 and are gone**:
+
+| map | node | footholds | with no v84 counterpart |
+|---|---|---:|---:|
+| 102000004 | `foothold/1/0` | 21 | 21 |
+| 610030300 | `foothold/6` | 12 | 12 |
+| 670010200 | `foothold/6` | 9 | 9 |
+| 250000000 | `foothold/1/6` | 7 | 7 |
+| 106020000 | `foothold/0` | 4 | 4 |
+| 195000000 | `foothold/6` | 4 | 4 |
+| 541010110 | `foothold/6/2` | 119 | 5 |
+| 610030700 | `foothold/6` | 3 | 3 |
+| 610030510 | `foothold/6` | 1 | 1 |
+| 670010400 | `foothold/6` | 1 | 1 |
+| 261000000 `foothold/3`, 610030000 `foothold/1` | | 14 | 0 |
+
+Exactly **one life row stood on any of them**: `195000000` slot 76, npc `1052013` "Computer", itself
+protect-listed. It is kept and re-anchored 274px down onto real v84 ground - the ledge it stood on
+exists in neither stock v83 nor v84, so the client never drew ground under it.
+
+## Downstream: changeSet 165
+
+changeSet 163 seeded six Hall of Fame PlayerNPCs with `x/cy/fh` computed from
+`getGroundBelow(PlayerNPCPodium.calcNextPos(rank, 1))` against **v83's** tables. Three cited ids 12,
+40 and 18 on maps whose v84 image has 2, 67 and 12 footholds. 163 is applied and its checksum
+frozen, so `165-hall-of-fame-v84-terrain.sql` corrects the rows in place - the same shape as
+changeSet 164 after the portal reindex. Largest move: 27px, and `x` is unchanged on every row.
+
+`PlayerNPCPodium.calcNextPos` hardcodes its platform offsets (-50, -170, +70). All five podium halls
+were replayed over every `(rank, step)` the allocator can produce, against the real `FootholdTree`:
+**every slot still lands on a foothold**. That matters because `getGroundBelow` does `spos.y--` on
+`calcPointBelow`'s result with no null check, so a slot over empty space is an NPE, not a misdraw.
+Pinned by `HallOfFameSeedRealLoad.everyPodiumSlotOnEveryHallLandsOnAFoothold`. Where v84 has no wing
+under one of those offsets the slot now falls to the hall floor, which is what the client draws
+there anyway; retuning the offsets to v84's wings is cosmetic and deliberately not done.
+
+## How it was verified
+
+By measurement, not inspection, on all 52:
+
+* the resulting `fhid` digest **equals v84's on every map**, computed by re-running the digest over
+  our written XML with a different reader than the one that read the archive;
+* every `life` row cites a foothold its own map has (0 dangling), and each cited platform **spans
+  that row's own x** and lies at or below it - 733 of 734, the exception a stock row off by 2px that
+  was already so before this change;
+* `life` slot names still cover 0..n-1 and no row was lost;
+* `life`, `portal`, `info`, `reactor`, `ladderRope`, `seat` and `area` are **byte-identical to the
+  previous commit except for the `fh` leaf** on life rows - compared by row content, not by slot
+  path, so a renumber cannot hide a loss inside the check;
+* 99,556 foothold leaves match the archive key-for-key and value-for-value;
+* every file's diff is confined to the foothold block and its life `fh` lines. `core.autocrlf` is
+  true in this worktree, so the working tree is CRLF while the blobs are LF - a writer that forces
+  the wrong style shows every line as changed and buries the real edit.
+
+`V84TerrainFootholdParityRealLoad` (8 tests), `HallOfFameSeedRealLoad` (7),
+`V84TownIndexParityRealLoad`, `V84RenumberedFootholdParityRealLoad`, `V84MapLifeParityRealLoad`,
+`V84PortalIndexParityRealLoad` and `MapAndPortalScriptsRealLoad`: **60 tests, all green.**
+
+A restart is required - `Map.wz` is read at map load.
+
+## Noted in passing, not fixed
+
+`scripts/portal/Depart_goFoward0.js:10,18` warps to `103040430, "right00"`. Pristine v84 has no
+`right00` on `103040430` either (its portals are `sp`, `right01`), and our `103040420`, `103040430`,
+`103040450` and `103040460` images match v84's portal arrays exactly. The map data is correct; the
+script names a portal that never existed in any version. Harmless today only because the script is
+attached to no portal on `103040420`/`103040450`, so nothing reaches the warp.
