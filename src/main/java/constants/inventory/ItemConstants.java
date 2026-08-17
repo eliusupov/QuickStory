@@ -440,7 +440,7 @@ public final class ItemConstants {
     }
 
     public static boolean isMasteryBook(int itemId) {
-        return itemId >= 2290000 && itemId <= 2290139;
+        return itemId >= 2290000 && itemId <= 2290152;   // 2290140-2290152 are Evan's, added in v84
     }
 
     public static boolean isMonsterCard(int itemId) {

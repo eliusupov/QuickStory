@@ -42,46 +42,67 @@ server-side.
 | 70 | **Slumbering Dragon Island needs 8 missing scripts**: `enterSDI`, `move_SDIRit`, `enterSnowDragon`, `onSDI`, `stopIceWall`, `stopIceWall2`, `summonIceWall`, `blackSDI`. Both `enterSnowDragon` (pt=7) and `enterSDI` (pt=8) are `tm=999999999` - destinations are genuinely server-side-only and in no client file. Strands 22300, 22580, 22588, 22589, 22590, 22591 - `enterSnowDragon` is the single highest-leverage missing file on the island, the sole router into all four Cave of Silence rooms (no map in Map.wz carries a `tm` to 914100020/21/22/23). What each room is *for* is legible from its contents - 914100020 has the ten `stopIceWall` portals and no NPC, 914100021 has Afrien placed and `onUserEnter=evanTogether`, 914100022 has the 1409000 altar and `onUserEnter=summonIceWall`, 914100023 has ten Black Wing Henchmen and `onUserEnter=blackSDI` - but "quest state X routes to room Y" is **inference from content, not a stated routing table**, which is why it stays UNKNOWN. | QUEUED / UNKNOWN |
 | 70 | **Quest 22596's mob 9300393 "Gentleman" is placed by no map** - confirmed in pristine v84 too (0 hits / 4505 images). Room IS named by the quest text: 922030001, whose `onUserEnter` hook is `enterBlackfrog` (lowercase f) and does not exist. Spawn **coordinates** are in no WZ file - UNKNOWN. | QUEUED / UNKNOWN |
 
-## 2. Evan skills - data complete, code incomplete
+## 2. Evan skills - **8 of 12 CLOSED**, re-verified at `379aa7554` (2026-08-18)
 
-Worsens with job level. `IN FLIGHT`.
+DONE, do not re-open: 22171004 Hero's Will (`ad6de3fbe`, `StatEffect.java:1791` + `Character.java:1096`);
+2217-block mastery books (`c2cd9e78a`, `ItemInformationProvider.java:1548` now uses
+`GameConstants.isInJobTree`); 22181000 Blessing of the Onyx (`09407afcc`, `SkillFactory.java:370`);
+22181003 Soul Stone (`c9d0ca824`, `StatEffect.java:1632`); 22161003 Recovery Aura crash (`5d4e6673f`,
+`MapleMap.java:2349` now uses `mist.getSourceX()`); 22140000 Critical Magic (`9da8dbb62`,
+`AbstractDealDamageHandler.java:603`); 22131001 Magic Shield (`026f87e54`,
+`TakeDamageHandler.java:262`); 22000000 Dragon Soul + 22170001 Magic Mastery (`a7239dcdd`,
+`Character.java:7773-7783`).
 
-- **22171004 Hero's Will unlearnable** - `isFourthJob()` true + `getMasterLevel()` 0; no mastery book exists in `wz/Item.wz`; also absent from `StatEffect.isHerosWill`.
-- **2217-block mastery books unusable by a maxed Evan** - `ItemInformationProvider.java:1481` matches `curskill / 10000 == playerJob`, and Evan's skills stay in 2217 while the job advances to 2218. Every other class is immune. Fix must not change any other class.
-- **22181000 Blessing of the Onyx applies nothing** - no `effect` node, `action/0="OnixBlessing"` != `alert2`, absent from SkillFactory's isBuff switch. Evan's capstone party buff is a no-op.
-- **22181003 Soul Stone** - empty statup list, absent from `StatEffect.isResurrection()`.
-- **22161003 Recovery Aura CRASHES** - `MapleMap.java:2310-2322` reads the *recipient's* skill level; a party member without the skill hits `effects.get(-1)` -> IOOBE in a scheduled task.
-- 22140000 Critical Magic - Evan absent from `canCrit` list.
-- 22131001 Magic Shield / 22151003 Magic Resistance - `BuffStat` written, never read.
-- 22000000 Dragon Soul - Evan's FIRST job skill, pure passive, zero references, never enters `localmagic`.
-- 22160000 Dragon Fury, 22170001 Magic Mastery - zero references.
-- masterLevel never read from Skill.wz; `isFourthJob()` is a hardcoded 5-id list (over-permissive).
-- 20011011 Power Explosion missing from the BOOSTER arm.
-- Evan mounts 20011018/19/31 not in `SKILL_MOUNTS`.
+Still open:
+
+- **22151003 Magic Resistance** - `BuffStat.MAGIC_RESISTANCE` written at `StatEffect.java:665`, never
+  read at `TakeDamageHandler.java:279`. Blocked on data, not on a diff: the mitigation is elemental-only
+  and the element byte is read and discarded in `handlePacket`, with nothing in the tree mapping its
+  values. `UNKNOWN`
+- **22160000 Dragon Fury** - two references at HEAD, both inert (`constants/skills/Evan.java:43`, a
+  comment at `Character.java:7769`). There is no passive damage multiplier to put +10% into and damage
+  is client-computed, so the only insertion point is the autoban ceiling. Effectively unfixable and
+  player-invisible. `QUEUED`
+- **20011011 Power Explosion** - deliberately excluded from the BOOSTER arm (`StatEffect.java:766-772`,
+  commit `875ae982b`). v84 gives Evan `x = 200` where the other three carry `-3`, and `BuffStat.BOOSTER`
+  is an attack-speed step count. WONTFIX unless the real target stat is found in data.
+- **Evan mounts 20011018/19/31** absent from `buildSkillMounts()` (`StatEffect.java:147-188`). Sprite
+  ids are **UNKNOWN** and do not transfer from the Beginner/Legend offsets - pinned by
+  `src/test/java/server/V84EvanNodeTest.java:151-162`. Reachable only via `!maxskill` today.
+- **masterLevel never read from Skill.wz; `isFourthJob()` is a hardcoded 5-id list**
+  (`client/Skill.java:55-62`). The node exists (`wz/Skill.wz/2217.img.xml:329,589`,
+  `2218.img.xml:297,620`, all `value="10"`). Left alone deliberately: 22171004 has **no** `masterLevel`
+  node, so reading it would demote that skill out of fourth-job and cap its SP at 5, which is a
+  behaviour change, not a refactor. `QUEUED`
 
 ## 3. Drops, cards, maker, reactors
 
 - Mob drops **LARGELY CLOSED** - changeSet **160**, 214 rows over 25 mobs. Items taken from the v84 client's own `MonsterBook.img`; rates **all DERIVED** from our own tables as `median(item class x mob level band x boss flag)` over 22,461 non-quest-gated rows. Holdout-validated: **median fold-error 1.14x, 73.2% within 2x, 94.6% within 10x**; weakest classes `use` and `etc_mobdrop` at 2.0x, flagged in the seed header. `boss_drop_rate: 10` checked and neutral by construction, because each rate is the median of rows from the same (class x boss) bucket.
-  - **Triage was most of the job.** 274 mobs can spawn with no drop row; **250 (91%) are event / PQ / Monster Carnival / boss-body-part** ids that never had drops in any version. Of the 24 on ordinary ids, nearly all are correctly empty (Papulatus and all four Targa/Scarlion phases drop on their FINAL form; the 6 Gatekeeper Nex are kill-count quest targets). **Genuine remainder: one mob, 4090000 Iron Hook.** `QUEUED`
+  - **Triage was most of the job.** 274 mobs can spawn with no drop row; **250 (91%) are event / PQ / Monster Carnival / boss-body-part** ids that never had drops in any version. Of the 24 on ordinary ids, nearly all are correctly empty (Papulatus and all four Targa/Scarlion phases drop on their FINAL form; the 6 Gatekeeper Nex are kill-count quest targets). **Genuine remainder: one mob, 4090000 Iron Hook** - spawns on `104010001` The Pig Beach and `106000110` The Burnt Land II, 0 rows in `drop_data`. **It has no `String.wz/MonsterBook.img` entry** (that image covers 385 card mobs; changeSet 160's item lists all came from it), so v84 states no item list for it and there is no other drop source in this tree. **UNKNOWN - do not invent one.**
   - **DreamMS rejected, measured twice.** `ours = their_pct * 10000 / 3` - a flat 0.333 at p10/p25/p50/p75 across 2,621 pairs, in all 7 level bands and every item class independently. It is our own lineage; calibrating against it is circular and a missed divisor would have tripled every rate. Valhalla/MCDB also rejected: p10 0.05 -> p50 0.114 -> p90 1.25, only 3.0% exact - noise, not a factor.
   - Authentic Nexon probabilities exist only in `Etc.wz/Server/Reward.img`, which our `Etc.wz` does not contain. **No number in our tables is a Nexon figure** and the seed header says so.
 - Monster cards **CLOSED 39/39** `64f0858e1` - every card names its mob in `Item.wz/.../info/mob`. **4 still cannot drop** (mobs 3400008, 4300001/3/5 placed nowhere, in v84 either). **7 pre-existing rows disagree with the WZ leaf** (2383045, 2388011/17/26/43, swapped pair 2388068/69) - not touched, that is an edit not an addition. `QUEUED`
 - Maker **CLOSED 6/6** `3f1f81b32` incl. all four Evan dragon slots; `req_meso` formula validated 145/145.
 - `wz/Etc.wz/ItemMake.img.xml` is still the **v83 file** - harmless today (server reads only `catalyst`) but a fresh `SkillMakerFetcher` run would drop the six. `QUEUED`
 - Reactors: only **1** genuinely new (2302006) and it is placed on no map, so nothing should drop. Closed as a false premise.
+- **Ungated quest-item drops: 18 rows is the right count, but only 2 rows are defects.** Re-measured 2026-08-18 against 23,279 `drop_data` rows and the 1,060 items carrying `info/quest=1`: 545 rows carry a questid, **18 rows over 6 items carry `questid = 0`**. `c22ecc419` cannot touch them - its gate lives entirely downstream of the `questid > 0` test, because `Character.needQuestItem:5825` returns `true` for `questid <= 0`. Triage of the 18:
+  - **14 rows are correct as-is.** 4031013 Dark Marble (8 second-job-advancement clone mobs, asked for by `scripts/npc/1072000.js:64`), 4031059 Black Charm (5 third-job clones) and 4032311 Sign of Acceptance (Aran 21202, implemented script-side at `scripts/quest/21202.js:62`) are all demanded by scripts, not by a `Quest.wz` quest, so there is no questid to gate on. Gating them would break job advancement.
+  - **2 rows are genuine missing data**, each proved by a sibling row on the same item: 4031568 Cat's Eye from 2110301 Scorpion should be `questid 3911` (its 2100108 Meerkat row already is), and 4031405 Glass Shoes from 9500108 should be `questid 8732` (its 3110100 Ligator row already is).
+  - 4031593 Lip Lock Key (2 rows) has no owning quest in `Check.img` at all - event item, nothing to gate on.
+  - **Not fixed here**: correcting the two rows is an `UPDATE`, not an insert, and this project's standing rule is additive-only on data (same reason the 7 disagreeing monster-card rows were left). `OWNER` - the exact statements are `UPDATE drop_data SET questid = 3911 WHERE itemid = 4031568 AND dropperid = 2110301;` and `UPDATE drop_data SET questid = 8732 WHERE itemid = 4031405 AND dropperid = 9500108;`. Do **not** instead make `needQuestItem` reject `questid <= 0` - that path also serves mesos and ordinary loot (`MapleMap.java:1329`) and would make everything invisible.
 
 ## 4. Cash shop and new items
 
-- NX-loss: action `0x1E` has no `isPackage` guard - deducts cash then NPEs. `IN FLIGHT`
-- **6 purchasable packages are completely inert** (9102289-9102294, 2000-4700 NX) - item types 522/553/562 have no handler. `IN FLIGHT`
-- 25 tablet scrolls 2047000-2047309 stuck at **0% success** - they carry `successRates`, not `success`. `IN FLIGHT`
-- 79 Commodity rows have no `Period` -> 1-day items, incl. **SN 60001005 Pink Bean pet at 20,000 NX**. `IN FLIGHT`
+- ~~NX-loss: action `0x1E` has no `isPackage` guard~~ **FIXED** `225ee009b`, `CashOperationHandler.java:105`.
+- ~~6 purchasable packages inert (9102289-9102294)~~ **FIXED** `c9d0ca824`, `UseCashItemHandler.java:552` (553) and `:633` (562). "522" in the old note was a typo for 552.
+- ~~25 tablet scrolls 2047000-2047309 at 0% success~~ **FIXED** `cefab785d`, `ItemInformationProvider.java:1089-1093`.
+- 79 Commodity rows have no `Period`: **the one purchasable row is FIXED** (`bdc49a200`, SN 60001005). The other 78 are all `OnSale=0` and were left deliberately. The trap survives for any hand-added row - `CashShop.java:246` defaults Period to 1 and `:142` maps 0 -> 90. Changing that default is an owner call. `OWNER`
 - **279 of 332 new v84 items have no source of any kind** - no drop, shop, quest, reactor, Maker or cash-shop row. Includes all 18 new endgame weapons (reachable only from containers that are themselves unobtainable). `QUEUED`
 - 21 items 2430xxx have `spec/script` and no script file (incl. 5 mount coupons that ARE obtainable). `QUEUED`
 - 5240028 Dynamite feeds pet 5000067, which has no source. `QUEUED`
-- `isMasteryBook` range (2290000-2290139) excludes the 13 new books. Cosmetic.
-- Evan SP resets 5050005-09 do not enforce their per-tier restriction.
-- `UseCashItemHandler.java:552` is unreachable dead code (duplicate `itemType == 552`, commented "DS EGG THING", probably meant 553).
+- ~~`isMasteryBook` range excludes the 13 new books~~ **FIXED** - `ItemConstants.java:443` now runs to 2290152, matching `ItemInformationProvider.usableMasteryBooks` and `wz/Item.wz/Consume/0229.img.xml`, whose last id is `02290152`. Its only caller is the mastery-book drop-rate multiplier at `MapleMap.java:774`, so Evan's 13 books were dropping at the ordinary rate instead of 5.0x/1.0x.
+- **Evan SP resets 5050005-09 do not enforce their per-tier restriction** - and neither do the four vanilla ones. `UseCashItemHandler.java:177-190` splits only on `itemId > ItemId.AP_RESET` and then defers wholly to `AssignSPProcessor.canSPAssign`; the reset item's own id is never inspected, so a 1st-job reset moves 4th-job SP. **v84 settles the intent exactly**, `wz/String.wz/Cash.img.xml:371-410`: 5050001-04 are "SP Reset (1st..4th job)", and 5050005/6/7/8/9 are "Evan SP Reset (1st/2nd, 3rd/4th, 5th/6th, 7th/8th, 9th/10th Skill)" - i.e. the Evan growth pairs 2200+2210, 2211+2212, 2213+2214, 2215+2216, 2217+2218. What is missing is a skill-tier function; the codebase has none (`Job.getJobNiche()` returns the class, not the advancement). `QUEUED`
+- ~~`UseCashItemHandler.java:552` unreachable dead code~~ **FIXED** `c9d0ca824`; guarded against recurrence by `CashItemTypeDispatchRealLoad.noItemTypeIsDispatchedTwice()`.
 - Commodity divergence vs real v84 on shared SNs: ItemId 19, Price 28, Period 6, Count 4, OnSale 81 - none on v84-new SNs. SNs 60001000-60001005 are local additions absent from v84.
 
 ## 5. Naming and cosmetic
@@ -93,7 +114,7 @@ Worsens with job level. `IN FLIGHT`.
 
 ## 6. Maps and scripts
 
-- `100030301` is absent from `Map.wz` (deliberate - its life places NPCs inside the PlayerNPC allocator range) but `scripts/portal/inDragonEgg.js:8` still warps there. `isQuestStarted` is `== STARTED` only, so it fires before 22005 starts AND after it completes. Caught as an NPE, not a stranding.
+- **`100030301` "Forest Hall" is absent from `Map.wz`** (deliberate refusal, ticket 28 - its `life` places ten NPCs inside the PlayerNPC allocator range) but `scripts/portal/inDragonEgg.js:8` still warps there. **Correction to the earlier note**: the script's `STARTED`-only test is *correct* v84 behaviour, not the bug - during quest 22005 the egg portal leads to `900020100` Lush Forest, and before/after it leads to Forest Hall. The single defect is the missing map. `wz/Map.wz/Map/Map1/100030300.img.xml` portal 2 (`in00`, `pt=7`, `tm=999999999`, `script="inDragonEgg"`) is on the Evan farm, i.e. reachable and live, so this is a dead portal an Evan walks into. **MAP DATA - route to whoever owns `Map.wz`.**
 - `910050300` declares `onUserEnter = "dollCave01"`; no such script. Silent no-op, quests unaffected.
 - `900090104` (incubation cutscene) has no inbound portal. Cosmetic.
 - **328 non-Evan quests declare a script with no `.js`.** All 49 Evan ones have theirs. The 8 in `19011` / `29934-29940` were checked and need nothing - they are medal-title markers with empty `Act.img`, covered by the `medalQuest.js` fallback.
@@ -101,9 +122,9 @@ Worsens with job level. `IN FLIGHT`.
 
 ## 7. Infrastructure debt
 
-- Packet validator covers **33 of 307 sendops (10.7%)** and is **blind to enum renumbering** - it checks byte counts, not meaning. `SPAWN_DRAGON` was a packet it modelled wrong, and that is what caused the login loop. Named next step: per-mode models for the 90 opcodes that branch on a mode byte.
-- `USE_DEBUG_SHOW_RCVD_PACKET` still true - log spam.
-- CLIENT_START_ERROR de-dup is in-memory, so every restart re-reports old crashes.
+- Packet validator covers **33 of 307 sendops (10.7%)** and is **blind to enum renumbering** - it checks byte counts, not meaning. `SPAWN_DRAGON` was a packet it modelled wrong, and that is what caused the login loop. Named next step: per-mode models for the 90 opcodes that branch on a mode byte. **Re-counted 2026-08-18 and the figure is current, not stale**: 307 keys in `sendops-84.properties`; 29 + 6 `verified` rows across `tools/v84/decode-models-v84.tsv` and `-binary.tsv` = 35 model names, 33 distinct opcodes once the three per-mode variants collapse. `candidate` rows are not validation-safe (`PacketStructureModels.java:46-50`).
+- ~~`USE_DEBUG_SHOW_RCVD_PACKET` still true~~ **FIXED** - `config.yaml:211` set to false. It was **5,877 of 5,964 lines (98.5%)** of `tools/v84/cutover-server.log`, one line to console and one to `logs/cosmic-log.log` per received packet (`Client.java:214`, only 7 opcodes in `LoggingUtil`'s ignore list). `!showpackets` still toggles it live.
+- CLIENT_START_ERROR de-dup is in-memory (`ClientStartErrorHandler.java:35`, a 512-entry LRU on heap), so the first reconnect after every restart re-WARNs the client's whole cumulative history, ~12 entries. Steady-state within one boot is correct. Nothing on disk or in the DB fits - the packet arrives pre-login, so `medalmaps`-style per-character keying is useless. Cheapest real fix is a flat file next to the log; a table is not warranted. `QUEUED`
 - Evan never receives its **own** `SPAWN_DRAGON` after a map change (`addPlayer` places objects before the dragon is registered; `spawnDragon` broadcasts excluding the source). Server-side `getDragon()` stays non-null so quests are fine. Whether the v84 client tears down its local `CDragon` on field transfer: **UNKNOWN** - needs a client.
 
 ## 8. Owner's hands or owner's call
@@ -184,20 +205,25 @@ The "written but never read" pattern the Evan audit found is **not Evan-specific
 - **5 chaos scrolls are no-ops that still burn the upgrade slot**: `2049103/104/112/113/114` carry
   `info/randstat=1`, but `ItemInformationProvider.java:1110-1184` special-cases only `2049100-102` by
   hardcoded id; the rest fall through to `improveEquipStats` against an empty stat map. Slot and item
-  both consumed, nothing applied.
+  both consumed, nothing applied. **Re-verified against the WZ 2026-08-18**: exactly 8 items in
+  `wz/Item.wz/Consume/0204.img.xml` carry `randstat=1` - 2049100-104 and 2049112-114 - and the id list
+  at `ItemInformationProvider.java:1170-1172` covers 3 of them. The fix is to match the node, not the
+  ids: `ret.put("randstat", ...)` beside `fs` in `getEquipStats:580`, then replace those three `case`
+  labels with `if (stats.get("randstat") > 0)` inside the `default:` arm. Written this session and
+  **reverted unbuilt** when scope was cut - it is a behaviour change and the suite could not be run.
 - **7 percentage buff potions grant zero stats**: `2022359-2022365` carry `padRate/madRate/pddRate/
   mddRate/accRate/evaRate/speedRate`; `StatEffect.java:370-378` reads only the flat versions.
 - **6 brand-new v84 `BFSkill` items are wholly unwired**: `2022539/542/543/547/548/549`, zero code
   references anywhere.
 - **Shadow Web's damage-over-time is commented-out dead code** (`Monster.java:1328-1336`) - Hermit,
   Night Walker and Blaze Wizard bind the target and deal 0.
-- **Mage Seal never blocks mob skills** - `StatEffect` writes `MonsterStatus.SEAL` but the mob-skill
-  gate checks a different constant, `SEAL_SKILL`. Affects FP/IL Mage and Blaze Wizard.
-- **Invincible Barrier and Cleric's Invincible do nothing** - `DIVINE_BODY`/`INVINCIBLE` are written
-  but absent from `TakeDamageHandler`'s mitigation chain. The buff icon shows.
-- **Monster-card immunity piercing does nothing** - `RESPECT_PIMMUNE`/`RESPECT_MIMMUNE` written at
-  `StatEffect.java:485/489`, never checked by the immunity gate at `AbstractDealDamageHandler.java:261-269`.
-- **Echo of Hero's +4% watk** written but absent from `recalcLocalStats()`.
+- ~~**Mage Seal never blocks mob skills**~~ **FIXED** `e364ed14a`, `Monster.java:1529` checks both statuses.
+- ~~**Invincible Barrier and Cleric's Invincible do nothing**~~ **FIXED** `9deb94cef`, `TakeDamageHandler.java:212` and `:274`.
+- ~~**Monster-card immunity piercing does nothing**~~ **FIXED** `66ec1e559`, `AbstractDealDamageHandler.java:264/268`.
+- **Echo of Hero's +4% watk** written at `StatEffect.java:581-586` and delivered map-wide by
+  `applyEchoOfHero:972`, but `Character.reapplyLocalStats()` (`Character.java:7699-7843`) has no
+  `ECHO_OF_HERO` reference at all. Smallest open one in this section: four lines next to the
+  `BuffStat.WATK` read at `Character.java:7784`.
 - **All chairs heal identically** - `info/recoveryHP/recoveryMP` (56/35 items, several v84-new) never
   read; regen is derived from the player's own max HP/MP.
 - `spec/onlyPickup` unenforced on 83 items (5 v84-new). Cash coupons crediting nothing:
