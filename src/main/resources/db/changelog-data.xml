@@ -238,4 +238,12 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="168" author="evan-shops">
+        <sqlFile path="db/data/168-evan-book-drop-data.sql"/>
+        <rollback>
+            DELETE FROM drop_data WHERE questid = 0
+                AND (itemid BETWEEN 2280026 AND 2280029 OR itemid BETWEEN 2290140 AND 2290152);
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>
