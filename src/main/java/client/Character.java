@@ -7760,6 +7760,27 @@ public class Character extends AbstractCharacterObject {
                 }
             }
 
+            // Evan's two magic passives, the same shape as the Bowman expert above and referenced
+            // nowhere else in the codebase before this: Dragon Soul 22000000 is flat mad, 1 to 20,
+            // and it is the first skill an Evan ever gets; Magic Mastery 22170001 adds x, 15 at
+            // level 30. No job test is needed - nobody else can hold either skill.
+            //
+            // Magic Mastery's other half, mastery 16, is not applied: there is no magic mastery
+            // concept in this codebase at all. Neither is Dragon Fury 22160000 (+10% damage at 10),
+            // which would want a passive damage multiplier - getAllBuffs() only walks active buffs.
+            // Both are new mechanisms rather than fixes to an existing one.
+            Skill dragonSoul = SkillFactory.getSkill(Evan.DRAGON_SOUL);
+            int soulLevel = getSkillLevel(dragonSoul);
+            if (soulLevel > 0) {
+                localmagic += dragonSoul.getEffect(soulLevel).getMatk();
+            }
+
+            Skill magicMastery = SkillFactory.getSkill(Evan.MAGIC_MASTERY);
+            int masteryLevel = getSkillLevel(magicMastery);
+            if (masteryLevel > 0) {
+                localmagic += magicMastery.getEffect(masteryLevel).getX();
+            }
+
             Integer watkbuff = getBuffedValue(BuffStat.WATK);
             if (watkbuff != null) {
                 localwatk += watkbuff.intValue();
