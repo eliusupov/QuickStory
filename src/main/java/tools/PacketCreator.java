@@ -7589,7 +7589,22 @@ public class PacketCreator {
         p.writeShort(dragon.getPosition().y);
         p.writeShort(0);
         p.writeByte(dragon.getStance());
-        p.writeByte(0);
+        // v84 reads TWO shorts after the stance byte; v83's writer emitted byte+short, one short.
+        // Measured in the v84 client: CUserPool::OnPacket routes 0xB9..0xBB to 0x009704B9, whose
+        // 0xB9 arm calls the CDragon decode at 0x00506F85 -
+        //     0x00506FA5 Decode4  x     (the leading owner id was already taken by the dispatcher
+        //     0x00506FB2 Decode4  y      at 0x009B23AC, before the per-opcode branch)
+        //     0x00506FD7 Decode1  stance
+        //     0x00506FF3 Decode2
+        //     0x00506FFA Decode2
+        // 13 bytes after the owner id; we were sending 12. The client read past the end and threw
+        // ZException error 38, which is a hard client crash - and because the dragon respawns on
+        // every login for job 2200+, it was a LOGIN LOOP, not a one-off.
+        if (ServerConstants.VERSION >= 84) {
+            p.writeShort(0);
+        } else {
+            p.writeByte(0);
+        }
         p.writeShort(dragon.getOwner().getJob().getId());
         return p;
     }
