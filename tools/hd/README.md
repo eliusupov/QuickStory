@@ -1,4 +1,4 @@
-# HD client on v84 — phase 1 patch set
+# HD client on v84 — phase 2 patch set
 
 Turns the Ezorsia v2 HD mod (v83, hardcoded addresses) into a **verified** v84 patch
 set, plus an offline harness that proves each patch without launching the client.
@@ -35,21 +35,41 @@ runtime and nothing needs regenerating to change resolution.
 | T2 neighbour-delta anchoring | 43 | 13.6% |
 | T2b interval-identical bracketing | 1 | 0.3% |
 | T2c one-sided identity extension | 6 | 1.9% |
-| T3 function-scoped | 6 | 1.9% |
+| T3 function-scoped | 5 | 1.6% |
 | T6 monotone-envelope | 8 | 2.5% |
 | T7 forward-idiom in envelope | 11 | 3.5% |
-| M hand-resolved | 19 | 6.0% |
-| **resolved and verified** | **288** | **90.9%** |
-| **rejected as false positive** | **9** | 2.8% |
-| unresolved | 20 | 6.3% |
+| M hand-resolved | 34 | 10.7% |
+| **resolved and verified** | **302** | **95.3%** |
+| **rejected as false positive** | **1** | 0.3% |
+| unresolved | 14 | 4.4% |
 
-Per **operation**, after the source-bug corrections: **295 PASS, 0 FAIL, 28 unresolved,
-4 dropped**. Restricted to the shipping set (groups C–J; A/B/L are already done by
-`edits\`, K is optional gameplay caps): **292 ops → 277 PASS, 0 FAIL, 15 unresolved
-(94.9%).**
+Per **operation**: **306 PASS, 0 FAIL, 14 unresolved, 7 dropped**. Restricted to the
+shipping set (groups C–J; A/B/L are already done by `edits\`, K is optional gameplay
+caps): **289 ops → 288 PASS, 0 FAIL, 1 unresolved (99.7%).**
 
-Groups **C, F, G, H and J are complete**. D is 30/31 and E is 32/33 — one code cave
-each. Everything still open is group I (13 ops) plus those two caves.
+Groups **C, D, F, G, H, I and J are complete.** E is 32/33. The single open op is
+`ccLoginDescriptorFix` (`0x0060D85B`), and it is not an address problem — see
+"What CANNOT be verified" below and `data/manual-sites.json`
+under `not_portable_as_is`.
+
+### What phase 2 changed
+
+Phase 1 reported 288/317 and called group I "restructured, needs design not
+translation". Four of its conclusions were wrong, and each was wrong for a reason
+worth keeping:
+
+- **Group I is a clean translation, and it is now 23/23.** Eleven of the twelve pop-up
+  blocks are byte-identical to v83 apart from two immediates. Every tier missed them
+  because v84 changed *both* patched immediates in the same signature window and T1b
+  masks only the site's own. Phase 1's "there are fewer blocks in v84" was backwards —
+  v84 has two *more*; the count compared `mov edx,0x1D0` occurrences, which undercounts
+  exactly because v84 rewrote most of them to `mov edx,0x19D`.
+- **`AdjustStatusBarBG` is portable**, at 9 displaced bytes rather than 5. Phase 1's
+  proposed "3 NOPs" could not have worked — a 5-byte `E9` does not fit in 3 bytes.
+- **`AlwaysViewRestoreFix` needs no body edit at all.** Its `je` is `74 06` in both
+  images; phase 1 compared capstone's rendered *absolute* targets.
+- **"97% of sites hold a vanilla 800/600" really measures 65%**, and separately, 17
+  shipping sites hold a v84 constant that is *not* v83's — see below.
 
 Hand-resolved sites live in `data/manual-sites.json` with their evidence written out;
 `resolve.py` applies them last and they **override** any search-tier hit, because a
@@ -97,26 +117,58 @@ so nobody rebuilds them:
 - T9, the same tolerating v84's register reallocation within ±0x40 — 1 net hit and 4
   new collisions, one of which displaced a good result. See "group I" below for why.
 
-## Group I is not a translation problem
+## Group I: solved, 23/23
 
-`0x00522C73`–`0x005243EF`, the eleven near-identical party/guild/trade/family/quest
-pop-up blocks, is the weakest part of the set (10 of 23 ops), and heuristics will not
-close it. v84 rebuilt this code:
+`0x00522C73`–`0x005243EF`, the twelve party/guild/trade/family/quest pop-up blocks.
+Eleven are byte-identical to v83 apart from two immediates and the relocated call
+targets. v84 lowered the pop-up base Y from `0x1FC` (508) to `0x1EC` (492) and the X
+from `0x1D0` (464) to `0x19D` (413) on the majority of them.
 
-- **registers were reallocated** — v83's `mov eax,0x1FC ; sub eax,ecx` is
-  `mov ecx,0x1FC ; sub ecx,eax` in v84. The write only touches the immediate, so the
-  register is harmless *if* you have the right address, but it defeats every
-  context-signature tier.
-- **a branch was added** that v83 has no counterpart for:
-  `test esi,esi ; jne … ; mov ecx,0x1EC ; add edx,-0x33`. So v84 may need *more*
-  patches here than v83 had, on a second code path Ezorsia never saw.
-- **there are fewer blocks.** `mov edx,0x1D0` occurs **12 times** in v83's
-  `0x00522000-0x00525000` and only **6 times** in the corresponding v84 range. Eleven
-  v83 patch sites cannot map injectively onto six v84 slots — several handlers were
-  merged or rewritten.
+The blocks are near-identical to *each other*, so no signature can separate them once
+the changed fields are wildcarded — masking both immediates makes a ±32B window match
+3 v83 sites and 7 v84 sites. **The join is ordinal**, and four independent constraints
+force it and all agree:
 
-Treat even the 10 passing group-I rows as provisional, and expect this group to need
-design, not address translation. Everything else in the set is a clean translation.
+- **five unique per-image markers** — delay literal `0x7530`, delay `0x1770`, a
+  `neg esi ; sbb esi,esi` head, head immediate `0x1F2` with a `sub`, and the sid-less
+  `push 0` variant. All five were resolved *independently* by T1/T2 in phase 1 and every
+  one lands exactly where the ordinal join puts it.
+- **dialog id** — each block ends `lea eax,[ebp+0xc] ; push <sid>`, and v84 shifted the
+  string table by exactly +2. The two v84 blocks that disobey (`0x0052EB3F` sid `0x159A`,
+  `0x0052EF50` sid `0x1599`) are dialogs v84 **added**; excluding them makes it 12 = 12.
+- **gap runs** — v83 `+0x1F4,+0x1FE,+0x1E9` equals v84 `+0x1F4,+0x1FE,+0x1E9`.
+- **monotonicity** — the twelve deltas are non-decreasing, and P042 falls in its slot.
+
+One block, `0x0052307E` (trade), v84 genuinely did restructure: registers swapped
+(`mov ecx,0x1FC ; sub ecx,eax`, so `regalloc` is set and operand geometry is the test),
+and a runtime `test esi,esi` branch added selecting a second variant. Its identity is
+certain — both blocks end with the same computed-sid idiom and both carry a
+`push 0 ; push 0xFF ; push 0` tail no other block has. **Its second arm
+(`0x0052E85C`, `mov ecx,0x1EC` and `add edx,-0x33`) has no v83 counterpart and is
+UNPATCHED**; if that path is taken, that variant stays at its vanilla position.
+
+## The values are as important as the addresses
+
+Ezorsia's values are tuned to the **v83 literal at each site**. `m_nGameHeight - 92` is
+really `508 + H - 600`, where 508 is what v83 happened to hold there. Where v84 shipped
+a different literal, writing Ezorsia's number unchanged moves the widget by exactly the
+difference — and every such row still passes ADDR, SHAPE, SLOT, DUAL and FIT. *The
+address is right and the number is wrong*, which no address-oriented check can see.
+
+`verify.py`'s **VANILLA DRIFT** table lists them; `gen_loader.py` subtracts the drift
+from the fitted formula's constant term. 17 shipping ops are affected:
+
+| group | ops | drift |
+|---|---:|---|
+| I | 12 | pop-up Y 508→492, X 464→413 |
+| H | 3 | gain-message canvas 290→350, inventory X 504→444 |
+| J | 2 | avatar megaphone 800→900 |
+
+The group-I **Y** adjustment is *proven*, not inferred: Ezorsia used `H - 92` on the 508
+sites and `H - 102` on the 498 sites, so its rule is demonstrably `vanilla + (H - 600)`.
+The rest preserve the same intent, but that intent was eyeballed against v83's `UI.wz`
+— **UNPROVEN**. Immediates inside the image VA range are excluded as relocated
+addresses, not constants.
 
 ## The 9 false positives — and why shape checking alone does not catch them
 
@@ -213,21 +265,60 @@ The hook table in `dllmain.cpp` is deliberately empty.
 replaced with the generated `HD_<name>_RETN` values. The cave bodies are ~600 lines of
 naked `__asm`; retyping them is how you get a silent crash.
 
-**Two cave bodies additionally need editing**, because a cave body *replays* the
-instructions it displaced and v84 displaced different ones. `verify.py` finds these
-automatically and prints both sequences — 30 caves resolved, 2 need an edit:
+**31 caves resolve.** All tile their NOP run, and — new in phase 2 — nothing in either
+image branches *into* any displaced range (`JMPIN`). Exactly **two need their body
+edited**, because a cave body *replays* what it displaced:
 
 | cave | v83 displaced | v84 displaced | edit |
 |---|---|---|---|
-| `AlwaysViewRestoreFix` `0x00642105` → `0x0065797A` | `test eax,eax ; je 0x64210F ; mov ecx,[eax] ; push eax` | same, `je 0x657984` | retarget the `je` |
-| `AdjustStatusBarInput` `0x008D217C` → `0x00906EBE` | `push 0x16 ; push edi ; lea ecx,[esi+0xCD0]` | `… lea ecx,[esi+0xD08]` | `CUIStatusBar` member moved `+0x38` |
+| `AdjustStatusBarInput` `0x008D217C` → `0x00906EBE` (9B) | `push 0x16 ; push edi ; lea ecx,[esi+0xCD0]` | `… lea ecx,[esi+0xD08]` | member `+0x38` |
+| `AdjustStatusBarBG` `0x008D1F65` → `0x00906D39` (**9B, not 5**) | `push 0x16 ; movsd ; push 0` | `push 0x16 ; push edi ; lea ecx,[esi+0xD04]` | **redesigned** |
 
-The `+0x38` shift is corroborated independently by `0x008D247B → 0x009071BD`, whose
-`lea ecx,[esi+0xCD4]` becomes `lea ecx,[esi+0xD0C]`. Assume any other v83 struct offset
-baked into a cave body has moved by the same amount and re-check it before shipping.
+`AdjustStatusBarBG` is a redesign, not a re-point: v84 recompiled the call from a vtable
+call taking two `ZXString`s **by value** into a direct thiscall taking them **by
+pointer**, so the v83 5-byte run does not exist in v84. It becomes the same shape as
+`AdjustStatusBarInput` — 9 displaced bytes, 4 NOPs after the jmp, retn `0x00906D42`,
+body `push nStatusBarY ; push edi ; lea ecx,[esi+0xD04]`. Its address is settled by four
+independent lines of evidence (member offset, a constant +0xC SEH-state alignment with
+no insertion across ~0x700 bytes, the identical `ZXString`-pair preamble, and argument
+position); ordinal position alone was *not* sufficient, because the 2nd v84 `push 0x16`
+has the shape of the *Input* cave.
 
-To build: x86 DLL, no CRT dependency needed beyond `memcpy`/`memset`, link
-`kernel32`. Any MSVC toolchain; match the other edit DLLs (they are ~30–70 KB x86).
+`AlwaysViewRestoreFix` needs **no** edit. Its `je` is `74 06` — the same two bytes in
+both images — and the cave body does not even replay that branch; it inverts the test
+onto a local label.
+
+**The `CUIStatusBar` shift is not uniform.** Members below ~`0xC40` moved `+0x30`
+(`0xA90`→`0xAC0`); those above moved `+0x38` (`0xCD0`→`0xD08`, `0xCD4`→`0xD0C`, the
+latter an ordered 11↔11 match). Do not assume one number — re-check any struct offset
+against `verify.py`'s printed sequence. `gen_loader.py` emits the v84 displacement as
+`HD_<name>_MEMBER` so the stale v83 literal need not stay in the naked asm.
+
+### Building it — there is no toolchain on this machine
+
+`where cl / gcc / g++ / clang / clang-cl / zig / rustc / nasm / ml / link` all return
+nothing; `C:\Program Files\Microsoft Visual Studio`, the `(x86)` path, `LLVM`, `msys64`,
+`mingw*`, `MinGW`, `Strawberry`, `TDM-GCC-64`, `Windows Kits` and `chocolatey` do not
+exist; the VS7/VC7 registry keys are absent; scoop has only 7zip, godot, pandoc,
+tesseract, typst. The only SDK present is `dotnet`, which cannot build a native x86 DLL
+with MSVC-style `__asm`. **So the loader has NOT been compiled, and no claim that it
+compiles should be believed until someone runs the command below.**
+
+Note that MSVC is not merely convenient here, it is required: the cave bodies are
+`__declspec(naked)` with `__asm { }` blocks, which GCC and Clang do not accept — they
+would need rewriting into AT&T/extended asm first.
+
+```
+"C:\...\VC\Auxiliary\Build\vcvars32.bat"
+cl /LD /O2 /GS- /MT /DNDEBUG dllmain.cpp /link /OUT:hd-res-1.0.0.dll kernel32.lib user32.lib
+```
+x86, no CRT dependency beyond `memcpy`/`memset`; `user32` only for the optional
+`report=1` MessageBox. Match the other edit DLLs (~30–70 KB x86).
+
+In place of a compile, `test_hd.py` lints the generated header for what the compiler
+would have caught — field count, brace balance, unknown `HdKind`, duplicate `#define`,
+rows that did not PASS — and checks that **no two shipped patches write the same byte**.
+That last check is what caught the `VersionNumberFix` conflict described below.
 
 ## Offline harness: what each check proves
 
@@ -239,12 +330,50 @@ To build: x86 DLL, no CRT dependency needed beyond `memcpy`/`memset`, link
 | `SHAPE` | the bytes decode to the same instruction shape as the v83 site |
 | `SLOT` | the write lands on that instruction's own immediate/displacement, at the right width — **this is the check the three latent bugs fail** |
 | `CAVE` | for code caves: the NOP run tiles a whole number of v84 instructions, so the cave's `jmp` back at origin+N lands on an instruction boundary |
-| cave body (informational) | whether the displaced instruction sequence is identical in v83 and v84 — if not, the naked `__asm` has to be edited, not just re-pointed |
+| `JMPIN` | **new** — nothing in the image branches *into* the range the cave overwrites. Not implied by tiling: tiling only proves the range *ends* on a boundary. Branch sources are filtered to real instruction starts by requiring the decode to pass through the origin |
+| cave body (informational) | whether the displaced sequence is identical in v83 and v84 — if not, the naked `__asm` has to be edited. Relative branch targets are normalised *relative*, so a byte-identical `je` is not reported as a difference |
 | `BLOCK` | same tiling check for `FillBytes` / `WriteByteArray` |
 | `DUAL` | the same bytes appear in the second, independent dump |
 | `FIT` | the value fits the operand width |
+| `VANILLA` | **new**, informational — v84's own literal still equals v83's. Where it does not, Ezorsia's value means something different (above) |
 
-Plus, across the whole set: injectivity and monotonicity (above).
+Plus, across the whole set: injectivity, monotonicity, and — new — **write overlap**
+(`test_hd.py`): no two shipped patches may write the same byte. Injectivity only ever
+said two v83 sites cannot share one v84 *address*; it said nothing about two write
+*ranges* intersecting.
+
+That check found a real crash. `Client.cpp:541` is
+
+```c
+if (MainMain::bigLoginFrame) { WriteInt(0x005F464D + 1, W - 165); }   // P115
+else                         { CodeCave(VersionNumberFix, 0x005F464D, 10); }  // P114
+```
+
+and `extract.py` was flattening the source without tracking conditionals at all, so
+both were emitted. P115 lands on bytes +1..+4 of the cave's own `E9 rel32` — the login
+screen jumps to a garbage address. `bigLoginFrame` defaults to false, so the cave arm is
+the correct one. `extract.py` now tags every patch with its innermost guard and
+`verify.py` drops the arms the shipped configuration does not take.
+
+Two more things nothing had checked, both now fixed:
+
+- `gen_loader.py` was emitting **every** PASS row regardless of group, so the DLL carried
+  groups A, B and L — anti-tamper, **server IP**, window mode — on top of what
+  `bypass` / `redirect` / `window-mode` already do in `edits\`. Group B would have fought
+  `redirect-1.0.0.dll` over the server address. The table is the shipping set only now.
+- Every emitted row carries the bytes it **expects** to find, read from the verified v84
+  image, and the DLL compares before it writes. A client that is not the build this table
+  was verified against gets skipped rather than corrupted. Being skipped is a visibly
+  wrong screen; being wrong is a crash nobody can diagnose. Counts go to
+  `OutputDebugStringA`, plus a MessageBox under `report=1` in `hd-res.ini`.
+
+### Known false-positive lesson from phase 2
+
+Injectivity **only detects a collision once both claimants are resolved.** P037
+(`0x00522C87`) sat on the wrong group-I block through all of phase 1: it passed SHAPE
+(`mov edx,0x1d0` on both sides) and nothing flagged it, because the address's real owner
+was itself unresolved. Resolving a group can retro-actively expose false positives
+inside it — so re-run the whole resolver after any manual batch, never just the new rows.
 
 ## What CANNOT be verified without launching
 
@@ -262,14 +391,24 @@ prove any of this:
 4. **Interaction with `edits\`.** No two-writers-to-one-address conflict is possible from
    this table (groups A/B/L are excluded), but nothing proves `bypass` does not itself
    relocate code.
-5. **The 15 unresolved shipping operations** — 13 of them group I.
-   The one to watch is `0x008D1F65` (`AdjustStatusBarBG`): v84 recompiled that
-   construct from a vtable call with an inline struct copy into a direct thiscall, so
-   its 5-byte NOP run no longer tiles. Its v84 address is known (`0x00906D39`) but the
-   cave needs redesigning — 3 NOPs and a body of `push nStatusBarY ; push edi ; jmp
-   0x00906D3C`. Until that is done the status-bar background will sit at 22px while the
-   rest of the HUD moves, which looks worse than not patching at all. Details in
-   `data/manual-sites.json` under `not_portable_as_is`.
+5. **The one unresolved shipping operation**, `ccLoginDescriptorFix` (`0x0060D85B`,
+   group E). Its *function* is resolved beyond doubt — the enclosing code brackets
+   instruction-for-instruction and the three descriptor pointers relocate 1:1
+   (`0xAF70D0/84/80` → `0xB486D0/84/80`). The **cave** is not portable: it displaces 51
+   bytes of argument setup that no longer exists — `and edx,0x3f ; add edx,0x21` does not
+   occur *anywhere* in the v84 image — because v84 hoisted the literal coordinates into
+   stack locals and added a second arm (`cmp ebx,4 ; jne` at `0x00622907`) with four
+   constants v83 has no counterpart for.
+
+   Two of the cave's four effects do map onto plain immediate writes
+   (`0x00622956+2`, `and ebx,0x64` → 25; and `0x00622911+3`, the `-149` → `W-949`); two
+   do not, one of them because v84's `add eax,0x21` is a sign-extended `imm8` that
+   overflows above 706px of height. **Shipping the two portable halves alone would put
+   the descriptor somewhere neither version intends, so it is deliberately left out.**
+   Full working in `data/manual-sites.json` under `not_portable_as_is`. Finishing it
+   needs a running client — it is a design job, not address translation.
+
+   The `0x0052307E` group-I block's **second arm** is likewise unpatched (see above).
 6. **The `0x0040013E` 4 GB edit.** It patches the PE `Characteristics` field, which the
    loader has already consumed by the time any DLL runs. It is a no-op from inside the
    process — the source says as much. Port it into a file patcher or drop it.
@@ -280,14 +419,23 @@ Do this on a **copy**, never on `D:\games\MSv84\client\` in place.
 
 ```
 1.  robocopy D:\games\MSv84\client D:\games\MSv84\hd /E      (a full copy; ~2 GB)
-2.  Build loader\ as hd-res-1.0.0.dll (x86). Put it and hd-res.ini in
+2.  Build loader\ as hd-res-1.0.0.dll (x86) -- see "Building it" above; there is no
+    toolchain on this machine, so this step has never been run. Put the DLL and
+    hd-res.ini in
         D:\games\MSv84\hd\edits\
     Leave the five existing edit DLLs exactly as they are.
+    Put `report=1` under [general] in hd-res.ini for the first launch.
 3.  BEFORE launching, record the current registry value so you can put it back:
         reg query "HKLM\SOFTWARE\WOW6432Node\Wizet\MapleStory" /v ExecPath
     A launch REWRITES this machine-wide value and will repoint your other client.
 4.  Launch D:\games\MSv84\hd\MapleStory.exe.
-5.  AFTER the test, restore ExecPath to whatever step 3 printed.
+5.  A message box should appear before the window opens, reading
+        hd-res 1280x720: applied 288, skipped 0, byte-mismatch 0 of 288
+    ANY non-zero byte-mismatch means your client is not the build this table was
+    verified against -- STOP, and re-run verify.py against a fresh dump of it. Those
+    rows were skipped rather than applied, so nothing is corrupted, but the rest of
+    the table is then also suspect.
+6.  AFTER the test, restore ExecPath to whatever step 3 printed.
 ```
 
 Check in this order — each step gates the next, so stop at the first failure:
@@ -295,11 +443,11 @@ Check in this order — each step gates the next, so stop at the first failure:
 | # | what | proves | if it fails |
 |---|---|---|---|
 | 1 | window opens at 1280×720, not 800×600 | `0x00A4127E` / `0x00A41283` (`InitializeGr2D`) landed | the whole set is mis-timed or mis-addressed; nothing below will be meaningful |
-| 2 | login screen: version number and world-select buttons in place | group E, 32/33 ops, + the `VersionNumberFix` / `LoginBackCanvas` / `LoginViewRec` caves | only `ccLoginDescriptorFix` (`0x0060D85B`) is unported; the world-select tab animation may still be off |
+| 2 | login screen: version number and world-select buttons in place | group E, 32/33 ops, + the `VersionNumberFix` / `LoginBackCanvas` / `LoginViewRec` caves | only `ccLoginDescriptorFix` (`0x0060D85B`) is unported — **expect the world-select descriptor to stay at its v84 position**; everything else on this screen should move |
 | 3 | mouse cursor reaches all four screen edges | `0x0059AC09/22`, `0x0059A898/8B1` cursor clamps | cursor clamp group in C |
-| 4 | in game: status bar spans the bottom, HP/MP/EXP bars aligned | group D, 30/31 ops, + `AdjustStatusBar` and `AdjustStatusBarInput` caves | **expect the background layer to stay put** — `AdjustStatusBarBG` (`0x008D1F65`) is the one op still unported, and its cave needs redesigning, not just an address |
+| 4 | in game: status bar spans the bottom, HP/MP/EXP bars aligned, **background layer moves with it** | group D, 31/31, + all three status-bar caves | if the background alone stays at 22px, `AdjustStatusBarBG`'s redesigned 9-byte cave is wrong — it is the one cave in the set whose body was rewritten rather than re-pointed |
 | 5 | open a skill window, hover a buff icon: tooltip stays on screen | `0x008F32CC/DF` tooltip clamp, both resolved | if it clips, the regalloc-tolerant match at `0x00929BE1` is wrong |
-| 6 | receive a party/guild/trade invite | group I | **expect failure** — 13 of 23 ops unresolved and the group is restructured in v84 (see above); this is the designated known-broken step |
+| 6 | receive a party/guild/trade invite; then a **trade** invite specifically | group I, 23/23 | the pop-up should sit bottom-right and clear of the chat box. If it is 16px low or 51px right, the VANILLA-DRIFT adjustment is being double-applied; if only the *trade* pop-up misplaces, that is `0x0052307E`'s unpatched second arm |
 | 7 | open the cash shop | group F — 11/11 verified, all 9 caves pass | if this breaks, the cave mechanism itself is wrong |
 | 8 | Mu Lung Dojo | group G — 11/11 verified, 10 caves | same |
 | 9 | pick up an item / gain EXP: messages readable, not clipped | group H, 11/11 | v84 already widened this canvas 290 -> 350, so check it is not double-counted |
