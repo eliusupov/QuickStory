@@ -262,6 +262,7 @@ static const HdPatch kHdPatches[] = {
   { 0x0096C1CE,   4, K_INT      ,         {0,-1,0,0,0}, 'C', "P267", 0x0093519A, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300 ;
   { 0x0096CB3A,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P268", 0x0093586B, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; RelMove? (Skills)
   { 0x0096CB3F,   4, K_INT      ,          {0,1,0,0,0}, 'C', "P269", 0x00935870, 4, {0x2C,0x01,0x00,0x00} },  // push 300
+  { 0x009851CD,   4, K_SPDCAP   ,        {0,0,0,0,140}, 'K', "P270", 0x0094D91E, 4, {0x8C,0x00,0x00,0x00} },  // set speed cap //ty ronan
   { 0x0098F0E4,   4, K_INT      ,         {0,-1,0,0,0}, 'C', "P271", 0x00954433, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300 ;
   { 0x009C1752,   4, K_INT      ,         {0,-1,0,0,0}, 'C', "P272", 0x00981555, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300 ;
   { 0x009C21BF,   4, K_INT      ,         {0,-1,0,0,0}, 'C', "P273", 0x00981F7A, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300 ;

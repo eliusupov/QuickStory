@@ -690,6 +690,12 @@ def main():
     if os.path.exists(paths.MANUAL):
         man = json.load(open(paths.MANUAL))['sites']
         for k, v in man.items():
+            # Keys that are not a bare v83 address are parked findings, not sites to
+            # apply: a resolved address we deliberately do not ship keeps its evidence
+            # here rather than being deleted and re-derived later. See the entry's own
+            # why_not_shipped.
+            if not k.lower().startswith('0x'):
+                continue
             s = int(k, 16)
             r = rows.setdefault(s, {'v83': s, 'v84': None, 'tier': None,
                                     'status': 'unresolved', 'shape83': None,

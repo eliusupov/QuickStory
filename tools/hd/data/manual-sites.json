@@ -1,6 +1,20 @@
 {
  "_": "Hand-resolved v83->v84 sites that no automatic tier can reach, plus source-bug findings. Every entry states the evidence that was checked against the two v84 dumps. resolve.py applies these last; verify.py re-checks them like any other patch.",
  "sites": {
+  "_0x00780743_NOT_SHIPPED": {
+   "v84": "0x007A4622",
+   "tier": "M-manual",
+   "off_v84": 6,
+   "why_not_shipped": "Key is prefixed so resolve.py does NOT apply it. The ADDRESS is high-confidence, but the site fails the SHAPE gate for a real reason: v83 is `mov dword ptr [ebp+8], imm32` and v84 is `mov dword ptr [ebp-0x3c4], imm32`. Same mnemonic and same operand roles, different displacement width -- so same_shape() rejects it and the resolver reports a false positive. That gate is the thing keeping this table trustworthy, and overriding it on one agent's call, for a feature that is a NO-OP at the default config (v84 already holds 140 here), is a bad trade. Ship it only after same_shape() learns that disp8 and disp32 forms of the same instruction are the same shape -- a general fix that would need the whole 327-row table re-verified, since it can flip other verdicts. Until then speedMovementCap is 2 of 3 sites: raising it above 140 may still be clamped by whatever path this site governs.",
+   "evidence": "speedMovementCap, 1 of 3. v83 `c7 45 08 d1 2f 01 00` mov [ebp+8],0x12fd1. Byte signatures are useless here: 0 of 119 masked 24-byte windows spanning the whole v83 function 0x0077F4C9-0x007807BF occur anywhere in v84, because v84 recompiled it (sub esp,0x3f0 vs v83's 0x28). Resolved through the call graph instead: v83 0x0077F4C9 has exactly two callers, 0x00A085BA and 0x00A22772; both locate uniquely in BOTH dumps (-> 0x00A52890, 0x00A6DC72) and following the same call index in each lands independently on v84 0x007A2161. Inside it the block 0x007A45EC-0x007A4678 matches v83 0x0078072E-0x0078076A instruction for instruction with every struct offset preserved (+0x158, +0x150, 0x64). 0x007A4622 is the only imm32==0x8c write-to-local in the function; its +-16B masked context is unique across v84 .text in both dumps. Delta +0x23EDF sits between resolved neighbours 0x00776B5F (+0x22967) and 0x007B2C97 (+0x25D47).",
+   "caveat": "off_v84 is 6, NOT the source's 3. v83 uses a disp8 ([ebp+8]) so its imm32 starts at +3; v84's larger frame needs a disp32 ([ebp-0x3c4]), making the instruction 10 bytes with the imm32 at +6. Writing at +3 on v84 would overwrite the top three displacement bytes plus the low byte of the immediate -- stack corruption, not a cap change."
+  },
+  "0x0094D91E": {
+   "v84": "0x009851CC",
+   "tier": "M-manual",
+   "evidence": "speedMovementCap, 2 of 3. v83 `b8 d1 2f 01 00` mov eax,0x12fd1 -> v84 `b8 8c 00 00 00` mov eax,0x8c, same length, same imm slot at +1. The whole preceding idiom is byte-identical across versions (59 59 74 0c ff 37 53 e8 <rel32> 59 59 eb 05 b8 <imm32>); forward-idiom LCS 17/20 against v83 with the next-best candidate in the envelope scoring 11. Inside the enclosing function already resolved as v83 0x0094D8D9 -> v84 0x00984BE3. Delta +0x378AE lies strictly between resolved neighbours 0x00935870 (+0x372CE) and 0x00954433 (+0x3ACB0). Identical in v84_mem.bin and v84_mem2.bin; no injectivity collision.",
+   "caveat": "The v83 literal at all three speed-cap sites is 0x12FD1 = 77777, not 140 -- 140 is Ezorsia's REPLACEMENT value. v84 ships 140 at all three sites already (77777 occurs nowhere in v84 .text), so at the default config these three writes are no-ops and only matter if speedMovementCap is changed."
+  },
   "0x0040013E": {
    "v84": "0x00400146",
    "tier": "M-manual",

@@ -9307,9 +9307,9 @@
   },
   {
    "v83": 9754910,
-   "v84": null,
-   "tier": null,
-   "status": "unresolved",
+   "v84": 9982412,
+   "tier": "M-manual",
+   "status": "resolved",
    "shape83": {
     "m": "mov",
     "ops": "eax, 0x12fd1",
@@ -9320,14 +9320,27 @@
     "disp_size": 0,
     "bytes": "b8d12f0100"
    },
-   "shape84": null,
+   "shape84": {
+    "m": "mov",
+    "ops": "eax, 0x8c",
+    "len": 5,
+    "imm_off": 1,
+    "imm_size": 4,
+    "disp_off": 0,
+    "disp_size": 0,
+    "bytes": "b88c000000"
+   },
    "window": null,
-   "delta": null,
-   "dual_dump": null,
+   "delta": 227502,
+   "dual_dump": true,
    "fn_ok": null,
-   "note": "",
+   "note": "speedMovementCap, 2 of 3. v83 `b8 d1 2f 01 00` mov eax,0x12fd1 -> v84 `b8 8c 00 00 00` mov eax,0x8c, same length, same i",
    "fn83": 9753561,
-   "fn84": 9981923
+   "fn84": 9981923,
+   "data": false,
+   "regalloc": false,
+   "shape_ok": true,
+   "mono_ok": true
   },
   {
    "v83": 9782323,

@@ -7637,10 +7637,21 @@
    "comment": "set speed cap //ty ronan",
    "drop": null,
    "fixed": false,
-   "tier": null,
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "M-manual",
+   "v84": 9982413,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "expect": "8c000000",
+   "v84_insn": "mov eax, 0x8c",
+   "v84_verdict": "ok",
+   "van83": 77777,
+   "van84": 140
   },
   {
    "id": "P271",

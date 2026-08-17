@@ -223,7 +223,15 @@ def main():
             continue
 
         v84_anchor = r['v84']
-        v84_target = v84_anchor + (p['target'] - anchor)
+        # v84 can put the operand at a DIFFERENT offset inside the instruction than v83
+        # did: where v83 addressed a local with a disp8 and v84's larger stack frame
+        # needs a disp32, the instruction grows by three bytes and the immediate moves
+        # with it. Carrying v83's offset across then writes into the displacement --
+        # stack corruption, not a changed constant. manual-sites.json carries the
+        # override. Without one the SLOT check below refuses the row, which is the safe
+        # failure, so this only ever turns a refusal into a shippable row.
+        off84 = man['sites'].get(f'0x{p["site"]:08X}', {}).get('off_v84')
+        v84_target = v84_anchor + (p['target'] - anchor if off84 is None else off84)
         row['v84'] = v84_target
         c = row['checks']
 

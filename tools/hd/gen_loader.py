@@ -36,7 +36,8 @@ KIND = {'WriteInt': 'K_INT', 'WriteByte': 'K_BYTE', 'WriteShort': 'K_SHORT',
 # so they take their value from the ini at runtime instead of from the fitted formula.
 # Keyed by row id because there are exactly three of them; a general mechanism for
 # "which config key feeds this row" would be more machinery than rows.
-CFG_KIND = {'P236': 'K_DMGCAP32', 'P318': 'K_DMGCAPD', 'P237': 'K_SPDCAP'}
+CFG_KIND = {'P236': 'K_DMGCAP32', 'P318': 'K_DMGCAPD',
+            'P237': 'K_SPDCAP', 'P270': 'K_SPDCAP'}
 
 
 def fit(vals):
