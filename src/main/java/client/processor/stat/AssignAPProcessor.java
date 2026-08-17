@@ -896,12 +896,11 @@ public class AssignAPProcessor {
             multiplier = 24; offset = 418;
 
         } else if (job.isA(Job.MAGICIAN) ||
-                   job.isA(Job.BLAZEWIZARD1)) {
-            // NOT extended to Evan, unlike the HP/MP gain chains above. This is the AP-RESET FLOOR,
-            // a different question from what a point is worth, and ticket 51 finding 3 flags that
-            // Evan and Aran's LEGEND both return 0 here. Adopting the magician pool wholesale could
-            // turn a silent gap into a false "you don't have the minimum HP pool required to swap".
-            // Dormant either way: USE_ENFORCE_HPMP_SWAP is false. Left for a deliberate decision.
+                   job.isA(Job.BLAZEWIZARD1) ||
+                   job.isA(Job.EVAN1)) {
+            // Evan takes the magician floor: its per-level HP gain in levelUp() is the magician's
+            // rand(20, 28) exactly, and changeJob() grants mages no HP at all on advancement, which
+            // is why this magician branch has no second-job tier for anything to differ on.
             multiplier = 10; offset = 54;
 
         } else if (job == Job.BOWMAN ||
@@ -928,7 +927,11 @@ public class AssignAPProcessor {
             multiplier = 22; offset = 338;
 
         } else if (job == Job.BEGINNER ||
-                   job == Job.NOBLESSE) {
+                   job == Job.NOBLESSE ||
+                   job == Job.LEGEND ||
+                   job == Job.EVAN) {
+            // Aran's (2000) and Evan's (2001) beginner jobs. levelUp() runs one beginner branch for
+            // all four, so they share the beginner floor; without them here both returned 0.
             multiplier = 12; offset = 38;
         }
 
@@ -950,13 +953,18 @@ public class AssignAPProcessor {
             multiplier = 4; offset = 155;
 
         } else if (job == Job.MAGICIAN ||
-                   job == Job.BLAZEWIZARD1) {
+                   job == Job.BLAZEWIZARD1 ||
+                   job == Job.EVAN1) {
             multiplier = 22; offset = -1;
 
         } else if (job.isA(Job.FP_WIZARD) ||
                    job.isA(Job.IL_WIZARD) ||
                    job.isA(Job.CLERIC) ||
-                   job.isA(Job.BLAZEWIZARD2)) {
+                   job.isA(Job.BLAZEWIZARD2) ||
+                   job.isA(Job.EVAN2)) {
+            // The tier split is what changeJob() pays out, and it keys on getId() % 1000: Evan's
+            // 2200 lands on 200 ("1st mage", +100~150 MP) and 2210-2218 land on 210-218 ("2nd~4th
+            // mage", +450~500 MP) - the same two grants the magician offsets above were fitted to.
             multiplier = 22; offset = 449;
 
         } else if (job == Job.BOWMAN ||
@@ -983,7 +991,9 @@ public class AssignAPProcessor {
             multiplier = 18; offset = 95;
 
         } else if (job == Job.BEGINNER ||
-                   job == Job.NOBLESSE) {
+                   job == Job.NOBLESSE ||
+                   job == Job.LEGEND ||
+                   job == Job.EVAN) {
             multiplier = 10; offset = -5;
         }
 

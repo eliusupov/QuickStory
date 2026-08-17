@@ -241,23 +241,38 @@ class AssignAPProcessorTest {
 
     /**
      * Every branch of getMinHp/getMinMp is an {@code isA} chain rooted at an Explorer or Cygnus job,
-     * plus a {@code job == BEGINNER || job == NOBLESSE} case. Evan (2001, 2200-2218) matches none of
-     * them - {@code EVAN1.isA(MAGICIAN)} is false because 2200/100 is 22, not 2 - and neither does
-     * Aran's LEGEND (2000), so both fall out with multiplier 0 and offset 0. That is the AP-reset
-     * floor: {@code getMaxHp() + hplose < getMinHp(...)} can never fire, so an Evan can drain max HP
-     * or MP with AP Reset past the point every other class is stopped at. Pinning the wrong values.
+     * plus a {@code job == BEGINNER || job == NOBLESSE} case. Evan (2001, 2200-2218) matched none of
+     * them - {@code EVAN1.isA(MAGICIAN)} is false because 2200/100 is 22, not 2 - and neither did
+     * Aran's LEGEND (2000), so both fell out with multiplier 0 and offset 0. That is the AP-reset
+     * floor: {@code getMaxHp() + hplose < getMinHp(...)} could never fire, so an Evan could drain max
+     * HP or MP with AP Reset past the point every other class is stopped at.
+     *
+     * <p>The values below are derived, not invented. HP: {@code levelUp()} gives Evan the magician's
+     * own {@code rand(20, 28)}, and {@code changeJob()} grants mages no HP on advancement - which is
+     * why the magician HP branch has no second-job tier - so all of 2200-2218 take 10/54. MP: the
+     * magician tier split (-1 for job 200, 449 for 210+) is a fit to what {@code changeJob()} pays
+     * out, and that method keys on {@code getId() % 1000}, so 2200 already lands on "1st mage"
+     * (+100~150 MP) and 2210-2218 on "2nd~4th mage" (+450~500 MP). The beginner jobs 2000 and 2001
+     * take the beginner floor because {@code levelUp()} runs one beginner branch for all four.
      */
     @Test
-    void evanAndLegendHaveNoMinimumHpMpFloor() {
+    void evanAndLegendTakeTheirClassMinimumHpMpFloor() {
         assertAll(
-                () -> assertEquals(0, AssignAPProcessor.getMinHp(Job.LEGEND, 200), "job 2000 HP"),
-                () -> assertEquals(0, AssignAPProcessor.getMinHp(Job.EVAN, 200), "job 2001 HP"),
-                () -> assertEquals(0, AssignAPProcessor.getMinHp(Job.EVAN1, 200), "job 2200 HP"),
-                () -> assertEquals(0, AssignAPProcessor.getMinHp(Job.EVAN10, 200), "job 2218 HP"),
-                () -> assertEquals(0, AssignAPProcessor.getMinMp(Job.LEGEND, 200), "job 2000 MP"),
-                () -> assertEquals(0, AssignAPProcessor.getMinMp(Job.EVAN, 200), "job 2001 MP"),
-                () -> assertEquals(0, AssignAPProcessor.getMinMp(Job.EVAN1, 200), "job 2200 MP"),
-                () -> assertEquals(0, AssignAPProcessor.getMinMp(Job.EVAN10, 200), "job 2218 MP")
+                () -> assertEquals(2438, AssignAPProcessor.getMinHp(Job.LEGEND, 200), "job 2000 HP"),
+                () -> assertEquals(2438, AssignAPProcessor.getMinHp(Job.EVAN, 200), "job 2001 HP"),
+                () -> assertEquals(2054, AssignAPProcessor.getMinHp(Job.EVAN1, 200), "job 2200 HP"),
+                () -> assertEquals(2054, AssignAPProcessor.getMinHp(Job.EVAN2, 200), "job 2210 HP"),
+                () -> assertEquals(2054, AssignAPProcessor.getMinHp(Job.EVAN10, 200), "job 2218 HP"),
+                () -> assertEquals(1995, AssignAPProcessor.getMinMp(Job.LEGEND, 200), "job 2000 MP"),
+                () -> assertEquals(1995, AssignAPProcessor.getMinMp(Job.EVAN, 200), "job 2001 MP"),
+                () -> assertEquals(4399, AssignAPProcessor.getMinMp(Job.EVAN1, 200), "job 2200 MP"),
+                () -> assertEquals(4849, AssignAPProcessor.getMinMp(Job.EVAN2, 200), "job 2210 MP"),
+                () -> assertEquals(4849, AssignAPProcessor.getMinMp(Job.EVAN10, 200), "job 2218 MP"),
+
+                // the Explorer rows these were derived from, so a change to either side shows up here
+                () -> assertEquals(2054, AssignAPProcessor.getMinHp(Job.MAGICIAN, 200), "job 200 HP"),
+                () -> assertEquals(4399, AssignAPProcessor.getMinMp(Job.MAGICIAN, 200), "job 200 MP"),
+                () -> assertEquals(4849, AssignAPProcessor.getMinMp(Job.FP_WIZARD, 200), "job 210 MP")
         );
     }
 
