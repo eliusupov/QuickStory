@@ -8,6 +8,7 @@ produce a client-corrupting patch set:
 Checks 2 and 3 need the v83/v84 images; they skip (loudly) if those are absent.
 """
 import json
+import re
 import os
 import sys
 
@@ -82,6 +83,74 @@ def test_patchset_clean():
     print(f'  patch set: {len(seen)} PASS rows, no FAILs, injective')
 
 
+def test_no_overlapping_writes():
+    """No two patches may write the same byte.
+
+    Injectivity says two v83 sites cannot share one v84 ADDRESS. It says nothing about
+    two patches whose write RANGES intersect -- a 4-byte int at X and another at X+2, or
+    a 46-byte code cave swallowing a neighbour's target. The last writer would win and
+    the loser would corrupt the winner's operand. Nothing measured this before.
+    """
+    J = json.load(open(os.path.join(paths.DATA, 'v84-patchset.json')))
+    skip = set(J['drop_groups']) | set(J['optional_groups'])
+    rows = [r for r in J['rows'] if r['verdict'] == 'PASS' and r['v84'] is not None
+            and r['group'] not in skip]
+    owned, clash = {}, []
+    for r in rows:
+        span = range(r['v84'], r['v84'] + (r.get('size84') or r['size']))
+        for b in span:
+            prev = owned.get(b)
+            # `FillBytes` that fully contains a later write is the deliberate
+            # clear-then-write idiom (blank the IP string, then write the new one),
+            # not a conflict. Anything else overlapping is one patch eating another.
+            if prev and prev[0] != r['id'] and not (
+                    prev[1] == 'FillBytes' and prev[2] <= span.start
+                    and span.stop <= prev[3]):
+                clash.append((prev[0], r['id'], b))
+            owned[b] = (r['id'], r['op'], span.start, span.stop)
+    assert not clash, f'{len(clash)} overlapping writes in the SHIPPING set, e.g. ' + \
+        ', '.join(f'{a}/{b}@0x{c:08X}' for a, b, c in clash[:5])
+    print(f'  overlap: ok ({len(owned)} shipped bytes, no patch overwrites another)')
+
+
+def test_generated_inc_wellformed():
+    """Stand-in for the compile this machine cannot do: there is no C toolchain here.
+
+    Catches what the compiler would have caught in the generated header -- wrong field
+    count, unbalanced braces, an unknown kind enum, a duplicate #define, a value that
+    does not fit its field -- plus that every row in the table is one verify.py passed.
+    """
+    inc = os.path.join(paths.HD, 'loader', 'hd_patches.inc')
+    if not os.path.exists(inc):
+        print('  inc: SKIPPED (run gen_loader.py)')
+        return
+    src = open(inc).read()
+    kinds = set(re.findall(r'enum HdKind \{([^}]*)\}',
+                           open(os.path.join(paths.HD, 'loader', 'dllmain.cpp')).read())
+                [0].replace(' ', '').split(','))
+    body = src.split('kHdPatches[] = {', 1)[1].split('\n};', 1)[0]
+    rows = [ln for ln in body.splitlines() if ln.strip().startswith('{')]
+    assert rows, 'no rows emitted'
+    for ln in rows:
+        row = ln.split('//')[0].strip().rstrip(',')
+        assert row.count('{') == row.count('}') == 3, f'brace/field shape: {ln[:70]}'
+        # addr, size, kind, {formula}, group, id, v83, nexp, {expect}
+        flat = re.sub(r'\{[^{}]*\}', 'X', row[1:-1])
+        assert len([x for x in flat.split(',') if x.strip()]) == 9, \
+            f'expected 9 top-level fields, got: {flat}'
+        k = flat.split(',')[2].strip()
+        assert k in kinds, f'unknown kind {k!r}; dllmain.cpp declares {sorted(kinds)}'
+    ids = re.findall(r'#define (\w+)', src)
+    dup = {i for i in ids if ids.count(i) > 1}
+    assert not dup, f'duplicate #define: {sorted(dup)}'
+    passed = {r['id'] for r in
+              json.load(open(os.path.join(paths.DATA, 'v84-patchset.json')))['rows']
+              if r['verdict'] == 'PASS'}
+    emitted = set(re.findall(r'"(P\d+)"', src))
+    assert emitted <= passed, f'emitted rows that did not PASS: {sorted(emitted - passed)}'
+    print(f'  inc: ok ({len(rows)} rows, {len(ids)} defines, all rows PASS-backed)')
+
+
 if __name__ == '__main__':
     test_fit()
     have = all(os.path.exists(p) for p in (paths.V83, paths.V84_A, paths.EZORSIA))
@@ -91,4 +160,6 @@ if __name__ == '__main__':
     test_formulas_match_source()
     test_known_source_bugs()
     test_patchset_clean()
+    test_no_overlapping_writes()
+    test_generated_inc_wellformed()
     print('OK')

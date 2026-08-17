@@ -69,10 +69,17 @@ def main():
     J = json.load(open(os.path.join(paths.DATA, 'v84-patchset.json')))
     rows = {r['id']: r for r in J['rows']}
 
+    # Emit the SHIPPING set only. Groups A (anti-tamper/CRC), B (server IP) and L
+    # (window mode) are already done by the existing edits\ DLLs -- bypass, redirect,
+    # window-mode. Emitting them here would put two writers on the same functions,
+    # which is the exact failure this design exists to avoid, and group B would fight
+    # redirect-1.0.0.dll over the server address. K is optional gameplay caps.
+    skip_groups = set(J['drop_groups']) | set(J['optional_groups'])
+
     out, nfit, nconst, skipped, nadj = [], 0, 0, 0, 0
     for i, p in enumerate(base):
         r = rows.get(p['id'])
-        if not r or r['verdict'] != 'PASS':
+        if not r or r['verdict'] != 'PASS' or r['group'] in skip_groups:
             skipped += 1
             continue
         vals = [t[i]['value'] for t in tables]
@@ -106,13 +113,19 @@ def main():
                 '//   the address exists, the bytes decode to the same instruction shape as\n'
                 '//   the v83 site, and the write lands on that instruction\'s own operand.\n'
                 '// value = aW*W/2 + aH*H/2 + aWH*W*H + k\n'
-                '// { v84addr, size, kind, {aW,aH,aWH,k}, group, id, v83addr }\n'
+                '// expect[] is what these bytes read in the VERIFIED v84 image. The DLL\n'
+                '// compares before it writes, so a client that is not the one this table\n'
+                '// was checked against gets skipped instead of corrupted.\n'
+                '// { v84addr, size, kind, {aW,aH,aWH,k}, group, id, v83addr, nexp, {exp} }\n'
                 'static const HdPatch kHdPatches[] = {\n')
         for r, p, expr, fitted, adj in out:
             note = p['comment'].replace('\n', ' ').replace('*/', '* /')[:60]
+            eb = bytes.fromhex(r.get('expect') or '')
+            ex = '{' + ','.join(f'0x{b:02X}' for b in eb) + '}' if eb else '{0}'
             f.write(f'  {{ 0x{r["v84"]:08X}, {r.get("size84", r["size"]):3}, '
                     f'{KIND[r["op"]]:8}, {expr:>18},'
-                    f" '{r['group']}', \"{r['id']}\", 0x{r['v83']:08X} }},"
+                    f" '{r['group']}', \"{r['id']}\", 0x{r['v83']:08X},"
+                    f' {len(eb)}, {ex} }},'
                     f'{"" if fitted else "  // CONST (non-linear)"}'
                     f'{f"  // VANILLA-ADJ {adj:+d}" if adj else ""}'
                     f'  // {note}\n')

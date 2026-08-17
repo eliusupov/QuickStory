@@ -49,12 +49,14 @@ struct HdPatch {
     char      group;     // ticket 30 s2 group
     const char* id;      // row id in tools/hd/data/v84-patchset.json
     DWORD     v83;       // the Ezorsia address this came from, for auditing
+    int       nexp;      // bytes of `expect` that are meaningful (0 = do not check)
+    BYTE      expect[8]; // what these bytes read in the verified v84 image
 };
 
 #include "hd_patches.inc"
 
 static int g_w = 1280, g_h = 720;
-static int g_applied = 0, g_skipped = 0;
+static int g_applied = 0, g_skipped = 0, g_mismatch = 0, g_report = 0;
 
 static int Eval(const HdFormula& f) {
     return f.aW * g_w / 2 + f.aH * g_h / 2 + f.aWH * g_w * g_h + f.k;
@@ -107,24 +109,48 @@ static bool Cave(DWORD origin, int nops, void* body) {
 //
 // A cave body is NOT v84-neutral, though. It REPLAYS the instructions it displaced, so
 // wherever v84 displaced something different the asm has to be edited too. verify.py
-// diffs the displaced sequence between images and prints the ones that differ. As of
-// this table, 30 caves resolve, all tile their NOP run, and TWO need an edit:
+// diffs the displaced sequence and prints the ones that differ. 31 caves resolve, all
+// tile their NOP run, nothing branches into any displaced range, and exactly TWO need
+// their body edited:
 //
-//   AlwaysViewRestoreFix  0x00642105 -> 0x0065797A
-//       v83: test eax,eax ; je 0x64210F ; mov ecx,[eax] ; push eax
-//       v84: same, but `je 0x657984`               -> retarget the je
-//   AdjustStatusBarInput  0x008D217C -> 0x00906EBE
-//       v83: push 0x16 ; push edi ; lea ecx,[esi+0x0CD0]
-//       v84: push 0x16 ; push edi ; lea ecx,[esi+0x0D08]   -> CUIStatusBar grew 0x38
+//   AdjustStatusBarInput  0x008D217C -> HD_AdjustStatusBarInput_ORIGIN (9 bytes)
+//       v83 body: push nStatusBarY ; push edi ; lea ecx,[esi+0x0CD0]
+//       v84:      ... lea ecx,[esi + HD_AdjustStatusBarInput_MEMBER]     (0xD08)
+//   AdjustStatusBarBG     0x008D1F65 -> HD_AdjustStatusBarBG_ORIGIN (9 bytes, NOT 5)
+//       v83 body: push nStatusBarY ; movsd ; push 0
+//       v84 body: push nStatusBarY ; push edi ; lea ecx,[esi + HD_AdjustStatusBarBG_MEMBER]
+//       v84 recompiled this from a vtable call taking two ZXStrings BY VALUE into a
+//       direct thiscall taking them BY POINTER, so the v83 displaced run does not exist
+//       in v84. It becomes the same shape as AdjustStatusBarInput: 9 displaced bytes,
+//       4 NOPs after the jmp, retn HD_AdjustStatusBarBG_RETN.
 //
-// A third, AdjustStatusBarBG (v83 0x008D1F65 -> v84 0x00906D39), cannot be ported as
-// written at all: v84 recompiled it from a vtable call with an inline struct copy into
-// a direct thiscall, so its 5-byte NOP run no longer tiles. It needs 3 NOPs and a body
-// of `push nStatusBarY ; push edi ; jmp 0x00906D3C`. Not in the table yet.
+// AlwaysViewRestoreFix needs NO edit, despite v83 `je 0x64210F` vs v84 `je 0x657984`:
+// that is one relative branch, `74 06` in both images, and the cave body does not even
+// replay it -- it inverts the test onto a local label. Phase 1 called for a re-point
+// because the check compared capstone's rendered ABSOLUTE targets. It is fixed now.
+//
+// The CUIStatusBar member shift is NOT uniform -- do not assume one number. Members
+// below ~0xC40 moved +0x30 (0xA90 -> 0xAC0), those above moved +0x38 (0xCD0 -> 0xD08).
+// Re-check any struct offset baked into a body against verify.py's printed sequence.
 // #include "codecaves.h"
+
+// Every address in this table was verified against two memory dumps of ONE build of
+// the v84 client. If the owner's client is not that build -- a different sub-version,
+// or an edits\ DLL that relocated something -- an address that was a `mov eax,0x1FC`
+// is now the middle of some other instruction, and writing there corrupts it silently.
+// So: refuse unless the bytes still read what the offline check saw. Being skipped is
+// a visibly wrong screen; being wrong is a crash the owner cannot diagnose.
+static bool Expected(const HdPatch& p) {
+    if (p.nexp <= 0) return true;                 // nothing recorded -> nothing to check
+    MEMORY_BASIC_INFORMATION mbi{};
+    if (!VirtualQuery((LPCVOID)p.addr, &mbi, sizeof(mbi)) || mbi.State != MEM_COMMIT)
+        return false;
+    return memcmp((const void*)p.addr, p.expect, (SIZE_T)p.nexp) == 0;
+}
 
 static void ApplyAll() {
     for (const HdPatch& p : kHdPatches) {
+        if (!Expected(p)) { ++g_mismatch; continue; }
         bool ok = false;
         switch (p.kind) {
         case K_INT:   { int   v = Eval(p.f);          ok = Poke(p.addr, &v, 4); break; }
@@ -138,6 +164,17 @@ static void ApplyAll() {
     }
 }
 
+// The counts are the whole result of a gated manual test, so make them visible without
+// requiring a debugger. Nothing is written to disk -- see the SAFETY note at the top.
+static void Report() {
+    char msg[256];
+    wsprintfA(msg, "hd-res %dx%d: applied %d, skipped %d, byte-mismatch %d of %d\n",
+              g_w, g_h, g_applied, g_skipped, g_mismatch,
+              (int)(sizeof(kHdPatches) / sizeof(kHdPatches[0])));
+    OutputDebugStringA(msg);
+    if (g_report) MessageBoxA(NULL, msg, "hd-res", MB_OK | MB_ICONINFORMATION);
+}
+
 BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     if (reason != DLL_PROCESS_ATTACH) return TRUE;
     DisableThreadLibraryCalls(h);
@@ -149,7 +186,9 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     g_h = GetPrivateProfileIntA("general", "height", 720, ini);
     // The whole table is fitted for even W/H; odd values silently truncate the /2 terms.
     g_w &= ~1; g_h &= ~1;
+    g_report = GetPrivateProfileIntA("general", "report", 0, ini);
 
     ApplyAll();
+    Report();
     return TRUE;
 }

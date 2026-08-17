@@ -32,7 +32,8 @@
     "SHAPE": null,
     "SLOT": null
    },
-   "verdict": "PASS"
+   "verdict": "PASS",
+   "expect": "0f"
   },
   {
    "id": "P001",
@@ -55,6 +56,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov edi, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -81,6 +83,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov esi, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -107,6 +110,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "d4feffff",
    "v84_insn": "push 0xfffffed4",
    "v84_verdict": "ok",
    "van83": 4294966996,
@@ -133,6 +137,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "70feffff",
    "v84_insn": "push 0xfffffe70",
    "v84_verdict": "ok",
    "van83": 4294966896,
@@ -159,6 +164,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "push 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -185,6 +191,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "84030000",
    "v84_insn": "push 0x384",
    "v84_verdict": "ok",
    "van83": 800,
@@ -212,6 +219,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "3f020000",
    "v84_insn": "push 0x23f",
    "v84_verdict": "ok",
    "van83": 575,
@@ -238,6 +246,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "3f020000",
    "v84_insn": "push 0x23f",
    "v84_verdict": "ok",
    "van83": 575,
@@ -264,6 +273,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "84030000",
    "v84_insn": "push 0x384",
    "v84_verdict": "ok",
    "van83": 800,
@@ -294,6 +304,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "683c010000680001",
    "size84": 12,
    "cave_v84_seq": [
     "push 0x13c",
@@ -336,6 +347,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "6a68680001000068",
    "size84": 14,
    "cave_v84_seq": [
     "push 0x68",
@@ -378,6 +390,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "68a300000068f600",
    "size84": 16,
    "cave_v84_seq": [
     "push 0xa3",
@@ -420,6 +433,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "6a4e68fc0100006a",
    "size84": 14,
    "cave_v84_seq": [
     "push 0x4e",
@@ -462,6 +476,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "68ae010000689c01",
    "size84": 17,
    "cave_v84_seq": [
     "push 0x1ae",
@@ -504,6 +519,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "68660100006a5a68",
    "size84": 12,
    "cave_v84_seq": [
     "push 0x166",
@@ -541,6 +557,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "b2020000",
    "v84_insn": "push 0x2b2",
    "v84_verdict": "ok",
    "van83": 690,
@@ -570,6 +587,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "6a38682102000068",
    "size84": 17,
    "cave_v84_seq": [
     "push 0x38",
@@ -612,6 +630,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "6a166a596a6168b2",
    "size84": 11,
    "cave_v84_seq": [
     "push 0x16",
@@ -651,6 +670,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov eax, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -677,6 +697,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov eax, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -735,6 +756,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "02",
    "v84_insn": "push 0x80000002",
    "v84_verdict": "partial",
    "van83": 2147483649,
@@ -761,6 +783,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "02",
    "v84_insn": "push 0x80000002",
    "v84_verdict": "partial",
    "van83": 2147483649,
@@ -787,6 +810,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "02",
    "v84_insn": "push 0x80000002",
    "v84_verdict": "partial",
    "van83": 2147483649,
@@ -816,6 +840,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "68a500000068d400",
    "size84": 14,
    "cave_v84_seq": [
     "push 0xa5",
@@ -855,6 +880,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov dword ptr [ebp - 0x10], 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -881,6 +907,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov eax, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -907,6 +934,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "cmp ecx, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -933,6 +961,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov eax, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -959,6 +988,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "cmp ecx, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -985,6 +1015,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov eax, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -1011,6 +1042,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov eax, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -1037,6 +1069,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov ecx, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -1063,6 +1096,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov ecx, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -1089,6 +1123,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "ec010000",
    "v84_insn": "mov eax, 0x1ec",
    "v84_verdict": "ok",
    "van83": 508,
@@ -1116,6 +1151,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "9d010000",
    "v84_insn": "mov edx, 0x19d",
    "v84_verdict": "ok",
    "van83": 464,
@@ -1143,6 +1179,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "ec010000",
    "v84_insn": "mov eax, 0x1ec",
    "v84_verdict": "ok",
    "van83": 508,
@@ -1170,6 +1207,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "9d010000",
    "v84_insn": "mov edx, 0x19d",
    "v84_verdict": "ok",
    "van83": 464,
@@ -1197,6 +1235,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "fc010000",
    "regalloc": true,
    "v84_insn": "mov ecx, 0x1fc",
    "v84_verdict": "ok",
@@ -1224,6 +1263,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "d0010000",
    "v84_insn": "mov edx, 0x1d0",
    "v84_verdict": "ok",
    "van83": 464,
@@ -1250,6 +1290,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "f2010000",
    "v84_insn": "mov edx, 0x1f2",
    "v84_verdict": "ok",
    "van83": 498,
@@ -1276,6 +1317,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "ec010000",
    "v84_insn": "mov eax, 0x1ec",
    "v84_verdict": "ok",
    "van83": 508,
@@ -1303,6 +1345,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "9d010000",
    "v84_insn": "mov edx, 0x19d",
    "v84_verdict": "ok",
    "van83": 464,
@@ -1330,6 +1373,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "fc010000",
    "v84_insn": "mov eax, 0x1fc",
    "v84_verdict": "ok",
    "van83": 508,
@@ -1356,6 +1400,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "ec010000",
    "v84_insn": "mov eax, 0x1ec",
    "v84_verdict": "ok",
    "van83": 508,
@@ -1383,6 +1428,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "9d010000",
    "v84_insn": "mov edx, 0x19d",
    "v84_verdict": "ok",
    "van83": 464,
@@ -1410,6 +1456,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "ec010000",
    "v84_insn": "mov eax, 0x1ec",
    "v84_verdict": "ok",
    "van83": 508,
@@ -1437,6 +1484,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "9d010000",
    "v84_insn": "mov edx, 0x19d",
    "v84_verdict": "ok",
    "van83": 464,
@@ -1464,6 +1512,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "fc010000",
    "v84_insn": "mov eax, 0x1fc",
    "v84_verdict": "ok",
    "van83": 508,
@@ -1490,6 +1539,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "d0010000",
    "v84_insn": "mov edx, 0x1d0",
    "v84_verdict": "ok",
    "van83": 464,
@@ -1516,6 +1566,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "fc010000",
    "v84_insn": "mov eax, 0x1fc",
    "v84_verdict": "ok",
    "van83": 508,
@@ -1542,6 +1593,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "d0010000",
    "v84_insn": "mov edx, 0x1d0",
    "v84_verdict": "ok",
    "van83": 464,
@@ -1568,6 +1620,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "fc010000",
    "v84_insn": "mov eax, 0x1fc",
    "v84_verdict": "ok",
    "van83": 508,
@@ -1594,6 +1647,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "d0010000",
    "v84_insn": "mov edx, 0x1d0",
    "v84_verdict": "ok",
    "van83": 464,
@@ -1620,6 +1674,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "f2010000",
    "v84_insn": "mov eax, 0x1f2",
    "v84_verdict": "ok",
    "van83": 498,
@@ -1646,6 +1701,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "ec010000",
    "v84_insn": "mov eax, 0x1ec",
    "v84_verdict": "ok",
    "van83": 508,
@@ -1673,6 +1729,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "9d010000",
    "v84_insn": "mov edx, 0x19d",
    "v84_verdict": "ok",
    "van83": 464,
@@ -1700,6 +1757,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "b8",
    "v84_insn": "mov eax, 0x320",
    "v84_verdict": "opcode",
    "van83": 800,
@@ -1726,6 +1784,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov eax, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -1752,6 +1811,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "b9",
    "v84_insn": "mov ecx, 0x319",
    "v84_verdict": "opcode",
    "van83": 793,
@@ -1778,6 +1838,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "19030000",
    "v84_insn": "mov ecx, 0x319",
    "v84_verdict": "ok",
    "van83": 793,
@@ -1807,6 +1868,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "6804010000689001",
    "size84": 10,
    "cave_v84_seq": [
     "push 0x104",
@@ -1842,6 +1904,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "0f010000",
    "v84_insn": "push 0x10f",
    "v84_verdict": "ok",
    "van83": 271,
@@ -1868,6 +1931,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "0f010000",
    "v84_insn": "mov dword ptr [eax], 0x10f",
    "v84_verdict": "ok",
    "van83": 271,
@@ -1894,6 +1958,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "push 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -1920,6 +1985,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "push 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -1946,6 +2012,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "d4feffff",
    "v84_insn": "push 0xfffffed4",
    "v84_verdict": "ok",
    "van83": 4294966996,
@@ -1972,6 +2039,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "70feffff",
    "v84_insn": "push 0xfffffe70",
    "v84_verdict": "ok",
    "van83": 4294966896,
@@ -1998,6 +2066,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "push 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -2024,6 +2093,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "push 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -2053,6 +2123,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "6a3268a900000051",
    "size84": 8,
    "cave_v84_seq": [
     "push 0x32",
@@ -2093,6 +2164,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "6a1a689001000051",
    "size84": 8,
    "cave_v84_seq": [
     "push 0x1a",
@@ -2133,6 +2205,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "6a32687702000051",
    "size84": 8,
    "cave_v84_seq": [
     "push 0x32",
@@ -2173,6 +2246,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "68820000006a1451",
    "size84": 8,
    "cave_v84_seq": [
     "push 0x82",
@@ -2213,6 +2287,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "6a506a0951",
    "size84": 5,
    "cave_v84_seq": [
     "push 0x50",
@@ -2253,6 +2328,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "6a20683d010000",
    "size84": 7,
    "cave_v84_seq": [
     "push 0x20",
@@ -2291,6 +2367,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "6a2068e2010000",
    "size84": 7,
    "cave_v84_seq": [
     "push 0x20",
@@ -2329,6 +2406,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "6a566a1151",
    "size84": 5,
    "cave_v84_seq": [
     "push 0x56",
@@ -2369,6 +2447,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "ba3e010000",
    "size84": 5,
    "cave_v84_seq": [
     "mov edx, 0x13e"
@@ -2405,6 +2484,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "6a106859010000",
    "size84": 7,
    "cave_v84_seq": [
     "push 0x10",
@@ -2440,6 +2520,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "push 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -2466,6 +2547,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov edi, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -2492,6 +2574,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "push 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -2518,6 +2601,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "d4feffff",
    "v84_insn": "push 0xfffffed4",
    "v84_verdict": "ok",
    "van83": 4294966996,
@@ -2544,6 +2628,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "70feffff",
    "v84_insn": "push 0xfffffe70",
    "v84_verdict": "ok",
    "van83": 4294966896,
@@ -2570,6 +2655,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov eax, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -2596,6 +2682,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "64",
    "v84_insn": "push 0x64",
    "v84_verdict": "ok",
    "van83": 100,
@@ -2622,6 +2709,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "13010000",
    "v84_insn": "push 0x113",
    "v84_verdict": "ok",
    "van83": 275,
@@ -2648,6 +2736,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "90010000",
    "v84_insn": "mov dword ptr [esi], 0x190",
    "v84_verdict": "ok",
    "van83": 400,
@@ -2674,6 +2763,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "2c010000",
    "v84_insn": "mov dword ptr [ebx + 0x93c], 0x12c",
    "v84_verdict": "ok",
    "van83": 300,
@@ -2700,6 +2790,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "d4feffff",
    "v84_insn": "add ecx, 0xfffffed4",
    "v84_verdict": "ok",
    "van83": 4294966996,
@@ -2726,6 +2817,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "70feffff",
    "v84_insn": "add ecx, 0xfffffe70",
    "v84_verdict": "ok",
    "van83": 4294966896,
@@ -2752,6 +2844,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov eax, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -2778,6 +2871,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov eax, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -2804,6 +2898,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov ecx, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -2830,6 +2925,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov ecx, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -2856,6 +2952,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "push 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -2882,6 +2979,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov eax, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -2908,6 +3006,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov eax, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -2934,6 +3033,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov eax, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -2960,6 +3060,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov eax, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -2986,6 +3087,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov eax, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -3012,6 +3114,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov eax, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -3038,6 +3141,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov eax, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -3064,6 +3168,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov eax, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -3090,6 +3195,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov eax, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -3116,6 +3222,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov eax, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -3142,6 +3249,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov eax, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -3168,6 +3276,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov eax, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -3194,6 +3303,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov eax, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -3220,6 +3330,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov eax, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -3265,6 +3376,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "b8850200002b45e4",
    "size84": 10,
    "cave_v84_seq": [
     "mov eax, 0x285",
@@ -3290,22 +3402,12 @@
    "size": 4,
    "value": 1115,
    "comment": "mov eax,800 ; RelMove?\t//game version number for login frames that hug the side of the screen //you will still need to offset ntop, and that may require a code cave if your height resolution is too big",
-   "drop": null,
+   "drop": "guard `MainMain::bigLoginFrame` is false in the shipped configuration (mutually exclusive arm)",
    "fixed": false,
    "tier": "T1-context",
-   "v84": 6329574,
-   "checks": {
-    "ADDR": true,
-    "DUAL": true,
-    "FIT": true,
-    "SHAPE": true,
-    "SLOT": true
-   },
-   "verdict": "PASS",
-   "v84_insn": "mov eax, 0x285",
-   "v84_verdict": "ok",
-   "van83": 645,
-   "van84": 645
+   "v84": null,
+   "checks": {},
+   "verdict": "DROPPED"
   },
   {
    "id": "P116",
@@ -3316,22 +3418,12 @@
    "size": 4,
    "value": -360,
    "comment": "push -300\t\t\t\t!!game login frame!! turn this on if you edit UI.wz and use a frame that matches your res",
-   "drop": null,
+   "drop": "guard `MainMain::CustomLoginFrame` is false in the shipped configuration (mutually exclusive arm)",
    "fixed": false,
    "tier": "T1-context",
-   "v84": 6330039,
-   "checks": {
-    "ADDR": true,
-    "DUAL": true,
-    "FIT": true,
-    "SHAPE": true,
-    "SLOT": true
-   },
-   "verdict": "PASS",
-   "v84_insn": "push 0xfffffed4",
-   "v84_verdict": "ok",
-   "van83": 4294966996,
-   "van84": 4294966996
+   "v84": null,
+   "checks": {},
+   "verdict": "DROPPED"
   },
   {
    "id": "P117",
@@ -3342,22 +3434,12 @@
    "size": 4,
    "value": -640,
    "comment": "push -400 ; RelMove?\t\t\t\t!!game login frame!! turn this on if you edit UI.wz and use a frame that matches your res",
-   "drop": null,
+   "drop": "guard `MainMain::CustomLoginFrame` is false in the shipped configuration (mutually exclusive arm)",
    "fixed": false,
    "tier": "T1-context",
-   "v84": 6330045,
-   "checks": {
-    "ADDR": true,
-    "DUAL": true,
-    "FIT": true,
-    "SHAPE": true,
-    "SLOT": true
-   },
-   "verdict": "PASS",
-   "v84_insn": "push 0xfffffe70",
-   "v84_verdict": "ok",
-   "van83": 4294966896,
-   "van84": 4294966896
+   "v84": null,
+   "checks": {},
+   "verdict": "DROPPED"
   },
   {
    "id": "P118",
@@ -3380,6 +3462,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "d4feffff",
    "v84_insn": "push 0xfffffed4",
    "v84_verdict": "ok",
    "van83": 4294966996,
@@ -3406,6 +3489,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "d4feffff",
    "v84_insn": "push 0xfffffed4",
    "v84_verdict": "ok",
    "van83": 4294966996,
@@ -3448,6 +3532,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "0c",
    "v84_insn": "push dword ptr [ebp + 0xc]",
    "v84_verdict": "ok",
    "van83": null,
@@ -3514,6 +3599,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "push 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -3540,6 +3626,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "2c010000",
    "v84_insn": "mov eax, 0x12c",
    "v84_verdict": "ok",
    "van83": 300,
@@ -3585,6 +3672,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "68600100006a7d6a",
    "size84": 11,
    "cave_v84_seq": [
     "push 0x160",
@@ -3624,6 +3712,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "96000000",
    "v84_insn": "mov eax, 0x96",
    "v84_verdict": "ok",
    "van83": 150,
@@ -3650,6 +3739,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "aa000000",
    "v84_insn": "mov edx, 0xaa",
    "v84_verdict": "ok",
    "van83": 170,
@@ -3676,6 +3766,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "db000000",
    "v84_insn": "mov ecx, 0xdb",
    "v84_verdict": "ok",
    "van83": 219,
@@ -3702,6 +3793,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "ef000000",
    "v84_insn": "mov ebx, 0xef",
    "v84_verdict": "ok",
    "van83": 239,
@@ -3728,6 +3820,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "c8000000",
    "v84_insn": "mov ecx, 0xc8",
    "v84_verdict": "ok",
    "van83": 200,
@@ -3754,6 +3847,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "63010000",
    "v84_insn": "mov eax, 0x163",
    "v84_verdict": "ok",
    "van83": 355,
@@ -3780,6 +3874,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "96000000",
    "v84_insn": "mov eax, 0x96",
    "v84_verdict": "ok",
    "van83": 150,
@@ -3806,6 +3901,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "aa000000",
    "v84_insn": "mov edx, 0xaa",
    "v84_verdict": "ok",
    "van83": 170,
@@ -3832,6 +3928,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "db000000",
    "v84_insn": "mov ecx, 0xdb",
    "v84_verdict": "ok",
    "van83": 219,
@@ -3858,6 +3955,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "ef000000",
    "v84_insn": "mov ebx, 0xef",
    "v84_verdict": "ok",
    "van83": 239,
@@ -3884,6 +3982,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "2f",
    "v84_insn": "push 0x2f",
    "v84_verdict": "ok",
    "van83": 47,
@@ -3910,6 +4009,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "b8000000",
    "v84_insn": "push 0xb8",
    "v84_verdict": "ok",
    "van83": 184,
@@ -3939,6 +4039,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "68a7000000681c02",
    "size84": 17,
    "cave_v84_seq": [
     "push 0xa7",
@@ -3978,7 +4079,8 @@
     "BLOCK": true,
     "SLOT": null
    },
-   "verdict": "PASS"
+   "verdict": "PASS",
+   "expect": "8b45f03bc3741538"
   },
   {
    "id": "P142",
@@ -4001,6 +4103,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "push 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -4027,6 +4130,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "push 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -4053,6 +4157,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "push 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -4079,6 +4184,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "push 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -4105,6 +4211,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "push 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -4131,6 +4238,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "push 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -4157,6 +4265,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "push 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -4183,6 +4292,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "push 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -4209,6 +4319,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "push 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -4235,6 +4346,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "push 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -4261,6 +4373,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "90010000",
    "v84_insn": "mov edi, 0x190",
    "v84_verdict": "ok",
    "van83": 400,
@@ -4287,6 +4400,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "2c010000",
    "v84_insn": "mov esi, 0x12c",
    "v84_verdict": "ok",
    "van83": 300,
@@ -4313,6 +4427,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov ecx, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -4339,6 +4454,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov ecx, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -4365,6 +4481,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov ecx, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -4391,6 +4508,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov ecx, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -4433,6 +4551,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "90010000",
    "v84_insn": "add eax, 0x190",
    "v84_verdict": "ok",
    "van83": 400,
@@ -4459,6 +4578,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov ecx, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -4485,6 +4605,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov ecx, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -4511,6 +4632,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "70feffff",
    "v84_insn": "add edi, 0xfffffe70",
    "v84_verdict": "ok",
    "van83": 4294966896,
@@ -4537,6 +4659,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov ecx, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -4563,6 +4686,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov ecx, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -4589,6 +4713,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov ecx, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -4615,6 +4740,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov ecx, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -4641,6 +4767,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "lea esi, [ecx + 0x258]",
    "v84_verdict": "ok",
    "van83": null,
@@ -4667,6 +4794,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "lea esi, [ecx + 0x320]",
    "v84_verdict": "ok",
    "van83": null,
@@ -4693,6 +4821,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "d4feffff",
    "v84_insn": "mov esi, 0xfffffed4",
    "v84_verdict": "ok",
    "van83": 4294966996,
@@ -4719,6 +4848,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "70feffff",
    "v84_insn": "mov esi, 0xfffffe70",
    "v84_verdict": "ok",
    "van83": 4294966896,
@@ -4745,6 +4875,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov dword ptr [ebp - 0x20], 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -4771,6 +4902,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov dword ptr [ebp - 0x1c], 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -4797,6 +4929,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov dword ptr [ebp - 0x24], 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -4823,6 +4956,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov dword ptr [ebp - 0x20], 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -4849,6 +4983,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "90010000",
    "v84_insn": "mov ebx, 0x190",
    "v84_verdict": "ok",
    "van83": 400,
@@ -4875,6 +5010,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "2c010000",
    "v84_insn": "add eax, 0x12c",
    "v84_verdict": "ok",
    "van83": 300,
@@ -4901,6 +5037,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "2c010000",
    "v84_insn": "sub eax, 0x12c",
    "v84_verdict": "ok",
    "van83": 300,
@@ -4930,6 +5067,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "85c074068b0850",
    "size84": 7,
    "cave_v84_seq": [
     "test eax, eax",
@@ -4969,6 +5107,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "push 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -4995,6 +5134,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "70feffff",
    "v84_insn": "and ecx, 0xfffffe70",
    "v84_verdict": "ok",
    "van83": 4294966896,
@@ -5021,6 +5161,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "90010000",
    "v84_insn": "push 0x190",
    "v84_verdict": "ok",
    "van83": 400,
@@ -5047,6 +5188,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "push 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -5073,6 +5215,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "70feffff",
    "v84_insn": "push 0xfffffe70",
    "v84_verdict": "ok",
    "van83": 4294966896,
@@ -5099,6 +5242,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "push 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -5125,6 +5269,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "004c1d00",
    "v84_insn": "mov esi, 0x1d4c00",
    "v84_verdict": "ok",
    "van83": 1920000,
@@ -5151,6 +5296,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "00f91500",
    "v84_insn": "push 0x15f900",
    "v84_verdict": "ok",
    "van83": 1440000,
@@ -5177,6 +5323,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "00530700",
    "v84_insn": "mov edi, 0x75300",
    "v84_verdict": "ok",
    "van83": 480000,
@@ -5203,6 +5350,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov edx, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -5229,6 +5377,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov ecx, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -5255,6 +5404,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "push 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -5281,6 +5431,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "push 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -5307,6 +5458,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "push 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -5333,6 +5485,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "push 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -5362,6 +5515,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "5bc9c20400",
    "size84": 5,
    "cave_v84_seq": [
     "pop ebx",
@@ -5415,6 +5569,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "15010000",
    "v84_insn": "sub ebx, 0x115",
    "v84_verdict": "ok",
    "van83": 277,
@@ -5441,6 +5596,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "8d010000",
    "v84_insn": "lea eax, [eax + esi + 0x18d]",
    "v84_verdict": "ok",
    "van83": null,
@@ -5467,6 +5623,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "15010000",
    "v84_insn": "sub ebx, 0x115",
    "v84_verdict": "ok",
    "van83": 277,
@@ -5493,6 +5650,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "8d010000",
    "v84_insn": "lea eax, [eax + esi + 0x18d]",
    "v84_verdict": "ok",
    "van83": null,
@@ -5519,6 +5677,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "e3fcffff",
    "v84_insn": "lea eax, [eax + ecx - 0x31d]",
    "v84_verdict": "ok",
    "van83": null,
@@ -5545,6 +5704,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "e3fcffff",
    "v84_insn": "lea eax, [eax + edx - 0x31d]",
    "v84_verdict": "ok",
    "van83": null,
@@ -5571,6 +5731,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "08020000",
    "v84_insn": "push 0x208",
    "v84_verdict": "ok",
    "van83": 520,
@@ -5597,6 +5758,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov eax, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -5623,6 +5785,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov eax, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -5649,6 +5812,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "push 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -5675,6 +5839,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "push 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -5701,6 +5866,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "push 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -5727,6 +5893,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "lea eax, [esi + 0x320]",
    "v84_verdict": "ok",
    "van83": null,
@@ -5753,6 +5920,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "push 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -5779,6 +5947,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "lea eax, [esi + 0x320]",
    "v84_verdict": "ok",
    "van83": null,
@@ -5805,6 +5974,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov ecx, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -5831,6 +6001,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov ecx, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -5857,6 +6028,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov edx, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -5883,6 +6055,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov edi, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -5909,6 +6082,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "a7010000",
    "v84_insn": "mov edx, 0x1a7",
    "v84_verdict": "ok",
    "van83": 423,
@@ -5935,6 +6109,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "28010000",
    "v84_insn": "mov edx, 0x128",
    "v84_verdict": "ok",
    "van83": 296,
@@ -5961,6 +6136,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "cmp edx, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -5987,6 +6163,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "d0020000",
    "v84_insn": "mov ecx, 0x2d0",
    "v84_verdict": "ok",
    "van83": 720,
@@ -6013,6 +6190,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "01010000",
    "v84_insn": "push 0x101",
    "v84_verdict": "ok",
    "van83": 257,
@@ -6039,6 +6217,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "06000000",
    "v84_insn": "mov dword ptr [ebp - 0x18], 6",
    "v84_verdict": "ok",
    "van83": 6,
@@ -6065,6 +6244,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "5e010000",
    "v84_insn": "push 0x15e",
    "v84_verdict": "ok",
    "van83": 290,
@@ -6095,6 +6275,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "8b471083f806",
    "size84": 6,
    "cave_v84_seq": [
     "mov eax, dword ptr [edi + 0x10]",
@@ -6130,6 +6311,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "5e010000",
    "v84_insn": "mov esi, 0x15e",
    "v84_verdict": "ok",
    "van83": 290,
@@ -6160,6 +6342,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "68ff000000",
    "size84": 5,
    "cave_v84_seq": [
     "push 0xff"
@@ -6196,6 +6379,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "05701700006a03",
    "size84": 7,
    "cave_v84_seq": [
     "add eax, 0x1770",
@@ -6231,6 +6415,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "b2",
    "v84_insn": "and eax, 0xffffffb2",
    "v84_verdict": "ok",
    "van83": 178,
@@ -6257,6 +6442,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "bb010000",
    "v84_insn": "add eax, 0x1bb",
    "v84_verdict": "ok",
    "van83": 443,
@@ -6283,6 +6469,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "bc010000",
    "v84_insn": "push 0x1bc",
    "v84_verdict": "ok",
    "van83": 504,
@@ -6310,6 +6497,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "bb010000",
    "v84_insn": "add eax, 0x1bb",
    "v84_verdict": "ok",
    "van83": 443,
@@ -6336,6 +6524,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov eax, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -6362,6 +6551,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov eax, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -6388,6 +6578,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "push 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -6414,6 +6605,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "push 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -6440,6 +6632,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "1e010000",
    "v84_insn": "push 0x11e",
    "v84_verdict": "ok",
    "van83": 286,
@@ -6466,6 +6659,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "f2000000",
    "v84_insn": "push 0xf2",
    "v84_verdict": "ok",
    "van83": 242,
@@ -6492,6 +6686,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "3f0d0300",
    "v84_insn": "mov eax, 0x30d3f",
    "v84_verdict": "ok",
    "van83": 2142096969,
@@ -6518,6 +6713,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "8c000000",
    "v84_insn": "mov esi, 0x8c",
    "v84_verdict": "ok",
    "van83": 77777,
@@ -6544,6 +6740,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "42020000",
    "v84_insn": "push 0x242",
    "v84_verdict": "ok",
    "van83": 578,
@@ -6570,6 +6767,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "push 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -6599,6 +6797,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "6a16538bce",
    "size84": 5,
    "cave_v84_seq": [
     "push 0x16",
@@ -6636,6 +6835,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "15020000",
    "v84_insn": "add eax, 0x215",
    "v84_verdict": "ok",
    "van83": 533,
@@ -6662,6 +6862,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "87020000",
    "v84_insn": "push 0x287",
    "v84_verdict": "ok",
    "van83": 647,
@@ -6688,6 +6889,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "42020000",
    "v84_insn": "push 0x242",
    "v84_verdict": "ok",
    "van83": 578,
@@ -6714,6 +6916,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "push 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -6743,6 +6946,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "6a16578d8e",
    "size84": 9,
    "cave_v84_seq": [
     "push 0x16",
@@ -6780,6 +6984,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "42020000",
    "v84_insn": "push 0x242",
    "v84_verdict": "ok",
    "van83": 578,
@@ -6806,6 +7011,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "push 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -6835,6 +7041,7 @@
     "SLOT": null
    },
    "verdict": "PASS",
+   "expect": "6a16578d8e080d00",
    "size84": 9,
    "cave_v84_seq": [
     "push 0x16",
@@ -6872,6 +7079,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "37020000",
    "v84_insn": "push 0x237",
    "v84_verdict": "ok",
    "van83": 567,
@@ -6898,6 +7106,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "45020000",
    "v84_insn": "push 0x245",
    "v84_verdict": "ok",
    "van83": 581,
@@ -6924,6 +7133,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "45020000",
    "v84_insn": "push 0x245",
    "v84_verdict": "ok",
    "van83": 581,
@@ -6950,6 +7160,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "42020000",
    "v84_insn": "push 0x242",
    "v84_verdict": "ok",
    "van83": 578,
@@ -6976,6 +7187,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "push 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -7002,6 +7214,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "45020000",
    "v84_insn": "push 0x245",
    "v84_verdict": "ok",
    "van83": 581,
@@ -7028,6 +7241,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "45020000",
    "v84_insn": "push 0x245",
    "v84_verdict": "ok",
    "van83": 581,
@@ -7054,6 +7268,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "45020000",
    "v84_insn": "push 0x245",
    "v84_verdict": "ok",
    "van83": 581,
@@ -7080,6 +7295,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "79fdffff",
    "v84_insn": "lea edi, [eax - 0x287]",
    "v84_verdict": "ok",
    "van83": null,
@@ -7106,6 +7322,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "55feffff",
    "v84_insn": "lea ebx, [eax - 0x1ab]",
    "v84_verdict": "ok",
    "van83": null,
@@ -7132,6 +7349,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "44020000",
    "v84_insn": "push 0x244",
    "v84_verdict": "ok",
    "van83": 580,
@@ -7158,6 +7376,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "44020000",
    "v84_insn": "push 0x244",
    "v84_verdict": "ok",
    "van83": 580,
@@ -7184,6 +7403,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "15020000",
    "v84_insn": "add esi, 0x215",
    "v84_verdict": "ok",
    "van83": 533,
@@ -7210,6 +7430,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "87020000",
    "v84_insn": "push 0x287",
    "v84_verdict": "ok",
    "van83": 647,
@@ -7236,6 +7457,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov eax, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -7262,6 +7484,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov eax, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -7288,6 +7511,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "1f030000",
    "regalloc": true,
    "v84_insn": "mov ecx, 0x31f",
    "v84_verdict": "ok",
@@ -7315,6 +7539,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "57020000",
    "v84_insn": "mov eax, 0x257",
    "v84_verdict": "ok",
    "van83": 599,
@@ -7341,6 +7566,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "d4feffff",
    "v84_insn": "push 0xfffffed4",
    "v84_verdict": "ok",
    "van83": 4294966996,
@@ -7367,6 +7593,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "push 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -7393,6 +7620,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "2c010000",
    "v84_insn": "push 0x12c",
    "v84_verdict": "ok",
    "van83": 300,
@@ -7435,6 +7663,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "d4feffff",
    "v84_insn": "and eax, 0xfffffed4",
    "v84_verdict": "ok",
    "van83": 4294966996,
@@ -7461,6 +7690,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "d4feffff",
    "v84_insn": "and eax, 0xfffffed4",
    "v84_verdict": "ok",
    "van83": 4294966996,
@@ -7487,6 +7717,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "d4feffff",
    "v84_insn": "and esi, 0xfffffed4",
    "v84_verdict": "ok",
    "van83": 4294966996,
@@ -7513,6 +7744,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov eax, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -7539,6 +7771,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "0a010000",
    "v84_insn": "push 0x10a",
    "v84_verdict": "ok",
    "van83": 266,
@@ -7565,6 +7798,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "0b010000",
    "v84_insn": "push 0x10b",
    "v84_verdict": "ok",
    "van83": 267,
@@ -7591,6 +7825,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "2c010000",
    "v84_insn": "push 0x12c",
    "v84_verdict": "ok",
    "van83": 300,
@@ -7617,6 +7852,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "90010000",
    "v84_insn": "push 0x190",
    "v84_verdict": "ok",
    "van83": 400,
@@ -7643,6 +7879,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov ecx, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -7669,6 +7906,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "cmp edi, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -7695,6 +7933,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "bc020000",
    "v84_insn": "mov edx, 0x2bc",
    "v84_verdict": "ok",
    "van83": 700,
@@ -7721,6 +7960,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov ecx, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -7747,6 +7987,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "cmp edi, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -7773,6 +8014,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "bc020000",
    "v84_insn": "mov edx, 0x2bc",
    "v84_verdict": "ok",
    "van83": 700,
@@ -7799,6 +8041,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov edx, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -7825,6 +8068,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov edx, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -7851,6 +8095,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "d4feffff",
    "v84_insn": "mov dword ptr [ebp - 0x34], 0xfffffed4",
    "v84_verdict": "ok",
    "van83": 4294966996,
@@ -7877,6 +8122,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "2c010000",
    "v84_insn": "mov dword ptr [ebp - 0x2c], 0x12c",
    "v84_verdict": "ok",
    "van83": 300,
@@ -7903,6 +8149,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "e0fcffff",
    "v84_insn": "lea eax, [ecx + eax - 0x320]",
    "v84_verdict": "ok",
    "van83": null,
@@ -7929,6 +8176,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "mov ecx, 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -7955,6 +8203,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "a8fdffff",
    "v84_insn": "lea eax, [esi + eax - 0x258]",
    "v84_verdict": "ok",
    "van83": null,
@@ -7981,6 +8230,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "mov ecx, 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -8007,6 +8257,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "d4feffff",
    "v84_insn": "push 0xfffffed4",
    "v84_verdict": "ok",
    "van83": 4294966996,
@@ -8033,6 +8284,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "70feffff",
    "v84_insn": "push 0xfffffe70",
    "v84_verdict": "ok",
    "van83": 4294966896,
@@ -8059,7 +8311,8 @@
     "BLOCK": true,
     "SLOT": null
    },
-   "verdict": "PASS"
+   "verdict": "PASS",
+   "expect": "9090909090"
   },
   {
    "id": "P296",
@@ -8098,6 +8351,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "2c010000",
    "v84_insn": "push 0x12c",
    "v84_verdict": "ok",
    "van83": 300,
@@ -8124,6 +8378,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "push 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -8150,6 +8405,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "push 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -8192,6 +8448,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "push 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -8234,6 +8491,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "push 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -8330,6 +8588,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "58020000",
    "v84_insn": "push 0x258",
    "v84_verdict": "ok",
    "van83": 600,
@@ -8356,6 +8615,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "20030000",
    "v84_insn": "push 0x320",
    "v84_verdict": "ok",
    "van83": 800,
@@ -8382,6 +8642,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "0f010000",
    "v84_insn": "push 0x10f",
    "v84_verdict": "ok",
    "van83": 271,
@@ -8408,6 +8669,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "d4feffff",
    "v84_insn": "add eax, 0xfffffed4",
    "v84_verdict": "ok",
    "van83": 4294966996,
@@ -8434,6 +8696,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
+   "expect": "b8",
    "v84_insn": "mov eax, 0xb40970",
    "v84_verdict": "opcode",
    "van83": 11466192,
@@ -8475,7 +8738,8 @@
     "SHAPE": null,
     "SLOT": null
    },
-   "verdict": "PASS"
+   "verdict": "PASS",
+   "expect": "36332e3235312e32"
   },
   {
    "id": "P315",
@@ -8497,7 +8761,8 @@
     "SHAPE": null,
     "SLOT": null
    },
-   "verdict": "PASS"
+   "verdict": "PASS",
+   "expect": "36332e3235312e32"
   },
   {
    "id": "P316",
@@ -8519,7 +8784,8 @@
     "SHAPE": null,
     "SLOT": null
    },
-   "verdict": "PASS"
+   "verdict": "PASS",
+   "expect": "36332e3235312e32"
   },
   {
    "id": "P317",
@@ -8541,7 +8807,8 @@
     "SHAPE": null,
     "SLOT": null
    },
-   "verdict": "PASS"
+   "verdict": "PASS",
+   "expect": "36332e3235312e32"
   },
   {
    "id": "P318",
@@ -8563,7 +8830,8 @@
     "SHAPE": null,
     "SLOT": null
    },
-   "verdict": "PASS"
+   "verdict": "PASS",
+   "expect": "00000000f8690841"
   },
   {
    "id": "P319",
@@ -8585,7 +8853,8 @@
     "SHAPE": null,
     "SLOT": null
    },
-   "verdict": "PASS"
+   "verdict": "PASS",
+   "expect": "90010000"
   },
   {
    "id": "P320",
@@ -8607,7 +8876,8 @@
     "SHAPE": null,
     "SLOT": null
    },
-   "verdict": "PASS"
+   "verdict": "PASS",
+   "expect": "2c010000"
   },
   {
    "id": "P321",
@@ -8629,7 +8899,8 @@
     "SHAPE": null,
     "SLOT": null
    },
-   "verdict": "PASS"
+   "verdict": "PASS",
+   "expect": "90010000"
   },
   {
    "id": "P322",
@@ -8651,7 +8922,8 @@
     "SHAPE": null,
     "SLOT": null
    },
-   "verdict": "PASS"
+   "verdict": "PASS",
+   "expect": "2c010000"
   },
   {
    "id": "P323",
@@ -8673,7 +8945,8 @@
     "SHAPE": null,
     "SLOT": null
    },
-   "verdict": "PASS"
+   "verdict": "PASS",
+   "expect": "2272657175697265"
   },
   {
    "id": "P324",
@@ -8695,7 +8968,8 @@
     "SHAPE": null,
     "SLOT": null
    },
-   "verdict": "PASS"
+   "verdict": "PASS",
+   "expect": "22"
   },
   {
    "id": "P325",
@@ -8717,7 +8991,8 @@
     "SHAPE": null,
     "SLOT": null
    },
-   "verdict": "PASS"
+   "verdict": "PASS",
+   "expect": "7265717569726541"
   },
   {
    "id": "P326",
@@ -8739,7 +9014,8 @@
     "SHAPE": null,
     "SLOT": null
    },
-   "verdict": "PASS"
+   "verdict": "PASS",
+   "expect": "6d"
   }
  ]
 }

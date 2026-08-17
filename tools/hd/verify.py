@@ -179,6 +179,19 @@ def main():
         # site still reads 600. Writing a height there under-allocates below 608.
         'P113': {'drop': 'sizeof, not a resolution constant (v84 reads 608)'},
     }
+    # ---- conditional arms the shipped configuration does not take.
+    # Client.cpp guards six blocks. `bigLoginFrame` defaults to false (MainMain.cpp:11)
+    # and is only set true by CustomLoginFrame, which needs a hand-edited UI.wz we are
+    # not shipping. So the `bigLoginFrame` arm must NOT be applied -- and it is not
+    # merely redundant: its WriteInt at 0x005F464D+1 lands on bytes +1..+4 of the
+    # VersionNumberFix cave's own `E9 rel32`, so applying both sends the login screen
+    # to a garbage address. They are the two arms of one if/else.
+    GUARD_FALSE = {'MainMain::bigLoginFrame', 'MainMain::CustomLoginFrame'}
+    for p in patches:
+        if p.get('guard') in GUARD_FALSE:
+            FIXED[p['id']] = {'drop': f'guard `{p["guard"]}` is false in the shipped '
+                                      f'configuration (mutually exclusive arm)'}
+
     # v84's manifest literal is one byte longer than v83's
     for p in patches:
         if p['op'] == 'FillBytes' and p['site'] == 0x00C08459:
@@ -217,6 +230,12 @@ def main():
         # ADDR
         c['ADDR'] = (0 <= v84_target - paths.BASE
                      and v84_target - paths.BASE + p['size'] <= len(V84))
+        # EXPECT: the bytes this patch is about to overwrite, as they stand in the
+        # verified v84 image. The DLL compares them before writing, so a client that is
+        # not the one this table was verified against is skipped rather than corrupted.
+        if c['ADDR']:
+            o = v84_target - paths.BASE
+            row['expect'] = V84[o:o + min(p['size'], 8)].hex()
         # DUAL
         a, b = v84_anchor - paths.BASE, v84_anchor - paths.BASE + max(p['size'], 8)
         c['DUAL'] = b <= len(V84B) and V84[a:b] == V84B[a:b]

@@ -163,6 +163,37 @@ def _parse():
             fname = m.group(1)
         fmap[i] = fname
 
+    # map line number -> innermost `if (...)` / `else` guard.
+    #
+    # The source is NOT a flat list of writes. Six blocks are conditional, and one pair
+    # is mutually exclusive by construction:
+    #     if (MainMain::bigLoginFrame) { WriteInt(0x005F464D+1, W-165); }
+    #     else                         { CodeCave(VersionNumberFix, 0x005F464D, 10); }
+    # Flattening those emits both, and the WriteInt then lands on bytes +1..+4 of the
+    # cave's own `E9 rel32` -- the login screen jumps to garbage. Nothing caught this
+    # until the write-overlap check; it is exactly the failure mode the three original
+    # source bugs had, arriving by a different route.
+    gmap, stack, closed = {}, [], None
+    for i, l in enumerate(lines, 1):
+        code = l.split('//')[0]
+        gmap[i] = stack[-1][0] if stack else None
+        m = re.match(r'\s*(?:\}\s*)?(else\s+if|if|else)\b\s*(\([^{]*\))?', code)
+        if m and '{' in code:
+            if m.group(1).startswith('else'):
+                # `}` and `else` are usually on separate lines, so the `if` arm has
+                # already been popped -- pair with the one that closed most recently.
+                cond = 'NOT(' + (closed or '?') + ')'
+                if m.group(1) == 'else if':
+                    cond += ' AND ' + (m.group(2) or '').strip()[1:-1].strip()
+            else:
+                cond = (m.group(2) or '').strip()[1:-1].strip()
+            stack.append([cond, code.count('{') - code.count('}')])
+            continue
+        if stack:
+            stack[-1][1] += code.count('{') - code.count('}')
+            while stack and stack[-1][1] <= 0:
+                closed = stack.pop()[0]
+
     # byte-array literals: unsigned char NAME[] = { 0x.., .. };
     arrays = {}
     for m in re.finditer(r'unsigned char (\w+)\[\]\s*=\s*\{([^}]*)\}', src):
@@ -199,7 +230,7 @@ def _parse():
         rec = {
             'op': op, 'site': site, 'off': off, 'target': site + off,
             'src_line': i, 'comment': comment, 'func': fmap[i],
-            'addr_expr': a0.strip(),
+            'addr_expr': a0.strip(), 'guard': gmap.get(i),
         }
 
         # ---- value + size
