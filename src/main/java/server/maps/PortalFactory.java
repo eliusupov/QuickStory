@@ -44,6 +44,24 @@ public class PortalFactory {
         return ret;
     }
 
+    /**
+     * The whole of what the server reads out of a {@code portal} node: {@code pn}, {@code tn},
+     * {@code tm}, {@code x}, {@code y}, {@code script}, and the node's <em>name</em>. Nothing else.
+     * {@code onlyOnce}, {@code hideTooltip}, {@code delay}, {@code horizontalImpact} and
+     * {@code image} appear in the WZ and are read <strong>nowhere</strong> in this codebase - the
+     * client uses its own copy of them, exactly as it does for foothold geometry.
+     * <p>
+     * That is what makes a portal section safe to take from a newer client wholesale: only
+     * {@code script} is server-owned (it names a file under {@code scripts/portal/}, and a name we
+     * cannot resolve is worse than none), while every other leaf is the client's business. See
+     * ticket 53.
+     * <p>
+     * The node name is an <em>array index</em>, and {@code PacketCreator.getWarpToMap} sends
+     * {@code portal.getId()} raw for the client to resolve against its own array - so inserting or
+     * reordering a slot changes where arriving players land, even though clicking a portal is
+     * resolved by name. {@code DOOR_PORTAL} is the exception: it is handed a synthetic
+     * {@code 0x80+n} id below and never addresses by position.
+     */
     private void loadPortal(GenericPortal myPortal, Data portal) {
         myPortal.setName(DataTool.getString(portal.getChildByPath("pn")));
         myPortal.setTarget(DataTool.getString(portal.getChildByPath("tn")));

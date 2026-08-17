@@ -145,9 +145,23 @@ layout. This is a substitution rebalance with no mob *type* lost, the same shape
 case, so v84's `life` section was taken whole. The take asserts before writing that no type
 disappears and that every v84 row cites a foothold the map has.
 
-**`106010102` is deliberately left alone**: it is not a substitution but a pure surplus - our 14
-Stone Golems against v84's 7, same three types on both sides. Cutting seven mobs is a density
-change, not a rebalance, and it needs its own call.
+## `106010102`: a cut, not a substitution - and taken anyway
+
+Recorded separately because the reasoning differs from `106010101` and should stay legible. This is
+**not** a substitution: both sides carry the same two types and v84 simply ships fewer.
+
+| | ours | v84 |
+|---|---:|---:|
+| Fairy `3000004` | 3 | 3 |
+| Stone Golem `5130101` | 14 | 7 |
+| | **17** | **10** |
+
+So taking v84's `life` here **deletes seven mobs outright**, which is exactly what ticket 46 refuses
+in general. It was authorised anyway, on the owner's standing criterion - *"i want feature parity to
+v84 only"* - and on the fact that makes the deletion safe: **no type disappears**, so nothing on the
+map becomes unfarmable, it only becomes less dense. Fourteen Stone Golems where v84 ships seven is a
+map that plays measurably differently from the game being matched. The same "no type lost" assertion
+guards the write as on `106010101`.
 
 ## Portals: v84's array on the 28
 
@@ -166,22 +180,39 @@ out across 57 maps elsewhere:
   only has two portals there, and `670010600`'s seven `gtNNWP` doors, which move to 25-31.
 
 Everything else a portal node carries - `onlyOnce`, `hideTooltip`, `delay`, `horizontalImpact`,
-`image` - is **read nowhere in the server**; `PortalFactory` reads only `pn`, `tn`, `tm`, `x`, `y`,
-`script` and the node name. So v84 owning those costs nothing, which is what makes the protect-listed
-non-script leaves on matched portals safe to take from v84.
+`image` - is **read nowhere in the server**; `PortalFactory.loadPortal` reads only `pn`, `tn`, `tm`,
+`x`, `y`, `script` and the node name. So v84 owning those costs nothing, which is what makes the
+protect-listed non-script leaves on matched portals safe to hand to v84. That fact is the load-bearing
+one for this whole section, so it is also written down at `PortalFactory.loadPortal` itself, where
+the next person to ask will actually be looking.
 
 12 of the 28 needed no write at all: their extras were already appended past v84's last index and
 every shared slot already agreed. 16 were rewritten.
 
-### The one portal not taken whole
+### The one portal not taken whole - do not "finish" this one
 
-v84 makes `106010101`'s `in00` a `pt` 7 script portal driven by `evanGolemDoor`, and this tree has
-no `scripts/portal/evanGolemDoor.js`. Taking v84's `pt`/`tm`/`tn` would have left the only entrance
-to Golem's Temple **dead**. The slot is v84's - that is the half the client resolves - and the
-destination stays ours (`pt` 2, `tm` 106010102). The guard is general, not a hardcoded exception: it
-fires only where v84's node is script-only (`tm` is `MapId.NONE`), the script is one we cannot run,
-and we hold a working destination for the same portal. It fired exactly once across the 28. Pinned
-by `golemsTempleEntranceKeptAWorkingDestination`.
+> **`106010101` slot 5, `in00`, is intentionally not at v84 parity. Do not take v84's `pt`/`tm`/`tn`
+> for it. Doing so kills the only entrance to Golem's Temple.**
+
+v84 makes that portal a `pt` 7 **script** portal driven by `evanGolemDoor`, with `tm` set to
+`MapId.NONE` - the script *is* its entire behaviour. This tree has no
+`scripts/portal/evanGolemDoor.js` (checked against all 468 files in `scripts/portal/`), so a
+faithful copy yields a portal that goes nowhere and runs nothing, and `106010102` becomes
+unreachable through it.
+
+What was taken instead: **v84's slot, our destination.** The slot index is the half the client
+resolves for arrivals, so parity there is what fixes the reported bug; `pt` 2 / `tm` 106010102 /
+`tn` `out00` stay ours so the door still opens.
+
+The guard that produced this is general, not a hardcoded exception - it fires only where v84's node
+is script-only (`tm` is `MapId.NONE`), names a script we cannot run, **and** we hold a working
+destination for the same portal. Across all 28 maps it fired exactly once, which is the evidence it
+is a rule and not a special case wearing one. Pinned by
+`golemsTempleEntranceKeptAWorkingDestination`, which asserts the destination, the `pt`, and the
+absence of a script name.
+
+If someone later adds `evanGolemDoor.js`, taking v84's node whole becomes correct - and that test is
+where to change it.
 
 `670010600`'s seven new `gtNNPCS` portals also name a script we lack (`doorgo`), but we have no
 counterpart portal to fall back on, so they are taken as v84 has them minus the script - inert
