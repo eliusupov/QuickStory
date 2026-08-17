@@ -258,6 +258,11 @@ public class StatEffect {
         return isEffectActive(applyto.getMapId(), applyto.getPartyMembersOnSameMap().size() > 1);
     }
 
+    /** The card's raw prob, with none of {@link #getCardRate}'s item filtering in front of it. */
+    public int getCardProb() {
+        return cardStats != null ? cardStats.prob : 0;
+    }
+
     public int getCardRate(int mapid, int itemid) {
         if (cardStats != null) {
             if (cardStats.itemCode == Integer.MAX_VALUE) {
@@ -481,12 +486,17 @@ public class StatEffect {
                         }
                     }
 
+                    // These two carry the pierce chance in the same prob node the meso/item cards
+                    // use, and it was the one thing not being kept - without it the stat is a flag
+                    // with no rate behind it. 02387003 sets both from one prob.
                     if (DataTool.getInt("respectPimmune", source, 0) != 0) {
                         addBuffStatPairToListIfNotZero(statups, BuffStat.RESPECT_PIMMUNE, 4);
+                        prob = DataTool.getInt("prob", source, 1);
                     }
 
                     if (DataTool.getInt("respectMimmune", source, 0) != 0) {
                         addBuffStatPairToListIfNotZero(statups, BuffStat.RESPECT_MIMMUNE, 4);
+                        prob = DataTool.getInt("prob", source, 1);
                     }
 
                     if (DataTool.getString("defenseAtt", source, null) != null) {

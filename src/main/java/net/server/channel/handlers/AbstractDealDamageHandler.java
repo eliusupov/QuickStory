@@ -259,11 +259,11 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                     List<Integer> onedList = target.getValue().damageLines();
 
                     if (attack.magic) { // thanks BHB, Alex (CanIGetaPR) for noticing no immunity status check here
-                        if (monster.isBuffed(MonsterStatus.MAGIC_IMMUNITY)) {
+                        if (monster.isBuffed(MonsterStatus.MAGIC_IMMUNITY) && !piercesImmunity(player, BuffStat.RESPECT_MIMMUNE)) {
                             Collections.fill(onedList, 1);
                         }
                     } else {
-                        if (monster.isBuffed(MonsterStatus.WEAPON_IMMUNITY)) {
+                        if (monster.isBuffed(MonsterStatus.WEAPON_IMMUNITY) && !piercesImmunity(player, BuffStat.RESPECT_PIMMUNE)) {
                             Collections.fill(onedList, 1);
                         }
                     }
@@ -544,6 +544,18 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Five monster cards carry {@code spec/respectPimmune} or {@code respectMimmune} beside a
+     * {@code prob}, and that prob is the chance one attack ignores the mob's immunity outright -
+     * "20% chance of breaking through monster's weapon/magic defense". Rolled once per target, not
+     * per damage line. {@code isActive} is not redundant: leaving the card's {@code con} map range
+     * only greys the icon out, the effect stays in the buff map.
+     */
+    static boolean piercesImmunity(Character player, BuffStat respect) {
+        StatEffect card = player.getBuffEffect(respect);
+        return card != null && card.isActive(player) && Randomizer.nextInt(100) < card.getCardProb();
     }
 
     private static void damageMonsterWithSkill(final Character attacker, final MapleMap map, final Monster monster,
