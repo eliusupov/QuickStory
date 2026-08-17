@@ -28,7 +28,7 @@ provably geometry-preserving. Measured against `D:\games\MSv84\client\Map.wz`:
 | map | | ours | v84 | added | removed | verdict |
 |---|---|---:|---:|---:|---:|---|
 | 100030000 | Evan farm entrance | 489 | 511 | +22 | **0** | **v84 only ADDS platforms - nothing of ours disappears** |
-| 251010403 | Herb Town area | 105 | 105 | 0 | **0** | **identical geometry; one duplicated foothold pair blocks a 1:1 map** |
+| 251010403 | Herb Town area | 105 | 105 | 0 | **0** | **identical geometry; a plain renumber - DONE, `789fc548d`** |
 | 102000000 | Perion | 521 | 521 | +1 | -1 | genuine terrain edit |
 | 251000000 | Herb Town | 333 | 333 | +3 | -3 | genuine terrain edit |
 | 103000000 | Kerning City | 519 | 518 | +3 | -4 | genuine terrain edit |
@@ -44,11 +44,18 @@ table for that map.
 
 **The top two rows are not terrain edits and should be split off from this ticket.** `100030000` is
 strictly additive - every platform we have survives, v84 just adds 22 more that our server does not
-know about (so the client already draws ground the server does not have). `251010403` has byte-identical
-geometry and fails only because one foothold pair shares coordinates, which a
-`(layer, group, geometry)` tie-break resolves. Both are low-risk and both would fix their maps
-outright. They were **not** applied here because the instruction was to write this up rather than
-attempt a partial renumber - but they need none of the risk discussion below.
+know about (so the client already draws ground the server does not have). `251010403` has identical
+geometry and is a plain renumber. Both are low-risk and both would fix their maps outright. They were
+**not** applied here because the instruction was to write this up rather than attempt a partial
+renumber - but they need none of the risk discussion below.
+
+**Correction (`789fc548d`).** This ticket first said `251010403` "fails only because one foothold
+pair shares coordinates, which a `(layer, group, geometry)` tie-break resolves". There is no such
+hazard and no tie-break ever fires. Ids 63 and 64 do share their coordinates - both are
+`-166,-177` to `-164,-177` - but they sit in different **groups** (`4/4` and `4/0`), so the
+`(layer, group, geometry)` key is already unique and every mapping on the map is forced. Measured
+across all twenty maps of the renumber batch: zero duplicate keys. `251010403` was taken in
+`789fc548d` and its `life` array is now byte-identical to v84's, `fh` included.
 
 ## What taking the whole v84 image would require
 
@@ -94,7 +101,8 @@ the server actually consumes.
 
 ### Order of work, cheapest and safest first
 
-1. `100030000`, `251010403` - not terrain edits; no deletions; no new authorisation needed.
+1. `100030000`, ~~`251010403`~~ - not terrain edits; no deletions; no new authorisation needed.
+   `251010403` is done (`789fc548d`); `100030000` is still open.
 2. `109090000`, `200080600`, `261000000` - terrain edit but zero life deletions.
 3. `102000000`, `101000000`, `250000000`, `106010102` - deletions are seasonal decorations or
    surplus mobs only.
