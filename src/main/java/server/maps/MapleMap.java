@@ -2708,6 +2708,16 @@ public class MapleMap {
             broadcastSpawnPlayerMapObjectMessage(chr, chr, true);
         }
 
+        // Before sendObjectPlacement, and it has to be: spawnDragon() shows the dragon to everyone
+        // BUT its owner, so the owner only ever gets it from the object list below - DRAGON is a
+        // non-ranged type there. Registering it afterwards, as this used to, served the arriving
+        // Evan a list without their own dragon and then excluded them from the only packet carrying
+        // it, so Mir vanished for its owner on every portal and came back only on relog.
+        final Dragon dragon = chr.getDragon();
+        if (dragon != null) {
+            spawnDragon(dragon);
+        }
+
         sendObjectPlacement(chr.getClient());
 
         if (isStartingEventMap() && !eventStarted()) {
@@ -2729,11 +2739,6 @@ public class MapleMap {
 
         if (chr.getPlayerShop() != null) {
             addMapObject(chr.getPlayerShop());
-        }
-
-        final Dragon dragon = chr.getDragon();
-        if (dragon != null) {
-            spawnDragon(dragon);
         }
 
         StatEffect summonStat = chr.getStatForBuff(BuffStat.SUMMON);
