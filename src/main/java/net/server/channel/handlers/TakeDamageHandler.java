@@ -248,6 +248,19 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                 if (highDef != null && hdLevel > 0) {
                     damage *= Math.ceil(highDef.getEffect(hdLevel).getX() / 1000.0);
                 }
+
+                // Magic Shield 22131001 takes x% off the hit - 30 at level 20. StatEffect wrote the
+                // buff stat and nobody ever read it, so the skill was 20s of animation.
+                Integer magicShield = chr.getBuffedValue(BuffStat.MAGIC_SHIELD);
+                if (magicShield != null) {
+                    damage -= damage * magicShield / 100;
+                }
+
+                // BuffStat.MAGIC_RESISTANCE (22151003, -x% from elemental attacks) is written and
+                // still unread, deliberately: nothing here knows the element of an incoming hit.
+                // The packet's element byte is read and discarded at the top of this method with no
+                // mapping for its values anywhere in the tree, and Monster.getStats()
+                // .getEffectiveness() is the mob's own resistance, not its attack's element.
             }
             Integer mesoguard = chr.getBuffedValue(BuffStat.MESOGUARD);
             if (chr.getBuffedValue(BuffStat.MAGIC_GUARD) != null && mpattack == 0) {
