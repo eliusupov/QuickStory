@@ -60,6 +60,12 @@ The skill-block sites all now go through one new accessor, `Character.getBeginne
 
 ## Balance changes the owner did not ask for
 
+- **The AP-reset floors are live, not dormant.** Ticket 51 recorded them as gated by
+  `USE_ENFORCE_HPMP_SWAP`; they are not - that flag only forces the swap *direction*, and the
+  `getMinHp`/`getMinMp` guards run unconditionally. So giving Evan (2200-2218) and the 2000/2001
+  beginners a nonzero floor takes effect immediately: an Evan that has swapped a lot of HP into MP
+  can now be refused "You don't have the minimum HP pool required to swap", exactly as a magician
+  already is. Correct, consistent, and a real change to a running character.
 - Evan **loses** free dojo secret skills; they now consume dojo energy like every other class.
 - Noblesse/Legend/Evan beginners under level 10 can **no longer** complete card sets. That was always
   the intent of the gate; only job 0 was actually being stopped.

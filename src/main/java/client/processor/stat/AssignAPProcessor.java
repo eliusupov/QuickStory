@@ -553,6 +553,10 @@ public class AssignAPProcessor {
                     }
 
                     int hplose = -takeHp(player.getJob());
+                    // this guard and its MP twin below are NOT behind USE_ENFORCE_HPMP_SWAP - that
+                    // flag only forces the swap direction, above. Ticket 51 recorded them as dormant
+                    // and that was wrong: giving a job a nonzero getMinHp/getMinMp takes effect on a
+                    // running server immediately.
                     if (player.getMaxHp() + hplose < getMinHp(player.getJob(), player.getLevel())) {
                         player.message("You don't have the minimum HP pool required to swap.");
                         c.sendPacket(PacketCreator.enableActions());
