@@ -66,7 +66,10 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
         int __skillLevel = p.readByte();
         Skill skill = SkillFactory.getSkill(skillid);
         int skillLevel = chr.getSkillLevel(skill);
-        if (skillid % 10000000 == 1010 || skillid % 10000000 == 1011) {
+        // the caster's own dojo secret skills. This was `skillid % 10000000`, which leaves 11010 for
+        // an Evan (block 2001, not 2000) and let its Invincible Barrier and Power Explosion past the
+        // energy check entirely - same defect StatEffect.isMonsterRidingSkill documents.
+        if (skillid == chr.getBeginnerSkillBlock() + 1010 || skillid == chr.getBeginnerSkillBlock() + 1011) {
             if (chr.getDojoEnergy() < 10000) { // PE hacking or maybe just lagging
                 return;
             }
@@ -125,7 +128,7 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
         } else if (skillid == SuperGM.HEAL_PLUS_DISPEL) {
             p.skip(11);
             chr.getMap().broadcastMessage(chr, PacketCreator.showBuffEffect(chr.getId(), skillid, chr.getSkillLevel(skillid)), false);
-        } else if (skillid % 10000000 == 1004) {
+        } else if (skillid == chr.getBeginnerSkillBlock() + 1004) {   // Monster Rider
             p.readShort();
         }
 
@@ -134,7 +137,7 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
         }
         if (chr.isAlive()) {
             if (skill.getId() != Priest.MYSTIC_DOOR) {
-                if (skill.getId() % 10000000 != 1005) {
+                if (skill.getId() != chr.getBeginnerSkillBlock() + 1005) {   // Echo of Hero
                     skill.getEffect(skillLevel).applyTo(chr, pos);
                 } else {
                     skill.getEffect(skillLevel).applyEchoOfHero(chr);

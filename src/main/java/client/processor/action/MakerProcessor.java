@@ -312,7 +312,7 @@ public class MakerProcessor {
     }
 
     public static int getMakerSkillLevel(Character chr) {
-        return chr.getSkillLevel((chr.getJob().getId() / 1000) * 10000000 + 1007);
+        return chr.getSkillLevel(chr.getBeginnerSkillBlock() + 1007);
     }
 
     private static short getCreateStatus(Client c, MakerItemCreateEntry recipe) {

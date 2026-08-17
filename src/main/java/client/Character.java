@@ -5230,6 +5230,14 @@ public class Character extends AbstractCharacterObject {
         return job.getId() / 1000;
     }
 
+    public int getBeginnerSkillBlock() {
+        // Beginner skill ids are <block>0000 + n, and getJobType() * 10000000 gives that block for
+        // Explorers (0), Cygnus (1000) and Aran (2000). Evan's block is 2001 - Three Snails is
+        // 20011000, not 20001000 - and getJobType() divides by 1000, so on its own it hands Evan
+        // Aran's skills. Every "the caller's own beginner skill n" site goes through here.
+        return (job == Job.EVAN || job.isA(Job.EVAN1)) ? 20010000 : getJobType() * 10000000;
+    }
+
     public Map<Integer, KeyBinding> getKeymap() {
         return keymap;
     }
@@ -7358,7 +7366,7 @@ public class Character extends AbstractCharacterObject {
                 //ret.resetBattleshipHp();
             }
 
-            final int mountid = ret.getJobType() * 10000000 + 1004;
+            final int mountid = ret.getBeginnerSkillBlock() + 1004;
             if (ret.getInventory(InventoryType.EQUIPPED).getItem((short) -18) != null) {
                 ret.maplemount = new Mount(ret, ret.getInventory(InventoryType.EQUIPPED).getItem((short) -18).getItemId(), mountid);
             } else {
@@ -7765,7 +7773,7 @@ public class Character extends AbstractCharacterObject {
             }
             */
 
-            Integer blessing = getSkillLevel(10000000 * getJobType() + 12);
+            Integer blessing = getSkillLevel(getBeginnerSkillBlock() + 12);
             if (blessing > 0) {
                 localwatk += blessing;
                 localmagic += blessing * 2;
@@ -9400,7 +9408,7 @@ public class Character extends AbstractCharacterObject {
             this.getMap().broadcastMessage(PacketCreator.updateMount(this.getId(), maplemount, false));
             if (tiredness > 99) {
                 maplemount.setTiredness(99);
-                this.dispelSkill(this.getJobType() * 10000000 + 1004);
+                this.dispelSkill(this.getBeginnerSkillBlock() + 1004);
                 this.dropMessage(6, "Your mount grew tired! Treat it some revitalizer before riding it again!");
                 return false;
             }

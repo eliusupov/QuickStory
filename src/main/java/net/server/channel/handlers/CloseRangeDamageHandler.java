@@ -165,7 +165,7 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
         if (numFinisherOrbs == 0 && GameConstants.isFinisherSkill(attack.skill)) {
             return;
         }
-        if (attack.skill % 10000000 == 1009) { // bamboo
+        if (attack.skill == chr.getBeginnerSkillBlock() + 1009) { // bamboo
             if (chr.getDojoEnergy() < 10000) { // PE hacking or maybe just lagging
                 return;
             }

@@ -5,6 +5,7 @@ import client.Job;
 import config.YamlConfig;
 import constants.id.MapId;
 import constants.skills.Aran;
+import constants.skills.Evan;
 import provider.*;
 import provider.wz.WZFiles;
 import server.maps.FieldLimit;
@@ -452,7 +453,10 @@ public class GameConstants {
         } else {
             if (job.isA(Job.WARRIOR)) {
                 return MapId.HALL_OF_WARRIORS;
-            } else if (job.isA(Job.MAGICIAN)) {
+            } else if (job.isA(Job.MAGICIAN) || job.isA(Job.EVAN1)) {
+                // Evan has no hall of its own, and isCygnus/isAran both reject it, so it was landing
+                // on the Cygnus map in the fallback below. It is a magician living in Victoria, so
+                // the magician hall fits it better than Aran's palace over in Rien.
                 return MapId.HALL_OF_MAGICIANS;
             } else if (job.isA(Job.BOWMAN)) {
                 return MapId.HALL_OF_BOWMEN;
@@ -565,7 +569,9 @@ public class GameConstants {
     }
 
     public static boolean isPqSkill(final int skill) {
-        return (skill >= 20000014 && skill <= 20000018) || skill == 10000013 || skill == 20001013 || (skill % 10000000 >= 1009 && skill % 10000000 <= 1011) || skill % 10000000 == 1020;
+        // the last two terms miss Evan: its beginner block is 2001, so 20011009 % 10000000 is 11009.
+        return (skill >= 20000014 && skill <= 20000018) || skill == 10000013 || skill == 20001013 || (skill % 10000000 >= 1009 && skill % 10000000 <= 1011) || skill % 10000000 == 1020
+                || (skill >= Evan.BAMBOO_THRUST && skill <= Evan.POWER_EXPLOSION) || skill == 20011020;
     }
 
     public static boolean bannedBindSkills(final int skill) {

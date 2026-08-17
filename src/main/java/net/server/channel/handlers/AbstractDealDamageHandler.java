@@ -465,7 +465,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                                 AutobanFactory.FIX_DAMAGE.autoban(player, totDamageToOneMonster + " damage");
                             }
 
-                            int threeSnailsId = player.getJobType() * 10000000 + 1000;
+                            int threeSnailsId = player.getBeginnerSkillBlock() + 1000;
                             if (attack.skill == threeSnailsId) {
                                 if (YamlConfig.config.server.USE_ULTRA_THREE_SNAILS) {
                                     int skillLv = player.getSkillLevel(threeSnailsId);
