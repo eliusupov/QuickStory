@@ -16,7 +16,7 @@ server-side.
 
 | lv | item | status |
 |---|---|---|
-| 11 | **Quest 22503 needs item 4032453 "Pork" x10 and nothing produces it.** Verified: 0 rows in `drop_data`, `reactordrops`, `shopitems`. 22504 requires 22503 complete, so **107 of 135 Evan quests are unreachable** behind it. Source is establishable: `scripts/quest/22503.js:23` names mob 1210100 "Pig", placed on 16 maps incl. 100030310. Rate not in any WZ - copy a comparable existing row. | IN FLIGHT |
+| 11 | ~~Quest 22503 item 4032453 "Pork"~~ **FIXED** `d8b6372db`, changeSet 159. Drops from mob 1210100 "Pig", chance 200000 copied from that same mob's own 25-count Aran row (q21710) - NOT changeSet 155's count-1 rate, which is the wrong shape for a x10 fetch. Reachability re-derived independently: **28/135 startable before, 135/135 after**. Applies on next boot. | DONE |
 | 23-70 | **Seven quests gate on quest-records 22597-22605 that nothing ever writes.** `Quest.canStart` AND `canComplete` both call `canQuestByInfoProgress`; `autoStart`/`autoComplete` do NOT bypass it. States: 22530(22597="5"), 22556(22598="1"), 22557(22598="2"), 22580(22599="1"/"2"), 22588(22605="1"), 22589(22600="1", 22604="1"), 22591(22601="1"). Mechanism is live - `setQuestProgress` exists and 59 scripts use it. 22530's writer is derivable: npc 1022107 already placed on the five right maps (101030000/100/200/300/400), needs `scripts/npc/1022107.js`; must land record 22597 on exactly `"5"` (string equality) so it needs a dedupe scheme - **UNKNOWN**. Other six triggers UNKNOWN. | QUEUED |
 | 50 | **Quest 22402 Dragon Mount branch needs PlayerNPC 9901000 on map 102000004** (Hall of Warriors). Correct as designed - do NOT place it as a normal NPC; `NpcLocation.img` and `COLLISION-DENY.txt:406` both say so. `playernpcs` table has 0 rows. Kills 22403-22413 and the Monster Rider skill grant. | OWNER |
 | 50 | Item 4032474 "Seruf Pearl" (22404/22405): drop rows exist on mobs 4220000 and 9303014, but neither mob is placed in any map. Which v84 map carries Seruf: **UNKNOWN**. | QUEUED |
@@ -43,7 +43,10 @@ Worsens with job level. `IN FLIGHT`.
 
 ## 3. Drops, cards, maker, reactors
 
-- **116 v84 mobs spawn and drop nothing** (38 boss-flagged). Of 374 with no drops, 258 are placed in no map and correctly need none. Owner approved DERIVED rates: *"we can even derive drop chance by type of other monsters and drop we already have."* Plan: lists from DreamMS/Royals, rates **calibrated** against our own 23,025 rows, holdout-validated. `IN FLIGHT`
+- Mob drops **LARGELY CLOSED** - changeSet **160**, 214 rows over 25 mobs. Items taken from the v84 client's own `MonsterBook.img`; rates **all DERIVED** from our own tables as `median(item class x mob level band x boss flag)` over 22,461 non-quest-gated rows. Holdout-validated: **median fold-error 1.14x, 73.2% within 2x, 94.6% within 10x**; weakest classes `use` and `etc_mobdrop` at 2.0x, flagged in the seed header. `boss_drop_rate: 10` checked and neutral by construction, because each rate is the median of rows from the same (class x boss) bucket.
+  - **Triage was most of the job.** 274 mobs can spawn with no drop row; **250 (91%) are event / PQ / Monster Carnival / boss-body-part** ids that never had drops in any version. Of the 24 on ordinary ids, nearly all are correctly empty (Papulatus and all four Targa/Scarlion phases drop on their FINAL form; the 6 Gatekeeper Nex are kill-count quest targets). **Genuine remainder: one mob, 4090000 Iron Hook.** `QUEUED`
+  - **DreamMS rejected, measured twice.** `ours = their_pct * 10000 / 3` - a flat 0.333 at p10/p25/p50/p75 across 2,621 pairs, in all 7 level bands and every item class independently. It is our own lineage; calibrating against it is circular and a missed divisor would have tripled every rate. Valhalla/MCDB also rejected: p10 0.05 -> p50 0.114 -> p90 1.25, only 3.0% exact - noise, not a factor.
+  - Authentic Nexon probabilities exist only in `Etc.wz/Server/Reward.img`, which our `Etc.wz` does not contain. **No number in our tables is a Nexon figure** and the seed header says so.
 - Monster cards **CLOSED 39/39** `64f0858e1` - every card names its mob in `Item.wz/.../info/mob`. **4 still cannot drop** (mobs 3400008, 4300001/3/5 placed nowhere, in v84 either). **7 pre-existing rows disagree with the WZ leaf** (2383045, 2388011/17/26/43, swapped pair 2388068/69) - not touched, that is an edit not an addition. `QUEUED`
 - Maker **CLOSED 6/6** `3f1f81b32` incl. all four Evan dragon slots; `req_meso` formula validated 145/145.
 - `wz/Etc.wz/ItemMake.img.xml` is still the **v83 file** - harmless today (server reads only `catalyst`) but a fresh `SkillMakerFetcher` run would drop the six. `QUEUED`
@@ -92,6 +95,60 @@ Worsens with job level. `IN FLIGHT`.
 - **WZ phase B tree** built and content-verified at `D:\games\wz-stage\phaseB\tree` (18 .wz, 2.0 GB, 6,073/6,073), **not installed anywhere**. Open inside it: 5 deletion rows, 124 positional-array rows, additive-layer question on 17 images.
 - **Dual Blade** - not started ("i want evan first, dual blade can be after").
 - Never answered: 2x event on/when, PQ bonus EXP (has not paid since 2015), cash-shop OnSale, Easy Balrog, CPQ party size.
+
+## 9. v84 content that exists and cannot be reached  *(found 2026-08-17, non-Evan sweep)*
+
+- **CRIMSON SKY - v84's single largest content addition has no entrance.** Ticket 06 merged 22 maps,
+  7 huntable mobs and 776 drop rows, and left "travel route works" explicitly unchecked as an owner
+  decision. Still true at HEAD: `240030102` (the only edge from existing content) has no `right00`
+  back, and v84 ships that map byte-identical to v83; `grep` for `240080000` / `Sky_GateMapEnter` /
+  `dragonLair_GL` across `scripts/` and `src/main/java` returns **zero hits**; the two "Crimson Sky
+  Doorway" NPCs 2085001/2085002 have `func=None` and no script. Reachable today only by `!warp`.
+  Second gate behind it: `240080000` has `fly=1` + `needSkillForFly=1` (Dragon Rider flying skill).
+  **OWNER decision: NPC-script warp, hand-authored portal, or leave GM-only.**
+- **8 more non-Evan maps unreachable for the same structural reason** (ticket 08): `910600000`
+  Golem's Temple Entrance and the Frog House / Sky Terrace chain `922030010/011/020/021/022`. v84's
+  inbound portal lands at an array index that means something else live - e.g. `106010101/portal/5`
+  is the WORKING `out00`, so merging v84's row verbatim would break a live route. The merge tool was
+  right to refuse; the data was never revisited. Same owner decision as Crimson Sky. `OWNER`
+- **NPC 1011101 "General Mau" is a dead vendor in live Henesys Market** (`100000100`, town, reachable
+  today). Its `String.wz` `func` reads "Street Vendor" but there is no `scripts/npc/1011101.js` and
+  no `shops` row. Clickable, does nothing, in a hub players walk through. `QUEUED`
+- NPC 9000054 "Ranch Owner" on `109090000`/`910040000`/`910040002` - no script, no shop, no quest
+  reference. Shape resembles a Monster-Carnival-style instance. Intended role **UNKNOWN**.
+
+## 10. Items and buffs that exist and do nothing  *(found 2026-08-17, parity-surface sweep)*
+
+The "written but never read" pattern the Evan audit found is **not Evan-specific**. Confirmed wider:
+
+- **5 chaos scrolls are no-ops that still burn the upgrade slot**: `2049103/104/112/113/114` carry
+  `info/randstat=1`, but `ItemInformationProvider.java:1110-1184` special-cases only `2049100-102` by
+  hardcoded id; the rest fall through to `improveEquipStats` against an empty stat map. Slot and item
+  both consumed, nothing applied.
+- **7 percentage buff potions grant zero stats**: `2022359-2022365` carry `padRate/madRate/pddRate/
+  mddRate/accRate/evaRate/speedRate`; `StatEffect.java:370-378` reads only the flat versions.
+- **6 brand-new v84 `BFSkill` items are wholly unwired**: `2022539/542/543/547/548/549`, zero code
+  references anywhere.
+- **Shadow Web's damage-over-time is commented-out dead code** (`Monster.java:1328-1336`) - Hermit,
+  Night Walker and Blaze Wizard bind the target and deal 0.
+- **Mage Seal never blocks mob skills** - `StatEffect` writes `MonsterStatus.SEAL` but the mob-skill
+  gate checks a different constant, `SEAL_SKILL`. Affects FP/IL Mage and Blaze Wizard.
+- **Invincible Barrier and Cleric's Invincible do nothing** - `DIVINE_BODY`/`INVINCIBLE` are written
+  but absent from `TakeDamageHandler`'s mitigation chain. The buff icon shows.
+- **Monster-card immunity piercing does nothing** - `RESPECT_PIMMUNE`/`RESPECT_MIMMUNE` written at
+  `StatEffect.java:485/489`, never checked by the immunity gate at `AbstractDealDamageHandler.java:261-269`.
+- **Echo of Hero's +4% watk** written but absent from `recalcLocalStats()`.
+- **All chairs heal identically** - `info/recoveryHP/recoveryMP` (56/35 items, several v84-new) never
+  read; regen is derived from the player's own max HP/MP.
+- `spec/onlyPickup` unenforced on 83 items (5 v84-new). Cash coupons crediting nothing:
+  `info/maplepoint` (5200009/10), `info/slotIndex`+`addDay` (5550001). `incMaxHP/incMaxMP/incReqLevel/
+  incCraft/incLEV` reach the stat map but `improveEquipStats` has no case for them.
+
+Swept and **clean** - do not re-check: DB content tables (`area_info`, `plife`, `questactions`,
+`questrequirements`, `specialcashitems`, `monsterbook`, maker siblings), Etc.wz image coverage, the
+pet system end to end, mob `mobType`->`category` rename (dead field before and after), and skill
+`isBuff` classification across all **627** skills - Blessing of the Onyx is the ONLY instance of that
+failure shape.
 
 ---
 
