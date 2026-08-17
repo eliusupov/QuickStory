@@ -221,7 +221,8 @@
             DELETE FROM shopitems WHERE shopid = 2080001
                 AND (itemid BETWEEN 2280026 AND 2280029 OR itemid BETWEEN 2290140 AND 2290152);
             DELETE FROM shopitems WHERE shopid = 1052104 AND itemid IN
-                (2040512, 2040513, 2040514, 2040816, 2040817, 2043700, 2043800);
+                (2040024, 2040025, 2040026, 2040512, 2040513, 2040514,
+                 2040816, 2040817, 2041015, 2043700, 2043800);
         </rollback>
     </changeSet>
 

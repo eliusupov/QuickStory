@@ -165,7 +165,8 @@ class EvanShopStockRealLoad {
         List<int[]> rows = rowsFor(TULCUS);
 
         assertAll(
-                () -> assertEquals(7, rows.size(), "3 overall INT, 2 gloves magic att, 2 wand/staff 100%"),
+                () -> assertEquals(11, rows.size(),
+                        "3 overall INT, 2 gloves magic att, 2 wand/staff 100%, 3 helmet INT, 1 cape INT 100%"),
                 () -> assertEquals(
                         IntStream.range(0, rows.size())
                                 .map(i -> TULCUS_FIRST_POSITION + 4 * i).boxed().toList(),

@@ -130,8 +130,19 @@
 --   2040816  Scroll for Gloves for Magic Att.    10%  +3 INT      "Magic Att."; it grants incINT
 --   2043700  Scroll for Wand for Magic Att.     100%  +1 MAD
 --   2043800  Scroll for Staff for Magic Att.    100%  +1 MAD
+--   2040024  Scroll for Helmet for INT 100%     100%  +1 INT   <- the one slot with no INT scroll
+--   2040025  Scroll for Helmet for INT 60%       60%  +2 INT      in the shop at all
+--   2040026  Scroll for Helmet for INT 10%       10%  +3 INT
+--   2041015  Scroll for Cape for INT            100%  +1 INT   <- 60% and 10% already stocked
 --
--- Positions continue the shop's stride-4 run; its highest is 620, so these take 624-648.
+-- The helmet rows follow convention A + the owner's 100%, because his shop sets no helmet
+-- precedent of its own: its only helmet rows are the two SEED ones, 2040003 at position 160 and
+-- 2040000 at 164, both 100% at 35000. That 35000 is the seeded armor-100% price, not his - every
+-- 100% row he added himself (2040202, 2040207, 2041300, 2041303, 2041306, 2041309) is 250000. So
+-- helmet INT 100% lands at 250000 beside a seeded helmet DEF 100% at 35000. That split already
+-- runs through the whole shop and is his, not something introduced here.
+--
+-- Positions continue the shop's stride-4 run; its highest is 620, so these take 624-664.
 --
 -- ============================================================================================
 -- WHAT IS NOT IN HERE, AND WHY  (read this before assuming something was missed)
@@ -156,12 +167,9 @@
 --     The Shoes pair is 2040729 "Balrog's INT Scroll 30%" and 2040739 "Balrog's Twilight Scroll
 --     5%" - event drops at success rates (30, 5) that exist nowhere in this shop's three
 --     conventions, so there is no precedent to price them from. Left out rather than invented.
---   * NO Helmet INT (2040024/2040025/2040026) and no Cape INT 100% (2041015), which are the same
---     gap in slots that were not named - the shop already has cape INT at 60% and 10%. Both are
---     one line each under the conventions above if the owner wants them; not added unasked.
 --
 -- Liquibase's changelog table is the idempotency guard here, as it is for every neighbouring data
--- changeSet; the rollback in changelog-data.xml deletes exactly these 24 rows and nothing else.
+-- changeSet; the rollback in changelog-data.xml deletes exactly these 28 rows and nothing else.
 
 INSERT INTO shopitems (shopid, itemid, price, pitch, position)
 VALUES (2080001, 2280026, 5000000, 0, 156),
@@ -189,4 +197,8 @@ VALUES (1052104, 2040512, 250000, 0, 624),
        (1052104, 2040817, 500000, 0, 636),
        (1052104, 2040816, 750000, 0, 640),
        (1052104, 2043700, 250000, 0, 644),
-       (1052104, 2043800, 250000, 0, 648);
+       (1052104, 2043800, 250000, 0, 648),
+       (1052104, 2040024, 250000, 0, 652),
+       (1052104, 2040025, 250000, 0, 656),
+       (1052104, 2040026, 500000, 0, 660),
+       (1052104, 2041015, 250000, 0, 664);
