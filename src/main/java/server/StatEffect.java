@@ -755,6 +755,11 @@ public class StatEffect {
                 case Beginner.POWER_EXPLOSION:
                 case Noblesse.POWER_EXPLOSION:
                 case Legend.POWER_EXPLOSION:
+                    // Evan's 20011011 is deliberately absent. All four are the same skill in
+                    // String.wz - "Meteo Shower", damage +100% for 30s - but v84 gives Evan x 200
+                    // where the other three carry -3, and BOOSTER is an attack-speed delta, so 200
+                    // would be nonsense. Nothing in the node says where a damage percentage should
+                    // go instead, and this class has no passive damage multiplier to put it in.
                     statups.add(new Pair<>(BuffStat.BOOSTER, x));
                     break;
                 case Hero.MAPLE_WARRIOR:
