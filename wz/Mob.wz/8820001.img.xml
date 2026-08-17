@@ -26,7 +26,7 @@
     <string name="buff" value="2022449"/>
     <int name="hpTagColor" value="1"/>
     <int name="hpTagBgcolor" value="5"/>
-    <string name="elemAttr" value="P2H2F2I2"/>
+    <string name="elemAttr" value="P2H2F2I2D2"/>
     <int name="mobType" value="1"/>
     <int name="rareItemDropLevel" value="3"/>
     <imgdir name="skill">

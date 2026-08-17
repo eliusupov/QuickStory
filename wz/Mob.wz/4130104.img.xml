@@ -17,7 +17,7 @@
     <int name="pushed" value="300"/>
     <int name="hpRecovery" value="50"/>
     <int name="mpRecovery" value="2"/>
-    <string name="elemAttr" value="H3"/>
+    <string name="elemAttr" value="H3D2"/>
     <int name="summonType" value="1"/>
     <string name="link" value="4130102"/>
     <int name="mobType" value="4"/>

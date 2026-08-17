@@ -17,7 +17,7 @@
     <int name="pushed" value="2320"/>
     <float name="fs" value="10.0"/>
     <int name="summonType" value="1"/>
-    <string name="elemAttr" value="I2S1H2"/>
+    <string name="elemAttr" value="I2S1H2D3"/>
     <int name="mobType" value="1"/>
   </imgdir>
   <imgdir name="move">

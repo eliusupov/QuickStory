@@ -16,7 +16,7 @@
     <int name="undead" value="0"/>
     <int name="pushed" value="5000"/>
     <int name="fs" value="10"/>
-    <string name="elemAttr" value="I2F2L2H2S2"/>
+    <string name="elemAttr" value="I2F2L2H2S2D2"/>
     <int name="boss" value="1"/>
     <int name="removeAfter" value="40"/>
     <int name="summonType" value="1"/>

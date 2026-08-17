@@ -15,7 +15,7 @@
     <int name="exp" value="0"/>
     <int name="undead" value="0"/>
     <int name="pushed" value="9999"/>
-    <string name="elemAttr" value="H2F3"/>
+    <string name="elemAttr" value="H2F3D3"/>
     <int name="summonType" value="1"/>
     <int name="invincible" value="1"/>
     <int name="mobType" value="8"/>

@@ -18,7 +18,7 @@
     <int name="mpRecovery" value="2"/>
     <float name="fs" value="10.0"/>
     <int name="summonType" value="1"/>
-    <string name="elemAttr" value="H3F3"/>
+    <string name="elemAttr" value="H3F3D2"/>
     <int name="mobType" value="6"/>
   </imgdir>
   <imgdir name="move">

@@ -19,7 +19,7 @@
     <int name="summonType" value="1"/>
     <int name="noregen" value="1"/>
     <int name="removeAfter" value="60"/>
-    <string name="elemAttr" value="F1L1I1S1H1P1"/>
+    <string name="elemAttr" value="F1L1I1S1H1P1D1"/>
   </imgdir>
   <imgdir name="move">
     <canvas name="0" width="55" height="34">

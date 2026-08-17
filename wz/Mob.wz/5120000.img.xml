@@ -17,7 +17,7 @@
     <int name="pushed" value="500"/>
     <int name="mpRecovery" value="5"/>
     <float name="fs" value="10.0"/>
-    <string name="elemAttr" value="I2F2L2H2"/>
+    <string name="elemAttr" value="I2F2L2H2D2"/>
     <int name="summonType" value="1"/>
     <imgdir name="skill">
       <imgdir name="0">

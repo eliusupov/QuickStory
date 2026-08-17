@@ -17,7 +17,7 @@
     <int name="pushed" value="5500"/>
     <float name="fs" value="10.0"/>
     <int name="summonType" value="1"/>
-    <string name="elemAttr" value="F3I1L1S1H1P1"/>
+    <string name="elemAttr" value="F3I1L1S1H1P1D1"/>
     <int name="firstAttack" value="1"/>
     <string name="link" value="8170000"/>
     <int name="boss" value="1"/>

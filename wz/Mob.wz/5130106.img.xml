@@ -16,7 +16,7 @@
     <int name="undead" value="0"/>
     <int name="pushed" value="500"/>
     <float name="fs" value="10.0"/>
-    <string name="elemAttr" value="H3"/>
+    <string name="elemAttr" value="H3D2"/>
     <imgdir name="revive">
       <int name="0" value="6400001"/>
     </imgdir>

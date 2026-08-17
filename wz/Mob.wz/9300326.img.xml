@@ -17,7 +17,7 @@
     <int name="pushed" value="1000"/>
     <int name="hpRecovery" value="100"/>
     <int name="mpRecovery" value="5"/>
-    <string name="elemAttr" value="S1H3"/>
+    <string name="elemAttr" value="S1H3D2"/>
     <int name="boss" value="1"/>
     <int name="summonType" value="0"/>
     <int name="firstAttack" value="1"/>

@@ -15,7 +15,7 @@
     <int name="exp" value="12000"/>
     <int name="undead" value="0"/>
     <int name="pushed" value="5000"/>
-    <string name="elemAttr" value="I2F2L2H2S2"/>
+    <string name="elemAttr" value="I2F2L2H2S2D2"/>
     <int name="fs" value="10"/>
     <int name="boss" value="1"/>
     <int name="summonType" value="1"/>

@@ -20,7 +20,7 @@
     <string name="link" value="8130100"/>
     <int name="hpRecovery" value="20"/>
     <int name="mpRecovery" value="5"/>
-    <string name="elemAttr" value="S1H3"/>
+    <string name="elemAttr" value="S1H3D2"/>
     <int name="boss" value="1"/>
     <int name="mobType" value="6"/>
   </imgdir>

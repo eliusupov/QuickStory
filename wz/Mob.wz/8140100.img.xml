@@ -17,7 +17,7 @@
     <int name="pushed" value="3000"/>
     <int name="hpRecovery" value="80"/>
     <int name="mpRecovery" value="2"/>
-    <string name="elemAttr" value="H3"/>
+    <string name="elemAttr" value="H3D2"/>
     <imgdir name="revive">
       <int name="0" value="6400002"/>
       <int name="1" value="6230201"/>

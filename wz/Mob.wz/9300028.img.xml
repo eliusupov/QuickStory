@@ -15,7 +15,7 @@
     <int name="exp" value="150000"/>
     <int name="undead" value="1"/>
     <int name="pushed" value="9999"/>
-    <string name="elemAttr" value="I2F2L2H2S2"/>
+    <string name="elemAttr" value="I2F2L2H2S2D2"/>
     <int name="hpRecovery" value="3000"/>
     <int name="mpRecovery" value="5000"/>
     <int name="firstAttack" value="1"/>

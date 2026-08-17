@@ -17,7 +17,7 @@
     <int name="pushed" value="3000"/>
     <int name="hpRecovery" value="110"/>
     <int name="mpRecovery" value="5"/>
-    <string name="elemAttr" value="S1H3"/>
+    <string name="elemAttr" value="S1H3D2"/>
     <int name="boss" value="1"/>
     <float name="fs" value="10.0"/>
     <int name="summonType" value="0"/>

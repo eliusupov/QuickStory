@@ -19,7 +19,7 @@
     <int name="summonType" value="1"/>
     <int name="noregen" value="1"/>
     <int name="removeAfter" value="60"/>
-    <string name="elemAttr" value="F2L2I2S2H2P2"/>
+    <string name="elemAttr" value="F2L2I2S2H2P2D2"/>
     <string name="link" value="9501011"/>
   </imgdir>
 </imgdir>
