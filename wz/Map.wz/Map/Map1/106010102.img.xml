@@ -3033,44 +3033,48 @@
       <string name="tn" value=""/>
     </imgdir>
     <imgdir name="3">
-      <string name="pn" value="in03"/>
-      <int name="pt" value="1"/>
-      <int name="x" value="69"/>
-      <int name="y" value="204"/>
-      <int name="tm" value="106010103"/>
-      <string name="tn" value="out00"/>
-    </imgdir>
-    <imgdir name="4">
-      <string name="pn" value="in04"/>
-      <int name="pt" value="1"/>
-      <int name="x" value="405"/>
-      <int name="y" value="208"/>
-      <int name="tm" value="106010104"/>
-      <string name="tn" value="out00"/>
-    </imgdir>
-    <imgdir name="5">
-      <string name="pn" value="in05"/>
-      <int name="pt" value="1"/>
-      <int name="x" value="87"/>
-      <int name="y" value="-76"/>
-      <int name="tm" value="106010105"/>
-      <string name="tn" value="out00"/>
-    </imgdir>
-    <imgdir name="6">
-      <string name="pn" value="in06"/>
-      <int name="pt" value="1"/>
-      <int name="x" value="88"/>
-      <int name="y" value="-250"/>
-      <int name="tm" value="106010106"/>
-      <string name="tn" value="out00"/>
-    </imgdir>
-    <imgdir name="7">
       <string name="pn" value="out00"/>
       <int name="pt" value="2"/>
       <int name="x" value="-363"/>
       <int name="y" value="304"/>
       <int name="tm" value="106010101"/>
       <string name="tn" value="in00"/>
+    </imgdir>
+    <imgdir name="4">
+      <string name="pn" value="in03"/>
+      <int name="pt" value="2"/>
+      <int name="x" value="63"/>
+      <int name="y" value="209"/>
+      <int name="tm" value="106010103"/>
+      <string name="tn" value="out00"/>
+      <int name="horizontalImpact" value="0"/>
+    </imgdir>
+    <imgdir name="5">
+      <string name="pn" value="in04"/>
+      <int name="pt" value="2"/>
+      <int name="x" value="401"/>
+      <int name="y" value="212"/>
+      <int name="tm" value="106010104"/>
+      <string name="tn" value="out00"/>
+      <int name="horizontalImpact" value="0"/>
+    </imgdir>
+    <imgdir name="6">
+      <string name="pn" value="in05"/>
+      <int name="pt" value="2"/>
+      <int name="x" value="75"/>
+      <int name="y" value="-66"/>
+      <int name="tm" value="106010105"/>
+      <string name="tn" value="out00"/>
+      <int name="horizontalImpact" value="0"/>
+    </imgdir>
+    <imgdir name="7">
+      <string name="pn" value="in06"/>
+      <int name="pt" value="2"/>
+      <int name="x" value="85"/>
+      <int name="y" value="-247"/>
+      <int name="tm" value="106010106"/>
+      <string name="tn" value="out00"/>
+      <int name="horizontalImpact" value="0"/>
     </imgdir>
     <imgdir name="8">
       <string name="pn" value="scr00"/>

@@ -4696,21 +4696,21 @@
       <string name="tn" value=""/>
     </imgdir>
     <imgdir name="4">
-      <string name="pn" value="under00"/>
-      <int name="pt" value="2"/>
-      <int name="x" value="-244"/>
-      <int name="y" value="90"/>
-      <int name="tm" value="200080700"/>
-      <string name="tn" value="top00"/>
-      <string name="script" value=""/>
-    </imgdir>
-    <imgdir name="5">
       <string name="pn" value="top00"/>
       <int name="pt" value="2"/>
       <int name="x" value="-255"/>
       <int name="y" value="-1703"/>
       <int name="tm" value="200080500"/>
       <string name="tn" value="under00"/>
+      <string name="script" value=""/>
+    </imgdir>
+    <imgdir name="5">
+      <string name="pn" value="under00"/>
+      <int name="pt" value="2"/>
+      <int name="x" value="-244"/>
+      <int name="y" value="90"/>
+      <int name="tm" value="200080700"/>
+      <string name="tn" value="top00"/>
       <string name="script" value=""/>
     </imgdir>
     <imgdir name="6">

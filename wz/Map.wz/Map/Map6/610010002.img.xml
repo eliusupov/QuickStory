@@ -3476,36 +3476,36 @@
   </imgdir>
   <imgdir name="portal">
     <imgdir name="0">
+      <string name="pn" value="sp"/>
+      <int name="pt" value="0"/>
       <int name="x" value="-667"/>
       <int name="y" value="-127"/>
-      <int name="pt" value="0"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
-      <string name="pn" value="sp"/>
     </imgdir>
     <imgdir name="1">
+      <string name="pn" value="U3_1"/>
+      <int name="pt" value="1"/>
       <int name="x" value="-1059"/>
       <int name="y" value="-97"/>
-      <int name="pt" value="1"/>
       <int name="tm" value="610010201"/>
       <string name="tn" value="B2_6"/>
-      <string name="pn" value="U3_1"/>
     </imgdir>
     <imgdir name="2">
+      <string name="pn" value="U3_2"/>
+      <int name="pt" value="1"/>
       <int name="x" value="2123"/>
       <int name="y" value="-158"/>
-      <int name="pt" value="1"/>
       <int name="tm" value="682000000"/>
-      <string name="tn" value="left01"/>
-      <string name="pn" value="U3_2"/>
+      <string name="tn" value="left00"/>
     </imgdir>
     <imgdir name="3">
+      <string name="pn" value="sU3_1"/>
+      <int name="pt" value="8"/>
       <int name="x" value="1584"/>
       <int name="y" value="-397"/>
-      <int name="pt" value="8"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
-      <string name="pn" value="sU3_1"/>
       <string name="script" value="Masteria_U3_1"/>
     </imgdir>
   </imgdir>

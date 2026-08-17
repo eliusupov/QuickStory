@@ -7704,168 +7704,167 @@
   </imgdir>
   <imgdir name="portal">
     <imgdir name="0">
+      <string name="pn" value="sp"/>
+      <int name="pt" value="0"/>
       <int name="x" value="208"/>
       <int name="y" value="-204"/>
-      <int name="pt" value="0"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
-      <string name="pn" value="sp"/>
     </imgdir>
     <imgdir name="1">
+      <string name="pn" value="st00"/>
+      <int name="pt" value="1"/>
       <int name="x" value="312"/>
       <int name="y" value="-25"/>
-      <int name="pt" value="1"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value="st00"/>
-      <string name="pn" value="st00"/>
       <int name="horizontalImpact" value="0"/>
     </imgdir>
     <imgdir name="2">
+      <string name="pn" value="out00"/>
+      <int name="pt" value="2"/>
       <int name="x" value="111"/>
       <int name="y" value="-23"/>
-      <int name="pt" value="2"/>
       <int name="tm" value="211050000"/>
       <string name="tn" value="in00"/>
-      <string name="pn" value="out00"/>
       <int name="horizontalImpact" value="0"/>
     </imgdir>
     <imgdir name="3">
+      <string name="pn" value="clear01"/>
+      <int name="pt" value="2"/>
       <int name="x" value="7102"/>
       <int name="y" value="-28"/>
-      <int name="pt" value="7"/>
-      <int name="tm" value="999999999"/>
-      <string name="tn" value=""/>
-      <string name="pn" value="clear01"/>
+      <int name="tm" value="211050000"/>
+      <string name="tn" value="in00"/>
+      <int name="horizontalImpact" value="0"/>
       <string name="script" value="outRider"/>
-      <int name="hideTooltip" value="0"/>
-      <int name="onlyOnce" value="0"/>
     </imgdir>
     <imgdir name="4">
+      <string name="pn" value="clear00"/>
+      <int name="pt" value="9"/>
       <int name="x" value="6875"/>
       <int name="y" value="-71"/>
-      <int name="pt" value="9"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
-      <string name="pn" value="clear00"/>
-      <string name="script" value="clearRider"/>
-      <int name="horizontalImpact" value="0"/>
       <int name="delay" value="200"/>
+      <int name="horizontalImpact" value="0"/>
+      <string name="script" value="clearRider"/>
     </imgdir>
     <imgdir name="5">
+      <string name="pn" value="trap00"/>
+      <int name="pt" value="3"/>
       <int name="x" value="1253"/>
       <int name="y" value="-71"/>
-      <int name="pt" value="3"/>
       <int name="tm" value="921110000"/>
       <string name="tn" value="st00"/>
-      <string name="pn" value="trap00"/>
       <int name="horizontalImpact" value="0"/>
     </imgdir>
     <imgdir name="6">
+      <string name="pn" value="trap01"/>
+      <int name="pt" value="3"/>
       <int name="x" value="1352"/>
       <int name="y" value="-71"/>
-      <int name="pt" value="3"/>
       <int name="tm" value="921110000"/>
       <string name="tn" value="st00"/>
-      <string name="pn" value="trap01"/>
       <int name="horizontalImpact" value="0"/>
     </imgdir>
     <imgdir name="7">
+      <string name="pn" value="trap02"/>
+      <int name="pt" value="3"/>
       <int name="x" value="1450"/>
       <int name="y" value="-71"/>
-      <int name="pt" value="3"/>
       <int name="tm" value="921110000"/>
       <string name="tn" value="st00"/>
-      <string name="pn" value="trap02"/>
       <int name="horizontalImpact" value="0"/>
     </imgdir>
     <imgdir name="8">
+      <string name="pn" value="trap03"/>
+      <int name="pt" value="3"/>
       <int name="x" value="1548"/>
       <int name="y" value="-71"/>
-      <int name="pt" value="3"/>
       <int name="tm" value="921110000"/>
       <string name="tn" value="st00"/>
-      <string name="pn" value="trap03"/>
       <int name="horizontalImpact" value="0"/>
     </imgdir>
     <imgdir name="9">
+      <string name="pn" value="trap04"/>
+      <int name="pt" value="3"/>
       <int name="x" value="1646"/>
       <int name="y" value="-71"/>
-      <int name="pt" value="3"/>
       <int name="tm" value="921110000"/>
       <string name="tn" value="st00"/>
-      <string name="pn" value="trap04"/>
       <int name="horizontalImpact" value="0"/>
     </imgdir>
     <imgdir name="10">
+      <string name="pn" value="trap05"/>
+      <int name="pt" value="3"/>
       <int name="x" value="5011"/>
       <int name="y" value="-71"/>
-      <int name="pt" value="3"/>
       <int name="tm" value="921110000"/>
       <string name="tn" value="st00"/>
-      <string name="pn" value="trap05"/>
       <int name="horizontalImpact" value="0"/>
     </imgdir>
     <imgdir name="11">
+      <string name="pn" value="trap06"/>
+      <int name="pt" value="3"/>
       <int name="x" value="5088"/>
       <int name="y" value="-71"/>
-      <int name="pt" value="3"/>
       <int name="tm" value="921110000"/>
       <string name="tn" value="st00"/>
-      <string name="pn" value="trap06"/>
       <int name="horizontalImpact" value="0"/>
     </imgdir>
     <imgdir name="12">
+      <string name="pn" value="trap07"/>
+      <int name="pt" value="3"/>
       <int name="x" value="5337"/>
       <int name="y" value="-71"/>
-      <int name="pt" value="3"/>
       <int name="tm" value="921110000"/>
       <string name="tn" value="st00"/>
-      <string name="pn" value="trap07"/>
       <int name="horizontalImpact" value="0"/>
     </imgdir>
     <imgdir name="13">
+      <string name="pn" value="trap08"/>
+      <int name="pt" value="3"/>
       <int name="x" value="5394"/>
       <int name="y" value="-71"/>
-      <int name="pt" value="3"/>
       <int name="tm" value="921110000"/>
       <string name="tn" value="st00"/>
-      <string name="pn" value="trap08"/>
       <int name="horizontalImpact" value="0"/>
     </imgdir>
     <imgdir name="14">
+      <string name="pn" value="trap09"/>
+      <int name="pt" value="3"/>
       <int name="x" value="5450"/>
       <int name="y" value="-71"/>
-      <int name="pt" value="3"/>
       <int name="tm" value="921110000"/>
       <string name="tn" value="st00"/>
-      <string name="pn" value="trap09"/>
       <int name="horizontalImpact" value="0"/>
     </imgdir>
     <imgdir name="15">
+      <string name="pn" value="trap10"/>
+      <int name="pt" value="3"/>
       <int name="x" value="5724"/>
       <int name="y" value="-72"/>
-      <int name="pt" value="3"/>
       <int name="tm" value="921110000"/>
       <string name="tn" value="st00"/>
-      <string name="pn" value="trap10"/>
       <int name="horizontalImpact" value="0"/>
     </imgdir>
     <imgdir name="16">
+      <string name="pn" value="trap11"/>
+      <int name="pt" value="3"/>
       <int name="x" value="5800"/>
       <int name="y" value="-72"/>
-      <int name="pt" value="3"/>
       <int name="tm" value="921110000"/>
       <string name="tn" value="st00"/>
-      <string name="pn" value="trap11"/>
       <int name="horizontalImpact" value="0"/>
     </imgdir>
     <imgdir name="17">
+      <string name="pn" value="trap12"/>
+      <int name="pt" value="3"/>
       <int name="x" value="5877"/>
       <int name="y" value="-72"/>
-      <int name="pt" value="3"/>
       <int name="tm" value="921110000"/>
       <string name="tn" value="st00"/>
-      <string name="pn" value="trap12"/>
       <int name="horizontalImpact" value="0"/>
     </imgdir>
   </imgdir>

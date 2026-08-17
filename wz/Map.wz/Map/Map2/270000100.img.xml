@@ -1293,28 +1293,28 @@
   </imgdir>
   <imgdir name="portal">
     <imgdir name="0">
+      <string name="pn" value="sp"/>
+      <int name="pt" value="0"/>
       <int name="x" value="-1783"/>
       <int name="y" value="66"/>
-      <int name="pt" value="0"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
-      <string name="pn" value="sp"/>
     </imgdir>
     <imgdir name="1">
+      <string name="pn" value="in00"/>
+      <int name="pt" value="2"/>
       <int name="x" value="-9"/>
       <int name="y" value="-336"/>
-      <int name="pt" value="2"/>
       <int name="tm" value="270000000"/>
       <string name="tn" value="out00"/>
-      <string name="pn" value="in00"/>
     </imgdir>
     <imgdir name="2">
-      <int name="x" value="-1780"/>
-      <int name="y" value="170"/>
+      <string name="pn" value="out00"/>
       <int name="pt" value="7"/>
+      <int name="x" value="-1780"/>
+      <int name="y" value="176"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
-      <string name="pn" value="out00"/>
       <string name="script" value="outTemple"/>
     </imgdir>
   </imgdir>
