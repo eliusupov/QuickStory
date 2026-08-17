@@ -7584,10 +7584,12 @@ public class PacketCreator {
     public static Packet spawnDragon(Dragon dragon) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_DRAGON);
         p.writeInt(dragon.getOwner().getId());//objectid = owner id
-        p.writeShort(dragon.getPosition().x);
-        p.writeShort(0);
-        p.writeShort(dragon.getPosition().y);
-        p.writeShort(0);
+        // Decode4, so one signed int - NOT short + short(0). writeShort is writeShortLE
+        // (ByteBufOutPacket:53), so the old pair hand-built a little-endian int32 whose high half was
+        // always 0x0000: correct for x >= 0, and 65441 instead of -95 for a negative one. Evan's own
+        // room 100030100 spawns at x = -95, so the first dragon a player ever sees was mispositioned.
+        p.writeInt(dragon.getPosition().x);
+        p.writeInt(dragon.getPosition().y);
         p.writeByte(dragon.getStance());
         // v84 reads TWO shorts after the stance byte; v83's writer emitted byte+short, one short.
         // Measured in the v84 client: CUserPool::OnPacket routes 0xB9..0xBB to 0x009704B9, whose

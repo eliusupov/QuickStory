@@ -14,10 +14,12 @@ import server.maps.AbstractMapObject;
 import server.maps.Dragon;
 import server.maps.MapObjectType;
 import server.maps.MapleMap;
+import tools.PacketCreator;
 
 import java.awt.Point;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -332,6 +334,39 @@ class V84EvanNodeTest {
         // nothing filed, and the dragon was never even asked where it should stand
         assertTrue(map.getMapObjects().isEmpty(), "a dragon was filed for a player who is not here");
         verify(dragon, never()).setPosition(any());
+    }
+
+    /**
+     * SPAWN_DRAGON carries x and y as {@code Decode4} each — the IDA read recorded in
+     * {@code PacketCreator.spawnDragon} (v84 @0x00506FA5 / @0x00506FB2). They used to be written as
+     * {@code writeShort(v); writeShort(0)}, and {@code writeShort} is {@code writeShortLE}
+     * ({@code ByteBufOutPacket:53}), so that pair hand-assembled a little-endian int32 with a
+     * permanently zero high half. Identical to a real int for {@code v >= 0}; for {@code v < 0} it
+     * drops the sign, e.g. −95 goes out as 65441.
+     * <p>
+     * Not hypothetical: an Evan's first job advancement (quest 22100) happens in Evan's room,
+     * {@code wz/Map.wz/Map/Map1/100030100.img.xml}, whose portal 0 stands at {@code x = -95}, and
+     * {@code MapleMap.spawnDragon} stamps the dragon at its owner's position.
+     */
+    @Test
+    void spawnDragonWritesSignedIntCoordinates() {
+        Character owner = mock(Character.class);
+        when(owner.getId()).thenReturn(0x11223344);
+        when(owner.getJob()).thenReturn(Job.EVAN1);
+
+        Dragon dragon = mock(Dragon.class);
+        when(dragon.getOwner()).thenReturn(owner);
+        when(dragon.getPosition()).thenReturn(new Point(-95, -1));
+        when(dragon.getStance()).thenReturn(0);
+
+        byte[] body = PacketCreator.spawnDragon(dragon).getBytes();
+        // opcode(2) + owner id(4), then x and y
+        assertArrayEquals(new byte[]{(byte) 0xA1, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF},
+                java.util.Arrays.copyOfRange(body, 6, 10), "x = -95 must sign-extend, not read 65441");
+        assertArrayEquals(new byte[]{(byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF},
+                java.util.Arrays.copyOfRange(body, 10, 14), "y = -1 must sign-extend, not read 65535");
+        // and the length the 393127dc6 fix pinned is unchanged: id 4, x 4, y 4, stance 1, 2, job 2
+        assertEquals(2 + 17, body.length, "v84 CDragon decode reads 17 bytes after the opcode");
     }
 
     /**
