@@ -124,7 +124,12 @@ public class MakeCharInfo {
         // This is because when the Maple Life A or Maple Life B items are used, the client does not send any data
         // regarding what equipment the character should be wearing (as it's all handled server-side)
         Job characterJob = character.getJob();
-        if (characterJob == Job.BEGINNER || characterJob == Job.NOBLESSE || characterJob == Job.LEGEND) {
+        // Job.EVAN (2001) belongs here too: EvanCreator takes top/bottom/shoes/weapon straight off
+        // the creation packet, exactly like LegendCreator, so leaving it out meant an Evan's starting
+        // equipment was the one thing accepted unverified. MakeCharInfo.img/EvanChar{Male,Female}
+        // carries the four ids, so there is a list to check against.
+        if (characterJob == Job.BEGINNER || characterJob == Job.NOBLESSE || characterJob == Job.LEGEND
+                || characterJob == Job.EVAN) {
             if (!verifyTopId(character.getInventory(InventoryType.EQUIPPED).getItem((short) -5).getItemId()))
                 return false;
             if (!verifyBottomId(character.getInventory(InventoryType.EQUIPPED).getItem((short) -6).getItemId()))
