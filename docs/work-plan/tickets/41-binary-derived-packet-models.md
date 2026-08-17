@@ -165,8 +165,13 @@ that would otherwise get reported as a finding.
 
 | | before | after |
 |---|---|---|
-| sendops with a `verified` model checked against real `PacketCreator` output | 29 | **35** |
-| of 307 sendops in `sendops-84.properties` | 9.4% | **11.4%** |
+| `verified` model rows checked against real `PacketCreator` output | 29 | **35** |
+| distinct sendops those rows cover | 27 | **33** |
+| of the 307 sendops in `sendops-84.properties` | 8.8% | **10.7%** |
+
+(Ticket 40 quoted "29 of 307, ~9%". That counted rows: `DROP_ITEM_FROM_MAPOBJECT` contributes three
+of them and `KILL_MONSTER` and `SKILL_LEARN_ITEM_RESULT` one each as named variants, so the real
+before-figure is 27 distinct sendops. The +6 here are six distinct sendops, no variants.)
 
 Six added, all from the binary table, each promoted only after **both** the handler disassembly and
 the emitting `PacketCreator` method were read:
