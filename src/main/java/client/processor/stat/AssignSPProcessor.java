@@ -69,10 +69,19 @@ public class AssignSPProcessor {
             int remainingSp = player.getRemainingSps()[GameConstants.getSkillBook(skillid / 10000)];
             boolean isBeginnerSkill = false;
 
-            if (skillid % 10000000 > 999 && skillid % 10000000 < 1003) {
+            // Beginner jobs are 0, Noblesse 1000, Legend 2000 and Evan 2001 - the list
+            // Character.isBeginnerJob() carries. 2001 is the only one that is not a round thousand,
+            // so Evan's Three Snails / Recovery / Nimble Feet are 20011000-20011002 and
+            // `skillid % 10000000` gave 11000-11002, outside this window: an Evan paid job SP for
+            // them, and a beginner Evan, who banks none, could not learn them at all. The job id
+            // has to be part of the test - Evan's own Magic Missile is 22001001, which the level
+            // window alone would let through. Same reason the total below keys on the skill's job
+            // rather than getJobType(), which is 2 for an Evan and counted Aran's Legend skills.
+            int skillJob = skillid / 10000;
+            if ((skillJob == 0 || skillJob == 1000 || skillJob == 2000 || skillJob == 2001) && skillid % 10000 > 999 && skillid % 10000 < 1003) {
                 int total = 0;
                 for (int i = 0; i < 3; i++) {
-                    total += player.getSkillLevel(SkillFactory.getSkill(player.getJobType() * 10000000 + 1000 + i));
+                    total += player.getSkillLevel(SkillFactory.getSkill(skillJob * 10000 + 1000 + i));
                 }
                 remainingSp = Math.min((player.getLevel() - 1), 6) - total;
                 isBeginnerSkill = true;
