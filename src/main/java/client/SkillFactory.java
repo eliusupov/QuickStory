@@ -367,6 +367,9 @@ public class SkillFactory {
                 case Evan.MAGIC_RESISTANCE:
                 case Evan.MAGIC_SHIELD:
                 case Evan.SLOW:
+                // 22181000 has no effect node and its action is "OnixBlessing", not "alert2", so
+                // neither test above sees a buff and its mad/pdd/mdd never became statups
+                case Evan.BLESSING_OF_THE_ONYX:
                     isBuff = true;
                     break;
             }
