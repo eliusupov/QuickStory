@@ -1,8 +1,12 @@
 package client.processor.stat;
 
+import client.Character;
+import client.Client;
 import client.Job;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
+import java.lang.reflect.Method;
 import java.util.function.BiFunction;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -232,6 +236,55 @@ class AssignAPProcessorTest {
                 () -> assertEquals(2255, f.apply(Job.THUNDERBREAKER2, cygnus_max_level)),
                 () -> assertEquals(2255, f.apply(Job.THUNDERBREAKER3, cygnus_max_level)),
                 () -> assertEquals(2255, f.apply(Job.THUNDERBREAKER4, cygnus_max_level))
+        );
+    }
+
+    /**
+     * Every branch of getMinHp/getMinMp is an {@code isA} chain rooted at an Explorer or Cygnus job,
+     * plus a {@code job == BEGINNER || job == NOBLESSE} case. Evan (2001, 2200-2218) matches none of
+     * them - {@code EVAN1.isA(MAGICIAN)} is false because 2200/100 is 22, not 2 - and neither does
+     * Aran's LEGEND (2000), so both fall out with multiplier 0 and offset 0. That is the AP-reset
+     * floor: {@code getMaxHp() + hplose < getMinHp(...)} can never fire, so an Evan can drain max HP
+     * or MP with AP Reset past the point every other class is stopped at. Pinning the wrong values.
+     */
+    @Test
+    void evanAndLegendHaveNoMinimumHpMpFloor() {
+        assertAll(
+                () -> assertEquals(0, AssignAPProcessor.getMinHp(Job.LEGEND, 200), "job 2000 HP"),
+                () -> assertEquals(0, AssignAPProcessor.getMinHp(Job.EVAN, 200), "job 2001 HP"),
+                () -> assertEquals(0, AssignAPProcessor.getMinHp(Job.EVAN1, 200), "job 2200 HP"),
+                () -> assertEquals(0, AssignAPProcessor.getMinHp(Job.EVAN10, 200), "job 2218 HP"),
+                () -> assertEquals(0, AssignAPProcessor.getMinMp(Job.LEGEND, 200), "job 2000 MP"),
+                () -> assertEquals(0, AssignAPProcessor.getMinMp(Job.EVAN, 200), "job 2001 MP"),
+                () -> assertEquals(0, AssignAPProcessor.getMinMp(Job.EVAN1, 200), "job 2200 MP"),
+                () -> assertEquals(0, AssignAPProcessor.getMinMp(Job.EVAN10, 200), "job 2218 MP")
+        );
+    }
+
+    private static int apChange(String method, Job job) throws Exception {
+        Character chr = Character.getDefault(Mockito.mock(Client.class));
+        chr.setJob(job);
+
+        Method calc = AssignAPProcessor.class.getDeclaredMethod(method, Character.class, boolean.class);
+        calc.setAccessible(true);
+        return (int) calc.invoke(null, chr, true);    // the AP-reset path, the one that is not random
+    }
+
+    /**
+     * calcHpChange/calcMpChange classify by the same {@code isA} chains, so Evan - an INT class -
+     * lands in the trailing "everything else" case: 8 HP and 6 MP per AP point where a magician gets
+     * 6 and 18. Every AP point an Evan puts into MP is worth a third of a magician's, permanently.
+     * Pinning the wrong values.
+     */
+    @Test
+    void evanIsNotClassifiedAsAMagicianForApGains() throws Exception {
+        assertAll(
+                () -> assertEquals(6, apChange("calcHpChange", Job.MAGICIAN), "magician HP per AP"),
+                () -> assertEquals(18, apChange("calcMpChange", Job.MAGICIAN), "magician MP per AP"),
+                () -> assertEquals(8, apChange("calcHpChange", Job.EVAN1), "job 2200 HP per AP"),
+                () -> assertEquals(6, apChange("calcMpChange", Job.EVAN1), "job 2200 MP per AP"),
+                () -> assertEquals(8, apChange("calcHpChange", Job.EVAN10), "job 2218 HP per AP"),
+                () -> assertEquals(6, apChange("calcMpChange", Job.EVAN10), "job 2218 MP per AP")
         );
     }
 }
