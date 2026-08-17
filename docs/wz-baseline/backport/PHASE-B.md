@@ -332,9 +332,13 @@ in seconds and the 3.5 GB archive runs last.
 ## 9. What is NOT done, stated plainly
 
 1. **2,870 rows of his content did not land.** 2,854 refused by the positional-array gate (§4),
-   15 by the deny list (§6), 1 already present. **This portion cannot be safely automated** — index
-   `n` is not an identity, and the tool is right to refuse. Every row is listed in
-   `phase-b/REFUSED.tsv` with its array in `phase-b/ARRAYS.tsv`.
+   15 by the deny list (§6), 1 "already exists in target". **This portion cannot be safely
+   automated** — index `n` is not an identity, and the tool is right to refuse. Every row is listed
+   in `phase-b/REFUSED.tsv` with its array in `phase-b/ARRAYS.tsv`.
+   *Correction to that last row:* `REFUSED.tsv` labels
+   `Map.wz/Map/Map9/970032200.img/foothold/6` as `ALREADY EXISTS in v84 base`. It does not — it
+   already existed in the **target**, because the whole image was added earlier in the same run from
+   the removed set. Its content is present in the output. **That row is not a gap.**
 2. **The 136 conflicts are unresolved by design.** 79 are mechanically resolvable (§5 A+B) but
    nothing was merged for them; 57 need his decision.
 3. **A backport-direction deny list does not exist.** The forward-direction one was used unchanged,
