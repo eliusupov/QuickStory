@@ -86,6 +86,22 @@ class V84TownIndexParityRealLoad {
             "west00", "east00", "east10", "in00", "in01", "in02", "hp01", "hp01_1",
             "tp", "tp", "tp", "tp", "tp", "tp"};
 
+    /**
+     * The two maps that were index-corrected a second time. Both had the right portals in the wrong
+     * slots: {@code dda2d5f5a} appended the Frog House door at 15 where v84 has it at 4, and
+     * {@code c07ade7db} wrote the farm's {@code in01} over slot 13 where v84 has {@code west00}.
+     * Both commits reasoned that portals resolve by name so position does not matter - it does, for
+     * arrivals, because {@code getWarpToMap} sends the position. Spelled out in full for the same
+     * reason as Henesys: these two are on the owner's active path.
+     */
+    private static final String[] FROG_HOUSE_PORTALS = {          // 220000300
+            "sp", "sp", "sp", "sp", "scr00", "h000", "h001", "west00", "east00",
+            "in00", "in01", "in02", "in03", "in04", "in05", "in06"};
+
+    private static final String[] EVAN_FARM_PORTALS = {           // 100030000
+            "sp", "sp", "sp", "sp", "sp", "sp", "sp", "sp", "sp", "sp", "sp", "sp",
+            "ntgo01", "west00", "in01", "in00", "h_east00", "h_west00", "east00"};
+
     @Test
     void everyTownCarriesUnityPortal2AtV84sIndex() {
         Map<Integer, String> wrong = new TreeMap<>();
@@ -130,13 +146,60 @@ class V84TownIndexParityRealLoad {
 
     @Test
     void henesysPortalOrderIsV84sExactly() {
-        Data portals = section(100000000, "portal");
+        assertEquals(List.of(HENESYS_PORTALS), portalOrder(100000000, HENESYS_PORTALS.length),
+                "Henesys portal order drifted from v84");
+    }
+
+    @Test
+    void frogHouseDoorSitsAtV84sIndexFour() {
+        assertEquals(List.of(FROG_HOUSE_PORTALS), portalOrder(220000300, FROG_HOUSE_PORTALS.length),
+                "220000300 portal order drifted from v84 - scr00 belongs at 4, and appending it "
+                        + "instead pushes eleven portals one slot off the client");
+    }
+
+    @Test
+    void evanFarmEntranceSitsAtV84sIndexThirteen() {
+        assertEquals(List.of(EVAN_FARM_PORTALS), portalOrder(100030000, EVAN_FARM_PORTALS.length),
+                "100030000 portal order drifted from v84 - west00 belongs at 13 and in01 at 14");
+    }
+
+    /**
+     * The reorders above move no slot that {@code characters.spawnpoint} can hold, which is why they
+     * ship without a correction changeset (unlike the 17 towns, see changeSet 164).
+     * {@code findClosestPlayerSpawnpoint} only ever returns a {@code pt} 0 or 1 portal whose
+     * {@code tm} is {@code MapId.NONE}; on both maps every such portal is an {@code sp} in the
+     * untouched head of the array. If that stops being true, a stored index can go stale silently.
+     */
+    @Test
+    void noReorderedSlotIsOneThatSpawnpointCouldHold() {
+        Map<Integer, String> spawnable = new TreeMap<>();
+        for (int[] mapAndFirstMovedSlot : new int[][]{{220000300, 4}, {100030000, 13}}) {
+            Data portals = section(mapAndFirstMovedSlot[0], "portal");
+            for (Data node : portals.getChildren()) {
+                if (Integer.parseInt(node.getName()) < mapAndFirstMovedSlot[1]) {
+                    continue;
+                }
+                int pt = DataTool.getInt("pt", node, -1);
+                if ((pt == 0 || pt == 1) && DataTool.getInt("tm", node, -1) == 999999999) {
+                    spawnable.put(mapAndFirstMovedSlot[0],
+                            "slot " + node.getName() + " (" + DataTool.getString("pn", node, "?") + ")");
+                }
+            }
+        }
+        assertEquals(Map.of(), spawnable,
+                "a moved slot is now spawnpoint-eligible, so characters.spawnpoint needs a "
+                        + "correction changeset for that map");
+    }
+
+    private static List<String> portalOrder(int mapId, int size) {
+        Data portals = section(mapId, "portal");
+        assertEquals(size, portals.getChildren().size(), "map " + mapId + " portal count");
         List<String> actual = new ArrayList<>();
-        for (int i = 0; i < HENESYS_PORTALS.length; i++) {
+        for (int i = 0; i < size; i++) {
             Data node = portals.getChildByPath(String.valueOf(i));
             actual.add(node == null ? "<missing>" : DataTool.getString("pn", node, "<none>"));
         }
-        assertEquals(List.of(HENESYS_PORTALS), actual, "Henesys portal order drifted from v84");
+        return actual;
     }
 
     @Test

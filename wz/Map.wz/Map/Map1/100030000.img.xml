@@ -15590,14 +15590,23 @@
       <string name="tn" value="nt01"/>
     </imgdir>
     <imgdir name="13">
+      <string name="pn" value="west00"/>
+      <int name="pt" value="2"/>
+      <int name="x" value="-4326"/>
+      <int name="y" value="154"/>
+      <int name="tm" value="100020000"/>
+      <string name="tn" value="east00"/>
+    </imgdir>
+    <imgdir name="14">
       <string name="pn" value="in01"/>
       <int name="pt" value="2"/>
       <int name="x" value="-4431"/>
       <int name="y" value="-1287"/>
       <int name="tm" value="100030400"/>
       <string name="tn" value="out00"/>
+      <int name="horizontalImpact" value="0"/>
     </imgdir>
-    <imgdir name="14">
+    <imgdir name="15">
       <string name="pn" value="in00"/>
       <int name="pt" value="10"/>
       <int name="x" value="-3368"/>
@@ -15605,7 +15614,7 @@
       <int name="tm" value="100030001"/>
       <string name="tn" value="out00"/>
     </imgdir>
-    <imgdir name="15">
+    <imgdir name="16">
       <string name="pn" value="h_east00"/>
       <int name="pt" value="1"/>
       <int name="x" value="-1237"/>
@@ -15613,7 +15622,7 @@
       <int name="tm" value="100030000"/>
       <string name="tn" value="h_west00"/>
     </imgdir>
-    <imgdir name="16">
+    <imgdir name="17">
       <string name="pn" value="h_west00"/>
       <int name="pt" value="1"/>
       <int name="x" value="-2986"/>
@@ -15621,21 +15630,13 @@
       <int name="tm" value="100030000"/>
       <string name="tn" value="h_east00"/>
     </imgdir>
-    <imgdir name="17">
+    <imgdir name="18">
       <string name="pn" value="east00"/>
       <int name="pt" value="2"/>
       <int name="x" value="-947"/>
       <int name="y" value="-865"/>
       <int name="tm" value="100040000"/>
       <string name="tn" value="west00"/>
-    </imgdir>
-    <imgdir name="18">
-      <string name="pn" value="west00"/>
-      <int name="pt" value="2"/>
-      <int name="x" value="-4326"/>
-      <int name="y" value="154"/>
-      <int name="tm" value="100020000"/>
-      <string name="tn" value="east00"/>
     </imgdir>
   </imgdir>
 </imgdir>

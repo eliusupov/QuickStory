@@ -229,10 +229,14 @@ class V84EvanWorldNodeTest {
     @Test
     void theFarmClusterHasItsV84WayBackIn() {
         DataProvider maps = wz("Map.wz");
-        Data in01 = maps.getData(mapNode(100030000)).getChildByPath("portal/13");
-        assertNotNull(in01, "100030000/portal/13 vanished");
+        // Slot 14, not 13: this test was written when in01 was written over slot 13, which is
+        // v84's west00. The array is now v84's own order (see ticket 53 and
+        // V84TownIndexParityRealLoad) - the server sends the slot number to the client as the
+        // arrival point, so the position is load-bearing, not cosmetic.
+        Data in01 = maps.getData(mapNode(100030000)).getChildByPath("portal/14");
+        assertNotNull(in01, "100030000/portal/14 vanished");
         assertEquals("in01", DataTool.getString("pn", in01, null),
-                "100030000/portal/13 is not in01 - if the v83 quest00 is back, 100030400 is a "
+                "100030000/portal/14 is not in01 - if the v83 quest00 is back, 100030400 is a "
                         + "one-way trip again");
         assertEquals(2, DataTool.getInt("pt", in01, -1));
         assertEquals(-4431, DataTool.getInt("x", in01, 0));
