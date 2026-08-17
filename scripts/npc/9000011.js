@@ -49,11 +49,18 @@ function action(mode, type, selection) {
                     cm.sendNext("You've entered the event already in the past hour.");
                 } else if (!cm.canHold(4031019)) {
                     cm.sendNext("Save up some space in your inventory.");
-                } else if (cm.getChannelServer().getEvent() > -1 && !cm.haveItem(4031019)) {
+                } else if (cm.getEvent() != null && !cm.haveItem(4031019)) {
+                    // cm.getEvent() is server.events.gm.Event (set by @startevent), not the bare
+                    // map id an older Channel.getEvent() returned - hence getMapId() here.
+                    var eventMap = cm.getEvent().getMapId();
                     cm.getPlayer().saveLocation("EVENT");
                     cm.getPlayer().setChalkboard(null);
                     marr.setCustomData("" + cm.getCurrentTime());
-                    cm.warp(cm.getChannelServer().getEvent(), cm.getChannelServer().getEvent() == 109080000 || cm.getChannelServer().getEvent() == 109080010 ? 0 : "join00");
+                    if (eventMap == 109080000 || eventMap == 109080010) {
+                        cm.warp(eventMap, 0);
+                    } else {
+                        cm.warp(eventMap, "join00");
+                    }
                 } else {
                     cm.sendNext("Either the event has not been started, you already have the #bScroll of Secrets#k, or you have already participated in this event within the last 24 hours. Please try again later!");
                 }
