@@ -233,14 +233,14 @@
     <imgdir name="0">
       <string name="type" value="n"/>
       <string name="id" value="2040014"/>
-      <int name="x" value="-1626"/>
-      <int name="y" value="93"/>
+      <int name="x" value="-1002"/>
+      <int name="y" value="99"/>
       <int name="mobTime" value="0"/>
       <int name="f" value="0"/>
-      <int name="fh" value="51"/>
+      <int name="fh" value="46"/>
       <int name="cy" value="102"/>
-      <int name="rx0" value="-1676"/>
-      <int name="rx1" value="-1576"/>
+      <int name="rx0" value="-1052"/>
+      <int name="rx1" value="-952"/>
     </imgdir>
     <imgdir name="1">
       <string name="type" value="n"/>

@@ -559,13 +559,13 @@
     <imgdir name="21">
       <string name="type" value="m"/>
       <string name="id" value="1110101"/>
-      <int name="x" value="886"/>
-      <int name="y" value="1539"/>
+      <int name="x" value="856"/>
+      <int name="y" value="1519"/>
       <int name="mobTime" value="0"/>
       <int name="f" value="0"/>
       <int name="hide" value="0"/>
-      <int name="fh" value="60"/>
-      <int name="cy" value="1569"/>
+      <int name="fh" value="59"/>
+      <int name="cy" value="1568"/>
       <int name="rx0" value="-93"/>
       <int name="rx1" value="1983"/>
     </imgdir>

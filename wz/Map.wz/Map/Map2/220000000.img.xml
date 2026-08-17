@@ -575,14 +575,14 @@
     <imgdir name="0">
       <string name="type" value="n"/>
       <string name="id" value="9010022"/>
-      <int name="x" value="-374"/>
-      <int name="y" value="-215"/>
+      <int name="x" value="-387"/>
+      <int name="y" value="-201"/>
       <int name="mobTime" value="0"/>
       <int name="f" value="0"/>
       <int name="hide" value="0"/>
       <int name="fh" value="246"/>
       <int name="cy" value="-198"/>
-      <int name="rx0" value="-424"/>
+      <int name="rx0" value="-437"/>
       <int name="rx1" value="-347"/>
     </imgdir>
     <imgdir name="10">

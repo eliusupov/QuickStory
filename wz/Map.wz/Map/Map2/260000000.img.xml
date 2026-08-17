@@ -617,15 +617,15 @@
     <imgdir name="0">
       <string name="type" value="n"/>
       <string name="id" value="9010022"/>
-      <int name="x" value="868"/>
-      <int name="y" value="263"/>
+      <int name="x" value="872"/>
+      <int name="y" value="267"/>
       <int name="mobTime" value="0"/>
       <int name="f" value="0"/>
       <int name="hide" value="0"/>
       <int name="fh" value="37"/>
       <int name="cy" value="275"/>
-      <int name="rx0" value="818"/>
-      <int name="rx1" value="918"/>
+      <int name="rx0" value="822"/>
+      <int name="rx1" value="922"/>
     </imgdir>
   </imgdir>
   <imgdir name="reactor">
