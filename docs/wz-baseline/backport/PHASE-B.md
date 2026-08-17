@@ -188,11 +188,12 @@ in `Map.wz`, not 165.
 
 ---
 
-## 5. The 136 three-way conflicts — grouped, NOT resolved
+## 5. The 136 three-way conflicts — grouped here, RESOLVED in §5.1
 
-v84 and the owner both edited these stock images. Nothing was merged for any of them; the tree
-carries **v84's version**, and the owner's version is intact in his client. Full table with the
-per-child and per-field breakdown: `phase-b/CONFLICTS-136.tsv`.
+v84 and the owner both edited these stock images. **This section is the triage, and it describes the
+tree before step 6 of §8**: at that point nothing had been merged for any of them, the tree carried
+**v84's version**, and the owner's version was intact in his client. Full table with the per-child
+and per-field breakdown: `phase-b/CONFLICTS-136.tsv`. **What the shipped tree now holds is §5.1.**
 
 Method: digest each image's direct children in **v83-stock, v84 and live**. A child differing
 live-vs-v83 is *his* edit; differing v84-vs-v83 is *v84's*. Where both moved the same child, descend
@@ -210,6 +211,26 @@ one more level and repeat.
 **79 of the 136 (groups A and B) are mechanically resolvable with a field-level merge and no
 judgement.** That is the single largest actionable reduction in this phase — phase A costed all 136
 as hand work.
+
+### 5.1 Resolved, 2026-08-17 — the owner's "Maximum v84 parity" decision
+
+He was shown the table above and chose: **take v84 on the conflicts, keep his on the 17
+`Character.wz` `info/level` EXP curves only** — a deliberate, informed, one-time override of his
+additive-only rule, scoped to these 136 rows. A + B were merged both ways (nothing is displaced,
+they are disjoint); the 17 keep his; the other 23 `C` and all 17 `D` keep v84, which needed no merge
+because the tree already carried v84 there.
+
+```
+296 field roots derived -> 1 dropped as a proven no-op -> 295 requested -> 290 landed, 5 refused
+1,637 digest checks over four trees:  0 WRONG,  83 vacuous
+Cap/01002777 info/level/info/*/exp:   v83 & v84 = 80,90,100,110,120,0   his & tree\ = 10000 x30
+```
+
+The 5 refusals are rows where **his** side is a deletion, which the tool cannot express. Full
+record, the discriminator for every check, the two things that still need his answer, and the
+important caveat that "reverts to v84" does not reach phase B's *additive* layer inside those same
+images: **`phase-b/CONFLICT-RESOLUTION.md`**, with `phase-b/CONFLICT-MANIFEST-136.tsv` (one row per
+conflict) and `phase-b/VERIFY-conflicts.tsv` (one row per digest check).
 
 ---
 
@@ -319,9 +340,19 @@ Copy-Item D:\games\wz-stage\v84-base\*.wz D:\games\wz-stage\phaseB\pre\
 # 5. assemble + hash the deliverable
 .\assemble-tree.ps1         # -> D:\games\wz-stage\phaseB\tree\  + TREE-MANIFEST.tsv
 
-# 6. conflicts (report only, resolves nothing)
+# 6. conflicts — triage (report only), then RESOLVE to the owner's decision (§5.1)
 .\conflicts-triage.ps1 ; .\conflicts-drill.ps1
+python resolve-conflicts-lists.py          # CONFLICTS-136.tsv -> merge lists + DECISIONS.tsv
+.\resolve-conflicts.ps1 -Dry               # read the refusals before committing to them
+.\resolve-conflicts.ps1                    # ~35 s, 8 archives, peak 174 MB
+.\assemble-tree.ps1                        # AGAIN: it lays conflicts\out\ over out\
+python verify-conflicts.py                 # 1,637 digest checks; expect 0 WRONG
 ```
+
+Step 6 must run **after** step 5, not instead of it: `resolve-conflicts.ps1` merges *from the client
+into `tree\`*, so `tree\` has to exist first, and `assemble-tree.ps1` is then re-run to fold the
+result in and re-hash. Running `assemble-tree.ps1` on a stage that has no `conflicts\out\` is a
+no-op for this step, so a first build and a rebuild take the same sequence.
 
 Scripts: `docs/wz-baseline/backport/phase-b/`. Peak RSS ≈ 0.7 MB per forced image; budget 4 GB for
 `Character` and run it alone. `run-phaseB.ps1` orders archives smallest-first so a failure surfaces
@@ -339,8 +370,11 @@ in seconds and the 3.5 GB archive runs last.
    `Map.wz/Map/Map9/970032200.img/foothold/6` as `ALREADY EXISTS in v84 base`. It does not — it
    already existed in the **target**, because the whole image was added earlier in the same run from
    the removed set. Its content is present in the output. **That row is not a gap.**
-2. **The 136 conflicts are unresolved by design.** 79 are mechanically resolvable (§5 A+B) but
-   nothing was merged for them; 57 need his decision.
+2. ~~**The 136 conflicts are unresolved by design.**~~ **Resolved 2026-08-17 to his "Maximum v84
+   parity" decision — §5.1 and `phase-b/CONFLICT-RESOLUTION.md`.** What remains of them: 5 rows
+   where his side is a deletion the tool cannot express, and 38 his-alone fields inside the 17
+   kept images (`info/icon`/`info/iconRaw`/`shootF`) that the literal reading of "the EXP curves
+   only" left at v84. Both need him, not a guess.
 3. **A backport-direction deny list does not exist.** The forward-direction one was used unchanged,
    as instructed, and it blocked 13 rows for reasons that do not apply in this direction (§6).
 4. **742 of Mob.wz's 810 additive rows are content-UNPROVEN** (§3.2).
