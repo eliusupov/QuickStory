@@ -261,9 +261,20 @@ route. MinHook becomes necessary only for the optional `EzorsiaV2_UI.wz` side ar
 which needs exactly two hooks (`CWvsApp::InitializeResMan`, `StringPool::GetString`).
 The hook table in `dllmain.cpp` is deliberately empty.
 
-**`codecaves.h` must be copied from upstream verbatim** and its `dw…Retn` constants
-replaced with the generated `HD_<name>_RETN` values. The cave bodies are ~600 lines of
-naked `__asm`; retyping them is how you get a silent crash.
+**`codecaves.h` is vendored from upstream verbatim**, apart from the two v84 body edits
+marked in it. Its `dw…Retn` constants are *not* hand-edited: `gen_loader.py` emits
+`const unsigned long <Ezorsia's own name> = <v84 address>;` for all 35, so the header
+compiles unmodified. Caves we do not ship bind to 0 and nothing jumps to them.
+
+`cave_params.h` wraps it and supplies the rest: a `Client` shim for the two statics
+codecaves.h references, stubs for 15 `dw…` symbols belonging to commented-out
+experiments, and `SetCaveParams()`.
+
+**`SetCaveParams()` is not optional.** codecaves.h computes `myHeight`/`myWidth` as
+*static initialisers* (`int myHeight = -(Client::m_nGameHeight - 600) / 2;`), which run
+before `DllMain` has read `hd-res.ini`. Left alone, every cave would lay out for 800×600
+whatever the ini says. The 76 assignments are transcribed from `Client.cpp` in its own
+order, and `SetCaveParams()` runs after the ini read and before `ApplyAll()`.
 
 **31 caves resolve.** All tile their NOP run, and — new in phase 2 — nothing in either
 image branches *into* any displaced range (`JMPIN`). Exactly **two need their body
@@ -294,31 +305,56 @@ latter an ordered 11↔11 match). Do not assume one number — re-check any stru
 against `verify.py`'s printed sequence. `gen_loader.py` emits the v84 displacement as
 `HD_<name>_MEMBER` so the stale v83 literal need not stay in the naked asm.
 
-### Building it — there is no toolchain on this machine
-
-`where cl / gcc / g++ / clang / clang-cl / zig / rustc / nasm / ml / link` all return
-nothing; `C:\Program Files\Microsoft Visual Studio`, the `(x86)` path, `LLVM`, `msys64`,
-`mingw*`, `MinGW`, `Strawberry`, `TDM-GCC-64`, `Windows Kits` and `chocolatey` do not
-exist; the VS7/VC7 registry keys are absent; scoop has only 7zip, godot, pandoc,
-tesseract, typst. The only SDK present is `dotnet`, which cannot build a native x86 DLL
-with MSVC-style `__asm`. **So the loader has NOT been compiled, and no claim that it
-compiles should be believed until someone runs the command below.**
-
-Note that MSVC is not merely convenient here, it is required: the cave bodies are
-`__declspec(naked)` with `__asm { }` blocks, which GCC and Clang do not accept — they
-would need rewriting into AT&T/extended asm first.
+### Building it — it builds
 
 ```
-"C:\...\VC\Auxiliary\Build\vcvars32.bat"
-cl /LD /O2 /GS- /MT /DNDEBUG dllmain.cpp /link /OUT:hd-res-1.0.0.dll kernel32.lib user32.lib
+tools\hd\loader\build.cmd
 ```
-x86, no CRT dependency beyond `memcpy`/`memset`; `user32` only for the optional
-`report=1` MessageBox. Match the other edit DLLs (~30–70 KB x86).
 
-In place of a compile, `test_hd.py` lints the generated header for what the compiler
-would have caught — field count, brace balance, unknown `HdKind`, duplicate `#define`,
-rows that did not PASS — and checks that **no two shipped patches write the same byte**.
-That last check is what caught the `VersionNumberFix` conflict described below.
+MSVC is required, not merely convenient: the cave bodies are `__declspec(naked)` with
+`__asm { }` blocks, which GCC and Clang reject outright. `vcvars32.bat` must run first —
+a bare `cl` fails on headers and libs. `build.cmd` handles both and takes `VCVARS32` as
+an override; the command it runs is
+
+```
+cl /nologo /LD /O2 /GS- /MT /DNDEBUG dllmain.cpp /link /OUT:hd-res-1.0.0.dll kernel32.lib user32.lib
+```
+
+Built with **Visual Studio 2022 Build Tools 14.44.35207** (x86 cross from Hostx64):
+
+| | |
+|---|---|
+| artifact | `loader/hd-res-1.0.0.dll`, 108,544 bytes |
+| machine | `14C (x86)`, 32-bit word machine, PE32 |
+| warnings | one, `C4733` at `codecaves.h:575` |
+
+That warning is in `cc0x00A63FF3`, a **group A cave that is not in the shipped table and
+is never jumped to** — it also carries hardcoded v83 addresses, which is a second reason
+it is excluded. Any *other* warning is worth reading.
+
+`user32` is only for the optional `report=1` MessageBox; there is no CRT dependency
+beyond `memcpy`/`memset`. Size is in line with the other edit DLLs (~30–70 KB x86).
+
+**`build.cmd` also runs a load-and-run selftest**, which proves what a compile does not.
+`selftest.cpp` is a 32-bit host, deliberately linked at `/BASE:0x20000000` so it cannot
+overlap the `0x00400000`–`0x00C61463` range the patch table addresses, and it
+`LoadLibrary`s the DLL. Expected output:
+
+```
+hd-res 1280x720: applied 0, skipped 0, byte-mismatch 288 of 288
+OK: hd-res-selftest.dll loaded at 7AA40000, DllMain returned
+```
+
+That is the result being checked: `DllMain` runs, reads the ini, walks all 288 rows, and
+the byte guard **refuses every one** because this process is not the v84 client. **A
+non-zero `applied` count there means the guard is broken — do not ship it.**
+
+Build products are gitignored; rebuild takes a few seconds.
+
+`test_hd.py` still lints the generated header for what a compiler catches late or not at
+all — field count, brace balance, unknown `HdKind`, duplicate `#define`, rows that did
+not PASS — and checks that **no two shipped patches write the same byte**. That last
+check is what caught the `VersionNumberFix` conflict described below; keep it.
 
 ## Offline harness: what each check proves
 
@@ -419,9 +455,8 @@ Do this on a **copy**, never on `D:\games\MSv84\client\` in place.
 
 ```
 1.  robocopy D:\games\MSv84\client D:\games\MSv84\hd /E      (a full copy; ~2 GB)
-2.  Build loader\ as hd-res-1.0.0.dll (x86) -- see "Building it" above; there is no
-    toolchain on this machine, so this step has never been run. Put the DLL and
-    hd-res.ini in
+2.  tools\hd\loader\build.cmd     (builds + selftests; see "Building it" above)
+    Copy hd-res-1.0.0.dll and hd-res.ini into
         D:\games\MSv84\hd\edits\
     Leave the five existing edit DLLs exactly as they are.
     Put `report=1` under [general] in hd-res.ini for the first launch.
@@ -430,9 +465,7 @@ Do this on a **copy**, never on `D:\games\MSv84\client\` in place.
     A launch REWRITES this machine-wide value and will repoint your other client.
 4.  Launch D:\games\MSv84\hd\MapleStory.exe.
 5.  A message box should appear before the window opens, reading
-        hd-res 1280x720: applied 257, skipped 31, byte-mismatch 0 of 288
-    The 31 skipped are the code caves, which do nothing until codecaves.h is included
-    (see "The loader"); once it is, expect applied 288, skipped 0.
+        hd-res 1280x720: applied 288, skipped 0, byte-mismatch 0 of 288
     ANY non-zero byte-mismatch means your client is not the build this table was
     verified against -- STOP, and re-run verify.py against a fresh dump of it. Those
     rows were skipped rather than applied, so nothing is corrupted, but the rest of

@@ -370,3 +370,40 @@ static const HdPatch kHdPatches[] = {
 // BODY EDIT REQUIRED for AdjustStatusBarInput:
 //   v83 displaced: push 0x16 ; push edi ; lea ecx, [esi + 0xcd0]
 //   v84 displaced: push 0x16 ; push edi ; lea ecx, [esi + 0xd08]
+
+// Ezorsia`s own return-address symbol names, bound to v84.
+const unsigned long dwCashFix1Rtm = 0x0046B883;  // CashShopFix1
+const unsigned long dwCashFix2Rtm = 0x0046B8A0;  // CashShopFix2
+const unsigned long dwCashFix3Rtm = 0x0046B8BF;  // CashShopFix3
+const unsigned long dwCashFix4Rtm = 0x0046B8DC;  // CashShopFix4
+const unsigned long dwCashFix5Rtm = 0x0046B8FC;  // CashShopFix5
+const unsigned long dwCashFix6Rtm = 0x0046B917;  // CashShopFix6
+const unsigned long dwCashFix7Rtm = 0x0046B93C;  // CashShopFix7
+const unsigned long dwCashFix8Rtm = 0x0046B956;  // CashShopFix8
+const unsigned long dwCashFixPrevRtm = 0x004B08F4;  // CashShopFixPrev
+const unsigned long dwMuruengraidClearRoundUIRetn = 0x0054129A;  // ccMuruengraidClearRoundUI
+const unsigned long dwMuruengraidPlayerRetn = 0x00560A20;  // ccMuruengraidPlayer
+const unsigned long dwMuruengraidClockRetn = 0x00560AA8;  // ccMuruengraidClock
+const unsigned long dwMuruengraidMonsterRetn = 0x00560B2E;  // ccMuruengraidMonster
+const unsigned long dwMuruengraidEngBar1Retn = 0x00560BB9;  // ccMuruengraidEngBar1
+const unsigned long dwMuruengraidEngBar2Retn = 0x00560C41;  // ccMuruengraidEngBar2
+const unsigned long dwMuruengraidMonster1Retn = 0x00560DCF;  // ccMuruengraidMonster1
+const unsigned long dwMuruengraidMonster2Retn = 0x00560E5A;  // ccMuruengraidMonster2
+const unsigned long dwMuruengraidEngBarRetn = 0x00560EE3;  // ccMuruengraidEngBar
+const unsigned long dwMuruengraidMonster1_2Retn = 0x0056157F;  // ccMuruengraidMonster1_2
+const unsigned long dwMuruengraidTimerBarRetn = 0x00561F1F;  // ccMuruengraidTimerBar
+const unsigned long dwVersionNumberFixRtm = 0x006094EF;  // VersionNumberFix
+const unsigned long dwCLoginSendCheckPasswordPacketRetn = 0;  // ccCLoginSendCheckPasswordPacket NOT SHIPPED - unreachable
+const unsigned long dwLoginDescriptorFixRetn = 0;  // ccLoginDescriptorFix NOT SHIPPED - unreachable
+const unsigned long dwLoginBackCanvasFixRetn = 0x006232E3;  // ccLoginBackCanvasFix
+const unsigned long dwLoginViewRecFixRetn = 0x0064084C;  // ccLoginViewRecFix
+const unsigned long dwAlwaysViewRestorerFixRtm = 0x00657981;  // AlwaysViewRestoreFix
+const unsigned long dwCashFixOnOffRtm = 0x007994CB;  // CashShopFixOnOff
+const unsigned long dwMoreGainMsgsRetn = 0x008CF37D;  // ccMoreGainMsgs
+const unsigned long dwMoreGainMsgsFade1Retn = 0x008CF6DD;  // ccMoreGainMsgsFade1
+const unsigned long dwMoreGainMsgsFadeRetn = 0x008CF75C;  // ccMoreGainMsgsFade
+const unsigned long dwStatusBarPosRetn = 0x0090488D;  // AdjustStatusBar
+const unsigned long dwStatusBarBackgroundPosRetn = 0x00906D42;  // AdjustStatusBarBG
+const unsigned long dwStatusBarInputPosRetn = 0x00906EC7;  // AdjustStatusBarInput
+const unsigned long dwLoadUItwiceRetn = 0;  // LoadUItwice NOT SHIPPED - unreachable
+const unsigned long dw0x00A63FF3Retn = 0;  // cc0x00A63FF3 NOT SHIPPED - unreachable

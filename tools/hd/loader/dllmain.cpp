@@ -132,7 +132,17 @@ static bool Cave(DWORD origin, int nops, void* body) {
 // The CUIStatusBar member shift is NOT uniform -- do not assume one number. Members
 // below ~0xC40 moved +0x30 (0xA90 -> 0xAC0), those above moved +0x38 (0xCD0 -> 0xD08).
 // Re-check any struct offset baked into a body against verify.py's printed sequence.
-// #include "codecaves.h"
+#include "cave_params.h"   // shims + codecaves.h + SetCaveParams()
+
+// Which cave body belongs to which patch row. Only the shipped caves appear; the rest of
+// codecaves.h compiles but is never jumped to, so it is unreachable dead code.
+struct HdCave { const char* id; void (*body)(); DWORD origin; int nops; };
+static const HdCave kHdCaves[] = {
+#define HD_CAVE(name, id) { id, name, HD_##name##_ORIGIN, \
+                            HD_##name##_RETN - HD_##name##_ORIGIN },
+#include "hd_caves.inc"
+#undef HD_CAVE
+};
 
 // Every address in this table was verified against two memory dumps of ONE build of
 // the v84 client. If the owner's client is not that build -- a different sub-version,
@@ -157,7 +167,11 @@ static void ApplyAll() {
         case K_SHORT: { short v = (short)Eval(p.f);   ok = Poke(p.addr, &v, 2); break; }
         case K_BYTE:  { BYTE  v = (BYTE)Eval(p.f);    ok = Poke(p.addr, &v, 1); break; }
         case K_FILL:  { ok = PokeFill(p.addr, (BYTE)p.f.k, p.size); break; }
-        case K_CAVE:  /* wired up once codecaves.h is included; see above */ break;
+        case K_CAVE:  {
+            for (const HdCave& c : kHdCaves)
+                if (!strcmp(c.id, p.id)) { ok = Cave(c.origin, c.nops, (void*)c.body); break; }
+            break;
+        }
         default: break;   // K_DOUBLE / K_STR / K_BYTES are group A/B/K, not shipped
         }
         ok ? ++g_applied : ++g_skipped;
@@ -172,6 +186,9 @@ static void Report() {
               g_w, g_h, g_applied, g_skipped, g_mismatch,
               (int)(sizeof(kHdPatches) / sizeof(kHdPatches[0])));
     OutputDebugStringA(msg);
+#ifdef HD_SELFTEST
+    fputs(msg, stderr);   // selftest.cpp build only; the shipped DLL has no CRT output
+#endif
     if (g_report) MessageBoxA(NULL, msg, "hd-res", MB_OK | MB_ICONINFORMATION);
 }
 
@@ -188,6 +205,10 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     g_w &= ~1; g_h &= ~1;
     g_report = GetPrivateProfileIntA("general", "report", 0, ini);
 
+    // MUST run after the ini read and before ApplyAll: codecaves.h's myWidth/myHeight
+    // are static initialisers evaluated at 800x600, and every cave body reads globals
+    // derived from them.
+    SetCaveParams(g_w, g_h);
     ApplyAll();
     Report();
     return TRUE;
