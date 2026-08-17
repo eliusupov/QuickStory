@@ -316,16 +316,14 @@ class V84MiscAreasNodeTest {
             assertNoneOf(106010102, pn, "horizontalImpact");
         }
 
-        // 220000300: v84 INSERTED scr00 at index 4, shifting eleven portals down. portal/15 is a
-        // duplicate in06; portal/4/{horizontalImpact,script} would land on h000; portal/6/image on
-        // west00.
-        assertEquals(15, portalCount(220000300), "220000300 must still have exactly 15 portals");
+        // 220000300: v84 INSERTED scr00 at index 4, shifting eleven portals down, so the add-list
+        // rows still cannot be applied - portal/15 would be a duplicate in06,
+        // portal/4/{horizontalImpact,script} would land on h000, portal/6/image on west00. Those
+        // three refusals stand. The PORTAL itself no longer does: see
+        // theFrogHouseDoorWasHandAuthoredFromPristineV84 below.
         long in06 = map(220000300).getChildByPath("portal").getChildren().stream()
                 .filter(p -> "in06".equals(DataTool.getString("pn", p, null))).count();
         assertEquals(1, in06, "220000300 gained a duplicate in06 portal");
-        assertNull(portal(220000300, "scr00"),
-                "220000300/scr00 cannot be merged - v84 inserted it at index 4, so no add-list row "
-                        + "reaches it without landing on a different portal");
         assertNoneOf(220000300, "h000", "script", "horizontalImpact");
         assertNoneOf(220000300, "west00", "image");
 
@@ -334,6 +332,95 @@ class V84MiscAreasNodeTest {
         assertNoneOf(220011000, "in00", "script", "horizontalImpact");
         assertEquals(220011001, DataTool.getInt("tm", portal(220011000, "in00"), -1),
                 "220011000/in00 must still lead to 220011001");
+    }
+
+    /**
+     * 220000300/scr00 - the door into the Frog House, read straight out of the pristine v84
+     * archive and hand-authored rather than merged.
+     *
+     * <p>Ticket 08 refused this portal, correctly, for a reason about its MERGE TOOL and not about
+     * the data: v84 inserts scr00 at {@code portal/4} and pushes eleven portals down, so no
+     * index-addressed add-list row can reach it. Reading
+     * {@code porting-resources/wz-data/v84/Map.wz} directly settles what the row actually holds:
+     *
+     * <pre>
+     *   v84 Map/Map2/220000300.img/portal/4
+     *     pn=scr00 pt=7 x=-1674 y=106 tm=999999999 tn="" horizontalImpact=0 script=enterBlackFrog
+     *   v83-stock Map/Map2/220000300.img/portal   15 portals, no scr00 at any index
+     * </pre>
+     *
+     * <p>Appending it at index 15 reaches the same portal - the server looks portals up by name and
+     * by id, never by array position - without moving the fifteen v83 portals, which is what the
+     * merge could not avoid. The two maps behind it, 922030000 and 922030001, are the only two in
+     * all of v84 Map.wz whose {@code out00} carries {@code tm=220000300 / tn="scr00"}.
+     */
+    @Test
+    void theFrogHouseDoorWasHandAuthoredFromPristineV84() throws IOException {
+        assertEquals(16, portalCount(220000300),
+                "220000300 must have the 15 v83 portals plus the hand-authored v84 scr00");
+
+        Data scr00 = portal(220000300, "scr00");
+        assertNotNull(scr00, "220000300/scr00 is the only client-side route to the Frog House");
+        assertEquals(7, DataTool.getInt("pt", scr00, -1), "scr00 must be a pt=7 script portal");
+        assertEquals(-1674, DataTool.getInt("x", scr00, 0));
+        assertEquals(106, DataTool.getInt("y", scr00, 0));
+        assertEquals(999999999, DataTool.getInt("tm", scr00, -1),
+                "pt=7 means the server picks the destination; tm must stay the null marker");
+        assertEquals("enterBlackFrog", DataTool.getString("script", scr00, null));
+
+        // The fifteen v83 portals must be exactly where they were - the whole point of appending.
+        assertEquals(220000301, DataTool.getInt("tm", portal(220000300, "in00"), -1));
+        assertEquals(220000000, DataTool.getInt("tm", portal(220000300, "east00"), -1));
+        assertEquals(220000400, DataTool.getInt("tm", portal(220000300, "west00"), -1));
+
+        // Both Frog Houses come back through this portal, and nothing else does.
+        for (int frogHouse : new int[]{922030000, 922030001}) {
+            Data out00 = portal(frogHouse, "out00");
+            assertNotNull(out00, frogHouse + "/out00 is missing");
+            assertEquals(220000300, DataTool.getInt("tm", out00, -1));
+            assertEquals("scr00", DataTool.getString("tn", out00, null),
+                    frogHouse + " returns to a portal that is not the one enterBlackFrog serves");
+        }
+
+        String js = Files.readString(Path.of("scripts", "portal", "enterBlackFrog.js"),
+                StandardCharsets.UTF_8);
+        assertTrue(js.contains("function enter(pi)"),
+                "enterBlackFrog.js does not implement the PortalScript interface");
+        assertTrue(js.contains("pi.warp(922030000, 0)"),
+                "enterBlackFrog.js no longer routes 922030000, where npc 1013203 stands - "
+                        + "Check.img names him for every one of quests 22581-22588");
+        assertTrue(js.contains("pi.warp(922030001, 0)"),
+                "enterBlackFrog.js no longer routes 922030001 - QuestInfo.img/22596/1 names that "
+                        + "map id in the quest text itself");
+
+        // The 922030001 arm is quest 22596 only. Ungated it would strand every player taking a
+        // Black Wings mission in the empty fight room instead of in front of Hiver.
+        int fight = js.indexOf("pi.warp(922030001, 0)");
+        int gate = js.lastIndexOf("22596", fight);
+        assertTrue(gate >= 0 && fight - gate < 200,
+                "the 922030001 warp is not gated on Evan quest 22596");
+    }
+
+    /**
+     * Mob 9300393 ("Gentleman", quest 22596's single kill) is placed by NO map in pristine v84 -
+     * a full scan of all 4505 map images under {@code Map/Map*} in
+     * {@code porting-resources/wz-data/v84/Map.wz} for {@code life/*}{@code /id = 9300393} returns
+     * zero hits. It is a scripted spawn: 922030001 carries {@code info/onUserEnter="enterBlackfrog"}
+     * (lowercase f - a different name from the portal script) and an empty {@code life}.
+     *
+     * <p>Pinned as a gap rather than filled, because the spawn COORDINATES exist in no WZ file.
+     * The day {@code scripts/map/onUserEnter/enterBlackfrog.js} is written on a real source, this
+     * test says so out loud instead of letting it land unnoticed.
+     */
+    @Test
+    void theRageMobIsAScriptedSpawnAndTheHookIsStillMissing() {
+        assertEquals("enterBlackfrog",
+                DataTool.getString("onUserEnter", map(922030001).getChildByPath("info"), null),
+                "922030001 no longer declares the hook that has to spawn mob 9300393");
+        Data life = map(922030001).getChildByPath("life");
+        assertTrue(life == null || life.getChildren().isEmpty(),
+                "922030001 now places life - if that is mob 9300393 from a real v84 source, say "
+                        + "where, because pristine v84 places it on no map at all");
     }
 
     /** Asserts a named portal has none of the given child fields - i.e. no refused row landed on it. */

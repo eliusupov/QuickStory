@@ -43,6 +43,34 @@ Traced by hand over `Map.wz` portal `tm`, `scripts/`, `wz/Quest.wz` and `src/mai
 So the whole Slumbering Dragon Island cluster is **disconnected from the playable map graph** in this
 tree. That is not a reason to invent the encounter; it is the reason not to.
 
+### Correction (read from pristine v84 `Map.wz` / `Quest.wz`, not from this tree)
+
+Two of the bullets above are wrong, and they were wrong because they were traced over **this tree**,
+which is a v83+v84 merge, instead of over the pristine archives in
+`porting-resources/wz-data/{v84,v83-stock}/`. Corrected with the raw node values:
+
+- **The quests DO exist.** `Check.img` in pristine v84 carries full entries for 22581-22596:
+  `22581/1 npc=1013203`, `22590/1 npc=1205000` (Afrien), `22596/1 mob 9300393 x1`, and so on. The
+  "no entry at all in Check/Act/Say" reading came from the tree's own partial Quest.wz; changeSet
+  156 has since merged them. `QuestInfo.img/22588/1` is what the ice-wall encounter is FOR: Hiver
+  "gives you an item called a `#t4032473#` and tells you to enter a portal that leads to Turtle
+  Island, where you are to offer it on an altar inside a cave in the center of the island" - i.e.
+  reactor **1409000** on 914100022, which waits for exactly item **4032473** dropped in an
+  `lt(-100,-53)…rb(98,49)` box. `QuestInfo.img/22588/2` then names `#o9300391#`, the ice wall
+  itself, as the thing that breaks.
+- **The door in is the Frog House, not 900030000.** `922030000/tel00` is `pt=8 tm=999999999
+  script=enterSDI`, and 922030000 is reached from El Nath's 220000300 through `scr00`
+  (`script=enterBlackFrog`) - a v84 portal this tree did not have until ticket 53 hand-authored it.
+  The ferry is also live in the data: all eight of `200090090`'s non-`sp` portals carry
+  `tm=914100000`.
+
+What does NOT change: `enterSDI`, `enterSnowDragon`, `onSDI`, `summonIceWall`, `stopIceWall`,
+`stopIceWall2` and `blackSDI` are all still refused. `enterSnowDragon` is `pt=7 tm=999999999` with
+four sibling rooms behind it and no data anywhere that says which quest state picks which room;
+`enterSDI` is `pt=8 tm=999999999` and the island has two plausible landing maps (914100000
+Temporary Harbor, which the ferry uses, and 914100010 Snowy Forest). Those are server-side
+decisions that live in no WZ file. The refusals stand.
+
 ## `Effect.wz` — none of these is a cutscene
 
 Re-derived rather than trusted: `Direction.img`…`Direction4.img` hold **33 top-level nodes, 25

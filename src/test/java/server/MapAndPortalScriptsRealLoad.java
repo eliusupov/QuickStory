@@ -79,6 +79,7 @@ class MapAndPortalScriptsRealLoad {
         PORTAL_HOOKS.put("tutorWorldmap", 130030006);
         PORTAL_HOOKS.put("piramid_in00", 926010000);
         PORTAL_HOOKS.put("outSDI", 914100022);
+        PORTAL_HOOKS.put("enterBlackFrog", 220000300);
     }
 
     /**
@@ -171,6 +172,39 @@ class MapAndPortalScriptsRealLoad {
             verify(pi).playPortalSound();
             verify(pi).warp(914100010, "in00");
         });
+    }
+
+    /**
+     * 220000300's {@code scr00} is the only client-side door to the Frog House, and pristine v84
+     * gives it two destinations, not one: 922030000 and 922030001 are the ONLY two maps in all of
+     * v84 Map.wz whose {@code out00} carries {@code tm=220000300 / tn="scr00"}.
+     *
+     * <p>The split is quest 22596 ("Rage"), and the quest text picks the map by id:
+     * {@code QuestInfo.img/22596/1} says "go to the {@code #b#m922030001##k} in {@code #m220000300#}
+     * where you met {@code #p1013203#}", and {@code Check.img/22596/1} wants mob 9300393 x1. Every
+     * other visit - {@code Check.img/22581..22588} - names npc 1013203, who stands on 922030000.
+     *
+     * <p>Run twice against the same file, because one arm of a branch passing proves nothing about
+     * the other, and getting the default arm wrong strands every Black Wings mission in an empty
+     * room.
+     */
+    @Test
+    void enterBlackFrogPicksTheFrogHouseByQuestState() throws Exception {
+        runPortal("enterBlackFrog", pi -> {
+            verify(pi).isQuestStarted(22596);
+            verify(pi).playPortalSound();
+            verify(pi).warp(922030000, 0);
+        });
+
+        Invocable iv = evalOrNull("portal/enterBlackFrog.js");
+        assertNotNull(iv, "enterBlackFrog.js did not load");
+        PortalPlayerInteraction onRage = mock(PortalPlayerInteraction.class);
+        when(onRage.isQuestStarted(22596)).thenReturn(true);
+        iv.invokeFunction("enter", onRage);
+        verify(onRage).isQuestStarted(22596);
+        verify(onRage).playPortalSound();
+        verify(onRage).warp(922030001, 0);
+        verifyNoMoreInteractions(onRage);
     }
 
     /**

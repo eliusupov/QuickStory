@@ -5534,5 +5534,15 @@
       <int name="tm" value="220000307"/>
       <string name="tn" value="out00"/>
     </imgdir>
+    <imgdir name="15">
+      <string name="pn" value="scr00"/>
+      <int name="pt" value="7"/>
+      <int name="x" value="-1674"/>
+      <int name="y" value="106"/>
+      <int name="tm" value="999999999"/>
+      <string name="tn" value=""/>
+      <int name="horizontalImpact" value="0"/>
+      <string name="script" value="enterBlackFrog"/>
+    </imgdir>
   </imgdir>
 </imgdir>
