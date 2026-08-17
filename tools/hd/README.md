@@ -430,7 +430,9 @@ Do this on a **copy**, never on `D:\games\MSv84\client\` in place.
     A launch REWRITES this machine-wide value and will repoint your other client.
 4.  Launch D:\games\MSv84\hd\MapleStory.exe.
 5.  A message box should appear before the window opens, reading
-        hd-res 1280x720: applied 288, skipped 0, byte-mismatch 0 of 288
+        hd-res 1280x720: applied 257, skipped 31, byte-mismatch 0 of 288
+    The 31 skipped are the code caves, which do nothing until codecaves.h is included
+    (see "The loader"); once it is, expect applied 288, skipped 0.
     ANY non-zero byte-mismatch means your client is not the build this table was
     verified against -- STOP, and re-run verify.py against a fresh dump of it. Those
     rows were skipped rather than applied, so nothing is corrupted, but the rest of
