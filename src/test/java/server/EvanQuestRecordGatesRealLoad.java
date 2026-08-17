@@ -2,14 +2,23 @@ package server;
 
 import client.QuestStatus;
 import client.QuestStatus.Status;
+import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import provider.Data;
 import provider.DataProviderFactory;
 import provider.DataTool;
 import provider.wz.WZFiles;
+import scripting.npc.NPCConversationManager;
+import scripting.reactor.ReactorActionManager;
 import server.quest.Quest;
 
+import javax.script.Bindings;
+import javax.script.Invocable;
+import javax.script.ScriptContext;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -20,6 +29,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.intThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * The Evan quest-record gate. {@code Quest.canStart} and {@code Quest.canComplete} BOTH end in
@@ -73,6 +90,15 @@ class EvanQuestRecordGatesRealLoad {
             {101030000, 101030100, 101030200, 101030300, 101030400};
 
     private static final Path WARNING_POST_SCRIPT = Path.of("scripts", "npc", "1022107.js");
+
+    /**
+     * The Ice Wall altar. Reactor scripts are dispatched by reactor ID -
+     * {@code ReactorScriptManager.initializeInvocable} builds {@code "reactor/" + reactor.getId()
+     * + ".js"} - so this file is 1409000.js and NOT {@code SDIScript0.js}, which is what
+     * {@code Reactor.wz/1409000.img/action} names. That {@code action} string is the CLIENT's
+     * animation script; naming the server file after it would leave a file nothing ever loads.
+     */
+    private static final Path ICE_WALL_ALTAR_SCRIPT = Path.of("scripts", "reactor", "1409000.js");
 
     @BeforeAll
     static void muteGraal() {
@@ -237,6 +263,136 @@ class EvanQuestRecordGatesRealLoad {
                         + "for what the Warning Posts do");
     }
 
+    /**
+     * <strong>The script, actually run.</strong> Everything above proves the mechanism and the
+     * script's text; this proves the wiring, which is where a real bug would sit. Loaded under the
+     * same Graal engine {@code AbstractScriptManager} uses and driven through nine clicks on five
+     * signs, with repeats and an out-of-order revisit, exactly as a player wandering the road would.
+     *
+     * <p>The write must land on "5" once and must never be asked for a sixth.
+     */
+    @Test
+    void clickingTheFiveSignsWritesFiveAndReClickingNeverOvershoots() throws Exception {
+        NPCConversationManager cm = mock(NPCConversationManager.class);
+        QuestStatus qs = new QuestStatus(Quest.getInstance(22530), Status.STARTED);
+        when(cm.isQuestStarted(22530)).thenReturn(true);
+        when(cm.getQuestRecord(22530)).thenReturn(qs);
+
+        Invocable iv = eval(WARNING_POST_SCRIPT, "cm", cm);
+        for (int map : new int[]{101030000, 101030000, 101030200, 101030100, 101030200,
+                101030300, 101030000, 101030400, 101030400}) {
+            when(cm.getMapId()).thenReturn(map);
+            iv.invokeFunction("start");
+        }
+
+        verify(cm).setQuestProgress(22530, 22597, 5);
+        verify(cm, times(5)).setQuestProgress(anyInt(), anyInt(), anyInt());
+        verify(cm, never()).setQuestProgress(eq(22530), eq(22597), intThat(v -> v > 5));
+    }
+
+    /**
+     * Before the quest is taken the sign must stay inert. This is not politeness: while 22530 is
+     * NOT_STARTED, {@code Quest.getInfoNumber} reads the START requirements, where 22530 has no
+     * {@code infoNumber}, so {@code Character.setQuestProgress} would fall through to its else branch
+     * and park the value under quest 22530 instead of record 22597 - a wrong write, not a no-op.
+     */
+    @Test
+    void anUntakenQuestLeavesTheSignInert() throws Exception {
+        NPCConversationManager cm = mock(NPCConversationManager.class);
+        when(cm.isQuestStarted(22530)).thenReturn(false);
+
+        Invocable iv = eval(WARNING_POST_SCRIPT, "cm", cm);
+        when(cm.getMapId()).thenReturn(101030000);
+        iv.invokeFunction("start");
+
+        verify(cm, never()).setQuestProgress(anyInt(), anyInt(), anyInt());
+        verify(cm, never()).getQuestRecord(anyInt());
+    }
+
+    /**
+     * <strong>22588's writer, and why it is a reactor.</strong> Unlike the other five unknowns, this
+     * one is stated end to end by the data, so it is built rather than reported:
+     *
+     * <pre>
+     *   Act.img/22588/0/item/0/id          Hiver hands over 4032473 on accept
+     *   Map9/914100022.img/reactor/0/id    1409000 at (-243, 6), its only placement in Map.wz
+     *   Reactor.wz/1409000/info/info       "break down the ice wall"
+     *   Reactor.wz/1409000/0/event/0/type  100 - the drop-item reactor type
+     *   Reactor.wz/1409000/0/event/0/0..2  item 4032473, quantity 1, to state 1
+     *   Check.img/22588/1                  infoNumber 22605, infoex/0/value "1"
+     * </pre>
+     *
+     * <p>{@code MapleMap.searchItemReactors} implements type 100 already: it matches the item inside
+     * the reactor's {@code lt}/{@code rb} box and {@code ActivateItemReactor} hits the reactor, whose
+     * state 1 is terminal, so {@code act()} is what runs.
+     */
+    @Test
+    void the22588AltarIsADropItemReactorForExactlyTheItemHiverHandsOver() {
+        assertEquals(4032473, DataTool.getInt(questAct("22588/0/item/0/id"), -1),
+                "22588 no longer grants 4032473 on accept, so nothing can be dropped on the altar");
+
+        Data reactor = DataProviderFactory.getDataProvider(WZFiles.REACTOR).getData("1409000.img");
+        assertNotNull(reactor, "Reactor.wz has no 1409000 image");
+        assertEquals(100, DataTool.getInt(reactor.getChildByPath("0/event/0/type"), -1),
+                "reactor 1409000 is no longer a type-100 drop-item reactor, so searchItemReactors "
+                        + "will never fire and the altar is inert");
+        assertEquals(4032473, DataTool.getInt(reactor.getChildByPath("0/event/0/0"), -1),
+                "reactor 1409000 no longer accepts item 4032473");
+        assertEquals(1, DataTool.getInt(reactor.getChildByPath("0/event/0/1"), -1),
+                "reactor 1409000 no longer accepts a quantity of exactly 1 - searchItemReactors "
+                        + "matches quantity exactly, so a change here silently kills the trigger");
+
+        // and it is placed on the cave map, once
+        assertEquals(1, reactorCount(914100022, 1409000),
+                "reactor 1409000 is not placed on 914100022, so 22588 has no altar");
+    }
+
+    /**
+     * The altar script, run for real. Dropping the item must write 22605 exactly once, and must do
+     * nothing at all for a player who is not on the quest - the reactor is permanent scenery and
+     * anyone can drop anything on it.
+     */
+    @Test
+    void droppingTheItemOnTheAltarWritesRecord22605() throws Exception {
+        assertTrue(Files.isRegularFile(ICE_WALL_ALTAR_SCRIPT),
+                "scripts/reactor/1409000.js is missing, so the altar consumes the item and 22588 can "
+                        + "never be completed");
+
+        ReactorActionManager onQuest = mock(ReactorActionManager.class);
+        when(onQuest.isQuestStarted(22588)).thenReturn(true);
+        eval(ICE_WALL_ALTAR_SCRIPT, "rm", onQuest).invokeFunction("act");
+        verify(onQuest).setQuestProgress(22588, 22605, 1);
+
+        ReactorActionManager passerby = mock(ReactorActionManager.class);
+        when(passerby.isQuestStarted(22588)).thenReturn(false);
+        eval(ICE_WALL_ALTAR_SCRIPT, "rm", passerby).invokeFunction("act");
+        verify(passerby, never()).setQuestProgress(anyInt(), anyInt(), anyInt());
+    }
+
+    /**
+     * <strong>22588 is currently academic, and this pins that.</strong> All four Cave of Silence
+     * rooms (914100020/21/22/23) have ZERO static inbound portals - no map in Map.wz carries a
+     * {@code tm} pointing at any of them. The sole router is
+     * {@code Map9/914100010.img/portal/2} ({@code pn=in00, pt=7, tm=999999999, script=enterSnowDragon}),
+     * and {@code tm=999999999} means the destination is chosen server-side and appears in no client
+     * file. Which of the four rooms it should pick at which quest state is NOT stated anywhere in
+     * v84, so {@code enterSnowDragon.js} is deliberately NOT written here.
+     *
+     * <p>The writer above is correct the moment that router lands. This test fails when it does,
+     * which is the point: that is when 22588 stops being academic and wants a play test.
+     */
+    @Test
+    void theCaveOfSilenceIsStillUnreachableSoThe22588WriterCannotYetBeReached() {
+        assertEquals(999999999, DataTool.getInt(mapData(914100010).getChildByPath("portal/2/tm"), -1),
+                "914100010's in00 portal now names a real destination - the router is no longer "
+                        + "server-side-only and enterSnowDragon can be derived from data");
+        assertEquals("enterSnowDragon",
+                DataTool.getString(mapData(914100010).getChildByPath("portal/2/script"), ""));
+        assertFalse(Files.isRegularFile(Path.of("scripts", "portal", "enterSnowDragon.js")),
+                "enterSnowDragon.js now exists, so the Cave of Silence is reachable and quest 22588 "
+                        + "should be play-tested end to end");
+    }
+
     /** Guards against the Quest cache being empty, which would make every lookup above vacuous. */
     @Test
     void theGatedQuestsActuallyLoad() {
@@ -261,6 +417,25 @@ class EvanQuestRecordGatesRealLoad {
                 .getData("QuestInfo.img").getChildByPath(id + "/" + node), "");
     }
 
+    /**
+     * Same construction {@code AbstractScriptManager} uses, with the manager bound under the name
+     * its own script manager uses ({@code cm} for npc, {@code rm} for reactor), so a script that
+     * runs here runs there.
+     */
+    private static Invocable eval(Path script, String binding, Object manager) throws Exception {
+        ScriptEngine engine = new ScriptEngineManager().getEngineByName("graal.js").getFactory()
+                .getScriptEngine();
+        assertTrue(engine instanceof GraalJSScriptEngine, "no GraalJSScriptEngine on the test classpath");
+        Bindings bindings = engine.getBindings(ScriptContext.ENGINE_SCOPE);
+        bindings.put("polyglot.js.allowHostAccess", true);
+        bindings.put("polyglot.js.allowHostClassLookup", true);
+        engine.put(binding, manager);
+        try (BufferedReader br = Files.newBufferedReader(script, StandardCharsets.UTF_8)) {
+            engine.eval(br);
+        }
+        return (Invocable) engine;
+    }
+
     /** String.wz/Map.img groups maps by region ("maple", "victoria", "ossyria", ...), so walk them. */
     private static String mapNameString(int mapId) {
         Data root = DataProviderFactory.getDataProvider(WZFiles.STRING).getData("Map.img");
@@ -279,11 +454,29 @@ class EvanQuestRecordGatesRealLoad {
         return DataTool.getString(d.getChildByPath("name"), "");
     }
 
-    private static int lifeCount(int mapId, String type, int id) {
+    private static Data mapData(int mapId) {
         Data map = DataProviderFactory.getDataProvider(WZFiles.MAP).getData("Map/Map"
                 + (mapId / 100000000) + "/" + String.format("%09d", mapId) + ".img");
         assertNotNull(map, "Map.wz has no image for map " + mapId);
-        Data life = map.getChildByPath("life");
+        return map;
+    }
+
+    private static int reactorCount(int mapId, int reactorId) {
+        Data reactors = mapData(mapId).getChildByPath("reactor");
+        if (reactors == null) {
+            return 0;
+        }
+        int n = 0;
+        for (Data entry : reactors.getChildren()) {
+            if (Integer.parseInt(DataTool.getString(entry.getChildByPath("id")).trim()) == reactorId) {
+                n++;
+            }
+        }
+        return n;
+    }
+
+    private static int lifeCount(int mapId, String type, int id) {
+        Data life = mapData(mapId).getChildByPath("life");
         if (life == null) {
             return 0;
         }
