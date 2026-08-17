@@ -237,7 +237,29 @@
                         <configuration>
                             <excludes>
                                 <exclude>**/*RealLoad.java</exclude>
+                                <!--
+                                  MobSkillFactoryTest is the ONE test that redirects "wz-path" at an
+                                  empty @TempDir fixture, and WZFiles.DIRECTORY is `static final` -
+                                  resolved once per JVM. Whichever test touches it first wins for the
+                                  whole run. It therefore cannot share a JVM with the rest of the
+                                  suite, which wants the real wz/ tree, so it gets its own execution
+                                  below for the same reason *RealLoad does.
+                                -->
+                                <exclude>**/MobSkillFactoryTest.java</exclude>
                             </excludes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>wz-redirecting-tests</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>**/MobSkillFactoryTest.java</include>
+                            </includes>
+                            <failIfNoSpecifiedTests>false</failIfNoSpecifiedTests>
                         </configuration>
                     </execution>
                     <execution>
