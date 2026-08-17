@@ -271,20 +271,25 @@ class AssignAPProcessorTest {
     }
 
     /**
-     * calcHpChange/calcMpChange classify by the same {@code isA} chains, so Evan - an INT class -
-     * lands in the trailing "everything else" case: 8 HP and 6 MP per AP point where a magician gets
-     * 6 and 18. Every AP point an Evan puts into MP is worth a third of a magician's, permanently.
-     * Pinning the wrong values.
+     * Evan is an INT class and must gain HP/MP like a magician: 6 HP and 18 MP per AP point.
+     *
+     * <p>He did not, until this was fixed. {@code Job.isA} compares {@code id/100} - 22 for Evan
+     * against 2 for MAGICIAN - so {@code EVAN1.isA(MAGICIAN)} is <b>false</b> and every Evan fell
+     * into the trailing "everything else" case at 8 HP and 6 MP. Every AP point an Evan spent was
+     * worth a third of a magician's MP, and the loss is permanent because MP is banked per point.
+     * The owner hit it in play at job 2200. Fixed by naming {@code Job.EVAN1} alongside MAGICIAN and
+     * BLAZEWIZARD1 in the five {@code isA} chains of this class; {@code isA} itself was left alone,
+     * because its {@code id/100} rule is load-bearing everywhere else.
      */
     @Test
-    void evanIsNotClassifiedAsAMagicianForApGains() throws Exception {
+    void evanGainsHpAndMpAsAMagician() throws Exception {
         assertAll(
                 () -> assertEquals(6, apChange("calcHpChange", Job.MAGICIAN), "magician HP per AP"),
                 () -> assertEquals(18, apChange("calcMpChange", Job.MAGICIAN), "magician MP per AP"),
-                () -> assertEquals(8, apChange("calcHpChange", Job.EVAN1), "job 2200 HP per AP"),
-                () -> assertEquals(6, apChange("calcMpChange", Job.EVAN1), "job 2200 MP per AP"),
-                () -> assertEquals(8, apChange("calcHpChange", Job.EVAN10), "job 2218 HP per AP"),
-                () -> assertEquals(6, apChange("calcMpChange", Job.EVAN10), "job 2218 MP per AP")
+                () -> assertEquals(6, apChange("calcHpChange", Job.EVAN1), "job 2200 HP per AP"),
+                () -> assertEquals(18, apChange("calcMpChange", Job.EVAN1), "job 2200 MP per AP"),
+                () -> assertEquals(6, apChange("calcHpChange", Job.EVAN10), "job 2218 HP per AP"),
+                () -> assertEquals(18, apChange("calcMpChange", Job.EVAN10), "job 2218 MP per AP")
         );
     }
 }

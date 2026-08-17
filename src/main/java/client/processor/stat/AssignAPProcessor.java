@@ -699,7 +699,7 @@ public class AssignAPProcessor {
             } else {
                 MaxHP += 28;
             }
-        } else if (job.isA(Job.MAGICIAN) || job.isA(Job.BLAZEWIZARD1)) {
+        } else if (job.isA(Job.MAGICIAN) || job.isA(Job.BLAZEWIZARD1) || job.isA(Job.EVAN1)) {
             if (YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
                 if (usedAPReset) {
                     MaxHP += 6;
@@ -775,7 +775,7 @@ public class AssignAPProcessor {
             } else {
                 MaxMP += 3;
             }
-        } else if (job.isA(Job.MAGICIAN) || job.isA(Job.BLAZEWIZARD1)) {
+        } else if (job.isA(Job.MAGICIAN) || job.isA(Job.BLAZEWIZARD1) || job.isA(Job.EVAN1)) {
             if (!usedAPReset) {
                 Skill increaseMP = SkillFactory.getSkill(job.isA(Job.BLAZEWIZARD1) ? BlazeWizard.INCREASING_MAX_MP : Magician.IMPROVED_MAX_MP_INCREASE);
                 int sLvl = player.getSkillLevel(increaseMP);
@@ -844,7 +844,7 @@ public class AssignAPProcessor {
 
         if (job.isA(Job.WARRIOR) || job.isA(Job.DAWNWARRIOR1) || job.isA(Job.ARAN1)) {
             MaxHP += 54;
-        } else if (job.isA(Job.MAGICIAN) || job.isA(Job.BLAZEWIZARD1)) {
+        } else if (job.isA(Job.MAGICIAN) || job.isA(Job.BLAZEWIZARD1) || job.isA(Job.EVAN1)) {
             MaxHP += 10;
         } else if (job.isA(Job.THIEF) || job.isA(Job.NIGHTWALKER1)) {
             MaxHP += 20;
@@ -864,7 +864,7 @@ public class AssignAPProcessor {
 
         if (job.isA(Job.WARRIOR) || job.isA(Job.DAWNWARRIOR1) || job.isA(Job.ARAN1)) {
             MaxMP += 4;
-        } else if (job.isA(Job.MAGICIAN) || job.isA(Job.BLAZEWIZARD1)) {
+        } else if (job.isA(Job.MAGICIAN) || job.isA(Job.BLAZEWIZARD1) || job.isA(Job.EVAN1)) {
             MaxMP += 31;
         } else if (job.isA(Job.BOWMAN) || job.isA(Job.WINDARCHER1)) {
             MaxMP += 12;
@@ -897,6 +897,11 @@ public class AssignAPProcessor {
 
         } else if (job.isA(Job.MAGICIAN) ||
                    job.isA(Job.BLAZEWIZARD1)) {
+            // NOT extended to Evan, unlike the HP/MP gain chains above. This is the AP-RESET FLOOR,
+            // a different question from what a point is worth, and ticket 51 finding 3 flags that
+            // Evan and Aran's LEGEND both return 0 here. Adopting the magician pool wholesale could
+            // turn a silent gap into a false "you don't have the minimum HP pool required to swap".
+            // Dormant either way: USE_ENFORCE_HPMP_SWAP is false. Left for a deliberate decision.
             multiplier = 10; offset = 54;
 
         } else if (job == Job.BOWMAN ||
