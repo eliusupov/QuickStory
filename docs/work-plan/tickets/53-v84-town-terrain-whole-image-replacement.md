@@ -218,6 +218,21 @@ where to change it.
 counterpart portal to fall back on, so they are taken as v84 has them minus the script - inert
 placeholders that keep indices 18-24 aligned while our `gtNNWP` doors continue to do the work.
 
+### An earlier refusal this retires
+
+`V84MiscAreasNodeTest.theUnsafeRoutePortalRowsWereNotMerged` refused
+`106010102/portal/{4,5,6,7}/horizontalImpact` because the add-list index named a different portal
+here than in v84 - our array had `out00` at 7 and `in04`/`in05`/`in06` at 4/5/6, so merging by index
+would have written onto `in04`. Correct then. Taking the whole section at v84's indices removes the
+premise: index 4 is `in03` on both sides now, and v84 carries `horizontalImpact` on exactly `in03`,
+`in04`, `in05`, `in06` and `scr00`. The leaf arrives as part of v84's node, not by an
+index-addressed merge.
+
+The test now asserts the alignment instead of the absence, which is the stricter guard: if that
+array ever slips by one, `out00` gains a `horizontalImpact` and `in06` loses one, and both halves
+fail. `106010101` left the refusal list for the same reason - its `portal/5` is `in00` on both sides
+now, with only the destination held back.
+
 ### changeSet 167
 
 `characters.spawnpoint` stores an **index**, so a moved slot strands a stored value.
