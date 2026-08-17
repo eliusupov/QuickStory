@@ -3,6 +3,22 @@
 Living tracker. Branch `worktree-evan-dualblade`. Acceptance bar is the owner's: **"as it was in gms
 v84"**, additive only, and **code clean and concise, conforming to what is already there**.
 
+## THE GOAL IS v84 PARITY. The operational test, and it is the only one:
+
+> **Is it in the v84 data?** If yes, the server should support it. If no, we do not build it.
+
+The owner has had to say this more than once, because the failure mode is real and I have committed
+it: *"please, can you not invent or halucinate things? we have the files, we have the data. i just
+want v84 feature parity. verify before working."*
+
+So, before any work: **read the file**. Not the ticket, not a wiki, not a chain of plausible
+inference - the WZ node, the `Act.img` entry, the pristine archive. `docs/wz-baseline/add-list/*.txt`
+is the computed v84-minus-v83 diff and is the authority on what v84 actually added; the pristine
+archives are at `porting-resources/wz-data/v84/` and a working query tool is at
+`docs/wz-baseline/tool-peek/`. Where the data does not settle a value, the answer is **"unknown"** and
+the work stops there. A fabricated value that looks official is worse than a documented gap - it has
+cost this project real time twice.
+
 Status keys: `IN FLIGHT` an agent is on it · `QUEUED` known, not started · `OWNER` needs his decision
 or his hands · `UNKNOWN` correct value not establishable from data yet.
 
@@ -104,8 +120,23 @@ Worsens with job level. `IN FLIGHT`.
   back, and v84 ships that map byte-identical to v83; `grep` for `240080000` / `Sky_GateMapEnter` /
   `dragonLair_GL` across `scripts/` and `src/main/java` returns **zero hits**; the two "Crimson Sky
   Doorway" NPCs 2085001/2085002 have `func=None` and no script. Reachable today only by `!warp`.
-  Second gate behind it: `240080000` has `fly=1` + `needSkillForFly=1` (Dragon Rider flying skill).
-  **OWNER decision: NPC-script warp, hand-authored portal, or leave GM-only.**
+  - **The flying key is skill 1026, and it is NOT Evan's.** `Act.img/3759` ("Towards the Sky 2")
+    grants skill **1026** with a `job` list of `0, 100, 110, 120, 130, ...` - beginner and every
+    branch. The chain is **3757** "The Dragon Rider's Identity 2" (Chief Tatamo 2081000) -> **3758**
+    "Towards the Sky 1" (*"Discover the secret to flight from Matada"*, npc 2085000) -> **3759**
+    grants 1026 -> **3760** "Dragonica's Horn" -> **3761** "Tears of Repentance". No `job` or `lvmin`
+    on any of them in Check.img.
+  - Provenance, measured against the v84-minus-v83 diff: **3758 and 3759 are v84-NEW**, and all 21
+    `240080xxx` maps **are in the v84 archive**. Whether GMS switched the content on in v84 or later
+    is NOT answerable from our files - do not assert it either way.
+  - **ORCHESTRATOR ERROR, recorded so it is not repeated:** I claimed this was Evan progression gated
+    behind the Evan dragon mount 20011004. That was a chain of inference from `needSkillForFly`, not
+    a reading of the data, and it is wrong - 20011004 and 1026 are different mechanics. Read
+    `Act.img` before claiming who content belongs to.
+  - Likely real parity gap: NPCs 2081000 / 2085000 / 2085001 / 2085002 have no `scripts/npc/*.js`, so
+    the Soaring chain cannot be walked. **Dragon Rider PQ itself is DEFERRED by owner decision**
+    ("i dont want 'Dragon Rider Party Quest', we can do that in the future") - stages, doorway
+    shuttling, party logic and resurrection sites are out of scope; the pre-quest chain is not.
 - **8 more non-Evan maps unreachable for the same structural reason** (ticket 08): `910600000`
   Golem's Temple Entrance and the Frog House / Sky Terrace chain `922030010/011/020/021/022`. v84's
   inbound portal lands at an array index that means something else live - e.g. `106010101/portal/5`
