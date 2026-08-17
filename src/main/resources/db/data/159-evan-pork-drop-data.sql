@@ -1,0 +1,39 @@
+-- Quest 22503 "A Bite of Pork" -> 4032453 "Pork" x10. Nothing on this server produced this item:
+-- no drop_data, no drop_data_global, no reactordrops, no shopitems, and Act.img/22503/0 is empty.
+-- Because Check.img/22504/0 requires 22503 at state 2, this one item left 107 of the 135 Evan
+-- quests unstartable, stopping the chain dead at level 11.
+--
+-- DROPPER. Named by the game's own data, not chosen:
+--   QuestInfo.img.xml:7528     "Hunt the #r#o1210100##ks to obtain some #b#t4032453##k"
+--   scripts/quest/22503.js:23  "You have to hunt a few #o1210100#s at the farm. Ten should be
+--                              plenty" (#o1210100# = mob 1210100)
+--   String.wz/Mob.img.xml:42   mob 1210100 = "Pig"
+--   String.wz/Etc.img.xml:9317 4032453 = "Pork", "Juicy pork. Baby dragons might like it."
+-- And the Pig is where the quest says it is: Map1/100030310.img.xml "Large Forest Trail" on Farm
+-- Street carries 20 life entries, all of them 1210100 and nothing else.
+--
+-- RATE 200000, copied from this mob's own row
+--   (1210100, 4032340, 1, 1, 21710, 200000)   "Pig Tail" x25, quest 21710 "A Monster War?"
+-- Same dropperid, same table, quest-gated, and 21710 is the Aran informant chain - the twin
+-- content changeSet 156 already established as this chain's comparable.
+--
+-- WHY NOT 155's 80000, i.e. how the x10 was accounted for. 1210100's other three quest rows are
+-- all COUNT-1 fetches (4031846/q2173/50000, 4032379/q2409/80000, 4032130/q20707/10000), so they
+-- are the wrong shape for a bulk one. The Pig family prices bulk higher, and consistently:
+-- count 25 -> 200000 here, and sibling 1210102 "Ribbon Pig" carries count 15 -> 150000
+-- (4032314, q21709). 22503's count 10 sits below both, so 200000 is copied UNCHANGED rather than
+-- interpolated down to ~100000 - interpolating would be inventing a number, which this project
+-- forbids. Stated plainly: at 200000 a 10-item fetch is faster than the 25-item row it is copied
+-- from. That is the deliberate and safe direction for the item that is blocking the playthrough.
+--
+-- Effective rate: 4032453 is ETC, and MapleMap.java:722-727 doubles ETC chance, so 400000/999999
+-- ~= 40% per Pig -> ~25 kills for the 10 Pork, against 20 Pigs on the map.
+--
+-- questid 22503 keeps it out of the economy: Character.java:5818-5839 needQuestItem() only lets
+-- the item spawn while 22503 is in progress and the player holds fewer than 10. Item.wz/Etc/
+-- 0403.img.xml:14481 sets quest=1 on 4032453, so sortDropEntries actually applies that gate.
+--
+-- 1 row, 1 dropperid.
+
+INSERT INTO drop_data (dropperid, itemid, minimum_quantity, maximum_quantity, questid, chance)
+VALUES (1210100, 4032453, 1, 1, 22503, 200000);

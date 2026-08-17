@@ -97,6 +97,13 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="159" author="evan-chain">
+        <sqlFile path="db/data/159-evan-pork-drop-data.sql"/>
+        <rollback>
+            DELETE FROM drop_data WHERE dropperid = 1210100 AND itemid = 4032453 AND questid = 22503;
+        </rollback>
+    </changeSet>
+
     <changeSet id="161" author="Ponk">
         <sqlFile path="db/data/161-admin-data.sql"/>
     </changeSet>
