@@ -1096,6 +1096,11 @@ public class Character extends AbstractCharacterObject {
         } else if (jobId == 2217) {
             skills[0] = Evan.MAPLE_WARRIOR;
             skills[1] = Evan.ILLUSION;
+            // Hero's Will has no mastery book in Item.wz for any class and no masterLevel node in
+            // Skill.wz, so nothing could ever lift its master level off 0 - and Skill.isFourthJob()
+            // lists 22171004, which caps SP at exactly that. Granting it here is the only way an
+            // Evan can learn it at all.
+            skills[2] = Evan.HEROS_WILL;
         } else if (jobId == 2218) {
             skills[0] = Evan.BLESSING_OF_THE_ONYX;
             skills[1] = Evan.BLAZE;
@@ -1108,7 +1113,9 @@ public class Character extends AbstractCharacterObject {
                     continue;
                 }
 
-                changeSkillLevel(skill, (byte) 0, 10, -1);
+                // every other skill here maxes at 30; Hero's Will maxes at 5, and a master level
+                // above the max would let SP run past the last level effect
+                changeSkillLevel(skill, (byte) 0, Math.min(10, skill.getMaxLevel()), -1);
             }
         }
     }

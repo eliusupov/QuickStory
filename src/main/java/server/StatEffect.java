@@ -1763,6 +1763,7 @@ public class StatEffect {
             case Shadower.HEROS_WILL:
             case Buccaneer.PIRATES_RAGE:
             case Aran.HEROS_WILL:
+            case Evan.HEROS_WILL:
                 return true;
 
             default:
