@@ -1505,11 +1505,17 @@
       <imgdir name="1032075">
         <string name="name" value="Free Spirit Piercing"/>
       </imgdir>
+      <imgdir name="1142152">
+        <string name="name" value="Well-Behaved Child"/>
+      </imgdir>
       <imgdir name="1142153">
         <string name="name" value="Perion Guard"/>
       </imgdir>
       <imgdir name="1142154">
         <string name="name" value="Kerning City Honorary Citizen"/>
+      </imgdir>
+      <imgdir name="1142155">
+        <string name="name" value="Secret Organization Temporary Member"/>
       </imgdir>
       <imgdir name="1012180">
         <string name="name" value="Chocolate Heart"/>
