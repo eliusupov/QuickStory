@@ -6369,7 +6369,10 @@ public class Character extends AbstractCharacterObject {
         } else if (job.isA(Job.EVAN1)) {
             // Evan (2200-2218) is a magician-type class, so it follows the Magician curve. Without
             // this branch Evan matched no case above and gained 0 HP/MP per level. Evan's beginner
-            // job 2001 is handled by isBeginnerJob() above.
+            // job 2001 is handled by isBeginnerJob() above. No improvingMaxMP is set here on
+            // purpose: Evan has no Improved Max MP passive - Skill.wz 2001.img and 2200-2218.img
+            // list every Evan skill and none of them is one - so the improvingMaxMPLevel check
+            // below is correct to leave Evan out.
             addhp += Randomizer.rand(20, 28);
             addmp += Randomizer.rand(22, 24);
         }
