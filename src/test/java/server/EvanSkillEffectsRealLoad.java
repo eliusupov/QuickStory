@@ -3,6 +3,7 @@ package server;
 import client.BuffStat;
 import client.Skill;
 import client.SkillFactory;
+import constants.skills.Bishop;
 import constants.skills.Evan;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,7 @@ import tools.Pair;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * What Evan's skills actually load as, straight out of {@code Skill.wz/2200-2218.img}.
@@ -54,6 +56,25 @@ class EvanSkillEffectsRealLoad {
                 () -> assertEquals(100, statup(Evan.BLESSING_OF_THE_ONYX, 30, BuffStat.MDEF), "mdd"),
                 () -> assertEquals(60000, onyx.getDuration(), "time"),
                 () -> assertEquals(120, onyx.getCooldown(), "cooltime")
+        );
+    }
+
+    /**
+     * 22181003. It has an effect node, so it always loaded as a buff - one with an empty statup
+     * list, and it was in no other list either, so casting it did nothing whatsoever.
+     *
+     * <p>The revive percentage comes from the same {@code x} the other three resurrections do not
+     * have, which is what keeps the new branch neutral for them.
+     */
+    @Test
+    void soulStoneRevives() {
+        assertAll(
+                () -> assertTrue(SkillFactory.getSkill(Evan.SOUL_STONE).getEffect(20).isResurrection(), "22181003"),
+                () -> assertEquals(50, SkillFactory.getSkill(Evan.SOUL_STONE).getEffect(20).getX(), "revives at 50%"),
+                () -> assertEquals(0, SkillFactory.getSkill(Bishop.RESURRECTION).getEffect(10).getX(),
+                        "Resurrection has no x, so it still revives at full"),
+                () -> assertTrue(SkillFactory.getSkill(Bishop.RESURRECTION).getEffect(10).isResurrection(),
+                        "Resurrection unchanged")
         );
     }
 }

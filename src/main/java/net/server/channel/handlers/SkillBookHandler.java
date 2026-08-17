@@ -48,6 +48,19 @@ public final class SkillBookHandler extends AbstractPacketHandler {
         short slot = p.readShort();
         int itemId = p.readInt();
 
+        useSkillBook(c, InventoryType.USE, slot, itemId);
+    }
+
+    /**
+     * Applies a skill book: reads the book's own {@code info/skill}, {@code reqSkillLevel},
+     * {@code masterLevel} and {@code success}, and raises the master level if it takes.
+     *
+     * <p>Takes the inventory because the type 562 mastery books are cash items and sit in CASH,
+     * not USE. The job check is the one {@code getSkillStats} already does - it only returns a
+     * {@code skillid} for a skill the character's own job tree owns, so a book for another class
+     * lands on {@code skillid == 0} and is refused without being consumed.
+     */
+    static void useSkillBook(Client c, InventoryType type, short slot, int itemId) {
         boolean canuse;
         boolean success = false;
         int skill = 0;
@@ -56,7 +69,7 @@ public final class SkillBookHandler extends AbstractPacketHandler {
         Character player = c.getPlayer();
         if (c.tryacquireClient()) {
             try {
-                Inventory inv = c.getPlayer().getInventory(InventoryType.USE);
+                Inventory inv = c.getPlayer().getInventory(type);
                 Item toUse = inv.getItem(slot);
                 if (toUse == null || toUse.getItemId() != itemId) {
                     return;
@@ -76,7 +89,7 @@ public final class SkillBookHandler extends AbstractPacketHandler {
                             return;
                         }
 
-                        InventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (short) 1, false);
+                        InventoryManipulator.removeFromSlot(c, type, slot, (short) 1, false);
                     } finally {
                         inv.unlockInventory();
                     }

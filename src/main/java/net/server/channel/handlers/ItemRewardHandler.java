@@ -47,8 +47,18 @@ public final class ItemRewardHandler extends AbstractPacketHandler {
         byte slot = (byte) p.readShort();
         int itemId = p.readInt(); // will load from xml I don't care.
 
-        Item it = c.getPlayer().getInventory(InventoryType.USE).getItem(slot);   // null check here thanks to Thora
-        if (it == null || it.getItemId() != itemId || c.getPlayer().getInventory(InventoryType.USE).countById(itemId) < 1) {
+        rollReward(c, InventoryType.USE, slot, itemId);
+    }
+
+    /**
+     * Rolls an item's {@code reward} node and gives what it names, consuming one of the item.
+     *
+     * <p>Takes the inventory because the type 553 trade coupons carry the same {@code reward} node
+     * shape but sit in CASH, not USE.
+     */
+    static void rollReward(Client c, InventoryType type, short slot, int itemId) {
+        Item it = c.getPlayer().getInventory(type).getItem(slot);   // null check here thanks to Thora
+        if (it == null || it.getItemId() != itemId || c.getPlayer().getInventory(type).countById(itemId) < 1) {
             return;
         }
 
@@ -70,7 +80,7 @@ public final class ItemRewardHandler extends AbstractPacketHandler {
                 } else {
                     InventoryManipulator.addById(c, reward.itemid, reward.quantity, "", -1);
                 }
-                InventoryManipulator.removeById(c, InventoryType.USE, itemId, 1, false, false);
+                InventoryManipulator.removeById(c, type, itemId, 1, false, false);
                 if (reward.worldmsg != null) {
                     String msg = reward.worldmsg;
                     msg.replaceAll("/name", c.getPlayer().getName());

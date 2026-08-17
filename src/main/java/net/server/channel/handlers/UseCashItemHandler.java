@@ -549,8 +549,11 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             player.forceUpdateItem(item);
             remove(c, position, itemId);
             c.sendPacket(PacketCreator.enableActions());
-        } else if (itemType == 552) { //DS EGG THING
-            c.sendPacket(PacketCreator.enableActions());
+        } else if (itemType == 553) {
+            // Trade coupons. Each one's info carries a `reward` node naming exactly what it trades
+            // for - 5530009-12 are the DS Egg boxes this branch was written for, and it read 552
+            // (already taken by Scissors of Karma above) so it was unreachable and they did nothing.
+            ItemRewardHandler.rollReward(c, InventoryType.CASH, position, itemId);
         } else if (itemType == 557) {
             p.readInt();
             int itemSlot = p.readInt();
@@ -627,6 +630,10 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
 
                 client.sendPacket(PacketCreator.enableActions());
             }, SECONDS.toMillis(3));
+        } else if (itemType == 562) {
+            // Mastery books. Same node shape as the USE-inventory skill books - info/skill,
+            // reqSkillLevel, masterLevel, success - so they take the same path, only from CASH.
+            SkillBookHandler.useSkillBook(c, InventoryType.CASH, position, itemId);
         } else {
             log.warn("NEW CASH ITEM TYPE: {}, packet: {}", itemType, p);
             c.sendPacket(PacketCreator.enableActions());

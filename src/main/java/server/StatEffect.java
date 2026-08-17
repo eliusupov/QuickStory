@@ -1001,7 +1001,8 @@ public class StatEffect {
             }
         } else {
             if (isResurrection()) {
-                hpchange = applyto.getCurrentMaxHp();
+                // Soul Stone revives at x% (50 at level 20); Resurrection has no x node at all
+                hpchange = x > 0 ? applyto.getCurrentMaxHp() * x / 100 : applyto.getCurrentMaxHp();
                 applyto.broadcastStance(applyto.isFacingLeft() ? 5 : 4);
             }
         }
@@ -1605,8 +1606,17 @@ public class StatEffect {
         return sourceid == Cleric.HEAL || sourceid == SuperGM.HEAL_PLUS_DISPEL;
     }
 
-    private boolean isResurrection() {
-        return sourceid == Bishop.RESURRECTION || sourceid == GM.RESURRECTION || sourceid == SuperGM.RESURRECTION;
+    /**
+     * Soul Stone 22181003 is Evan's revive. It registered as a buff with an empty statup list and
+     * was in no other list, so casting it did nothing at all.
+     *
+     * <p>Not modelled, because nothing in the WZ says how: the real skill hangs over the party for
+     * {@code time} (300s) and spends one of {@code y} (2) charges as members die, where this branch
+     * revives whoever is already down at cast time. The node carries no counter of any kind.
+     */
+    boolean isResurrection() {
+        return sourceid == Bishop.RESURRECTION || sourceid == GM.RESURRECTION || sourceid == SuperGM.RESURRECTION
+                || sourceid == Evan.SOUL_STONE;
     }
 
     private boolean isTimeLeap() {
