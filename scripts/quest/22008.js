@@ -20,7 +20,7 @@ function start(mode, type, selection) {
             qm.sendNext("Right? Let us go and defeat those Foxes. Go on ahead and defeat #r10 #o9300385#es#k in #b#m100030103##k first. I'll follow you and take care of what's left behind. Now, hurry over to #m100030103#!");
         }
     } else if (status == 2) {
-        qm.sendImage("UI/tutorial/evan/10/0");
+        qm.showInfo("UI/tutorial/evan/10/0");
         qm.dispose();
     }
 }

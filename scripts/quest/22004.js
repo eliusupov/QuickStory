@@ -22,7 +22,7 @@ function start(mode, type, selection) {
             qm.sendNext("Oh, that's very nice of you. You'll be able to find #b#t4032498#es#k from the nearby #r#o0130100#s#k. They're not too strong, but use your skills and items when you find yourself in danger.");
         }
     } else if (status == 3) {
-        qm.sendImage("UI/tutorial/evan/6/0");
+        qm.showInfo("UI/tutorial/evan/6/0");
         qm.dispose();
     }
 }
@@ -46,7 +46,7 @@ function end(mode, type, selection) {
         }
         qm.sendNextPrev("Here. I made this new chair from the wooden boards I had left over after fixing the fence. It may not seem like much, but it's sturdy. I'm sure it'll come in handy.");
     } else if (status == 2) {
-        qm.sendImage("UI/tutorial/evan/7/0");
+        qm.showInfo("UI/tutorial/evan/7/0");
         qm.dispose();
     }
 }

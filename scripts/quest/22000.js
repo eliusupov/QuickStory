@@ -34,7 +34,7 @@ function start(mode, type, selection) {
             qm.sendNext("#b#p1013101##k went to the #b#m100030102##k to feed the Bull Dog. You'll see him right outside.");
         }
     } else if (status == 9) {
-        qm.sendImage("UI/tutorial/evan/1/0");
+        qm.showInfo("UI/tutorial/evan/1/0");
         qm.dispose();
     }
 }
@@ -55,7 +55,7 @@ function end(mode, type, selection) {
     } else if (status == 2) {
         qm.forceCompleteQuest();
         qm.gainExp(20);
-        qm.sendImage("UI/tutorial/evan/2/0");
+        qm.showInfo("UI/tutorial/evan/2/0");
         qm.dispose();
     }
 }

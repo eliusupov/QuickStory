@@ -48,7 +48,7 @@ function start(mode, type, selection) {
     } else if (status == 14) {
         qm.sendNextPrev("Wait a minute! Did you distribute your AP? I'm heavily affected by my master's #bINT and LUK#k! If you really want to see what I can do, distribute your AP and #bequip your Magician equipment#k before you use the skill!");
     } else if (status == 15) {
-        qm.sendImage("UI/tutorial/evan/11/0");
+        qm.showInfo("UI/tutorial/evan/11/0");
         qm.dispose();
     }
 }

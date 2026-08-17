@@ -23,7 +23,7 @@ function start(mode, type, selection) {
             qm.sendNext("#b(Mom has something to say? Eat your #t2022620# and head back inside the house.)#k");
         }
     } else if (status == 3) {
-        qm.sendImage("UI/tutorial/evan/3/0");
+        qm.showInfo("UI/tutorial/evan/3/0");
         qm.dispose();
     }
 }
@@ -45,7 +45,7 @@ function end(mode, type, selection) {
         qm.gainItem(2022621, 5, true);
         qm.gainItem(2022622, 5, true);
         qm.gainExp(60);
-        qm.sendImage("UI/tutorial/evan/4/0");
+        qm.showInfo("UI/tutorial/evan/4/0");
         qm.dispose();
     }
 }

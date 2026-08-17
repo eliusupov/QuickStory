@@ -16,7 +16,7 @@ function start(mode, type, selection) {
             qm.sendNext("Hm, you never know unless you try. That lizard is big enough to be on Maple's Believe It Or Not. It might eat hay.");
         } else {
             qm.forceStartQuest();
-            qm.sendImage("UI/tutorial/evan/12/0");
+            qm.showInfo("UI/tutorial/evan/12/0");
         }
         qm.dispose();
     }

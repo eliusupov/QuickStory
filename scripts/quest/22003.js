@@ -27,7 +27,7 @@ function start(mode, type, selection) {
     } else if (status == 2) {
         qm.sendNextPrev("Come back to me if you happen to lose the Lunch Box. I'll make his lunch again.");
     } else if (status == 3) {
-        qm.sendImage("UI/tutorial/evan/5/0");
+        qm.showInfo("UI/tutorial/evan/5/0");
         qm.dispose();
     }
 }
