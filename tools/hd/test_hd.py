@@ -184,6 +184,43 @@ def test_archive_hooks_match_dumps():
     print(f'  archive hooks: ok ({len(rows)} addresses, guard bytes match both dumps)')
 
 
+def test_archive_mount_site():
+    """The mount is a 4-byte operand write, so its guard has to be exactly right.
+
+    MountArchive() overwrites the operand of `push offset L"Base.wz"` at 0x00A405CB. Two
+    things must hold in BOTH dumps or the write lands somewhere it should not:
+      1. the five bytes at the patch site really are that push, and
+      2. the operand really points at L"Base.wz" -- 16 bytes of UTF-16LE.
+    Check (2) is what catches a guard that was transcribed from the wrong dump: the push
+    encoding is common enough to collide, the string it points at is not.
+    """
+    hdr = os.path.join(paths.HD, 'loader', 'archive.h')
+    if not os.path.exists(hdr):
+        print('  archive mount: SKIPPED (no archive.h)')
+        return
+    src = open(hdr).read()
+    guard = re.search(r'kPushBaseWz\[5\]\s*=\s*\{([^}]*)\}', src)
+    site = re.search(r'memcmp\(\(const void\*\)(0x[0-9A-Fa-f]+), kPushBaseWz', src)
+    poke = re.search(r'Poke\((0x[0-9A-Fa-f]+), &p, 4\)', src)
+    assert guard and site and poke, 'could not parse the mount site out of archive.h'
+    exp = bytes(int(x, 16) for x in guard.group(1).replace(' ', '').split(',') if x)
+    va, wr = int(site.group(1), 16), int(poke.group(1), 16)
+    assert len(exp) == 5, f'mount guard must be 5 bytes, got {len(exp)}'
+    assert wr == va + 1, f'operand write 0x{wr:08X} must be guard site 0x{va:08X} + 1'
+    assert exp[0] == 0x68, f'mount guard is not a push imm32: {exp.hex()}'
+
+    target = int.from_bytes(exp[1:5], 'little')
+    want = 'Base.wz'.encode('utf-16-le') + b'\x00\x00'
+    for tag, buf in (('A', paths.load(paths.V84_A)), ('B', paths.load(paths.V84_B))):
+        o = va - paths.BASE
+        assert buf[o:o + 5] == exp, \
+            f'mount @0x{va:08X}: dump {tag} reads {buf[o:o+5].hex()}, archive.h says {exp.hex()}'
+        t = target - paths.BASE
+        assert buf[t:t + len(want)] == want, \
+            f'mount operand 0x{target:08X}: dump {tag} does not hold L"Base.wz"'
+    print(f'  archive mount: ok (0x{va:08X} push -> 0x{target:08X} L"Base.wz", both dumps)')
+
+
 if __name__ == '__main__':
     test_fit()
     have = all(os.path.exists(p) for p in (paths.V83, paths.V84_A, paths.EZORSIA))
@@ -196,4 +233,5 @@ if __name__ == '__main__':
     test_no_overlapping_writes()
     test_generated_inc_wellformed()
     test_archive_hooks_match_dumps()
+    test_archive_mount_site()
     print('OK')

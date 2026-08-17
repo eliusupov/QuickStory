@@ -189,12 +189,22 @@ static void ApplyAll() {
 // The counts are the whole result of a gated manual test, so make them visible without
 // requiring a debugger. Nothing is written to disk -- see the SAFETY note at the top.
 static void Report() {
-    char msg[320];
+    char msg[420];
+    // The archive line names WHICH of the three ways it can be off actually happened, so
+    // one launch distinguishes "owner has no .wz" from "guard bytes differ" from
+    // "mounted but the hook refused" -- without a second round trip.
+    const char* arch = !g_useArchive   ? "off (no EzorsiaV2_UI.wz)"
+                     : g_mountMismatch ? "FAILED (mount guard bytes differ)"
+                     : !g_mounted      ? "FAILED (mount write refused)"
+                     : g_hooked        ? "on"
+                                       : "FAILED (mounted, GetString guard differs)";
     wsprintfA(msg, "hd-res %dx%d: applied %d, skipped %d, byte-mismatch %d of %d"
-                   " | diag %s: observer %d, mismatch %d, GetItem calls %d\n",
+                   "\narchive: %s | hooks %d, mismatch %d"
+                   "%s\n",
               g_w, g_h, g_applied, g_skipped, g_mismatch,
               (int)(sizeof(kHdPatches) / sizeof(kHdPatches[0])),
-              g_diag ? "ON" : "off", g_hooked, g_hookMismatch, g_giOrdinal);
+              arch, g_hooked, g_hookMismatch,
+              g_diag ? " | diag ON" : "");
     OutputDebugStringA(msg);
 #ifdef HD_SELFTEST
     fputs(msg, stderr);   // selftest.cpp build only; the shipped DLL has no CRT output

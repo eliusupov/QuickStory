@@ -210,17 +210,62 @@ static void* __fastcall GetItem_hook(void* pThis, void* edx, void* result, void*
     return r;
 }
 
+// ---- the mount: one 4-byte data patch, NOT a hook -------------------------
+// v84 CWvsApp::InitializeResMan opens the namespace root with:
+//     0x00A405CB  68 D4 33 B9 00   push offset L"Base.wz"   (data at 0x00B933D4)
+//     0x00A405D0  E8 AD 2D 9C FF   call 0x00403382          Ztl_bstr_t(const wchar_t*)
+// and 0x00B933D4 has exactly ONE code reference in .text -- that push.
+//
+// WHY THIS IS SAFE WHERE v2.0.0 WAS NOT. The callee at 0x00403382 -- the same address
+// in v83 and v84 -- is the Ztl_bstr_t constructor, which COPIES the wide string into an
+// allocation the client owns and later frees at m_wstr-4. v2.0.0 wrote a .rdata literal
+// into the already-constructed Data_t::m_wstr, i.e. straight into the pointer the client
+// frees, and the client duly called free(ourLiteral-4). This writes the operand ONE
+// INSTRUCTION EARLIER, on the input side of that copy. Our literal is only ever read;
+// it is never adopted, never refcounted, never freed. No ownership is transferred, so
+// the failure mode that produced STG_E_FILENOTFOUND cannot arise here.
+//
+// The archive is a clone of v84's own Base.wz with one extra img, so replacing the root
+// with it is the whole mount -- ResMan's 15 load-list entries then resolve inside it
+// exactly as they did inside Base.wz.
+static const wchar_t kArchiveName[]  = L"EzorsiaV2_UI.wz";
+static const BYTE    kPushBaseWz[5]  = { 0x68, 0xD4, 0x33, 0xB9, 0x00 };
+static bool          g_mounted = false, g_mountMismatch = false;
+
+static void MountArchive() {
+    if (!g_useArchive) return;
+    if (!Readable((const void*)0x00A405CB, 5) ||
+        memcmp((const void*)0x00A405CB, kPushBaseWz, 5) != 0) { g_mountMismatch = true; return; }
+    const void* p = kArchiveName;
+    g_mounted = Poke(0x00A405CC, &p, 4);
+}
+
 // ---- hook 2: point four UI strings at the archive's img -------------------
-// Upstream remaps exactly these four StringPool ids. Note its `case 1307:` has no
-// break when ownLoginFrame is set and falls through into `case 1301:`, assigning the
-// cash-shop background to the login frame; written correctly here.
+// Upstream remaps exactly four StringPool ids. Note its `case 1307:` has no break when
+// ownLoginFrame is set and falls through into `case 1301:`, assigning the cash-shop
+// background to the login frame; written correctly here.
+//
+// THE IDS ARE NOT v83'S. v84 inserted entries into the string pool, so every one of the
+// four moved, and the drift is piecewise -- +2 here, +3 there, up to +164 higher in the
+// pool -- so it cannot be guessed or applied as a constant. Resolved individually by
+// matching each caller of the pool wrapper (v83 0x00406292 -> v84 0x00406368) across
+// localhome.exe and BOTH v84 dumps, then corroborated by monotonicity brackets:
+//
+//   login frame   1307 -> 1309   v83 call 0x005F44A1 -> v84 0x00609339
+//   cash bg       1301 -> 1303   v83 call 0x00469252 -> v84 0x0046B6BF
+//   cash bg1      1302 -> 1304   v83 call 0x0046903C -> v84 0x0046B365
+//   cash bg2      5361 -> 5364   v83 call 0x0046915F -> v84 0x0046B483
+//
+// Shipping v83's numbers here would not have been a no-op: 1301/1302/1307/5361 all
+// exist in v84's pool and name unrelated strings, so it would have silently repainted
+// four wrong UI elements with cash-shop art.
 static const char* ArchivePathFor(unsigned nIdx) {
     if (!g_useArchive) return nullptr;
     switch (nIdx) {
-    case 1307: return (!g_ownLoginFrame && g_frameImg[0]) ? g_frameImg : nullptr;
-    case 1301: return g_ownCashShop ? nullptr : "MapleEzorsiaV2wzfiles.img/Base/backgrnd";
-    case 1302: return g_ownCashShop ? nullptr : "MapleEzorsiaV2wzfiles.img/Base/backgrnd1";
-    case 5361: return g_ownCashShop ? nullptr : "MapleEzorsiaV2wzfiles.img/Base/backgrnd2";
+    case 1309: return (!g_ownLoginFrame && g_frameImg[0]) ? g_frameImg : nullptr;
+    case 1303: return g_ownCashShop ? nullptr : "MapleEzorsiaV2wzfiles.img/Base/backgrnd";
+    case 1304: return g_ownCashShop ? nullptr : "MapleEzorsiaV2wzfiles.img/Base/backgrnd1";
+    case 5364: return g_ownCashShop ? nullptr : "MapleEzorsiaV2wzfiles.img/Base/backgrnd2";
     default:   return nullptr;
     }
 }
@@ -251,13 +296,17 @@ static void SetArchiveParams(int w, bool haveWz, bool ownLogin, bool ownCash) {
         wsprintfA(g_frameImg, "MapleEzorsiaV2wzfiles.img/Common/frame%d", w);
 }
 
-// v2.1.0 installs the GetItem OBSERVER and nothing else.
+// v3.0.0 mounts the archive and installs StringPool::GetString -- but ONLY when
+// EzorsiaV2_UI.wz is actually present next to the exe. No archive means no mount, no
+// hook, and behaviour identical to the shipping resolution-only build, so the owner
+// reverts the entire feature by renaming one file.
 //
-// StringPool::GetString stays in kHdHooks above so test_hd.py keeps checking its guard
-// bytes against both dumps, but it is deliberately not installed: remapping four UI
-// strings onto MapleEzorsiaV2wzfiles.img is pointless while the img is not mounted, and
-// every hook that is live is a hook that can be blamed for the next crash. It goes back
-// in with the mount, once the log says how to build the path string.
+// IWzNameSpace::GetItem is NOT installed any more outside diag. It existed to log what
+// the client asks the namespace for, and the question it was built to answer -- whether
+// those path strings are length-prefixed bstrs we would have to own -- is answered by
+// the disassembly at MountArchive() above: the string is copied by the constructor at
+// 0x00403382, so we never own one. The observer stays available at diag=1 and nowhere
+// else; every hook that is live is a hook that can be blamed for the next crash.
 // ZXString<char>::Assign is the least independently corroborated of the three addresses
 // (it resolved on a forward-only window). It is not called by this build, but its guard
 // bytes are checked and reported anyway: that turns the owner's launch into a free
@@ -266,7 +315,16 @@ static void SetArchiveParams(int w, bool haveWz, bool ownLogin, bool ownCash) {
 static const BYTE kAssign[5] = { 0x83, 0x7C, 0x24, 0x04, 0x00 };
 
 static void InstallArchiveHooks(const char* logPath) {
-    if (!g_diag) return;                      // diag=0 -> byte-identical to v1 behaviour
+    // The mount and its one hook are a package: the GetString remap points at nodes that
+    // only exist inside the archive, so installing either without the other is a way to
+    // ask the client for art that is not there. Both are gated on the same flag.
+    if (g_useArchive) {
+        MountArchive();
+        if (g_mounted)
+            for (HdHook& h : kHdHooks)
+                if (h.orig == (void**)&g_origGetString) InstallHook(h);
+    }
+    if (!g_diag) return;                      // diag=0 -> no observer
     g_log = CreateFileA(logPath, GENERIC_WRITE, FILE_SHARE_READ, NULL,
                         CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
     LogLine("hd-res 2.1.0 diagnostic: IWzNameSpace::GetItem observer, NO swap.\r\n"

@@ -18,8 +18,8 @@ cd /d "%~dp0"
 
 REM Regenerate first if the tables are stale -- gen_loader.py writes hd_patches.inc and
 REM hd_caves.inc from data/v84-patchset.json, which verify.py produces.
-echo === building hd-res-2.1.0.dll (x86) ===
-cl /nologo /LD /O2 /GS- /MT /DNDEBUG dllmain.cpp /link /OUT:hd-res-2.1.0.dll kernel32.lib user32.lib || exit /b 1
+echo === building hd-res-3.0.0.dll (x86) ===
+cl /nologo /LD /O2 /GS- /MT /DNDEBUG dllmain.cpp /link /OUT:hd-res-3.0.0.dll kernel32.lib user32.lib || exit /b 1
 
 REM The only expected warning is C4733 from cc0x00A63FF3, a group-A cave that is NOT in
 REM the shipped table and is never jumped to. Any other warning is worth reading.
@@ -33,11 +33,11 @@ cl /nologo /MT /DNDEBUG selftest.cpp /link /BASE:0x20000000 /OUT:hd-selftest.exe
 .\hd-selftest.exe hd-res-selftest.dll || exit /b 1
 echo.
 echo Expected above: "applied 0, skipped 0, byte-mismatch 288 of 288"
-echo   and "diag off: observer 0, mismatch 0, GetItem calls 0".
+echo   and an archive line reading "off (no EzorsiaV2_UI.wz)".
 echo That is the byte guard refusing to patch a process that is not the v84 client.
 echo A NON-ZERO applied count here means the guard is broken -- do not ship it.
 
 :done
 echo.
-dumpbin /nologo /headers hd-res-2.1.0.dll | findstr /C:"machine" /C:"File Type"
+dumpbin /nologo /headers hd-res-3.0.0.dll | findstr /C:"machine" /C:"File Type"
 exit /b 0
