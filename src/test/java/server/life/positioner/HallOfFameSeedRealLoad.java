@@ -1,6 +1,7 @@
 package server.life.positioner;
 
 import client.Job;
+import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.id.NpcId;
 import org.junit.jupiter.api.BeforeAll;
@@ -22,6 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -53,6 +55,15 @@ class HallOfFameSeedRealLoad {
     private static final Path SEED =
             Path.of("src", "main", "resources", "db", "data", "163-hall-of-fame-data.sql");
 
+    /**
+     * changeSet 165. All five podium halls have since taken v84's foothold table verbatim, so the
+     * ids 163 wrote no longer name the platforms they were computed from - 103000008 alone went from
+     * 22 footholds to 3. 163 is already applied, so it is corrected the way 164 corrected the town
+     * spawnpoints: a follow-on changeset, not an edit in place.
+     */
+    private static final Path RE_ANCHOR =
+            Path.of("src", "main", "resources", "db", "data", "165-hall-of-fame-v84-terrain.sql");
+
     /** One seeded row: character job (for the hall mapping) and the values the SQL claims. */
     private record Row(String name, int job, int mapid, int scriptId, int podiumRank,
                        int x, int cy, int fh) {
@@ -62,16 +73,29 @@ class HallOfFameSeedRealLoad {
      * Creation order, highest level first - the same order the ranks in the SQL count up in. Job ids
      * are the live {@code characters} rows the seed selects by name; if one of them job-advances the
      * hall it belongs to can change, and {@link #eachCharacterIsInTheHallItsJobMapsTo()} says so.
+     *
+     * <p>{@code x}/{@code cy}/{@code fh} are v84's - what the podium computes against the tables in
+     * the tree today, and what changeSet 165 writes. The values 163 inserted are in {@link #STALE}.
      */
     private static final List<Row> ROWS = List.of(
-            new Row("Shadow", 412, 103000008, 9901300, 0, 0, -8, 12),
-            new Row("Robinhood", 312, 100000204, 9901200, 0, 0, -1, 12),
-            new Row("Wall", 132, 102000004, 9901000, 0, 0, 33, 12),
-            new Row("monkeyDluffy", 421, 103000008, 9901301, 1, -120, 71, 5),
-            new Row("arikrab", 231, 101000004, 9901100, 0, 0, -8, 40),
-            new Row("CaptianKid", 520, 120000105, 9901400, 0, 0, -41, 18));
+            new Row("Shadow", 412, 103000008, 9901300, 0, 0, -7, 1),
+            new Row("Robinhood", 312, 100000204, 9901200, 0, 0, -3, 1),
+            new Row("Wall", 132, 102000004, 9901000, 0, 0, 34, 5),
+            new Row("monkeyDluffy", 421, 103000008, 9901301, 1, -120, 71, 2),
+            new Row("arikrab", 231, 101000004, 9901100, 0, 0, -35, 3),
+            new Row("CaptianKid", 520, 120000105, 9901400, 0, 0, -45, 3));
+
+    /** scriptid -&gt; the {@code cy}/{@code fh} changeSet 163 inserted, against v83's tables. */
+    private static final Map<Integer, int[]> STALE = Map.of(
+            9901300, new int[]{-8, 12},
+            9901200, new int[]{-1, 12},
+            9901000, new int[]{33, 12},
+            9901301, new int[]{71, 5},
+            9901100, new int[]{-8, 40},
+            9901400, new int[]{-41, 18});
 
     private static String seedSql;
+    private static String reAnchorSql;
 
     @BeforeAll
     static void readSeed() throws IOException {
@@ -79,6 +103,7 @@ class HallOfFameSeedRealLoad {
                 "wz-path resolved to '" + WZFiles.DIRECTORY + "', which holds no Hall of Warriors - "
                         + "another test class won the WZFiles.DIRECTORY race, so this says nothing");
         seedSql = Files.readString(SEED, StandardCharsets.UTF_8);
+        reAnchorSql = Files.readString(RE_ANCHOR, StandardCharsets.UTF_8);
     }
 
     /**
@@ -136,6 +161,10 @@ class HallOfFameSeedRealLoad {
      * The position values. {@code createPlayerNPCInternal} writes
      * {@code getGroundBelow(PlayerNPCPodium.calcNextPos(rank, step))} plus {@code x +/- 50} and the
      * foothold under the result; recompute all of it off the real map and compare.
+     *
+     * <p>The comparison is against changeSet 165, not 163: 163 is applied and immutable, and 165 is
+     * what leaves the database agreeing with the tree. 163 is still checked - for the values it
+     * actually inserted - by {@link #theSeedStillCarriesTheValuesItWasAppliedWith()}.
      */
     @Test
     void positionsMatchWhatThePodiumWouldHaveComputed() {
@@ -147,12 +176,62 @@ class HallOfFameSeedRealLoad {
             assertEquals(row.cy(), ground.y, row.name() + " cy");
             assertEquals(row.fh(), map.getFootholds().findBelow(ground).getId(), row.name() + " fh");
 
-            // the derived table names its columns on the first UNION member only; drop those aliases
-            String values = seedSql.replaceAll(" (?:cname|map|scriptid|x|cy|fh|wrank|jobrank)(?=[,)])", "");
-            assertTrue(values.contains(row.x() + ", " + row.cy() + ", " + row.fh() + ","),
-                    row.name() + ": " + SEED + " does not carry x/cy/fh " + row.x() + "/" + row.cy()
-                            + "/" + row.fh());
+            assertTrue(reAnchorSql.contains(
+                            "SET cy = " + row.cy() + ", fh = " + row.fh() + " WHERE scriptid = " + row.scriptId()),
+                    row.name() + ": " + RE_ANCHOR + " does not re-anchor " + row.scriptId()
+                            + " to cy/fh " + row.cy() + "/" + row.fh());
         }
+    }
+
+    /**
+     * changeSet 163 has run on the live database, so its text is frozen: liquibase validates its
+     * checksum on every boot and an edit in place would halt startup. This pins that it still says
+     * what it said when it ran - and, by contrast with {@link #ROWS}, that 165 has real work to do.
+     */
+    @Test
+    void theSeedStillCarriesTheValuesItWasAppliedWith() {
+        // the derived table names its columns on the first UNION member only; drop those aliases
+        String values = seedSql.replaceAll(" (?:cname|map|scriptid|x|cy|fh|wrank|jobrank)(?=[,)])", "");
+        for (Row row : ROWS) {
+            int[] stale = STALE.get(row.scriptId());
+            assertNotNull(stale, "no recorded 163 value for " + row.scriptId());
+            assertTrue(values.contains(row.x() + ", " + stale[0] + ", " + stale[1] + ","),
+                    row.name() + ": " + SEED + " no longer carries the x/cy/fh it was applied with ("
+                            + row.x() + "/" + stale[0] + "/" + stale[1] + ")");
+            assertTrue(stale[0] != row.cy() || stale[1] != row.fh(),
+                    row.name() + ": 163 and the current terrain agree, so changeSet 165 has a "
+                            + "no-op row - drop it rather than shipping an UPDATE that does nothing");
+        }
+    }
+
+    /**
+     * Every podium slot the allocator can ever hand out has to land on a foothold, on all five
+     * halls. {@code PlayerNPCPodium.getNextPlayerNpcPosition} ends in {@code map.getGroundBelow},
+     * and that does {@code spos.y--} on the result of {@code calcPointBelow} with no null check - so
+     * a slot over empty space is a NullPointerException on a live deploy, not a misdrawn npc.
+     *
+     * <p>This matters because the platform x-offsets in {@code calcNextPos} are hardcoded (-50, -170,
+     * +70) and the halls have since taken v84's terrain. They still all resolve; where v84 has no
+     * wing under an offset the slot falls through to the hall floor, which is what the client draws
+     * there anyway.
+     */
+    @Test
+    void everyPodiumSlotOnEveryHallLandsOnAFoothold() {
+        List<String> overEmptySpace = new LinkedList<>();
+        for (int mapid : new int[]{100000204, 101000004, 102000004, 103000008, 120000105}) {
+            MapleMap map = loadFootholds(mapid);
+            for (int step = 1; step <= YamlConfig.config.server.PLAYERNPC_AREA_STEPS; step++) {
+                for (int rank = 0; rank < 3 * step; rank++) {
+                    Point pos = PlayerNPCPodium.calcNextPos(rank, step);
+                    if (map.getPointBelow(new Point(pos.x, pos.y - 14)) == null) {
+                        overEmptySpace.add(mapid + " step " + step + " rank " + rank + " at " + pos);
+                    }
+                }
+            }
+        }
+        assertEquals(List.of(), overEmptySpace,
+                "a Hall of Fame podium slot is over empty space - getGroundBelow will throw when a "
+                        + "player deploys into it");
     }
 
     /**

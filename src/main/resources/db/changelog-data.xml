@@ -203,4 +203,16 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="165" author="v84-terrain">
+        <sqlFile path="db/data/165-hall-of-fame-v84-terrain.sql"/>
+        <rollback>
+            UPDATE playernpcs SET cy = -8, fh = 12 WHERE scriptid = 9901300 AND map = 103000008;
+            UPDATE playernpcs SET cy = -1, fh = 12 WHERE scriptid = 9901200 AND map = 100000204;
+            UPDATE playernpcs SET cy = 33, fh = 12 WHERE scriptid = 9901000 AND map = 102000004;
+            UPDATE playernpcs SET cy = 71, fh = 5 WHERE scriptid = 9901301 AND map = 103000008;
+            UPDATE playernpcs SET cy = -8, fh = 40 WHERE scriptid = 9901100 AND map = 101000004;
+            UPDATE playernpcs SET cy = -41, fh = 18 WHERE scriptid = 9901400 AND map = 120000105;
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>
