@@ -7445,7 +7445,15 @@ public class Character extends AbstractCharacterObject {
             raiseQuestMobCount(MobId.ZOMBIE_MUSHROOM_QUEST);
         } else if (id == MobId.GHOST_STUMP || id == MobId.SMIRKING_GHOST_STUMP) {
             raiseQuestMobCount(MobId.GHOST_STUMP_QUEST);
+        } else if (id == MobId.BLUE_MUSHROOM || id == MobId.CRYING_BLUE_MUSHROOM) {
+            raiseQuestMobCount(MobId.BLUE_MUSHROOM_QUEST);
+        } else if (id == MobId.BALROG_LOW || id == MobId.BALROG_HIGH) {
+            raiseQuestMobCount(MobId.BALROG_QUEST);
         }
+        // ponytail: hardcoded to match the existing branches. The authoritative membership is
+        // shipped in Mob.wz/QuestCountGroup/<mergeId>.img; load that generically if more groups appear.
+        // All five groups the WZ ships (9101000-9101004) are now covered, and each is referenced by
+        // a real quest - 9101003 was the last gap, used only by 8142 "Todd's How-to-Hunt".
 
         int lastQuestProcessed = 0;
         try {

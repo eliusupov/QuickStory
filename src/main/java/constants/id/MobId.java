@@ -14,6 +14,14 @@ public class MobId {
     public static final int GHOST_STUMP = 1140100;
     public static final int SMIRKING_GHOST_STUMP = 1140130;
     public static final int GHOST_STUMP_QUEST = 9101002;
+    public static final int BLUE_MUSHROOM = 2220100;
+    public static final int CRYING_BLUE_MUSHROOM = 2220110;
+    public static final int BLUE_MUSHROOM_QUEST = 9101004;
+    // Both are named "Balrog" in String.wz/Mob.img; Mob.wz/QuestCountGroup/9101003.img is what
+    // pairs them. Quest 8142 "Todd's How-to-Hunt" is the only user.
+    public static final int BALROG_LOW = 8830003;
+    public static final int BALROG_HIGH = 8830010;
+    public static final int BALROG_QUEST = 9101003;
 
     public static final int PAPULATUS_CLOCK = 8500001;
     public static final int HIGH_DARKSTAR = 8500003;
