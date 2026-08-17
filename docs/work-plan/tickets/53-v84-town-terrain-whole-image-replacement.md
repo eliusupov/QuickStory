@@ -129,7 +129,7 @@ which is neither our layout nor v84's. Our 18 rows are kept and re-pointed; taki
 all-or-nothing life swap needing its own authorisation. `106010102` is the same shape (our 8 Stone
 Golems against v84's 1).
 
-**3. Portals.** 34 of the 52 also differ from v84 in `portal`, and
+**3. Portals.** 28 of the 52 also differ from v84 in `portal`, and
 `docs/wz-baseline/protect-list/Map.txt` lists custom portal nodes on many of them - `674030000`
 alone has 32 protected portal slots, plus `910510100` @26-32, `106020000` @4-9, `610030000` @3-8,
 and `670010600`. A verbatim portal take would delete them. Portals are untouched here; they need the
