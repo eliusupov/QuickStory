@@ -370,15 +370,24 @@ class V84MiscAreasNodeTest {
     }
 
     /**
-     * 910050300 Abandoned Cave looks routable and is not. Its {@code returnMap} is 105070300, whose
-     * {@code in00} is a {@code pt=8} script portal named {@code enterDollcave} - but Cosmic ALREADY
-     * ships {@code scripts/portal/enterDollcave.js}, warping to 105040201 behind quests 20730 /
-     * 21734 with an NPC password fallback. That script name is taken by working v83 content, so
-     * the cave cannot be hung off it. Asserted, because the shape of the data invites exactly this
-     * mistake and it was made once already while writing this ticket.
+     * 910050300 Abandoned Cave is reached through 105070300's {@code in00}, the {@code pt=8} script
+     * portal named {@code enterDollcave} - the same portal that already serves the Sleepywood
+     * puppeteer route.
+     * <p>
+     * An earlier revision of this test forbade the cave from being mentioned in that script at all,
+     * on the grounds that the name was "taken" by working v83 content. That reasoning does not
+     * hold: {@code pt=8} means the destination is decided SERVER side, so v84's client data looks
+     * identical whether or not the cave hangs off this portal, and the script already branches
+     * three ways. What actually needs protecting is not the script's exclusivity but the v83 route
+     * through it, so that is what this asserts.
+     * <p>
+     * The cave belongs here on the evidence: its {@code returnMap} and {@code forcedReturn} are
+     * both 105070300, it appears in no other map's {@code tm} in any of Map.wz, and npc 1063018
+     * lives alone on it and gates eight quests (22549's hand-in through 22566). Without the route
+     * the Evan chain dies at level ~32 and 22550-22596 are unreachable.
      */
     @Test
-    void theAbandonedCaveDoesNotStealTheExistingEnterDollcaveScript() throws IOException {
+    void theAbandonedCaveHangsOffEnterDollcaveWithoutBreakingTheSleepywoodRoute() throws IOException {
         Data dollCave = portal(105070300, "in00");
         assertNotNull(dollCave, "105070300/in00 - the v83 script portal");
         assertEquals("enterDollcave", DataTool.getString("script", dollCave, null));
@@ -389,9 +398,19 @@ class V84MiscAreasNodeTest {
         assertTrue(js.contains("pi.warp(105040201,"),
                 "enterDollcave.js no longer warps to 105040201 - a ticket has repurposed a working "
                         + "v83 portal script");
-        assertFalse(js.contains("910050300"),
-                "enterDollcave.js was repointed at the Abandoned Cave, which breaks the Sleepywood "
-                        + "puppeteer route it already serves");
+        assertTrue(js.contains("pi.openNpc(1063011,"),
+                "enterDollcave.js lost the puppeteer password fallback");
+        assertTrue(js.contains("pi.warp(910050300,"),
+                "enterDollcave.js no longer routes the Abandoned Cave - npc 1063018 is then "
+                        + "unreachable and Evan quests 22549-22566 cannot be completed");
+
+        // The cave arm must stay behind an Evan quest gate: ungated, it would swallow the v83
+        // route for every player who steps on the portal.
+        int cave = js.indexOf("pi.warp(910050300,");
+        int gate = js.lastIndexOf("22549", cave);
+        assertTrue(gate >= 0 && cave - gate < 200,
+                "the Abandoned Cave warp is not gated on Evan quest 22549 - it would hijack the "
+                        + "Sleepywood puppeteer route");
     }
 
     /** Each of the three routed maps has a return portal at the name its script warps to. */
