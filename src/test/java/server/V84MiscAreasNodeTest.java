@@ -304,17 +304,31 @@ class V84MiscAreasNodeTest {
      */
     @Test
     void theUnsafeRoutePortalRowsWereNotMerged() {
-        // 106010101/portal/5 is out00 in the live client and in00 in v84.
+        // 106010101 and 106010102 no longer belong in this list. Both arrays have since been taken
+        // from v84 whole, at v84's indices (ticket 53), so the mismatch that made those rows unsafe
+        // - our portal/5 being out00 where v84 has in00, our portal/{4,5,6,7} being in04/in05/in06/
+        // out00 where v84 has in03/in04/in05/in06 - no longer exists. The leaves are not "merged by
+        // index" any more; they arrive as part of v84's own node. What has to be asserted now is the
+        // alignment itself, which is a stricter guard than their absence ever was: if the array
+        // slipped by one, out00 would pick up a horizontalImpact and in06 would lose one.
         assertEquals(6, portalCount(106010101), "106010101 must still have exactly 6 portals");
         assertNoneOf(106010101, "out00", "script", "horizontalImpact");
+        // The one portal deliberately NOT at v84 parity: v84 makes in00 a pt 7 script portal driven
+        // by evanGolemDoor, which this tree has no scripts/portal/ file for, so taking v84's
+        // pt/tm/tn would leave Golem's Temple with no entrance. v84's slot, our destination.
         assertEquals(106010102, DataTool.getInt("tm", portal(106010101, "in00"), -1),
                 "106010101/in00 must still lead to Golem's Temple 2");
+        assertNull(portal(106010101, "in00").getChildByPath("script"),
+                "106010101/in00 must not name evanGolemDoor - there is no such portal script here, "
+                        + "and a script we cannot run makes the portal inert");
 
-        // 106010102/portal/{4,5,6,7}/horizontalImpact: v84 moved out00 to index 3, so every one of
-        // those rows lands one portal off. This is the same array the merge appends to at index 8.
-        for (String pn : List.of("in03", "in04", "in05", "in06", "out00")) {
-            assertNoneOf(106010102, pn, "horizontalImpact");
+        // v84 puts horizontalImpact on in03..in06 and scr00, and on nothing else in this array.
+        for (String pn : List.of("in03", "in04", "in05", "in06", "scr00")) {
+            assertNotNull(portal(106010102, pn).getChildByPath("horizontalImpact"),
+                    "106010102/" + pn + " lost its horizontalImpact - v84 carries it on exactly "
+                            + "these five, so losing one means the array no longer matches v84");
         }
+        assertNoneOf(106010102, "out00", "horizontalImpact");
 
         // 220000300: v84 INSERTED scr00 at index 4, shifting eleven portals down, so the add-list
         // rows still cannot be applied - portal/15 would be a duplicate in06,

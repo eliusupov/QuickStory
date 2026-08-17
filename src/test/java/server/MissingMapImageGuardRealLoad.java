@@ -96,7 +96,11 @@ class MissingMapImageGuardRealLoad {
         try (Stream<Path> imgs = Files.walk(Path.of(WZFiles.DIRECTORY, "Map.wz", "Map"))) {
             imgs.map(p -> p.getFileName().toString())
                     .filter(n -> n.endsWith(".img.xml"))
-                    .forEach(n -> ids.add(Integer.parseInt(n.substring(0, n.length() - ".img.xml".length()))));
+                    .map(n -> n.substring(0, n.length() - ".img.xml".length()))
+                    // Map.wz/Map holds non-map images too - AreaCode.img.xml has been there since the
+                    // original import, and Files.walk reaches it. Only numeric names are map ids.
+                    .filter(n -> n.chars().allMatch(Character::isDigit))
+                    .forEach(n -> ids.add(Integer.parseInt(n)));
         }
         assertTrue(ids.size() > 5000, "only " + ids.size() + " map images found under "
                 + WZFiles.DIRECTORY + " - another test class won the WZFiles.DIRECTORY race, so "
