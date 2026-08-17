@@ -469,6 +469,9 @@ public class GameConstants {
     public static int getJobBranch(Job job) {
         int jobid = job.getId();
 
+        // 2001 (Evan's beginner job) is the only beginner id that is not a round thousand, so it
+        // falls through to `2 + (jobid % 10)` = 3 and reads as a 3rd-job character here. Callers
+        // that mean "is this a beginner" must use Character.isBeginnerJob(), which handles 2001.
         if (jobid % 1000 == 0) {
             return 0;
         } else if (jobid % 100 == 0) {

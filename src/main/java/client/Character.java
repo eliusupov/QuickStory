@@ -6273,7 +6273,11 @@ public class Character extends AbstractCharacterObject {
     }
 
     private void levelUpGainSp() {
-        if (GameConstants.getJobBranch(job) == 0) {
+        // isBeginnerJob(), not getJobBranch(job) == 0: 2001 is Evan's beginner job and the only one
+        // that is not a round thousand, so getJobBranch returns 3 for it and every Evan beginner
+        // banked 3 SP per level - ~27 by the level-10 advancement. The two predicates agree on
+        // every other job. getJobBranch is left alone because it also feeds getJobMaxLevel.
+        if (isBeginnerJob()) {
             return;
         }
 
@@ -7970,6 +7974,13 @@ public class Character extends AbstractCharacterObject {
                 case 1200:
                     tint = 20;
                     tsp += ((getLevel() - 8) * 3);
+                    break;
+                case 2200:  // Evan is INT-based, so it takes the magician spread, but not its SP:
+                    tint = 20;
+                    // changeJob grants an Evan 3 SP, not 1 (spGain = 1, +2 for hasSPTable), so every
+                    // formula here is short by 2 and would delete SP. Book 0 is the slot the call
+                    // below writes, so reading it back makes the SP write an identity.
+                    tsp = remainingSp[GameConstants.getSkillBook(job.getId())];
                     break;
                 case 300:
                 case 1300:

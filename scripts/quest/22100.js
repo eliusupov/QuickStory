@@ -39,12 +39,11 @@ function start(mode, type, selection) {
         qm.sendNext("Master, I can feel it... I'm about to grow. Are you ready?");
     } else if (status == 1) {
         qm.changeJobById(2200);
+        // Moves the beginner's auto-assigned STR/DEX into INT, as Aran's 21101.js and the five
+        // Explorer 1st-job NPCs do. resetStats' case 2200 leaves the ten-slot SP array alone.
+        qm.resetStats();
         qm.forceStartQuest();
         qm.forceCompleteQuest();
-        // ponytail: no resetStats() here, unlike the Cygnus advancement scripts. It has no
-        // Evan branch (Character.java:7954) and would rewrite the ten-slot SP array through
-        // updateStrDexIntLukSp. changeJob() already grants Evan's SP, AP, slots, HP/MP and
-        // respawns the dragon.
         // sendNext, not sendNextPrev: the job gate above now rejects this character, so a
         // Prev button would dead-end into dispose().
         qm.sendNext("Baby Dragon Mir has been born from the Dragon Egg.\r\n\r\nYou have received #bSP#k and #bAP#k. Open the Skill window to see what I can do now, master!");

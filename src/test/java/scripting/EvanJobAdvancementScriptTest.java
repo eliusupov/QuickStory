@@ -40,6 +40,7 @@ public class EvanJobAdvancementScriptTest {
         public Integer changedTo;
         public boolean completed;
         public String lastText;
+        public int resetStatsCalls;
 
         StubQm(int jobId, int level) {
             this.job = Job.getById(jobId);
@@ -79,6 +80,10 @@ public class EvanJobAdvancementScriptTest {
             lastText = text;
         }
 
+        public void resetStats() {
+            resetStatsCalls++;
+        }
+
         public void dispose() {
         }
     }
@@ -112,6 +117,10 @@ public class EvanJobAdvancementScriptTest {
 
         assertEquals(toJob, qm.changedTo);
         assertTrue(qm.completed);
+        // Only 22100 leaves the beginner spread behind, so only 22100 resets stats. 22101-22109
+        // advance an already-built Evan; resetting there would wipe a real stat allocation.
+        assertEquals(questId == 22100 ? 1 : 0, qm.resetStatsCalls,
+                "quest/" + questId + ".js resetStats() calls");
     }
 
     @ParameterizedTest(name = "{0} refuses below level {2}")
@@ -146,7 +155,7 @@ public class EvanJobAdvancementScriptTest {
     @ParameterizedTest(name = "QuestActionManager exposes {0}")
     @CsvSource({
             "getJob", "getLevel", "changeJobById", "forceStartQuest", "forceCompleteQuest",
-            "sendNext", "sendOk", "canHold", "gainItem", "dispose",
+            "sendNext", "sendOk", "canHold", "gainItem", "dispose", "resetStats",
     })
     void questActionManagerExposesTheScriptSurface(String method) {
         boolean found = Stream.of(QuestActionManager.class.getMethods())
