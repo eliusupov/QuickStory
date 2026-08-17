@@ -58,7 +58,6 @@ import server.life.LifeFactory;
 import server.life.PlayerNPC;
 import server.maps.MapManager;
 import server.maps.MapObject;
-import server.maps.MapObjectType;
 import server.maps.MapleMap;
 import server.partyquest.AriantColiseum;
 import server.partyquest.MonsterCarnival;
@@ -344,15 +343,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public PlayerNPC getPlayerNPCByScriptid(int scriptId) {
-        for (MapObject pnpcObj : getPlayer().getMap().getMapObjectsInRange(new Point(0, 0), Double.POSITIVE_INFINITY, Arrays.asList(MapObjectType.PLAYER_NPC))) {
-            PlayerNPC pn = (PlayerNPC) pnpcObj;
-
-            if (pn.getScriptId() == scriptId) {
-                return pn;
-            }
-        }
-
-        return null;
+        return getPlayer().getMap().getPlayerNPCByScriptId(scriptId);
     }
 
     @Override

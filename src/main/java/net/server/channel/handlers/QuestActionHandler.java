@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import scripting.quest.QuestScriptManager;
 import server.life.NPC;
+import server.life.PlayerNPC;
 import server.quest.Quest;
 
 import java.awt.*;
@@ -49,6 +50,23 @@ public final class QuestActionHandler extends AbstractPacketHandler {
      * Dragon". So he is never in any map's {@code life}, and {@code getNPCById} can never find him.
      */
     private static final int MIR = 1013000;
+
+    /**
+     * Where the quest giver stands, or {@code null} if it is not on this map. A Hall-of-Fame
+     * PlayerNPC is a {@code MapObjectType.PLAYER_NPC} and never a {@link NPC}, so
+     * {@code getNPCById} cannot see one - quest 22402 "Meeting the Dragon Rider" names 9901000,
+     * the first warrior slot of the {@code NpcId.PLAYER_NPC_BASE} band, and both its start and its
+     * end would be refused on a map where that pnpc is standing in plain sight.
+     */
+    private static Point questNpcPosition(Character player, int npcId) {
+        NPC npc = player.getMap().getNPCById(npcId);
+        if (npc != null) {
+            return npc.getPosition();
+        }
+
+        PlayerNPC pnpc = player.getMap().getPlayerNPCByScriptId(npcId);
+        return pnpc != null ? pnpc.getPosition() : null;
+    }
 
     // isNpcNearby thanks to GabrielSin
     private static boolean isNpcNearby(InPacket p, Character player, Quest quest, int npcId) {
@@ -74,14 +92,13 @@ public final class QuestActionHandler extends AbstractPacketHandler {
                 return true;
             }
 
-            NPC npc = player.getMap().getNPCById(npcId);
-            if (npc == null) {
+            Point npcP = questNpcPosition(player, npcId);
+            if (npcP == null) {
                 log.debug("Quest {} denied for {}: npc {} is not spawned on map {}", quest.getId(), player.getName(),
                         npcId, player.getMapId());
                 return false;
             }
 
-            Point npcP = npc.getPosition();
             if (Math.abs(npcP.getX() - playerP.getX()) > 1200 || Math.abs(npcP.getY() - playerP.getY()) > 800) {
                 log.debug("Quest {} denied for {}: npc {} at {} too far from {}", quest.getId(), player.getName(),
                         npcId, npcP, playerP);

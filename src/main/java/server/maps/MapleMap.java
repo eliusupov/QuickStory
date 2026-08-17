@@ -1917,6 +1917,18 @@ public class MapleMap {
         return null;
     }
 
+    /** Hall-of-Fame PlayerNPCs are {@code MapObjectType.PLAYER_NPC}, so {@link #getNPCById} misses them. */
+    public PlayerNPC getPlayerNPCByScriptId(int scriptId) {
+        for (MapObject obj : getMapObjectsInRange(new Point(0, 0), Double.POSITIVE_INFINITY, List.of(MapObjectType.PLAYER_NPC))) {
+            PlayerNPC pnpc = (PlayerNPC) obj;
+            if (pnpc.getScriptId() == scriptId) {
+                return pnpc;
+            }
+        }
+
+        return null;
+    }
+
     public boolean containsNPC(int npcid) {
         objectRLock.lock();
         try {

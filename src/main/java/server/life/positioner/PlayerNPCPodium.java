@@ -59,7 +59,7 @@ public class PlayerNPCPodium {
         return 40;
     }
 
-    private static Point calcNextPos(int rank, int step) {
+    static Point calcNextPos(int rank, int step) {   // package-private: HallOfFameSeedRealLoad pins the seeded podium rows against it
         int podiumPlatform = rank / step;
         int relativePos = (rank % step) + 1;
 
@@ -77,7 +77,7 @@ public class PlayerNPCPodium {
         return calcNextPos(i, newStep);
     }
 
-    private static Point reorganizePlayerNpcs(MapleMap map, int newStep, List<MapObject> mmoList) {
+    static Point reorganizePlayerNpcs(MapleMap map, int newStep, List<MapObject> mmoList) {
         if (!mmoList.isEmpty()) {
             if (YamlConfig.config.server.USE_DEBUG) {
                 log.debug("Re-organizing pnpc map, step {}", newStep);
@@ -117,7 +117,11 @@ public class PlayerNPCPodium {
             return ret;
         }
 
-        return null;
+        // Nothing to rearrange yet, so hand out the first podium slot instead of refusing. Returning
+        // null here made every podium hall silently reject its very first PlayerNPC - and drop the
+        // branch's lowest scriptid, 9901000 for warriors, which quest 22402 needs - because the
+        // caller reaches this branch on the empty map (podiumCount 0 >= 3 * podiumStep 0).
+        return calcNextPos(0, newStep);
     }
 
     private static int encodePodiumData(int podiumStep, int podiumCount) {
