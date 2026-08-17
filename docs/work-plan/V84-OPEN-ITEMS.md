@@ -114,7 +114,24 @@ Worsens with job level. `IN FLIGHT`.
 
 ## 9. v84 content that exists and cannot be reached  *(found 2026-08-17, non-Evan sweep)*
 
-- **CRIMSON SKY - v84's single largest content addition has no entrance.** Ticket 06 merged 22 maps,
+- **CRIMSON SKY - CLOSED AS OUT OF SCOPE. Do not re-flag this as a missing route.**
+  **v84 ships the assets but not the way in, and that IS v84 parity.** Measured: all 21
+  `240080xxx` maps are in the v84 archive, quests 3758/3759 are v84-new, and a scan of ALL 4,848
+  images of v84's own `Map.wz` finds **zero** portals with `tm=240080000` (control: the same scan
+  returns two real edges for `240030102`, so the method is not vacuous). Independently re-derived by
+  the orchestrator on our merged tree with the same control - same result.
+  Two consequences worth keeping:
+  - **No flying mechanic needs building.** `MapFactory.loadMapFromWz` never reads `fly` or
+    `needSkillForFly`; the CLIENT draws and validates flight. Grant the skill and it works - which is
+    how `200090500`/`200090510` work today on five-line portal scripts.
+  - **A server-side portal would be inert.** The client never sends an enter packet for a portal its
+    own `Map.wz` does not draw, so reaching this content requires patching the CLIENT archive - a
+    different class of work that would make the client diverge from an authentic v84 one.
+  The owner's external reading puts the Dragon Rider PQ at v85; our files cannot confirm a patch
+  number, only that v84 has the assets and no route. Either way it is beyond v84 parity. **Owner
+  decision recorded: "lets focus on v84 for now".**
+  Historical detail below, kept for whoever picks this up later:
+- Ticket 06 merged 22 maps,
   7 huntable mobs and 776 drop rows, and left "travel route works" explicitly unchecked as an owner
   decision. Still true at HEAD: `240030102` (the only edge from existing content) has no `right00`
   back, and v84 ships that map byte-identical to v83; `grep` for `240080000` / `Sky_GateMapEnter` /
