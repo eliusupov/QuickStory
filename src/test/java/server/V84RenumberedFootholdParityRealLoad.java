@@ -35,7 +35,10 @@ import static server.V84Wz.wz;
  * is identical between the two trees, so an id-to-id bijection exists. v84's table was then taken
  * verbatim and every {@code life} row re-pointed through it - 384 rows, all of which still stand on
  * the same physical platform they stood on before. Nothing was deleted; the life rows we carry that
- * v84 does not are kept and re-pointed with the rest.
+ * v84 does not are kept and re-pointed with the rest. Fifteen mob rows that match v84 on
+ * {@code (type, id, x, y)} but cited a different overlapping platform than v84 does were then given
+ * v84's own {@code fh}, so no row on these twenty maps disagrees with v84 where the two describe the
+ * same spawn.
  *
  * <p>The expectation below is the same digest {@code docs/wz-baseline/tool-peek} prints
  * ({@code WzPeek digest D:\games\MSv84\client\Map.wz}): SHA-1 of {@code id|layer|group|x1,y1,x2,y2}
@@ -74,26 +77,47 @@ class V84RenumberedFootholdParityRealLoad {
     ));
 
     /**
-     * The five of the twenty whose {@code portal} array was ALSO taken from v84 verbatim. On each
-     * of them v84's array is ours plus exactly one portal, so nothing is invented and nothing is
-     * lost - and on {@code 197000000} and {@code 550000000} the new portal lands mid-array, which is
-     * the {@code unityPortal2} defect again: {@code getWarpToMap} sends {@code portal.getId()} and
-     * {@code PortalFactory} takes that id from the slot name, so every later slot answered one early.
+     * The ten of the twenty whose {@code portal} array diverged from v84, in the order they now
+     * carry. One rule produced all ten: <b>v84's rows sit at v84's indices, and anything of ours
+     * that v84 does not have is appended past v84's last index.</b> That satisfies parity and the
+     * additive policy at once - every index the client resolves means what v84 means, and no row of
+     * ours was dropped to get there.
      *
-     * <p>The other five whose portal arrays still differ from v84 are deliberately untouched, see
-     * the ticket: {@code 130000120} and {@code 610030100} carry a portal v84 lacks, {@code 209000000}
-     * six {@code tp} doors v84 lacks (and {@code PortalFactory} re-ids {@code pt} 6 to 0x80+, so
-     * those never address by position), {@code 801000000} differs only in one door's x, and
-     * {@code 191000000} would need {@code up12} moved five pixels to take v84's array whole.
+     * <p>The number of leading slots v84 owns is in the trailing comment. On seven maps that is the
+     * whole array; on {@code 130000120}, {@code 209000000} and {@code 610030100} the tail is ours:
+     * the {@code rankDeveloperRoom} door, six {@code tp} doors, and the Guild PQ
+     * {@code glpqPortalDummy} portal (custom content from {@code a7beff1bb}, and the one extra row
+     * {@code protect-list/Map.txt} already records at {@code 610030100.img/portal/6}).
+     *
+     * <p>Why the index matters at all: {@code getWarpToMap} sends {@code portal.getId()} and
+     * {@code PortalFactory} takes that id from the slot NAME, so a portal in the wrong slot makes
+     * the client land the player at its neighbour. Clicking was never affected - that resolves by
+     * name. {@code pt} 6 doors are exempt either way ({@code PortalFactory} re-ids them to 0x80+),
+     * which is why {@code 209000000}'s six extra doors are harmless wherever they sit.
      */
-    private static final Map<Integer, String[]> V84_PORTAL_ORDER = new LinkedHashMap<>(Map.of(
-            190000000, new String[]{"sp", "sp", "in00", "in01", "out00"},
-            192000000, new String[]{"sp", "sp", "sp", "sp", "in00", "out00"},
-            196000000, new String[]{"sp", "sp", "sp", "sp", "east00", "out00"},
-            197000000, new String[]{"sp", "sp", "sp", "west00", "east00"},
-            550000000, new String[]{"sp", "sp", "sp", "st00", "WP00", "east00", "west00",
+    private static final Map<Integer, String[]> V84_PORTAL_ORDER = new LinkedHashMap<>(Map.ofEntries(
+            Map.entry(130000120, new String[]{"sp", "sp", "st00", "st01", "down00", "down01",
+                    "dn00", "dn01", "dn02", "dn03", "dn04", "dn05", "dn06", "dn07", "dn08", "dn09",
+                    "dn10", "dn11", "dn12", "dn13", "dn14", "dn15", "in00"}),          // 22 v84's
+            Map.entry(190000000, new String[]{"sp", "sp", "in00", "in01", "out00"}),   //  5 v84's
+            Map.entry(191000000, new String[]{"sp", "sp", "sp", "sp", "sp", "sp", "sp", "up00",
+                    "up01", "up02", "up10", "up11", "up12", "in00", "in01", "out00"}), // 16 v84's
+            Map.entry(192000000, new String[]{"sp", "sp", "sp", "sp", "in00", "out00"}),
+            Map.entry(196000000, new String[]{"sp", "sp", "sp", "sp", "east00", "out00"}),
+            Map.entry(197000000, new String[]{"sp", "sp", "sp", "west00", "east00"}),
+            Map.entry(209000000, new String[]{"sp", "sp", "sp", "sp", "sp", "sp", "sp", "h001",
+                    "out00", "chimney01", "chimney00", "h002", "h003", "h001_1", "h002_1",
+                    "h003_1", "st00", "chimney00_1", "chimney00_2",
+                    "tp", "tp", "tp", "tp", "tp", "tp"}),                              // 19 v84's
+            Map.entry(550000000, new String[]{"sp", "sp", "sp", "st00", "WP00", "east00", "west00",
                     "market00", "hide01", "hide02", "hide03", "hide04", "hide05", "hide06",
-                    "hide07", "tp", "tp", "tp", "tp", "tp", "tp"}));
+                    "hide07", "tp", "tp", "tp", "tp", "tp", "tp"}),                    // 21 v84's
+            Map.entry(610030100, new String[]{"sp", "sp", "sp", "sp", "sp", "next00", "next01"}),
+                                                                                       //  6 v84's
+            Map.entry(801000000, new String[]{"sp", "sp", "sp", "sp", "in00", "h00_0", "h00_1",
+                    "h00_2", "h00_3", "west00", "center00", "in01", "in02",
+                    "tp", "tp", "tp", "tp", "tp", "tp"})                               // 19 v84's
+    ));
 
     @Test
     void everyRenumberedMapCarriesV84sFootholdTable() {
@@ -138,8 +162,26 @@ class V84RenumberedFootholdParityRealLoad {
                 "Showa Town npc foothold ids drifted from v84");
     }
 
+    /**
+     * The fifteen mob rows that survived the renumber correctly - same platform as before - but had
+     * always cited a different overlapping platform than v84 does. They match v84 on
+     * {@code (type, id, x, y)}, that key is unique on both sides, so v84's {@code fh} was adopted.
+     * Slot -&gt; fh, because the ids repeat within a map and the slot does not.
+     */
     @Test
-    void thePortalArraysTakenFromV84AreInV84sOrder() {
+    void theMobRowsThatDisagreedWithV84NowCarryV84sFh() {
+        assertEquals(Map.of(190000000, Map.of(20, 109, 22, 134, 26, 69),
+                        677000011, Map.of(1, 123, 11, 96),
+                        192000000, Map.of(6, 71, 9, 69, 10, 62, 30, 54, 31, 62,
+                                39, 69, 40, 66, 41, 59, 42, 62, 43, 55)),
+                Map.of(190000000, fhBySlot(190000000, 20, 22, 26),
+                        677000011, fhBySlot(677000011, 1, 11),
+                        192000000, fhBySlot(192000000, 6, 9, 10, 30, 31, 39, 40, 41, 42, 43)),
+                "a mob row drifted back off v84's foothold id");
+    }
+
+    @Test
+    void everyPortalArrayCarriesV84sRowsAtV84sIndices() {
         Map<Integer, List<String>> expected = new TreeMap<>();
         Map<Integer, List<String>> actual = new TreeMap<>();
         for (Map.Entry<Integer, String[]> e : V84_PORTAL_ORDER.entrySet()) {
@@ -150,34 +192,54 @@ class V84RenumberedFootholdParityRealLoad {
                 "a portal slot moved - arrivals on that map land at the neighbouring portal");
     }
 
+    private static Map<Integer, Integer> fhBySlot(int mapId, int... slots) {
+        Data life = section(mapId, "life");
+        Map<Integer, Integer> found = new TreeMap<>();
+        for (int slot : slots) {
+            Data node = life.getChildByPath(String.valueOf(slot));
+            assertNotNull(node, "map " + mapId + " has no life slot " + slot);
+            found.put(slot, DataTool.getInt("fh", node, -1));
+        }
+        return found;
+    }
+
     /**
-     * The two mid-array insertions move no slot that {@code characters.spawnpoint} can hold, which
-     * is why they ship without a correction changeset. {@code findClosestPlayerSpawnpoint} only ever
-     * returns a {@code pt} 0 or 1 portal whose {@code tm} is {@code MapId.NONE}; on both maps every
-     * such portal sits in the untouched head of the array.
+     * {@code characters.spawnpoint} stores a portal index, so a reorder can leave one pointing at a
+     * different portal. {@code findClosestPlayerSpawnpoint} only ever returns a {@code pt} 0 or 1
+     * portal whose {@code tm} is {@code MapId.NONE}, so only those slots can ever have been stored.
+     *
+     * <p>Three of the four reorders move no such slot - {@code 197000000} moved a {@code pt} 2,
+     * {@code 550000000} {@code pt} 7/10/6, {@code 610030100} {@code pt} 8. {@code 191000000} does:
+     * {@code up12} is {@code pt} 1 with {@code tm} NONE and v84 puts it at 12 where we had it at 14.
+     * That one was measured rather than argued - {@code SELECT map, spawnpoint FROM characters}
+     * returned zero rows on all seven touched maps (37 characters exist), so no correction changeset
+     * ships. This test pins the shape so a later reorder cannot make it stale silently.
      */
     @Test
-    void noInsertedSlotIsOneThatSpawnpointCouldHold() {
-        Map<Integer, String> spawnable = new TreeMap<>();
-        for (int[] mapAndFirstMovedSlot : new int[][]{{197000000, 3}, {550000000, 6}}) {
+    void theOnlySpawnpointEligibleSlotThatMovedIsUp12OnRien() {
+        Map<Integer, List<String>> spawnable = new TreeMap<>();
+        for (int[] mapAndFirstMovedSlot : new int[][]{
+                {191000000, 12}, {197000000, 3}, {550000000, 6}, {610030100, 5}}) {
+            List<String> hits = new ArrayList<>();
             for (Data node : section(mapAndFirstMovedSlot[0], "portal").getChildren()) {
                 if (Integer.parseInt(node.getName()) < mapAndFirstMovedSlot[1]) {
                     continue;
                 }
                 int pt = DataTool.getInt("pt", node, -1);
                 if ((pt == 0 || pt == 1) && DataTool.getInt("tm", node, -1) == 999999999) {
-                    spawnable.put(mapAndFirstMovedSlot[0], "slot " + node.getName()
-                            + " (" + DataTool.getString("pn", node, "?") + ")");
+                    hits.add(node.getName() + ":" + DataTool.getString("pn", node, "?"));
                 }
             }
+            spawnable.put(mapAndFirstMovedSlot[0], hits);
         }
-        assertEquals(Map.of(), spawnable,
-                "a moved slot is now spawnpoint-eligible, so characters.spawnpoint needs a "
-                        + "correction changeset for that map");
+        assertEquals(Map.of(191000000, List.of("12:up12"), 197000000, List.of(),
+                        550000000, List.of(), 610030100, List.of()), spawnable,
+                "the set of spawnpoint-eligible slots at or after an insertion changed, so "
+                        + "characters.spawnpoint has to be re-measured for that map");
     }
 
     @Test
-    void portalAndLifeSlotsAreStillWhereTheImageSaysTheyAre() {
+    void portalSlotsAreConsecutiveFromZero() {
         Map<Integer, String> broken = new TreeMap<>();
         for (int mapId : V84_FOOTHOLD_DIGEST.keySet()) {
             Data portals = section(mapId, "portal");
