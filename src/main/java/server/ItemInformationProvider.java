@@ -257,6 +257,9 @@ public class ItemInformationProvider {
         } else if (itemId >= 1070000 && itemId < 1080000) {
             theData = eqpStringData;
             cat = "Eqp/Shoes";
+        } else if (itemId >= 1940000 && itemId < 1980000) {
+            theData = eqpStringData;
+            cat = "Eqp/Dragon";
         } else if (itemId >= 1900000 && itemId < 2000000) {
             theData = eqpStringData;
             cat = "Eqp/Taming";
