@@ -73,7 +73,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
         int damage = p.readInt();
         int oid = 0, monsteridfrom = 0, pgmr = 0, direction = 0;
         int pos_x = 0, pos_y = 0, fake = 0;
-        boolean is_pgmr = false, is_pg = true, is_deadly = false;
+        boolean is_pgmr = false, is_pg = true, is_deadly = false, is_magic = false;
         int mpattack = 0;
         Monster attacker = null;
         final MapleMap map = chr.getMap();
@@ -159,6 +159,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                     mpattack = chr.getMp() - 1;
                     is_deadly = true;
                 }
+                is_magic = attackInfo.isMagicAttack();
                 mpattack += attackInfo.getMpBurn();
 
                 Optional<MobSkillType> possibleType = MobSkillType.from(attackInfo.getDiseaseSkill());
@@ -200,6 +201,15 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
 
         //in dojo player cannot use pot, so deadly attacks should be turned off as well
         if (is_deadly && MapId.isDojo(chr.getMap().getId()) && !YamlConfig.config.server.USE_DEADLY_DOJO) {
+            damage = 0;
+            mpattack = 0;
+        }
+
+        // Invincible Barrier 1010/10001010/20001010/20011010. Skill.wz gives it time=30 and x=1 - a
+        // flag, not a percentage - and the help string is only "30 seconds of invincibility", so the
+        // hit does not land at all. It has to zero here: the mitigation chain below is gated on
+        // damage > 0, and the MP burn of a deadly attack never reaches that chain in the first place.
+        if (chr.getBuffedValue(BuffStat.DIVINE_BODY) != null) {
             damage = 0;
             mpattack = 0;
         }
@@ -254,6 +264,16 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                 Integer magicShield = chr.getBuffedValue(BuffStat.MAGIC_SHIELD);
                 if (magicShield != null) {
                     damage -= damage * magicShield / 100;
+                }
+
+                // Cleric's Invincible 2301003, x% at level x+10. Same story as Magic Shield, except
+                // 2301003's desc draws a line the others do not: "Temporarily decreases the weapon
+                // damage received. It has no effect, however, on the magic attack." Mob.wz marks the
+                // magic half with attackN/info/magic, which is where is_magic comes from; a bump
+                // (damagefrom -1) carries no attack node and is contact damage, so it stays weapon.
+                Integer invincible = chr.getBuffedValue(BuffStat.INVINCIBLE);
+                if (invincible != null && !is_magic) {
+                    damage -= damage * invincible / 100;
                 }
 
                 // BuffStat.MAGIC_RESISTANCE (22151003, -x% from elemental attacks) is written and

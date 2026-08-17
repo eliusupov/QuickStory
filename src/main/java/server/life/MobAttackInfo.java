@@ -26,6 +26,7 @@ package server.life;
  */
 public class MobAttackInfo {
     private boolean isDeadlyAttack;
+    private boolean isMagicAttack;
     private int mpBurn;
     private int diseaseSkill;
     private int diseaseLevel;
@@ -40,6 +41,14 @@ public class MobAttackInfo {
 
     public boolean isDeadlyAttack() {
         return isDeadlyAttack;
+    }
+
+    public void setMagicAttack(boolean isMagicAttack) {
+        this.isMagicAttack = isMagicAttack;
+    }
+
+    public boolean isMagicAttack() {
+        return isMagicAttack;
     }
 
     public void setMpBurn(int mpBurn) {

@@ -60,12 +60,14 @@ public class MobAttackInfoFactory {
                     }
 
                     Data deadlyAttack = attackData.getChildByPath("deadlyAttack");
+                    Data magic = attackData.getChildByPath("magic");   // present-and-1 or absent, on 480 of the 948 mob attacks
                     int mpBurn = DataTool.getInt("mpBurn", attackData, 0);
                     int disease = DataTool.getInt("disease", attackData, 0);
                     int level = DataTool.getInt("level", attackData, 0);
                     int mpCon = DataTool.getInt("conMP", attackData, 0);
                     ret = new MobAttackInfo(mob.getId(), attack);
                     ret.setDeadlyAttack(deadlyAttack != null);
+                    ret.setMagicAttack(magic != null);
                     ret.setMpBurn(mpBurn);
                     ret.setDiseaseSkill(disease);
                     ret.setDiseaseLevel(level);

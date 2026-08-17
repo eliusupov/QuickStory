@@ -15,6 +15,7 @@ import server.maps.MapleMap;
 import testutil.HandlerTest;
 import testutil.Packets;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -55,6 +56,13 @@ class TakeDamageMagicShieldTest extends HandlerTest {
         when(attacker.getStats()).thenReturn(stats);
         when(chr.getAutobanManager()).thenReturn(autoban);
         lenient().when(stats.loseItem()).thenReturn(null);
+
+        // Mockito hands back 0, not null, for an Integer-returning method it has not been told
+        // about, and Character.getBuffedValue returns null for a buff the player does not have.
+        // Every read in this handler is "!= null", so an unstubbed mock reads as PERMANENTLY
+        // BUFFED - harmless while the only stat read was a percentage of 0, wrong the moment one
+        // of them is a flag. Absent has to be said out loud.
+        lenient().when(chr.getBuffedValue(any(BuffStat.class))).thenReturn(null);
     }
 
     /** A melee hit (damagefrom -1) from a mob that is on the map. */
