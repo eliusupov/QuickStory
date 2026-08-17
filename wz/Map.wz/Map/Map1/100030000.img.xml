@@ -15590,13 +15590,12 @@
       <string name="tn" value="nt01"/>
     </imgdir>
     <imgdir name="13">
-      <string name="pn" value="quest00"/>
-      <int name="pt" value="7"/>
-      <int name="x" value="-4428"/>
-      <int name="y" value="-1286"/>
-      <int name="tm" value="999999999"/>
-      <string name="tn" value=""/>
-      <string name="script" value="q2073"/>
+      <string name="pn" value="in01"/>
+      <int name="pt" value="2"/>
+      <int name="x" value="-4431"/>
+      <int name="y" value="-1287"/>
+      <int name="tm" value="100030400"/>
+      <string name="tn" value="out00"/>
     </imgdir>
     <imgdir name="14">
       <string name="pn" value="in00"/>

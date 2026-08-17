@@ -200,6 +200,59 @@ class V84EvanWorldNodeTest {
                 "100030301 was merged — read this test's javadoc before keeping it");
     }
 
+    /**
+     * The way back INTO the farm cluster, and the reason it had to be a replacement rather than an
+     * append.
+     *
+     * <p>Until now this tree's 100030000 carried the v83 node at {@code portal/13}:
+     * {@code pn=quest00 pt=7 x=-4428 y=-1286 tm=999999999 script=q2073}, the Camila's Gem door
+     * into Utah's Pig Farm. Pristine v84 {@code Map.wz} replaces exactly that node, in place, at
+     * three pixels' distance:
+     *
+     * <pre>
+     *   v83-stock 100030000/portal/13  pn=quest00 pt=7 x=-4428 y=-1286 tm=999999999 script=q2073
+     *   v84       100030000/portal/14  pn=in01    pt=2 x=-4431 y=-1287 tm=100030400 tn=out00
+     * </pre>
+     *
+     * <p>v84 moved the Camila door one map outward: 100030400 ("Farm Entrance") carries
+     * {@code quest00 pt=7 script=q2073} of its own, and this tree already has it. So the swap
+     * loses no route - quest 2073 now runs 100030000 -> in01 -> 100030400 -> quest00 ->
+     * 900000000, which is what {@code QuestInfo.img/2073/1} means by "I could get to
+     * {@code #m900000000#} through {@code #m100030000#}".
+     *
+     * <p>What it fixes: {@code 100030400/out00} already pointed at {@code 100030000/in01}, a
+     * portal that did not exist, so a player who left the Evan farm through it fell out of the
+     * cluster with no way back - {@code 900020100 -> 100030300} (Evan quest 22005 only) was the
+     * single inbound route. Appending in01 instead of replacing quest00 would have stacked two
+     * portals three pixels apart, which is why the v83 node goes.
+     */
+    @Test
+    void theFarmClusterHasItsV84WayBackIn() {
+        DataProvider maps = wz("Map.wz");
+        Data in01 = maps.getData(mapNode(100030000)).getChildByPath("portal/13");
+        assertNotNull(in01, "100030000/portal/13 vanished");
+        assertEquals("in01", DataTool.getString("pn", in01, null),
+                "100030000/portal/13 is not in01 - if the v83 quest00 is back, 100030400 is a "
+                        + "one-way trip again");
+        assertEquals(2, DataTool.getInt("pt", in01, -1));
+        assertEquals(-4431, DataTool.getInt("x", in01, 0));
+        assertEquals(-1287, DataTool.getInt("y", in01, 0));
+        assertEquals(100030400, DataTool.getInt("tm", in01, -1));
+        assertEquals("out00", DataTool.getString("tn", in01, null));
+        assertNull(in01.getChildByPath("script"), "a pt=2 portal must carry no script");
+
+        // The far side, and the Camila's Gem door that moved onto it.
+        Data out00 = maps.getData(mapNode(100030400)).getChildByPath("portal/2");
+        assertEquals("out00", DataTool.getString("pn", out00, null));
+        assertEquals(100030000, DataTool.getInt("tm", out00, -1));
+        assertEquals("in01", DataTool.getString("tn", out00, null),
+                "100030400/out00 names a portal that must exist on 100030000");
+        Data camila = maps.getData(mapNode(100030400)).getChildByPath("portal/3");
+        assertEquals("quest00", DataTool.getString("pn", camila, null));
+        assertEquals("q2073", DataTool.getString("script", camila, null),
+                "quest 2073 lost its portal when 100030000/quest00 was replaced");
+    }
+
     private static int[] concat(int[] a, int[] b) {
         int[] out = new int[a.length + b.length];
         System.arraycopy(a, 0, out, 0, a.length);
