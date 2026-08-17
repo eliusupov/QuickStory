@@ -65,8 +65,10 @@ public final class MonsterBook {
 
             if (qty != null) {
                 if (qty < 5) {
-                    // Block beginners under level 10 from completing a set (4 -> 5)
-                    if (qty == 4 && c.getPlayer().getLevel() < 10 && c.getPlayer().getJob().isA(Job.BEGINNER)) {
+                    // Block beginners under level 10 from completing a set (4 -> 5). isBeginnerJob(),
+                    // not isA(BEGINNER): the latter is only ever true for job 0, so it missed the
+                    // Noblesse (1000), Legend (2000) and Evan (2001) beginner jobs.
+                    if (qty == 4 && c.getPlayer().getLevel() < 10 && c.getPlayer().isBeginnerJob()) {
                         blockedSetCompletion = true;
                     } else {
                         cards.put(cardid, qty + 1);
@@ -74,7 +76,7 @@ public final class MonsterBook {
                     if (!blockedSetCompletion && qty + 1 == 5) { // Card count reached 5
                         if (!isGainedMainStatBuffs.getOrDefault(cardid, false)) {
                             // Prevent beginners under level 10 from receiving the buff
-                            if (!(c.getPlayer().getLevel() < 10 && c.getPlayer().getJob().isA(Job.BEGINNER))) {
+                            if (!(c.getPlayer().getLevel() < 10 && c.getPlayer().isBeginnerJob())) {
                                 applyMainStatBuff(c, cardid);
                                 isGainedMainStatBuffs.put(cardid, true);
                             }
@@ -111,7 +113,7 @@ public final class MonsterBook {
             c.sendPacket(PacketCreator.addCard(true, cardid, 5));
             if (!isGainedMainStatBuffs.getOrDefault(cardid, false)) {
                 // Prevent beginners under level 10 from receiving the buff
-                if (!(c.getPlayer().getLevel() < 10 && c.getPlayer().getJob().isA(Job.BEGINNER))) {
+                if (!(c.getPlayer().getLevel() < 10 && c.getPlayer().isBeginnerJob())) {
                     applyMainStatBuff(c, cardid);
                     isGainedMainStatBuffs.put(cardid, true);
                 }
@@ -126,7 +128,10 @@ public final class MonsterBook {
 
         if (job.isA(Job.WARRIOR) || job.isA(Job.ARAN1) || job.isA(Job.DAWNWARRIOR1)) {
             mainStat = Stat.STR;
-        } else if (job.isA(Job.MAGICIAN) || job.isA(Job.BLAZEWIZARD1)) {
+        } else if (job.isA(Job.MAGICIAN) || job.isA(Job.BLAZEWIZARD1) || job.isA(Job.EVAN1) || job == Job.EVAN) {
+            // Evan is a magician class, but isA(MAGICIAN) is false for it (22 vs 2), so without
+            // naming it here every Evan fell through to the STR default below. Job.EVAN (2001) is
+            // Evan's beginner job and only ever advances into 2200, so it is INT too.
             mainStat = Stat.INT;
         } else if (job.isA(Job.BOWMAN) || job.isA(Job.WINDARCHER1)) {
             mainStat = Stat.DEX;
