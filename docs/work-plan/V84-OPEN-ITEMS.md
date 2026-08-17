@@ -200,6 +200,15 @@ failure shape.
 
 ---
 
+## Server facts that are BY DESIGN - do not "fix" these
+
+- **Every character in this database is `gm` 2 or 6. That is deliberate**, owner-confirmed. Both
+  PlayerNPC auto-deploy paths gate on `!chr.isGM()` (`Character.java:6428` at max class level, and
+  `NPCConversationManager.canSpawnPlayerNpc:343`), so the Hall of Fame will NEVER populate itself
+  here. That is the guard working correctly, not a bug - do NOT weaken either check. Seeding at the
+  admin layer (changeSet 163, or the `!playernpc` / `!spawnallpnpcs` commands, which carry no GM
+  check by design) is the correct and permanent mechanism on this server.
+
 ## Corrections to keep - do not re-derive these wrongly
 
 - "Playable 1 to 67" was **wrong**: the real stop is quest 22503 at **level 11**.
