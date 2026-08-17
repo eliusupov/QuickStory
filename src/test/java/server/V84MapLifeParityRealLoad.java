@@ -66,6 +66,86 @@ class V84MapLifeParityRealLoad {
         assertSlotsAreConsecutive(196000000, 24);
     }
 
+    // ---- rows taken from v84 ---------------------------------------------------------------
+
+    /** 926100203 "Yulete's Office" had an empty life node; v84's five investigation markers now fill it. */
+    @Test
+    void map926100203GainsTheAranInvestigationMarkers() {
+        assertEquals(Map.of("n 2112007", 5), composition(926100203),
+                "926100203 no longer carries v84's five 2112007 markers");
+        assertSlotsAreConsecutive(926100203, 5);
+    }
+
+    /** v84 rebalances Ant Tunnel IV onto 2230131; the 20 it adds sit on top of our own rows. */
+    @Test
+    void map105050300GainsV84AnnoyedZombieMushrooms() {
+        assertEquals(Map.of("n 1063007", 1, "m 2110200", 42, "m 2230101", 6, "m 2230131", 37),
+                composition(105050300),
+                "105050300 lost either v84's 20 added 2230131 or our own pre-existing rows");
+        assertSlotsAreConsecutive(105050300, 86);
+    }
+
+    /** v84 swaps 9010021 for 1202010 here; additive-only keeps both. */
+    @Test
+    void map140010111GainsPudinAndKeepsRyko() {
+        Map<String, Integer> life = composition(140010111);
+        assertEquals(1, life.getOrDefault("n 1202010", 0),
+                "140010111 is missing v84's npc 1202010 (Pudin)");
+        assertEquals(1, life.getOrDefault("n 9010021", 0),
+                "140010111 dropped npc 9010021 (Wolf Spirit Ryko)");
+        assertSlotsAreConsecutive(140010111, 12);
+    }
+
+    /** v84 puts a Master Dummy in the beginner practice field; ours had only the Practice Chart. */
+    @Test
+    void map250020000GainsTheMasterDummy() {
+        assertEquals(Map.of("m 5090001", 1, "m 5120503", 12, "n 2096000", 2),
+                composition(250020000),
+                "250020000 is missing v84's mob 5090001 (Master Dummy)");
+        assertSlotsAreConsecutive(250020000, 15);
+    }
+
+    /** The largest coordinate move taken from v84: Chico walks 624px east. */
+    @Test
+    void map220000300PlacesChicoWhereV84Does() {
+        Data chico = mapData(220000300).getChildByPath("life/0");
+        assertEquals("2040014", DataTool.getString(chico.getChildByPath("id"), "").trim());
+        assertEquals(-1002, DataTool.getInt(chico.getChildByPath("x")), "220000300 npc 2040014 x");
+        assertEquals(99, DataTool.getInt(chico.getChildByPath("y")), "220000300 npc 2040014 y");
+        assertEquals(46, DataTool.getInt(chico.getChildByPath("fh")), "220000300 npc 2040014 fh");
+    }
+
+    // ---- rows deliberately NOT taken from v84 ------------------------------------------------
+
+    /**
+     * v84 statically places 9901517-9901537 here. Upstream deleted exactly those rows in
+     * {@code fca7b2ada} when the Hall of Fame became the DB-driven {@link server.life.PlayerNPC}
+     * system, so restoring them would double-place every Knights Chamber pnpc.
+     */
+    @Test
+    void map130000110KeepsItsLifeEmptyForThePlayerNpcSystem() {
+        Data life = mapData(130000110).getChildByPath("life");
+        assertNotNull(life, "130000110 lost its life node");
+        assertEquals(0, life.getChildren().size(),
+                "130000110 got v84's static 9901517-9901537 back; those are deployed from the "
+                        + "playernpcs table and would now appear twice");
+    }
+
+    /**
+     * v84 gives the CWKPQ Pirate Mastery Room respawning mobs. {@code ca3838050} set every one of
+     * them to {@code mobTime -1} (spawn once) so the stage can be cleared; parity here would make
+     * it unclearable.
+     */
+    @Test
+    void map610030550KeepsItsNonRespawningPqMobs() {
+        Data life = mapData(610030550).getChildByPath("life");
+        assertEquals(25, life.getChildren().size(), "610030550 life entry count");
+        for (Data entry : life.getChildren()) {
+            assertEquals(-1, DataTool.getInt(entry.getChildByPath("mobTime"), 0),
+                    "610030550 life/" + entry.getName() + " respawns again; CWKPQ needs mobTime -1");
+        }
+    }
+
     /** {@code "<type> <id>"} -> count, over every life entry of the map. */
     private static Map<String, Integer> composition(int mapId) {
         Data life = mapData(mapId).getChildByPath("life");
