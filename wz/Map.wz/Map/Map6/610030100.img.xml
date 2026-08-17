@@ -2623,46 +2623,55 @@
   </imgdir>
   <imgdir name="portal">
     <imgdir name="0">
+      <string name="pn" value="sp"/>
+      <int name="pt" value="0"/>
       <int name="x" value="-917"/>
       <int name="y" value="318"/>
-      <int name="pt" value="0"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
-      <string name="pn" value="sp"/>
     </imgdir>
     <imgdir name="1">
+      <string name="pn" value="sp"/>
+      <int name="pt" value="0"/>
       <int name="x" value="-1012"/>
       <int name="y" value="312"/>
-      <int name="pt" value="0"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
-      <string name="pn" value="sp"/>
     </imgdir>
     <imgdir name="2">
+      <string name="pn" value="sp"/>
+      <int name="pt" value="0"/>
       <int name="x" value="-780"/>
       <int name="y" value="233"/>
-      <int name="pt" value="0"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
-      <string name="pn" value="sp"/>
     </imgdir>
     <imgdir name="3">
+      <string name="pn" value="sp"/>
+      <int name="pt" value="0"/>
       <int name="x" value="-730"/>
       <int name="y" value="316"/>
-      <int name="pt" value="0"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
-      <string name="pn" value="sp"/>
     </imgdir>
     <imgdir name="4">
+      <string name="pn" value="sp"/>
+      <int name="pt" value="0"/>
       <int name="x" value="-824"/>
       <int name="y" value="312"/>
-      <int name="pt" value="0"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
-      <string name="pn" value="sp"/>
     </imgdir>
     <imgdir name="5">
+      <string name="pn" value="next00"/>
+      <int name="pt" value="8"/>
+      <int name="x" value="824"/>
+      <int name="y" value="328"/>
+      <int name="tm" value="999999999"/>
+      <string name="tn" value=""/>
+      <string name="script" value="glpqPortal0"/>
+    </imgdir>
+    <imgdir name="6">
       <int name="x" value="1547"/>
       <int name="y" value="336"/>
       <int name="pt" value="8"/>
@@ -2670,15 +2679,6 @@
       <string name="tn" value=""/>
       <string name="pn" value="next01"/>
       <string name="script" value="glpqPortalDummy"/>
-    </imgdir>
-    <imgdir name="6">
-      <int name="x" value="824"/>
-      <int name="y" value="328"/>
-      <int name="pt" value="8"/>
-      <int name="tm" value="999999999"/>
-      <string name="tn" value=""/>
-      <string name="pn" value="next00"/>
-      <string name="script" value="glpqPortal0"/>
     </imgdir>
   </imgdir>
   <imgdir name="reactor">

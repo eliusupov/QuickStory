@@ -3727,7 +3727,7 @@
       <int name="rx1" value="469"/>
       <int name="f" value="0"/>
       <string name="type" value="m"/>
-      <int name="fh" value="34"/>
+      <int name="fh" value="123"/>
     </imgdir>
     <imgdir name="2">
       <string name="id" value="9400609"/>
@@ -3847,7 +3847,7 @@
       <int name="rx1" value="739"/>
       <int name="f" value="0"/>
       <string name="type" value="m"/>
-      <int name="fh" value="63"/>
+      <int name="fh" value="96"/>
     </imgdir>
     <imgdir name="12">
       <string name="id" value="9400613"/>

@@ -3827,7 +3827,7 @@
       <int name="rx1" value="374"/>
       <int name="f" value="0"/>
       <string name="type" value="m"/>
-      <int name="fh" value="105"/>
+      <int name="fh" value="109"/>
     </imgdir>
     <imgdir name="21">
       <string name="id" value="0210100"/>
@@ -3851,7 +3851,7 @@
       <int name="rx1" value="512"/>
       <int name="f" value="0"/>
       <string name="type" value="m"/>
-      <int name="fh" value="5"/>
+      <int name="fh" value="134"/>
     </imgdir>
     <imgdir name="23">
       <string name="id" value="0210100"/>
@@ -3899,7 +3899,7 @@
       <int name="rx1" value="271"/>
       <int name="f" value="0"/>
       <string name="type" value="m"/>
-      <int name="fh" value="93"/>
+      <int name="fh" value="69"/>
     </imgdir>
     <imgdir name="27">
       <string name="id" value="2220100"/>

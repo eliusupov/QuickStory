@@ -3008,126 +3008,132 @@
   </imgdir>
   <imgdir name="portal">
     <imgdir name="0">
+      <string name="pn" value="sp"/>
+      <int name="pt" value="0"/>
       <int name="x" value="138"/>
       <int name="y" value="-1253"/>
-      <int name="pt" value="0"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
-      <string name="pn" value="sp"/>
     </imgdir>
     <imgdir name="1">
+      <string name="pn" value="sp"/>
+      <int name="pt" value="0"/>
       <int name="x" value="-66"/>
       <int name="y" value="-1255"/>
-      <int name="pt" value="0"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
-      <string name="pn" value="sp"/>
     </imgdir>
     <imgdir name="2">
+      <string name="pn" value="sp"/>
+      <int name="pt" value="0"/>
       <int name="x" value="492"/>
       <int name="y" value="-1133"/>
-      <int name="pt" value="0"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
-      <string name="pn" value="sp"/>
     </imgdir>
     <imgdir name="3">
+      <string name="pn" value="sp"/>
+      <int name="pt" value="0"/>
       <int name="x" value="680"/>
       <int name="y" value="-1085"/>
-      <int name="pt" value="0"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
-      <string name="pn" value="sp"/>
     </imgdir>
     <imgdir name="4">
+      <string name="pn" value="sp"/>
+      <int name="pt" value="0"/>
       <int name="x" value="862"/>
       <int name="y" value="-1148"/>
-      <int name="pt" value="0"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
-      <string name="pn" value="sp"/>
     </imgdir>
     <imgdir name="5">
+      <string name="pn" value="sp"/>
+      <int name="pt" value="0"/>
       <int name="x" value="529"/>
       <int name="y" value="64"/>
-      <int name="pt" value="0"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
-      <string name="pn" value="sp"/>
     </imgdir>
     <imgdir name="6">
+      <string name="pn" value="sp"/>
+      <int name="pt" value="0"/>
       <int name="x" value="585"/>
       <int name="y" value="68"/>
-      <int name="pt" value="0"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
-      <string name="pn" value="sp"/>
     </imgdir>
     <imgdir name="7">
+      <string name="pn" value="up00"/>
+      <int name="pt" value="1"/>
       <int name="x" value="-38"/>
       <int name="y" value="218"/>
-      <int name="pt" value="1"/>
       <int name="tm" value="191000000"/>
       <string name="tn" value="up01"/>
-      <string name="pn" value="up00"/>
     </imgdir>
     <imgdir name="8">
+      <string name="pn" value="up01"/>
+      <int name="pt" value="1"/>
       <int name="x" value="-38"/>
       <int name="y" value="-178"/>
-      <int name="pt" value="1"/>
       <int name="tm" value="191000000"/>
       <string name="tn" value="up02"/>
-      <string name="pn" value="up01"/>
     </imgdir>
     <imgdir name="9">
+      <string name="pn" value="up02"/>
+      <int name="pt" value="1"/>
       <int name="x" value="-42"/>
       <int name="y" value="-980"/>
-      <int name="pt" value="1"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
-      <string name="pn" value="up02"/>
     </imgdir>
     <imgdir name="10">
+      <string name="pn" value="up10"/>
+      <int name="pt" value="1"/>
       <int name="x" value="1146"/>
       <int name="y" value="99"/>
-      <int name="pt" value="1"/>
       <int name="tm" value="191000000"/>
       <string name="tn" value="up11"/>
-      <string name="pn" value="up10"/>
     </imgdir>
     <imgdir name="11">
+      <string name="pn" value="up11"/>
+      <int name="pt" value="1"/>
       <int name="x" value="1204"/>
       <int name="y" value="-496"/>
-      <int name="pt" value="1"/>
       <int name="tm" value="191000000"/>
       <string name="tn" value="up12"/>
-      <string name="pn" value="up11"/>
     </imgdir>
     <imgdir name="12">
-      <int name="x" value="-115"/>
-      <int name="y" value="-1358"/>
+      <string name="pn" value="up12"/>
       <int name="pt" value="1"/>
-      <int name="tm" value="191000001"/>
-      <string name="tn" value="out00"/>
-      <string name="pn" value="in00"/>
-    </imgdir>
-    <imgdir name="13">
-      <int name="x" value="-54"/>
-      <int name="y" value="-2182"/>
-      <int name="pt" value="1"/>
-      <int name="tm" value="191000001"/>
-      <string name="tn" value="out01"/>
-      <string name="pn" value="in01"/>
-    </imgdir>
-    <imgdir name="14">
-      <int name="x" value="1134"/>
+      <int name="x" value="1139"/>
       <int name="y" value="-1100"/>
-      <int name="pt" value="1"/>
       <int name="tm" value="999999999"/>
       <string name="tn" value=""/>
-      <string name="pn" value="up12"/>
-      <int name="hideTooltip" value="0"/>
-      <int name="onlyOnce" value="0"/>
+    </imgdir>
+    <imgdir name="13">
+      <string name="pn" value="in00"/>
+      <int name="pt" value="1"/>
+      <int name="x" value="-115"/>
+      <int name="y" value="-1358"/>
+      <int name="tm" value="191000001"/>
+      <string name="tn" value="out00"/>
+    </imgdir>
+    <imgdir name="14">
+      <string name="pn" value="in01"/>
+      <int name="pt" value="1"/>
+      <int name="x" value="-54"/>
+      <int name="y" value="-2182"/>
+      <int name="tm" value="191000001"/>
+      <string name="tn" value="out01"/>
+    </imgdir>
+    <imgdir name="15">
+      <string name="pn" value="out00"/>
+      <int name="pt" value="2"/>
+      <int name="x" value="291"/>
+      <int name="y" value="-1225"/>
+      <int name="tm" value="193000000"/>
+      <string name="tn" value="st00"/>
     </imgdir>
   </imgdir>
   <imgdir name="reactor">
