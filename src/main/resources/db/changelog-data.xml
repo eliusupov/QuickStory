@@ -89,6 +89,14 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="158" author="v84-data-gaps">
+        <sqlFile path="db/data/158-maker-v84-data.sql"/>
+        <rollback>
+            DELETE FROM makerrecipedata WHERE itemid IN (1142156, 1142157, 1942002, 1952002, 1962002, 1972002);
+            DELETE FROM makercreatedata WHERE itemid IN (1142156, 1142157, 1942002, 1952002, 1962002, 1972002);
+        </rollback>
+    </changeSet>
+
     <changeSet id="161" author="Ponk">
         <sqlFile path="db/data/161-admin-data.sql"/>
     </changeSet>
