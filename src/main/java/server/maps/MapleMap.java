@@ -2314,7 +2314,11 @@ public class MapleMap {
                     if (mist.makeChanceResult()) {
                         Character chr = (Character) mo;
                         if (mist.getOwner().getId() == chr.getId() || mist.getOwner().getParty() != null && mist.getOwner().getParty().containsMembers(chr.getMPC())) {
-                            chr.addMP(mist.getSourceSkill().getEffect(chr.getSkillLevel(mist.getSourceSkill().getId())).getX() * chr.getMp() / 100);
+                            // the recipient's own level, not the caster's: a party member who does
+                            // not have Recovery Aura gave getEffect(0) -> effects.get(-1), an
+                            // IndexOutOfBounds thrown inside a scheduled task. The mist already
+                            // carries the effect it was cast with.
+                            chr.addMP(mist.getSourceX() * chr.getMp() / 100);
                         }
                     }
                 }

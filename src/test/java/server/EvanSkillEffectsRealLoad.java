@@ -8,10 +8,14 @@ import constants.skills.Evan;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import provider.wz.WZFiles;
+import server.maps.Mist;
 import tools.Pair;
+
+import java.awt.Rectangle;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -75,6 +79,26 @@ class EvanSkillEffectsRealLoad {
                         "Resurrection has no x, so it still revives at full"),
                 () -> assertTrue(SkillFactory.getSkill(Bishop.RESURRECTION).getEffect(10).isResurrection(),
                         "Resurrection unchanged")
+        );
+    }
+
+    /**
+     * 22161003. The recovery tick read the <em>recipient's</em> skill level, so a party member
+     * standing in the aura without the skill produced getEffect(0) - and Skill.getEffect() is
+     * {@code effects.get(level - 1)}, so that is effects.get(-1), thrown inside a scheduled task.
+     * The Mist already holds the StatEffect it was cast with, which is the caster's.
+     */
+    @Test
+    void recoveryAuraReadsTheCastersLevel() {
+        StatEffect cast = SkillFactory.getSkill(Evan.RECOVERY_AURA).getEffect(15);
+        Mist mist = new Mist(new Rectangle(), null, cast);
+
+        assertAll(
+                () -> assertTrue(mist.isRecoveryMist(), "22161003 spawns a recovery mist"),
+                () -> assertEquals(80, mist.getSourceX(), "x at level 15"),
+                () -> assertThrows(IndexOutOfBoundsException.class,
+                        () -> SkillFactory.getSkill(Evan.RECOVERY_AURA).getEffect(0),
+                        "what a party member without the skill used to ask for")
         );
     }
 }

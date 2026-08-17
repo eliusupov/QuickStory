@@ -165,4 +165,8 @@ public class Mist extends AbstractMapObject {
     public boolean makeChanceResult() {
         return source.makeChanceResult();
     }
+
+    public int getSourceX() {
+        return source.getX();
+    }
 }
