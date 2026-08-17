@@ -342,6 +342,18 @@ def main():
                 break
     print(f'T1b context, own target masked   : {n1b}')
 
+    # T1c was BUILT AND DELETED. It extended T1b from "mask this patch's own target" to
+    # "mask every patch target that falls in the window", because v84 changed BOTH
+    # immediates in the group-I pop-up blocks (0x1FC->0x1EC and 0x1D0->0x19D, 0x14 bytes
+    # apart, i.e. inside one signature window) and T1b masks only one of them.
+    # Measured: 0 group-I resolutions, 2 false positives (both caught by the shape check).
+    # It fails for a structural reason, not a tuning one: the eleven blocks are
+    # near-IDENTICAL, so wildcarding the only fields that distinguish them makes them
+    # indistinguishable from each other. At +-32B the masked pattern matches 3 v83 sites
+    # and 7 v84 sites; at +-24B it is unique in v83 but has 0 v84 hits, because a byte
+    # that mask_of does not wildcard still differs. Group I is joined ORDINALLY instead --
+    # see data/manual-sites.json, which records the four constraints that force the join.
+
     # ---------------- T2: neighbour-delta anchoring
     def nearby_deltas(va):
         got = sorted((r['v83'], r['delta']) for r in rows.values() if r['v84'] is not None)
@@ -726,7 +738,8 @@ def main():
     # wherever it is. Distinct sites colliding on one v84 address is proof that at
     # least one of them is wrong, so keep only a strictly better-evidenced tier and
     # reject the rest.
-    TIER_RANK = {'T1-context': 0, 'M-manual': 0, 'T1b-masked-target': 1, 'T2b-interval': 1, 'T2c-extend': 1,
+    TIER_RANK = {'T1-context': 0, 'M-manual': 0, 'T1b-masked-target': 1,
+                 'T2b-interval': 1, 'T2c-extend': 1,
                  'T5-xref': 1, 'T2-anchored': 2, 'T6-envelope': 3, 'T7-idiom': 3,
                  'T3-function': 4}
     # T1 and the hand-resolved sites are the trustworthy skeleton; a claimant whose
@@ -735,7 +748,8 @@ def main():
     # ranking on tier alone threw away 0x00523FA3, whose delta +0xBC42 matches its T1
     # neighbours on both sides exactly.
     trusted = sorted((r['v83'], r['delta']) for r in rows.values()
-                     if r['tier'] in ('T1-context', 'T1b-masked-target', 'M-manual', 'T5-xref')
+                     if r['tier'] in ('T1-context', 'T1b-masked-target',
+                                      'M-manual', 'T5-xref')
                      and r['delta'] is not None)
     tk = [a for a, _ in trusted]
 
@@ -792,9 +806,10 @@ def main():
     print()
     print(f'=== RESULT ({N} distinct patch anchors) ===')
     t = collections.Counter(r['tier'] for r in ok)
-    for k in ("T1-context", "T1b-masked-target", "T2-anchored", "T2b-interval", "T2c-extend",
-              "T3-function", "T6-envelope", "T7-idiom", "T5-xref", "M-manual"):
-        print(f'  {k:16} {t[k]:3}  ({100.0 * t[k] / N:.1f}%)')
+    for k in ("T1-context", "T1b-masked-target", "T2-anchored",
+              "T2b-interval", "T2c-extend", "T3-function", "T6-envelope", "T7-idiom",
+              "T5-xref", "M-manual"):
+        print(f'  {k:20} {t[k]:3}  ({100.0 * t[k] / N:.1f}%)')
     print(f'  {"RESOLVED":16} {len(ok):3}  ({100.0 * len(ok) / N:.1f}%)')
     print(f'  {"false positive":16} {len(fp):3}')
     print(f'  {"unresolved":16} {N - len(ok) - len(fp):3}')

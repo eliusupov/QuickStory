@@ -1029,10 +1029,18 @@
    "comment": "??various requests like party, guild, friend, family, invites that pop up",
    "drop": null,
    "fixed": false,
-   "tier": null,
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "M-manual",
+   "v84": 5432352,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "mov eax, 0x1ec",
+   "v84_verdict": "ok"
   },
   {
    "id": "P037",
@@ -1045,8 +1053,8 @@
    "comment": "various requests like party, guild, friend, family, invites that pop up\t// Guild Invite",
    "drop": null,
    "fixed": false,
-   "tier": "T3-function",
-   "v84": 5433430,
+   "tier": "M-manual",
+   "v84": 5432372,
    "checks": {
     "ADDR": true,
     "DUAL": true,
@@ -1055,7 +1063,7 @@
     "SLOT": true
    },
    "verdict": "PASS",
-   "v84_insn": "mov edx, 0x1d0",
+   "v84_insn": "mov edx, 0x19d",
    "v84_verdict": "ok"
   },
   {
@@ -1069,10 +1077,18 @@
    "comment": "??various requests like party, guild, friend, family, invites that pop up",
    "drop": null,
    "fixed": false,
-   "tier": null,
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "M-manual",
+   "v84": 5432868,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "mov eax, 0x1ec",
+   "v84_verdict": "ok"
   },
   {
    "id": "P039",
@@ -1085,10 +1101,18 @@
    "comment": "various requests like party, guild, friend, family, invites that pop up //friend request",
    "drop": null,
    "fixed": false,
-   "tier": null,
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "M-manual",
+   "v84": 5432888,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "mov edx, 0x19d",
+   "v84_verdict": "ok"
   },
   {
    "id": "P040",
@@ -1101,10 +1125,19 @@
    "comment": "various requests like party, guild, friend, family, invites that pop up",
    "drop": null,
    "fixed": false,
-   "tier": null,
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "M-manual",
+   "v84": 5433421,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "regalloc": true,
+   "v84_insn": "mov ecx, 0x1fc",
+   "v84_verdict": "ok"
   },
   {
    "id": "P041",
@@ -1117,10 +1150,18 @@
    "comment": "various requests like party, guild, friend, family, invites that pop up\t//trade\t\t //thank you Rain for the width addresses",
    "drop": null,
    "fixed": false,
-   "tier": null,
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "M-manual",
+   "v84": 5433430,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "mov edx, 0x1d0",
+   "v84_verdict": "ok"
   },
   {
    "id": "P042",
@@ -1157,10 +1198,18 @@
    "comment": "various requests like party, guild, friend, family, invites that pop up",
    "drop": null,
    "fixed": false,
-   "tier": "T2-anchored",
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "M-manual",
+   "v84": 5434701,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "mov eax, 0x1ec",
+   "v84_verdict": "ok"
   },
   {
    "id": "P044",
@@ -1173,10 +1222,18 @@
    "comment": "various requests like party, guild, friend, family, invites that pop up //Party Invite",
    "drop": null,
    "fixed": false,
-   "tier": "T2c-extend",
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "M-manual",
+   "v84": 5434721,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "mov edx, 0x19d",
+   "v84_verdict": "ok"
   },
   {
    "id": "P045",
@@ -1213,10 +1270,18 @@
    "comment": "various requests like party, guild, friend, family, invites that pop up",
    "drop": null,
    "fixed": false,
-   "tier": "T2-anchored",
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "M-manual",
+   "v84": 5436309,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "mov eax, 0x1ec",
+   "v84_verdict": "ok"
   },
   {
    "id": "P047",
@@ -1229,10 +1294,18 @@
    "comment": "various requests like party, guild, friend, family, invites that pop up//??",
    "drop": null,
    "fixed": false,
-   "tier": "T2c-extend",
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "M-manual",
+   "v84": 5436329,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "mov edx, 0x19d",
+   "v84_verdict": "ok"
   },
   {
    "id": "P048",
@@ -1245,10 +1318,18 @@
    "comment": "various requests like party, guild, friend, family, invites that pop up",
    "drop": null,
    "fixed": false,
-   "tier": "T2-anchored",
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "M-manual",
+   "v84": 5436807,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "mov eax, 0x1ec",
+   "v84_verdict": "ok"
   },
   {
    "id": "P049",
@@ -1261,10 +1342,18 @@
    "comment": "various requests like party, guild, friend, family, invites that pop up/??",
    "drop": null,
    "fixed": false,
-   "tier": "T2c-extend",
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "M-manual",
+   "v84": 5436827,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "mov edx, 0x19d",
+   "v84_verdict": "ok"
   },
   {
    "id": "P050",
@@ -1445,10 +1534,18 @@
    "comment": "various requests like party, guild, friend, family, invites that pop up",
    "drop": null,
    "fixed": false,
-   "tier": "T2-anchored",
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "M-manual",
+   "v84": 5439536,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "mov eax, 0x1ec",
+   "v84_verdict": "ok"
   },
   {
    "id": "P058",
@@ -1461,10 +1558,18 @@
    "comment": "various requests like party, guild, friend, family, invites that pop up//??",
    "drop": null,
    "fixed": false,
-   "tier": "T2c-extend",
-   "v84": null,
-   "checks": {},
-   "verdict": "UNRESOLVED"
+   "tier": "M-manual",
+   "v84": 5439556,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "v84_insn": "mov edx, 0x19d",
+   "v84_verdict": "ok"
   },
   {
    "id": "P059",
