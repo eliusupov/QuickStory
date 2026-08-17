@@ -1,0 +1,14 @@
+archive	probes	changedImages	collateral	disappeared	note
+Character	32	5100	0	0
+Etc	2	6	0	0
+Item	10	11	0	0
+Map	26	1551	0	0
+Mob	2	735	0	0
+Npc	2	5605	0	0
+Quest	2	4	0	0
+Reactor	2	21	0	0
+Skill	2	8	0	0
+Sound	2	0	0	0	UNPROVEN - `hash` cannot walk Sound.wz: BgmGL.img is unparseable in all three trees (phase A note 4). The probe fails symmetrically, so "0 changed" here is a failed measurement, not a result.
+String	2	9	0	0
+UI	2	2	0	0
+TOTAL	86	13052	0	0	Sound excluded

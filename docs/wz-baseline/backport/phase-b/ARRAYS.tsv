@@ -1,0 +1,545 @@
+array	rows	sets	categories	sample_row
+Etc.wz/Commodity.img	1040	{'removed': 1040}	{'ARRAY: writes INTO an existing slot': 1040}	Etc.wz/Commodity.img/2334/PbCash
+String.wz/MonsterBook.img/9500317/reward	29	{'protect': 29}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 28}	String.wz/MonsterBook.img/9500317/reward/27
+String.wz/MonsterBook.img/8500002/reward	26	{'protect': 26}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 25}	String.wz/MonsterBook.img/8500002/reward/65
+String.wz/MonsterBook.img/1110100/reward	19	{'protect': 19}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 18}	String.wz/MonsterBook.img/1110100/reward/32
+Map.wz/Map/Map1/105050300.img/life	17	{'removed': 17}	{'ARRAY: writes INTO an existing slot': 6, 'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 10}	Map.wz/Map/Map1/105050300.img/life/50/f
+String.wz/MonsterBook.img/3210200/reward	17	{'protect': 17}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 16}	String.wz/MonsterBook.img/3210200/reward/28
+String.wz/MonsterBook.img/2230102/reward	16	{'protect': 16}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 15}	String.wz/MonsterBook.img/2230102/reward/34
+String.wz/MonsterBook.img/3230400/reward	15	{'protect': 15}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 14}	String.wz/MonsterBook.img/3230400/reward/32
+String.wz/MonsterBook.img/2110200/reward	14	{'protect': 14}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 13}	String.wz/MonsterBook.img/2110200/reward/27
+String.wz/MonsterBook.img/8180001/reward	14	{'protect': 14}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 13}	String.wz/MonsterBook.img/8180001/reward/60
+String.wz/MonsterBook.img/210100/reward	13	{'protect': 13}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 12}	String.wz/MonsterBook.img/210100/reward/18
+String.wz/MonsterBook.img/4230115/reward	13	{'protect': 13}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 12}	String.wz/MonsterBook.img/4230115/reward/35
+String.wz/MonsterBook.img/8150300/reward	13	{'protect': 13}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 12}	String.wz/MonsterBook.img/8150300/reward/31
+String.wz/MonsterBook.img/8150302/reward	13	{'protect': 13}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 12}	String.wz/MonsterBook.img/8150302/reward/37
+String.wz/MonsterBook.img/8160000/reward	13	{'protect': 13}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 12}	String.wz/MonsterBook.img/8160000/reward/37
+String.wz/MonsterBook.img/8510000/reward	13	{'protect': 13}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 12}	String.wz/MonsterBook.img/8510000/reward/51
+String.wz/MonsterBook.img/8800002/reward	13	{'protect': 13}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 12}	String.wz/MonsterBook.img/8800002/reward/74
+String.wz/MonsterBook.img/6230400/reward	12	{'protect': 12}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 11}	String.wz/MonsterBook.img/6230400/reward/44
+String.wz/MonsterBook.img/8170000/reward	12	{'protect': 12}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 11}	String.wz/MonsterBook.img/8170000/reward/40
+String.wz/MonsterBook.img/8190003/reward	12	{'protect': 12}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 11}	String.wz/MonsterBook.img/8190003/reward/41
+String.wz/MonsterBook.img/3230306/reward	11	{'protect': 11}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 10}	String.wz/MonsterBook.img/3230306/reward/32
+String.wz/MonsterBook.img/8143000/reward	11	{'protect': 11}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 10}	String.wz/MonsterBook.img/8143000/reward/36
+String.wz/MonsterBook.img/8150301/reward	11	{'protect': 11}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 10}	String.wz/MonsterBook.img/8150301/reward/28
+String.wz/MonsterBook.img/1140100/reward	10	{'protect': 10}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 9}	String.wz/MonsterBook.img/1140100/reward/25
+String.wz/MonsterBook.img/130100/reward	10	{'protect': 10}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 9}	String.wz/MonsterBook.img/130100/reward/15
+String.wz/MonsterBook.img/6130100/reward	10	{'protect': 10}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 9}	String.wz/MonsterBook.img/6130100/reward/38
+String.wz/MonsterBook.img/6230601/reward	10	{'protect': 10}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 9}	String.wz/MonsterBook.img/6230601/reward/34
+String.wz/MonsterBook.img/8150100/reward	10	{'protect': 10}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 9}	String.wz/MonsterBook.img/8150100/reward/33
+String.wz/MonsterBook.img/8150101/reward	10	{'protect': 10}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 9}	String.wz/MonsterBook.img/8150101/reward/36
+Map.wz/Map/Map1/102000000.img/life	9	{'removed': 1, 'protect': 8}	{'ARRAY: writes INTO an existing slot': 9}	Map.wz/Map/Map1/102000000.img/life/24/limitedname
+Map.wz/Map/Map2/261000000.img/portal	9	{'removed': 9}	{'ARRAY: writes INTO an existing slot': 9}	Map.wz/Map/Map2/261000000.img/portal/15/image
+Quest.wz/Say.img/8251	9	{'protect': 9}	{'ARRAY: writes INTO an existing slot': 9}	Quest.wz/Say.img/8251/0/0
+String.wz/MonsterBook.img/1120100/reward	9	{'protect': 9}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 8}	String.wz/MonsterBook.img/1120100/reward/17
+String.wz/MonsterBook.img/1210100/reward	9	{'protect': 9}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 8}	String.wz/MonsterBook.img/1210100/reward/18
+String.wz/MonsterBook.img/1210103/reward	9	{'protect': 9}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 8}	String.wz/MonsterBook.img/1210103/reward/25
+String.wz/MonsterBook.img/2230109/reward	9	{'protect': 9}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 8}	String.wz/MonsterBook.img/2230109/reward/24
+String.wz/MonsterBook.img/3110100/reward	9	{'protect': 9}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 8}	String.wz/MonsterBook.img/3110100/reward/25
+String.wz/MonsterBook.img/3230100/reward	9	{'protect': 9}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 8}	String.wz/MonsterBook.img/3230100/reward/30
+String.wz/MonsterBook.img/3230102/reward	9	{'protect': 9}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 8}	String.wz/MonsterBook.img/3230102/reward/34
+String.wz/MonsterBook.img/5130100/reward	9	{'protect': 9}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 8}	String.wz/MonsterBook.img/5130100/reward/34
+String.wz/MonsterBook.img/6300000/reward	9	{'protect': 9}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 8}	String.wz/MonsterBook.img/6300000/reward/27
+String.wz/MonsterBook.img/8180000/reward	9	{'protect': 9}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 8}	String.wz/MonsterBook.img/8180000/reward/60
+Map.wz/Map/Map2/250000000.img/portal	8	{'removed': 8}	{'ARRAY: writes INTO an existing slot': 8}	Map.wz/Map/Map2/250000000.img/portal/11/image
+Quest.wz/Say.img/8255	8	{'protect': 8}	{'ARRAY: writes INTO an existing slot': 8}	Quest.wz/Say.img/8255/0/0
+String.wz/MonsterBook.img/1210102/reward	8	{'protect': 8}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 7}	String.wz/MonsterBook.img/1210102/reward/16
+String.wz/MonsterBook.img/2230101/reward	8	{'protect': 8}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 7}	String.wz/MonsterBook.img/2230101/reward/31
+String.wz/MonsterBook.img/4230114/reward	8	{'protect': 8}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 7}	String.wz/MonsterBook.img/4230114/reward/29
+String.wz/MonsterBook.img/5120003/reward	8	{'protect': 8}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 7}	String.wz/MonsterBook.img/5120003/reward/35
+String.wz/MonsterBook.img/6220001/reward	8	{'protect': 8}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 7}	String.wz/MonsterBook.img/6220001/reward/29
+String.wz/MonsterBook.img/6230100/reward	8	{'protect': 8}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 7}	String.wz/MonsterBook.img/6230100/reward/41
+String.wz/MonsterBook.img/6230300/reward	8	{'protect': 8}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 7}	String.wz/MonsterBook.img/6230300/reward/36
+String.wz/MonsterBook.img/6300005/reward	8	{'protect': 8}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 7}	String.wz/MonsterBook.img/6300005/reward/26
+String.wz/MonsterBook.img/7110301/reward	8	{'protect': 8}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 7}	String.wz/MonsterBook.img/7110301/reward/37
+String.wz/MonsterBook.img/7160000/reward	8	{'protect': 8}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 7}	String.wz/MonsterBook.img/7160000/reward/41
+String.wz/MonsterBook.img/8150000/reward	8	{'protect': 8}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 7}	String.wz/MonsterBook.img/8150000/reward/36
+String.wz/MonsterBook.img/8200003/reward	8	{'protect': 8}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 7}	String.wz/MonsterBook.img/8200003/reward/27
+Map.wz/Map/Map1/102000000.img/portal	7	{'removed': 7}	{'ARRAY: writes INTO an existing slot': 7}	Map.wz/Map/Map1/102000000.img/portal/14/image
+Map.wz/Map/Map2/220000000.img/portal	7	{'removed': 7}	{'ARRAY: writes INTO an existing slot': 7}	Map.wz/Map/Map2/220000000.img/portal/12/script
+Quest.wz/Say.img/8222	7	{'protect': 7}	{'ARRAY: writes INTO an existing slot': 7}	Quest.wz/Say.img/8222/0/0
+String.wz/MonsterBook.img/130101/reward	7	{'protect': 7}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 6}	String.wz/MonsterBook.img/130101/reward/17
+String.wz/MonsterBook.img/2230103/reward	7	{'protect': 7}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 6}	String.wz/MonsterBook.img/2230103/reward/25
+String.wz/MonsterBook.img/4230113/reward	7	{'protect': 7}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 6}	String.wz/MonsterBook.img/4230113/reward/29
+String.wz/MonsterBook.img/4230124/reward	7	{'protect': 7}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 6}	String.wz/MonsterBook.img/4230124/reward/31
+String.wz/MonsterBook.img/5110302/reward	7	{'protect': 7}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 6}	String.wz/MonsterBook.img/5110302/reward/26
+String.wz/MonsterBook.img/5200000/reward	7	{'protect': 7}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 6}	String.wz/MonsterBook.img/5200000/reward/19
+String.wz/MonsterBook.img/5220003/reward	7	{'protect': 7}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 6}	String.wz/MonsterBook.img/5220003/reward/53
+String.wz/MonsterBook.img/6130209/reward	7	{'protect': 7}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 6}	String.wz/MonsterBook.img/6130209/reward/24
+String.wz/MonsterBook.img/7130100/reward	7	{'protect': 7}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 6}	String.wz/MonsterBook.img/7130100/reward/34
+String.wz/MonsterBook.img/7130101/reward	7	{'protect': 7}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 6}	String.wz/MonsterBook.img/7130101/reward/33
+String.wz/MonsterBook.img/8140110/reward	7	{'protect': 7}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 6}	String.wz/MonsterBook.img/8140110/reward/23
+String.wz/MonsterBook.img/8141000/reward	7	{'protect': 7}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 6}	String.wz/MonsterBook.img/8141000/reward/41
+String.wz/MonsterBook.img/8190004/reward	7	{'protect': 7}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 6}	String.wz/MonsterBook.img/8190004/reward/44
+String.wz/MonsterBook.img/8220003/reward	7	{'protect': 7}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 6}	String.wz/MonsterBook.img/8220003/reward/36
+String.wz/MonsterBook.img/8220004/reward	7	{'protect': 7}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 6}	String.wz/MonsterBook.img/8220004/reward/32
+Etc.wz/NpcLocation.img/1022101	6	{'removed': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	Etc.wz/NpcLocation.img/1022101/17
+Map.wz/Map/Map1/103000000.img/portal	6	{'removed': 6}	{'ARRAY: writes INTO an existing slot': 6}	Map.wz/Map/Map1/103000000.img/portal/23/image
+Map.wz/Map/Map1/106010102.img/life	6	{'removed': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	Map.wz/Map/Map1/106010102.img/life/11
+Map.wz/Map/Map1/120000000.img/portal	6	{'removed': 6}	{'ARRAY: writes INTO an existing slot': 6}	Map.wz/Map/Map1/120000000.img/portal/10/delay
+Map.wz/Map/Map1/130000101.img/foothold	6	{'removed': 6}	{'ARRAY: writes INTO an existing slot': 6}	Map.wz/Map/Map1/130000101.img/foothold/2/39
+Map.wz/Map/Map1/103000000.img/life	6	{'protect': 6}	{'ARRAY: writes INTO an existing slot': 6}	Map.wz/Map/Map1/103000000.img/life/17/limitedname
+String.wz/MonsterBook.img/100100/reward	6	{'protect': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	String.wz/MonsterBook.img/100100/reward/10
+String.wz/MonsterBook.img/100101/reward	6	{'protect': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	String.wz/MonsterBook.img/100101/reward/13
+String.wz/MonsterBook.img/1110101/reward	6	{'protect': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	String.wz/MonsterBook.img/1110101/reward/26
+String.wz/MonsterBook.img/2220100/reward	6	{'protect': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	String.wz/MonsterBook.img/2220100/reward/30
+String.wz/MonsterBook.img/2230100/reward	6	{'protect': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	String.wz/MonsterBook.img/2230100/reward/30
+String.wz/MonsterBook.img/2230106/reward	6	{'protect': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	String.wz/MonsterBook.img/2230106/reward/24
+String.wz/MonsterBook.img/2230110/reward	6	{'protect': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	String.wz/MonsterBook.img/2230110/reward/26
+String.wz/MonsterBook.img/3220000/reward	6	{'protect': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	String.wz/MonsterBook.img/3220000/reward/54
+String.wz/MonsterBook.img/3300007/reward	6	{'protect': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	String.wz/MonsterBook.img/3300007/reward/74
+String.wz/MonsterBook.img/3300008/reward	6	{'protect': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	String.wz/MonsterBook.img/3300008/reward/57
+String.wz/MonsterBook.img/4130101/reward	6	{'protect': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	String.wz/MonsterBook.img/4130101/reward/28
+String.wz/MonsterBook.img/4230102/reward	6	{'protect': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	String.wz/MonsterBook.img/4230102/reward/30
+String.wz/MonsterBook.img/4230119/reward	6	{'protect': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	String.wz/MonsterBook.img/4230119/reward/34
+String.wz/MonsterBook.img/4230300/reward	6	{'protect': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	String.wz/MonsterBook.img/4230300/reward/28
+String.wz/MonsterBook.img/4230502/reward	6	{'protect': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	String.wz/MonsterBook.img/4230502/reward/24
+String.wz/MonsterBook.img/5130107/reward	6	{'protect': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	String.wz/MonsterBook.img/5130107/reward/34
+String.wz/MonsterBook.img/5220002/reward	6	{'protect': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	String.wz/MonsterBook.img/5220002/reward/48
+String.wz/MonsterBook.img/5300100/reward	6	{'protect': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	String.wz/MonsterBook.img/5300100/reward/30
+String.wz/MonsterBook.img/6130101/reward	6	{'protect': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	String.wz/MonsterBook.img/6130101/reward/26
+String.wz/MonsterBook.img/6230500/reward	6	{'protect': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	String.wz/MonsterBook.img/6230500/reward/32
+String.wz/MonsterBook.img/6230602/reward	6	{'protect': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	String.wz/MonsterBook.img/6230602/reward/35
+String.wz/MonsterBook.img/6400000/reward	6	{'protect': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	String.wz/MonsterBook.img/6400000/reward/30
+String.wz/MonsterBook.img/7130200/reward	6	{'protect': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	String.wz/MonsterBook.img/7130200/reward/37
+String.wz/MonsterBook.img/7140000/reward	6	{'protect': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	String.wz/MonsterBook.img/7140000/reward/34
+String.wz/MonsterBook.img/7220000/reward	6	{'protect': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	String.wz/MonsterBook.img/7220000/reward/54
+String.wz/MonsterBook.img/7220001/reward	6	{'protect': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	String.wz/MonsterBook.img/7220001/reward/58
+String.wz/MonsterBook.img/8130100/reward	6	{'protect': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	String.wz/MonsterBook.img/8130100/reward/40
+String.wz/MonsterBook.img/8150201/reward	6	{'protect': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	String.wz/MonsterBook.img/8150201/reward/42
+String.wz/MonsterBook.img/8190000/reward	6	{'protect': 6}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 5}	String.wz/MonsterBook.img/8190000/reward/37
+Map.wz/Map/Map2/260000000.img/portal	5	{'removed': 5}	{'ARRAY: writes INTO an existing slot': 5}	Map.wz/Map/Map2/260000000.img/portal/19/image
+Quest.wz/Say.img/29510	5	{'protect': 5}	{'ARRAY: writes INTO an existing slot': 5}	Quest.wz/Say.img/29510/0/0
+String.wz/MonsterBook.img/1110130/reward	5	{'protect': 5}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 4}	String.wz/MonsterBook.img/1110130/reward/30
+String.wz/MonsterBook.img/1130100/reward	5	{'protect': 5}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 4}	String.wz/MonsterBook.img/1130100/reward/24
+String.wz/MonsterBook.img/1140130/reward	5	{'protect': 5}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 4}	String.wz/MonsterBook.img/1140130/reward/25
+String.wz/MonsterBook.img/1210101/reward	5	{'protect': 5}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 4}	String.wz/MonsterBook.img/1210101/reward/24
+String.wz/MonsterBook.img/2130100/reward	5	{'protect': 5}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 4}	String.wz/MonsterBook.img/2130100/reward/26
+String.wz/MonsterBook.img/2230107/reward	5	{'protect': 5}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 4}	String.wz/MonsterBook.img/2230107/reward/22
+String.wz/MonsterBook.img/2230200/reward	5	{'protect': 5}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 4}	String.wz/MonsterBook.img/2230200/reward/21
+String.wz/MonsterBook.img/3000005/reward	5	{'protect': 5}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 4}	String.wz/MonsterBook.img/3000005/reward/21
+String.wz/MonsterBook.img/3110303/reward	5	{'protect': 5}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 4}	String.wz/MonsterBook.img/3110303/reward/36
+String.wz/MonsterBook.img/3210100/reward	5	{'protect': 5}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 4}	String.wz/MonsterBook.img/3210100/reward/32
+String.wz/MonsterBook.img/3210205/reward	5	{'protect': 5}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 4}	String.wz/MonsterBook.img/3210205/reward/30
+String.wz/MonsterBook.img/3210450/reward	5	{'protect': 5}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 4}	String.wz/MonsterBook.img/3210450/reward/29
+String.wz/MonsterBook.img/3230200/reward	5	{'protect': 5}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 4}	String.wz/MonsterBook.img/3230200/reward/35
+String.wz/MonsterBook.img/4220000/reward	5	{'protect': 5}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 4}	String.wz/MonsterBook.img/4220000/reward/38
+String.wz/MonsterBook.img/4230101/reward	5	{'protect': 5}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 4}	String.wz/MonsterBook.img/4230101/reward/39
+String.wz/MonsterBook.img/5120506/reward	5	{'protect': 5}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 4}	String.wz/MonsterBook.img/5120506/reward/31
+String.wz/MonsterBook.img/5130102/reward	5	{'protect': 5}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 4}	String.wz/MonsterBook.img/5130102/reward/34
+String.wz/MonsterBook.img/5130104/reward	5	{'protect': 5}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 4}	String.wz/MonsterBook.img/5130104/reward/35
+String.wz/MonsterBook.img/5400000/reward	5	{'protect': 5}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 4}	String.wz/MonsterBook.img/5400000/reward/33
+String.wz/MonsterBook.img/6110300/reward	5	{'protect': 5}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 4}	String.wz/MonsterBook.img/6110300/reward/35
+String.wz/MonsterBook.img/6220000/reward	5	{'protect': 5}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 4}	String.wz/MonsterBook.img/6220000/reward/46
+String.wz/MonsterBook.img/6230600/reward	5	{'protect': 5}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 4}	String.wz/MonsterBook.img/6230600/reward/37
+String.wz/MonsterBook.img/7220002/reward	5	{'protect': 5}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 4}	String.wz/MonsterBook.img/7220002/reward/48
+String.wz/MonsterBook.img/8140703/reward	5	{'protect': 5}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 4}	String.wz/MonsterBook.img/8140703/reward/24
+String.wz/MonsterBook.img/8141100/reward	5	{'protect': 5}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 4}	String.wz/MonsterBook.img/8141100/reward/38
+String.wz/MonsterBook.img/8142100/reward	5	{'protect': 5}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 4}	String.wz/MonsterBook.img/8142100/reward/37
+String.wz/MonsterBook.img/8200001/reward	5	{'protect': 5}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 4}	String.wz/MonsterBook.img/8200001/reward/27
+String.wz/MonsterBook.img/8200004/reward	5	{'protect': 5}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 4}	String.wz/MonsterBook.img/8200004/reward/29
+String.wz/MonsterBook.img/8220002/reward	5	{'protect': 5}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 4}	String.wz/MonsterBook.img/8220002/reward/42
+Etc.wz/NpcLocation.img/9000036	4	{'removed': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	Etc.wz/NpcLocation.img/9000036/11
+Etc.wz/NpcLocation.img/9000067	4	{'removed': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	Etc.wz/NpcLocation.img/9000067/2
+Etc.wz/NpcLocation.img/9250052	4	{'removed': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	Etc.wz/NpcLocation.img/9250052/4
+Etc.wz/Swindle.img	4	{'removed': 4}	{'ARRAY: writes INTO an existing slot': 4}	Etc.wz/Swindle.img/3/word/4
+Map.wz/Map/Map2/240070201.img/3/obj	4	{'removed': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	Map.wz/Map/Map2/240070201.img/3/obj/25
+Map.wz/Map/Map2/240070202.img/3/obj	4	{'removed': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	Map.wz/Map/Map2/240070202.img/3/obj/24
+Quest.wz/Act.img/2156	4	{'protect': 4}	{'ARRAY: writes INTO an existing slot': 4}	Quest.wz/Act.img/2156/1/exp
+Quest.wz/Act.img/8251	4	{'protect': 4}	{'ARRAY: writes INTO an existing slot': 4}	Quest.wz/Act.img/8251/1/exp
+Quest.wz/Say.img/8256	4	{'protect': 4}	{'ARRAY: writes INTO an existing slot': 4}	Quest.wz/Say.img/8256/0/0
+String.wz/MonsterBook.img/2100104/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/2100104/reward/22
+String.wz/MonsterBook.img/2230105/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/2230105/reward/23
+String.wz/MonsterBook.img/2230111/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/2230111/reward/22
+String.wz/MonsterBook.img/2300100/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/2300100/reward/25
+String.wz/MonsterBook.img/3000000/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/3000000/reward/24
+String.wz/MonsterBook.img/3000006/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/3000006/reward/24
+String.wz/MonsterBook.img/3110102/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/3110102/reward/30
+String.wz/MonsterBook.img/3220001/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/3220001/reward/27
+String.wz/MonsterBook.img/3230101/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/3230101/reward/26
+String.wz/MonsterBook.img/3230302/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/3230302/reward/27
+String.wz/MonsterBook.img/3230304/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/3230304/reward/34
+String.wz/MonsterBook.img/3300006/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/3300006/reward/66
+String.wz/MonsterBook.img/4130103/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/4130103/reward/33
+String.wz/MonsterBook.img/4230103/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/4230103/reward/26
+String.wz/MonsterBook.img/4230104/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/4230104/reward/27
+String.wz/MonsterBook.img/4230109/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/4230109/reward/30
+String.wz/MonsterBook.img/4230111/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/4230111/reward/30
+String.wz/MonsterBook.img/4230116/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/4230116/reward/33
+String.wz/MonsterBook.img/4230121/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/4230121/reward/31
+String.wz/MonsterBook.img/5100000/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/5100000/reward/31
+String.wz/MonsterBook.img/5120001/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/5120001/reward/32
+String.wz/MonsterBook.img/5120502/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/5120502/reward/25
+String.wz/MonsterBook.img/5140000/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/5140000/reward/40
+String.wz/MonsterBook.img/5150000/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/5150000/reward/31
+String.wz/MonsterBook.img/5200001/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/5200001/reward/19
+String.wz/MonsterBook.img/6110301/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/6110301/reward/28
+String.wz/MonsterBook.img/6130200/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/6130200/reward/39
+String.wz/MonsterBook.img/6400100/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/6400100/reward/41
+String.wz/MonsterBook.img/8140102/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/8140102/reward/34
+String.wz/MonsterBook.img/8140103/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/8140103/reward/33
+String.wz/MonsterBook.img/8140500/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/8140500/reward/37
+String.wz/MonsterBook.img/8200000/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/8200000/reward/21
+String.wz/MonsterBook.img/8200007/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/8200007/reward/25
+String.wz/MonsterBook.img/8200009/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/8200009/reward/24
+String.wz/MonsterBook.img/8200012/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/8200012/reward/25
+String.wz/MonsterBook.img/8220005/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/8220005/reward/30
+String.wz/MonsterBook.img/8220006/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/8220006/reward/33
+String.wz/MonsterBook.img/9300274/reward	4	{'protect': 4}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 3}	String.wz/MonsterBook.img/9300274/reward/17
+Character.wz/Weapon/01492024.img/swingPF	3	{'removed': 3}	{'ARRAY: prepend / different origin': 3}	Character.wz/Weapon/01492024.img/swingPF/0
+Map.wz/Map/Map1/106010102.img/foothold	3	{'removed': 3}	{'ARRAY: writes INTO an existing slot': 3}	Map.wz/Map/Map1/106010102.img/foothold/0/16
+Map.wz/Map/Map2/240070501.img/2/obj	3	{'removed': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	Map.wz/Map/Map2/240070501.img/2/obj/28
+Map.wz/Map/Map1/101000000.img/life	3	{'protect': 3}	{'ARRAY: writes INTO an existing slot': 3}	Map.wz/Map/Map1/101000000.img/life/2/f
+Quest.wz/Act.img/28344	3	{'protect': 3}	{'ARRAY: writes INTO an existing slot': 3}	Quest.wz/Act.img/28344/1/exp
+Quest.wz/Act.img/8248	3	{'protect': 3}	{'ARRAY: writes INTO an existing slot': 3}	Quest.wz/Act.img/8248/1/exp
+Quest.wz/Act.img/8249	3	{'protect': 3}	{'ARRAY: writes INTO an existing slot': 3}	Quest.wz/Act.img/8249/1/exp
+Quest.wz/Check.img/3239	3	{'protect': 3}	{'ARRAY: writes INTO an existing slot': 3}	Quest.wz/Check.img/3239/1/endscript
+Quest.wz/Check.img/8249	3	{'protect': 3}	{'ARRAY: writes INTO an existing slot': 3}	Quest.wz/Check.img/8249/0/lvmin
+Quest.wz/Say.img/2156	3	{'protect': 3}	{'ARRAY: writes INTO an existing slot': 3}	Quest.wz/Say.img/2156/1/0
+Quest.wz/Say.img/8248	3	{'protect': 3}	{'ARRAY: writes INTO an existing slot': 3}	Quest.wz/Say.img/8248/0/2
+String.wz/MonsterBook.img/2110301/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/2110301/reward/22
+String.wz/MonsterBook.img/2230104/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/2230104/reward/23
+String.wz/MonsterBook.img/2230108/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/2230108/reward/21
+String.wz/MonsterBook.img/2230131/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/2230131/reward/31
+String.wz/MonsterBook.img/3210201/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/3210201/reward/29
+String.wz/MonsterBook.img/3210208/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/3210208/reward/31
+String.wz/MonsterBook.img/3230104/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/3230104/reward/31
+String.wz/MonsterBook.img/3230305/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/3230305/reward/30
+String.wz/MonsterBook.img/4110300/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/4110300/reward/31
+String.wz/MonsterBook.img/4110301/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/4110301/reward/19
+String.wz/MonsterBook.img/4230100/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/4230100/reward/32
+String.wz/MonsterBook.img/4230106/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/4230106/reward/38
+String.wz/MonsterBook.img/4230118/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/4230118/reward/36
+String.wz/MonsterBook.img/4230120/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/4230120/reward/32
+String.wz/MonsterBook.img/4240000/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/4240000/reward/36
+String.wz/MonsterBook.img/5100003/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/5100003/reward/26
+String.wz/MonsterBook.img/5100004/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/5100004/reward/29
+String.wz/MonsterBook.img/5120000/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/5120000/reward/36
+String.wz/MonsterBook.img/5120503/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/5120503/reward/24
+String.wz/MonsterBook.img/5130101/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/5130101/reward/34
+String.wz/MonsterBook.img/5130108/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/5130108/reward/34
+String.wz/MonsterBook.img/5220000/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/5220000/reward/50
+String.wz/MonsterBook.img/5300000/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/5300000/reward/31
+String.wz/MonsterBook.img/6130208/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/6130208/reward/26
+String.wz/MonsterBook.img/6230401/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 2, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/6230401/reward/10
+String.wz/MonsterBook.img/7130004/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/7130004/reward/20
+String.wz/MonsterBook.img/7130010/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/7130010/reward/45
+String.wz/MonsterBook.img/7130103/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/7130103/reward/32
+String.wz/MonsterBook.img/7130104/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/7130104/reward/29
+String.wz/MonsterBook.img/7130500/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/7130500/reward/29
+String.wz/MonsterBook.img/7130601/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/7130601/reward/25
+String.wz/MonsterBook.img/8140001/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/8140001/reward/30
+String.wz/MonsterBook.img/8140111/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/8140111/reward/32
+String.wz/MonsterBook.img/8140200/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/8140200/reward/41
+String.wz/MonsterBook.img/8140600/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/8140600/reward/37
+String.wz/MonsterBook.img/8141300/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/8141300/reward/37
+String.wz/MonsterBook.img/8190002/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/8190002/reward/35
+String.wz/MonsterBook.img/8200005/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/8200005/reward/24
+String.wz/MonsterBook.img/8200006/reward	3	{'protect': 3}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 2}	String.wz/MonsterBook.img/8200006/reward/27
+Map.wz/Map/Map1/100000000.img/life	2	{'removed': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	Map.wz/Map/Map1/100000000.img/life/28
+Map.wz/Map/Map1/100010000.img/life	2	{'removed': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	Map.wz/Map/Map1/100010000.img/life/52
+Map.wz/Map/Map1/100020000.img/life	2	{'removed': 2}	{'ARRAY: writes INTO an existing slot': 1, 'ARRAY: append would duplicate an existing entry': 1}	Map.wz/Map/Map1/100020000.img/life/14/limitedname
+Map.wz/Map/Map1/101000000.img/portal	2	{'removed': 2}	{'ARRAY: writes INTO an existing slot': 2}	Map.wz/Map/Map1/101000000.img/portal/28/image
+Map.wz/Map/Map1/106010000.img/life	2	{'removed': 2}	{'ARRAY: writes INTO an existing slot': 1, 'ARRAY: append would duplicate an existing entry': 1}	Map.wz/Map/Map1/106010000.img/life/32/hide
+Map.wz/Map/Map2/251000000.img/life	2	{'removed': 2}	{'ARRAY: writes INTO an existing slot': 2}	Map.wz/Map/Map2/251000000.img/life/13/limitedname
+Quest.wz/Act.img/2244	2	{'protect': 2}	{'ARRAY: writes INTO an existing slot': 2}	Quest.wz/Act.img/2244/1/exp
+Quest.wz/Act.img/29510	2	{'protect': 2}	{'ARRAY: writes INTO an existing slot': 2}	Quest.wz/Act.img/29510/1/exp
+Quest.wz/Act.img/3250	2	{'protect': 2}	{'ARRAY: writes INTO an existing slot': 2}	Quest.wz/Act.img/3250/1/item
+Quest.wz/Act.img/3522	2	{'protect': 2}	{'ARRAY: writes INTO an existing slot': 2}	Quest.wz/Act.img/3522/1/exp
+Quest.wz/Act.img/8222	2	{'protect': 2}	{'ARRAY: writes INTO an existing slot': 2}	Quest.wz/Act.img/8222/1/exp
+Quest.wz/Act.img/8255	2	{'protect': 2}	{'ARRAY: writes INTO an existing slot': 2}	Quest.wz/Act.img/8255/1/fame
+Quest.wz/Act.img/8256	2	{'protect': 2}	{'ARRAY: writes INTO an existing slot': 2}	Quest.wz/Act.img/8256/1/exp
+Quest.wz/Check.img/28002	2	{'protect': 2}	{'ARRAY: writes INTO an existing slot': 2}	Quest.wz/Check.img/28002/0/lvmax
+Quest.wz/Check.img/28004	2	{'protect': 2}	{'ARRAY: writes INTO an existing slot': 2}	Quest.wz/Check.img/28004/0/lvmax
+Quest.wz/Check.img/29510	2	{'protect': 2}	{'ARRAY: writes INTO an existing slot': 2}	Quest.wz/Check.img/29510/1/item
+Quest.wz/Check.img/8227	2	{'protect': 2}	{'ARRAY: writes INTO an existing slot': 2}	Quest.wz/Check.img/8227/1/endscript
+Quest.wz/Check.img/8248	2	{'protect': 2}	{'ARRAY: writes INTO an existing slot': 2}	Quest.wz/Check.img/8248/0/lvmin
+Quest.wz/Say.img/3250	2	{'protect': 2}	{'ARRAY: writes INTO an existing slot': 2}	Quest.wz/Say.img/3250/1/0
+Quest.wz/Say.img/8249	2	{'protect': 2}	{'ARRAY: writes INTO an existing slot': 2}	Quest.wz/Say.img/8249/1/0
+String.wz/MonsterBook.img/100131/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/100131/reward/13
+String.wz/MonsterBook.img/100133/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/100133/reward/17
+String.wz/MonsterBook.img/120100/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/120100/reward/13
+String.wz/MonsterBook.img/2100103/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/2100103/reward/22
+String.wz/MonsterBook.img/2100107/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/2100107/reward/19
+String.wz/MonsterBook.img/2110300/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/2110300/reward/20
+String.wz/MonsterBook.img/2130103/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/2130103/reward/18
+String.wz/MonsterBook.img/3110300/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/3110300/reward/27
+String.wz/MonsterBook.img/3210800/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/3210800/reward/35
+String.wz/MonsterBook.img/3230308/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/3230308/reward/34
+String.wz/MonsterBook.img/3300005/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/3300005/reward/39
+String.wz/MonsterBook.img/4110302/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/4110302/reward/16
+String.wz/MonsterBook.img/4230105/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/4230105/reward/28
+String.wz/MonsterBook.img/4230107/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/4230107/reward/30
+String.wz/MonsterBook.img/4230110/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/4230110/reward/37
+String.wz/MonsterBook.img/4230117/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/4230117/reward/31
+String.wz/MonsterBook.img/4230123/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/4230123/reward/29
+String.wz/MonsterBook.img/4230126/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/4230126/reward/32
+String.wz/MonsterBook.img/4230200/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/4230200/reward/34
+String.wz/MonsterBook.img/4230505/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/4230505/reward/21
+String.wz/MonsterBook.img/5100002/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/5100002/reward/29
+String.wz/MonsterBook.img/5110301/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/5110301/reward/24
+String.wz/MonsterBook.img/5120500/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/5120500/reward/30
+String.wz/MonsterBook.img/5130103/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/5130103/reward/29
+String.wz/MonsterBook.img/5150001/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/5150001/reward/30
+String.wz/MonsterBook.img/5200002/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/5200002/reward/21
+String.wz/MonsterBook.img/5250000/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/5250000/reward/17
+String.wz/MonsterBook.img/5250002/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/5250002/reward/18
+String.wz/MonsterBook.img/6130203/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/6130203/reward/26
+String.wz/MonsterBook.img/6130204/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/6130204/reward/32
+String.wz/MonsterBook.img/6300100/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/6300100/reward/39
+String.wz/MonsterBook.img/7130000/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/7130000/reward/39
+String.wz/MonsterBook.img/7130003/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/7130003/reward/26
+String.wz/MonsterBook.img/7130020/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/7130020/reward/36
+String.wz/MonsterBook.img/8110300/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/8110300/reward/28
+String.wz/MonsterBook.img/8140101/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/8140101/reward/30
+String.wz/MonsterBook.img/8140702/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/8140702/reward/28
+String.wz/MonsterBook.img/8142000/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/8142000/reward/37
+String.wz/MonsterBook.img/8150200/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/8150200/reward/33
+String.wz/MonsterBook.img/8200002/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/8200002/reward/29
+String.wz/MonsterBook.img/8200010/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/8200010/reward/23
+String.wz/MonsterBook.img/8200011/reward	2	{'protect': 2}	{'ARRAY: append would duplicate an existing entry': 1, 'ARRAY: gap after an earlier refusal': 1}	String.wz/MonsterBook.img/8200011/reward/27
+Character.wz/Glove/01082262.img/swingP2	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Character.wz/Glove/01082262.img/swingP2/2/lGlove
+Character.wz/Glove/01082262.img/swingT2	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Character.wz/Glove/01082262.img/swingT2/2/lGlove
+Character.wz/Glove/01082262.img/swingT3	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Character.wz/Glove/01082262.img/swingT3/0/lGlove
+Character.wz/Longcoat/01052156.img/shootF	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Character.wz/Longcoat/01052156.img/shootF/2/mailArm
+Character.wz/Longcoat/01052161.img/shootF	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Character.wz/Longcoat/01052161.img/shootF/2/mailArm
+Character.wz/Weapon/01492024.img/stabT2	1	{'removed': 1}	{'ARRAY: prepend / different origin': 1}	Character.wz/Weapon/01492024.img/stabT2/0
+Etc.wz/NpcLocation.img/2000	1	{'removed': 1}	{'ARRAY: append would duplicate an existing entry': 1}	Etc.wz/NpcLocation.img/2000/1
+Etc.wz/NpcLocation.img/20001	1	{'removed': 1}	{'ARRAY: append would duplicate an existing entry': 1}	Etc.wz/NpcLocation.img/20001/1
+Etc.wz/NpcLocation.img/20002	1	{'removed': 1}	{'ARRAY: append would duplicate an existing entry': 1}	Etc.wz/NpcLocation.img/20002/1
+Etc.wz/NpcLocation.img/2001	1	{'removed': 1}	{'ARRAY: append would duplicate an existing entry': 1}	Etc.wz/NpcLocation.img/2001/2
+Etc.wz/NpcLocation.img/2091005	1	{'removed': 1}	{'ARRAY: append would duplicate an existing entry': 1}	Etc.wz/NpcLocation.img/2091005/39
+Etc.wz/NpcLocation.img/2091006	1	{'removed': 1}	{'ARRAY: append would duplicate an existing entry': 1}	Etc.wz/NpcLocation.img/2091006/7
+Etc.wz/NpcLocation.img/2120002	1	{'removed': 1}	{'ARRAY: append would duplicate an existing entry': 1}	Etc.wz/NpcLocation.img/2120002/9
+Etc.wz/NpcLocation.img/9000034	1	{'removed': 1}	{'ARRAY: append would duplicate an existing entry': 1}	Etc.wz/NpcLocation.img/9000034/7
+Etc.wz/NpcLocation.img/9010000	1	{'removed': 1}	{'ARRAY: append would duplicate an existing entry': 1}	Etc.wz/NpcLocation.img/9010000/19
+Item.wz/Consume/0202.img/02022504/reward	1	{'removed': 1}	{'ARRAY: append would duplicate an existing entry': 1}	Item.wz/Consume/0202.img/02022504/reward/44
+Item.wz/Consume/0202.img/02022505/reward	1	{'removed': 1}	{'ARRAY: append would duplicate an existing entry': 1}	Item.wz/Consume/0202.img/02022505/reward/44
+Item.wz/Consume/0202.img/02022506/reward	1	{'removed': 1}	{'ARRAY: append would duplicate an existing entry': 1}	Item.wz/Consume/0202.img/02022506/reward/44
+Item.wz/Consume/0202.img/02022507/reward	1	{'removed': 1}	{'ARRAY: append would duplicate an existing entry': 1}	Item.wz/Consume/0202.img/02022507/reward/44
+Item.wz/Consume/0202.img/02022508/reward	1	{'removed': 1}	{'ARRAY: append would duplicate an existing entry': 1}	Item.wz/Consume/0202.img/02022508/reward/44
+Item.wz/Consume/0202.img/02022509/reward	1	{'removed': 1}	{'ARRAY: append would duplicate an existing entry': 1}	Item.wz/Consume/0202.img/02022509/reward/44
+Item.wz/Consume/0202.img/02022510/reward	1	{'removed': 1}	{'ARRAY: append would duplicate an existing entry': 1}	Item.wz/Consume/0202.img/02022510/reward/44
+Item.wz/Consume/0202.img/02022511/reward	1	{'removed': 1}	{'ARRAY: append would duplicate an existing entry': 1}	Item.wz/Consume/0202.img/02022511/reward/44
+Item.wz/Consume/0202.img/02022512/reward	1	{'removed': 1}	{'ARRAY: append would duplicate an existing entry': 1}	Item.wz/Consume/0202.img/02022512/reward/44
+Item.wz/Consume/0202.img/02022513/reward	1	{'removed': 1}	{'ARRAY: append would duplicate an existing entry': 1}	Item.wz/Consume/0202.img/02022513/reward/44
+Item.wz/Consume/0202.img/02022515/reward	1	{'removed': 1}	{'ARRAY: append would duplicate an existing entry': 1}	Item.wz/Consume/0202.img/02022515/reward/44
+Item.wz/Consume/0202.img/02022516/reward	1	{'removed': 1}	{'ARRAY: append would duplicate an existing entry': 1}	Item.wz/Consume/0202.img/02022516/reward/44
+Item.wz/Consume/0202.img/02022517/reward	1	{'removed': 1}	{'ARRAY: append would duplicate an existing entry': 1}	Item.wz/Consume/0202.img/02022517/reward/44
+Item.wz/Consume/0202.img/02022518/reward	1	{'removed': 1}	{'ARRAY: append would duplicate an existing entry': 1}	Item.wz/Consume/0202.img/02022518/reward/44
+Item.wz/Consume/0202.img/02022519/reward	1	{'removed': 1}	{'ARRAY: append would duplicate an existing entry': 1}	Item.wz/Consume/0202.img/02022519/reward/44
+Item.wz/Consume/0202.img/02022520/reward	1	{'removed': 1}	{'ARRAY: append would duplicate an existing entry': 1}	Item.wz/Consume/0202.img/02022520/reward/44
+Item.wz/Consume/0202.img/02022521/reward	1	{'removed': 1}	{'ARRAY: append would duplicate an existing entry': 1}	Item.wz/Consume/0202.img/02022521/reward/44
+Item.wz/Consume/0202.img/02022522/reward	1	{'removed': 1}	{'ARRAY: append would duplicate an existing entry': 1}	Item.wz/Consume/0202.img/02022522/reward/44
+Item.wz/Consume/0202.img/02022523/reward	1	{'removed': 1}	{'ARRAY: append would duplicate an existing entry': 1}	Item.wz/Consume/0202.img/02022523/reward/44
+Item.wz/Consume/0202.img/02022524/reward	1	{'removed': 1}	{'ARRAY: append would duplicate an existing entry': 1}	Item.wz/Consume/0202.img/02022524/reward/44
+Map.wz/Map/Map1/100000000.img/portal	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Map.wz/Map/Map1/100000000.img/portal/12/image
+Map.wz/Map/Map1/100030000.img/portal	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Map.wz/Map/Map1/100030000.img/portal/13/script
+Map.wz/Map/Map1/105040300.img/life	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Map.wz/Map/Map1/105040300.img/life/12/limitedname
+Map.wz/Map/Map1/105040300.img/portal	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Map.wz/Map/Map1/105040300.img/portal/12/image
+Map.wz/Map/Map1/120000105.img/foothold	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Map.wz/Map/Map1/120000105.img/foothold/1/1
+Map.wz/Map/Map2/200000200.img/portal	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Map.wz/Map/Map2/200000200.img/portal/1/image
+Map.wz/Map/Map2/211000000.img/portal	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Map.wz/Map/Map2/211000000.img/portal/11/image
+Map.wz/Map/Map2/220000300.img/portal	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Map.wz/Map/Map2/220000300.img/portal/4/image
+Map.wz/Map/Map2/222000000.img/life	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Map.wz/Map/Map2/222000000.img/life/22/limitedname
+Map.wz/Map/Map2/240000000.img/life	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Map.wz/Map/Map2/240000000.img/life/19/limitedname
+Map.wz/Map/Map2/250000000.img/life	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Map.wz/Map/Map2/250000000.img/life/17/limitedname
+Map.wz/Map/Map1/102000004.img/foothold/1	1	{'protect': 1}	{'ARRAY: prepend / different origin': 1}	Map.wz/Map/Map1/102000004.img/foothold/1/0
+Map.wz/Map/Map2/221030300.img/portal	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Map.wz/Map/Map2/221030300.img/portal/3/script
+Map.wz/Map/Map2/221030501.img/portal	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Map.wz/Map/Map2/221030501.img/portal/2/script
+Map.wz/Map/Map2/261000000.img/life	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Map.wz/Map/Map2/261000000.img/life/9/limitedname
+Map.wz/WorldMap/WorldMap.img/MapList	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Map.wz/WorldMap/WorldMap.img/MapList/4/path
+Npc.wz/1013000.img/stand	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Npc.wz/1013000.img/stand/0/z
+Quest.wz/Act.img/28178	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/28178/1/item
+Quest.wz/Check.img/28178	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/28178/1/item
+Quest.wz/Check.img/28267	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/28267/0/job
+Quest.wz/Check.img/28268	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/28268/0/job
+Quest.wz/Check.img/28269	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/28269/0/job
+Quest.wz/Check.img/28270	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/28270/0/job
+Quest.wz/Check.img/28271	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/28271/0/job
+Quest.wz/Check.img/28272	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/28272/0/job
+Quest.wz/Check.img/28273	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/28273/0/job
+Quest.wz/Check.img/28274	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/28274/0/job
+Quest.wz/Check.img/28275	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/28275/0/job
+Quest.wz/Check.img/28276	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/28276/0/job
+Quest.wz/Check.img/28277	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/28277/0/job
+Quest.wz/Check.img/28278	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/28278/0/job
+Quest.wz/Check.img/28279	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/28279/0/job
+Quest.wz/Check.img/28280	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/28280/0/job
+Quest.wz/Check.img/28281	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/28281/0/job
+Quest.wz/Check.img/4919	1	{'removed': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/4919/0/job
+Quest.wz/Act.img/21610	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/21610/1/item
+Quest.wz/Act.img/21613	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/21613/1/item
+Quest.wz/Act.img/2251	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/2251/1/item
+Quest.wz/Act.img/28219	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/28219/0/item
+Quest.wz/Act.img/28238	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/28238/0/item
+Quest.wz/Act.img/28255	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/28255/1/item
+Quest.wz/Act.img/28256	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/28256/0/item
+Quest.wz/Act.img/3018	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/3018/1/item
+Quest.wz/Act.img/3021	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/3021/1/item
+Quest.wz/Act.img/3023	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/3023/1/item
+Quest.wz/Act.img/3025	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/3025/1/item
+Quest.wz/Act.img/3027	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/3027/1/item
+Quest.wz/Act.img/3401	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/3401/1/item
+Quest.wz/Act.img/3405	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/3405/1/exp
+Quest.wz/Act.img/6180	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/6180/0/item
+Quest.wz/Act.img/8002	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/8002/1/exp
+Quest.wz/Act.img/8005	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/8005/1/exp
+Quest.wz/Act.img/8007	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/8007/1/exp
+Quest.wz/Act.img/8012	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/8012/1/exp
+Quest.wz/Act.img/8013	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/8013/1/exp
+Quest.wz/Act.img/8028	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/8028/1/exp
+Quest.wz/Act.img/8029	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/8029/1/exp
+Quest.wz/Act.img/8030	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/8030/1/exp
+Quest.wz/Act.img/8032	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/8032/1/exp
+Quest.wz/Act.img/8033	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/8033/1/exp
+Quest.wz/Act.img/8034	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/8034/1/exp
+Quest.wz/Act.img/8035	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/8035/1/exp
+Quest.wz/Act.img/8038	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/8038/1/exp
+Quest.wz/Act.img/8040	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/8040/1/exp
+Quest.wz/Act.img/8042	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/8042/1/exp
+Quest.wz/Act.img/8043	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/8043/1/exp
+Quest.wz/Act.img/8047	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/8047/1/exp
+Quest.wz/Act.img/8052	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/8052/1/exp
+Quest.wz/Act.img/8064	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/8064/1/exp
+Quest.wz/Act.img/8068	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/8068/1/exp
+Quest.wz/Act.img/8069	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/8069/1/exp
+Quest.wz/Act.img/8077	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/8077/1/exp
+Quest.wz/Act.img/8081	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/8081/1/exp
+Quest.wz/Act.img/8254	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Act.img/8254/0/item
+Quest.wz/Check.img/2001	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/2001/1/endscript
+Quest.wz/Check.img/2034	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/2034/1/endscript
+Quest.wz/Check.img/20504	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/20504/1/endmeso
+Quest.wz/Check.img/20511	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/20511/1/endmeso
+Quest.wz/Check.img/20512	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/20512/1/endmeso
+Quest.wz/Check.img/20524	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/20524/1/endmeso
+Quest.wz/Check.img/20525	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/20525/1/endmeso
+Quest.wz/Check.img/20526	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/20526/1/endmeso
+Quest.wz/Check.img/20532	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/20532/1/endmeso
+Quest.wz/Check.img/20534	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/20534/1/endmeso
+Quest.wz/Check.img/2156	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/2156/1/item
+Quest.wz/Check.img/21602	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/21602/1/endmeso
+Quest.wz/Check.img/21605	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/21605/1/endmeso
+Quest.wz/Check.img/21606	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/21606/1/endmeso
+Quest.wz/Check.img/21609	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/21609/1/endmeso
+Quest.wz/Check.img/21610	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/21610/1/item
+Quest.wz/Check.img/21611	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/21611/1/endmeso
+Quest.wz/Check.img/21613	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/21613/1/item
+Quest.wz/Check.img/21615	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/21615/1/endmeso
+Quest.wz/Check.img/21617	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/21617/1/endmeso
+Quest.wz/Check.img/21733	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/21733/1/mob
+Quest.wz/Check.img/21743	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/21743/1/endmeso
+Quest.wz/Check.img/21750	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/21750/0/quest
+Quest.wz/Check.img/2215	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/2215/1/endmeso
+Quest.wz/Check.img/2244	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/2244/1/mob
+Quest.wz/Check.img/2251	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/2251/0/endscript
+Quest.wz/Check.img/2293	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/2293/1/endscript
+Quest.wz/Check.img/28179	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/28179/1/item
+Quest.wz/Check.img/28198	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/28198/1/item
+Quest.wz/Check.img/28219	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/28219/1/item
+Quest.wz/Check.img/28238	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/28238/1/item
+Quest.wz/Check.img/28256	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/28256/1/item
+Quest.wz/Check.img/28262	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/28262/1/item
+Quest.wz/Check.img/28344	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/28344/1/item
+Quest.wz/Check.img/3021	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/3021/1/item
+Quest.wz/Check.img/3023	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/3023/1/item
+Quest.wz/Check.img/3025	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/3025/1/item
+Quest.wz/Check.img/3027	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/3027/1/item
+Quest.wz/Check.img/3029	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/3029/1/item
+Quest.wz/Check.img/3046	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/3046/1/endmeso
+Quest.wz/Check.img/3048	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/3048/1/endmeso
+Quest.wz/Check.img/3069	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/3069/1/endmeso
+Quest.wz/Check.img/3079	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/3079/1/endmeso
+Quest.wz/Check.img/3095	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/3095/1/endmeso
+Quest.wz/Check.img/3305	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/3305/1/endmeso
+Quest.wz/Check.img/3306	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/3306/1/endmeso
+Quest.wz/Check.img/3377	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/3377/1/endmeso
+Quest.wz/Check.img/3414	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/3414/1/endscript
+Quest.wz/Check.img/3437	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/3437/1/endscript
+Quest.wz/Check.img/3454	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/3454/1/endscript
+Quest.wz/Check.img/3514	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/3514/0/startscript
+Quest.wz/Check.img/3522	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/3522/1/mob
+Quest.wz/Check.img/3612	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/3612/1/endmeso
+Quest.wz/Check.img/3613	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/3613/1/endmeso
+Quest.wz/Check.img/3614	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/3614/1/endmeso
+Quest.wz/Check.img/3623	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/3623/1/endmeso
+Quest.wz/Check.img/3901	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/3901/1/endmeso
+Quest.wz/Check.img/3930	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/3930/1/endmeso
+Quest.wz/Check.img/4307	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/4307/0/quest
+Quest.wz/Check.img/5009	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/5009/1/endmeso
+Quest.wz/Check.img/5010	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/5010/1/endmeso
+Quest.wz/Check.img/5011	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/5011/1/endmeso
+Quest.wz/Check.img/5012	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/5012/1/endmeso
+Quest.wz/Check.img/6000	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/6000/1/endmeso
+Quest.wz/Check.img/6030	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/6030/1/endmeso
+Quest.wz/Check.img/6031	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/6031/1/endmeso
+Quest.wz/Check.img/6032	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/6032/1/endmeso
+Quest.wz/Check.img/6033	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/6033/1/infoex
+Quest.wz/Check.img/6180	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/6180/1/item
+Quest.wz/Check.img/7103	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/7103/0/startscript
+Quest.wz/Check.img/8078	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/8078/1/endmeso
+Quest.wz/Check.img/8079	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/8079/1/endmeso
+Quest.wz/Check.img/8207	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/8207/1/endmeso
+Quest.wz/Check.img/8225	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/8225/1/item
+Quest.wz/Check.img/8229	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/8229/1/item
+Quest.wz/Check.img/8251	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/8251/1/item
+Quest.wz/Check.img/8254	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/8254/1/item
+Quest.wz/Check.img/8255	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/8255/1/item
+Quest.wz/Check.img/8256	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/8256/1/mob
+Quest.wz/Check.img/9310	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/9310/1/endmeso
+Quest.wz/Check.img/9311	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/9311/1/endmeso
+Quest.wz/Check.img/9340	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/9340/1/endmeso
+Quest.wz/Check.img/9341	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Check.img/9341/1/endmeso
+Quest.wz/Say.img/2327	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Say.img/2327/1/0
+Quest.wz/Say.img/28344	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Say.img/28344/0/yes
+Quest.wz/Say.img/8254	1	{'protect': 1}	{'ARRAY: writes INTO an existing slot': 1}	Quest.wz/Say.img/8254/1/stop
+String.wz/MonsterBook.img/100130/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/100130/reward/10
+String.wz/MonsterBook.img/100132/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/100132/reward/17
+String.wz/MonsterBook.img/100134/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/100134/reward/14
+String.wz/MonsterBook.img/2100100/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/2100100/reward/21
+String.wz/MonsterBook.img/2100101/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/2100101/reward/20
+String.wz/MonsterBook.img/2100102/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/2100102/reward/23
+String.wz/MonsterBook.img/2100105/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/2100105/reward/24
+String.wz/MonsterBook.img/2100106/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/2100106/reward/21
+String.wz/MonsterBook.img/2100108/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/2100108/reward/24
+String.wz/MonsterBook.img/2220000/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/2220000/reward/58
+String.wz/MonsterBook.img/3000001/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/3000001/reward/10
+String.wz/MonsterBook.img/3100102/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/3100102/reward/19
+String.wz/MonsterBook.img/3210202/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/3210202/reward/33
+String.wz/MonsterBook.img/3230300/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/3230300/reward/9
+String.wz/MonsterBook.img/3230405/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/3230405/reward/31
+String.wz/MonsterBook.img/3300003/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/3300003/reward/29
+String.wz/MonsterBook.img/4130102/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/4130102/reward/29
+String.wz/MonsterBook.img/4230501/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/4230501/reward/22
+String.wz/MonsterBook.img/4230600/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/4230600/reward/30
+String.wz/MonsterBook.img/4250000/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/4250000/reward/16
+String.wz/MonsterBook.img/5090000/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/5090000/reward/8
+String.wz/MonsterBook.img/5090001/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/5090001/reward/6
+String.wz/MonsterBook.img/5100005/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/5100005/reward/27
+String.wz/MonsterBook.img/5130105/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/5130105/reward/33
+String.wz/MonsterBook.img/5300001/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/5300001/reward/26
+String.wz/MonsterBook.img/6090000/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/6090000/reward/8
+String.wz/MonsterBook.img/6090001/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/6090001/reward/9
+String.wz/MonsterBook.img/6090003/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/6090003/reward/8
+String.wz/MonsterBook.img/6090004/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/6090004/reward/8
+String.wz/MonsterBook.img/6130207/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/6130207/reward/24
+String.wz/MonsterBook.img/7090000/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/7090000/reward/21
+String.wz/MonsterBook.img/7110300/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/7110300/reward/39
+String.wz/MonsterBook.img/7130002/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/7130002/reward/27
+String.wz/MonsterBook.img/7130300/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/7130300/reward/40
+String.wz/MonsterBook.img/7130400/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/7130400/reward/24
+String.wz/MonsterBook.img/7130401/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/7130401/reward/28
+String.wz/MonsterBook.img/7130402/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/7130402/reward/30
+String.wz/MonsterBook.img/7130501/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/7130501/reward/29
+String.wz/MonsterBook.img/7130600/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/7130600/reward/22
+String.wz/MonsterBook.img/8090000/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/8090000/reward/21
+String.wz/MonsterBook.img/8140000/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/8140000/reward/39
+String.wz/MonsterBook.img/8140002/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/8140002/reward/32
+String.wz/MonsterBook.img/8140300/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/8140300/reward/41
+String.wz/MonsterBook.img/8220000/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/8220000/reward/55
+String.wz/MonsterBook.img/8220001/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/8220001/reward/53
+String.wz/MonsterBook.img/8830000/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/8830000/reward/74
+String.wz/MonsterBook.img/9300012/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/9300012/reward/1
+String.wz/MonsterBook.img/9300028/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/9300028/reward/7
+String.wz/MonsterBook.img/9300039/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/9300039/reward/1
+String.wz/MonsterBook.img/9300182/reward	1	{'protect': 1}	{'ARRAY: append would duplicate an existing entry': 1}	String.wz/MonsterBook.img/9300182/reward/21
