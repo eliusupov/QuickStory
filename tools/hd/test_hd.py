@@ -151,6 +151,39 @@ def test_generated_inc_wellformed():
     print(f'  inc: ok ({len(rows)} rows, {len(ids)} defines, all rows PASS-backed)')
 
 
+def test_archive_hooks_match_dumps():
+    """The v2 archive hooks are hand-written addresses, not generated rows.
+
+    Nothing upstream of the compiler checks them, so check them here: every address in
+    archive.h's kHdHooks (plus the ZXString::Assign it calls) must still read exactly the
+    five guard bytes recorded beside it, in BOTH v84 dumps. If this fails, the DLL will
+    refuse to hook at runtime -- which is safe, but silent -- so fail loudly offline.
+    """
+    hdr = os.path.join(paths.HD, 'loader', 'archive.h')
+    if not os.path.exists(hdr):
+        print('  archive hooks: SKIPPED (no archive.h)')
+        return
+    src = open(hdr).read()
+    rows = re.findall(r'\{\s*"([^"]+)",\s*(0x[0-9A-Fa-f]+),\s*\{([^}]*)\}', src)
+    assign = re.search(r'g_Assign\s*=\s*\(Assign_t\)(0x[0-9A-Fa-f]+)', src)
+    kassign = re.search(r'kAssign\[5\]\s*=\s*\{([^}]*)\}', src)
+    assert rows, 'no kHdHooks rows parsed out of archive.h'
+    assert assign and kassign, 'could not parse the ZXString::Assign address/guard'
+    rows.append(('ZXString<char>::Assign', assign.group(1), kassign.group(1)))
+
+    a, b = paths.load(paths.V84_A), paths.load(paths.V84_B)
+    for name, addr, byts in rows:
+        va = int(addr, 16)
+        exp = bytes(int(x, 16) for x in byts.replace(' ', '').split(',') if x)
+        assert len(exp) == 5, f'{name}: guard must be 5 bytes, got {len(exp)}'
+        o = va - paths.BASE
+        assert a[o:o + 5] == exp, \
+            f'{name} @0x{va:08X}: dump A reads {a[o:o+5].hex()}, archive.h says {exp.hex()}'
+        assert b[o:o + 5] == exp, \
+            f'{name} @0x{va:08X}: dump B reads {b[o:o+5].hex()}, archive.h says {exp.hex()}'
+    print(f'  archive hooks: ok ({len(rows)} addresses, guard bytes match both dumps)')
+
+
 if __name__ == '__main__':
     test_fit()
     have = all(os.path.exists(p) for p in (paths.V83, paths.V84_A, paths.EZORSIA))
@@ -162,4 +195,5 @@ if __name__ == '__main__':
     test_patchset_clean()
     test_no_overlapping_writes()
     test_generated_inc_wellformed()
+    test_archive_hooks_match_dumps()
     print('OK')

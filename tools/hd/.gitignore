@@ -7,3 +7,6 @@ __pycache__/
 *.lib
 *.exp
 *.pdb
+# diagnostic output from a diag=1 launch, and build/selftest capture files
+hd-res-diag.log
+*.out

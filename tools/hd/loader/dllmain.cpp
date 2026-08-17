@@ -25,9 +25,16 @@
 //   11001 "host cannot be reached" launches.
 //   The resolution patch set needs ZERO function hooks: every code cave here is a raw
 //   5-byte E9 into our own naked thunk, which is not a hook engine's job.
-//   MinHook is needed only if the EzorsiaV2_UI.wz side archive is later wanted, which
-//   requires exactly two: CWvsApp::InitializeResMan and StringPool::GetString. The
-//   hook table below is deliberately empty; wire MinHook in only when those land.
+//
+// v2 ADDS THE ARCHIVE, AND STILL NEEDS NO MinHook:
+//   v1 said the EzorsiaV2_UI.wz archive "requires exactly two: CWvsApp::InitializeResMan
+//   and StringPool::GetString". That was wrong on the first of the two. Upstream's
+//   InitializeResMan hook is an explicit no-op and its load-list patches are dead code
+//   (see archive.h for the evidence). The archive is actually mounted by swapping the
+//   path of the FIRST IWzNameSpace::GetItem call -- the Base root open -- because the
+//   archive is a Base.wz clone. So v2 hooks IWzNameSpace::GetItem and
+//   StringPool::GetString, and both targets begin with a single self-contained 5-byte
+//   instruction, so a memcpy trampoline is the whole engine. See archive.h.
 //
 // SAFETY: this DLL writes to the loaded image only. It never touches a file on disk,
 // never writes to the registry, and never calls SetCurrentDirectory -- so it cannot
@@ -133,6 +140,7 @@ static bool Cave(DWORD origin, int nops, void* body) {
 // below ~0xC40 moved +0x30 (0xA90 -> 0xAC0), those above moved +0x38 (0xCD0 -> 0xD08).
 // Re-check any struct offset baked into a body against verify.py's printed sequence.
 #include "cave_params.h"   // shims + codecaves.h + SetCaveParams()
+#include "archive.h"       // EzorsiaV2_UI.wz mount + StringPool remap (v2)
 
 // Which cave body belongs to which patch row. Only the shipped caves appear; the rest of
 // codecaves.h compiles but is never jumped to, so it is unreachable dead code.
@@ -181,10 +189,12 @@ static void ApplyAll() {
 // The counts are the whole result of a gated manual test, so make them visible without
 // requiring a debugger. Nothing is written to disk -- see the SAFETY note at the top.
 static void Report() {
-    char msg[256];
-    wsprintfA(msg, "hd-res %dx%d: applied %d, skipped %d, byte-mismatch %d of %d\n",
+    char msg[320];
+    wsprintfA(msg, "hd-res %dx%d: applied %d, skipped %d, byte-mismatch %d of %d"
+                   " | diag %s: observer %d, mismatch %d, GetItem calls %d\n",
               g_w, g_h, g_applied, g_skipped, g_mismatch,
-              (int)(sizeof(kHdPatches) / sizeof(kHdPatches[0])));
+              (int)(sizeof(kHdPatches) / sizeof(kHdPatches[0])),
+              g_diag ? "ON" : "off", g_hooked, g_hookMismatch, g_giOrdinal);
     OutputDebugStringA(msg);
 #ifdef HD_SELFTEST
     fputs(msg, stderr);   // selftest.cpp build only; the shipped DLL has no CRT output
@@ -196,20 +206,56 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     if (reason != DLL_PROCESS_ATTACH) return TRUE;
     DisableThreadLibraryCalls(h);
 
+    // hd-res.ini sits next to this DLL and stays supported: it is what the owner
+    // already has (width/height/report), and it supplies the defaults below.
     char ini[MAX_PATH]{};
     GetModuleFileNameA(h, ini, MAX_PATH);
     if (char* s = strrchr(ini, '\\')) strcpy(s + 1, "hd-res.ini");
     g_w = GetPrivateProfileIntA("general", "width", 1280, ini);
     g_h = GetPrivateProfileIntA("general", "height", 720, ini);
+    g_report = GetPrivateProfileIntA("general", "report", 0, ini);
+
+    // Ezorsia's own config.ini lives at the CLIENT ROOT, next to MapleStory.exe, and
+    // wins where it sets a key. Same file and same key names Ezorsia itself reads, so
+    // there is one config to maintain, not two. (Its remaining keys -- MsgAmount,
+    // setDamageCap, speedMovementCap, useTubi, useV62_ExpTable, use_custom_dll_*, and
+    // ServerIP_Address / WindowedMode / RemoveLogos which belong to the existing
+    // redirect, window-mode and skip-logo DLLs -- are not wired here; see README.)
+    char root[MAX_PATH]{}, cfg[MAX_PATH]{}, wz[MAX_PATH]{};
+    GetModuleFileNameA(NULL, root, MAX_PATH);
+    if (char* s = strrchr(root, '\\')) s[1] = 0;
+    wsprintfA(cfg, "%sconfig.ini", root);
+    wsprintfA(wz,  "%sEzorsiaV2_UI.wz", root);
+    if (GetFileAttributesA(cfg) != INVALID_FILE_ATTRIBUTES) {
+        g_w = GetPrivateProfileIntA("general", "width", g_w, cfg);
+        g_h = GetPrivateProfileIntA("general", "height", g_h, cfg);
+    }
     // The whole table is fitted for even W/H; odd values silently truncate the /2 terms.
     g_w &= ~1; g_h &= ~1;
-    g_report = GetPrivateProfileIntA("general", "report", 0, ini);
+
+    // The archive is opt-in by mere presence, exactly as Ezorsia decides it. No file
+    // there means the two hooks below stay inert, so a bad copy cannot break a launch:
+    // the owner reverts by renaming EzorsiaV2_UI.wz.
+    SetArchiveParams(g_w,
+                     GetFileAttributesA(wz) != INVALID_FILE_ATTRIBUTES,
+                     GetPrivateProfileIntA("optional", "CustomLoginFrame", 0, cfg) != 0,
+                     GetPrivateProfileIntA("optional", "ownCashShopFrame", 0, cfg) != 0);
 
     // MUST run after the ini read and before ApplyAll: codecaves.h's myWidth/myHeight
     // are static initialisers evaluated at 800x600, and every cave body reads globals
     // derived from them.
     SetCaveParams(g_w, g_h);
     ApplyAll();
+
+    // diag=1 installs a read-only observer on IWzNameSpace::GetItem and writes
+    // hd-res-diag.log next to this DLL. diag=0 (the default) installs no hooks at all,
+    // which is exactly the v1 behaviour that launched cleanly.
+    g_diag = GetPrivateProfileIntA("general", "diag", 0, ini) != 0;
+    char logPath[MAX_PATH]{};
+    GetModuleFileNameA(h, logPath, MAX_PATH);
+    if (char* s = strrchr(logPath, '\\')) strcpy(s + 1, "hd-res-diag.log");
+    InstallArchiveHooks(logPath);
+
     Report();
     return TRUE;
 }
