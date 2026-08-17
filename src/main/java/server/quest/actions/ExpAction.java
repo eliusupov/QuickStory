@@ -51,7 +51,15 @@ public class ExpAction extends AbstractQuestAction {
     }
 
     public static void runAction(Character chr, int gain) {
-        if (!YamlConfig.config.server.USE_QUEST_RATE) {
+        if (chr.isBeginnerJob()) {
+            // Quest exp is flat 1x until the character takes a 1st job advancement. isBeginnerJob()
+            // is the gate because it already covers 2001 - Evan's beginner job, whose 1st job is
+            // 2200, not 2100 - alongside 0/1000/2000.
+            // Both quest exp paths land here: Act.img rewards via run(), and the qm.gainExp(n) calls
+            // inside scripts/quest/*.js via QuestActionManager.gainExp, which is the only other
+            // caller of this method. Nothing outside quests routes through it.
+            chr.gainExp(gain, true, true);
+        } else if (!YamlConfig.config.server.USE_QUEST_RATE) {
             chr.gainExp(gain * chr.getExpRate(), true, true);
         } else {
             chr.gainExp(gain * chr.getQuestExpRate(), true, true);
