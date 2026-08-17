@@ -44,6 +44,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -135,6 +136,9 @@ public class MapFactory {
 
         String mapName = getMapName(mapid);
         Data mapData = mapSource.getData(mapName);    // source.getData issue with giving nulls in rare ocasions found thanks to MedicOP
+        if (mapData == null) {  // XMLWZFile.getData returns null for an image this tree does not ship; without this the next line NPEs and the caller only ever sees "null"
+            throw new NoSuchElementException("no map image for mapid " + mapid + " (expected Map.wz/" + mapName + ")");
+        }
         Data infoData = mapData.getChildByPath("info");
 
         String link = DataTool.getString(infoData.getChildByPath("link"), "");
