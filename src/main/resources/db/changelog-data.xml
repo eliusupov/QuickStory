@@ -180,4 +180,27 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="164" author="town-portal-index">
+        <sqlFile path="db/data/164-town-portal-index-spawnpoint.sql"/>
+        <rollback>
+            UPDATE characters SET spawnpoint = spawnpoint - 1 WHERE map = 100000000 AND spawnpoint >= 13;
+            UPDATE characters SET spawnpoint = spawnpoint - 1 WHERE map = 101000000 AND spawnpoint >= 29;
+            UPDATE characters SET spawnpoint = spawnpoint - 1 WHERE map = 102000000 AND spawnpoint >= 15;
+            UPDATE characters SET spawnpoint = spawnpoint - 1 WHERE map = 103000000 AND spawnpoint >= 24;
+            UPDATE characters SET spawnpoint = spawnpoint - 1 WHERE map = 105040300 AND spawnpoint >= 13;
+            UPDATE characters SET spawnpoint = spawnpoint - 1 WHERE map = 120000000 AND spawnpoint >= 3;
+            UPDATE characters SET spawnpoint = spawnpoint - 1 WHERE map = 200000200 AND spawnpoint >= 2;
+            UPDATE characters SET spawnpoint = spawnpoint - 1 WHERE map = 211000000 AND spawnpoint >= 12;
+            UPDATE characters SET spawnpoint = spawnpoint - 1 WHERE map = 220000000 AND spawnpoint >= 10;
+            UPDATE characters SET spawnpoint = spawnpoint - 1 WHERE map = 221000000 AND spawnpoint >= 4;
+            UPDATE characters SET spawnpoint = spawnpoint - 1 WHERE map = 222000000 AND spawnpoint >= 17;
+            UPDATE characters SET spawnpoint = spawnpoint - 1 WHERE map = 230000000 AND spawnpoint >= 13;
+            UPDATE characters SET spawnpoint = spawnpoint - 1 WHERE map = 240000000 AND spawnpoint >= 5;
+            UPDATE characters SET spawnpoint = spawnpoint - 1 WHERE map = 250000000 AND spawnpoint >= 12;
+            UPDATE characters SET spawnpoint = spawnpoint - 1 WHERE map = 251000000 AND spawnpoint >= 8;
+            UPDATE characters SET spawnpoint = spawnpoint - 1 WHERE map = 260000000 AND spawnpoint >= 20;
+            UPDATE characters SET spawnpoint = spawnpoint - 1 WHERE map = 261000000 AND spawnpoint >= 16;
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>
