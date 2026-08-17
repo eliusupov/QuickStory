@@ -214,6 +214,47 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
+                <!--
+                  Two executions on purpose.
+
+                  Tests named *RealLoad load the REAL wz/ tree and a real Graal script manager, so
+                  they cannot share a JVM with the rest of the suite: WZFiles.DIRECTORY is
+                  `static final` and resolved once per JVM from the "wz-path" system property, and
+                  MobSkillFactoryTest points that property at an empty @TempDir. Whichever runs
+                  first wins for the whole JVM.
+
+                  They were therefore named *RealLoad to sit outside surefire's default patterns
+                  (Test*, *Test, *Tests, *TestCase) - which dodged the race by also dodging the
+                  runner. `mvnw test` had never executed a single one of them, so every "full suite
+                  green" was silent about them and they only ran when someone typed -Dtest by hand.
+
+                  A second execution gets its own forked JVM, so both now run under plain
+                  `mvnw test` and neither can poison the other.
+                -->
+                <executions>
+                    <execution>
+                        <id>default-test</id>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/*RealLoad.java</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>real-load-tests</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>**/*RealLoad.java</include>
+                            </includes>
+                            <!-- so an explicit -Dtest=SomeOtherTest does not fail this execution -->
+                            <failIfNoSpecifiedTests>false</failIfNoSpecifiedTests>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <!-- Enable assembling jar that includes all dependencies -->
