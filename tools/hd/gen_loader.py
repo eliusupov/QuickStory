@@ -14,6 +14,7 @@ fallback, and there are only a handful.
 """
 import json
 import os
+import re
 import sys
 from fractions import Fraction
 
@@ -68,7 +69,7 @@ def main():
     J = json.load(open(os.path.join(paths.DATA, 'v84-patchset.json')))
     rows = {r['id']: r for r in J['rows']}
 
-    out, nfit, nconst, skipped = [], 0, 0, 0
+    out, nfit, nconst, skipped, nadj = [], 0, 0, 0, 0
     for i, p in enumerate(base):
         r = rows.get(p['id'])
         if not r or r['verdict'] != 'PASS':
@@ -76,16 +77,26 @@ def main():
             continue
         vals = [t[i]['value'] for t in tables]
         f = fit(vals)
+        # VANILLA DRIFT. Ezorsia's value is tuned to the v83 literal at this site --
+        # `m_nGameHeight - 92` is really `508 + H - 600`, where 508 is v83's own constant.
+        # Where v84 shipped a different literal, writing Ezorsia's number unchanged moves
+        # the widget by exactly the difference. Subtracting the drift from the constant
+        # term preserves the offset Ezorsia applied, measured against each image's own
+        # baseline. verify.py computes the drift; see its VANILLA DRIFT table and the
+        # README for which of these are proven and which are intent-preserving guesses.
+        adj = r.get('van_adjust') or 0
         if f:
             nfit += 1
             aW, aH, aWH, k = f
-            expr = f'{{{aW},{aH},{aWH},{k}}}'
+            expr = f'{{{aW},{aH},{aWH},{k - adj}}}'
         else:
             nconst += 1
             v = p['value']
             k = v if isinstance(v, int) else 0
-            expr = f'{{0,0,0,{k}}}'
-        out.append((r, p, expr, bool(f)))
+            expr = f'{{0,0,0,{k - adj}}}'
+        if adj:
+            nadj += 1
+        out.append((r, p, expr, bool(f), adj))
 
     os.makedirs(os.path.join(paths.HD, 'loader'), exist_ok=True)
     dst = os.path.join(paths.HD, 'loader', 'hd_patches.inc')
@@ -97,24 +108,43 @@ def main():
                 '// value = aW*W/2 + aH*H/2 + aWH*W*H + k\n'
                 '// { v84addr, size, kind, {aW,aH,aWH,k}, group, id, v83addr }\n'
                 'static const HdPatch kHdPatches[] = {\n')
-        for r, p, expr, fitted in out:
+        for r, p, expr, fitted, adj in out:
             note = p['comment'].replace('\n', ' ').replace('*/', '* /')[:60]
-            f.write(f'  {{ 0x{r["v84"]:08X}, {r["size"]:3}, {KIND[r["op"]]:8}, {expr:>18},'
+            f.write(f'  {{ 0x{r["v84"]:08X}, {r.get("size84", r["size"]):3}, '
+                    f'{KIND[r["op"]]:8}, {expr:>18},'
                     f" '{r['group']}', \"{r['id']}\", 0x{r['v83']:08X} }},"
                     f'{"" if fitted else "  // CONST (non-linear)"}'
+                    f'{f"  // VANILLA-ADJ {adj:+d}" if adj else ""}'
                     f'  // {note}\n')
         f.write('};\n')
-        cave = [(r, p) for r, p, _, _ in out if r['op'] == 'CodeCave']
-        f.write('\n// Code-cave return addresses. codecaves.h from upstream is used\n'
-                '// VERBATIM; only these constants change for v84.\n')
+        cave = [(r, p) for r, p, _, _, _ in out if r['op'] == 'CodeCave']
+        f.write('\n// Code-cave origins and return addresses. codecaves.h from upstream is\n'
+                '// used VERBATIM except for the bodies marked BODY EDIT below.\n')
+        nedit = 0
         for r, p in cave:
-            f.write(f'#define HD_{p.get("cave", "CAVE")}_ORIGIN 0x{r["v84"]:08X}\n')
-            f.write(f'#define HD_{p.get("cave", "CAVE")}_RETN   '
-                    f'0x{r["v84"] + r["size"]:08X}  // origin + {r["size"]} nops\n')
+            nm = p.get('cave', 'CAVE')
+            n = r.get('size84', r['size'])
+            f.write(f'#define HD_{nm}_ORIGIN 0x{r["v84"]:08X}\n')
+            f.write(f'#define HD_{nm}_RETN   0x{r["v84"] + n:08X}'
+                    f'  // origin + {n} ({n - 5} nops after the 5-byte jmp)\n')
+            # A cave body REPLAYS what it displaced. Any [esi+disp] baked into that body
+            # has to move with v84's struct layout, so emit the v84 displacement as a
+            # constant rather than leaving the v83 literal in the naked asm.
+            for s in r.get('cave_v84_seq', []):
+                m = re.search(r'\[esi \+ (0x[0-9a-f]+)\]', s)
+                if m:
+                    f.write(f'#define HD_{nm}_MEMBER 0x{m.group(1)[2:].upper()}'
+                            f'  // v84 CUIStatusBar member; v83 literal in the body is stale\n')
+            if not r.get('cave_body_same', True):
+                nedit += 1
+                f.write(f'// BODY EDIT REQUIRED for {nm}:\n')
+                f.write(f'//   v83 displaced: {" ; ".join(r.get("cave_v83_seq", []))}\n')
+                f.write(f'//   v84 displaced: {" ; ".join(r.get("cave_v84_seq", []))}\n')
     print(f'wrote {dst}')
     print(f'  rows: {len(out)}   formula-fitted: {nfit}   baked constant: {nconst}')
     print(f'  skipped (not PASS): {skipped}')
-    print(f'  code caves with generated origin/retn: {len(cave)}')
+    print(f"  code caves: {len(cave)}   needing a BODY edit: {nedit}")
+    print(f"  rows with a vanilla-drift adjustment: {nadj}")
 
 
 if __name__ == '__main__':

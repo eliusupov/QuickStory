@@ -56,7 +56,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov edi, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P002",
@@ -80,7 +82,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov esi, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P003",
@@ -104,7 +108,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0xfffffed4",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 4294966996,
+   "van84": 4294966996
   },
   {
    "id": "P004",
@@ -128,7 +134,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0xfffffe70",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 4294966896,
+   "van84": 4294966896
   },
   {
    "id": "P005",
@@ -152,7 +160,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P006",
@@ -176,7 +186,10 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x384",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 900,
+   "van_adjust": -100
   },
   {
    "id": "P007",
@@ -200,7 +213,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x23f",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 575,
+   "van84": 575
   },
   {
    "id": "P008",
@@ -224,7 +239,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x23f",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 575,
+   "van84": 575
   },
   {
    "id": "P009",
@@ -248,7 +265,10 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x384",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 900,
+   "van_adjust": -100
   },
   {
    "id": "P010",
@@ -522,7 +542,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x2b2",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 690,
+   "van84": 690
   },
   {
    "id": "P017",
@@ -630,7 +652,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P020",
@@ -654,7 +678,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P021",
@@ -710,7 +736,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x80000002",
-   "v84_verdict": "partial"
+   "v84_verdict": "partial",
+   "van83": 2147483649,
+   "van84": 2147483650
   },
   {
    "id": "P024",
@@ -734,7 +762,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x80000002",
-   "v84_verdict": "partial"
+   "v84_verdict": "partial",
+   "van83": 2147483649,
+   "van84": 2147483650
   },
   {
    "id": "P025",
@@ -758,7 +788,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x80000002",
-   "v84_verdict": "partial"
+   "v84_verdict": "partial",
+   "van83": 2147483649,
+   "van84": 2147483650
   },
   {
    "id": "P026",
@@ -824,7 +856,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov dword ptr [ebp - 0x10], 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P028",
@@ -848,7 +882,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P029",
@@ -872,7 +908,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "cmp ecx, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P030",
@@ -896,7 +934,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P031",
@@ -920,7 +960,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "cmp ecx, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P032",
@@ -944,7 +986,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P033",
@@ -968,7 +1012,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P034",
@@ -992,7 +1038,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov ecx, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P035",
@@ -1016,7 +1064,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov ecx, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P036",
@@ -1040,7 +1090,10 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x1ec",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 508,
+   "van84": 492,
+   "van_adjust": 16
   },
   {
    "id": "P037",
@@ -1064,7 +1117,10 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov edx, 0x19d",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 464,
+   "van84": 413,
+   "van_adjust": 51
   },
   {
    "id": "P038",
@@ -1088,7 +1144,10 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x1ec",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 508,
+   "van84": 492,
+   "van_adjust": 16
   },
   {
    "id": "P039",
@@ -1112,7 +1171,10 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov edx, 0x19d",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 464,
+   "van84": 413,
+   "van_adjust": 51
   },
   {
    "id": "P040",
@@ -1137,7 +1199,9 @@
    "verdict": "PASS",
    "regalloc": true,
    "v84_insn": "mov ecx, 0x1fc",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 508,
+   "van84": 508
   },
   {
    "id": "P041",
@@ -1161,7 +1225,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov edx, 0x1d0",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 464,
+   "van84": 464
   },
   {
    "id": "P042",
@@ -1185,7 +1251,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov edx, 0x1f2",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 498,
+   "van84": 498
   },
   {
    "id": "P043",
@@ -1209,7 +1277,10 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x1ec",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 508,
+   "van84": 492,
+   "van_adjust": 16
   },
   {
    "id": "P044",
@@ -1233,7 +1304,10 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov edx, 0x19d",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 464,
+   "van84": 413,
+   "van_adjust": 51
   },
   {
    "id": "P045",
@@ -1257,7 +1331,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x1fc",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 508,
+   "van84": 508
   },
   {
    "id": "P046",
@@ -1281,7 +1357,10 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x1ec",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 508,
+   "van84": 492,
+   "van_adjust": 16
   },
   {
    "id": "P047",
@@ -1305,7 +1384,10 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov edx, 0x19d",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 464,
+   "van84": 413,
+   "van_adjust": 51
   },
   {
    "id": "P048",
@@ -1329,7 +1411,10 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x1ec",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 508,
+   "van84": 492,
+   "van_adjust": 16
   },
   {
    "id": "P049",
@@ -1353,7 +1438,10 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov edx, 0x19d",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 464,
+   "van84": 413,
+   "van_adjust": 51
   },
   {
    "id": "P050",
@@ -1377,7 +1465,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x1fc",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 508,
+   "van84": 508
   },
   {
    "id": "P051",
@@ -1401,7 +1491,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov edx, 0x1d0",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 464,
+   "van84": 464
   },
   {
    "id": "P052",
@@ -1425,7 +1517,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x1fc",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 508,
+   "van84": 508
   },
   {
    "id": "P053",
@@ -1449,7 +1543,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov edx, 0x1d0",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 464,
+   "van84": 464
   },
   {
    "id": "P054",
@@ -1473,7 +1569,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x1fc",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 508,
+   "van84": 508
   },
   {
    "id": "P055",
@@ -1497,7 +1595,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov edx, 0x1d0",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 464,
+   "van84": 464
   },
   {
    "id": "P056",
@@ -1521,7 +1621,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x1f2",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 498,
+   "van84": 498
   },
   {
    "id": "P057",
@@ -1545,7 +1647,10 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x1ec",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 508,
+   "van84": 492,
+   "van_adjust": 16
   },
   {
    "id": "P058",
@@ -1569,7 +1674,10 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov edx, 0x19d",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 464,
+   "van84": 413,
+   "van_adjust": 51
   },
   {
    "id": "P059",
@@ -1593,7 +1701,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x320",
-   "v84_verdict": "opcode"
+   "v84_verdict": "opcode",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P060",
@@ -1617,7 +1727,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P061",
@@ -1641,7 +1753,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov ecx, 0x319",
-   "v84_verdict": "opcode"
+   "v84_verdict": "opcode",
+   "van83": 793,
+   "van84": 793
   },
   {
    "id": "P062",
@@ -1665,7 +1779,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov ecx, 0x319",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 793,
+   "van84": 793
   },
   {
    "id": "P063",
@@ -1727,7 +1843,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x10f",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 271,
+   "van84": 271
   },
   {
    "id": "P065",
@@ -1751,7 +1869,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov dword ptr [eax], 0x10f",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 271,
+   "van84": 271
   },
   {
    "id": "P066",
@@ -1775,7 +1895,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P067",
@@ -1799,7 +1921,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P068",
@@ -1823,7 +1947,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0xfffffed4",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 4294966996,
+   "van84": 4294966996
   },
   {
    "id": "P069",
@@ -1847,7 +1973,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0xfffffe70",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 4294966896,
+   "van84": 4294966896
   },
   {
    "id": "P070",
@@ -1871,7 +1999,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P071",
@@ -1895,7 +2025,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P072",
@@ -2309,7 +2441,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P083",
@@ -2333,7 +2467,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov edi, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P084",
@@ -2357,7 +2493,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P085",
@@ -2381,7 +2519,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0xfffffed4",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 4294966996,
+   "van84": 4294966996
   },
   {
    "id": "P086",
@@ -2405,7 +2545,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0xfffffe70",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 4294966896,
+   "van84": 4294966896
   },
   {
    "id": "P087",
@@ -2429,7 +2571,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P088",
@@ -2453,7 +2597,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x64",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 100,
+   "van84": 100
   },
   {
    "id": "P089",
@@ -2477,7 +2623,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x113",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 275,
+   "van84": 275
   },
   {
    "id": "P090",
@@ -2501,7 +2649,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov dword ptr [esi], 0x190",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 400,
+   "van84": 400
   },
   {
    "id": "P091",
@@ -2525,7 +2675,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov dword ptr [ebx + 0x93c], 0x12c",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 300,
+   "van84": 300
   },
   {
    "id": "P092",
@@ -2549,7 +2701,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "add ecx, 0xfffffed4",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 4294966996,
+   "van84": 4294966996
   },
   {
    "id": "P093",
@@ -2573,7 +2727,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "add ecx, 0xfffffe70",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 4294966896,
+   "van84": 4294966896
   },
   {
    "id": "P094",
@@ -2597,7 +2753,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P095",
@@ -2621,7 +2779,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P096",
@@ -2645,7 +2805,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov ecx, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P097",
@@ -2669,7 +2831,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov ecx, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P098",
@@ -2693,7 +2857,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P099",
@@ -2717,7 +2883,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P100",
@@ -2741,7 +2909,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P101",
@@ -2765,7 +2935,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P102",
@@ -2789,7 +2961,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P103",
@@ -2813,7 +2987,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P104",
@@ -2837,7 +3013,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P105",
@@ -2861,7 +3039,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P106",
@@ -2885,7 +3065,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P107",
@@ -2909,7 +3091,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P108",
@@ -2933,7 +3117,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P109",
@@ -2957,7 +3143,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P110",
@@ -2981,7 +3169,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P111",
@@ -3005,7 +3195,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P112",
@@ -3029,7 +3221,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P113",
@@ -3109,7 +3303,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x285",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 645,
+   "van84": 645
   },
   {
    "id": "P116",
@@ -3133,7 +3329,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0xfffffed4",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 4294966996,
+   "van84": 4294966996
   },
   {
    "id": "P117",
@@ -3157,7 +3355,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0xfffffe70",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 4294966896,
+   "van84": 4294966896
   },
   {
    "id": "P118",
@@ -3181,7 +3381,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0xfffffed4",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 4294966996,
+   "van84": 4294966996
   },
   {
    "id": "P119",
@@ -3205,7 +3407,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0xfffffed4",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 4294966996,
+   "van84": 4294966996
   },
   {
    "id": "P120",
@@ -3245,7 +3449,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push dword ptr [ebp + 0xc]",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": null,
+   "van84": null
   },
   {
    "id": "P122",
@@ -3309,7 +3515,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P125",
@@ -3333,7 +3541,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x12c",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 300,
+   "van84": 300
   },
   {
    "id": "P126",
@@ -3415,7 +3625,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x96",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 150,
+   "van84": 150
   },
   {
    "id": "P129",
@@ -3439,7 +3651,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov edx, 0xaa",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 170,
+   "van84": 170
   },
   {
    "id": "P130",
@@ -3463,7 +3677,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov ecx, 0xdb",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 219,
+   "van84": 219
   },
   {
    "id": "P131",
@@ -3487,7 +3703,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov ebx, 0xef",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 239,
+   "van84": 239
   },
   {
    "id": "P132",
@@ -3511,7 +3729,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov ecx, 0xc8",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 200,
+   "van84": 200
   },
   {
    "id": "P133",
@@ -3535,7 +3755,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x163",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 355,
+   "van84": 355
   },
   {
    "id": "P134",
@@ -3559,7 +3781,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x96",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 150,
+   "van84": 150
   },
   {
    "id": "P135",
@@ -3583,7 +3807,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov edx, 0xaa",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 170,
+   "van84": 170
   },
   {
    "id": "P136",
@@ -3607,7 +3833,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov ecx, 0xdb",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 219,
+   "van84": 219
   },
   {
    "id": "P137",
@@ -3631,7 +3859,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov ebx, 0xef",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 239,
+   "van84": 239
   },
   {
    "id": "P138",
@@ -3655,7 +3885,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x2f",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 47,
+   "van84": 47
   },
   {
    "id": "P139",
@@ -3679,7 +3911,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0xb8",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 184,
+   "van84": 184
   },
   {
    "id": "P140",
@@ -3768,7 +4002,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P143",
@@ -3792,7 +4028,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P144",
@@ -3816,7 +4054,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P145",
@@ -3840,7 +4080,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P146",
@@ -3864,7 +4106,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P147",
@@ -3888,7 +4132,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P148",
@@ -3912,7 +4158,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P149",
@@ -3936,7 +4184,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P150",
@@ -3960,7 +4210,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P151",
@@ -3984,7 +4236,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P152",
@@ -4008,7 +4262,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov edi, 0x190",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 400,
+   "van84": 400
   },
   {
    "id": "P153",
@@ -4032,7 +4288,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov esi, 0x12c",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 300,
+   "van84": 300
   },
   {
    "id": "P154",
@@ -4056,7 +4314,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov ecx, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P155",
@@ -4080,7 +4340,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov ecx, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P156",
@@ -4104,7 +4366,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov ecx, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P157",
@@ -4128,7 +4392,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov ecx, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P158",
@@ -4168,7 +4434,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "add eax, 0x190",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 400,
+   "van84": 400
   },
   {
    "id": "P160",
@@ -4192,7 +4460,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov ecx, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P161",
@@ -4216,7 +4486,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov ecx, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P162",
@@ -4240,7 +4512,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "add edi, 0xfffffe70",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 4294966896,
+   "van84": 4294966896
   },
   {
    "id": "P163",
@@ -4264,7 +4538,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov ecx, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P164",
@@ -4288,7 +4564,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov ecx, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P165",
@@ -4312,7 +4590,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov ecx, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P166",
@@ -4336,7 +4616,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov ecx, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P167",
@@ -4360,7 +4642,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "lea esi, [ecx + 0x258]",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": null,
+   "van84": null
   },
   {
    "id": "P168",
@@ -4384,7 +4668,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "lea esi, [ecx + 0x320]",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": null,
+   "van84": null
   },
   {
    "id": "P169",
@@ -4408,7 +4694,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov esi, 0xfffffed4",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 4294966996,
+   "van84": 4294966996
   },
   {
    "id": "P170",
@@ -4432,7 +4720,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov esi, 0xfffffe70",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 4294966896,
+   "van84": 4294966896
   },
   {
    "id": "P171",
@@ -4456,7 +4746,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov dword ptr [ebp - 0x20], 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P172",
@@ -4480,7 +4772,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov dword ptr [ebp - 0x1c], 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P173",
@@ -4504,7 +4798,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov dword ptr [ebp - 0x24], 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P174",
@@ -4528,7 +4824,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov dword ptr [ebp - 0x20], 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P175",
@@ -4552,7 +4850,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov ebx, 0x190",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 400,
+   "van84": 400
   },
   {
    "id": "P176",
@@ -4576,7 +4876,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "add eax, 0x12c",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 300,
+   "van84": 300
   },
   {
    "id": "P177",
@@ -4600,7 +4902,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "sub eax, 0x12c",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 300,
+   "van84": 300
   },
   {
    "id": "P178",
@@ -4666,7 +4970,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P180",
@@ -4690,7 +4996,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "and ecx, 0xfffffe70",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 4294966896,
+   "van84": 4294966896
   },
   {
    "id": "P181",
@@ -4714,7 +5022,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x190",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 400,
+   "van84": 400
   },
   {
    "id": "P182",
@@ -4738,7 +5048,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P183",
@@ -4762,7 +5074,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0xfffffe70",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 4294966896,
+   "van84": 4294966896
   },
   {
    "id": "P184",
@@ -4786,7 +5100,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P185",
@@ -4810,7 +5126,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov esi, 0x1d4c00",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 1920000,
+   "van84": 1920000
   },
   {
    "id": "P186",
@@ -4834,7 +5152,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x15f900",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 1440000,
+   "van84": 1440000
   },
   {
    "id": "P187",
@@ -4858,7 +5178,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov edi, 0x75300",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 480000,
+   "van84": 480000
   },
   {
    "id": "P188",
@@ -4882,7 +5204,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov edx, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P189",
@@ -4906,7 +5230,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov ecx, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P190",
@@ -4930,7 +5256,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P191",
@@ -4954,7 +5282,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P192",
@@ -4978,7 +5308,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P193",
@@ -5002,7 +5334,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P194",
@@ -5082,7 +5416,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "sub ebx, 0x115",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 277,
+   "van84": 277
   },
   {
    "id": "P197",
@@ -5106,7 +5442,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "lea eax, [eax + esi + 0x18d]",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": null,
+   "van84": null
   },
   {
    "id": "P198",
@@ -5130,7 +5468,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "sub ebx, 0x115",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 277,
+   "van84": 277
   },
   {
    "id": "P199",
@@ -5154,7 +5494,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "lea eax, [eax + esi + 0x18d]",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": null,
+   "van84": null
   },
   {
    "id": "P200",
@@ -5178,7 +5520,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "lea eax, [eax + ecx - 0x31d]",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": null,
+   "van84": null
   },
   {
    "id": "P201",
@@ -5202,7 +5546,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "lea eax, [eax + edx - 0x31d]",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": null,
+   "van84": null
   },
   {
    "id": "P202",
@@ -5226,7 +5572,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x208",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 520,
+   "van84": 520
   },
   {
    "id": "P203",
@@ -5250,7 +5598,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P204",
@@ -5274,7 +5624,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P205",
@@ -5298,7 +5650,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P206",
@@ -5322,7 +5676,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P207",
@@ -5346,7 +5702,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P208",
@@ -5370,7 +5728,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "lea eax, [esi + 0x320]",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": null,
+   "van84": null
   },
   {
    "id": "P209",
@@ -5394,7 +5754,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P210",
@@ -5418,7 +5780,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "lea eax, [esi + 0x320]",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": null,
+   "van84": null
   },
   {
    "id": "P211",
@@ -5442,7 +5806,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov ecx, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P212",
@@ -5466,7 +5832,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov ecx, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P213",
@@ -5490,7 +5858,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov edx, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P214",
@@ -5514,7 +5884,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov edi, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P215",
@@ -5538,7 +5910,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov edx, 0x1a7",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 423,
+   "van84": 423
   },
   {
    "id": "P216",
@@ -5562,7 +5936,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov edx, 0x128",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 296,
+   "van84": 296
   },
   {
    "id": "P217",
@@ -5586,7 +5962,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "cmp edx, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P218",
@@ -5610,7 +5988,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov ecx, 0x2d0",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 720,
+   "van84": 720
   },
   {
    "id": "P219",
@@ -5634,7 +6014,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x101",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 257,
+   "van84": 257
   },
   {
    "id": "P220",
@@ -5658,7 +6040,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov dword ptr [ebp - 0x18], 6",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 6,
+   "van84": 6
   },
   {
    "id": "P221",
@@ -5682,7 +6066,10 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x15e",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 290,
+   "van84": 350,
+   "van_adjust": -60
   },
   {
    "id": "P222",
@@ -5744,7 +6131,10 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov esi, 0x15e",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 290,
+   "van84": 350,
+   "van_adjust": -60
   },
   {
    "id": "P224",
@@ -5842,7 +6232,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "and eax, 0xffffffb2",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 178,
+   "van84": 178
   },
   {
    "id": "P227",
@@ -5866,7 +6258,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "add eax, 0x1bb",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 443,
+   "van84": 443
   },
   {
    "id": "P228",
@@ -5890,7 +6284,10 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x1bc",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 504,
+   "van84": 444,
+   "van_adjust": 60
   },
   {
    "id": "P229",
@@ -5914,7 +6311,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "add eax, 0x1bb",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 443,
+   "van84": 443
   },
   {
    "id": "P230",
@@ -5938,7 +6337,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P231",
@@ -5962,7 +6363,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P232",
@@ -5986,7 +6389,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P233",
@@ -6010,7 +6415,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P234",
@@ -6034,7 +6441,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x11e",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 286,
+   "van84": 286
   },
   {
    "id": "P235",
@@ -6058,7 +6467,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0xf2",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 242,
+   "van84": 242
   },
   {
    "id": "P236",
@@ -6082,7 +6493,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x30d3f",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 2142096969,
+   "van84": 199999
   },
   {
    "id": "P237",
@@ -6106,7 +6519,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov esi, 0x8c",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 77777,
+   "van84": 140
   },
   {
    "id": "P238",
@@ -6130,7 +6545,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x242",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 578,
+   "van84": 578
   },
   {
    "id": "P239",
@@ -6154,7 +6571,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P240",
@@ -6218,7 +6637,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "add eax, 0x215",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 533,
+   "van84": 533
   },
   {
    "id": "P242",
@@ -6242,7 +6663,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x287",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 647,
+   "van84": 647
   },
   {
    "id": "P243",
@@ -6266,7 +6689,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x242",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 578,
+   "van84": 578
   },
   {
    "id": "P244",
@@ -6290,7 +6715,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P245",
@@ -6354,7 +6781,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x242",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 578,
+   "van84": 578
   },
   {
    "id": "P247",
@@ -6378,7 +6807,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P248",
@@ -6442,7 +6873,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x237",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 567,
+   "van84": 567
   },
   {
    "id": "P250",
@@ -6466,7 +6899,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x245",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 581,
+   "van84": 581
   },
   {
    "id": "P251",
@@ -6490,7 +6925,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x245",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 581,
+   "van84": 581
   },
   {
    "id": "P252",
@@ -6514,7 +6951,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x242",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 578,
+   "van84": 578
   },
   {
    "id": "P253",
@@ -6538,7 +6977,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P254",
@@ -6562,7 +7003,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x245",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 581,
+   "van84": 581
   },
   {
    "id": "P255",
@@ -6586,7 +7029,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x245",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 581,
+   "van84": 581
   },
   {
    "id": "P256",
@@ -6610,7 +7055,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x245",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 581,
+   "van84": 581
   },
   {
    "id": "P257",
@@ -6634,7 +7081,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "lea edi, [eax - 0x287]",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": null,
+   "van84": null
   },
   {
    "id": "P258",
@@ -6658,7 +7107,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "lea ebx, [eax - 0x1ab]",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": null,
+   "van84": null
   },
   {
    "id": "P259",
@@ -6682,7 +7133,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x244",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 580,
+   "van84": 580
   },
   {
    "id": "P260",
@@ -6706,7 +7159,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x244",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 580,
+   "van84": 580
   },
   {
    "id": "P261",
@@ -6730,7 +7185,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "add esi, 0x215",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 533,
+   "van84": 533
   },
   {
    "id": "P262",
@@ -6754,7 +7211,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x287",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 647,
+   "van84": 647
   },
   {
    "id": "P263",
@@ -6778,7 +7237,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P264",
@@ -6802,7 +7263,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P265",
@@ -6827,7 +7290,9 @@
    "verdict": "PASS",
    "regalloc": true,
    "v84_insn": "mov ecx, 0x31f",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 799,
+   "van84": 799
   },
   {
    "id": "P266",
@@ -6851,7 +7316,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x257",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 599,
+   "van84": 599
   },
   {
    "id": "P267",
@@ -6875,7 +7342,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0xfffffed4",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 4294966996,
+   "van84": 4294966996
   },
   {
    "id": "P268",
@@ -6899,7 +7368,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P269",
@@ -6923,7 +7394,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x12c",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 300,
+   "van84": 300
   },
   {
    "id": "P270",
@@ -6963,7 +7436,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "and eax, 0xfffffed4",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 4294966996,
+   "van84": 4294966996
   },
   {
    "id": "P272",
@@ -6987,7 +7462,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "and eax, 0xfffffed4",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 4294966996,
+   "van84": 4294966996
   },
   {
    "id": "P273",
@@ -7011,7 +7488,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "and esi, 0xfffffed4",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 4294966996,
+   "van84": 4294966996
   },
   {
    "id": "P274",
@@ -7035,7 +7514,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P275",
@@ -7059,7 +7540,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x10a",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 266,
+   "van84": 266
   },
   {
    "id": "P276",
@@ -7083,7 +7566,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x10b",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 267,
+   "van84": 267
   },
   {
    "id": "P277",
@@ -7107,7 +7592,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x12c",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 300,
+   "van84": 300
   },
   {
    "id": "P278",
@@ -7131,7 +7618,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x190",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 400,
+   "van84": 400
   },
   {
    "id": "P279",
@@ -7155,7 +7644,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov ecx, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P280",
@@ -7179,7 +7670,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "cmp edi, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P281",
@@ -7203,7 +7696,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov edx, 0x2bc",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 700,
+   "van84": 700
   },
   {
    "id": "P282",
@@ -7227,7 +7722,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov ecx, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P283",
@@ -7251,7 +7748,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "cmp edi, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P284",
@@ -7275,7 +7774,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov edx, 0x2bc",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 700,
+   "van84": 700
   },
   {
    "id": "P285",
@@ -7299,7 +7800,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov edx, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P286",
@@ -7323,7 +7826,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov edx, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P287",
@@ -7347,7 +7852,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov dword ptr [ebp - 0x34], 0xfffffed4",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 4294966996,
+   "van84": 4294966996
   },
   {
    "id": "P288",
@@ -7371,7 +7878,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov dword ptr [ebp - 0x2c], 0x12c",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 300,
+   "van84": 300
   },
   {
    "id": "P289",
@@ -7395,7 +7904,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "lea eax, [ecx + eax - 0x320]",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": null,
+   "van84": null
   },
   {
    "id": "P290",
@@ -7419,7 +7930,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov ecx, 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P291",
@@ -7443,7 +7956,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "lea eax, [esi + eax - 0x258]",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": null,
+   "van84": null
   },
   {
    "id": "P292",
@@ -7467,7 +7982,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov ecx, 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P293",
@@ -7491,7 +8008,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0xfffffed4",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 4294966996,
+   "van84": 4294966996
   },
   {
    "id": "P294",
@@ -7515,7 +8034,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0xfffffe70",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 4294966896,
+   "van84": 4294966896
   },
   {
    "id": "P295",
@@ -7578,7 +8099,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x12c",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 300,
+   "van84": 300
   },
   {
    "id": "P298",
@@ -7602,7 +8125,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P299",
@@ -7626,7 +8151,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P300",
@@ -7666,7 +8193,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P302",
@@ -7706,7 +8235,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P304",
@@ -7800,7 +8331,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x258",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 600,
+   "van84": 600
   },
   {
    "id": "P309",
@@ -7824,7 +8357,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x320",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 800,
+   "van84": 800
   },
   {
    "id": "P310",
@@ -7848,7 +8383,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "push 0x10f",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 271,
+   "van84": 271
   },
   {
    "id": "P311",
@@ -7872,7 +8409,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "add eax, 0xfffffed4",
-   "v84_verdict": "ok"
+   "v84_verdict": "ok",
+   "van83": 4294966996,
+   "van84": 4294966996
   },
   {
    "id": "P312",
@@ -7896,7 +8435,9 @@
    },
    "verdict": "PASS",
    "v84_insn": "mov eax, 0xb40970",
-   "v84_verdict": "opcode"
+   "v84_verdict": "opcode",
+   "van83": 11466192,
+   "van84": 11798896
   },
   {
    "id": "P313",

@@ -11,10 +11,10 @@ static const HdPatch kHdPatches[] = {
   { 0x00437F5F,   4, K_INT   ,         {0,-1,0,0}, 'C', "P003", 0x004372B1 },  // push -300
   { 0x00437F64,   4, K_INT   ,         {-1,0,0,0}, 'C', "P004", 0x004372B6 },  // push -400 ; RelMove?
   { 0x0045C66B,   4, K_INT   ,          {2,0,0,0}, 'J', "P005", 0x0045A5CB },  // push 800 ; CAvatarMegaphone ; CreateWnd
-  { 0x0045D3DB,   4, K_INT   ,          {2,0,0,0}, 'J', "P006", 0x0045B337 },  // related to smega display  //likely screen area where pop up 
+  { 0x0045D3DB,   4, K_INT   ,        {2,0,0,100}, 'J', "P006", 0x0045B337 },  // VANILLA-ADJ -100  // related to smega display  //likely screen area where pop up 
   { 0x0045D4BD,   4, K_INT   ,       {2,0,0,-225}, 'J', "P007", 0x0045B417 },  // smega with avatar x axis for duration on screen
   { 0x0045D96F,   4, K_INT   ,       {2,0,0,-225}, 'J', "P008", 0x0045B898 },  // push 575 ##ED  //smega x axis fade
-  { 0x0045DA55,   4, K_INT   ,          {2,0,0,0}, 'J', "P009", 0x0045B97E },  // push 800 ; CAvatarMegaphone::ByeAvatarMegaphone ; IWzVector2
+  { 0x0045DA55,   4, K_INT   ,        {2,0,0,100}, 'J', "P009", 0x0045B97E },  // VANILLA-ADJ -100  // push 800 ; CAvatarMegaphone::ByeAvatarMegaphone ; IWzVector2
   { 0x0046B877,  12, K_CAVE  ,          {0,0,0,0}, 'F', "P010", 0x00469414 },  // CONST (non-linear)  // 
   { 0x0046B892,  14, K_CAVE  ,          {0,0,0,0}, 'F', "P011", 0x0046942F },  // CONST (non-linear)  // 
   { 0x0046B8AF,  16, K_CAVE  ,          {0,0,0,0}, 'F', "P012", 0x0046944C },  // CONST (non-linear)  // 
@@ -39,9 +39,20 @@ static const HdPatch kHdPatches[] = {
   { 0x004F60FD,   4, K_INT   ,          {2,0,0,0}, 'C', "P033", 0x004EDAD8 },  // mov ecx,800
   { 0x004F619D,   4, K_INT   ,          {0,2,0,0}, 'C', "P034", 0x004EDB78 },  // mov ecx,600 ; CreateWnd
   { 0x004F61AE,   4, K_INT   ,          {2,0,0,0}, 'C', "P035", 0x004EDB89 },  // mov ecx,800
-  { 0x0052E856,   4, K_INT   ,        {0,0,0,423}, 'I', "P037", 0x00522C87 },  // various requests like party, guild, friend, family, invites 
+  { 0x0052E420,   4, K_INT   ,       {0,2,0,-108}, 'I', "P036", 0x00522C73 },  // VANILLA-ADJ +16  // ??various requests like party, guild, friend, family, invite
+  { 0x0052E434,   4, K_INT   ,        {0,0,0,372}, 'I', "P037", 0x00522C87 },  // VANILLA-ADJ +51  // various requests like party, guild, friend, family, invites 
+  { 0x0052E624,   4, K_INT   ,       {0,2,0,-108}, 'I', "P038", 0x00522E65 },  // VANILLA-ADJ +16  // ??various requests like party, guild, friend, family, invite
+  { 0x0052E638,   4, K_INT   ,        {0,0,0,372}, 'I', "P039", 0x00522E79 },  // VANILLA-ADJ +51  // various requests like party, guild, friend, family, invites 
+  { 0x0052E84D,   4, K_INT   ,        {0,2,0,-92}, 'I', "P040", 0x0052307E },  // various requests like party, guild, friend, family, invites 
+  { 0x0052E856,   4, K_INT   ,        {0,0,0,423}, 'I', "P041", 0x00523092 },  // various requests like party, guild, friend, family, invites 
   { 0x0052E932,   4, K_INT   ,       {0,2,0,-102}, 'I', "P042", 0x00523154 },  // ?? various requests like party, guild, friend, family, invit
+  { 0x0052ED4D,   4, K_INT   ,       {0,2,0,-108}, 'I', "P043", 0x00523359 },  // VANILLA-ADJ +16  // various requests like party, guild, friend, family, invites 
+  { 0x0052ED61,   4, K_INT   ,        {0,0,0,372}, 'I', "P044", 0x0052336D },  // VANILLA-ADJ +51  // various requests like party, guild, friend, family, invites 
   { 0x0052F18D,   4, K_INT   ,        {0,2,0,-92}, 'I', "P045", 0x00523595 },  // various requests like party, guild, friend, family, invites 
+  { 0x0052F395,   4, K_INT   ,       {0,2,0,-108}, 'I', "P046", 0x0052378B },  // VANILLA-ADJ +16  // various requests like party, guild, friend, family, invites 
+  { 0x0052F3A9,   4, K_INT   ,        {0,0,0,372}, 'I', "P047", 0x0052379F },  // VANILLA-ADJ +51  // various requests like party, guild, friend, family, invites 
+  { 0x0052F587,   4, K_INT   ,       {0,2,0,-108}, 'I', "P048", 0x0052397D },  // VANILLA-ADJ +16  // various requests like party, guild, friend, family, invites 
+  { 0x0052F59B,   4, K_INT   ,        {0,0,0,372}, 'I', "P049", 0x00523991 },  // VANILLA-ADJ +51  // various requests like party, guild, friend, family, invites 
   { 0x0052F7F4,   4, K_INT   ,        {0,2,0,-92}, 'I', "P050", 0x00523BB1 },  // various requests like party, guild, friend, family, invites 
   { 0x0052F808,   4, K_INT   ,        {0,0,0,423}, 'I', "P051", 0x00523BC5 },  // various requests like party, guild, friend, family, invites 
   { 0x0052F9E8,   4, K_INT   ,        {0,2,0,-92}, 'I', "P052", 0x00523DA5 },  // various requests like party, guild, friend, family, invites 
@@ -49,6 +60,8 @@ static const HdPatch kHdPatches[] = {
   { 0x0052FBE6,   4, K_INT   ,        {0,2,0,-92}, 'I', "P054", 0x00523FA3 },  // various requests like party, guild, friend, family, invites 
   { 0x0052FBFA,   4, K_INT   ,        {0,0,0,423}, 'I', "P055", 0x00523FB7 },  // various requests like party, guild, friend, family, invites 
   { 0x0052FDCF,   4, K_INT   ,       {0,2,0,-102}, 'I', "P056", 0x0052418C },  // party quest available pop-up y axis		my first address find o
+  { 0x00530030,   4, K_INT   ,       {0,2,0,-108}, 'I', "P057", 0x005243DB },  // VANILLA-ADJ +16  // various requests like party, guild, friend, family, invites 
+  { 0x00530044,   4, K_INT   ,        {0,0,0,372}, 'I', "P058", 0x005243EF },  // VANILLA-ADJ +51  // various requests like party, guild, friend, family, invites 
   { 0x0053FD89,   1, K_BYTE  ,        {0,0,0,184}, 'J', "P059", 0x00533B03 },  // boss bar extend to window
   { 0x0053FD8A,   4, K_INT   ,        {2,0,0,-15}, 'J', "P060", 0x00533B03 },  // boss bar	extend to window
   { 0x005405F6,   1, K_BYTE  ,        {0,0,0,185}, 'J', "P061", 0x00534370 },  // boss bar	extend to window
@@ -204,14 +217,14 @@ static const HdPatch kHdPatches[] = {
   { 0x0088AE58,   4, K_INT   ,        {2,0,0,-80}, 'C', "P218", 0x0085F374 },  // mov ecx,720 ; CreateDlg
   { 0x008CBCDB,   4, K_INT   ,       {1,0,0,-143}, 'H', "P219", 0x00897BB4 },  // ??related to exp gain/item pick up msg
   { 0x008CF0D7,   4, K_INT   ,         {0,0,0,26}, 'H', "P220", 0x0089AEE2 },  // moregainmsgs part 1
-  { 0x008CF126,   4, K_INT   ,        {0,0,0,400}, 'H', "P221", 0x0089AF33 },  // length of pick up and exp gain message canvas //found with h
+  { 0x008CF126,   4, K_INT   ,        {0,0,0,460}, 'H', "P221", 0x0089AF33 },  // VANILLA-ADJ -60  // length of pick up and exp gain message canvas //found with h
   { 0x008CF377,   6, K_CAVE  ,          {0,0,0,0}, 'H', "P222", 0x0089B185 },  // CONST (non-linear)  // moregainmsgs part 2
-  { 0x008CF4B9,   4, K_INT   ,        {0,0,0,400}, 'H', "P223", 0x0089B2C6 },  // address to move the message in the canvas adjusted above to 
+  { 0x008CF4B9,   4, K_INT   ,        {0,0,0,460}, 'H', "P223", 0x0089B2C6 },  // VANILLA-ADJ -60  // address to move the message in the canvas adjusted above to 
   { 0x008CF6D8,   5, K_CAVE  ,          {0,0,0,0}, 'H', "P224", 0x0089B4E6 },  // CONST (non-linear)  // moregainmsgsFade1
   { 0x008CF755,   7, K_CAVE  ,          {0,0,0,0}, 'H', "P225", 0x0089B563 },  // CONST (non-linear)  // moregainmsgsFade
   { 0x008CF82A,   1, K_BYTE  ,          {0,0,0,1}, 'H', "P226", 0x0089B636 },  // related to exp gain/item pick up msg, seems to affect msg he
   { 0x008CF82C,   4, K_INT   ,       {0,2,0,-370}, 'H', "P227", 0x0089B639 },  // inventory/exp gain y axis //####hd100 //90
-  { 0x008CF8EA,   4, K_INT   ,       {2,0,0,-405}, 'H', "P228", 0x0089B6F7 },  // inventory/exp gain x axis //310 //####hd415 //405
+  { 0x008CF8EA,   4, K_INT   ,       {2,0,0,-465}, 'H', "P228", 0x0089B6F7 },  // VANILLA-ADJ +60  // inventory/exp gain x axis //310 //####hd415 //405
   { 0x008CF989,   4, K_INT   ,        {0,2,0,-18}, 'H', "P229", 0x0089B796 },  // ???related to exp gain/item pick up msg //??!!found in anoth
   { 0x008D556F,   4, K_INT   ,          {0,2,0,0}, 'C', "P230", 0x008A12F4 },  // mov eax,600 ;
   { 0x008D557D,   4, K_INT   ,          {2,0,0,0}, 'C', "P231", 0x008A1302 },  // mov eax,800 ; IWzVector2D::RelMove
@@ -228,6 +241,7 @@ static const HdPatch kHdPatches[] = {
   { 0x00906452,   4, K_INT   ,        {0,0,0,798}, 'D', "P242", 0x008D179A },  // push 647 //hd800
   { 0x00906C08,   4, K_INT   ,        {0,2,0,-22}, 'D', "P243", 0x008D1D50 },  // push 578
   { 0x00906C0D,   4, K_INT   ,          {2,0,0,0}, 'D', "P244", 0x008D1D55 },  // push 800
+  { 0x00906D39,   9, K_CAVE  ,          {0,0,0,0}, 'D', "P245", 0x008D1F65 },  // CONST (non-linear)  // 
   { 0x00906D8D,   4, K_INT   ,        {0,2,0,-22}, 'D', "P246", 0x008D1FF4 },  // push 578
   { 0x00906D92,   4, K_INT   ,          {2,0,0,0}, 'D', "P247", 0x008D1FF9 },  // push 800 ; CUIStatusBar
   { 0x00906EBE,   9, K_CAVE  ,          {0,0,0,0}, 'D', "P248", 0x008D217C },  // CONST (non-linear)  // 
@@ -302,65 +316,75 @@ static const HdPatch kHdPatches[] = {
   { 0x00C61463,   1, K_BYTE  ,         {0,0,0,34}, 'A', "P326", 0x00C08463 },  // remove elevation requests	//thanks stelmo for showing me how
 };
 
-// Code-cave return addresses. codecaves.h from upstream is used
-// VERBATIM; only these constants change for v84.
+// Code-cave origins and return addresses. codecaves.h from upstream is
+// used VERBATIM except for the bodies marked BODY EDIT below.
 #define HD_CashShopFix1_ORIGIN 0x0046B877
-#define HD_CashShopFix1_RETN   0x0046B883  // origin + 12 nops
+#define HD_CashShopFix1_RETN   0x0046B883  // origin + 12 (7 nops after the 5-byte jmp)
 #define HD_CashShopFix2_ORIGIN 0x0046B892
-#define HD_CashShopFix2_RETN   0x0046B8A0  // origin + 14 nops
+#define HD_CashShopFix2_RETN   0x0046B8A0  // origin + 14 (9 nops after the 5-byte jmp)
 #define HD_CashShopFix3_ORIGIN 0x0046B8AF
-#define HD_CashShopFix3_RETN   0x0046B8BF  // origin + 16 nops
+#define HD_CashShopFix3_RETN   0x0046B8BF  // origin + 16 (11 nops after the 5-byte jmp)
 #define HD_CashShopFix4_ORIGIN 0x0046B8CE
-#define HD_CashShopFix4_RETN   0x0046B8DC  // origin + 14 nops
+#define HD_CashShopFix4_RETN   0x0046B8DC  // origin + 14 (9 nops after the 5-byte jmp)
 #define HD_CashShopFix5_ORIGIN 0x0046B8EB
-#define HD_CashShopFix5_RETN   0x0046B8FC  // origin + 17 nops
+#define HD_CashShopFix5_RETN   0x0046B8FC  // origin + 17 (12 nops after the 5-byte jmp)
 #define HD_CashShopFix6_ORIGIN 0x0046B90B
-#define HD_CashShopFix6_RETN   0x0046B917  // origin + 12 nops
+#define HD_CashShopFix6_RETN   0x0046B917  // origin + 12 (7 nops after the 5-byte jmp)
 #define HD_CashShopFix7_ORIGIN 0x0046B92B
-#define HD_CashShopFix7_RETN   0x0046B93C  // origin + 17 nops
+#define HD_CashShopFix7_RETN   0x0046B93C  // origin + 17 (12 nops after the 5-byte jmp)
 #define HD_CashShopFix8_ORIGIN 0x0046B94B
-#define HD_CashShopFix8_RETN   0x0046B956  // origin + 11 nops
+#define HD_CashShopFix8_RETN   0x0046B956  // origin + 11 (6 nops after the 5-byte jmp)
 #define HD_CashShopFixPrev_ORIGIN 0x004B08E6
-#define HD_CashShopFixPrev_RETN   0x004B08F4  // origin + 14 nops
+#define HD_CashShopFixPrev_RETN   0x004B08F4  // origin + 14 (9 nops after the 5-byte jmp)
 #define HD_ccMuruengraidClearRoundUI_ORIGIN 0x00541290
-#define HD_ccMuruengraidClearRoundUI_RETN   0x0054129A  // origin + 10 nops
+#define HD_ccMuruengraidClearRoundUI_RETN   0x0054129A  // origin + 10 (5 nops after the 5-byte jmp)
 #define HD_ccMuruengraidPlayer_ORIGIN 0x00560A18
-#define HD_ccMuruengraidPlayer_RETN   0x00560A20  // origin + 8 nops
+#define HD_ccMuruengraidPlayer_RETN   0x00560A20  // origin + 8 (3 nops after the 5-byte jmp)
 #define HD_ccMuruengraidClock_ORIGIN 0x00560AA0
-#define HD_ccMuruengraidClock_RETN   0x00560AA8  // origin + 8 nops
+#define HD_ccMuruengraidClock_RETN   0x00560AA8  // origin + 8 (3 nops after the 5-byte jmp)
 #define HD_ccMuruengraidMonster_ORIGIN 0x00560B26
-#define HD_ccMuruengraidMonster_RETN   0x00560B2E  // origin + 8 nops
+#define HD_ccMuruengraidMonster_RETN   0x00560B2E  // origin + 8 (3 nops after the 5-byte jmp)
 #define HD_ccMuruengraidEngBar1_ORIGIN 0x00560BB1
-#define HD_ccMuruengraidEngBar1_RETN   0x00560BB9  // origin + 8 nops
+#define HD_ccMuruengraidEngBar1_RETN   0x00560BB9  // origin + 8 (3 nops after the 5-byte jmp)
 #define HD_ccMuruengraidEngBar2_ORIGIN 0x00560C3C
-#define HD_ccMuruengraidEngBar2_RETN   0x00560C41  // origin + 5 nops
+#define HD_ccMuruengraidEngBar2_RETN   0x00560C41  // origin + 5 (0 nops after the 5-byte jmp)
 #define HD_ccMuruengraidMonster1_ORIGIN 0x00560DC8
-#define HD_ccMuruengraidMonster1_RETN   0x00560DCF  // origin + 7 nops
+#define HD_ccMuruengraidMonster1_RETN   0x00560DCF  // origin + 7 (2 nops after the 5-byte jmp)
 #define HD_ccMuruengraidMonster2_ORIGIN 0x00560E53
-#define HD_ccMuruengraidMonster2_RETN   0x00560E5A  // origin + 7 nops
+#define HD_ccMuruengraidMonster2_RETN   0x00560E5A  // origin + 7 (2 nops after the 5-byte jmp)
 #define HD_ccMuruengraidEngBar_ORIGIN 0x00560EDE
-#define HD_ccMuruengraidEngBar_RETN   0x00560EE3  // origin + 5 nops
+#define HD_ccMuruengraidEngBar_RETN   0x00560EE3  // origin + 5 (0 nops after the 5-byte jmp)
 #define HD_ccMuruengraidMonster1_2_ORIGIN 0x0056157A
-#define HD_ccMuruengraidMonster1_2_RETN   0x0056157F  // origin + 5 nops
+#define HD_ccMuruengraidMonster1_2_RETN   0x0056157F  // origin + 5 (0 nops after the 5-byte jmp)
 #define HD_ccMuruengraidTimerBar_ORIGIN 0x00561F18
-#define HD_ccMuruengraidTimerBar_RETN   0x00561F1F  // origin + 7 nops
+#define HD_ccMuruengraidTimerBar_RETN   0x00561F1F  // origin + 7 (2 nops after the 5-byte jmp)
 #define HD_VersionNumberFix_ORIGIN 0x006094E5
-#define HD_VersionNumberFix_RETN   0x006094EF  // origin + 10 nops
+#define HD_VersionNumberFix_RETN   0x006094EF  // origin + 10 (5 nops after the 5-byte jmp)
 #define HD_ccLoginBackCanvasFix_ORIGIN 0x006232D8
-#define HD_ccLoginBackCanvasFix_RETN   0x006232E3  // origin + 11 nops
+#define HD_ccLoginBackCanvasFix_RETN   0x006232E3  // origin + 11 (6 nops after the 5-byte jmp)
 #define HD_ccLoginViewRecFix_ORIGIN 0x0064083B
-#define HD_ccLoginViewRecFix_RETN   0x0064084C  // origin + 17 nops
+#define HD_ccLoginViewRecFix_RETN   0x0064084C  // origin + 17 (12 nops after the 5-byte jmp)
 #define HD_AlwaysViewRestoreFix_ORIGIN 0x0065797A
-#define HD_AlwaysViewRestoreFix_RETN   0x00657981  // origin + 7 nops
+#define HD_AlwaysViewRestoreFix_RETN   0x00657981  // origin + 7 (2 nops after the 5-byte jmp)
 #define HD_CashShopFixOnOff_ORIGIN 0x007994C6
-#define HD_CashShopFixOnOff_RETN   0x007994CB  // origin + 5 nops
+#define HD_CashShopFixOnOff_RETN   0x007994CB  // origin + 5 (0 nops after the 5-byte jmp)
 #define HD_ccMoreGainMsgs_ORIGIN 0x008CF377
-#define HD_ccMoreGainMsgs_RETN   0x008CF37D  // origin + 6 nops
+#define HD_ccMoreGainMsgs_RETN   0x008CF37D  // origin + 6 (1 nops after the 5-byte jmp)
 #define HD_ccMoreGainMsgsFade1_ORIGIN 0x008CF6D8
-#define HD_ccMoreGainMsgsFade1_RETN   0x008CF6DD  // origin + 5 nops
+#define HD_ccMoreGainMsgsFade1_RETN   0x008CF6DD  // origin + 5 (0 nops after the 5-byte jmp)
 #define HD_ccMoreGainMsgsFade_ORIGIN 0x008CF755
-#define HD_ccMoreGainMsgsFade_RETN   0x008CF75C  // origin + 7 nops
+#define HD_ccMoreGainMsgsFade_RETN   0x008CF75C  // origin + 7 (2 nops after the 5-byte jmp)
 #define HD_AdjustStatusBar_ORIGIN 0x00904888
-#define HD_AdjustStatusBar_RETN   0x0090488D  // origin + 5 nops
+#define HD_AdjustStatusBar_RETN   0x0090488D  // origin + 5 (0 nops after the 5-byte jmp)
+#define HD_AdjustStatusBarBG_ORIGIN 0x00906D39
+#define HD_AdjustStatusBarBG_RETN   0x00906D42  // origin + 9 (4 nops after the 5-byte jmp)
+#define HD_AdjustStatusBarBG_MEMBER 0xD04  // v84 CUIStatusBar member; v83 literal in the body is stale
+// BODY EDIT REQUIRED for AdjustStatusBarBG:
+//   v83 displaced: push 0x16 ; movsd dword ptr es:[edi], dword ptr [esi] ; push 0
+//   v84 displaced: push 0x16 ; push edi ; lea ecx, [esi + 0xd04]
 #define HD_AdjustStatusBarInput_ORIGIN 0x00906EBE
-#define HD_AdjustStatusBarInput_RETN   0x00906EC7  // origin + 9 nops
+#define HD_AdjustStatusBarInput_RETN   0x00906EC7  // origin + 9 (4 nops after the 5-byte jmp)
+#define HD_AdjustStatusBarInput_MEMBER 0xD08  // v84 CUIStatusBar member; v83 literal in the body is stale
+// BODY EDIT REQUIRED for AdjustStatusBarInput:
+//   v83 displaced: push 0x16 ; push edi ; lea ecx, [esi + 0xcd0]
+//   v84 displaced: push 0x16 ; push edi ; lea ecx, [esi + 0xd08]

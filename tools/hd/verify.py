@@ -24,7 +24,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import paths                                    # noqa: E402
-from resolve import MD, classify, same_shape, same_slot, shape   # noqa: E402
+from resolve import MD, HI, LO, classify, same_shape, same_slot, shape   # noqa: E402
 
 # Groups the architecture decision drops: the existing ijl15.dll + edits\ loader
 # (bypass / redirect / skip-logo / window-mode / no-patcher / no-ad-balloon) already
@@ -132,6 +132,15 @@ def jumps_into(img, origin, size, span=0x8000):
         if t in rng:
             hits.append((o + paths.BASE, t))
     return hits, aligned
+
+
+def imm_at(img, va):
+    """The immediate operand of the instruction at va, as an unsigned int, or None."""
+    sh = shape(img, va)
+    if not sh or not sh['imm_size']:
+        return None
+    o = va - paths.BASE + sh['imm_off']
+    return int.from_bytes(img[o:o + sh['imm_size']], 'little')
 
 
 def fits(value, size):
@@ -257,6 +266,13 @@ def main():
             c['SLOT'] = cc['verdict'] in ('ok', 'partial', 'opcode')
             row['v84_insn'] = s84 and f"{s84['m']} {s84['ops']}"
             row['v84_verdict'] = cc['verdict']
+            # VANILLA: does v84's own constant still equal v83's? Ezorsia's value is
+            # tuned against the v83 literal (`m_nGameHeight - 92` is really `508 + H -
+            # 600`). Where v84 shipped a different literal, writing Ezorsia's number
+            # moves the widget by exactly the difference. Informational, not pass/fail --
+            # only a human can say whether the shift was intended.
+            row['van83'] = imm_at(V83, anchor)
+            row['van84'] = imm_at(V84, v84_anchor)
 
         hard = [v for k, v in c.items() if v is not None and k not in ('CAVE83',)]
         row['verdict'] = 'PASS' if all(hard) else 'FAIL'
@@ -329,6 +345,28 @@ def main():
     if unal:
         print(f'    !! {len(unal)} caves: JMPIN scan could not prove its decode was aligned '
               f'({", ".join(r["id"] for r in unal)}) -- treat their JMPIN as UNPROVEN')
+
+    # An immediate inside the image VA range is an ADDRESS, not a UI constant -- v84
+    # relocated it and the "drift" is meaningless. P312 is the one such site.
+    drift = [r for r in shipping if r['verdict'] == 'PASS'
+             and r.get('van83') is not None and r.get('van84') is not None
+             and r['van83'] != r['van84']
+             and not (LO <= r['van83'] < HI or LO <= r['van84'] < HI)]
+    print(f'\n--- VANILLA DRIFT: {len(drift)} shipping ops whose v84 literal differs from '
+          f"v83's ---")
+    print("    Ezorsia's value is tuned to the v83 literal, so writing it unchanged moves")
+    print('    the widget by exactly (v83 - v84). ADJUSTED = value - (v83 - v84).')
+    if drift:
+        print(f'    {"id":5} {"g":1} {"v84 addr":>10} {"v83":>6} {"v84":>6} {"diff":>6} '
+              f'{"value":>7} {"ADJUSTED":>9}  comment')
+        for r in sorted(drift, key=lambda r: (r['group'], r['v83'])):
+            d = r['van83'] - r['van84']
+            adj = r['value'] - d if isinstance(r['value'], int) else None
+            # gen_loader.py subtracts this from the fitted formula's constant term
+            r['van_adjust'] = d
+            print(f'    {r["id"]:5} {r["group"]:1} 0x{r["v84"]:08X} {r["van83"]:6} '
+                  f'{r["van84"]:6} {d:6} {str(r["value"]):>7} {str(adj):>9}'
+                  f'  // {r["comment"][:38]}')
 
     unres = [r for r in rows if r['verdict'] == 'UNRESOLVED']
     print(f'\n--- STILL NEEDING MANUAL RE ({len(unres)} ops, '
