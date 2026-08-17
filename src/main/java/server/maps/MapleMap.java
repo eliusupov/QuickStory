@@ -677,18 +677,38 @@ public class MapleMap {
         return new Pair<>(getRoundedCoordinate(angle), (int) distn);
     }
 
-    private static void sortDropEntries(List<MonsterDropEntry> from, List<MonsterDropEntry> item, List<MonsterDropEntry> visibleQuest, List<MonsterDropEntry> otherQuest, Character chr) {
+    /**
+     * Whether spawning this quest drop is worth anything to anyone standing here. A quest drop is
+     * only ever sent to, and only ever picked up by, a player that needs it ({@code spawnDrop}'s
+     * ranged lambda, {@link MapItem#sendSpawnData}, {@code Character.pickupItem}), so one that
+     * nobody on the map needs is an invisible object lying on the ground - and it pops into view
+     * retroactively the moment its quest is accepted, because every ranged-object update
+     * re-evaluates {@code needQuestItem}.
+     *
+     * <p>The question has to span the whole map rather than just the killer: the killer's kill is
+     * what drops a party member's quest item for them (thanks Articuno, Limit, Rohenn), and after
+     * {@link MapItem#hasExpiredOwnershipTime} every drop is free-for-all.
+     */
+    public static boolean anyPlayerNeedsQuestItem(List<Character> players, int questid, int itemId) {
+        for (Character chr : players) {
+            if (chr.needQuestItem(questid, itemId)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    static void sortDropEntries(List<MonsterDropEntry> from, List<MonsterDropEntry> item, List<MonsterDropEntry> visibleQuest, List<MonsterDropEntry> otherQuest, Character chr) {
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
         for (MonsterDropEntry mde : from) {
             if (!ii.isQuestItem(mde.itemId)) {
                 item.add(mde);
-            } else {
-                if (chr.needQuestItem(mde.questid, mde.itemId)) {
-                    visibleQuest.add(mde);
-                } else {
-                    otherQuest.add(mde);
-                }
+            } else if (chr.needQuestItem(mde.questid, mde.itemId)) {
+                visibleQuest.add(mde);
+            } else if (anyPlayerNeedsQuestItem(chr.getMap().getAllPlayers(), mde.questid, mde.itemId)) {
+                otherQuest.add(mde);
             }
         }
     }

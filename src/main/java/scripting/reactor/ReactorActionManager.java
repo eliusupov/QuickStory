@@ -73,12 +73,10 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
         for (ReactorDropEntry mde : from) {
             if (!ii.isQuestItem(mde.itemId)) {
                 item.add(mde);
-            } else {
-                if (chr.needQuestItem(mde.questid, mde.itemId)) {
-                    visibleQuest.add(mde);
-                } else {
-                    otherQuest.add(mde);
-                }
+            } else if (chr.needQuestItem(mde.questid, mde.itemId)) {
+                visibleQuest.add(mde);
+            } else if (MapleMap.anyPlayerNeedsQuestItem(chr.getMap().getAllPlayers(), mde.questid, mde.itemId)) {
+                otherQuest.add(mde);   // same invisible-object bug as MapleMap.sortDropEntries, same gate
             }
         }
     }
