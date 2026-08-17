@@ -8,13 +8,19 @@ using MapleLib.WzLib;
 // diff tool - it answers "what is actually in the pristine archive at this path" and
 // "which images contain a leaf <name>=<value>". No CLI framework, positional args.
 //
-//   WzPeek dump <file.wz> <Path/Inside/Wz> [maxDepth]
-//   WzPeek scan <file.wz> <leafName> <value> [pathFilterSubstring]
+//   WzPeek dump   <file.wz> <Path/Inside/Wz> [maxDepth]
+//   WzPeek scan   <file.wz> <leafName> <value> [pathFilterSubstring]
+//   WzPeek digest <Map.wz>                     (every map, one line each)
+//   WzPeek fh     <Map.wz> <mapId>...          (one line per foothold)
 //
 // dump: prints every descendant of the node with its leaf value.
 // scan: walks EVERY image in the file and prints each property path whose leaf name is
 //       <leafName> and whose value renders exactly as <value>. This is how you prove a
 //       negative ("no map places mob X") - it looks at all of them.
+// digest: the three sections the SERVER reads, hashed per map, so a whole-tree comparison
+//       against our XML is one pass instead of one process per map. fhgeom hashes the
+//       platform GEOMETRY (ids excluded) and fhid hashes id->geometry: geom equal + id
+//       different is exactly the renumber-without-moving case that misplaces every NPC.
 
 static class Program
 {
@@ -152,8 +158,89 @@ static class Program
         Console.Error.WriteLine($"scanned {imgs} images");
     }
 
+    static string G(WzObject n, string name)
+    {
+        var x = Props(n)?.FirstOrDefault(q => string.Equals(q.Name, name, StringComparison.Ordinal));
+        return x == null ? "-" : Val(x);
+    }
+
+    static string Sha(IEnumerable<string> lines)
+    {
+        using var h = System.Security.Cryptography.SHA1.Create();
+        var b = h.ComputeHash(System.Text.Encoding.UTF8.GetBytes(string.Join("\n", lines)));
+        return Convert.ToHexString(b)[..12].ToLowerInvariant();
+    }
+
+    // foothold/<layer>/<group>/<id> -> (id, layer, group, x1,y1,x2,y2)
+    static List<(int id, string geom, string layer, string group)> Footholds(WzObject img)
+    {
+        var outp = new List<(int, string, string, string)>();
+        var root = Props(img)?.FirstOrDefault(p => string.Equals(p.Name, "foothold", StringComparison.Ordinal));
+        if (root == null) return outp;
+        foreach (var layer in Props(root)!)
+            foreach (var grp in Props(layer)!)
+                foreach (var fh in Props(grp)!)
+                    if (int.TryParse(fh.Name, out int id))
+                        outp.Add((id, $"{G(fh, "x1")},{G(fh, "y1")},{G(fh, "x2")},{G(fh, "y2")}", layer.Name, grp.Name));
+        return outp;
+    }
+
+    static List<string> Section(WzObject img, string section, string[] fields)
+    {
+        var outp = new List<string>();
+        var root = Props(img)?.FirstOrDefault(p => string.Equals(p.Name, section, StringComparison.Ordinal));
+        if (root == null) return outp;
+        foreach (var c in Props(root)!)
+        {
+            if (!int.TryParse(c.Name, out _)) continue;   // portal/life slots are numeric; skip stray leaves
+            outp.Add(c.Name + "\t" + string.Join("\t", fields.Select(f => G(c, f))));
+        }
+        return outp;
+    }
+
+    static readonly string[] LifeFields = { "type", "id", "x", "y", "fh", "cy", "rx0", "rx1", "f", "hide", "mobTime" };
+    static readonly string[] PortalFields = { "pn", "pt", "x", "y", "tm", "tn", "script" };
+
+    static void Digest(WzFile file)
+    {
+        Console.WriteLine("#map\tfh\tfhgeom\tfhid\tlife\tlifekey\tlifefh\tportal\tportalkey");
+        var dirs = new List<WzDirectory>();
+        void Collect(WzDirectory d) { dirs.Add(d); foreach (var s in d.WzDirectories) Collect(s); }
+        Collect(file.WzDirectory);
+        foreach (var dir in dirs)
+            foreach (var img in dir.WzImages.OrderBy(i => i.Name, StringComparer.Ordinal))
+            {
+                string id = img.Name.EndsWith(".img", StringComparison.Ordinal) ? img.Name[..^4] : img.Name;
+                if (!long.TryParse(id, out _)) continue;
+                try { if (!img.ParseImage()) { Console.Error.WriteLine("[PARSE-FAIL] " + img.Name); continue; } }
+                catch { Console.Error.WriteLine("[PARSE-THROW] " + img.Name); continue; }
+
+                var fh = Footholds(img);
+                var life = Section(img, "life", LifeFields);
+                var portal = Section(img, "portal", PortalFields);
+                // life rows cite foothold ids; that citation is what the client resolves, so hash it apart
+                var lifeFh = life.Select(l => l.Split('\t') is var p && p.Length > 5 ? p[0] + ":" + p[5] : l);
+
+                Console.WriteLine(string.Join("\t",
+                    id,
+                    fh.Count,
+                    Sha(fh.Select(f => $"{f.layer}|{f.group}|{f.geom}").OrderBy(s => s, StringComparer.Ordinal)),
+                    Sha(fh.OrderBy(f => f.id).Select(f => $"{f.id}|{f.layer}|{f.group}|{f.geom}")),
+                    life.Count, Sha(life), Sha(lifeFh),
+                    portal.Count, Sha(portal)));
+                img.UnparseImage();
+            }
+    }
+
     static int Main(string[] args)
     {
+        if (args.Length == 2 && args[0] == "digest")
+        {
+            var (f2, e2) = TryOpen(args[1]);
+            if (f2 == null) { Console.Error.WriteLine(e2); return 1; }
+            try { Digest(f2); } finally { f2.Dispose(); }
+            return 0;
+        }
         if (args.Length < 3)
         {
             Console.Error.WriteLine("usage: WzPeek dump <file.wz> <path> [maxDepth]");
@@ -199,6 +286,16 @@ static class Program
                         string G(string n) { var x = Props(c)!.FirstOrDefault(q => q.Name == n); return x == null ? "-" : Val(x); }
                         Console.WriteLine($"{id}\t{c.Name}\ttype={G("type")}\tid={G("id")}\tx={G("x")}\ty={G("y")}\tf={G("f")}\thide={G("hide")}\tmobTime={G("mobTime")}");
                     }
+                }
+            }
+            else if (args[0] == "fh")
+            {
+                foreach (var id in args.Skip(2))
+                {
+                    var node = Nav(file, $"Map/Map{id[0]}/{id}.img");
+                    if (node == null) { Console.WriteLine($"{id}\tMISSING"); continue; }
+                    foreach (var f in Footholds(node).OrderBy(f => f.id))
+                        Console.WriteLine($"{id}\t{f.id}\t{f.layer}\t{f.group}\t{f.geom}");
                 }
             }
             else if (args[0] == "scan")
