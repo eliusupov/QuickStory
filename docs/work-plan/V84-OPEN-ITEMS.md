@@ -167,6 +167,16 @@ Worsens with job level. `IN FLIGHT`.
 
 ## 10. Items and buffs that exist and do nothing  *(found 2026-08-17, parity-surface sweep)*
 
+**PROVENANCE CORRECTION - none of these are v84-new.** The sweep that found them called several
+"v84-new" and I relayed that; it was wrong. Checked against `docs/wz-baseline/add-list/Item.txt`,
+which is the computed v84-minus-v83 diff: it contains **zero** paths for `BFSkill`, `randstat`,
+`onlyPickup`, `recoveryHP` or `recoveryMP`. All of the below is **v83 legacy**, so it is real-bug
+territory rather than v84 parity - lower priority under the owner's "lets focus on v84 for now".
+
+Also corrected: the follow-up agent reported `spec/consumeOnPickup` missing from the shipped tree on
+items 2022539-2022549 and called it a merge gap. **It is present** - verified by exact node extraction,
+all eight carry `consumeOnPickup=1` inside their own `spec`. No gap, nothing to merge.
+
 The "written but never read" pattern the Evan audit found is **not Evan-specific**. Confirmed wider:
 
 - **5 chaos scrolls are no-ops that still burn the upgrade slot**: `2049103/104/112/113/114` carry
