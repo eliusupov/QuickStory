@@ -301,6 +301,32 @@ class EvanChainRealLoad {
                         + "swallowed until a map change");
     }
 
+    /**
+     * The Mushroom training centre npcs admit an Evan on quest business BEFORE applying their
+     * "under level 20 only" ceiling.
+     *
+     * <p>910060100 is the only map in Map.wz carrying mob 9300386; quest 22518 needs 100 of them,
+     * and 22521 requires 22518 completed. Ordered the other way round, an Evan who crosses level 20
+     * with 22518 still open loses every quest from 22521 to 22596 with no way back in. Both npcs
+     * carry a copy of the same dialogue, so both are pinned.
+     */
+    @Test
+    void theTrainingCentreAdmitsEvanQuestsPastTheLevel20Ceiling() throws IOException {
+        for (String npc : List.of("1012118", "1012119")) {
+            String js = Files.readString(Path.of("scripts", "npc", npc + ".js"),
+                    StandardCharsets.UTF_8);
+
+            int evanGate = js.indexOf("cm.isQuestActive(22515)");
+            int levelGate = js.indexOf("cm.getLevel() >= 20");
+            assertTrue(evanGate >= 0, npc + ".js no longer recognises the Evan training quests");
+            assertTrue(levelGate >= 0, npc + ".js dropped the under-20 ceiling entirely - it still "
+                    + "has to apply to everyone who is not on 22515-22518");
+            assertTrue(evanGate < levelGate,
+                    npc + ".js applies the level 20 ceiling ahead of the Evan quest branch, which "
+                            + "makes quest 22518 unwinnable past level 20 and ends the chain there");
+        }
+    }
+
     /** True if {@code npcId} appears as a {@code type=\"n\"} life entry of {@code mapId}. */
     private static boolean npcIsInLifeOf(int mapId, int npcId) {
         DataProvider mapSource = DataProviderFactory.getDataProvider(WZFiles.MAP);

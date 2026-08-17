@@ -18,13 +18,18 @@ function action(mode, type, selection) {
         status--;
     }
     if (status == 0) {
-        if (cm.getLevel() >= 20) {
+        // The Evan branch is tested BEFORE the level ceiling, not after it. 910060100 is the only
+        // map in the game carrying mob 9300386, quest 22518 needs 100 of them, and 22521 requires
+        // 22518 completed - so an Evan who reaches level 20 with 22518 still open loses the whole
+        // rest of the chain with no way back. The bypass stays narrow: only a character actively
+        // on 22515-22518 skips the ceiling, and the public training centre below still enforces it.
+        if (cm.isQuestActive(22515) || cm.isQuestActive(22516) || cm.isQuestActive(22517) || cm.isQuestActive(22518)) {
+            cm.sendYesNo("Would you like to go in the special Training Center?");
+            status = 1;
+        } else if (cm.getLevel() >= 20) {
             cm.sendOk("This training ground is available only for those under level 20.");
             cm.dispose();
 
-        } else if (cm.isQuestActive(22515) || cm.isQuestActive(22516) || cm.isQuestActive(22517) || cm.isQuestActive(22518)) {
-            cm.sendYesNo("Would you like to go in the special Training Center?");
-            status = 1;
         } else {
             var selStr = "Would you like to go into the Training Center?";
             for (var i = 0; i < num; i++) {
