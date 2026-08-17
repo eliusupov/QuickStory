@@ -105,35 +105,102 @@ which is why nine maps show `+0/-0` here yet still failed the `fhgeom` digest.
 The last row is maps where v84 moved every platform to a different `layer`/`group` without changing
 one coordinate - a pure renumber that only the layer-aware digest separates from this class.
 
-## What was refused, and why
+## The Hall of Fame rows: settled, do not reopen
 
-**1. v84's 96 static `9901xxx` life rows on the seven Hall of Fame maps.** These are genuine Nexon
-rows - the archive is pristine v84, SHA-256 matched against `porting-resources/wz-data/v84/Map.wz`.
-They are refused on a mechanical ground, not a provenance one:
-`PlayerNPC.fetchAvailableScriptIdsFromDb:319-323` allocates PlayerNPC scriptids from
-`NpcId.PLAYER_NPC_BASE + 100 * branch`, so **every id v84 places on those maps sits inside a live
-PlayerNPC branch**. changeSet 163 already seats real PlayerNPCs at 9901000, 9901100, 9901200,
-9901300, 9901301 and 9901400 on those same maps; v84's rows are 9901001-9901008, 9901100-9901107,
-9901200, 9901300-9901301, 9901740-9901749, 9901800-9901849 and 9901600-9901616. Adding them puts a
-static npc on the exact id the allocator hands the next deployment.
-`HallOfFameSeedRealLoad.seededIdsStayInsideTheBand` records that a prior pass already proved this
-collision is real corruption. Cosmic fills these halls dynamically instead - that *is* the v84
-feature, implemented live rather than statically. **If the owner would rather have v84's static
-rows, the route is to drop changeSet 163 and the PlayerNPC halls with it. That is a bigger decision
-than this ticket and is not taken here.**
+**v84's 96 static `9901xxx` life rows on the seven Hall of Fame maps are refused, permanently.**
+They are genuine Nexon rows - the archive is pristine v84, SHA-256 matched against
+`porting-resources/wz-data/v84/Map.wz` - so this is not a provenance question. Two reasons, either
+sufficient:
 
-**2. `106010101`, the mob mix.** A first sweep read this as "v84 adds 7 mobs". It is not: v84
-rebalanced the map's whole population - Blue Mushroom 12 -> 8, Stone Golem 4 -> 1, Fairy 2 -> 9 -
-and moved **every** coordinate. Under additive-only the result would be 25 mobs at 25 spawn points,
-which is neither our layout nor v84's. Our 18 rows are kept and re-pointed; taking v84's is an
-all-or-nothing life swap needing its own authorisation. `106010102` is the same shape (our 8 Stone
-Golems against v84's 1).
+1. **The owner asked for the DB-driven version by name**: *"you can take the highest level char from
+   db and make it hall of fame."* changeSet 163 implements exactly that, with real characters
+   seated. Taking v84's static statues would undo a feature he requested.
+2. **They collide with the allocator.** `PlayerNPC.fetchAvailableScriptIdsFromDb:319-323` allocates
+   PlayerNPC scriptids from `NpcId.PLAYER_NPC_BASE + 100 * branch`, so every id v84 places on those
+   maps sits inside a live PlayerNPC branch - v84's rows are 9901001-9901008, 9901100-9901107,
+   9901200, 9901300-9901301, 9901740-9901749, 9901800-9901849 and 9901600-9901616, while 163 seats
+   real PlayerNPCs at 9901000, 9901100, 9901200, 9901300, 9901301 and 9901400 on those same maps.
+   A static row in the band lands on the exact id the allocator hands the next deployment.
+   `HallOfFameSeedRealLoad.seededIdsStayInsideTheBand` records that a prior pass already proved this
+   is real corruption, and siblings reached the same conclusion independently on `fca7b2ada` grounds.
 
-**3. Portals.** 28 of the 52 also differ from v84 in `portal`, and
-`docs/wz-baseline/protect-list/Map.txt` lists custom portal nodes on many of them - `674030000`
-alone has 32 protected portal slots, plus `910510100` @26-32, `106020000` @4-9, `610030000` @3-8,
-and `670010600`. A verbatim portal take would delete them. Portals are untouched here; they need the
-protect-list as an input, not a whole-section copy.
+Cosmic fills these halls dynamically - that *is* the v84 feature, implemented live rather than
+statically. Pinned by `noHallOfFameMapCarriesAStaticNpcInThePlayerNpcBand`. **This is a closed
+decision, not an open question.**
+
+## `106010101`: v84's layout taken whole
+
+A first sweep read this as "v84 adds 7 mobs". It is not - v84 rebalanced the map's whole population
+and moved **every** coordinate:
+
+| | ours | v84 |
+|---|---:|---:|
+| Blue Mushroom `2220100` | 12 | 8 |
+| Fairy `3000004` | 2 | 9 |
+| Stone Golem `5130101` | 4 | 1 |
+| | **18** | **18** |
+
+Additive-only would have produced 25 mobs at 25 spawn points - denser than v84 ever was, and neither
+layout. This is a substitution rebalance with no mob *type* lost, the same shape as the Ant Tunnel
+case, so v84's `life` section was taken whole. The take asserts before writing that no type
+disappears and that every v84 row cites a foothold the map has.
+
+**`106010102` is deliberately left alone**: it is not a substitution but a pure surplus - our 14
+Stone Golems against v84's 7, same three types on both sides. Cutting seven mobs is a density
+change, not a rebalance, and it needs its own call.
+
+## Portals: v84's array on the 28
+
+The owner's originally reported symptom - *"im getting ported to random places on map"* - is this
+defect, so the 28 of the 52 whose `portal` array also differed were taken too, using the rule proved
+out across 57 maps elsewhere:
+
+* **v84 owns the client-facing fields** - `pn`, `pt`, `x`, `y`, `tm`, `tn` - **and the slot
+  position**, because `getWarpToMap` sends `portal.getId()` and `PortalFactory.loadPortal` takes
+  that id from the node's *name*.
+* **`script` is server-only** (`PortalScriptManager` reads it, it never goes on the wire), so ours
+  always wins: where v84 names a script we lack we keep ours, and where we have one and v84 has none
+  we keep ours.
+* **Custom nodes are appended past v84's last index.** All 68 survive - including the 32
+  protect-listed `floor` portals on `674030000`, which keep their original indices 2-33 because v84
+  only has two portals there, and `670010600`'s seven `gtNNWP` doors, which move to 25-31.
+
+Everything else a portal node carries - `onlyOnce`, `hideTooltip`, `delay`, `horizontalImpact`,
+`image` - is **read nowhere in the server**; `PortalFactory` reads only `pn`, `tn`, `tm`, `x`, `y`,
+`script` and the node name. So v84 owning those costs nothing, which is what makes the protect-listed
+non-script leaves on matched portals safe to take from v84.
+
+12 of the 28 needed no write at all: their extras were already appended past v84's last index and
+every shared slot already agreed. 16 were rewritten.
+
+### The one portal not taken whole
+
+v84 makes `106010101`'s `in00` a `pt` 7 script portal driven by `evanGolemDoor`, and this tree has
+no `scripts/portal/evanGolemDoor.js`. Taking v84's `pt`/`tm`/`tn` would have left the only entrance
+to Golem's Temple **dead**. The slot is v84's - that is the half the client resolves - and the
+destination stays ours (`pt` 2, `tm` 106010102). The guard is general, not a hardcoded exception: it
+fires only where v84's node is script-only (`tm` is `MapId.NONE`), the script is one we cannot run,
+and we hold a working destination for the same portal. It fired exactly once across the 28. Pinned
+by `golemsTempleEntranceKeptAWorkingDestination`.
+
+`670010600`'s seven new `gtNNPCS` portals also name a script we lack (`doorgo`), but we have no
+counterpart portal to fall back on, so they are taken as v84 has them minus the script - inert
+placeholders that keep indices 18-24 aligned while our `gtNNWP` doors continue to do the work.
+
+### changeSet 167
+
+`characters.spawnpoint` stores an **index**, so a moved slot strands a stored value.
+`findClosestPlayerSpawnpoint` only ever returns a `pt` 0 or 1 portal whose `tm` is `MapId.NONE`, and
+only two of the 28 moved such a slot:
+
+* `109090000` - v84 carries seven `sp` spawns where we had one, so `start00` moves from slot 1 to 7.
+* `670010600` - v84 has `gt00PIA` and `gt01PIA`, which our array lacked entirely; every later gate
+  portal shifts down by two.
+
+Written as one `CASE` per map, because `670010600`'s mapping overlaps (1 -> 2 *and* 2 -> 4) and
+sequential `UPDATE`s would move the same row twice. Pinned by
+`changeSet167CarriesEverySpawnpointIndexThatMoved`. No `pt` moved to or from 6, so no door portal
+changed class - those get a synthetic `0x80+n` id from `PortalFactory` and never address by position.
 
 ### Everything the first draft listed as a casualty is still present
 
@@ -201,9 +268,33 @@ By measurement, not inspection, on all 52:
   true in this worktree, so the working tree is CRLF while the blobs are LF - a writer that forces
   the wrong style shows every line as changed and buries the real edit.
 
-`V84TerrainFootholdParityRealLoad` (8 tests), `HallOfFameSeedRealLoad` (7),
+And on the 28 portal arrays: every v84 index carries v84's `pn`/`pt`/`x`/`y`/`tm`/`tn` (the one
+exception above); slots consecutive from 0; **68 custom portals and all 66 scripts still present**;
+no empty-valued leaf dropped; no `pt` moved to or from 6; `foothold` untouched by the portal pass,
+and `life` untouched on all but `106010101`.
+
+`V84TerrainFootholdParityRealLoad` (12 tests), `HallOfFameSeedRealLoad` (7),
 `V84TownIndexParityRealLoad`, `V84RenumberedFootholdParityRealLoad`, `V84MapLifeParityRealLoad`,
-`V84PortalIndexParityRealLoad` and `MapAndPortalScriptsRealLoad`: **60 tests, all green.**
+`V84PortalIndexParityRealLoad` and `MapAndPortalScriptsRealLoad`: **64 tests, all green.**
+
+Run without maven (three agents share `target/`), via the JUnit platform launcher:
+
+```powershell
+# one-time: flatten the m2 jars, drop the stale junit-platform 1.12.1 pair, compile tests to scratch
+Get-ChildItem "$env:USERPROFILE\.m2\repository" -Recurse -Filter *.jar |
+    ForEach-Object { Copy-Item $_.FullName -Destination $SCRATCH\lib -Force }
+Remove-Item $SCRATCH\lib\junit-platform-*-1.12.1.jar
+javac -proc:none -nowarn -d $SCRATCH\jout -cp "target\classes;$SCRATCH\lib\*" `
+      $SCRATCH\RunTests.java (Get-ChildItem src\test\java -Recurse -Filter *.java).FullName
+
+# then, per run - RunTests.java is a ~20-line LauncherFactory/SummaryGeneratingListener main
+java -cp "$SCRATCH\jout;target\classes;src\main\resources;$SCRATCH\lib\*" -Dwz-path=wz `
+     RunTests server.V84TerrainFootholdParityRealLoad server.life.positioner.HallOfFameSeedRealLoad
+```
+
+`-Dwz-path=wz` matters: `WZFiles.DIRECTORY` is resolved once per JVM and `MobSkillFactoryTest`
+repoints it at a `@TempDir`, which is why these classes are `*RealLoad` and not `*Test`.
+`RunTests.java` and the flattened `lib` are in the scratchpad; nothing was added to the repo.
 
 A restart is required - `Map.wz` is read at map load.
 
