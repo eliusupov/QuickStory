@@ -7,6 +7,8 @@ import provider.wz.WZFiles;
 import provider.wz.XMLWZFile;
 
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ import java.util.TreeMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static server.V84Wz.wz;
 
@@ -203,6 +206,44 @@ class V84TerrainFootholdParityRealLoad {
      */
     private static final Set<String> OFF_PLATFORM_IN_STOCK_DATA = Set.of("674030000/9220020");
 
+    /**
+     * The 28 of the 52 whose {@code portal} array also differed from v84, and the portal count each
+     * ends up with. v84 owns the client-facing fields - {@code pn}, {@code pt}, {@code x}, {@code y},
+     * {@code tm}, {@code tn} - and the slot position, because {@code getWarpToMap} sends
+     * {@code portal.getId()} and {@code PortalFactory.loadPortal} takes that id from the node's
+     * <em>name</em>. {@code script} is server-only ({@code PortalScriptManager} reads it, it never
+     * goes on the wire), so ours always wins. Portals we carry that v84 lacks are appended past
+     * v84's last index, which keeps all 68 of them - including the 32 protect-listed {@code floor}
+     * portals on {@code 674030000} - while still making every v84 index agree with the client.
+     *
+     * <p>Of every leaf a portal node carries, {@code PortalFactory} reads only {@code pn},
+     * {@code tn}, {@code tm}, {@code x}, {@code y}, {@code script} and the node name;
+     * {@code onlyOnce}, {@code hideTooltip}, {@code delay}, {@code horizontalImpact} and
+     * {@code image} are read nowhere in the server, so v84 owning those costs nothing.
+     */
+    private static final Map<Integer, Integer> V84_PORTAL_COUNT = new LinkedHashMap<>(Map.ofEntries(
+            Map.entry(100000204, 4), Map.entry(101000004, 4), Map.entry(102000004, 3),
+            Map.entry(103000008, 3), Map.entry(106010101, 6), Map.entry(106010102, 9),
+            Map.entry(106020000, 10), Map.entry(109090000, 9), Map.entry(120000105, 3),
+            Map.entry(140010110, 3), Map.entry(195000000, 5), Map.entry(200080600, 7),
+            Map.entry(250000000, 29), Map.entry(251000000, 16), Map.entry(261000000, 44),
+            Map.entry(270000100, 3), Map.entry(300000012, 2), Map.entry(600000000, 46),
+            Map.entry(610010002, 4), Map.entry(610030000, 9), Map.entry(610030010, 10),
+            Map.entry(670010400, 3), Map.entry(670010600, 32), Map.entry(674030000, 34),
+            Map.entry(910510100, 33), Map.entry(921110000, 18), Map.entry(922010800, 3),
+            Map.entry(926120200, 2)));
+
+    /**
+     * The two maps whose portal reindex moved a slot {@code characters.spawnpoint} can hold, and the
+     * old-to-new index mapping changeSet 167 writes for them. {@code findClosestPlayerSpawnpoint}
+     * only ever returns a {@code pt} 0 or 1 portal whose {@code tm} is {@code MapId.NONE}; on every
+     * other one of the 28, such slots either stayed put or only moved coordinates within their slot.
+     */
+    private static final Map<Integer, int[][]> SPAWNPOINT_MOVES = Map.of(
+            109090000, new int[][]{{1, 7}},
+            670010600, new int[][]{{1, 2}, {2, 4}, {4, 6}, {6, 8}, {8, 10}, {10, 12}, {12, 14},
+                    {13, 15}, {15, 17}});
+
     @Test
     void everyTerrainMapCarriesV84sFootholdTable() {
         Map<Integer, String> actual = new TreeMap<>();
@@ -351,6 +392,76 @@ class V84TerrainFootholdParityRealLoad {
         assertEquals(Map.of(), intruders,
                 "a static life row sits in the reserved PlayerNPC scriptid band - it will collide "
                         + "with whatever PlayerNPC the allocator hands that id to");
+    }
+
+    @Test
+    void everyReindexedMapHasV84sPortalCount() {
+        Map<Integer, Integer> actual = new TreeMap<>();
+        for (int mapId : V84_PORTAL_COUNT.keySet()) {
+            actual.put(mapId, section(mapId, "portal").getChildren().size());
+        }
+        assertEquals(new TreeMap<>(V84_PORTAL_COUNT), actual,
+                "a portal array changed size - either a v84 row was dropped or a custom one was");
+    }
+
+    @Test
+    void portalSlotsAreConsecutiveFromZero() {
+        Map<Integer, String> broken = new TreeMap<>();
+        for (int mapId : V84_PORTAL_COUNT.keySet()) {
+            Data portals = section(mapId, "portal");
+            for (int i = 0; i < portals.getChildren().size(); i++) {
+                if (portals.getChildByPath(String.valueOf(i)) == null) {
+                    broken.put(mapId, "missing slot " + i);
+                    break;
+                }
+            }
+        }
+        assertEquals(Map.of(), broken,
+                "a gap in the portal array shifts every later index against the client");
+    }
+
+    /**
+     * The one portal on the 28 where v84's node was deliberately not taken whole.
+     * v84 makes {@code 106010101}'s {@code in00} a {@code pt} 7 script portal driven by
+     * {@code evanGolemDoor}, and this tree has no {@code scripts/portal/evanGolemDoor.js}. Taking
+     * v84's {@code pt}/{@code tm}/{@code tn} would have left the only entrance to Golem's Temple
+     * dead, so the slot is v84's - which is the half the client resolves - and the destination
+     * stays ours. Nothing else on the 28 needed this.
+     */
+    @Test
+    void golemsTempleEntranceKeptAWorkingDestination() {
+        Data node = section(106010101, "portal").getChildByPath("5");
+        assertNotNull(node, "106010101 portal slot 5");
+        assertEquals("in00", DataTool.getString("pn", node, null), "v84 puts in00 at slot 5");
+        assertEquals(106010102, DataTool.getInt("tm", node, -1),
+                "in00 lost its destination - v84's script-only version needs evanGolemDoor, "
+                        + "which this tree cannot run, so the portal would be dead");
+        assertEquals(2, DataTool.getInt("pt", node, -1), "in00 must stay a map portal");
+        assertNull(DataTool.getString("script", node, null),
+                "a script name we cannot run is worse than none");
+    }
+
+    /**
+     * changeSet 167 has to carry exactly the indices that moved. A missing row silently strands a
+     * character on the wrong portal; a spurious one moves a spawnpoint that never shifted.
+     */
+    @Test
+    void changeSet167CarriesEverySpawnpointIndexThatMoved() throws Exception {
+        String sql = Files.readString(
+                Path.of("src", "main", "resources", "db", "data", "167-v84-portal-index-spawnpoint.sql"),
+                StandardCharsets.UTF_8);
+        List<String> missing = new ArrayList<>();
+        for (Map.Entry<Integer, int[][]> e : SPAWNPOINT_MOVES.entrySet()) {
+            assertTrue(sql.contains(String.valueOf(e.getKey())), "167 never mentions map " + e.getKey());
+            for (int[] move : e.getValue()) {
+                boolean direct = sql.contains("spawnpoint = " + move[1])
+                        && sql.contains("spawnpoint = " + move[0]);
+                if (!(sql.contains("WHEN " + move[0] + " THEN " + move[1]) || direct)) {
+                    missing.add(e.getKey() + ": " + move[0] + " -> " + move[1]);
+                }
+            }
+        }
+        assertEquals(List.of(), missing, "changeSet 167 is missing a spawnpoint correction");
     }
 
     /** y of the platform at x, linear between its endpoints, as {@code Foothold} treats it. */
