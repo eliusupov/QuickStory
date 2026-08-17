@@ -2,300 +2,305 @@
 // Every row here passed tools/hd/verify.py against BOTH v84 memory dumps:
 //   the address exists, the bytes decode to the same instruction shape as
 //   the v83 site, and the write lands on that instruction's own operand.
-// value = aW*W/2 + aH*H/2 + aWH*W*H + k
+// value = aW*W/2 + aH*H/2 + aWH*W*H + aM*MsgAmount + k
+// K_DMGCAP32/K_DMGCAPD/K_SPDCAP ignore the formula and write the
+//   corresponding config.ini scalar verbatim.
 // expect[] is what these bytes read in the VERIFIED v84 image. The DLL
 // compares before it writes, so a client that is not the one this table
 // was checked against gets skipped instead of corrupted.
-// { v84addr, size, kind, {aW,aH,aWH,k}, group, id, v83addr, nexp, {exp} }
+// { v84addr, size, kind, {aW,aH,aWH,aM,k}, group, id, v83addr, nexp, {exp} }
 static const HdPatch kHdPatches[] = {
-  { 0x00437E29,   4, K_INT   ,          {0,2,0,0}, 'C', "P001", 0x0043717B, 4, {0x58,0x02,0x00,0x00} },  // mov edi,600
-  { 0x00437E2F,   4, K_INT   ,          {2,0,0,0}, 'C', "P002", 0x00437181, 4, {0x20,0x03,0x00,0x00} },  // mov esi,800 ; CreateWnd
-  { 0x00437F5F,   4, K_INT   ,         {0,-1,0,0}, 'C', "P003", 0x004372B1, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300
-  { 0x00437F64,   4, K_INT   ,         {-1,0,0,0}, 'C', "P004", 0x004372B6, 4, {0x70,0xFE,0xFF,0xFF} },  // push -400 ; RelMove?
-  { 0x0045C66B,   4, K_INT   ,          {2,0,0,0}, 'J', "P005", 0x0045A5CB, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; CAvatarMegaphone ; CreateWnd
-  { 0x0045D3DB,   4, K_INT   ,        {2,0,0,100}, 'J', "P006", 0x0045B337, 4, {0x84,0x03,0x00,0x00} },  // VANILLA-ADJ -100  // related to smega display  //likely screen area where pop up 
-  { 0x0045D4BD,   4, K_INT   ,       {2,0,0,-225}, 'J', "P007", 0x0045B417, 4, {0x3F,0x02,0x00,0x00} },  // smega with avatar x axis for duration on screen
-  { 0x0045D96F,   4, K_INT   ,       {2,0,0,-225}, 'J', "P008", 0x0045B898, 4, {0x3F,0x02,0x00,0x00} },  // push 575 ##ED  //smega x axis fade
-  { 0x0045DA55,   4, K_INT   ,        {2,0,0,100}, 'J', "P009", 0x0045B97E, 4, {0x84,0x03,0x00,0x00} },  // VANILLA-ADJ -100  // push 800 ; CAvatarMegaphone::ByeAvatarMegaphone ; IWzVector2
-  { 0x0046B877,  12, K_CAVE  ,          {0,0,0,0}, 'F', "P010", 0x00469414, 8, {0x68,0x3C,0x01,0x00,0x00,0x68,0x00,0x01} },  // CONST (non-linear)  // 
-  { 0x0046B892,  14, K_CAVE  ,          {0,0,0,0}, 'F', "P011", 0x0046942F, 8, {0x6A,0x68,0x68,0x00,0x01,0x00,0x00,0x68} },  // CONST (non-linear)  // 
-  { 0x0046B8AF,  16, K_CAVE  ,          {0,0,0,0}, 'F', "P012", 0x0046944C, 8, {0x68,0xA3,0x00,0x00,0x00,0x68,0xF6,0x00} },  // CONST (non-linear)  // 
-  { 0x0046B8CE,  14, K_CAVE  ,          {0,0,0,0}, 'F', "P013", 0x0046946B, 8, {0x6A,0x4E,0x68,0xFC,0x01,0x00,0x00,0x6A} },  // CONST (non-linear)  // 
-  { 0x0046B8EB,  17, K_CAVE  ,          {0,0,0,0}, 'F', "P014", 0x00469488, 8, {0x68,0xAE,0x01,0x00,0x00,0x68,0x9C,0x01} },  // CONST (non-linear)  // main part of shop, item listings	//thanks angel for stuff th
-  { 0x0046B90B,  12, K_CAVE  ,          {0,0,0,0}, 'F', "P015", 0x004694A8, 8, {0x68,0x66,0x01,0x00,0x00,0x6A,0x5A,0x68} },  // CONST (non-linear)  // code cave 6 //best sellers
-  { 0x0046B91E,   4, K_INT   ,        {1,0,0,290}, 'F', "P016", 0x004694BA, 4, {0xB2,0x02,0x00,0x00} },  // nleft, actual drawn part	//best sellers
-  { 0x0046B92B,  17, K_CAVE  ,          {0,0,0,0}, 'F', "P017", 0x004694C8, 8, {0x6A,0x38,0x68,0x21,0x02,0x00,0x00,0x68} },  // CONST (non-linear)  // 
-  { 0x0046B94B,  11, K_CAVE  ,          {0,0,0,0}, 'F', "P018", 0x004694E8, 8, {0x6A,0x16,0x6A,0x59,0x6A,0x61,0x68,0xB2} },  // CONST (non-linear)  // 
-  { 0x0046DE4F,   4, K_INT   ,          {0,2,0,0}, 'C', "P019", 0x0046B85C, 4, {0x58,0x02,0x00,0x00} },  // mov eax,600
-  { 0x0046DE5D,   4, K_INT   ,          {2,0,0,0}, 'C', "P020", 0x0046B86A, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; IWzVector2D::RelMove
-  { 0x004B08E6,  14, K_CAVE  ,          {0,0,0,0}, 'F', "P026", 0x004AB10F, 8, {0x68,0xA5,0x00,0x00,0x00,0x68,0xD4,0x00} },  // CONST (non-linear)  // cash shop preview fix
-  { 0x004D1F40,   4, K_INT   ,          {2,0,0,0}, 'C', "P027", 0x004CC160, 4, {0x20,0x03,0x00,0x00} },  // mov [ebp-16],800 ; CreateWnd
-  { 0x004D208E,   4, K_INT   ,          {2,0,0,0}, 'C', "P028", 0x004CC2B0, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; CreateWnd
-  { 0x004D20A4,   4, K_INT   ,          {0,2,0,0}, 'C', "P029", 0x004CC2C5, 4, {0x58,0x02,0x00,0x00} },  // cmp ecx,600
-  { 0x004DB957,   4, K_INT   ,          {2,0,0,0}, 'C', "P030", 0x004D599D, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; CreateWnd
-  { 0x004DB96D,   4, K_INT   ,          {0,2,0,0}, 'C', "P031", 0x004D59B2, 4, {0x58,0x02,0x00,0x00} },  // mov eax,800
-  { 0x004F60E4,   4, K_INT   ,          {0,2,0,0}, 'C', "P032", 0x004EDABF, 4, {0x58,0x02,0x00,0x00} },  // ??
-  { 0x004F60FD,   4, K_INT   ,          {2,0,0,0}, 'C', "P033", 0x004EDAD8, 4, {0x20,0x03,0x00,0x00} },  // mov ecx,800
-  { 0x004F619D,   4, K_INT   ,          {0,2,0,0}, 'C', "P034", 0x004EDB78, 4, {0x58,0x02,0x00,0x00} },  // mov ecx,600 ; CreateWnd
-  { 0x004F61AE,   4, K_INT   ,          {2,0,0,0}, 'C', "P035", 0x004EDB89, 4, {0x20,0x03,0x00,0x00} },  // mov ecx,800
-  { 0x0052E420,   4, K_INT   ,       {0,2,0,-108}, 'I', "P036", 0x00522C73, 4, {0xEC,0x01,0x00,0x00} },  // VANILLA-ADJ +16  // ??various requests like party, guild, friend, family, invite
-  { 0x0052E434,   4, K_INT   ,        {0,0,0,372}, 'I', "P037", 0x00522C87, 4, {0x9D,0x01,0x00,0x00} },  // VANILLA-ADJ +51  // various requests like party, guild, friend, family, invites 
-  { 0x0052E624,   4, K_INT   ,       {0,2,0,-108}, 'I', "P038", 0x00522E65, 4, {0xEC,0x01,0x00,0x00} },  // VANILLA-ADJ +16  // ??various requests like party, guild, friend, family, invite
-  { 0x0052E638,   4, K_INT   ,        {0,0,0,372}, 'I', "P039", 0x00522E79, 4, {0x9D,0x01,0x00,0x00} },  // VANILLA-ADJ +51  // various requests like party, guild, friend, family, invites 
-  { 0x0052E84D,   4, K_INT   ,        {0,2,0,-92}, 'I', "P040", 0x0052307E, 4, {0xFC,0x01,0x00,0x00} },  // various requests like party, guild, friend, family, invites 
-  { 0x0052E856,   4, K_INT   ,        {0,0,0,423}, 'I', "P041", 0x00523092, 4, {0xD0,0x01,0x00,0x00} },  // various requests like party, guild, friend, family, invites 
-  { 0x0052E932,   4, K_INT   ,       {0,2,0,-102}, 'I', "P042", 0x00523154, 4, {0xF2,0x01,0x00,0x00} },  // ?? various requests like party, guild, friend, family, invit
-  { 0x0052ED4D,   4, K_INT   ,       {0,2,0,-108}, 'I', "P043", 0x00523359, 4, {0xEC,0x01,0x00,0x00} },  // VANILLA-ADJ +16  // various requests like party, guild, friend, family, invites 
-  { 0x0052ED61,   4, K_INT   ,        {0,0,0,372}, 'I', "P044", 0x0052336D, 4, {0x9D,0x01,0x00,0x00} },  // VANILLA-ADJ +51  // various requests like party, guild, friend, family, invites 
-  { 0x0052F18D,   4, K_INT   ,        {0,2,0,-92}, 'I', "P045", 0x00523595, 4, {0xFC,0x01,0x00,0x00} },  // various requests like party, guild, friend, family, invites 
-  { 0x0052F395,   4, K_INT   ,       {0,2,0,-108}, 'I', "P046", 0x0052378B, 4, {0xEC,0x01,0x00,0x00} },  // VANILLA-ADJ +16  // various requests like party, guild, friend, family, invites 
-  { 0x0052F3A9,   4, K_INT   ,        {0,0,0,372}, 'I', "P047", 0x0052379F, 4, {0x9D,0x01,0x00,0x00} },  // VANILLA-ADJ +51  // various requests like party, guild, friend, family, invites 
-  { 0x0052F587,   4, K_INT   ,       {0,2,0,-108}, 'I', "P048", 0x0052397D, 4, {0xEC,0x01,0x00,0x00} },  // VANILLA-ADJ +16  // various requests like party, guild, friend, family, invites 
-  { 0x0052F59B,   4, K_INT   ,        {0,0,0,372}, 'I', "P049", 0x00523991, 4, {0x9D,0x01,0x00,0x00} },  // VANILLA-ADJ +51  // various requests like party, guild, friend, family, invites 
-  { 0x0052F7F4,   4, K_INT   ,        {0,2,0,-92}, 'I', "P050", 0x00523BB1, 4, {0xFC,0x01,0x00,0x00} },  // various requests like party, guild, friend, family, invites 
-  { 0x0052F808,   4, K_INT   ,        {0,0,0,423}, 'I', "P051", 0x00523BC5, 4, {0xD0,0x01,0x00,0x00} },  // various requests like party, guild, friend, family, invites 
-  { 0x0052F9E8,   4, K_INT   ,        {0,2,0,-92}, 'I', "P052", 0x00523DA5, 4, {0xFC,0x01,0x00,0x00} },  // various requests like party, guild, friend, family, invites 
-  { 0x0052FA08,   4, K_INT   ,        {0,0,0,423}, 'I', "P053", 0x00523DC5, 4, {0xD0,0x01,0x00,0x00} },  // various requests like party, guild, friend, family, invites 
-  { 0x0052FBE6,   4, K_INT   ,        {0,2,0,-92}, 'I', "P054", 0x00523FA3, 4, {0xFC,0x01,0x00,0x00} },  // various requests like party, guild, friend, family, invites 
-  { 0x0052FBFA,   4, K_INT   ,        {0,0,0,423}, 'I', "P055", 0x00523FB7, 4, {0xD0,0x01,0x00,0x00} },  // various requests like party, guild, friend, family, invites 
-  { 0x0052FDCF,   4, K_INT   ,       {0,2,0,-102}, 'I', "P056", 0x0052418C, 4, {0xF2,0x01,0x00,0x00} },  // party quest available pop-up y axis		my first address find o
-  { 0x00530030,   4, K_INT   ,       {0,2,0,-108}, 'I', "P057", 0x005243DB, 4, {0xEC,0x01,0x00,0x00} },  // VANILLA-ADJ +16  // various requests like party, guild, friend, family, invites 
-  { 0x00530044,   4, K_INT   ,        {0,0,0,372}, 'I', "P058", 0x005243EF, 4, {0x9D,0x01,0x00,0x00} },  // VANILLA-ADJ +51  // various requests like party, guild, friend, family, invites 
-  { 0x0053FD89,   1, K_BYTE  ,        {0,0,0,184}, 'J', "P059", 0x00533B03, 1, {0xB8} },  // boss bar extend to window
-  { 0x0053FD8A,   4, K_INT   ,        {2,0,0,-15}, 'J', "P060", 0x00533B03, 4, {0x20,0x03,0x00,0x00} },  // boss bar	extend to window
-  { 0x005405F6,   1, K_BYTE  ,        {0,0,0,185}, 'J', "P061", 0x00534370, 1, {0xB9} },  // boss bar	extend to window
-  { 0x005405F7,   4, K_INT   ,        {2,0,0,-22}, 'J', "P062", 0x00534370, 4, {0x19,0x03,0x00,0x00} },  // boss bar	extend to window
-  { 0x00541290,  10, K_CAVE  ,          {0,0,0,0}, 'G', "P063", 0x0053500A, 8, {0x68,0x04,0x01,0x00,0x00,0x68,0x90,0x01} },  // CONST (non-linear)  // muruengraid scaling
-  { 0x005425B7,   4, K_INT   ,       {1,0,0,-129}, 'J', "P064", 0x005362B2, 4, {0x0F,0x01,0x00,0x00} },  // ??related to boss bar
-  { 0x005427B0,   4, K_INT   ,       {1,0,0,-128}, 'J', "P065", 0x005364AA, 4, {0x0F,0x01,0x00,0x00} },  // ??related to boss bar
-  { 0x00544495,   4, K_INT   ,          {0,2,0,0}, 'C', "P066", 0x0053808B, 4, {0x58,0x02,0x00,0x00} },  // push 600
-  { 0x0054449B,   4, K_INT   ,          {2,0,0,0}, 'C', "P067", 0x00538091, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; RelMove?
-  { 0x00544777,   4, K_INT   ,         {0,-1,0,0}, 'C', "P068", 0x0053836D, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300
-  { 0x0054477D,   4, K_INT   ,         {-1,0,0,0}, 'C', "P069", 0x00538373, 4, {0x70,0xFE,0xFF,0xFF} },  // push -400	; RelMove?
-  { 0x00544AFA,   4, K_INT   ,          {0,2,0,0}, 'C', "P070", 0x005386F0, 4, {0x58,0x02,0x00,0x00} },  // push 600
-  { 0x00544AFF,   4, K_INT   ,          {2,0,0,0}, 'C', "P071", 0x005386F5, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; CField::DrawFearEffect
-  { 0x00560A18,   8, K_CAVE  ,          {0,0,0,0}, 'G', "P072", 0x00554041, 8, {0x6A,0x32,0x68,0xA9,0x00,0x00,0x00,0x51} },  // CONST (non-linear)  // muruengraid scaling
-  { 0x00560AA0,   8, K_CAVE  ,          {0,0,0,0}, 'G', "P073", 0x005540C9, 8, {0x6A,0x1A,0x68,0x90,0x01,0x00,0x00,0x51} },  // CONST (non-linear)  // muruengraid scaling
-  { 0x00560B26,   8, K_CAVE  ,          {0,0,0,0}, 'G', "P074", 0x0055414F, 8, {0x6A,0x32,0x68,0x77,0x02,0x00,0x00,0x51} },  // CONST (non-linear)  // muruengraid scaling
-  { 0x00560BB1,   8, K_CAVE  ,          {0,0,0,0}, 'G', "P075", 0x005541DA, 8, {0x68,0x82,0x00,0x00,0x00,0x6A,0x14,0x51} },  // CONST (non-linear)  // muruengraid scaling
-  { 0x00560C3C,   5, K_CAVE  ,          {0,0,0,0}, 'G', "P076", 0x00554265, 5, {0x6A,0x50,0x6A,0x09,0x51} },  // CONST (non-linear)  // muruengraid scaling
-  { 0x00560DC8,   7, K_CAVE  ,          {0,0,0,0}, 'G', "P077", 0x005543F1, 7, {0x6A,0x20,0x68,0x3D,0x01,0x00,0x00} },  // CONST (non-linear)  // muruengraid scaling
-  { 0x00560E53,   7, K_CAVE  ,          {0,0,0,0}, 'G', "P078", 0x0055447C, 7, {0x6A,0x20,0x68,0xE2,0x01,0x00,0x00} },  // CONST (non-linear)  // muruengraid scaling
-  { 0x00560EDE,   5, K_CAVE  ,          {0,0,0,0}, 'G', "P079", 0x00554507, 5, {0x6A,0x56,0x6A,0x11,0x51} },  // CONST (non-linear)  // muruengraid scaling
-  { 0x0056157A,   5, K_CAVE  ,          {0,0,0,0}, 'G', "P080", 0x00554BA3, 5, {0xBA,0x3E,0x01,0x00,0x00} },  // CONST (non-linear)  // muruengraid scaling
-  { 0x00561F18,   7, K_CAVE  ,          {0,0,0,0}, 'G', "P081", 0x00555541, 7, {0x6A,0x10,0x68,0x59,0x01,0x00,0x00} },  // CONST (non-linear)  // muruengraid scaling
-  { 0x00568378,   4, K_INT   ,          {0,2,0,0}, 'C', "P082", 0x0055B808, 4, {0x58,0x02,0x00,0x00} },  // push 600
-  { 0x0056837D,   4, K_INT   ,          {2,0,0,0}, 'C', "P083", 0x0055B80D, 4, {0x20,0x03,0x00,0x00} },  // mov edi,800
-  { 0x005683F4,   4, K_INT   ,          {2,0,0,0}, 'C', "P084", 0x0055B884, 4, {0x58,0x02,0x00,0x00} },  // push 600 ; RelMove?
-  { 0x0056869F,   4, K_INT   ,         {0,-1,0,0}, 'C', "P085", 0x0055BB2F, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300
-  { 0x005686A5,   4, K_INT   ,         {-1,0,0,0}, 'C', "P086", 0x0055BB35, 4, {0x70,0xFE,0xFF,0xFF} },  // push -400 ; RelMove?
-  { 0x0059C812,   4, K_INT   ,          {2,0,0,0}, 'C', "P087", 0x0058C8A6, 4, {0x20,0x03,0x00,0x00} },  // ??
-  { 0x005A2B4E,   1, K_BYTE  ,          {0,0,0,1}, 'C', "P088", 0x00592A06, 1, {0x64} },  // ???likely related to mouse pos
-  { 0x005A2B50,   4, K_INT   ,       {1,0,0,-125}, 'C', "P089", 0x00592A08, 4, {0x13,0x01,0x00,0x00} },  // ??likely related to mouse pos
-  { 0x005AA2F1,   4, K_INT   ,          {1,0,0,0}, 'C', "P090", 0x0059A09C, 4, {0x90,0x01,0x00,0x00} },  // mov [esi],400	; CInputSystem::LoadCursorState
-  { 0x005AA2FB,   4, K_INT   ,          {0,1,0,0}, 'C', "P091", 0x0059A0A2, 4, {0x2C,0x01,0x00,0x00} },  // mov [ebx+2364],300
-  { 0x005AA3B2,   4, K_INT   ,         {0,-1,0,0}, 'C', "P092", 0x0059A15D, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300				!!moves all interactable UI elements!!
-  { 0x005AA3BE,   4, K_INT   ,         {-1,0,0,0}, 'C', "P093", 0x0059A169, 4, {0x70,0xFE,0xFF,0xFF} },  // push -400 ; CInputSystem::SetCursorVectorPos				!!moves all 
-  { 0x005AAAEC,   4, K_INT   ,          {2,0,0,0}, 'C', "P094", 0x0059A898, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; CInputSystem::SetCursorPos
-  { 0x005AAB05,   4, K_INT   ,          {0,2,0,0}, 'C', "P095", 0x0059A8B1, 4, {0x58,0x02,0x00,0x00} },  // mov eax,600
-  { 0x005AAE5D,   4, K_INT   ,          {2,0,0,0}, 'C', "P096", 0x0059AC09, 4, {0x20,0x03,0x00,0x00} },  // mov ecx,800 ; CInputSystem::UpdateMouse
-  { 0x005AAE76,   4, K_INT   ,          {0,2,0,0}, 'C', "P097", 0x0059AC22, 4, {0x58,0x02,0x00,0x00} },  // mov ecx,600
-  { 0x005AEEE6,   4, K_INT   ,          {0,2,0,0}, 'C', "P098", 0x0059EB49, 4, {0x58,0x02,0x00,0x00} },  // push 600 ; CSoundMan::PlayBGM
-  { 0x005B9073,   4, K_INT   ,          {0,2,0,0}, 'C', "P099", 0x005A8B46, 4, {0x58,0x02,0x00,0x00} },  // mov eax,600
-  { 0x005B9083,   4, K_INT   ,          {2,0,0,0}, 'C', "P100", 0x005A8B56, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; RelMove?
-  { 0x005BA036,   4, K_INT   ,          {0,2,0,0}, 'C', "P101", 0x005A9B42, 4, {0x58,0x02,0x00,0x00} },  // mov eax,600
-  { 0x005BA046,   4, K_INT   ,          {2,0,0,0}, 'C', "P102", 0x005A9B52, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; RelMove?
-  { 0x005BB29E,   4, K_INT   ,          {0,2,0,0}, 'C', "P103", 0x005AADAA, 4, {0x58,0x02,0x00,0x00} },  // mov eax,600
-  { 0x005BB2AE,   4, K_INT   ,          {2,0,0,0}, 'C', "P104", 0x005AADBA, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; RelMove?
-  { 0x005BC159,   4, K_INT   ,          {0,2,0,0}, 'C', "P105", 0x005ABC65, 4, {0x58,0x02,0x00,0x00} },  // mov eax,600
-  { 0x005BC169,   4, K_INT   ,          {2,0,0,0}, 'C', "P106", 0x005ABC75, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; RelMove?
-  { 0x005BD01D,   4, K_INT   ,          {0,2,0,0}, 'C', "P107", 0x005ACB29, 4, {0x58,0x02,0x00,0x00} },  // mov eax,600
-  { 0x005BD02D,   4, K_INT   ,          {2,0,0,0}, 'C', "P108", 0x005ACB39, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; RelMove?
-  { 0x005D2008,   4, K_INT   ,          {0,2,0,0}, 'C', "P109", 0x005C187E, 4, {0x58,0x02,0x00,0x00} },  // mov eax,600
-  { 0x005D2018,   4, K_INT   ,          {2,0,0,0}, 'C', "P110", 0x005C188E, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; RelMove?
-  { 0x005D34EC,   4, K_INT   ,          {0,2,0,0}, 'C', "P111", 0x005C2D62, 4, {0x58,0x02,0x00,0x00} },  // mov eax,600
-  { 0x005D34FC,   4, K_INT   ,          {2,0,0,0}, 'C', "P112", 0x005C2D72, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; RelMove?
-  { 0x006094E5,  10, K_CAVE  ,          {0,0,0,0}, 'E', "P114", 0x005F464D, 8, {0xB8,0x85,0x02,0x00,0x00,0x2B,0x45,0xE4} },  // CONST (non-linear)  // game version number fix //use this if you use no frame or de
-  { 0x0060B418,   4, K_INT   ,         {0,-1,0,0}, 'E', "P118", 0x005F64DE, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300 ;
-  { 0x0060B561,   4, K_INT   ,         {0,-1,0,0}, 'E', "P119", 0x005F6627, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300 ;
-  { 0x006190B9,   4, K_INT   ,          {0,2,0,0}, 'E', "P124", 0x0060411C, 4, {0x58,0x02,0x00,0x00} },  // push 600
-  { 0x0062294A,   4, K_INT   ,         {0,0,0,50}, 'E', "P125", 0x0060D849, 4, {0x2C,0x01,0x00,0x00} },  // speed 1	//temporary fix by increasing the speed of display u
-  { 0x006232D8,  11, K_CAVE  ,          {0,0,0,0}, 'E', "P127", 0x0060E1BF, 8, {0x68,0x60,0x01,0x00,0x00,0x6A,0x7D,0x6A} },  // CONST (non-linear)  // world select buttons fix		//thank you teto for pointing out 
-  { 0x006248C7,   4, K_INT   ,       {0,1,0,-201}, 'E', "P128", 0x0060F79B, 4, {0x96,0x00,0x00,0x00} },  // ??possibly related to login utildlg
-  { 0x006248D0,   4, K_INT   ,       {0,1,0,-181}, 'E', "P129", 0x0060F7A4, 4, {0xAA,0x00,0x00,0x00} },  // ??possibly related to login utildlg
-  { 0x006248D8,   4, K_INT   ,       {1,0,0,-201}, 'E', "P130", 0x0060F7AC, 4, {0xDB,0x00,0x00,0x00} },  // ??possibly related to login utildlg
-  { 0x006248E1,   4, K_INT   ,       {1,0,0,-181}, 'E', "P131", 0x0060F7B5, 4, {0xEF,0x00,0x00,0x00} },  // ??possibly related to login utildlg
-  { 0x0062827D,   4, K_INT   ,       {0,1,0,-200}, 'E', "P132", 0x00613093, 4, {0xC8,0x00,0x00,0x00} },  // ??likely related to login pop-up msg
-  { 0x00628283,   4, K_INT   ,        {1,0,0,-45}, 'E', "P133", 0x00613099, 4, {0x63,0x01,0x00,0x00} },  // ??likely related to login pop-up msg
-  { 0x00632E6F,   4, K_INT   ,       {0,1,0,-150}, 'E', "P134", 0x0061DAFF, 4, {0x96,0x00,0x00,0x00} },  // ??likely related to login pop-up msg
-  { 0x00632E78,   4, K_INT   ,       {0,1,0,-130}, 'E', "P135", 0x0061DB08, 4, {0xAA,0x00,0x00,0x00} },  // ??likely related to login pop-up msg
-  { 0x00632E80,   4, K_INT   ,       {1,0,0,-201}, 'E', "P136", 0x0061DB10, 4, {0xDB,0x00,0x00,0x00} },  // ??likely related to login pop-up msg
-  { 0x00632E89,   4, K_INT   ,       {1,0,0,-181}, 'E', "P137", 0x0061DB19, 4, {0xEF,0x00,0x00,0x00} },  // ??likely related to login pop-up msg
-  { 0x0063665A,   1, K_BYTE  ,          {0,0,0,1}, 'E', "P138", 0x0062121E, 1, {0x2F} },  // ??possibly related to logo
-  { 0x00636662,   4, K_INT   ,       {1,0,0,-216}, 'E', "P139", 0x00621226, 4, {0xB8,0x00,0x00,0x00} },  // ??possibly related to logo
-  { 0x0064083B,  17, K_CAVE  ,          {0,0,0,0}, 'E', "P140", 0x0062B334, 8, {0x68,0xA7,0x00,0x00,0x00,0x68,0x1C,0x02} },  // CONST (non-linear)  // world ViewRec fix
-  { 0x0064459F,   4, K_INT   ,          {0,2,0,0}, 'E', "P142", 0x0062F104, 4, {0x58,0x02,0x00,0x00} },  // mov eax,600
-  { 0x006445A4,   4, K_INT   ,          {2,0,0,0}, 'E', "P143", 0x0062F109, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; Rectangle
-  { 0x00644A7A,   4, K_INT   ,          {0,2,0,0}, 'E', "P144", 0x0062F5DF, 4, {0x58,0x02,0x00,0x00} },  // push 600
-  { 0x00644A7F,   4, K_INT   ,          {2,0,0,0}, 'E', "P145", 0x0062F5E4, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; (UI/Logo/NXXXon)
-  { 0x00644E61,   4, K_INT   ,          {0,2,0,0}, 'E', "P146", 0x0062F9C6, 4, {0x58,0x02,0x00,0x00} },  // push 600
-  { 0x00644E66,   4, K_INT   ,          {2,0,0,0}, 'E', "P147", 0x0062F9CB, 4, {0x20,0x03,0x00,0x00} },  // push 800; (UI/Logo/Wizet)
-  { 0x006450E5,   4, K_INT   ,          {0,2,0,0}, 'E', "P148", 0x0062FC4A, 4, {0x58,0x02,0x00,0x00} },  // push 600
-  { 0x006450EA,   4, K_INT   ,          {2,0,0,0}, 'E', "P149", 0x0062FC4F, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; IWzGr2DLayer::Getcanvas
-  { 0x006452FE,   4, K_INT   ,          {0,2,0,0}, 'E', "P150", 0x0062FE63, 4, {0x58,0x02,0x00,0x00} },  // push 600
-  { 0x00645303,   4, K_INT   ,          {2,0,0,0}, 'E', "P151", 0x0062FE68, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; IWzGr2DLayer::Getcanvas
-  { 0x00655CB4,   4, K_INT   ,          {1,0,0,0}, 'C', "P152", 0x0064043E, 4, {0x90,0x01,0x00,0x00} },  // mov edi,400
-  { 0x00655CB9,   4, K_INT   ,          {0,1,0,0}, 'C', "P153", 0x00640443, 4, {0x2C,0x01,0x00,0x00} },  // mov esi,300
-  { 0x00655D6E,   4, K_INT   ,          {2,0,0,0}, 'C', "P154", 0x006404F8, 4, {0x20,0x03,0x00,0x00} },  // mov ecx,800
-  { 0x00655D80,   4, K_INT   ,          {0,2,0,0}, 'C', "P155", 0x0064050A, 4, {0x58,0x02,0x00,0x00} },  // mov ecx,600
-  { 0x00655E7C,   4, K_INT   ,          {2,0,0,0}, 'C', "P156", 0x00640606, 4, {0x20,0x03,0x00,0x00} },  // mov ecx,800
-  { 0x00655E8E,   4, K_INT   ,          {0,2,0,0}, 'C', "P157", 0x00640618, 4, {0x58,0x02,0x00,0x00} },  // mov ecx,600
-  { 0x00655E9C,   4, K_INT   ,          {1,0,0,0}, 'C', "P159", 0x00640626, 4, {0x90,0x01,0x00,0x00} },  // add eax,400 ; bunch of modulus stuff
-  { 0x00655EAF,   4, K_INT   ,          {2,0,0,0}, 'C', "P160", 0x00640639, 4, {0x20,0x03,0x00,0x00} },  // mov ecx,800
-  { 0x00655EC1,   4, K_INT   ,          {0,2,0,0}, 'C', "P161", 0x0064064B, 4, {0x58,0x02,0x00,0x00} },  // mov ecx,600
-  { 0x00655ECD,   4, K_INT   ,         {-1,0,0,0}, 'C', "P162", 0x00640656, 4, {0x70,0xFE,0xFF,0xFF} },  // add edi,-400 ;
-  { 0x00655EF4,   4, K_INT   ,          {2,0,0,0}, 'C', "P163", 0x0064067E, 4, {0x20,0x03,0x00,0x00} },  // mov ecx,800
-  { 0x00655F06,   4, K_INT   ,          {0,2,0,0}, 'C', "P164", 0x00640690, 4, {0x58,0x02,0x00,0x00} },  // mov ecx,600
-  { 0x00655F39,   4, K_INT   ,          {2,0,0,0}, 'C', "P165", 0x006406C3, 4, {0x20,0x03,0x00,0x00} },  // mov ecx,800
-  { 0x00655F4B,   4, K_INT   ,          {0,2,0,0}, 'C', "P166", 0x006406D5, 4, {0x58,0x02,0x00,0x00} },  // mov ecx,600
-  { 0x006568AF,   4, K_INT   ,          {0,2,0,0}, 'C', "P167", 0x00641038, 4, {0x58,0x02,0x00,0x00} },  // ??possibly related to player display
-  { 0x006568B6,   4, K_INT   ,          {2,0,0,0}, 'C', "P168", 0x0064103F, 4, {0x20,0x03,0x00,0x00} },  // ??possibly related to player display
-  { 0x006568BE,   4, K_INT   ,         {0,-1,0,0}, 'C', "P169", 0x00641048, 4, {0xD4,0xFE,0xFF,0xFF} },  // mov esi,-300
-  { 0x006568C6,   4, K_INT   ,         {-1,0,0,0}, 'C', "P170", 0x00641050, 4, {0x70,0xFE,0xFF,0xFF} },  // mov esi,-400 ;
-  { 0x0065728A,   4, K_INT   ,          {2,0,0,0}, 'C', "P171", 0x00641A12, 4, {0x20,0x03,0x00,0x00} },  // mov [ebp+32],800 ; idk
-  { 0x00657291,   4, K_INT   ,          {0,2,0,0}, 'C', "P172", 0x00641A19, 4, {0x58,0x02,0x00,0x00} },  // mov [ebp+28],600
-  { 0x006573A6,   4, K_INT   ,          {2,0,0,0}, 'C', "P173", 0x00641B2E, 4, {0x20,0x03,0x00,0x00} },  // mov [ebp-36],800 ; CAnimationDisplayer::SetCenterOrigin
-  { 0x006573B0,   4, K_INT   ,          {0,2,0,0}, 'C', "P174", 0x00641B38, 4, {0x58,0x02,0x00,0x00} },  // mov [ebp-32],600
-  { 0x006577D7,   4, K_INT   ,          {1,0,0,0}, 'C', "P175", 0x00641F61, 4, {0x90,0x01,0x00,0x00} },  // mov ebc,400 ;  VRleft		//camera movement
-  { 0x0065783E,   4, K_INT   ,          {0,1,0,0}, 'C', "P176", 0x00641FC8, 4, {0x2C,0x01,0x00,0x00} },  // add eax,300  ; VRTop //camera movement //not working for mos
-  { 0x00657905,   4, K_INT   ,          {0,1,0,0}, 'C', "P177", 0x0064208F, 4, {0x2C,0x01,0x00,0x00} },  // add eax,300  ; VRbottom //camera movement //not working for 
-  { 0x0065797A,   7, K_CAVE  ,          {0,0,0,0}, 'C', "P178", 0x00642105, 7, {0x85,0xC0,0x74,0x06,0x8B,0x08,0x50} },  // CONST (non-linear)  // fix view restora on all maps, currently does nothing; i like
-  { 0x00657A29,   4, K_INT   ,          {0,2,0,0}, 'C', "P179", 0x006421B3, 4, {0x58,0x02,0x00,0x00} },  // push 600 ; CSoundMan::PlayBGM
-  { 0x00681CD3,   4, K_INT   ,         {-1,0,0,0}, 'C', "P180", 0x0066BACE, 4, {0x70,0xFE,0xFF,0xFF} },  // and ecx,-400
-  { 0x006E479D,   4, K_INT   ,          {1,0,0,0}, 'C', "P181", 0x006CD842, 4, {0x90,0x01,0x00,0x00} },  // push 400 ; RelMove?
-  { 0x006E5306,   4, K_INT   ,          {2,0,0,0}, 'C', "P182", 0x006CE3AB, 4, {0x20,0x03,0x00,0x00} },  // push 800
-  { 0x006E5421,   4, K_INT   ,         {-1,0,0,0}, 'C', "P183", 0x006CE4C6, 4, {0x70,0xFE,0xFF,0xFF} },  // push -400 ;
-  { 0x006EC1C8,   4, K_INT   ,          {0,2,0,0}, 'C', "P184", 0x006D50D8, 4, {0x58,0x02,0x00,0x00} },  // push 600
-  { 0x00766C1F,   4, K_INT   ,          {0,0,4,0}, 'C', "P185", 0x00744DA6, 4, {0x00,0x4C,0x1D,0x00} },  // ??related to in-game taking screenshot functionality
-  { 0x00766CA3,   4, K_INT   ,          {0,0,3,0}, 'C', "P186", 0x00744E2A, 4, {0x00,0xF9,0x15,0x00} },  // ??related to in-game taking screenshot functionality
-  { 0x00766CBC,   4, K_INT   ,          {0,0,1,0}, 'C', "P187", 0x00744E43, 4, {0x00,0x53,0x07,0x00} },  // ??related to in-game taking screenshot functionality
-  { 0x00766D2D,   4, K_INT   ,          {2,0,0,0}, 'C', "P188", 0x00744EB4, 4, {0x20,0x03,0x00,0x00} },  // ??related to in-game taking screenshot functionality
-  { 0x00766D32,   4, K_INT   ,          {0,2,0,0}, 'C', "P189", 0x00744EB9, 4, {0x58,0x02,0x00,0x00} },  // ??related to in-game taking screenshot functionality
-  { 0x0076D5A8,   4, K_INT   ,          {0,2,0,0}, 'C', "P190", 0x0074B3B7, 4, {0x58,0x02,0x00,0x00} },  // push 600
-  { 0x0076D693,   4, K_INT   ,          {0,2,0,0}, 'C', "P191", 0x0074B4A2, 4, {0x58,0x02,0x00,0x00} },  // push 600
-  { 0x0076DB42,   4, K_INT   ,          {0,2,0,0}, 'C', "P192", 0x0074B951, 4, {0x58,0x02,0x00,0x00} },  // push 600
-  { 0x0076DC9A,   4, K_INT   ,          {0,2,0,0}, 'C', "P193", 0x0074BAA9, 4, {0x58,0x02,0x00,0x00} },  // push 600
-  { 0x007994C6,   5, K_CAVE  ,          {0,0,0,0}, 'F', "P194", 0x00776B5F, 5, {0x5B,0xC9,0xC2,0x04,0x00} },  // CONST (non-linear)  // fix for preview On/Off button not being accurate on entering
-  { 0x007D89E0,   4, K_INT   ,        {0,1,0,-23}, 'D', "P196", 0x007B2C97, 4, {0x15,0x01,0x00,0x00} },  // sub ebx,277 ; Skill icon buff y-pos
-  { 0x007D89FF,   4, K_INT   ,         {1,0,0,-3}, 'D', "P197", 0x007B2CB5, 4, {0x8D,0x01,0x00,0x00} },  // lea eax,[eax+esi+397] ; Skill icon buff x-pos
-  { 0x007D8AE9,   4, K_INT   ,        {0,1,0,-23}, 'D', "P198", 0x007B2DA0, 4, {0x15,0x01,0x00,0x00} },  // sub ebx,277 ; Skill icon cooltime y-pos
-  { 0x007D8B08,   4, K_INT   ,         {1,0,0,-3}, 'D', "P199", 0x007B2DBE, 4, {0x8D,0x01,0x00,0x00} },  // lea eax,[eax+esi+397] ; Skill icon cooltime x-pos
-  { 0x007D8BEA,   4, K_INT   ,         {-2,0,0,6}, 'D', "P200", 0x007B2EA0, 4, {0xE3,0xFC,0xFF,0xFF} },  // lea eax,[eax+ecx-797] ; CTemporaryStatView::ShowToolTip
-  { 0x007D8DD1,   4, K_INT   ,         {-2,0,0,6}, 'D', "P201", 0x007B3087, 4, {0xE3,0xFC,0xFF,0xFF} },  // lea eax,[eax+ecx-797] ; CTemporaryStatView::FindIcon
-  { 0x007E8678,   4, K_INT   ,        {0,2,0,-80}, 'C', "P202", 0x007C2531, 4, {0x08,0x02,0x00,0x00} },  // ??
-  { 0x007F568E,   4, K_INT   ,          {0,2,0,0}, 'C', "P203", 0x007CF48F, 4, {0x58,0x02,0x00,0x00} },  // mov eax,600 ;
-  { 0x007F569C,   4, K_INT   ,          {2,0,0,0}, 'C', "P204", 0x007CF49D, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; IWzVector2D::RelMove
-  { 0x008078A9,   4, K_INT   ,          {2,0,0,0}, 'J', "P205", 0x007E15BE, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; CreateWnd
-  { 0x008079A4,   4, K_INT   ,          {0,2,0,0}, 'J', "P206", 0x007E16B9, 4, {0x58,0x02,0x00,0x00} },  // push 600
-  { 0x008079A9,   4, K_INT   ,          {2,0,0,0}, 'J', "P207", 0x007E16BE, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; CWnd::GetCanvas //!!length of server message at t
-  { 0x00807CB6,   4, K_INT   ,          {2,0,0,0}, 'J', "P208", 0x007E19CA, 4, {0x20,0x03,0x00,0x00} },  // ??related to displaying server message at top of screen
-  { 0x00807FA2,   4, K_INT   ,          {2,0,0,0}, 'J', "P209", 0x007E1CB7, 4, {0x20,0x03,0x00,0x00} },  // push 800
-  { 0x008080F3,   4, K_INT   ,          {2,0,0,0}, 'J', "P210", 0x007E1E07, 4, {0x20,0x03,0x00,0x00} },  // ??related to displaying server message at top of screen
-  { 0x00818869,   4, K_INT   ,          {0,2,0,0}, 'C', "P211", 0x007F257E, 4, {0x58,0x02,0x00,0x00} },  // push 600
-  { 0x0081887A,   4, K_INT   ,          {2,0,0,0}, 'C', "P212", 0x007F258F, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; CWnd::CreateWnd
-  { 0x0082B9CB,   4, K_INT   ,          {2,0,0,0}, 'C', "P213", 0x00805459, 4, {0x20,0x03,0x00,0x00} },  // mov edx,800 ; CUIEventAlarm::CreateEventAlarm
-  { 0x0082B9DE,   4, K_INT   ,          {0,2,0,0}, 'C', "P214", 0x0080546C, 4, {0x58,0x02,0x00,0x00} },  // mov edi,600
-  { 0x0087574A,   4, K_INT   ,       {0,2,0,-177}, 'C', "P215", 0x00849E39, 4, {0xA7,0x01,0x00,0x00} },  // system menu pop up
-  { 0x00875EC8,   4, K_INT   ,       {0,2,0,-281}, 'C', "P216", 0x0084A5B7, 4, {0x28,0x01,0x00,0x00} },  // shortcuts pop up	//0x84A5BD -  System Options "X" Position. 
-  { 0x0088AE51,   4, K_INT   ,          {2,0,0,0}, 'C', "P217", 0x0085F36C, 4, {0x20,0x03,0x00,0x00} },  // cmp edx,800
-  { 0x0088AE58,   4, K_INT   ,        {2,0,0,-80}, 'C', "P218", 0x0085F374, 4, {0xD0,0x02,0x00,0x00} },  // mov ecx,720 ; CreateDlg
-  { 0x008CBCDB,   4, K_INT   ,       {1,0,0,-143}, 'H', "P219", 0x00897BB4, 4, {0x01,0x01,0x00,0x00} },  // ??related to exp gain/item pick up msg
-  { 0x008CF0D7,   4, K_INT   ,         {0,0,0,26}, 'H', "P220", 0x0089AEE2, 4, {0x06,0x00,0x00,0x00} },  // moregainmsgs part 1
-  { 0x008CF126,   4, K_INT   ,        {0,0,0,460}, 'H', "P221", 0x0089AF33, 4, {0x5E,0x01,0x00,0x00} },  // VANILLA-ADJ -60  // length of pick up and exp gain message canvas //found with h
-  { 0x008CF377,   6, K_CAVE  ,          {0,0,0,0}, 'H', "P222", 0x0089B185, 6, {0x8B,0x47,0x10,0x83,0xF8,0x06} },  // CONST (non-linear)  // moregainmsgs part 2
-  { 0x008CF4B9,   4, K_INT   ,        {0,0,0,460}, 'H', "P223", 0x0089B2C6, 4, {0x5E,0x01,0x00,0x00} },  // VANILLA-ADJ -60  // address to move the message in the canvas adjusted above to 
-  { 0x008CF6D8,   5, K_CAVE  ,          {0,0,0,0}, 'H', "P224", 0x0089B4E6, 5, {0x68,0xFF,0x00,0x00,0x00} },  // CONST (non-linear)  // moregainmsgsFade1
-  { 0x008CF755,   7, K_CAVE  ,          {0,0,0,0}, 'H', "P225", 0x0089B563, 7, {0x05,0x70,0x17,0x00,0x00,0x6A,0x03} },  // CONST (non-linear)  // moregainmsgsFade
-  { 0x008CF82A,   1, K_BYTE  ,          {0,0,0,1}, 'H', "P226", 0x0089B636, 1, {0xB2} },  // related to exp gain/item pick up msg, seems to affect msg he
-  { 0x008CF82C,   4, K_INT   ,       {0,2,0,-370}, 'H', "P227", 0x0089B639, 4, {0xBB,0x01,0x00,0x00} },  // inventory/exp gain y axis //####hd100 //90
-  { 0x008CF8EA,   4, K_INT   ,       {2,0,0,-465}, 'H', "P228", 0x0089B6F7, 4, {0xBC,0x01,0x00,0x00} },  // VANILLA-ADJ +60  // inventory/exp gain x axis //310 //####hd415 //405
-  { 0x008CF989,   4, K_INT   ,        {0,2,0,-18}, 'H', "P229", 0x0089B796, 4, {0xBB,0x01,0x00,0x00} },  // ???related to exp gain/item pick up msg //??!!found in anoth
-  { 0x008D556F,   4, K_INT   ,          {0,2,0,0}, 'C', "P230", 0x008A12F4, 4, {0x58,0x02,0x00,0x00} },  // mov eax,600 ;
-  { 0x008D557D,   4, K_INT   ,          {2,0,0,0}, 'C', "P231", 0x008A1302, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; IWzVector2D::RelMove
-  { 0x008DE51F,   4, K_INT   ,          {0,2,0,0}, 'C', "P232", 0x008AA266, 4, {0x58,0x02,0x00,0x00} },  // push 600
-  { 0x008DE524,   4, K_INT   ,          {2,0,0,0}, 'C', "P233", 0x008AA26B, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; CreateWnd
-  { 0x008F4CBF,   4, K_INT   ,        {0,1,0,-14}, 'C', "P234", 0x008C069F, 4, {0x1E,0x01,0x00,0x00} },  // ??related to status bar
-  { 0x008F4CC4,   4, K_INT   ,       {1,0,0,-158}, 'C', "P235", 0x008C06A4, 4, {0xF2,0x00,0x00,0x00} },  // ???related to status bar
-  { 0x0090487F,   4, K_INT   ,        {0,2,0,-22}, 'D', "P238", 0x008CFD4B, 4, {0x42,0x02,0x00,0x00} },  // push 578
-  { 0x00904884,   4, K_INT   ,          {2,0,0,0}, 'D', "P239", 0x008CFD50, 4, {0x20,0x03,0x00,0x00} },  // push 800
-  { 0x00904888,   5, K_CAVE  ,          {0,0,0,0}, 'D', "P240", 0x008CFD55, 5, {0x6A,0x16,0x53,0x8B,0xCE} },  // CONST (non-linear)  // 
-  { 0x0090644B,   4, K_INT   ,          {0,2,0,1}, 'D', "P241", 0x008D1793, 4, {0x15,0x02,0x00,0x00} },  // add eax,533
-  { 0x00906452,   4, K_INT   ,        {0,0,0,798}, 'D', "P242", 0x008D179A, 4, {0x87,0x02,0x00,0x00} },  // push 647 //hd800
-  { 0x00906C08,   4, K_INT   ,        {0,2,0,-22}, 'D', "P243", 0x008D1D50, 4, {0x42,0x02,0x00,0x00} },  // push 578
-  { 0x00906C0D,   4, K_INT   ,          {2,0,0,0}, 'D', "P244", 0x008D1D55, 4, {0x20,0x03,0x00,0x00} },  // push 800
-  { 0x00906D39,   9, K_CAVE  ,          {0,0,0,0}, 'D', "P245", 0x008D1F65, 5, {0x6A,0x16,0x57,0x8D,0x8E} },  // CONST (non-linear)  // 
-  { 0x00906D8D,   4, K_INT   ,        {0,2,0,-22}, 'D', "P246", 0x008D1FF4, 4, {0x42,0x02,0x00,0x00} },  // push 578
-  { 0x00906D92,   4, K_INT   ,          {2,0,0,0}, 'D', "P247", 0x008D1FF9, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; CUIStatusBar
-  { 0x00906EBE,   9, K_CAVE  ,          {0,0,0,0}, 'D', "P248", 0x008D217C, 8, {0x6A,0x16,0x57,0x8D,0x8E,0x08,0x0D,0x00} },  // CONST (non-linear)  // 
-  { 0x009071BE,   4, K_INT   ,        {0,2,0,-33}, 'D', "P249", 0x008D247B, 4, {0x37,0x02,0x00,0x00} },  // push 567 ; IWzVector2D::RelMove
-  { 0x009074A8,   4, K_INT   ,        {0,2,0,-19}, 'D', "P250", 0x008D2765, 4, {0x45,0x02,0x00,0x00} },  // push 581
-  { 0x009076F7,   4, K_INT   ,        {0,2,0,-19}, 'D', "P251", 0x008D29B4, 4, {0x45,0x02,0x00,0x00} },  // push 581
-  { 0x0090D09D,   4, K_INT   ,        {0,2,0,-22}, 'D', "P252", 0x008D82F5, 4, {0x42,0x02,0x00,0x00} },  // push 578
-  { 0x0090D0A2,   4, K_INT   ,          {2,0,0,0}, 'D', "P253", 0x008D82FA, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; CreateWnd?
-  { 0x0090D9A6,   4, K_INT   ,        {0,2,0,-19}, 'D', "P254", 0x008D8BFE, 4, {0x45,0x02,0x00,0x00} },  // push 581
-  { 0x0090E126,   4, K_INT   ,        {0,2,0,-19}, 'D', "P255", 0x008D937E, 4, {0x45,0x02,0x00,0x00} },  // push 581 //008D9373  move mana bar outline? //ty rynyan
-  { 0x0090E871,   4, K_INT   ,        {0,2,0,-19}, 'D', "P256", 0x008D9AC9, 4, {0x45,0x02,0x00,0x00} },  // push
-  { 0x00913EAE,   4, K_INT   ,       {0,0,0,-798}, 'D', "P257", 0x008DE8E5, 4, {0x79,0xFD,0xFF,0xFF} },  // lea ebx,[eax-647]
-  { 0x00913EB7,   4, K_INT   ,      {0,-1,0,-127}, 'D', "P258", 0x008DE8EE, 4, {0x55,0xFE,0xFF,0xFF} },  // lea edi,[eax-427]
-  { 0x00914183,   4, K_INT   ,        {0,2,0,-20}, 'D', "P259", 0x008DEB93, 4, {0x44,0x02,0x00,0x00} },  // push 580
-  { 0x0091441F,   4, K_INT   ,        {0,2,0,-20}, 'D', "P260", 0x008DEE2F, 4, {0x44,0x02,0x00,0x00} },  // push 580
-  { 0x00914D73,   4, K_INT   ,          {0,2,0,1}, 'D', "P261", 0x008DF782, 4, {0x15,0x02,0x00,0x00} },  // add esi,533
-  { 0x00914DE8,   4, K_INT   ,        {0,0,0,798}, 'D', "P262", 0x008DF7F8, 4, {0x87,0x02,0x00,0x00} },  // push 647 //hd800
-  { 0x009218FC,   4, K_INT   ,          {2,0,0,0}, 'C', "P263", 0x008EBC3C, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; RelMove?
-  { 0x00921918,   4, K_INT   ,          {0,2,0,0}, 'C', "P264", 0x008EBC58, 4, {0x58,0x02,0x00,0x00} },  // mov eax,600
-  { 0x00929BE2,   4, K_INT   ,         {2,0,0,-1}, 'C', "P265", 0x008F32CC, 4, {0x1F,0x03,0x00,0x00} },  // mov eax,799 ; CUIToolTip::MakeLayer
-  { 0x00929BF5,   4, K_INT   ,         {2,0,0,-1}, 'C', "P266", 0x008F32DF, 4, {0x57,0x02,0x00,0x00} },  // mov eax,599 ; CUIToolTip::MakeLayer
-  { 0x0096C1CE,   4, K_INT   ,         {0,-1,0,0}, 'C', "P267", 0x0093519A, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300 ;
-  { 0x0096CB3A,   4, K_INT   ,          {2,0,0,0}, 'C', "P268", 0x0093586B, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; RelMove? (Skills)
-  { 0x0096CB3F,   4, K_INT   ,          {0,1,0,0}, 'C', "P269", 0x00935870, 4, {0x2C,0x01,0x00,0x00} },  // push 300
-  { 0x0098F0E4,   4, K_INT   ,         {0,-1,0,0}, 'C', "P271", 0x00954433, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300 ;
-  { 0x009C1752,   4, K_INT   ,         {0,-1,0,0}, 'C', "P272", 0x00981555, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300 ;
-  { 0x009C21BF,   4, K_INT   ,         {0,-1,0,0}, 'C', "P273", 0x00981F7A, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300 ;
-  { 0x009D26DB,   4, K_INT   ,          {0,2,0,0}, 'C', "P274", 0x00991854, 4, {0x58,0x02,0x00,0x00} },  // ??unknown cwnd function
-  { 0x009D26E6,   4, K_INT   ,       {1,0,0,-134}, 'C', "P275", 0x0099185F, 4, {0x0A,0x01,0x00,0x00} },  // ??unknown cwnd function
-  { 0x009D26EE,   4, K_INT   ,       {1,0,0,-133}, 'C', "P276", 0x00991867, 4, {0x0B,0x01,0x00,0x00} },  // ??unknown cwnd function
-  { 0x009D3A67,   4, K_INT   ,          {1,0,0,0}, 'C', "P277", 0x00992BA7, 4, {0x2C,0x01,0x00,0x00} },  // ??unknown cwnd function, possibly related to cutildlg
-  { 0x009D3A6C,   4, K_INT   ,          {0,1,0,0}, 'C', "P278", 0x00992BAC, 4, {0x90,0x01,0x00,0x00} },  // ??unknown cwnd function, possibly related to cutildlg
-  { 0x009D753C,   4, K_INT   ,          {0,2,0,0}, 'C', "P279", 0x009966B5, 4, {0x58,0x02,0x00,0x00} },  // mov ecx,600
-  { 0x009D7552,   4, K_INT   ,          {2,0,0,0}, 'C', "P280", 0x009966CA, 4, {0x20,0x03,0x00,0x00} },  // cmp edi,800
-  { 0x009D7559,   4, K_INT   ,       {2,0,0,-100}, 'C', "P281", 0x009966D2, 4, {0xBC,0x02,0x00,0x00} },  // mov edx,700 ; CreateDlg
-  { 0x009DA35F,   4, K_INT   ,          {0,2,0,0}, 'C', "P282", 0x009994D8, 4, {0x58,0x02,0x00,0x00} },  // mov ecx,600
-  { 0x009DA375,   4, K_INT   ,          {2,0,0,0}, 'C', "P283", 0x009994ED, 4, {0x20,0x03,0x00,0x00} },  // cmp edi,800
-  { 0x009DA37C,   4, K_INT   ,       {2,0,0,-100}, 'C', "P284", 0x009994F5, 4, {0xBC,0x02,0x00,0x00} },  // mov edx,700 ; CreateDlg
-  { 0x009E8DE9,   4, K_INT   ,          {2,0,0,0}, 'C', "P285", 0x009A3E72, 4, {0x20,0x03,0x00,0x00} },  // mov edx,800 ; CreateDlg
-  { 0x009E8DF6,   4, K_INT   ,          {0,2,0,0}, 'C', "P286", 0x009A3E7F, 4, {0x58,0x02,0x00,0x00} },  // mov edx,600
-  { 0x009FEB65,   4, K_INT   ,         {0,-1,0,0}, 'C', "P287", 0x009B76BD, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300
-  { 0x009FEB73,   4, K_INT   ,          {0,1,0,0}, 'C', "P288", 0x009B76CB, 4, {0x2C,0x01,0x00,0x00} },  // push 300
-  { 0x00A27F79,   4, K_INT   ,          {0,2,0,0}, 'C', "P289", 0x009DFCF0, 4, {0xE0,0xFC,0xFF,0xFF} },  // lea eax,[esi+eax-600]
-  { 0x00A27FE3,   4, K_INT   ,          {2,0,0,0}, 'C', "P290", 0x009DFD5C, 4, {0x20,0x03,0x00,0x00} },  // mov ecx,800
-  { 0x00A280F1,   4, K_INT   ,          {2,0,0,0}, 'C', "P291", 0x009DFE68, 4, {0xA8,0xFD,0xFF,0xFF} },  // lea eax,[ecx+eax-800]
-  { 0x00A28159,   4, K_INT   ,          {0,2,0,0}, 'C', "P292", 0x009DFED2, 4, {0x58,0x02,0x00,0x00} },  // mov ecx,600	; IWzVector2D::RelMove
-  { 0x00A2B242,   4, K_INT   ,         {0,-1,0,0}, 'C', "P293", 0x009E2E85, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300		overall screen visible UI scaling
-  { 0x00A2B248,   4, K_INT   ,         {-1,0,0,0}, 'C', "P294", 0x009E2E8B, 4, {0x70,0xFE,0xFF,0xFF} },  // push -400 ;	overall screen visible UI scaling
-  { 0x00A3FA1F,   4, K_INT   ,          {0,1,0,0}, 'C', "P297", 0x009F6ADD, 4, {0x2C,0x01,0x00,0x00} },  // push 300 ; MapleStoryClass
-  { 0x00A3FF3A,   4, K_INT   ,          {0,2,0,0}, 'C', "P298", 0x009F6E99, 4, {0x58,0x02,0x00,0x00} },  // push 600
-  { 0x00A3FF3F,   4, K_INT   ,          {2,0,0,0}, 'C', "P299", 0x009F6EA0, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; StringPool#1162 (MapleStoryClass)
-  { 0x00A401C3,   4, K_INT   ,          {0,2,0,0}, 'C', "P301", 0x009F7078, 4, {0x58,0x02,0x00,0x00} },  // ??related to application dimensions	//(ragezone release merg
-  { 0x00A401C8,   4, K_INT   ,          {2,0,0,0}, 'C', "P303", 0x009F707D, 4, {0x20,0x03,0x00,0x00} },  // ??related to application dimensions
-  { 0x00A4127F,   4, K_INT   ,          {0,2,0,0}, 'C', "P308", 0x009F7B1D, 4, {0x58,0x02,0x00,0x00} },  // push 600
-  { 0x00A41284,   4, K_INT   ,          {2,0,0,0}, 'C', "P309", 0x009F7B23, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; CWvsApp::InitializeGr2D
-  { 0x00A70406,   4, K_INT   ,       {1,0,0,-129}, 'C', "P310", 0x00A24D0B, 4, {0x0F,0x01,0x00,0x00} },  // ??
-  { 0x00A905FB,   4, K_INT   ,         {0,-1,0,0}, 'C', "P311", 0x00A448B0, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300 ; CWvsPhysicalSpace2D::Load]
-  { 0x00AABDAB,   1, K_BYTE  ,          {0,0,0,5}, 'C', "P312", 0x00A5FC2B, 1, {0xB8} },  // ??
-  { 0x00C3BA80,   4, K_INT   ,          {1,0,0,0}, 'C', "P319", 0x00BE2738, 4, {0x90,0x01,0x00,0x00} },  // dd 400
-  { 0x00C3BA84,   4, K_INT   ,        {0,0,0,128}, 'C', "P320", 0x00BE273C, 4, {0x2C,0x01,0x00,0x00} },  // ??
-  { 0x00C3C138,   4, K_INT   ,          {1,0,0,0}, 'C', "P321", 0x00BE2DF0, 4, {0x90,0x01,0x00,0x00} },  // dd 400
-  { 0x00C3C13C,   4, K_INT   ,          {0,1,0,0}, 'C', "P322", 0x00BE2DF4, 4, {0x2C,0x01,0x00,0x00} },  // dd 300
+  { 0x00437E29,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P001", 0x0043717B, 4, {0x58,0x02,0x00,0x00} },  // mov edi,600
+  { 0x00437E2F,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P002", 0x00437181, 4, {0x20,0x03,0x00,0x00} },  // mov esi,800 ; CreateWnd
+  { 0x00437F5F,   4, K_INT      ,         {0,-1,0,0,0}, 'C', "P003", 0x004372B1, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300
+  { 0x00437F64,   4, K_INT      ,         {-1,0,0,0,0}, 'C', "P004", 0x004372B6, 4, {0x70,0xFE,0xFF,0xFF} },  // push -400 ; RelMove?
+  { 0x0045C66B,   4, K_INT      ,          {2,0,0,0,0}, 'J', "P005", 0x0045A5CB, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; CAvatarMegaphone ; CreateWnd
+  { 0x0045D3DB,   4, K_INT      ,        {2,0,0,0,100}, 'J', "P006", 0x0045B337, 4, {0x84,0x03,0x00,0x00} },  // VANILLA-ADJ -100  // related to smega display  //likely screen area where pop up 
+  { 0x0045D4BD,   4, K_INT      ,       {2,0,0,0,-225}, 'J', "P007", 0x0045B417, 4, {0x3F,0x02,0x00,0x00} },  // smega with avatar x axis for duration on screen
+  { 0x0045D96F,   4, K_INT      ,       {2,0,0,0,-225}, 'J', "P008", 0x0045B898, 4, {0x3F,0x02,0x00,0x00} },  // push 575 ##ED  //smega x axis fade
+  { 0x0045DA55,   4, K_INT      ,        {2,0,0,0,100}, 'J', "P009", 0x0045B97E, 4, {0x84,0x03,0x00,0x00} },  // VANILLA-ADJ -100  // push 800 ; CAvatarMegaphone::ByeAvatarMegaphone ; IWzVector2
+  { 0x0046B877,  12, K_CAVE     ,          {0,0,0,0,0}, 'F', "P010", 0x00469414, 8, {0x68,0x3C,0x01,0x00,0x00,0x68,0x00,0x01} },  // CONST (non-linear)  // 
+  { 0x0046B892,  14, K_CAVE     ,          {0,0,0,0,0}, 'F', "P011", 0x0046942F, 8, {0x6A,0x68,0x68,0x00,0x01,0x00,0x00,0x68} },  // CONST (non-linear)  // 
+  { 0x0046B8AF,  16, K_CAVE     ,          {0,0,0,0,0}, 'F', "P012", 0x0046944C, 8, {0x68,0xA3,0x00,0x00,0x00,0x68,0xF6,0x00} },  // CONST (non-linear)  // 
+  { 0x0046B8CE,  14, K_CAVE     ,          {0,0,0,0,0}, 'F', "P013", 0x0046946B, 8, {0x6A,0x4E,0x68,0xFC,0x01,0x00,0x00,0x6A} },  // CONST (non-linear)  // 
+  { 0x0046B8EB,  17, K_CAVE     ,          {0,0,0,0,0}, 'F', "P014", 0x00469488, 8, {0x68,0xAE,0x01,0x00,0x00,0x68,0x9C,0x01} },  // CONST (non-linear)  // main part of shop, item listings	//thanks angel for stuff th
+  { 0x0046B90B,  12, K_CAVE     ,          {0,0,0,0,0}, 'F', "P015", 0x004694A8, 8, {0x68,0x66,0x01,0x00,0x00,0x6A,0x5A,0x68} },  // CONST (non-linear)  // code cave 6 //best sellers
+  { 0x0046B91E,   4, K_INT      ,        {1,0,0,0,290}, 'F', "P016", 0x004694BA, 4, {0xB2,0x02,0x00,0x00} },  // nleft, actual drawn part	//best sellers
+  { 0x0046B92B,  17, K_CAVE     ,          {0,0,0,0,0}, 'F', "P017", 0x004694C8, 8, {0x6A,0x38,0x68,0x21,0x02,0x00,0x00,0x68} },  // CONST (non-linear)  // 
+  { 0x0046B94B,  11, K_CAVE     ,          {0,0,0,0,0}, 'F', "P018", 0x004694E8, 8, {0x6A,0x16,0x6A,0x59,0x6A,0x61,0x68,0xB2} },  // CONST (non-linear)  // 
+  { 0x0046DE4F,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P019", 0x0046B85C, 4, {0x58,0x02,0x00,0x00} },  // mov eax,600
+  { 0x0046DE5D,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P020", 0x0046B86A, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; IWzVector2D::RelMove
+  { 0x004B08E6,  14, K_CAVE     ,          {0,0,0,0,0}, 'F', "P026", 0x004AB10F, 8, {0x68,0xA5,0x00,0x00,0x00,0x68,0xD4,0x00} },  // CONST (non-linear)  // cash shop preview fix
+  { 0x004D1F40,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P027", 0x004CC160, 4, {0x20,0x03,0x00,0x00} },  // mov [ebp-16],800 ; CreateWnd
+  { 0x004D208E,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P028", 0x004CC2B0, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; CreateWnd
+  { 0x004D20A4,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P029", 0x004CC2C5, 4, {0x58,0x02,0x00,0x00} },  // cmp ecx,600
+  { 0x004DB957,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P030", 0x004D599D, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; CreateWnd
+  { 0x004DB96D,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P031", 0x004D59B2, 4, {0x58,0x02,0x00,0x00} },  // mov eax,800
+  { 0x004F60E4,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P032", 0x004EDABF, 4, {0x58,0x02,0x00,0x00} },  // ??
+  { 0x004F60FD,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P033", 0x004EDAD8, 4, {0x20,0x03,0x00,0x00} },  // mov ecx,800
+  { 0x004F619D,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P034", 0x004EDB78, 4, {0x58,0x02,0x00,0x00} },  // mov ecx,600 ; CreateWnd
+  { 0x004F61AE,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P035", 0x004EDB89, 4, {0x20,0x03,0x00,0x00} },  // mov ecx,800
+  { 0x0052E420,   4, K_INT      ,       {0,2,0,0,-108}, 'I', "P036", 0x00522C73, 4, {0xEC,0x01,0x00,0x00} },  // VANILLA-ADJ +16  // ??various requests like party, guild, friend, family, invite
+  { 0x0052E434,   4, K_INT      ,        {0,0,0,0,372}, 'I', "P037", 0x00522C87, 4, {0x9D,0x01,0x00,0x00} },  // VANILLA-ADJ +51  // various requests like party, guild, friend, family, invites 
+  { 0x0052E624,   4, K_INT      ,       {0,2,0,0,-108}, 'I', "P038", 0x00522E65, 4, {0xEC,0x01,0x00,0x00} },  // VANILLA-ADJ +16  // ??various requests like party, guild, friend, family, invite
+  { 0x0052E638,   4, K_INT      ,        {0,0,0,0,372}, 'I', "P039", 0x00522E79, 4, {0x9D,0x01,0x00,0x00} },  // VANILLA-ADJ +51  // various requests like party, guild, friend, family, invites 
+  { 0x0052E84D,   4, K_INT      ,        {0,2,0,0,-92}, 'I', "P040", 0x0052307E, 4, {0xFC,0x01,0x00,0x00} },  // various requests like party, guild, friend, family, invites 
+  { 0x0052E856,   4, K_INT      ,        {0,0,0,0,423}, 'I', "P041", 0x00523092, 4, {0xD0,0x01,0x00,0x00} },  // various requests like party, guild, friend, family, invites 
+  { 0x0052E932,   4, K_INT      ,       {0,2,0,0,-102}, 'I', "P042", 0x00523154, 4, {0xF2,0x01,0x00,0x00} },  // ?? various requests like party, guild, friend, family, invit
+  { 0x0052ED4D,   4, K_INT      ,       {0,2,0,0,-108}, 'I', "P043", 0x00523359, 4, {0xEC,0x01,0x00,0x00} },  // VANILLA-ADJ +16  // various requests like party, guild, friend, family, invites 
+  { 0x0052ED61,   4, K_INT      ,        {0,0,0,0,372}, 'I', "P044", 0x0052336D, 4, {0x9D,0x01,0x00,0x00} },  // VANILLA-ADJ +51  // various requests like party, guild, friend, family, invites 
+  { 0x0052F18D,   4, K_INT      ,        {0,2,0,0,-92}, 'I', "P045", 0x00523595, 4, {0xFC,0x01,0x00,0x00} },  // various requests like party, guild, friend, family, invites 
+  { 0x0052F395,   4, K_INT      ,       {0,2,0,0,-108}, 'I', "P046", 0x0052378B, 4, {0xEC,0x01,0x00,0x00} },  // VANILLA-ADJ +16  // various requests like party, guild, friend, family, invites 
+  { 0x0052F3A9,   4, K_INT      ,        {0,0,0,0,372}, 'I', "P047", 0x0052379F, 4, {0x9D,0x01,0x00,0x00} },  // VANILLA-ADJ +51  // various requests like party, guild, friend, family, invites 
+  { 0x0052F587,   4, K_INT      ,       {0,2,0,0,-108}, 'I', "P048", 0x0052397D, 4, {0xEC,0x01,0x00,0x00} },  // VANILLA-ADJ +16  // various requests like party, guild, friend, family, invites 
+  { 0x0052F59B,   4, K_INT      ,        {0,0,0,0,372}, 'I', "P049", 0x00523991, 4, {0x9D,0x01,0x00,0x00} },  // VANILLA-ADJ +51  // various requests like party, guild, friend, family, invites 
+  { 0x0052F7F4,   4, K_INT      ,        {0,2,0,0,-92}, 'I', "P050", 0x00523BB1, 4, {0xFC,0x01,0x00,0x00} },  // various requests like party, guild, friend, family, invites 
+  { 0x0052F808,   4, K_INT      ,        {0,0,0,0,423}, 'I', "P051", 0x00523BC5, 4, {0xD0,0x01,0x00,0x00} },  // various requests like party, guild, friend, family, invites 
+  { 0x0052F9E8,   4, K_INT      ,        {0,2,0,0,-92}, 'I', "P052", 0x00523DA5, 4, {0xFC,0x01,0x00,0x00} },  // various requests like party, guild, friend, family, invites 
+  { 0x0052FA08,   4, K_INT      ,        {0,0,0,0,423}, 'I', "P053", 0x00523DC5, 4, {0xD0,0x01,0x00,0x00} },  // various requests like party, guild, friend, family, invites 
+  { 0x0052FBE6,   4, K_INT      ,        {0,2,0,0,-92}, 'I', "P054", 0x00523FA3, 4, {0xFC,0x01,0x00,0x00} },  // various requests like party, guild, friend, family, invites 
+  { 0x0052FBFA,   4, K_INT      ,        {0,0,0,0,423}, 'I', "P055", 0x00523FB7, 4, {0xD0,0x01,0x00,0x00} },  // various requests like party, guild, friend, family, invites 
+  { 0x0052FDCF,   4, K_INT      ,       {0,2,0,0,-102}, 'I', "P056", 0x0052418C, 4, {0xF2,0x01,0x00,0x00} },  // party quest available pop-up y axis		my first address find o
+  { 0x00530030,   4, K_INT      ,       {0,2,0,0,-108}, 'I', "P057", 0x005243DB, 4, {0xEC,0x01,0x00,0x00} },  // VANILLA-ADJ +16  // various requests like party, guild, friend, family, invites 
+  { 0x00530044,   4, K_INT      ,        {0,0,0,0,372}, 'I', "P058", 0x005243EF, 4, {0x9D,0x01,0x00,0x00} },  // VANILLA-ADJ +51  // various requests like party, guild, friend, family, invites 
+  { 0x0053FD89,   1, K_BYTE     ,        {0,0,0,0,184}, 'J', "P059", 0x00533B03, 1, {0xB8} },  // boss bar extend to window
+  { 0x0053FD8A,   4, K_INT      ,        {2,0,0,0,-15}, 'J', "P060", 0x00533B03, 4, {0x20,0x03,0x00,0x00} },  // boss bar	extend to window
+  { 0x005405F6,   1, K_BYTE     ,        {0,0,0,0,185}, 'J', "P061", 0x00534370, 1, {0xB9} },  // boss bar	extend to window
+  { 0x005405F7,   4, K_INT      ,        {2,0,0,0,-22}, 'J', "P062", 0x00534370, 4, {0x19,0x03,0x00,0x00} },  // boss bar	extend to window
+  { 0x00541290,  10, K_CAVE     ,          {0,0,0,0,0}, 'G', "P063", 0x0053500A, 8, {0x68,0x04,0x01,0x00,0x00,0x68,0x90,0x01} },  // CONST (non-linear)  // muruengraid scaling
+  { 0x005425B7,   4, K_INT      ,       {1,0,0,0,-129}, 'J', "P064", 0x005362B2, 4, {0x0F,0x01,0x00,0x00} },  // ??related to boss bar
+  { 0x005427B0,   4, K_INT      ,       {1,0,0,0,-128}, 'J', "P065", 0x005364AA, 4, {0x0F,0x01,0x00,0x00} },  // ??related to boss bar
+  { 0x00544495,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P066", 0x0053808B, 4, {0x58,0x02,0x00,0x00} },  // push 600
+  { 0x0054449B,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P067", 0x00538091, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; RelMove?
+  { 0x00544777,   4, K_INT      ,         {0,-1,0,0,0}, 'C', "P068", 0x0053836D, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300
+  { 0x0054477D,   4, K_INT      ,         {-1,0,0,0,0}, 'C', "P069", 0x00538373, 4, {0x70,0xFE,0xFF,0xFF} },  // push -400	; RelMove?
+  { 0x00544AFA,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P070", 0x005386F0, 4, {0x58,0x02,0x00,0x00} },  // push 600
+  { 0x00544AFF,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P071", 0x005386F5, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; CField::DrawFearEffect
+  { 0x00560A18,   8, K_CAVE     ,          {0,0,0,0,0}, 'G', "P072", 0x00554041, 8, {0x6A,0x32,0x68,0xA9,0x00,0x00,0x00,0x51} },  // CONST (non-linear)  // muruengraid scaling
+  { 0x00560AA0,   8, K_CAVE     ,          {0,0,0,0,0}, 'G', "P073", 0x005540C9, 8, {0x6A,0x1A,0x68,0x90,0x01,0x00,0x00,0x51} },  // CONST (non-linear)  // muruengraid scaling
+  { 0x00560B26,   8, K_CAVE     ,          {0,0,0,0,0}, 'G', "P074", 0x0055414F, 8, {0x6A,0x32,0x68,0x77,0x02,0x00,0x00,0x51} },  // CONST (non-linear)  // muruengraid scaling
+  { 0x00560BB1,   8, K_CAVE     ,          {0,0,0,0,0}, 'G', "P075", 0x005541DA, 8, {0x68,0x82,0x00,0x00,0x00,0x6A,0x14,0x51} },  // CONST (non-linear)  // muruengraid scaling
+  { 0x00560C3C,   5, K_CAVE     ,          {0,0,0,0,0}, 'G', "P076", 0x00554265, 5, {0x6A,0x50,0x6A,0x09,0x51} },  // CONST (non-linear)  // muruengraid scaling
+  { 0x00560DC8,   7, K_CAVE     ,          {0,0,0,0,0}, 'G', "P077", 0x005543F1, 7, {0x6A,0x20,0x68,0x3D,0x01,0x00,0x00} },  // CONST (non-linear)  // muruengraid scaling
+  { 0x00560E53,   7, K_CAVE     ,          {0,0,0,0,0}, 'G', "P078", 0x0055447C, 7, {0x6A,0x20,0x68,0xE2,0x01,0x00,0x00} },  // CONST (non-linear)  // muruengraid scaling
+  { 0x00560EDE,   5, K_CAVE     ,          {0,0,0,0,0}, 'G', "P079", 0x00554507, 5, {0x6A,0x56,0x6A,0x11,0x51} },  // CONST (non-linear)  // muruengraid scaling
+  { 0x0056157A,   5, K_CAVE     ,          {0,0,0,0,0}, 'G', "P080", 0x00554BA3, 5, {0xBA,0x3E,0x01,0x00,0x00} },  // CONST (non-linear)  // muruengraid scaling
+  { 0x00561F18,   7, K_CAVE     ,          {0,0,0,0,0}, 'G', "P081", 0x00555541, 7, {0x6A,0x10,0x68,0x59,0x01,0x00,0x00} },  // CONST (non-linear)  // muruengraid scaling
+  { 0x00568378,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P082", 0x0055B808, 4, {0x58,0x02,0x00,0x00} },  // push 600
+  { 0x0056837D,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P083", 0x0055B80D, 4, {0x20,0x03,0x00,0x00} },  // mov edi,800
+  { 0x005683F4,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P084", 0x0055B884, 4, {0x58,0x02,0x00,0x00} },  // push 600 ; RelMove?
+  { 0x0056869F,   4, K_INT      ,         {0,-1,0,0,0}, 'C', "P085", 0x0055BB2F, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300
+  { 0x005686A5,   4, K_INT      ,         {-1,0,0,0,0}, 'C', "P086", 0x0055BB35, 4, {0x70,0xFE,0xFF,0xFF} },  // push -400 ; RelMove?
+  { 0x0059C812,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P087", 0x0058C8A6, 4, {0x20,0x03,0x00,0x00} },  // ??
+  { 0x005A2B4E,   1, K_BYTE     ,          {0,0,0,0,1}, 'C', "P088", 0x00592A06, 1, {0x64} },  // ???likely related to mouse pos
+  { 0x005A2B50,   4, K_INT      ,       {1,0,0,0,-125}, 'C', "P089", 0x00592A08, 4, {0x13,0x01,0x00,0x00} },  // ??likely related to mouse pos
+  { 0x005AA2F1,   4, K_INT      ,          {1,0,0,0,0}, 'C', "P090", 0x0059A09C, 4, {0x90,0x01,0x00,0x00} },  // mov [esi],400	; CInputSystem::LoadCursorState
+  { 0x005AA2FB,   4, K_INT      ,          {0,1,0,0,0}, 'C', "P091", 0x0059A0A2, 4, {0x2C,0x01,0x00,0x00} },  // mov [ebx+2364],300
+  { 0x005AA3B2,   4, K_INT      ,         {0,-1,0,0,0}, 'C', "P092", 0x0059A15D, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300				!!moves all interactable UI elements!!
+  { 0x005AA3BE,   4, K_INT      ,         {-1,0,0,0,0}, 'C', "P093", 0x0059A169, 4, {0x70,0xFE,0xFF,0xFF} },  // push -400 ; CInputSystem::SetCursorVectorPos				!!moves all 
+  { 0x005AAAEC,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P094", 0x0059A898, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; CInputSystem::SetCursorPos
+  { 0x005AAB05,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P095", 0x0059A8B1, 4, {0x58,0x02,0x00,0x00} },  // mov eax,600
+  { 0x005AAE5D,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P096", 0x0059AC09, 4, {0x20,0x03,0x00,0x00} },  // mov ecx,800 ; CInputSystem::UpdateMouse
+  { 0x005AAE76,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P097", 0x0059AC22, 4, {0x58,0x02,0x00,0x00} },  // mov ecx,600
+  { 0x005AEEE6,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P098", 0x0059EB49, 4, {0x58,0x02,0x00,0x00} },  // push 600 ; CSoundMan::PlayBGM
+  { 0x005B9073,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P099", 0x005A8B46, 4, {0x58,0x02,0x00,0x00} },  // mov eax,600
+  { 0x005B9083,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P100", 0x005A8B56, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; RelMove?
+  { 0x005BA036,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P101", 0x005A9B42, 4, {0x58,0x02,0x00,0x00} },  // mov eax,600
+  { 0x005BA046,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P102", 0x005A9B52, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; RelMove?
+  { 0x005BB29E,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P103", 0x005AADAA, 4, {0x58,0x02,0x00,0x00} },  // mov eax,600
+  { 0x005BB2AE,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P104", 0x005AADBA, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; RelMove?
+  { 0x005BC159,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P105", 0x005ABC65, 4, {0x58,0x02,0x00,0x00} },  // mov eax,600
+  { 0x005BC169,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P106", 0x005ABC75, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; RelMove?
+  { 0x005BD01D,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P107", 0x005ACB29, 4, {0x58,0x02,0x00,0x00} },  // mov eax,600
+  { 0x005BD02D,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P108", 0x005ACB39, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; RelMove?
+  { 0x005D2008,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P109", 0x005C187E, 4, {0x58,0x02,0x00,0x00} },  // mov eax,600
+  { 0x005D2018,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P110", 0x005C188E, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; RelMove?
+  { 0x005D34EC,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P111", 0x005C2D62, 4, {0x58,0x02,0x00,0x00} },  // mov eax,600
+  { 0x005D34FC,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P112", 0x005C2D72, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; RelMove?
+  { 0x006094E5,  10, K_CAVE     ,          {0,0,0,0,0}, 'E', "P114", 0x005F464D, 8, {0xB8,0x85,0x02,0x00,0x00,0x2B,0x45,0xE4} },  // CONST (non-linear)  // game version number fix //use this if you use no frame or de
+  { 0x0060B418,   4, K_INT      ,         {0,-1,0,0,0}, 'E', "P118", 0x005F64DE, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300 ;
+  { 0x0060B561,   4, K_INT      ,         {0,-1,0,0,0}, 'E', "P119", 0x005F6627, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300 ;
+  { 0x006190B9,   4, K_INT      ,          {0,2,0,0,0}, 'E', "P124", 0x0060411C, 4, {0x58,0x02,0x00,0x00} },  // push 600
+  { 0x0062294A,   4, K_INT      ,         {0,0,0,0,50}, 'E', "P125", 0x0060D849, 4, {0x2C,0x01,0x00,0x00} },  // speed 1	//temporary fix by increasing the speed of display u
+  { 0x006232D8,  11, K_CAVE     ,          {0,0,0,0,0}, 'E', "P127", 0x0060E1BF, 8, {0x68,0x60,0x01,0x00,0x00,0x6A,0x7D,0x6A} },  // CONST (non-linear)  // world select buttons fix		//thank you teto for pointing out 
+  { 0x006248C7,   4, K_INT      ,       {0,1,0,0,-201}, 'E', "P128", 0x0060F79B, 4, {0x96,0x00,0x00,0x00} },  // ??possibly related to login utildlg
+  { 0x006248D0,   4, K_INT      ,       {0,1,0,0,-181}, 'E', "P129", 0x0060F7A4, 4, {0xAA,0x00,0x00,0x00} },  // ??possibly related to login utildlg
+  { 0x006248D8,   4, K_INT      ,       {1,0,0,0,-201}, 'E', "P130", 0x0060F7AC, 4, {0xDB,0x00,0x00,0x00} },  // ??possibly related to login utildlg
+  { 0x006248E1,   4, K_INT      ,       {1,0,0,0,-181}, 'E', "P131", 0x0060F7B5, 4, {0xEF,0x00,0x00,0x00} },  // ??possibly related to login utildlg
+  { 0x0062827D,   4, K_INT      ,       {0,1,0,0,-200}, 'E', "P132", 0x00613093, 4, {0xC8,0x00,0x00,0x00} },  // ??likely related to login pop-up msg
+  { 0x00628283,   4, K_INT      ,        {1,0,0,0,-45}, 'E', "P133", 0x00613099, 4, {0x63,0x01,0x00,0x00} },  // ??likely related to login pop-up msg
+  { 0x00632E6F,   4, K_INT      ,       {0,1,0,0,-150}, 'E', "P134", 0x0061DAFF, 4, {0x96,0x00,0x00,0x00} },  // ??likely related to login pop-up msg
+  { 0x00632E78,   4, K_INT      ,       {0,1,0,0,-130}, 'E', "P135", 0x0061DB08, 4, {0xAA,0x00,0x00,0x00} },  // ??likely related to login pop-up msg
+  { 0x00632E80,   4, K_INT      ,       {1,0,0,0,-201}, 'E', "P136", 0x0061DB10, 4, {0xDB,0x00,0x00,0x00} },  // ??likely related to login pop-up msg
+  { 0x00632E89,   4, K_INT      ,       {1,0,0,0,-181}, 'E', "P137", 0x0061DB19, 4, {0xEF,0x00,0x00,0x00} },  // ??likely related to login pop-up msg
+  { 0x0063665A,   1, K_BYTE     ,          {0,0,0,0,1}, 'E', "P138", 0x0062121E, 1, {0x2F} },  // ??possibly related to logo
+  { 0x00636662,   4, K_INT      ,       {1,0,0,0,-216}, 'E', "P139", 0x00621226, 4, {0xB8,0x00,0x00,0x00} },  // ??possibly related to logo
+  { 0x0064083B,  17, K_CAVE     ,          {0,0,0,0,0}, 'E', "P140", 0x0062B334, 8, {0x68,0xA7,0x00,0x00,0x00,0x68,0x1C,0x02} },  // CONST (non-linear)  // world ViewRec fix
+  { 0x0064459F,   4, K_INT      ,          {0,2,0,0,0}, 'E', "P142", 0x0062F104, 4, {0x58,0x02,0x00,0x00} },  // mov eax,600
+  { 0x006445A4,   4, K_INT      ,          {2,0,0,0,0}, 'E', "P143", 0x0062F109, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; Rectangle
+  { 0x00644A7A,   4, K_INT      ,          {0,2,0,0,0}, 'E', "P144", 0x0062F5DF, 4, {0x58,0x02,0x00,0x00} },  // push 600
+  { 0x00644A7F,   4, K_INT      ,          {2,0,0,0,0}, 'E', "P145", 0x0062F5E4, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; (UI/Logo/NXXXon)
+  { 0x00644E61,   4, K_INT      ,          {0,2,0,0,0}, 'E', "P146", 0x0062F9C6, 4, {0x58,0x02,0x00,0x00} },  // push 600
+  { 0x00644E66,   4, K_INT      ,          {2,0,0,0,0}, 'E', "P147", 0x0062F9CB, 4, {0x20,0x03,0x00,0x00} },  // push 800; (UI/Logo/Wizet)
+  { 0x006450E5,   4, K_INT      ,          {0,2,0,0,0}, 'E', "P148", 0x0062FC4A, 4, {0x58,0x02,0x00,0x00} },  // push 600
+  { 0x006450EA,   4, K_INT      ,          {2,0,0,0,0}, 'E', "P149", 0x0062FC4F, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; IWzGr2DLayer::Getcanvas
+  { 0x006452FE,   4, K_INT      ,          {0,2,0,0,0}, 'E', "P150", 0x0062FE63, 4, {0x58,0x02,0x00,0x00} },  // push 600
+  { 0x00645303,   4, K_INT      ,          {2,0,0,0,0}, 'E', "P151", 0x0062FE68, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; IWzGr2DLayer::Getcanvas
+  { 0x00655CB4,   4, K_INT      ,          {1,0,0,0,0}, 'C', "P152", 0x0064043E, 4, {0x90,0x01,0x00,0x00} },  // mov edi,400
+  { 0x00655CB9,   4, K_INT      ,          {0,1,0,0,0}, 'C', "P153", 0x00640443, 4, {0x2C,0x01,0x00,0x00} },  // mov esi,300
+  { 0x00655D6E,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P154", 0x006404F8, 4, {0x20,0x03,0x00,0x00} },  // mov ecx,800
+  { 0x00655D80,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P155", 0x0064050A, 4, {0x58,0x02,0x00,0x00} },  // mov ecx,600
+  { 0x00655E7C,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P156", 0x00640606, 4, {0x20,0x03,0x00,0x00} },  // mov ecx,800
+  { 0x00655E8E,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P157", 0x00640618, 4, {0x58,0x02,0x00,0x00} },  // mov ecx,600
+  { 0x00655E9C,   4, K_INT      ,          {1,0,0,0,0}, 'C', "P159", 0x00640626, 4, {0x90,0x01,0x00,0x00} },  // add eax,400 ; bunch of modulus stuff
+  { 0x00655EAF,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P160", 0x00640639, 4, {0x20,0x03,0x00,0x00} },  // mov ecx,800
+  { 0x00655EC1,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P161", 0x0064064B, 4, {0x58,0x02,0x00,0x00} },  // mov ecx,600
+  { 0x00655ECD,   4, K_INT      ,         {-1,0,0,0,0}, 'C', "P162", 0x00640656, 4, {0x70,0xFE,0xFF,0xFF} },  // add edi,-400 ;
+  { 0x00655EF4,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P163", 0x0064067E, 4, {0x20,0x03,0x00,0x00} },  // mov ecx,800
+  { 0x00655F06,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P164", 0x00640690, 4, {0x58,0x02,0x00,0x00} },  // mov ecx,600
+  { 0x00655F39,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P165", 0x006406C3, 4, {0x20,0x03,0x00,0x00} },  // mov ecx,800
+  { 0x00655F4B,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P166", 0x006406D5, 4, {0x58,0x02,0x00,0x00} },  // mov ecx,600
+  { 0x006568AF,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P167", 0x00641038, 4, {0x58,0x02,0x00,0x00} },  // ??possibly related to player display
+  { 0x006568B6,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P168", 0x0064103F, 4, {0x20,0x03,0x00,0x00} },  // ??possibly related to player display
+  { 0x006568BE,   4, K_INT      ,         {0,-1,0,0,0}, 'C', "P169", 0x00641048, 4, {0xD4,0xFE,0xFF,0xFF} },  // mov esi,-300
+  { 0x006568C6,   4, K_INT      ,         {-1,0,0,0,0}, 'C', "P170", 0x00641050, 4, {0x70,0xFE,0xFF,0xFF} },  // mov esi,-400 ;
+  { 0x0065728A,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P171", 0x00641A12, 4, {0x20,0x03,0x00,0x00} },  // mov [ebp+32],800 ; idk
+  { 0x00657291,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P172", 0x00641A19, 4, {0x58,0x02,0x00,0x00} },  // mov [ebp+28],600
+  { 0x006573A6,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P173", 0x00641B2E, 4, {0x20,0x03,0x00,0x00} },  // mov [ebp-36],800 ; CAnimationDisplayer::SetCenterOrigin
+  { 0x006573B0,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P174", 0x00641B38, 4, {0x58,0x02,0x00,0x00} },  // mov [ebp-32],600
+  { 0x006577D7,   4, K_INT      ,          {1,0,0,0,0}, 'C', "P175", 0x00641F61, 4, {0x90,0x01,0x00,0x00} },  // mov ebc,400 ;  VRleft		//camera movement
+  { 0x0065783E,   4, K_INT      ,          {0,1,0,0,0}, 'C', "P176", 0x00641FC8, 4, {0x2C,0x01,0x00,0x00} },  // add eax,300  ; VRTop //camera movement //not working for mos
+  { 0x00657905,   4, K_INT      ,          {0,1,0,0,0}, 'C', "P177", 0x0064208F, 4, {0x2C,0x01,0x00,0x00} },  // add eax,300  ; VRbottom //camera movement //not working for 
+  { 0x0065797A,   7, K_CAVE     ,          {0,0,0,0,0}, 'C', "P178", 0x00642105, 7, {0x85,0xC0,0x74,0x06,0x8B,0x08,0x50} },  // CONST (non-linear)  // fix view restora on all maps, currently does nothing; i like
+  { 0x00657A29,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P179", 0x006421B3, 4, {0x58,0x02,0x00,0x00} },  // push 600 ; CSoundMan::PlayBGM
+  { 0x00681CD3,   4, K_INT      ,         {-1,0,0,0,0}, 'C', "P180", 0x0066BACE, 4, {0x70,0xFE,0xFF,0xFF} },  // and ecx,-400
+  { 0x006E479D,   4, K_INT      ,          {1,0,0,0,0}, 'C', "P181", 0x006CD842, 4, {0x90,0x01,0x00,0x00} },  // push 400 ; RelMove?
+  { 0x006E5306,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P182", 0x006CE3AB, 4, {0x20,0x03,0x00,0x00} },  // push 800
+  { 0x006E5421,   4, K_INT      ,         {-1,0,0,0,0}, 'C', "P183", 0x006CE4C6, 4, {0x70,0xFE,0xFF,0xFF} },  // push -400 ;
+  { 0x006EC1C8,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P184", 0x006D50D8, 4, {0x58,0x02,0x00,0x00} },  // push 600
+  { 0x00766C1F,   4, K_INT      ,          {0,0,4,0,0}, 'C', "P185", 0x00744DA6, 4, {0x00,0x4C,0x1D,0x00} },  // ??related to in-game taking screenshot functionality
+  { 0x00766CA3,   4, K_INT      ,          {0,0,3,0,0}, 'C', "P186", 0x00744E2A, 4, {0x00,0xF9,0x15,0x00} },  // ??related to in-game taking screenshot functionality
+  { 0x00766CBC,   4, K_INT      ,          {0,0,1,0,0}, 'C', "P187", 0x00744E43, 4, {0x00,0x53,0x07,0x00} },  // ??related to in-game taking screenshot functionality
+  { 0x00766D2D,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P188", 0x00744EB4, 4, {0x20,0x03,0x00,0x00} },  // ??related to in-game taking screenshot functionality
+  { 0x00766D32,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P189", 0x00744EB9, 4, {0x58,0x02,0x00,0x00} },  // ??related to in-game taking screenshot functionality
+  { 0x0076D5A8,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P190", 0x0074B3B7, 4, {0x58,0x02,0x00,0x00} },  // push 600
+  { 0x0076D693,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P191", 0x0074B4A2, 4, {0x58,0x02,0x00,0x00} },  // push 600
+  { 0x0076DB42,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P192", 0x0074B951, 4, {0x58,0x02,0x00,0x00} },  // push 600
+  { 0x0076DC9A,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P193", 0x0074BAA9, 4, {0x58,0x02,0x00,0x00} },  // push 600
+  { 0x007994C6,   5, K_CAVE     ,          {0,0,0,0,0}, 'F', "P194", 0x00776B5F, 5, {0x5B,0xC9,0xC2,0x04,0x00} },  // CONST (non-linear)  // fix for preview On/Off button not being accurate on entering
+  { 0x007D89E0,   4, K_INT      ,        {0,1,0,0,-23}, 'D', "P196", 0x007B2C97, 4, {0x15,0x01,0x00,0x00} },  // sub ebx,277 ; Skill icon buff y-pos
+  { 0x007D89FF,   4, K_INT      ,         {1,0,0,0,-3}, 'D', "P197", 0x007B2CB5, 4, {0x8D,0x01,0x00,0x00} },  // lea eax,[eax+esi+397] ; Skill icon buff x-pos
+  { 0x007D8AE9,   4, K_INT      ,        {0,1,0,0,-23}, 'D', "P198", 0x007B2DA0, 4, {0x15,0x01,0x00,0x00} },  // sub ebx,277 ; Skill icon cooltime y-pos
+  { 0x007D8B08,   4, K_INT      ,         {1,0,0,0,-3}, 'D', "P199", 0x007B2DBE, 4, {0x8D,0x01,0x00,0x00} },  // lea eax,[eax+esi+397] ; Skill icon cooltime x-pos
+  { 0x007D8BEA,   4, K_INT      ,         {-2,0,0,0,6}, 'D', "P200", 0x007B2EA0, 4, {0xE3,0xFC,0xFF,0xFF} },  // lea eax,[eax+ecx-797] ; CTemporaryStatView::ShowToolTip
+  { 0x007D8DD1,   4, K_INT      ,         {-2,0,0,0,6}, 'D', "P201", 0x007B3087, 4, {0xE3,0xFC,0xFF,0xFF} },  // lea eax,[eax+ecx-797] ; CTemporaryStatView::FindIcon
+  { 0x007E8678,   4, K_INT      ,        {0,2,0,0,-80}, 'C', "P202", 0x007C2531, 4, {0x08,0x02,0x00,0x00} },  // ??
+  { 0x007F568E,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P203", 0x007CF48F, 4, {0x58,0x02,0x00,0x00} },  // mov eax,600 ;
+  { 0x007F569C,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P204", 0x007CF49D, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; IWzVector2D::RelMove
+  { 0x008078A9,   4, K_INT      ,          {2,0,0,0,0}, 'J', "P205", 0x007E15BE, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; CreateWnd
+  { 0x008079A4,   4, K_INT      ,          {0,2,0,0,0}, 'J', "P206", 0x007E16B9, 4, {0x58,0x02,0x00,0x00} },  // push 600
+  { 0x008079A9,   4, K_INT      ,          {2,0,0,0,0}, 'J', "P207", 0x007E16BE, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; CWnd::GetCanvas //!!length of server message at t
+  { 0x00807CB6,   4, K_INT      ,          {2,0,0,0,0}, 'J', "P208", 0x007E19CA, 4, {0x20,0x03,0x00,0x00} },  // ??related to displaying server message at top of screen
+  { 0x00807FA2,   4, K_INT      ,          {2,0,0,0,0}, 'J', "P209", 0x007E1CB7, 4, {0x20,0x03,0x00,0x00} },  // push 800
+  { 0x008080F3,   4, K_INT      ,          {2,0,0,0,0}, 'J', "P210", 0x007E1E07, 4, {0x20,0x03,0x00,0x00} },  // ??related to displaying server message at top of screen
+  { 0x00818869,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P211", 0x007F257E, 4, {0x58,0x02,0x00,0x00} },  // push 600
+  { 0x0081887A,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P212", 0x007F258F, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; CWnd::CreateWnd
+  { 0x0082B9CB,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P213", 0x00805459, 4, {0x20,0x03,0x00,0x00} },  // mov edx,800 ; CUIEventAlarm::CreateEventAlarm
+  { 0x0082B9DE,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P214", 0x0080546C, 4, {0x58,0x02,0x00,0x00} },  // mov edi,600
+  { 0x0087574A,   4, K_INT      ,       {0,2,0,0,-177}, 'C', "P215", 0x00849E39, 4, {0xA7,0x01,0x00,0x00} },  // system menu pop up
+  { 0x00875EC8,   4, K_INT      ,       {0,2,0,0,-281}, 'C', "P216", 0x0084A5B7, 4, {0x28,0x01,0x00,0x00} },  // shortcuts pop up	//0x84A5BD -  System Options "X" Position. 
+  { 0x0088AE51,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P217", 0x0085F36C, 4, {0x20,0x03,0x00,0x00} },  // cmp edx,800
+  { 0x0088AE58,   4, K_INT      ,        {2,0,0,0,-80}, 'C', "P218", 0x0085F374, 4, {0xD0,0x02,0x00,0x00} },  // mov ecx,720 ; CreateDlg
+  { 0x008CBCDB,   4, K_INT      ,       {1,0,0,0,-143}, 'H', "P219", 0x00897BB4, 4, {0x01,0x01,0x00,0x00} },  // ??related to exp gain/item pick up msg
+  { 0x008CF0D7,   4, K_INT      ,          {0,0,0,1,0}, 'H', "P220", 0x0089AEE2, 4, {0x06,0x00,0x00,0x00} },  // moregainmsgs part 1
+  { 0x008CF126,   4, K_INT      ,        {0,0,0,0,460}, 'H', "P221", 0x0089AF33, 4, {0x5E,0x01,0x00,0x00} },  // VANILLA-ADJ -60  // length of pick up and exp gain message canvas //found with h
+  { 0x008CF377,   6, K_CAVE     ,          {0,0,0,0,0}, 'H', "P222", 0x0089B185, 6, {0x8B,0x47,0x10,0x83,0xF8,0x06} },  // CONST (non-linear)  // moregainmsgs part 2
+  { 0x008CF4B9,   4, K_INT      ,        {0,0,0,0,460}, 'H', "P223", 0x0089B2C6, 4, {0x5E,0x01,0x00,0x00} },  // VANILLA-ADJ -60  // address to move the message in the canvas adjusted above to 
+  { 0x008CF6D8,   5, K_CAVE     ,          {0,0,0,0,0}, 'H', "P224", 0x0089B4E6, 5, {0x68,0xFF,0x00,0x00,0x00} },  // CONST (non-linear)  // moregainmsgsFade1
+  { 0x008CF755,   7, K_CAVE     ,          {0,0,0,0,0}, 'H', "P225", 0x0089B563, 7, {0x05,0x70,0x17,0x00,0x00,0x6A,0x03} },  // CONST (non-linear)  // moregainmsgsFade
+  { 0x008CF82A,   1, K_BYTE     ,          {0,0,0,0,1}, 'H', "P226", 0x0089B636, 1, {0xB2} },  // related to exp gain/item pick up msg, seems to affect msg he
+  { 0x008CF82C,   4, K_INT      ,       {0,2,0,-14,-6}, 'H', "P227", 0x0089B639, 4, {0xBB,0x01,0x00,0x00} },  // inventory/exp gain y axis //####hd100 //90
+  { 0x008CF8EA,   4, K_INT      ,       {2,0,0,0,-465}, 'H', "P228", 0x0089B6F7, 4, {0xBC,0x01,0x00,0x00} },  // VANILLA-ADJ +60  // inventory/exp gain x axis //310 //####hd415 //405
+  { 0x008CF989,   4, K_INT      ,        {0,2,0,0,-18}, 'H', "P229", 0x0089B796, 4, {0xBB,0x01,0x00,0x00} },  // ???related to exp gain/item pick up msg //??!!found in anoth
+  { 0x008D556F,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P230", 0x008A12F4, 4, {0x58,0x02,0x00,0x00} },  // mov eax,600 ;
+  { 0x008D557D,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P231", 0x008A1302, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; IWzVector2D::RelMove
+  { 0x008DE51F,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P232", 0x008AA266, 4, {0x58,0x02,0x00,0x00} },  // push 600
+  { 0x008DE524,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P233", 0x008AA26B, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; CreateWnd
+  { 0x008F4CBF,   4, K_INT      ,        {0,1,0,0,-14}, 'C', "P234", 0x008C069F, 4, {0x1E,0x01,0x00,0x00} },  // ??related to status bar
+  { 0x008F4CC4,   4, K_INT      ,       {1,0,0,0,-158}, 'C', "P235", 0x008C06A4, 4, {0xF2,0x00,0x00,0x00} },  // ???related to status bar
+  { 0x008F798A,   4, K_DMGCAP32 ,     {0,0,0,0,199999}, 'K', "P236", 0x008C3304, 4, {0x3F,0x0D,0x03,0x00} },  // ty rain
+  { 0x008F8984,   4, K_SPDCAP   ,        {0,0,0,0,140}, 'K', "P237", 0x008C4286, 4, {0x8C,0x00,0x00,0x00} },  // set speed cap //ty ronan
+  { 0x0090487F,   4, K_INT      ,        {0,2,0,0,-22}, 'D', "P238", 0x008CFD4B, 4, {0x42,0x02,0x00,0x00} },  // push 578
+  { 0x00904884,   4, K_INT      ,          {2,0,0,0,0}, 'D', "P239", 0x008CFD50, 4, {0x20,0x03,0x00,0x00} },  // push 800
+  { 0x00904888,   5, K_CAVE     ,          {0,0,0,0,0}, 'D', "P240", 0x008CFD55, 5, {0x6A,0x16,0x53,0x8B,0xCE} },  // CONST (non-linear)  // 
+  { 0x0090644B,   4, K_INT      ,          {0,2,0,0,1}, 'D', "P241", 0x008D1793, 4, {0x15,0x02,0x00,0x00} },  // add eax,533
+  { 0x00906452,   4, K_INT      ,        {0,0,0,0,798}, 'D', "P242", 0x008D179A, 4, {0x87,0x02,0x00,0x00} },  // push 647 //hd800
+  { 0x00906C08,   4, K_INT      ,        {0,2,0,0,-22}, 'D', "P243", 0x008D1D50, 4, {0x42,0x02,0x00,0x00} },  // push 578
+  { 0x00906C0D,   4, K_INT      ,          {2,0,0,0,0}, 'D', "P244", 0x008D1D55, 4, {0x20,0x03,0x00,0x00} },  // push 800
+  { 0x00906D39,   9, K_CAVE     ,          {0,0,0,0,0}, 'D', "P245", 0x008D1F65, 5, {0x6A,0x16,0x57,0x8D,0x8E} },  // CONST (non-linear)  // 
+  { 0x00906D8D,   4, K_INT      ,        {0,2,0,0,-22}, 'D', "P246", 0x008D1FF4, 4, {0x42,0x02,0x00,0x00} },  // push 578
+  { 0x00906D92,   4, K_INT      ,          {2,0,0,0,0}, 'D', "P247", 0x008D1FF9, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; CUIStatusBar
+  { 0x00906EBE,   9, K_CAVE     ,          {0,0,0,0,0}, 'D', "P248", 0x008D217C, 8, {0x6A,0x16,0x57,0x8D,0x8E,0x08,0x0D,0x00} },  // CONST (non-linear)  // 
+  { 0x009071BE,   4, K_INT      ,        {0,2,0,0,-33}, 'D', "P249", 0x008D247B, 4, {0x37,0x02,0x00,0x00} },  // push 567 ; IWzVector2D::RelMove
+  { 0x009074A8,   4, K_INT      ,        {0,2,0,0,-19}, 'D', "P250", 0x008D2765, 4, {0x45,0x02,0x00,0x00} },  // push 581
+  { 0x009076F7,   4, K_INT      ,        {0,2,0,0,-19}, 'D', "P251", 0x008D29B4, 4, {0x45,0x02,0x00,0x00} },  // push 581
+  { 0x0090D09D,   4, K_INT      ,        {0,2,0,0,-22}, 'D', "P252", 0x008D82F5, 4, {0x42,0x02,0x00,0x00} },  // push 578
+  { 0x0090D0A2,   4, K_INT      ,          {2,0,0,0,0}, 'D', "P253", 0x008D82FA, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; CreateWnd?
+  { 0x0090D9A6,   4, K_INT      ,        {0,2,0,0,-19}, 'D', "P254", 0x008D8BFE, 4, {0x45,0x02,0x00,0x00} },  // push 581
+  { 0x0090E126,   4, K_INT      ,        {0,2,0,0,-19}, 'D', "P255", 0x008D937E, 4, {0x45,0x02,0x00,0x00} },  // push 581 //008D9373  move mana bar outline? //ty rynyan
+  { 0x0090E871,   4, K_INT      ,        {0,2,0,0,-19}, 'D', "P256", 0x008D9AC9, 4, {0x45,0x02,0x00,0x00} },  // push
+  { 0x00913EAE,   4, K_INT      ,       {0,0,0,0,-798}, 'D', "P257", 0x008DE8E5, 4, {0x79,0xFD,0xFF,0xFF} },  // lea ebx,[eax-647]
+  { 0x00913EB7,   4, K_INT      ,      {0,-1,0,0,-127}, 'D', "P258", 0x008DE8EE, 4, {0x55,0xFE,0xFF,0xFF} },  // lea edi,[eax-427]
+  { 0x00914183,   4, K_INT      ,        {0,2,0,0,-20}, 'D', "P259", 0x008DEB93, 4, {0x44,0x02,0x00,0x00} },  // push 580
+  { 0x0091441F,   4, K_INT      ,        {0,2,0,0,-20}, 'D', "P260", 0x008DEE2F, 4, {0x44,0x02,0x00,0x00} },  // push 580
+  { 0x00914D73,   4, K_INT      ,          {0,2,0,0,1}, 'D', "P261", 0x008DF782, 4, {0x15,0x02,0x00,0x00} },  // add esi,533
+  { 0x00914DE8,   4, K_INT      ,        {0,0,0,0,798}, 'D', "P262", 0x008DF7F8, 4, {0x87,0x02,0x00,0x00} },  // push 647 //hd800
+  { 0x009218FC,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P263", 0x008EBC3C, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; RelMove?
+  { 0x00921918,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P264", 0x008EBC58, 4, {0x58,0x02,0x00,0x00} },  // mov eax,600
+  { 0x00929BE2,   4, K_INT      ,         {2,0,0,0,-1}, 'C', "P265", 0x008F32CC, 4, {0x1F,0x03,0x00,0x00} },  // mov eax,799 ; CUIToolTip::MakeLayer
+  { 0x00929BF5,   4, K_INT      ,         {2,0,0,0,-1}, 'C', "P266", 0x008F32DF, 4, {0x57,0x02,0x00,0x00} },  // mov eax,599 ; CUIToolTip::MakeLayer
+  { 0x0096C1CE,   4, K_INT      ,         {0,-1,0,0,0}, 'C', "P267", 0x0093519A, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300 ;
+  { 0x0096CB3A,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P268", 0x0093586B, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; RelMove? (Skills)
+  { 0x0096CB3F,   4, K_INT      ,          {0,1,0,0,0}, 'C', "P269", 0x00935870, 4, {0x2C,0x01,0x00,0x00} },  // push 300
+  { 0x0098F0E4,   4, K_INT      ,         {0,-1,0,0,0}, 'C', "P271", 0x00954433, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300 ;
+  { 0x009C1752,   4, K_INT      ,         {0,-1,0,0,0}, 'C', "P272", 0x00981555, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300 ;
+  { 0x009C21BF,   4, K_INT      ,         {0,-1,0,0,0}, 'C', "P273", 0x00981F7A, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300 ;
+  { 0x009D26DB,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P274", 0x00991854, 4, {0x58,0x02,0x00,0x00} },  // ??unknown cwnd function
+  { 0x009D26E6,   4, K_INT      ,       {1,0,0,0,-134}, 'C', "P275", 0x0099185F, 4, {0x0A,0x01,0x00,0x00} },  // ??unknown cwnd function
+  { 0x009D26EE,   4, K_INT      ,       {1,0,0,0,-133}, 'C', "P276", 0x00991867, 4, {0x0B,0x01,0x00,0x00} },  // ??unknown cwnd function
+  { 0x009D3A67,   4, K_INT      ,          {1,0,0,0,0}, 'C', "P277", 0x00992BA7, 4, {0x2C,0x01,0x00,0x00} },  // ??unknown cwnd function, possibly related to cutildlg
+  { 0x009D3A6C,   4, K_INT      ,          {0,1,0,0,0}, 'C', "P278", 0x00992BAC, 4, {0x90,0x01,0x00,0x00} },  // ??unknown cwnd function, possibly related to cutildlg
+  { 0x009D753C,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P279", 0x009966B5, 4, {0x58,0x02,0x00,0x00} },  // mov ecx,600
+  { 0x009D7552,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P280", 0x009966CA, 4, {0x20,0x03,0x00,0x00} },  // cmp edi,800
+  { 0x009D7559,   4, K_INT      ,       {2,0,0,0,-100}, 'C', "P281", 0x009966D2, 4, {0xBC,0x02,0x00,0x00} },  // mov edx,700 ; CreateDlg
+  { 0x009DA35F,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P282", 0x009994D8, 4, {0x58,0x02,0x00,0x00} },  // mov ecx,600
+  { 0x009DA375,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P283", 0x009994ED, 4, {0x20,0x03,0x00,0x00} },  // cmp edi,800
+  { 0x009DA37C,   4, K_INT      ,       {2,0,0,0,-100}, 'C', "P284", 0x009994F5, 4, {0xBC,0x02,0x00,0x00} },  // mov edx,700 ; CreateDlg
+  { 0x009E8DE9,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P285", 0x009A3E72, 4, {0x20,0x03,0x00,0x00} },  // mov edx,800 ; CreateDlg
+  { 0x009E8DF6,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P286", 0x009A3E7F, 4, {0x58,0x02,0x00,0x00} },  // mov edx,600
+  { 0x009FEB65,   4, K_INT      ,         {0,-1,0,0,0}, 'C', "P287", 0x009B76BD, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300
+  { 0x009FEB73,   4, K_INT      ,          {0,1,0,0,0}, 'C', "P288", 0x009B76CB, 4, {0x2C,0x01,0x00,0x00} },  // push 300
+  { 0x00A27F79,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P289", 0x009DFCF0, 4, {0xE0,0xFC,0xFF,0xFF} },  // lea eax,[esi+eax-600]
+  { 0x00A27FE3,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P290", 0x009DFD5C, 4, {0x20,0x03,0x00,0x00} },  // mov ecx,800
+  { 0x00A280F1,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P291", 0x009DFE68, 4, {0xA8,0xFD,0xFF,0xFF} },  // lea eax,[ecx+eax-800]
+  { 0x00A28159,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P292", 0x009DFED2, 4, {0x58,0x02,0x00,0x00} },  // mov ecx,600	; IWzVector2D::RelMove
+  { 0x00A2B242,   4, K_INT      ,         {0,-1,0,0,0}, 'C', "P293", 0x009E2E85, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300		overall screen visible UI scaling
+  { 0x00A2B248,   4, K_INT      ,         {-1,0,0,0,0}, 'C', "P294", 0x009E2E8B, 4, {0x70,0xFE,0xFF,0xFF} },  // push -400 ;	overall screen visible UI scaling
+  { 0x00A3FA1F,   4, K_INT      ,          {0,1,0,0,0}, 'C', "P297", 0x009F6ADD, 4, {0x2C,0x01,0x00,0x00} },  // push 300 ; MapleStoryClass
+  { 0x00A3FF3A,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P298", 0x009F6E99, 4, {0x58,0x02,0x00,0x00} },  // push 600
+  { 0x00A3FF3F,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P299", 0x009F6EA0, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; StringPool#1162 (MapleStoryClass)
+  { 0x00A401C3,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P301", 0x009F7078, 4, {0x58,0x02,0x00,0x00} },  // ??related to application dimensions	//(ragezone release merg
+  { 0x00A401C8,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P303", 0x009F707D, 4, {0x20,0x03,0x00,0x00} },  // ??related to application dimensions
+  { 0x00A4127F,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P308", 0x009F7B1D, 4, {0x58,0x02,0x00,0x00} },  // push 600
+  { 0x00A41284,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P309", 0x009F7B23, 4, {0x20,0x03,0x00,0x00} },  // push 800 ; CWvsApp::InitializeGr2D
+  { 0x00A70406,   4, K_INT      ,       {1,0,0,0,-129}, 'C', "P310", 0x00A24D0B, 4, {0x0F,0x01,0x00,0x00} },  // ??
+  { 0x00A905FB,   4, K_INT      ,         {0,-1,0,0,0}, 'C', "P311", 0x00A448B0, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300 ; CWvsPhysicalSpace2D::Load]
+  { 0x00AABDAB,   1, K_BYTE     ,          {0,0,0,0,5}, 'C', "P312", 0x00A5FC2B, 1, {0xB8} },  // ??
+  { 0x00B502C8,   8, K_DMGCAPD  ,          {0,0,0,0,0}, 'K', "P318", 0x00AFE8A0, 8, {0x00,0x00,0x00,0x00,0xF8,0x69,0x08,0x41} },  // CONST (non-linear)  // ty rain
+  { 0x00C3BA80,   4, K_INT      ,          {1,0,0,0,0}, 'C', "P319", 0x00BE2738, 4, {0x90,0x01,0x00,0x00} },  // dd 400
+  { 0x00C3BA84,   4, K_INT      ,        {0,0,0,0,128}, 'C', "P320", 0x00BE273C, 4, {0x2C,0x01,0x00,0x00} },  // ??
+  { 0x00C3C138,   4, K_INT      ,          {1,0,0,0,0}, 'C', "P321", 0x00BE2DF0, 4, {0x90,0x01,0x00,0x00} },  // dd 400
+  { 0x00C3C13C,   4, K_INT      ,          {0,1,0,0,0}, 'C', "P322", 0x00BE2DF4, 4, {0x2C,0x01,0x00,0x00} },  // dd 300
 };
 
 // Code-cave origins and return addresses. codecaves.h from upstream is

@@ -117,11 +117,17 @@ def parse_consts(text):
     return consts
 
 
-def build(width=WIDTH, height=HEIGHT):
-    """Parse the source and return the patch list evaluated at width x height."""
+def build(width=WIDTH, height=HEIGHT, msg=26):
+    """Parse the source and return the patch list evaluated at width x height.
+
+    `msg` is config.ini [general] MsgAmount. It is a build variable, not a constant,
+    because gen_loader fits a coefficient for it: two rows (P220, P227) depend on it,
+    and baking 26 there is what made the key inert in v1/v2.
+    """
     global ENV
     ENV = dict(ENV, m_nGameWidth=width, m_nGameHeight=height,
-               myHeight=(height - 600) // 2, myWidth=(width - 800) // 2)
+               myHeight=(height - 600) // 2, myWidth=(width - 800) // 2,
+               MsgAmount=msg, msgAmnt=msg, msgAmntOffset=msg * 14)
     return _parse()
 
 

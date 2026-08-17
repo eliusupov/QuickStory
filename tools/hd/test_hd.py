@@ -18,30 +18,37 @@ from gen_loader import SAMPLES, fit             # noqa: E402
 
 
 def test_fit():
-    assert fit([600, 720, 900, 1080]) == (0, 2, 0, 0), 'H'
-    assert fit([800, 1280, 1600, 1920]) == (2, 0, 0, 0), 'W'
-    assert fit([400, 640, 800, 960]) == (1, 0, 0, 0), 'W/2'
-    assert fit([-300, -360, -450, -540]) == (0, -1, 0, 0), '-H/2'
-    assert fit([508, 628, 808, 988]) == (0, 2, 0, -92), 'H-92'
-    assert fit([w * h for w, h in SAMPLES]) == (0, 0, 1, 0), 'W*H'
-    assert fit([1, 2, 4, 8]) is None, 'non-linear must not fit'
-    for f, (w, h) in ((fit([600, 720, 900, 1080]), (1280, 720)),):
-        assert f[0] * w // 2 + f[1] * h // 2 + f[2] * w * h + f[3] == 720
+    # One value per SAMPLES entry; the fifth sample differs from the second only in
+    # MsgAmount, so any row that ignores MsgAmount repeats its second value there.
+    H = [h for _, h, _ in SAMPLES]
+    W = [w for w, _, _ in SAMPLES]
+    assert fit(H) == (0, 2, 0, 0, 0), 'H'
+    assert fit(W) == (2, 0, 0, 0, 0), 'W'
+    assert fit([w // 2 for w in W]) == (1, 0, 0, 0, 0), 'W/2'
+    assert fit([-(h // 2) for h in H]) == (0, -1, 0, 0, 0), '-H/2'
+    assert fit([h - 92 for h in H]) == (0, 2, 0, 0, -92), 'H-92'
+    assert fit([w * h for w, h, _ in SAMPLES]) == (0, 0, 1, 0, 0), 'W*H'
+    # the two MsgAmount-dependent shapes that actually occur (P220, P227)
+    assert fit([m for _, _, m in SAMPLES]) == (0, 0, 0, 1, 0), 'MsgAmount'
+    assert fit([h - 6 - 14 * m for _, h, m in SAMPLES]) == (0, 2, 0, -14, -6), 'H-6-14M'
+    assert fit([1, 2, 4, 8, 16]) is None, 'non-linear must not fit'
+    f, (w, h, m) = fit(H), SAMPLES[1]
+    assert f[0] * w // 2 + f[1] * h // 2 + f[2] * w * h + f[3] * m + f[4] == 720
     print('  fit: ok')
 
 
 def test_formulas_match_source():
     """Every fitted formula must reproduce extract.py's own value at every sample."""
     import extract
-    tables = [extract.build(w, h) for w, h in SAMPLES]
+    tables = [extract.build(w, h, m) for w, h, m in SAMPLES]
     n = 0
     for i in range(len(tables[0])):
         vals = [t[i]['value'] for t in tables]
         f = fit(vals)
         if not f:
             continue
-        for (w, h), v in zip(SAMPLES, vals):
-            assert f[0] * w // 2 + f[1] * h // 2 + f[2] * w * h + f[3] == v, \
+        for (w, h, m), v in zip(SAMPLES, vals):
+            assert f[0] * w // 2 + f[1] * h // 2 + f[2] * w * h + f[3] * m + f[4] == v, \
                 f'{tables[0][i]["id"]} {tables[0][i]["value_expr"]}'
         n += 1
     assert n > 200, f'only {n} rows fitted; the expression set changed'
@@ -125,9 +132,11 @@ def test_generated_inc_wellformed():
         print('  inc: SKIPPED (run gen_loader.py)')
         return
     src = open(inc).read()
-    kinds = set(re.findall(r'enum HdKind \{([^}]*)\}',
-                           open(os.path.join(paths.HD, 'loader', 'dllmain.cpp')).read())
-                [0].replace(' ', '').split(','))
+    # split on commas and strip each name, so the enum may span lines
+    kinds = {k.strip() for k in
+             re.findall(r'enum HdKind \{([^}]*)\}',
+                        open(os.path.join(paths.HD, 'loader', 'dllmain.cpp')).read())
+             [0].split(',') if k.strip()}
     body = src.split('kHdPatches[] = {', 1)[1].split('\n};', 1)[0]
     rows = [ln for ln in body.splitlines() if ln.strip().startswith('{')]
     assert rows, 'no rows emitted'
@@ -221,6 +230,39 @@ def test_archive_mount_site():
     print(f'  archive mount: ok (0x{va:08X} push -> 0x{target:08X} L"Base.wz", both dumps)')
 
 
+def test_tubi_site():
+    """useTubi NOPs a 2-byte conditional jump; check it really is one, in both dumps.
+
+    The v83 address cannot be used and cannot even be inspected -- localhome.exe is a
+    pre-patched repack whose bytes there already read 90 90 -- so this site was resolved
+    from the v84 images alone. That makes the guard the only thing standing between us
+    and a blind 2-byte write, so assert three things: the recorded bytes match both
+    dumps, they decode as a short Jcc (0x70..0x7F), and its branch target lands just
+    past the `push 1 / pop eax / jmp` TRUE arm, which is what makes NOPping it mean
+    "always take TRUE" rather than "fall into something else".
+    """
+    src = open(os.path.join(paths.HD, 'loader', 'dllmain.cpp')).read()
+    g = re.search(r'kTubiJl\[2\]\s*=\s*\{([^}]*)\}', src)
+    a = re.search(r'kTubiAddr\s*=\s*(0x[0-9A-Fa-f]+)', src)
+    assert g and a, 'could not parse the useTubi site out of dllmain.cpp'
+    exp = bytes(int(x, 16) for x in g.group(1).replace(' ', '').split(',') if x)
+    va = int(a.group(1), 16)
+    assert len(exp) == 2, f'useTubi guard must be 2 bytes, got {len(exp)}'
+    assert 0x70 <= exp[0] <= 0x7F, f'useTubi guard is not a short Jcc: {exp.hex()}'
+
+    target = va + 2 + exp[1]                       # rel8 is from the next instruction
+    for tag, buf in (('A', paths.load(paths.V84_A)), ('B', paths.load(paths.V84_B))):
+        o = va - paths.BASE
+        assert buf[o:o + 2] == exp, \
+            f'useTubi @0x{va:08X}: dump {tag} reads {buf[o:o+2].hex()}, source says {exp.hex()}'
+        # the TRUE arm sits between the jump and its target: push 1 (6A 01), pop eax (58)
+        assert buf[o + 2:o + 5] == b'\x6a\x01\x58', \
+            f'useTubi @0x{va:08X}: dump {tag} does not have `push 1 / pop eax` after the jump'
+        assert buf[target - paths.BASE:target - paths.BASE + 2] == b'\x33\xc0', \
+            f'useTubi @0x{va:08X}: dump {tag} branch target 0x{target:08X} is not `xor eax,eax`'
+    print(f'  useTubi site: ok (0x{va:08X} {exp.hex()} -> 0x{target:08X}, both dumps)')
+
+
 if __name__ == '__main__':
     test_fit()
     have = all(os.path.exists(p) for p in (paths.V83, paths.V84_A, paths.EZORSIA))
@@ -234,4 +276,5 @@ if __name__ == '__main__':
     test_generated_inc_wellformed()
     test_archive_hooks_match_dumps()
     test_archive_mount_site()
+    test_tubi_site()
     print('OK')

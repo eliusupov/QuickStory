@@ -43,10 +43,15 @@
 
 #include <windows.h>
 #include <cstdio>
+#include <cstdlib>
 
-enum HdKind { K_INT, K_BYTE, K_SHORT, K_DOUBLE, K_FILL, K_STR, K_BYTES, K_CAVE };
+// The last three are group K: the value is a config.ini scalar written verbatim rather
+// than a function of the resolution, so those rows ignore HdFormula entirely.
+enum HdKind { K_INT, K_BYTE, K_SHORT, K_DOUBLE, K_FILL, K_STR, K_BYTES, K_CAVE,
+              K_DMGCAP32, K_DMGCAPD, K_SPDCAP };
 
-struct HdFormula { int aW, aH, aWH, k; };   // value = aW*W/2 + aH*H/2 + aWH*W*H + k
+// value = aW*W/2 + aH*H/2 + aWH*W*H + aM*MsgAmount + k
+struct HdFormula { int aW, aH, aWH, aM, k; };
 
 struct HdPatch {
     DWORD     addr;      // v84 VA, verified present in both memory dumps
@@ -65,8 +70,16 @@ struct HdPatch {
 static int g_w = 1280, g_h = 720;
 static int g_applied = 0, g_skipped = 0, g_mismatch = 0, g_report = 0;
 
+// config.ini [general] MsgAmount and [optional] setDamageCap / speedMovementCap.
+// Defaults are Ezorsia's own, which on this client happen to equal v84's vanilla
+// values -- so leaving them alone writes the bytes that are already there.
+static int    g_msg    = 26;
+static int    g_msgClamped = 0;   // the out-of-range value the owner actually wrote, if any
+static double g_dmgCap = 199999.0;
+static int    g_spdCap = 140;
+
 static int Eval(const HdFormula& f) {
-    return f.aW * g_w / 2 + f.aH * g_h / 2 + f.aWH * g_w * g_h + f.k;
+    return f.aW * g_w / 2 + f.aH * g_h / 2 + f.aWH * g_w * g_h + f.aM * g_msg + f.k;
 }
 
 // Write with the page temporarily writable, and restore protection. Ezorsia's
@@ -166,6 +179,46 @@ static bool Expected(const HdPatch& p) {
     return memcmp((const void*)p.addr, p.expect, (SIZE_T)p.nexp) == 0;
 }
 
+// ---- useTubi --------------------------------------------------------------
+// config.ini [optional] useTubi, default false (upstream's default, kept).
+//
+// Upstream is one unexplained line -- FillBytes(0x00485C32, 0x90, 2) -- and the author
+// never says what it does anywhere in the project. Read off the disassembly instead:
+//
+// v84 0x0048903A is a two-argument boolean helper with 107 call sites. It returns TRUE
+// only if a sub-check passes AND enough time has elapsed since a stored timestamp:
+//
+//     0048906B  2B 86 B0 20 00 00   sub eax, [esi+0x20B0]   ; eax = now - lastTime
+//     00489071  3B 44 24 08         cmp eax, [esp+8]        ; vs the caller's threshold
+//     00489075  7C 05               jl  0x48907C            ; <-- THIS is what tubi kills
+//     00489077  6A 01 / 58          push 1 / pop eax        ; -> TRUE
+//     0048907C  33 C0               xor eax, eax            ; -> FALSE
+//
+// The caller at 0x004F866D passes 0xC8, so that one is a 200 ms gate. NOPping the `jl`
+// makes the FALSE path unreachable and the helper always returns TRUE. In plain terms:
+// it removes a client-side minimum-delay check, so actions the client would otherwise
+// throttle fire as fast as they are issued. The server still applies its own limits --
+// this relaxes the client only.
+//
+// The v83 address is NOT carried across, and localhome.exe could not have told us the
+// original instruction anyway: that image is a pre-patched repack whose bytes at
+// 0x00485C32 already read 90 90. The v84 site was resolved from surrounding shape --
+// the `push 1 / pop eax / jmp / xor eax,eax / pop esi / ret 8` tail hits exactly once
+// per image, matches ordinally v83 0x00485C34 -> v84 0x00489077, and is byte-identical
+// in both dumps. The guard below is the intact `jl`, so on any client where this is not
+// that instruction we skip instead of writing.
+static const BYTE kTubiJl[2] = { 0x7C, 0x05 };
+static const DWORD kTubiAddr = 0x00489075;
+static bool g_tubi = false, g_tubiDone = false, g_tubiMismatch = false;
+
+static void ApplyTubi() {
+    if (!g_tubi) return;
+    MEMORY_BASIC_INFORMATION mbi{};
+    if (!VirtualQuery((LPCVOID)kTubiAddr, &mbi, sizeof(mbi)) || mbi.State != MEM_COMMIT ||
+        memcmp((const void*)kTubiAddr, kTubiJl, 2) != 0) { g_tubiMismatch = true; return; }
+    g_tubiDone = PokeFill(kTubiAddr, 0x90, 2);
+}
+
 static void ApplyAll() {
     for (const HdPatch& p : kHdPatches) {
         if (!Expected(p)) { ++g_mismatch; continue; }
@@ -175,6 +228,11 @@ static void ApplyAll() {
         case K_SHORT: { short v = (short)Eval(p.f);   ok = Poke(p.addr, &v, 2); break; }
         case K_BYTE:  { BYTE  v = (BYTE)Eval(p.f);    ok = Poke(p.addr, &v, 1); break; }
         case K_FILL:  { ok = PokeFill(p.addr, (BYTE)p.f.k, p.size); break; }
+        // The damage cap is written twice by design: the client keeps an int copy for
+        // the stat window and a double for the damage maths, and upstream sets both.
+        case K_DMGCAP32: { int    v = (int)g_dmgCap; ok = Poke(p.addr, &v, 4); break; }
+        case K_DMGCAPD:  { double v = g_dmgCap;      ok = Poke(p.addr, &v, 8); break; }
+        case K_SPDCAP:   { int    v = g_spdCap;      ok = Poke(p.addr, &v, 4); break; }
         case K_CAVE:  {
             for (const HdCave& c : kHdCaves)
                 if (!strcmp(c.id, p.id)) { ok = Cave(c.origin, c.nops, (void*)c.body); break; }
@@ -198,12 +256,20 @@ static void Report() {
                      : !g_mounted      ? "FAILED (mount write refused)"
                      : g_hooked        ? "on"
                                        : "FAILED (mounted, GetString guard differs)";
+    const char* tubi = !g_tubi          ? "off"
+                     : g_tubiMismatch   ? "FAILED (guard bytes differ)"
+                     : g_tubiDone       ? "ON"
+                                        : "FAILED (write refused)";
+    char clamp[64] = "";
+    if (g_msgClamped) wsprintfA(clamp, " (clamped from %d)", g_msgClamped);
     wsprintfA(msg, "hd-res %dx%d: applied %d, skipped %d, byte-mismatch %d of %d"
                    "\narchive: %s | hooks %d, mismatch %d"
+                   "\nMsgAmount %d%s | dmgCap %d | spdCap %d | useTubi %s"
                    "%s\n",
               g_w, g_h, g_applied, g_skipped, g_mismatch,
               (int)(sizeof(kHdPatches) / sizeof(kHdPatches[0])),
               arch, g_hooked, g_hookMismatch,
+              g_msg, clamp, (int)g_dmgCap, g_spdCap, tubi,
               g_diag ? " | diag ON" : "");
     OutputDebugStringA(msg);
 #ifdef HD_SELFTEST
@@ -243,6 +309,27 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     // The whole table is fitted for even W/H; odd values silently truncate the /2 terms.
     g_w &= ~1; g_h &= ~1;
 
+    // MsgAmount is a real variable now, not a baked 26: gen_loader fits a coefficient
+    // for it, so rows P220 and P227 track whatever is set here. CLAMPED to [6,255] --
+    // config.ini's own comment says 6 is vanilla and "no more than 255 or you buffer
+    // overflow", and reproducing an admitted overflow faithfully is not a feature.
+    g_msg = GetPrivateProfileIntA("general", "MsgAmount", 26, cfg);
+    if (g_msg > 255) { g_msgClamped = g_msg; g_msg = 255; }
+    if (g_msg < 6)   { g_msgClamped = g_msg; g_msg = 6;   }
+
+    // [optional] gameplay caps. These land on v84 literals that ALREADY hold Ezorsia's
+    // defaults, so an untouched config writes the bytes that are there and changes
+    // nothing; they exist so the knobs work at all.
+    char buf[64]{};
+    GetPrivateProfileStringA("optional", "setDamageCap", "199999.0", buf, sizeof(buf), cfg);
+    g_dmgCap = atof(buf);
+    if (g_dmgCap <= 0) g_dmgCap = 199999.0;
+    g_spdCap = GetPrivateProfileIntA("optional", "speedMovementCap", 140, cfg);
+
+    // useTubi: upstream's default is false, and it stays false. See ApplyTubi.
+    GetPrivateProfileStringA("optional", "useTubi", "false", buf, sizeof(buf), cfg);
+    g_tubi = (buf[0] == 't' || buf[0] == 'T' || buf[0] == '1');
+
     // The archive is opt-in by mere presence, exactly as Ezorsia decides it. No file
     // there means the two hooks below stay inert, so a bad copy cannot break a launch:
     // the owner reverts by renaming EzorsiaV2_UI.wz.
@@ -256,6 +343,7 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     // derived from them.
     SetCaveParams(g_w, g_h);
     ApplyAll();
+    ApplyTubi();
 
     // diag=1 installs a read-only observer on IWzNameSpace::GetItem and writes
     // hd-res-diag.log next to this DLL. diag=0 (the default) installs no hooks at all,

@@ -22,20 +22,30 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import extract                                   # noqa: E402
 import paths                                     # noqa: E402
 
-SAMPLES = [(800, 600), (1280, 720), (1600, 900), (1920, 1080)]
+# (W, H, MsgAmount). The fifth sample varies ONLY MsgAmount, which is what makes its
+# coefficient solvable; the first four are the original resolution samples, so every
+# row that does not depend on MsgAmount fits exactly as it did before with aM = 0.
+SAMPLES = [(800, 600, 26), (1280, 720, 26), (1600, 900, 26), (1920, 1080, 26),
+           (1280, 720, 40)]
 
 KIND = {'WriteInt': 'K_INT', 'WriteByte': 'K_BYTE', 'WriteShort': 'K_SHORT',
         'WriteDouble': 'K_DOUBLE', 'FillBytes': 'K_FILL', 'WriteString': 'K_STR',
         'WriteByteArray': 'K_BYTES', 'CodeCave': 'K_CAVE'}
 
+# Group-K rows write a config scalar verbatim rather than a function of the resolution,
+# so they take their value from the ini at runtime instead of from the fitted formula.
+# Keyed by row id because there are exactly three of them; a general mechanism for
+# "which config key feeds this row" would be more machinery than rows.
+CFG_KIND = {'P236': 'K_DMGCAP32', 'P318': 'K_DMGCAPD', 'P237': 'K_SPDCAP'}
+
 
 def fit(vals):
-    """Solve value = aW*W/2 + aH*H/2 + aWH*W*H + k over the four samples."""
+    """Solve value = aW*W/2 + aH*H/2 + aWH*W*H + aM*M + k over the five samples."""
     if any(not isinstance(v, int) for v in vals):
         return None
-    rows = [[Fraction(w, 2), Fraction(h, 2), Fraction(w * h), Fraction(1), Fraction(v)]
-            for (w, h), v in zip(SAMPLES, vals)]
-    n = 4
+    rows = [[Fraction(w, 2), Fraction(h, 2), Fraction(w * h), Fraction(m), Fraction(1),
+             Fraction(v)] for (w, h, m), v in zip(SAMPLES, vals)]
+    n = 5
     for c in range(n):                                     # gaussian elimination
         p = next((r for r in range(c, n) if rows[r][c]), None)
         if p is None:
@@ -56,15 +66,15 @@ def fit(vals):
             sol.append(rows[c][n])
     if any(x.denominator != 1 for x in sol):
         return None
-    aW, aH, aWH, k = (int(x) for x in sol)
-    for (w, h), v in zip(SAMPLES, vals):
-        if aW * w // 2 + aH * h // 2 + aWH * w * h + k != v:
+    aW, aH, aWH, aM, k = (int(x) for x in sol)
+    for (w, h, m), v in zip(SAMPLES, vals):
+        if aW * w // 2 + aH * h // 2 + aWH * w * h + aM * m + k != v:
             return None
-    return aW, aH, aWH, k
+    return aW, aH, aWH, aM, k
 
 
 def main():
-    tables = [extract.build(w, h) for w, h in SAMPLES]
+    tables = [extract.build(w, h, m) for w, h, m in SAMPLES]
     base = json.load(open(paths.PATCHES))['patches']
     J = json.load(open(os.path.join(paths.DATA, 'v84-patchset.json')))
     rows = {r['id']: r for r in J['rows']}
@@ -73,8 +83,14 @@ def main():
     # (window mode) are already done by the existing edits\ DLLs -- bypass, redirect,
     # window-mode. Emitting them here would put two writers on the same functions,
     # which is the exact failure this design exists to avoid, and group B would fight
-    # redirect-1.0.0.dll over the server address. K is optional gameplay caps.
-    skip_groups = set(J['drop_groups']) | set(J['optional_groups'])
+    # redirect-1.0.0.dll over the server address.
+    #
+    # K (damage cap, speed cap) IS shipped now -- the owner asked for the full feature
+    # set. It is listed in the data as `optional_groups` and deliberately NOT added to
+    # the skip set: its three PASS rows take their value from config.ini at runtime via
+    # CFG_KIND above, and its three UNRESOLVED rows are excluded by the verdict test
+    # below like any other unresolved row, not by their group.
+    skip_groups = set(J['drop_groups'])
 
     out, nfit, nconst, skipped, nadj = [], 0, 0, 0, 0
     for i, p in enumerate(base):
@@ -94,13 +110,13 @@ def main():
         adj = r.get('van_adjust') or 0
         if f:
             nfit += 1
-            aW, aH, aWH, k = f
-            expr = f'{{{aW},{aH},{aWH},{k - adj}}}'
+            aW, aH, aWH, aM, k = f
+            expr = f'{{{aW},{aH},{aWH},{aM},{k - adj}}}'
         else:
             nconst += 1
             v = p['value']
             k = v if isinstance(v, int) else 0
-            expr = f'{{0,0,0,{k - adj}}}'
+            expr = f'{{0,0,0,0,{k - adj}}}'
         if adj:
             nadj += 1
         out.append((r, p, expr, bool(f), adj))
@@ -112,18 +128,21 @@ def main():
                 '// Every row here passed tools/hd/verify.py against BOTH v84 memory dumps:\n'
                 '//   the address exists, the bytes decode to the same instruction shape as\n'
                 '//   the v83 site, and the write lands on that instruction\'s own operand.\n'
-                '// value = aW*W/2 + aH*H/2 + aWH*W*H + k\n'
+                '// value = aW*W/2 + aH*H/2 + aWH*W*H + aM*MsgAmount + k\n'
+                '// K_DMGCAP32/K_DMGCAPD/K_SPDCAP ignore the formula and write the\n'
+                '//   corresponding config.ini scalar verbatim.\n'
                 '// expect[] is what these bytes read in the VERIFIED v84 image. The DLL\n'
                 '// compares before it writes, so a client that is not the one this table\n'
                 '// was checked against gets skipped instead of corrupted.\n'
-                '// { v84addr, size, kind, {aW,aH,aWH,k}, group, id, v83addr, nexp, {exp} }\n'
+                '// { v84addr, size, kind, {aW,aH,aWH,aM,k}, group, id, v83addr, nexp, {exp} }\n'
                 'static const HdPatch kHdPatches[] = {\n')
         for r, p, expr, fitted, adj in out:
             note = p['comment'].replace('\n', ' ').replace('*/', '* /')[:60]
             eb = bytes.fromhex(r.get('expect') or '')
             ex = '{' + ','.join(f'0x{b:02X}' for b in eb) + '}' if eb else '{0}'
+            kind = CFG_KIND.get(r['id'], KIND[r['op']])
             f.write(f'  {{ 0x{r["v84"]:08X}, {r.get("size84", r["size"]):3}, '
-                    f'{KIND[r["op"]]:8}, {expr:>18},'
+                    f'{kind:11}, {expr:>20},'
                     f" '{r['group']}', \"{r['id']}\", 0x{r['v83']:08X},"
                     f' {len(eb)}, {ex} }},'
                     f'{"" if fitted else "  // CONST (non-linear)"}'
