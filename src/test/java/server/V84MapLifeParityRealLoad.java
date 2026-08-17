@@ -68,14 +68,6 @@ class V84MapLifeParityRealLoad {
 
     // ---- rows taken from v84 ---------------------------------------------------------------
 
-    /** 926100203 "Yulete's Office" had an empty life node; v84's five investigation markers now fill it. */
-    @Test
-    void map926100203GainsTheAranInvestigationMarkers() {
-        assertEquals(Map.of("n 2112007", 5), composition(926100203),
-                "926100203 no longer carries v84's five 2112007 markers");
-        assertSlotsAreConsecutive(926100203, 5);
-    }
-
     /**
      * The one authorised deletion. v84 rebalances Ant Tunnel IV onto 2230131 by substitution:
      * 17 -> 37, against 42 -> 15 Horny and 6 -> 2 Zombie Mushrooms. Additive-only would have left
@@ -102,15 +94,6 @@ class V84MapLifeParityRealLoad {
         assertSlotsAreConsecutive(140010111, 12);
     }
 
-    /** v84 puts a Master Dummy in the beginner practice field; ours had only the Practice Chart. */
-    @Test
-    void map250020000GainsTheMasterDummy() {
-        assertEquals(Map.of("m 5090001", 1, "m 5120503", 12, "n 2096000", 2),
-                composition(250020000),
-                "250020000 is missing v84's mob 5090001 (Master Dummy)");
-        assertSlotsAreConsecutive(250020000, 15);
-    }
-
     /** The largest coordinate move taken from v84: Chico walks 624px east. */
     @Test
     void map220000300PlacesChicoWhereV84Does() {
@@ -122,6 +105,38 @@ class V84MapLifeParityRealLoad {
     }
 
     // ---- rows deliberately NOT taken from v84 ------------------------------------------------
+
+    /**
+     * v84 places five npc 2112007 "Investigation Result" here. {@code e0a27e00a} deleted exactly
+     * those five rows in the commit that implemented Magatia PQ, because the PQ drives this map
+     * from script - {@code scripts/event/MagatiaPQ_Z.js} spawns and destroys its npcs - and
+     * {@code scripts/npc/2112007.js} indexes the PQ's {@code stg1_b0..b25} property bank by
+     * {@code cm.getNpcObjectId() % 26}. A static row gets an arbitrary runtime object id and no
+     * event instance, so it reads the wrong bucket or throws.
+     */
+    @Test
+    void map926100203KeepsItsLifeEmptyForMagatiaPq() {
+        Data life = mapData(926100203).getChildByPath("life");
+        assertNotNull(life, "926100203 lost its life node");
+        assertEquals(0, life.getChildren().size(),
+                "926100203 got v84's five static 2112007 back; MagatiaPQ_Z spawns them itself and "
+                        + "2112007.js keys on the runtime object id");
+    }
+
+    /**
+     * v84 puts mob 5090001 (Master Dummy) at 48,44 in the beginner practice field.
+     * {@code 0a2e382c3} rewrote that very slot to npc 2096000 (Practice Chart) and
+     * {@code c8e36c10e} then corrected its leftover {@code type}; the dummy now lives in
+     * 250020300, whose row is protect-listed as {@code Map/Map2/250020300.img/life/31}. So the
+     * relocation is deliberate and blessed, and re-adding the dummy here second-guesses it.
+     */
+    @Test
+    void map250020000KeepsThePracticeChartRatherThanV84sMasterDummy() {
+        assertEquals(Map.of("m 5120503", 12, "n 2096000", 2), composition(250020000),
+                "250020000 gained v84's mob 5090001 back, undoing 0a2e382c3's relocation of the "
+                        + "Master Dummy to 250020300");
+        assertSlotsAreConsecutive(250020000, 14);
+    }
 
     /**
      * v84 statically places 9901517-9901537 here. Upstream deleted exactly those rows in
@@ -150,6 +165,29 @@ class V84MapLifeParityRealLoad {
             assertEquals(-1, DataTool.getInt(entry.getChildByPath("mobTime"), 0),
                     "610030550 life/" + entry.getName() + " respawns again; CWKPQ needs mobTime -1");
         }
+    }
+
+    /**
+     * Leaf-count gate. Composition and slot counts both survive a row silently losing an optional
+     * leaf - {@code f}, {@code hide}, {@code mobTime}, and on six of these maps {@code limitedname}
+     * - so pin the total leaf count too. This is the check that would have caught the first pass
+     * dropping {@code f}/{@code hide}/{@code mobTime} from 105050300's added rows.
+     */
+    @Test
+    void editedMapsKeepEveryLifeLeaf() {
+        assertEquals(580, lifeLeaves(105050300), "105050300 life leaf count (v84's own: 55 rows)");
+        assertEquals(132, lifeLeaves(140010111), "140010111 life leaf count");
+        assertEquals(154, lifeLeaves(250020000), "250020000 life leaf count");
+        assertEquals(32, lifeLeaves(220000300), "220000300 life leaf count");
+        assertEquals(594, lifeLeaves(100010000), "100010000 life leaf count");
+    }
+
+    private static int lifeLeaves(int mapId) {
+        int leaves = 0;
+        for (Data entry : mapData(mapId).getChildByPath("life").getChildren()) {
+            leaves += entry.getChildren().size();
+        }
+        return leaves;
     }
 
     /** {@code "<type> <id>"} -> count, over every life entry of the map. */
