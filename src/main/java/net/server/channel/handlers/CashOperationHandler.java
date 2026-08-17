@@ -102,6 +102,12 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         cs.addToInventory(item);
                         c.sendPacket(PacketCreator.showBoughtCashItem(item, c.getAccID()));
                     } else { // Package
+                        if (!CashItemFactory.isPackage(cItem.getItemId())) {    // a non-package SN left getPackage no list to walk, with the cash already gone
+                            log.error("Denied to sell cash package with SN {}", snCS);
+                            c.enableCSActions();
+                            return;
+                        }
+
                         cs.gainCash(useNX, cItem, chr.getWorld());
 
                         List<Item> cashPackage = CashItemFactory.getPackage(cItem.getItemId());
