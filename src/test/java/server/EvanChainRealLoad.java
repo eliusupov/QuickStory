@@ -389,6 +389,46 @@ class EvanChainRealLoad {
         }
     }
 
+    /**
+     * The four ids ticket 41 listed as open and never re-verified. All four were closed by later
+     * work, not by this ticket, so this is a regression lock rather than a fix: it fails the moment
+     * any of them regresses back to the state the ticket described.
+     *
+     * <ul>
+     *   <li>{@code 1052002} (quest 22535) and {@code 2092001} (quest 22587) were placed by the 38
+     *       life placements of {@code ce3895453}, each on exactly the map
+     *       {@code Etc.wz/NpcLocation.img} names for it - 103000000 and 251000000.</li>
+     *   <li>{@code 4032455} (quest 22510) is not a drop and never was: 22510's own
+     *       {@code startscript q22510s} hands it over, which is why the drop tables have no row.</li>
+     *   <li>{@code 4032468} (quest 22567) comes from {@code Act.img/22568/1}, the repeatable
+     *       hand-in at npc 2030012 that trades 5 each of 4000070/71/72/4000068 for it. Nothing was
+     *       invented for either item.</li>
+     * </ul>
+     */
+    @Test
+    void theFourIdsTicket41LeftOpenAllHaveARealV84Source() throws IOException {
+        assertTrue(npcIsInLifeOf(103000000, 1052002),
+                "npc 1052002 left Map.wz life of 103000000; quest 22535 cannot be handed in");
+        assertTrue(npcIsInLifeOf(251000000, 2092001),
+                "npc 2092001 left Map.wz life of 251000000; quest 22587 cannot be handed in");
+
+        assertTrue(Files.readString(Path.of("scripts", "quest", "22510.js"), StandardCharsets.UTF_8)
+                        .contains("gainItem(4032455"),
+                "22510.js no longer grants 4032455; the item has no other source in v84 data");
+
+        Data grant = DataProviderFactory.getDataProvider(WZFiles.QUEST)
+                .getData("Act.img").getChildByPath("22568/1/item");
+        assertNotNull(grant, "Act.img/22568/1 lost its item block - the only source of 4032468");
+        boolean grants4032468 = false;
+        for (Data entry : grant.getChildren()) {
+            if (DataTool.getInt(entry.getChildByPath("id"), 0) == 4032468) {
+                grants4032468 = DataTool.getInt(entry.getChildByPath("count"), 0) > 0;
+            }
+        }
+        assertTrue(grants4032468,
+                "Act.img/22568 no longer grants 4032468, so quest 22567 becomes uncompletable");
+    }
+
     /** True if {@code npcId} appears as a {@code type=\"n\"} life entry of {@code mapId}. */
     private static boolean npcIsInLifeOf(int mapId, int npcId) {
         DataProvider mapSource = DataProviderFactory.getDataProvider(WZFiles.MAP);

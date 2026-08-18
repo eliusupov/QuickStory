@@ -118,18 +118,29 @@ Later in the chain, all from the same root cause: **this repo's `wz/Map.wz` is a
 `wz/Quest.wz` is v84**, so v84-era NPCs and mobs are absent from the map data. These need an
 additive Map.wz merge, not a drop row or a `plife` hack.
 
-- **Unspawned mobs:** 9101004 (quest 22524), 2230112 (22532), 9300393 (22596)
-- **Unplaced npcs:** 1022106 (22529), 1052002 (22535), 1013202 (22575/22576/22577/22581),
-  2030015 (22576), 2092001 (22587)
+- **Unspawned mobs:** 9101004 (quest 22524), 2230112 (22532). ~~9300393 (22596)~~ closed by
+  `enterBlackfrog.js`.
+- **Unplaced npcs:** 1022106 (22529). ~~1052002 (22535)~~, ~~2092001 (22587)~~ and ~~2030015
+  (22576)~~ were placed by the 38 life placements in `ce3895453`, each on the map
+  `Etc.wz/NpcLocation.img` names for it (103000000 / 251000000 / 211040400). ~~1013202
+  (22575/22576/22577/22581)~~ was never a gap: `NpcLocation.img/1013202/0` is **-1**, the same
+  no-field marker Mir carries, and all four of his quests set `autoStart 1` in QuestInfo.img, so
+  `QuestActionHandler.isNpcNearby` skips the proximity block entirely. Their END npcs - 2022003,
+  2030015, 1013203 - are all placed.
 - **9901000 (quest 22402) is a Hall-of-Fame PlayerNPC slot**, not a real NPC - it is filled at
   runtime with a level-200 warrior's name, and `playernpcs` has 0 rows. Do NOT place it.
   Reserved allocator range is **9900000-9906599 and 9977777** (`PlayerNPC.java:321-323`,
   `NpcId.java:38`) - the "9901910-9901919" figure in the original brief describes which `Npc.wz`
   images are fabricated, not what the allocator hands out.
-- Quest items still lacking a source further along: 4032453 (22503), 4032455 (22510), 4032459
-  (22524), 4032460 (22529), 4032461 (22531), 4032462 (22532), 4032463 (22548), 4032466 (22559),
-  4032467 (22562), 4032468 (22567), 4032470 (22572), 4032472 (22586). Each needs the same
-  evidence pass done above before any row is written.
+- Quest items still lacking a source further along: 4032453 (22503), 4032459 (22524), 4032460
+  (22529), 4032461 (22531), 4032462 (22532), 4032463 (22548), 4032466 (22559), 4032467 (22562),
+  4032470 (22572), 4032472 (22586). Each needs the same evidence pass done above before any row is
+  written. Two came off this list on re-verification and neither was ever a drop:
+  **4032455** (22510) is handed over by 22510's own `startscript q22510s` -
+  `scripts/quest/22510.js:13` - which is why the drop tables have no row for it; **4032468**
+  (22567) is granted 10 at a time by `Act.img/22568/1`, the repeatable hand-in at npc 2030012 that
+  takes 5 each of 4000070/4000071/4000072/4000068, all four of which already have `drop_data` rows
+  in `152-drop-data.sql`.
 - **`scripts/portal/inDragonEgg.js:8`** falls back to `warp(100030301, 0)` and map **100030301 does
   not exist** in Map.wz. Fires when an Evan clicks the 100030300 `in00` portal without quest 22005
   started. Not blocking; left alone because `scripts/portal/` was outside this ticket's ownership.
