@@ -3382,12 +3382,13 @@
     </imgdir>
     <imgdir name="5">
       <string name="pn" value="in00"/>
-      <int name="pt" value="2"/>
+      <int name="pt" value="7"/>
       <int name="x" value="92"/>
       <int name="y" value="-535"/>
-      <int name="tm" value="106010102"/>
-      <string name="tn" value="out00"/>
+      <int name="tm" value="999999999"/>
+      <string name="tn" value=""/>
       <int name="horizontalImpact" value="0"/>
+      <string name="script" value="evanGolemDoor"/>
     </imgdir>
   </imgdir>
 </imgdir>

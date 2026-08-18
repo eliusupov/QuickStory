@@ -240,6 +240,11 @@ class V84PortalIndexParityRealLoad {
             {921100300, 2, "out00", 2, 211000000, "in01", ""},
             {921100300, 3, "out01", 7, 999999999, "", "s4common1_exit"},   // v84 wants s4common1_clear
             {300000010, 3, "in01", 8, 999999999, "", "jail_in"},           // v84 wants cellar
+            // v84's own script names, written here rather than inherited: both gates turned out to
+            // be derivable from Quest.wz. See theFourSlotsWeRefusedStillCarryOurWorkingRouting's
+            // javadoc for 220011000's derivation, and scripts/portal/evanGolemDoor.js for the other.
+            {220011000, 4, "in00", 7, 999999999, "", "enterBlackBC"},
+            {106010101, 5, "in00", 7, 999999999, "", "evanGolemDoor"},
     };
 
     @Test
@@ -265,20 +270,27 @@ class V84PortalIndexParityRealLoad {
     }
 
     /**
-     * The five slots deliberately NOT taken from v84, each for a measured reason. Four of them name
-     * a {@code tn} that does not exist in the destination map <em>in v84's own archive either</em> -
+     * The four slots deliberately NOT taken from v84, each for a measured reason: each names a
+     * {@code tn} that does not exist in the destination map <em>in v84's own archive either</em> -
      * they are dangling in v84 and our values are repairs. Following v84 there would send the
      * player through {@code GenericPortal}'s {@code to.getPortal(0)} fallback and dump him at slot
-     * 0. The fifth, {@code 220011000}, is a working warp that v84 replaces with a script
-     * ({@code enterBlackBC}) appearing exactly once in all 4848 v84 images, so there is nothing to
-     * derive its gate from; taking v84's data would make {@code 220011001} unreachable, as
-     * {@code 220011000/in00} is its only entrance.
+     * 0.
+     *
+     * <p>{@code 220011000} used to be the fifth, on the reading that {@code enterBlackBC} appears
+     * exactly once in all 4848 v84 images "so there is nothing to derive its gate from". That was
+     * wrong, and {@code Quest.wz} is where the derivation lives:
+     * {@code QuestInfo.img/22583/1} names {@code 922030010} and {@code QuestInfo.img/22584/1}
+     * names {@code 922030020}, the two are mutually exclusive because
+     * {@code Check.img/22584/0/quest/0} requires 22583 at state 2, and the mobs those quests want
+     * ({@code Check.img} 9300389 and 9300390) are each placed in exactly one map in the tree -
+     * 922030011 and 922030022, both hanging off those two. Everything matching neither falls
+     * through to {@code 220011001}, which is what our v83 warp already pointed at, so nothing lost
+     * a route. The slot now lives in {@link #CLIENT_FIELDS_V84_SCRIPT_OURS}.
      */
     @Test
-    void theFiveSlotsWeRefusedStillCarryOurWorkingRouting() {
+    void theFourSlotsWeRefusedStillCarryOurWorkingRouting() {
         Map<String, String> wrong = new TreeMap<>();
         for (Object[] row : new Object[][]{
-                {220011000, 4, "in00", 220011001, "out00"},     // v84: pt 7, no destination, enterBlackBC
                 {300000100, 1, "out00", 222020400, "in01"},     // v84 says in00; 222020400 has no in00
                 {610010000, 6, "U1_3", 682000000, "right01"},   // v84 says right00; 682000000 has no right00
                 {610030020, 3, "out00", 610030010, "in06"},     // v84 says in00; 610030010 has no in00
@@ -296,8 +308,8 @@ class V84PortalIndexParityRealLoad {
                 wrong.put(key, actual + "  (want " + expected + ")");
             }
         }
-        assertEquals(Map.of(), wrong, "one of the five refused slots was 'corrected' to v84 - v84 is "
-                + "wrong on all five, see this method's javadoc before changing it back");
+        assertEquals(Map.of(), wrong, "one of the four refused slots was 'corrected' to v84 - v84 is "
+                + "wrong on all four, see this method's javadoc before changing it back");
     }
 
     private static List<String> portalOrder(int mapId, int size) {

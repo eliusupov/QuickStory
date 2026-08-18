@@ -84,6 +84,8 @@ class MapAndPortalScriptsRealLoad {
         PORTAL_HOOKS.put("enterBlackFrog", 220000300);
         PORTAL_HOOKS.put("stopIceWall", 914100020);
         PORTAL_HOOKS.put("outAfrienMemory", 900030000);
+        PORTAL_HOOKS.put("enterBlackBC", 220011000);
+        PORTAL_HOOKS.put("evanGolemDoor", 106010101);
     }
 
     /**
@@ -227,6 +229,78 @@ class MapAndPortalScriptsRealLoad {
         verify(onRage).playPortalSound();
         verify(onRage).warp(922030001, 0);
         verifyNoMoreInteractions(onRage);
+    }
+
+    /**
+     * 220011000's {@code in00}, which v84 turns from a plain warp to 220011001 into a {@code pt} 7
+     * {@code tm=999999999} gate on {@code enterBlackBC}. Three destinations, all from Quest.wz:
+     * {@code QuestInfo.img/22583/1} names 922030010, {@code QuestInfo.img/22584/1} names 922030020,
+     * and everything else keeps 220011001, which this portal is the only entrance to in all of
+     * Map.wz. The mobs settle it: {@code Check.img/22583/1/mob/0} = 9300389 and
+     * {@code Check.img/22584/1/mob/0} = 9300390 are each placed in exactly one map in the tree -
+     * 922030011 and 922030022, both reached only from those two rooms.
+     *
+     * <p>All three arms run, because a branch that is never taken is a branch that is never
+     * checked, and getting the default wrong seals Sky Terrace.
+     */
+    @Test
+    void enterBlackBCPicksTheBlackWingsRoomByQuestState() throws Exception {
+        runPortal("enterBlackBC", pi -> {
+            verify(pi).isQuestStarted(22584);
+            verify(pi).isQuestStarted(22583);
+            verify(pi).playPortalSound();
+            verify(pi).warp(220011001, "out00");
+        });
+
+        Invocable iv = evalOrNull("portal/enterBlackBC.js");
+        assertNotNull(iv, "enterBlackBC.js did not load");
+
+        PortalPlayerInteraction spirits = mock(PortalPlayerInteraction.class);
+        when(spirits.isQuestStarted(22583)).thenReturn(true);
+        iv.invokeFunction("enter", spirits);
+        verify(spirits).isQuestStarted(22584);
+        verify(spirits).isQuestStarted(22583);
+        verify(spirits).playPortalSound();
+        verify(spirits).warp(922030010, 0);
+        verifyNoMoreInteractions(spirits);
+
+        PortalPlayerInteraction safe = mock(PortalPlayerInteraction.class);
+        when(safe.isQuestStarted(22584)).thenReturn(true);
+        iv.invokeFunction("enter", safe);
+        verify(safe).isQuestStarted(22584);
+        verify(safe).playPortalSound();
+        verify(safe).warp(922030020, 0);
+        verifyNoMoreInteractions(safe);
+    }
+
+    /**
+     * 106010101's {@code in00}, the Warning Sign door, likewise a {@code pt} 7
+     * {@code tm=999999999} gate in v84. {@code QuestInfo.img/22555/1} ("Chief Stan's Test") is the
+     * gate: "go to the {@code #m910600000#} ... you can enter {@code #m910600000#} through the
+     * Warning Sign", and 910600000's own {@code portal/1} returns {@code tm=106010101 tn=in00} -
+     * the other side of this exact door. 910600000 is reachable by nothing else in Map.wz, in
+     * {@code scripts/} or in {@code src/}, so without this arm it is dead map data.
+     *
+     * <p>The default arm is not a "nobody" branch either: {@code QuestInfo.img/22556} sends the
+     * player to {@code #m106010102#} by name.
+     */
+    @Test
+    void evanGolemDoorOpensTheTempleOnlyForChiefStansTest() throws Exception {
+        runPortal("evanGolemDoor", pi -> {
+            verify(pi).isQuestStarted(22555);
+            verify(pi).playPortalSound();
+            verify(pi).warp(106010102, "out00");
+        });
+
+        Invocable iv = evalOrNull("portal/evanGolemDoor.js");
+        assertNotNull(iv, "evanGolemDoor.js did not load");
+        PortalPlayerInteraction onTest = mock(PortalPlayerInteraction.class);
+        when(onTest.isQuestStarted(22555)).thenReturn(true);
+        iv.invokeFunction("enter", onTest);
+        verify(onTest).isQuestStarted(22555);
+        verify(onTest).playPortalSound();
+        verify(onTest).warp(910600000, 0);
+        verifyNoMoreInteractions(onTest);
     }
 
     /**

@@ -483,23 +483,27 @@ class EvanQuestRecordGatesRealLoad {
      * (106010103-106010106). v84 turned the one route in, {@code 106010101/portal/5}, into
      * {@code pt=7 tm=999999999 script=evanGolemDoor}, and that script exists in no client file.
      *
-     * <p>Ticket 08 refused to merge that row - index 5 is a different portal in the live client, so
-     * merging would have attached the script to the exit - and this tree therefore still carries the
-     * v83 plain warp. That refusal is the ONLY reason 22556 is playable today, so it is pinned here
-     * rather than left to chance: if a later merge lands the v84 row without also writing
-     * {@code evanGolemDoor.js}, the Golem's Temple silently seals and this test says why.
+     * <p>Ticket 08 refused to merge that row while no such script existed - a {@code pt} 7 node
+     * with {@code tm=999999999} and no file behind it is a sealed temple - so the tree carried the
+     * v83 plain warp instead. {@code scripts/portal/evanGolemDoor.js} exists now and 106010102 is
+     * its default branch, so the node is v84's whole and 22556 stays playable through the script
+     * rather than through the data. The two halves are pinned together here: whichever one goes
+     * missing, the temple seals, and this test says why.
      */
     @Test
-    void theOnlyRouteIntoTheGolemsTempleIsStillTheUnscriptedV83Portal() {
+    void theOnlyRouteIntoTheGolemsTempleIsTheScriptedV84PortalAndItsScript() {
         Data route = mapData(106010101).getChildByPath("portal/5");
         assertEquals("in00", DataTool.getString(route.getChildByPath("pn"), ""));
-        assertEquals(106010102, DataTool.getInt(route.getChildByPath("tm"), -1),
-                "106010101/portal/5 no longer warps to 106010102 - if it now carries v84's "
-                        + "evanGolemDoor script, that file must be written or the temple is sealed");
-        assertEquals("", DataTool.getString(route.getChildByPath("script"), ""),
-                "106010101/portal/5 has grown a script node (v84 puts evanGolemDoor here, with "
-                        + "tm=999999999); scripts/portal/evanGolemDoor.js must exist or 22556-22559 "
-                        + "are all unreachable");
+        assertEquals(7, DataTool.getInt(route.getChildByPath("pt"), -1),
+                "106010101/portal/5 is no longer a scripted warp, so evanGolemDoor never runs and "
+                        + "910600000 is unreachable again");
+        assertEquals(999999999, DataTool.getInt(route.getChildByPath("tm"), -1),
+                "a real tm here bypasses evanGolemDoor entirely");
+        assertEquals("evanGolemDoor", DataTool.getString(route.getChildByPath("script"), ""),
+                "106010101/portal/5 lost its script node while keeping tm=999999999; that is the "
+                        + "one combination where 22556-22559 are all unreachable");
+        assertTrue(Files.isRegularFile(Path.of("scripts", "portal", "evanGolemDoor.js")),
+                "scripts/portal/evanGolemDoor.js must exist or 22556-22559 are all unreachable");
     }
 
     /**

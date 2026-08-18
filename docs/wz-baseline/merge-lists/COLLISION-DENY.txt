@@ -116,7 +116,7 @@ String.wz/MonsterBook.img/8810018/reward	# positional array
 # a collision. (03g demanded the run start at 0; 03i does not — see Hazard 2d.)
 # These rows stay listed anyway: they are a decision about data, and a deny row says WHY.
 Map.wz/Map/Map1/106010101.img/portal/5/horizontalImpact	# positional array: live slot 5 is out00 (-> 106010100), v84's is in00; would move the exit portal
-Map.wz/Map/Map1/106010101.img/portal/5/script	# positional array: would attach evanGolemDoor to the exit portal back to Golem's Temple 1
+Map.wz/Map/Map1/106010101.img/portal/5/script	# hand-authored, not merged: ticket 54 wrote evanGolemDoor.js and took v84's whole node (pt/tm/tn/script) by hand
 Map.wz/Map/Map1/106010102.img/portal/4/horizontalImpact	# positional array: v84 moved out00 to index 3, so live 4=in04 but v84 4=in03 — one portal off
 Map.wz/Map/Map1/106010102.img/portal/5/horizontalImpact	# positional array: live 5=in05, v84 5=in04
 Map.wz/Map/Map1/106010102.img/portal/6/horizontalImpact	# positional array: live 6=in06, v84 6=in05
@@ -126,7 +126,7 @@ Map.wz/Map/Map2/220000300.img/portal/4/script	# positional array: would attach e
 Map.wz/Map/Map2/220000300.img/portal/6/image	# positional array: live 6=west00 (-> 220000400), v84 6=h001
 Map.wz/Map/Map2/220000300.img/portal/15	# positional array: appends a DUPLICATE in06 — v84 has 16 portals only because it inserted scr00 at 4, so its slot 15 is byte-identical to live's slot 14
 Map.wz/Map/Map2/220011000.img/portal/4/horizontalImpact	# positional array: live slot 4 is the WORKING portal into Ludibrium Toy Factory (in00 pt=2 -> 220011001)
-Map.wz/Map/Map2/220011000.img/portal/4/script	# positional array: would attach enterBlackBC, a script that does not exist, to that working portal — i.e. break it
+Map.wz/Map/Map2/220011000.img/portal/4/script	# hand-authored, not merged: ticket 54 wrote enterBlackBC.js and took v84's whole node (pt/tm/tn/script) by hand
 
 # --- Hazard 2d: the same hazard, on an array that does not start at 0 ----------------------
 # Ticket 03i, found by ticket 16's regression pass. `Character.wz/Glove/01082262.img` is the

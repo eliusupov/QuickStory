@@ -313,14 +313,18 @@ class V84MiscAreasNodeTest {
         // slipped by one, out00 would pick up a horizontalImpact and in06 would lose one.
         assertEquals(6, portalCount(106010101), "106010101 must still have exactly 6 portals");
         assertNoneOf(106010101, "out00", "script", "horizontalImpact");
-        // The one portal deliberately NOT at v84 parity: v84 makes in00 a pt 7 script portal driven
-        // by evanGolemDoor, which this tree has no scripts/portal/ file for, so taking v84's
-        // pt/tm/tn would leave Golem's Temple with no entrance. v84's slot, our destination.
-        assertEquals(106010102, DataTool.getInt("tm", portal(106010101, "in00"), -1),
-                "106010101/in00 must still lead to Golem's Temple 2");
-        assertNull(portal(106010101, "in00").getChildByPath("script"),
-                "106010101/in00 must not name evanGolemDoor - there is no such portal script here, "
-                        + "and a script we cannot run makes the portal inert");
+        // in00 is now at v84 parity too: a pt 7 script portal on evanGolemDoor with tm=999999999,
+        // the script picking 910600000 (quest 22555) or 106010102 (everyone else). The pair is what
+        // matters - v84's node without the script file leaves Golem's Temple with no entrance.
+        assertEquals(7, DataTool.getInt("pt", portal(106010101, "in00"), -1),
+                "106010101/in00 must be v84's scripted warp");
+        assertEquals(999999999, DataTool.getInt("tm", portal(106010101, "in00"), -1),
+                "a real tm on a pt 7 portal bypasses evanGolemDoor and re-seals 910600000");
+        assertEquals("evanGolemDoor",
+                DataTool.getString("script", portal(106010101, "in00"), null),
+                "106010101/in00 must name evanGolemDoor - with tm=999999999 it is inert without it");
+        assertTrue(Files.isRegularFile(Path.of("scripts", "portal", "evanGolemDoor.js")),
+                "evanGolemDoor.js is gone, so 106010101/in00 leads nowhere at all");
 
         // v84 puts horizontalImpact on in03..in06 and scr00, and on nothing else in this array.
         for (String pn : List.of("in03", "in04", "in05", "in06", "scr00")) {
@@ -341,11 +345,19 @@ class V84MiscAreasNodeTest {
         assertNoneOf(220000300, "h000", "script", "horizontalImpact");
         assertNoneOf(220000300, "west00", "image");
 
-        // 220011000/portal/4 is a working v83 portal in the live client.
+        // 220011000/portal/4 is v84's node now as well. v84 replaces the v83 warp to 220011001
+        // with a pt 7 enterBlackBC gate; that script exists here and keeps 220011001 as its
+        // fallback branch, so nothing lost a route. The count is still 5 - v84 replaced the slot,
+        // it did not insert one, which is what made this row safe to take by index.
         assertEquals(5, portalCount(220011000), "220011000 must still have exactly 5 portals");
-        assertNoneOf(220011000, "in00", "script", "horizontalImpact");
-        assertEquals(220011001, DataTool.getInt("tm", portal(220011000, "in00"), -1),
-                "220011000/in00 must still lead to 220011001");
+        assertEquals(7, DataTool.getInt("pt", portal(220011000, "in00"), -1),
+                "220011000/in00 must be v84's scripted warp");
+        assertEquals(999999999, DataTool.getInt("tm", portal(220011000, "in00"), -1),
+                "a real tm on a pt 7 portal bypasses enterBlackBC and re-strands 22583/22584");
+        assertEquals("enterBlackBC", DataTool.getString("script", portal(220011000, "in00"), null),
+                "220011000/in00 must name enterBlackBC - with tm=999999999 it is inert without it");
+        assertTrue(Files.isRegularFile(Path.of("scripts", "portal", "enterBlackBC.js")),
+                "enterBlackBC.js is gone, so 220011001 has no entrance in all of Map.wz");
     }
 
     /**

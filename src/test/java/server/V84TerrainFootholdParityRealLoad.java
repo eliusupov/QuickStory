@@ -23,7 +23,6 @@ import java.util.TreeMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static server.V84Wz.wz;
 
@@ -421,24 +420,33 @@ class V84TerrainFootholdParityRealLoad {
     }
 
     /**
-     * The one portal on the 28 where v84's node was deliberately not taken whole.
-     * v84 makes {@code 106010101}'s {@code in00} a {@code pt} 7 script portal driven by
-     * {@code evanGolemDoor}, and this tree has no {@code scripts/portal/evanGolemDoor.js}. Taking
-     * v84's {@code pt}/{@code tm}/{@code tn} would have left the only entrance to Golem's Temple
-     * dead, so the slot is v84's - which is the half the client resolves - and the destination
-     * stays ours. Nothing else on the 28 needed this.
+     * The one portal on the 28 that had to wait for a script before v84's node could be taken
+     * whole. v84 makes {@code 106010101}'s {@code in00} a {@code pt} 7 script portal driven by
+     * {@code evanGolemDoor} with {@code tm=999999999}; until that file existed, taking v84's
+     * {@code pt}/{@code tm}/{@code tn} would have left the only entrance to Golem's Temple dead,
+     * so the slot was v84's and the destination stayed ours.
+     *
+     * <p>{@code scripts/portal/evanGolemDoor.js} exists now and carries both destinations -
+     * 910600000 for quest 22555 ({@code QuestInfo.img/22555/1}: "you can enter #m910600000#
+     * through the Warning Sign"), 106010102 for everyone else - so the node is v84's whole. What
+     * is pinned here is that the two halves stay together: a {@code pt} 7 node whose script file
+     * has been deleted is a sealed temple again.
      */
     @Test
-    void golemsTempleEntranceKeptAWorkingDestination() {
+    void golemsTempleEntranceIsV84sScriptPortalAndTheScriptExists() {
         Data node = section(106010101, "portal").getChildByPath("5");
         assertNotNull(node, "106010101 portal slot 5");
         assertEquals("in00", DataTool.getString("pn", node, null), "v84 puts in00 at slot 5");
-        assertEquals(106010102, DataTool.getInt("tm", node, -1),
-                "in00 lost its destination - v84's script-only version needs evanGolemDoor, "
-                        + "which this tree cannot run, so the portal would be dead");
-        assertEquals(2, DataTool.getInt("pt", node, -1), "in00 must stay a map portal");
-        assertNull(DataTool.getString("script", node, null),
-                "a script name we cannot run is worse than none");
+        assertEquals(7, DataTool.getInt("pt", node, -1), "in00 must be v84's scripted warp");
+        assertEquals(999999999, DataTool.getInt("tm", node, -1),
+                "a pt 7 portal lets the server pick; a real tm here means the script is bypassed");
+        assertEquals("", DataTool.getString("tn", node, null), "v84 leaves tn empty here");
+        assertEquals(0, DataTool.getInt("horizontalImpact", node, -1), "v84 carries horizontalImpact");
+        assertEquals("evanGolemDoor", DataTool.getString("script", node, null),
+                "in00 lost its script, and its tm no longer names a map - the portal is inert");
+        assertTrue(Files.isRegularFile(Path.of("scripts", "portal", "evanGolemDoor.js")),
+                "106010101/in00 names evanGolemDoor but the file is gone; with tm=999999999 that "
+                        + "leaves Golem's Temple and 910600000 both unreachable");
     }
 
     /**
