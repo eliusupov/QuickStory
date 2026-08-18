@@ -56,6 +56,13 @@ class QuestRequirementHalvingRealLoad {
             {3202, 3230303, 25, 13},    // odd: rounds UP
             {1023, 1210100, 2, 1},      // even, lands on the floor
             {1018, 9300018, 1, 1},      // already 1 - the floor holds, a kill quest never becomes unkillable
+
+            // the v84-merged ids, halved in the second pass - same rule, not a newer one
+            {22008, 9300385, 10, 5},
+            {22010, 1210100, 20, 10},
+            {22520, 1210101, 200, 100}, // the longest grind in the Evan chain
+            {22587, 7130104, 100, 50},
+            {22587, 6130208, 100, 50},  // second mob row of the same quest
     };
 
     /** {questId, itemId, pristine count, halved count} - the "collect"/"pick up" half of the rule. */
@@ -63,6 +70,26 @@ class QuestRequirementHalvingRealLoad {
             {10005, 4031701, 5, 3},     // odd: rounds UP
             {10010, 4031999, 20, 10},
             {1001, 4031003, 1, 1},      // already 1 - a hand-in of exactly one stays exactly one
+
+            // the v84-merged ids
+            {22004, 4032498, 3, 2},     // odd: rounds UP, same as the 2009 pass
+            {22412, 4000270, 300, 150},
+            {22555, 4000068, 2, 1},     // lands on the floor
+            {22573, 4000136, 5, 3},     // odd: rounds UP
+            {28359, 4001435, 3000, 1500},
+    };
+
+    /**
+     * The two Evan quests whose hand-in is done by a script instead of by {@code Act.img}. A
+     * scripted end never reaches {@code Quest.complete()} — {@code QuestActionHandler} case 5 goes
+     * straight to {@code QuestScriptManager.end()} — so the {@code Act.img} row is dead code for
+     * these two and the literal in the script is the removal that actually runs. It has to carry
+     * the halved number too, or the client offers completion at the halved requirement and the
+     * script tries to take the full one. {questId, itemId, script literal}.
+     */
+    private static final int[][] SCRIPTED_HAND_INS = {
+            {22567, 4032468, -5},
+            {22582, 4000144, -50},
     };
 
     private static void assertTreeIsLoaded() {
@@ -92,6 +119,23 @@ class QuestRequirementHalvingRealLoad {
                     "fixture for quest " + questId + " does not follow ceil(n/2) min 1");
             assertEquals(halved, Quest.getInstance(questId).getCompleteItemAmountNeeded(itemId),
                     "quest " + questId + " item " + itemId + " (pristine " + pristine + ")");
+        }
+    }
+
+    /**
+     * The requirement and the removal are the same number, for the two quests where a script owns
+     * the removal. Reads the literal back out of the script rather than restating it.
+     */
+    @Test
+    void aScriptedHandInTakesExactlyItsHalvedRequirement() throws Exception {
+        assertTreeIsLoaded();
+        for (int[] row : SCRIPTED_HAND_INS) {
+            int questId = row[0], itemId = row[1], literal = row[2];
+            String src = Files.readString(Path.of("scripts", "quest", questId + ".js"));
+            assertTrue(src.contains("qm.gainItem(" + itemId + ", " + literal + ")"),
+                    "scripts/quest/" + questId + ".js should remove " + literal + " of " + itemId);
+            assertEquals(-literal, Quest.getInstance(questId).getCompleteItemAmountNeeded(itemId),
+                    "quest " + questId + " asks for a different count than its script takes");
         }
     }
 

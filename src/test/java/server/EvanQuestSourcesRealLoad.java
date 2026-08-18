@@ -264,7 +264,8 @@ class EvanQuestSourcesRealLoad {
     void quest22524CountsAMergeIdThatHasNoMobImage() {
         assertEquals(9101004, DataTool.getInt(questCheck("22524/1/mob/0/id"), -1),
                 "22524 no longer counts mob 9101004");
-        assertEquals(100, DataTool.getInt(questCheck("22524/1/mob/0/count"), -1));
+        assertEquals(50, DataTool.getInt(questCheck("22524/1/mob/0/count"), -1),
+                "v84 asks 100; this tree asks 50 under the owner's halving - QuestRequirementHalvingRealLoad");
 
         assertEquals("Blue Mushroom", stringName("Mob.img", "9101004"));
         assertFalse(Files.isRegularFile(Path.of(WZFiles.DIRECTORY, "Mob.wz", "9101004.img.xml")),

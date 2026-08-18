@@ -48,11 +48,16 @@ class EvanPorkSourceRealLoad {
                         + "test class won the WZFiles.DIRECTORY race, so this says nothing about Evan");
     }
 
-    /** The requirement the whole chain hangs on, and the gate that propagates it to 107 quests. */
+    /**
+     * The requirement the whole chain hangs on, and the gate that propagates it to 107 quests.
+     * v84 asks for 10 Pork; this tree asks 5 under the owner's halving - see
+     * {@link QuestRequirementHalvingRealLoad}. What matters here is that the requirement is on
+     * 4032453 at all, not its magnitude.
+     */
     @Test
-    void quest22503Wants10PorkAnd22504IsGatedBehindIt() {
+    void quest22503WantsPorkAnd22504IsGatedBehindIt() {
         assertEquals(4032453, DataTool.getInt(questCheck("22503/1/item/0/id"), -1));
-        assertEquals(10, DataTool.getInt(questCheck("22503/1/item/0/count"), -1));
+        assertEquals(5, DataTool.getInt(questCheck("22503/1/item/0/count"), -1));
 
         assertEquals(22503, DataTool.getInt(questCheck("22504/0/quest/0/id"), -1),
                 "22504 no longer requires 22503, so the 107-quest blast radius has changed");
@@ -63,15 +68,15 @@ class EvanPorkSourceRealLoad {
     /**
      * The load-bearing distinction: {@code Act.img/22503/0} is empty, so the quest hands the player
      * nothing and 4032453 has to come from the world. Its completion node only ever CONSUMES the
-     * pork (count -10), which is the same statement from the other side. If someone ever "fixes"
+     * pork (a NEGATIVE count), which is the same statement from the other side. If someone ever "fixes"
      * this with an Act grant instead of the drop, that is not v84 and this is where it gets caught.
      */
     @Test
     void quest22503GrantsNothingSoTheItemMustComeFromTheWorld() {
         assertNull(questAct("22503/0/item"),
                 "quest 22503 start Act.img now grants an item; in v84 it granted nothing");
-        assertEquals(-10, DataTool.getInt(questAct("22503/1/item/0/count"), 0),
-                "quest 22503's completion node no longer CONSUMES 10 Pork; a non-negative count "
+        assertEquals(-5, DataTool.getInt(questAct("22503/1/item/0/count"), 0),
+                "quest 22503's completion node no longer CONSUMES Pork; a non-negative count "
                         + "here would mean the quest hands the item out and changeSet 159 is wrong");
         assertEquals(22504, DataTool.getInt(questAct("22503/1/nextQuest"), -1),
                 "22503 no longer chains into 22504");
