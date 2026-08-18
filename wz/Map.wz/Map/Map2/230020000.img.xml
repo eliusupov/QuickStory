@@ -809,6 +809,22 @@
       <int name="f" value="0"/>
       <string name="name" value=""/>
     </imgdir>
+    <imgdir name="1">
+      <string name="id" value="2302006"/>
+      <int name="x" value="-256"/>
+      <int name="y" value="679"/>
+      <int name="reactorTime" value="15"/>
+      <int name="f" value="0"/>
+      <string name="name" value=""/>
+    </imgdir>
+    <imgdir name="2">
+      <string name="id" value="2302006"/>
+      <int name="x" value="-480"/>
+      <int name="y" value="620"/>
+      <int name="reactorTime" value="9"/>
+      <int name="f" value="1"/>
+      <string name="name" value=""/>
+    </imgdir>
   </imgdir>
   <imgdir name="0">
     <imgdir name="info">

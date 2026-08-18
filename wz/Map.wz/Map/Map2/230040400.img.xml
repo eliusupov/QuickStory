@@ -918,6 +918,22 @@
       <int name="f" value="0"/>
       <string name="name" value=""/>
     </imgdir>
+    <imgdir name="7">
+      <string name="id" value="2302006"/>
+      <int name="x" value="361"/>
+      <int name="y" value="318"/>
+      <int name="reactorTime" value="6"/>
+      <int name="f" value="1"/>
+      <string name="name" value=""/>
+    </imgdir>
+    <imgdir name="8">
+      <string name="id" value="2302006"/>
+      <int name="x" value="-341"/>
+      <int name="y" value="-76"/>
+      <int name="reactorTime" value="9"/>
+      <int name="f" value="0"/>
+      <string name="name" value=""/>
+    </imgdir>
   </imgdir>
   <imgdir name="0">
     <imgdir name="info">
