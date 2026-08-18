@@ -257,4 +257,12 @@
         <rollback/>
     </changeSet>
 
+    <changeSet id="170" author="evan-quest-sources">
+        <sqlFile path="db/data/170-stump-sap-deep-valley-drop-data.sql"/>
+        <rollback>
+            DELETE FROM drop_data WHERE itemid = 4032460 AND questid = 22529
+                AND dropperid IN (1130100, 1140100, 2130100);
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>

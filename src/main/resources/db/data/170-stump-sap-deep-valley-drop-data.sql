@@ -1,0 +1,58 @@
+-- ============================================================================================
+-- Quest 22529 "Helping Beginner Adventurer Christopher" -> 4032460 "Refreshing Stump Sap" x3.
+-- Adds the drop to the three Deep Valley stump variants. Additive; the existing 130100 row
+-- from applied changeSet 156 stays exactly as it is.
+--
+-- THIS IS A DELIBERATE, OWNER-APPROVED DEVIATION FROM A LITERAL READING OF v84's MOB TOKEN.
+-- It is not recovered v84 data and must not be presented as such. v84's own quest data is
+-- internally inconsistent here, and these rows follow the half of it that matches the quest's
+-- staging and level band instead of the half that matches its prose.
+--
+-- The inconsistency, both halves measured in this tree:
+--
+--   * QuestInfo.img/22529/0 sends the player to "#m106000000#, 2, and 3" - Deep Valley I/II/III,
+--     106000000 / 106000100 / 106000200 - to find the NPC. Christopher (1022106) stands in
+--     106000000, placed there by changeSet 156. Those three maps hold, by life node count:
+--         106000000: 32x 1130100 Axe Stump, 10x 1140100 Ghost Stump
+--         106000100: 20x 1130100 Axe Stump, 22x 1140100 Ghost Stump
+--         106000200: 12x 1140100 Ghost Stump, 13x 2130100 Dark Axe Stump
+--     ZERO plain Stumps (130100) across all three. Grep for value="0130100" in the three
+--     Map.wz images returns nothing.
+--   * QuestInfo.img/22529/1 says the sap is "dropped by the #o0130100#s", and that token
+--     resolves to mob 130100, plain "Stump", which only spawns around Perion (100050000,
+--     101040000, 101030000, 102010000 and 13 more) - none of them a Deep Valley map.
+--   * The quest is level 22 (Check.img/22529/0/lvmin). Mob.wz levels for the family:
+--         130100 Stump 4     1130100 Axe Stump 17     1140100 Ghost Stump 19
+--         2130100 Dark Axe Stump 22
+--     Plain Stump is level 4 in this tree, not the 8 the ticket estimated - the gap is wider
+--     than reported, not narrower. Dark Axe Stump is level 22 ON THE NOSE, the quest's own
+--     lvmin. Sending a level-22 player off the map the quest stages itself on, to a level-4
+--     field, while a level-22 stump stands where the NPC is, is not plausible design.
+--
+-- Why the archives cannot settle it: client WZ files never contained drop tables - Nexon kept
+-- drops server-side - so there is no authoritative v84 drop row for 4032460 anywhere. The
+-- existing 130100 row is not independent evidence either: changeSet 156 authored it by reading
+-- that same #o0130100# token. Both readings descend from the one ambiguous string.
+--
+-- Keeping the 130100 row means a player who happens to be in Perion still finishes the quest
+-- the literal way. These three rows mean a player who follows the quest's own directions
+-- finishes it where it sent them.
+--
+-- RATE: 80000, same as the existing row. The precedent is exact and sits on these same four
+-- mobs - quest item 4031773 (quest 2145) is already carried by the whole stump family:
+--     (130100, 4031773, 1, 1, 2145, 80000)    (1130100, 4031773, 1, 1, 2145, 80000)
+--     (1140100, 4031773, 1, 1, 2145, 80000)   (2130100, 4031773, 1, 1, 2145, 200000)
+-- Three of the four at 80000; only Dark Axe Stump differs, upward. Nothing about 22529 asks
+-- for a variant-specific rate, so all three take the family's common 80000 and the quest's
+-- cost stays what changeSet 156 set it at.
+--
+-- GATING: questid 22529 is load-bearing, and it works because Item.wz/Etc/0403.img/04032460
+-- carries info/quest = 1 - MapleMap.sortDropEntries only consults needQuestItem for items
+-- flagged that way. Without the flag the questid column would be inert and the sap would
+-- become world loot for every player killing stumps. That gating was fixed deliberately
+-- earlier in this project; these rows inherit it and must keep questid non-zero.
+-- ============================================================================================
+INSERT INTO drop_data (dropperid, itemid, minimum_quantity, maximum_quantity, questid, chance)
+VALUES (1130100, 4032460, 1, 1, 22529, 80000),
+       (1140100, 4032460, 1, 1, 22529, 80000),
+       (2130100, 4032460, 1, 1, 22529, 80000);
