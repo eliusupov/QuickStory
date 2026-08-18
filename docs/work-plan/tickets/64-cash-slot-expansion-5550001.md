@@ -90,3 +90,30 @@ they collide on `target/`.
 - Do not invent an expiry mechanism modelled on pet or equipment expiry without saying so. If an
   existing expiry path is reused, name it.
 - Do not hardcode 7 days, 30 days, or partition 0. All three are data.
+
+## Closing note (2026-08-18) - premise wrong, no code written
+
+The ticket's reading of the data is wrong. `wz/String.wz/Cash.img.xml:1774` and `:1992` name these
+items **"Add Pendant Slots: 7 Days"** and **"Increasing the Pendant Slots:30 Days"** - *"Allows you
+to equip 1 additional pendant for 7 days"*. Type 555 is the **extra pendant equip slot**, not a cash
+inventory partition. `slotIndex=0` is the extra-pendant slot index; it is not a cash inventory
+partition id. Both shapes offered above, and the acceptance criterion "increases the usable cash
+inventory slot count for partition `slotIndex=0`", are written against a feature that does not exist.
+
+What the tree does have: `SendOpcode.SET_EXTRA_PENDANT_SLOT` (`sendops-84.properties:132` = `0x7C`,
+verified against the v84 binary in `tools/v84/decode-models-v84-binary.tsv:24`) and
+`PacketCreator.setExtraPendantSlot(boolean)` (`:373`), inherited from HeavenMS and called by nothing
+but `BinaryDerivedModelTest`.
+
+What it does not have: any second pendant equip position. `constants/inventory/EquipSlot.java:25`
+has `PENDANT("Pe", -17)` only - no `-59`. Equip validation, char-look serialisation and the equipped
+inventory all assume the v83 slot set. Sending the toggle without that support ships half a feature:
+the client opens a slot the server cannot accept an equip into.
+
+Timed-grant persistence has no per-character precedent either - the only expiry shapes in the tree
+are `inventoryitems.expiration` (item-bound, `003-inventory.sql:14`) and the one-off
+`characters.jailexpire` bigint (`002-character.sql:76`).
+
+**This row is an owner decision**, and a larger one than the ticket scoped: it is "add a second
+pendant equip slot" plus "persist a timed grant", not a storage-shape choice. Re-scope before
+re-queueing. Ticket 63's credit path is untouched.
