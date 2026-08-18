@@ -391,27 +391,28 @@ class EvanQuestRecordGatesRealLoad {
     }
 
     /**
-     * <strong>22588 is currently academic, and this pins that.</strong> All four Cave of Silence
-     * rooms (914100020/21/22/23) have ZERO static inbound portals - no map in Map.wz carries a
+     * <strong>22588 is reachable, and this pins that.</strong> All four Cave of Silence rooms
+     * (914100020/21/22/23) have ZERO static inbound portals - no map in Map.wz carries a
      * {@code tm} pointing at any of them. The sole router is
      * {@code Map9/914100010.img/portal/2} ({@code pn=in00, pt=7, tm=999999999, script=enterSnowDragon}),
      * and {@code tm=999999999} means the destination is chosen server-side and appears in no client
-     * file. Which of the four rooms it should pick at which quest state is NOT stated anywhere in
-     * v84, so {@code enterSnowDragon.js} is deliberately NOT written here.
+     * file. {@code scripts/portal/enterSnowDragon.js} now supplies that server-side choice, so the
+     * altar writer above is actually reachable in play.
      *
-     * <p>The writer above is correct the moment that router lands. This test fails when it does,
-     * which is the point: that is when 22588 stops being academic and wants a play test.
+     * <p>This test pins the whole route: the portal is still the server-side-only router it was
+     * (both halves of that are still read from Map.wz, so a data change breaks it), and the script
+     * that completes it exists.
      */
     @Test
-    void theCaveOfSilenceIsStillUnreachableSoThe22588WriterCannotYetBeReached() {
+    void theCaveOfSilenceIsReachableSoThe22588WriterCanBeReached() {
         assertEquals(999999999, DataTool.getInt(mapData(914100010).getChildByPath("portal/2/tm"), -1),
                 "914100010's in00 portal now names a real destination - the router is no longer "
                         + "server-side-only and enterSnowDragon can be derived from data");
         assertEquals("enterSnowDragon",
                 DataTool.getString(mapData(914100010).getChildByPath("portal/2/script"), ""));
-        assertFalse(Files.isRegularFile(Path.of("scripts", "portal", "enterSnowDragon.js")),
-                "enterSnowDragon.js now exists, so the Cave of Silence is reachable and quest 22588 "
-                        + "should be play-tested end to end");
+        assertTrue(Files.isRegularFile(Path.of("scripts", "portal", "enterSnowDragon.js")),
+                "scripts/portal/enterSnowDragon.js is gone - 914100010's in00 portal is the only "
+                        + "way into the Cave of Silence, so without it quest 22588 is unreachable");
     }
 
     /**

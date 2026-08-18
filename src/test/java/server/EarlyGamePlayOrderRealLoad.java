@@ -530,10 +530,10 @@ class EarlyGamePlayOrderRealLoad {
                 missing.add(e.getKey() + " (from " + e.getValue() + ")");
             }
         }
-        assertEquals(List.of("1003028 (from scripts/quest/22002.js)"), missing,
-                "the set of granted-but-unnamed ids moved. Anything ADDED here is a new gap; if "
-                        + "1003028 disappeared from the list somebody gave it a String.wz name, "
-                        + "which is a fix - drop it from the expectation");
+        assertEquals(List.of(), missing,
+                "the set of granted-but-unnamed ids moved. Every id listed here is a granted item "
+                        + "with no String.wz name - a new gap. 1003028 used to sit here and was "
+                        + "named in Eqp.img.xml, which is why the expectation is now empty");
     }
 
     // ------------------------------------------------------------------ helpers
