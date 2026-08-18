@@ -49,6 +49,13 @@ class EchoOfHeroWatkRealLoad {
         equipwatk.setAccessible(true);
         equipwatk.setInt(chr, BASE_WATK);
 
+        // equipchanged starts true, and recalcEquipStats then recomputes equipwatk from the
+        // (empty) EQUIPPED inventory, zeroing whatever was planted above. Clear it so the base
+        // watk survives into localwatk.
+        Field equipchanged = Character.class.getDeclaredField("equipchanged");
+        equipchanged.setAccessible(true);
+        equipchanged.setBoolean(chr, false);
+
         if (buff != null) {
             Class<?> holderClass = Class.forName("client.Character$BuffStatValueHolder");
             Constructor<?> holderCtor = holderClass.getDeclaredConstructor(
