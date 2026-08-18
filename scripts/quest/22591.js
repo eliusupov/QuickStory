@@ -11,5 +11,8 @@
 function start(mode, type, selection) {
     qm.forceStartQuest();
     qm.sendOk("Talk to #p1205000# to continue.");
+    // v84 accept-time warp: map 900030000 (Afrien's Memory) has no field-side entrance;
+    // this start script is the entrance. out00 (outAfrienMemory) writes record 22601=1 on exit.
+    qm.warp(900030000, 0);
     qm.dispose();
 }
