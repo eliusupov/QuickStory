@@ -73,7 +73,9 @@ Still open:
   (`client/Skill.java:55-62`). The node exists (`wz/Skill.wz/2217.img.xml:329,589`,
   `2218.img.xml:297,620`, all `value="10"`). Left alone deliberately: 22171004 has **no** `masterLevel`
   node, so reading it would demote that skill out of fourth-job and cap its SP at 5, which is a
-  behaviour change, not a refactor. `QUEUED`
+  behaviour change, not a refactor. `GameConstants.getSkillBranch()` (added for the SP reset tier
+  check) does **not** replace the list: it says 9 or 10 for every 2217/2218 skill, while the list
+  names the four that actually have a master level plus 22170001. `QUEUED`
 
 ## 3. Drops, cards, maker, reactors
 

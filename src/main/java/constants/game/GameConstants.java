@@ -485,6 +485,25 @@ public class GameConstants {
         }
     }
 
+    /**
+     * The advancement a skill belongs to: 0 for a beginner book, 1-4 for every ordinary job tree,
+     * and 1-10 for Evan, whose jobs run 2200 then 2210-2218 instead of the usual x00/x10/x11/x12.
+     * getJobBranch's {@code 2 + (jobid % 10)} happens to land on Evan's advancement number for all
+     * ten, so no second rule is needed - only his beginner job 2001 has to be taken out first,
+     * since it is the one beginner id that is not a round thousand and reads as a 3rd job there.
+     *
+     * @return -1 for a skill whose job is not a real job (GM skills, garbage ids)
+     */
+    public static int getSkillBranch(int skillId) {
+        int jobId = skillId / 10000;
+        if (jobId == 0 || jobId == 1000 || jobId == 2000 || jobId == 2001) {
+            return 0;
+        }
+
+        Job job = Job.getById(jobId);
+        return job != null ? getJobBranch(job) : -1;
+    }
+
     public static int getJobMaxLevel(Job job) {
         int jobBranch = getJobBranch(job);
 
@@ -529,6 +548,10 @@ public class GameConstants {
 
     public static boolean isAran(final int job) {
         return job == 2000 || (job >= 2100 && job <= 2112);
+    }
+
+    public static boolean isEvan(final int job) {
+        return job == 2001 || job == 2200 || (job >= 2210 && job <= 2218);
     }
 
     private static boolean isInBranchJobTree(int skillJobId, int jobId, int branchType) {

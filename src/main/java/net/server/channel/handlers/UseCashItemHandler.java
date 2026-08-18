@@ -181,43 +181,51 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                 }
 
                 int SPFrom = p.readInt();
+                if (!spResetCoversSkill(itemId, SPTo) || !spResetCoversSkill(itemId, SPFrom)) {
+                    c.sendPacket(PacketCreator.enableActions());
+                    return;
+                }
+
                 Skill skillSPTo = SkillFactory.getSkill(SPTo);
                 Skill skillSPFrom = SkillFactory.getSkill(SPFrom);
                 byte curLevel = player.getSkillLevel(skillSPTo);
                 byte curLevelSPFrom = player.getSkillLevel(skillSPFrom);
-                if ((curLevel < skillSPTo.getMaxLevel()) && curLevelSPFrom > 0) {
-                    player.changeSkillLevel(skillSPFrom, (byte) (curLevelSPFrom - 1), player.getMasterLevel(skillSPFrom), -1);
-                    player.changeSkillLevel(skillSPTo, (byte) (curLevel + 1), player.getMasterLevel(skillSPTo), -1);
+                if (curLevel >= skillSPTo.getMaxLevel() || curLevelSPFrom < 1) {
+                    c.sendPacket(PacketCreator.enableActions());
+                    return;     // nothing moved, so the scroll is not spent
+                }
 
-                    // update macros, thanks to Arnah
-                    if ((curLevelSPFrom - 1) == 0) {
-                        boolean updated = false;
-                        for (SkillMacro macro : player.getMacros()) {
-                            if (macro == null) {
-                                continue;
-                            }
+                player.changeSkillLevel(skillSPFrom, (byte) (curLevelSPFrom - 1), player.getMasterLevel(skillSPFrom), -1);
+                player.changeSkillLevel(skillSPTo, (byte) (curLevel + 1), player.getMasterLevel(skillSPTo), -1);
 
-                            boolean update = false;// cleaner?
-                            if (macro.getSkill1() == SPFrom) {
-                                update = true;
-                                macro.setSkill1(0);
-                            }
-                            if (macro.getSkill2() == SPFrom) {
-                                update = true;
-                                macro.setSkill2(0);
-                            }
-                            if (macro.getSkill3() == SPFrom) {
-                                update = true;
-                                macro.setSkill3(0);
-                            }
-                            if (update) {
-                                updated = true;
-                                player.updateMacros(macro.getPosition(), macro);
-                            }
+                // update macros, thanks to Arnah
+                if ((curLevelSPFrom - 1) == 0) {
+                    boolean updated = false;
+                    for (SkillMacro macro : player.getMacros()) {
+                        if (macro == null) {
+                            continue;
                         }
-                        if (updated) {
-                            player.sendMacros();
+
+                        boolean update = false;// cleaner?
+                        if (macro.getSkill1() == SPFrom) {
+                            update = true;
+                            macro.setSkill1(0);
                         }
+                        if (macro.getSkill2() == SPFrom) {
+                            update = true;
+                            macro.setSkill2(0);
+                        }
+                        if (macro.getSkill3() == SPFrom) {
+                            update = true;
+                            macro.setSkill3(0);
+                        }
+                        if (update) {
+                            updated = true;
+                            player.updateMacros(macro.getPosition(), macro);
+                        }
+                    }
+                    if (updated) {
+                        player.sendMacros();
                     }
                 }
             } else {
@@ -638,6 +646,33 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             log.warn("NEW CASH ITEM TYPE: {}, packet: {}", itemType, p);
             c.sendPacket(PacketCreator.enableActions());
         }
+    }
+
+    /**
+     * Whether an SP reset scroll is allowed to touch this skill. Every scroll is sold for one
+     * advancement and String.wz/Cash.img says which, so a 1st-job scroll must not be able to shuffle
+     * 4th-job points around - it could, before this check existed:
+     *
+     * <pre>
+     *   5050001-5050004  "SP Reset (Nth job)"                branch N
+     *   5050005-5050009  "Evan SP Reset (Nth/N+1th Skill)"   Evan branches 1-2, 3-4, 5-6, 7-8, 9-10
+     * </pre>
+     *
+     * v84 ships no other id in the family (verified against the pristine String.wz), and an id past
+     * 5050009 asks for a branch above 10, which nothing has - so it is refused rather than allowed.
+     *
+     * <p>The two families do not overlap: the Evan scrolls say "Only for Evan", and letting an
+     * explorer hold one would hand him a cross-tier reset anyway, since 5050006 covers branches 3
+     * AND 4 - the very thing this check exists to stop.
+     */
+    static boolean spResetCoversSkill(int itemId, int skillId) {
+        int tier = itemId - ItemId.AP_RESET;
+        if (GameConstants.isEvan(skillId / 10000) != (tier > 4)) {
+            return false;
+        }
+
+        int branch = GameConstants.getSkillBranch(skillId);
+        return tier <= 4 ? branch == tier : branch == 2 * tier - 9 || branch == 2 * tier - 8;
     }
 
     private static void remove(Client c, short position, int itemid) {
