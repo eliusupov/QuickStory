@@ -285,4 +285,17 @@
         </rollback>
     </changeSet>
 
+    <!--
+      Rollback restores the two rows exactly as measured before the delete (skilllevel 0,
+      masterlevel 20, expiration -1 on charids 48 and 50) - the skill was never usable, so these
+      are the stored values, not a guess.
+    -->
+    <changeSet id="173" author="evan-stale-skill">
+        <sqlFile path="db/data/173-evan-stale-legend-blessing-skill.sql"/>
+        <rollback>
+            INSERT INTO skills (skillid, characterid, skilllevel, masterlevel, expiration)
+                VALUES (20000012, 48, 0, 20, -1), (20000012, 50, 0, 20, -1);
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>
