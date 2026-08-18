@@ -298,4 +298,22 @@
         </rollback>
     </changeSet>
 
+    <!--
+      Rollback restores the exact mobid each of the seven rows carried before this changeSet, as
+      measured on the database (see the sql header's "table has" column) - stored values, not
+      guesses. 2388068/2388069 revert together, as the swapped pair they were.
+    -->
+    <changeSet id="174" author="monstercard-wz-mob">
+        <sqlFile path="db/data/174-monstercarddata-wz-mob-corrections.sql"/>
+        <rollback>
+            UPDATE monstercarddata SET mobid = 6130102 WHERE cardid = 2383045;
+            UPDATE monstercarddata SET mobid = 9300105 WHERE cardid = 2388011;
+            UPDATE monstercarddata SET mobid = 6400006 WHERE cardid = 2388017;
+            UPDATE monstercarddata SET mobid = 6400008 WHERE cardid = 2388026;
+            UPDATE monstercarddata SET mobid = 8820001 WHERE cardid = 2388043;
+            UPDATE monstercarddata SET mobid = 3300006 WHERE cardid = 2388068;
+            UPDATE monstercarddata SET mobid = 3300007 WHERE cardid = 2388069;
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>
