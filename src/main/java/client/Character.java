@@ -7785,6 +7785,12 @@ public class Character extends AbstractCharacterObject {
             if (watkbuff != null) {
                 localwatk += watkbuff.intValue();
             }
+            // Echo of Hero holds a percentage watk boost that nothing ever read, so the buff
+            // applied and did nothing. Same idiom as the flat WATK buff above.
+            Integer echobuff = getBuffedValue(BuffStat.ECHO_OF_HERO);
+            if (echobuff != null) {
+                localwatk += (localwatk * echobuff.intValue()) / 100;
+            }
             Integer matkbuff = getBuffedValue(BuffStat.MATK);
             if (matkbuff != null) {
                 localmagic += matkbuff.intValue();

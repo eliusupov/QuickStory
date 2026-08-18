@@ -578,6 +578,7 @@ public class ItemInformationProvider {
         ret.put("cursed", DataTool.getInt("cursed", info, 0));
         ret.put("success", DataTool.getInt("success", info, 0));
         ret.put("fs", DataTool.getInt("fs", info, 0));
+        ret.put("randstat", DataTool.getInt("randstat", info, 0));
         equipStatsCache.put(itemId, ret);
         return ret;
     }
@@ -1167,14 +1168,15 @@ public class ItemInformationProvider {
                                 nEquip.setUpgradeSlots((byte) (nEquip.getUpgradeSlots() + 1));
                             }
                             break;
-                        case ItemId.CHAOS_SCROll_60:
-                        case ItemId.LIAR_TREE_SAP:
-                        case ItemId.MAPLE_SYRUP:
-                            scrollEquipWithChaos(nEquip, YamlConfig.config.server.CHSCROLL_STAT_RANGE);
-                            break;
-
                         default:
-                            improveEquipStats(nEquip, stats);
+                            // Chaos scrolls carry info/randstat=1 and no inc* stats, so the three
+                            // that used to be listed here by id were the only ones that rolled;
+                            // the other five burned a slot and moved nothing. Select on the data.
+                            if (stats.getOrDefault("randstat", 0) > 0) {
+                                scrollEquipWithChaos(nEquip, YamlConfig.config.server.CHSCROLL_STAT_RANGE);
+                            } else {
+                                improveEquipStats(nEquip, stats);
+                            }
                             break;
                     }
                     if (!ItemConstants.isCleanSlate(scrollId)) {
