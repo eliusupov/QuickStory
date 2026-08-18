@@ -47,8 +47,10 @@ disagreeing status files were consolidated once already.
   `Server\`, which is the repo), `D:\games\MSv84\client\`, `D:\games\dreamms\`, and
   `D:\games\MapleStory\Server\porting-resources\wz-data\v84\` — the pristine v84 carve.
 - **The repo is `D:\games\MapleStory\Server\Cosmic`**, branch `master`. Migration work happens on
-  the worktree branch `worktree-evan-dualblade` under `.claude\worktrees\`, and has **not** been
-  merged to master yet.
+  the worktree branch `worktree-evan-dualblade` under `.claude\worktrees\`.
+- **DO NOT MERGE TO MASTER.** The owner's decision: the branch stays unmerged until the v84 work is
+  finished. Master is what keeps his v83 playable. Never merge, rebase onto, push to, or reset
+  master without him asking for it in those words.
 - **Never launch a game client** — it rewrites a shared registry key.
 - **Changesets and resources ship INSIDE the jar.** A restart without `./mvnw -o package` applies
   nothing. Verify a change landed in the **database**, not in the log.
