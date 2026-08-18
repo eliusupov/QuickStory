@@ -29,6 +29,19 @@ this was proven offline; this is where it meets the client.
 10. **Super-megaphone (smega)** - the smega banner renders at widescreen.
 11. **Mu Lung Dojo** - the Dojo UI draws correctly.
 
+## New v84 UI screens to eyeball at 1280x720
+
+These are v84-new UI/maps absent from the v83 HD client, so they were never viewport-tuned. Each is
+a candidate for a hand-made `EzorsiaV2_UI.wz` nudge if it looks wrong at widescreen (see
+`docs/work-plan/HD-ASSET-METHOD-FINDINGS.md`):
+
+- **Evan RaceSelect (Login BtEvan)** - the class-select splash.
+- **DragonEquip** - the Evan dragon-equip window.
+- **New MobGage bars** - the v84 mob HP gauges.
+- **Slumbering Dragon Island** maps (`914100xxx`) - new-map viewports.
+- **Neo City** maps - new-map viewports.
+- **dragonRoad / dragonDream** maps - Evan tutorial viewports.
+
 For each screen: launch, observe, and if it is wrong, route the fix - a patch op or a drift value
 back to S1/S2, a UI-archive issue back to S3. Fixes to the harness/loader are agent work dispatched
 from here; the launch and the visual judgement are the owner's.

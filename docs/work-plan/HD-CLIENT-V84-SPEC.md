@@ -84,24 +84,18 @@ owner's to run.
 
 ---
 
-## Asset HD treatment for v84 new/changed content - PENDING RESEARCH
+## Asset HD treatment for v84 new/changed content - RESOLVED
 
-**This section is a placeholder. Its mechanism is not yet known and must not be invented here.**
+HD is **runtime render-scaling**, not a per-asset treatment: a DLL (`hd-res-3.3.0.dll`) patches EXE
+addresses so vanilla art draws at 1280x720. Byte-compares confirm `client-hd\Map.wz` and `UI.wz` are
+**byte-identical** to the pristine v84 carve - the HD client ships stock v84 art. So v84's new
+content (dragonRoad/dragonDream, Neo City, Slumbering Dragon Island, RaceSelect BtEvan, DragonEquip,
+new MobGage bars) inherits HD **automatically** at launch, with no processing. There is **no asset
+pipeline and no "HD2" tool** - none exists on disk or upstream. The only per-content work is optional
+**launch-time viewport tuning** of new UI screens that look wrong at 1280x720, done by hand-editing
+`EzorsiaV2_UI.wz` exactly as the v83 client did - discoverable only by launching (S4).
 
-The owner already runs a working v83 HD client and wants v84 to match it - including that v84's
-**new and changed** maps and assets receive the **same HD treatment** the project already applies to
-its assets, done the same way. Whether that treatment exists as an asset step at all is exactly the
-open question:
-
-- Upstream's README describes HD as mostly **runtime resolution scaling** plus optional **manual UI
-  edits**, with **no automated asset pipeline**.
-- The local v84 fork and the owner's on-disk v83 HD client may tell a different story. A research
-  agent is investigating precisely this now.
-
-**Do not author the asset mechanism, tickets, or acceptance criteria until that research lands.** The
-five slices S1-S5 above are the *loader and bring-up* work and are independent of this question - S2
-in particular is UI-layout only (the 17 known vanilla-drift coordinates), not the new-map asset
-question. The asset tickets will be added once the mechanism is known and sourced, not before.
+Evidence and byte-compares: `docs/work-plan/HD-ASSET-METHOD-FINDINGS.md`.
 
 ## Out of scope
 
