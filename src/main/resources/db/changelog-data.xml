@@ -349,4 +349,18 @@
         </rollback>
     </changeSet>
 
+    <!--
+      Backfills Evan masterLevel-node skills (Magic Guard 22111001, and Critical Magic 22140000 /
+      Magic Booster 22141002 for job 2214+) that pre-fix logins granted at masterlevel 0. Only the
+      Magic Guard insert touches a row today: charid 51 (evan2, job 2211), which lacked a 22111001
+      row entirely - measured on this database before applying. The other two inserts touch 0 rows
+      (no char is at job 2214+). Rollback removes exactly the one row this changeSet creates.
+    -->
+    <changeSet id="175" author="evan-masterlevel-cap">
+        <sqlFile path="db/data/175-evan-masterlevel-skill-cap-backfill.sql"/>
+        <rollback>
+            DELETE FROM skills WHERE characterid = 51 AND skillid = 22111001;
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>

@@ -1104,6 +1104,15 @@ public class Character extends AbstractCharacterObject {
         } else if (jobId == 2218) {
             skills[0] = Evan.BLESSING_OF_THE_ONYX;
             skills[1] = Evan.BLAZE;
+        } else if (jobId == 2211) {
+            // Magic Guard carries a masterLevel-5 node in Skill.wz/2211.img. Unlike the mastery-book
+            // skills above, its cap is the wz masterLevel value (5), not min(10,max); without seeding
+            // it the cap stays 0 and the player can never spend SP into it.
+            seedEvanMasterLevelSkills(new int[]{Evan.MAGIC_GUARD}, 5);
+        } else if (jobId == 2214) {
+            // Critical Magic (22140000) and Magic Booster (22141002) each carry a masterLevel-5 node
+            // in Skill.wz/2214.img - same growth-3-style seeding as Magic Guard.
+            seedEvanMasterLevelSkills(new int[]{Evan.CRITICAL_MAGIC, Evan.MAGIC_BOOSTER}, 5);
         }
         for (Integer skillId : skills) {
             if (skillId != 0) {
@@ -1117,6 +1126,21 @@ public class Character extends AbstractCharacterObject {
                 // above the max would let SP run past the last level effect
                 changeSkillLevel(skill, (byte) 0, Math.min(10, skill.getMaxLevel()), -1);
             }
+        }
+    }
+
+    // Seeds Evan skills whose SP cap comes from a Skill.wz masterLevel node (Magic Guard 22111001,
+    // Critical Magic 22140000, Magic Booster 22141002 - all masterLevel 5) at that exact wz value.
+    // The min(10,max) loop in setMasteries would cap these wrong; the wz masterLevel is the parity
+    // truth. Idempotent: skips a skill already seeded or already raised past the cap by a mastery book,
+    // and preserves any SP the player already spent.
+    private void seedEvanMasterLevelSkills(int[] skillIds, int wzMasterLevel) {
+        for (int skillId : skillIds) {
+            Skill skill = SkillFactory.getSkill(skillId);
+            if (getMasterLevel(skill) >= wzMasterLevel) {
+                continue;
+            }
+            changeSkillLevel(skill, getSkillLevel(skill), wzMasterLevel, -1);
         }
     }
 
