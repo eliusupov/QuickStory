@@ -80,6 +80,21 @@ class StatusInfoModeTest {
         assertMode(V84 ? 15 : 13, PacketCreator.serverNotice(13, "x"), "v83 mode 13");
     }
 
+    // ------------------------------------------------------------------ PARTY_OPERATION (OnPartyResult)
+
+    /**
+     * v84 inserted 3 modes into OnPartyResult's door cluster: v83 localhome.exe modes 0x23/0x24/0x25
+     * (@0xa3ec92 Decode4x3, @0xa3f19d Decode1+Str, @0xa3ecd5 Decode1+Decode4+Decode4+Decode2+Decode2)
+     * map instruction-for-instruction to v84 ida_export {@code CWvsContext::OnPartyResult} @0xa89cf3
+     * modes 0x26/0x27/0x28. The town-portal send uses 0x23, so it is 0x26 on v84. See ticket 36 s6.
+     */
+    @Test
+    void partyPortalDoorModeShiftsByThreeOnV84() {
+        assertMode(V84 ? 0x26 : 0x23,
+                PacketCreator.partyPortal(100000000, 100000001, new java.awt.Point(0, 0)),
+                "party town-portal door update");
+    }
+
     // ------------------------------------------------------------------
 
     private static void assertMode(int expected, Packet p, String what) {

@@ -4214,7 +4214,11 @@ public class PacketCreator {
 
     public static Packet partyPortal(int townId, int targetId, Point position) {
         final OutPacket p = OutPacket.create(SendOpcode.PARTY_OPERATION);
-        p.writeShort(0x23);
+        // v84 inserted 3 modes into OnPartyResult's door cluster, shifting 0x23/0x24/0x25 -> 0x26/0x27/0x28.
+        // Proven by decode-shape match in both images: v83 localhome.exe mode 0x23 @0xa3ec92 (Decode4 x3,
+        // stores town/target) == v84 ida_export OnPartyResult @0xa89cf3 mode 0x26; the position-bearing
+        // sibling 0x25 @0xa3ecd5 == v84 0x28. This town-portal send uses 0x23 -> 0x26 on v84. Ticket 36.
+        p.writeShort(ServerConstants.VERSION >= 84 ? 0x26 : 0x23);
         p.writeInt(townId);
         p.writeInt(targetId);
         p.writePos(position);

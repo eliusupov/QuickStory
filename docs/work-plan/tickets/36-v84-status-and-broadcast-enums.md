@@ -186,8 +186,21 @@ Suite: **2130 passed, 0 failed.**
 
 ## 6. Unproven / not done
 
-- **`CWvsContext::OnPartyResult` `TOWN_PORTAL` 37 → 40** (ticket 32 §6.1's third shift) — not
-  looked at in this pass. **UNPROVEN.**
+- **`CWvsContext::OnPartyResult` `TOWN_PORTAL` 37 → 40** (ticket 32 §6.1's third shift) — **CONFIRMED,
+  +3.** v83 `localhome.exe` `OnPartyResult` jump table @`0xA3F260` (modes 4..37 via `add eax,-4`/
+  `cmp eax,0x21`). Its top door cluster: mode `0x23`=35 @`0xA3EC92` (`Decode4`×3, stores town→`+0x2F56`
+  / target→`+0x2F3E`), mode `0x24`=36 @`0xA3F19D` (`Decode1`+`DecodeStr`), mode `0x25`=37 @`0xA3ECD5`
+  (`Decode1`+`Decode4`+`Decode4`+`Decode2`+`Decode2`, stores town/target/x/y per member — the
+  position-bearing door update = `TOWN_PORTAL`). v84 `CWvsContext::OnPartyResult` @`0xA89CF3`
+  (`D:\games\MSv84\opcodes\ida_export_gms_v84.json`, the export that settled ticket 62) is a clean
+  compare chain whose data modes are `0x26`=38 (`Decode4`×3), `0x27`=39 (`Decode1`+`DecodeStr`+delegate),
+  `0x28`=40 (`Decode1`+`Decode4`+`Decode4`+`Decode2`+`Decode2`), plus a new `0x45`=69. The three v83
+  door shapes match the three v84 shapes one-for-one, uniformly +3: `0x23/0x24/0x25 → 0x26/0x27/0x28`.
+  **Fixed:** `PacketCreator.partyPortal` (the only live `TOWN_PORTAL` sender, from `DoorObject`) now
+  writes `0x26` when `VERSION >= 84`, else `0x23`. Test `partyPortalDoorModeShiftsByThreeOnV84`.
+  Note: `updateParty`'s modes (`JOIN` 0x0F=15, `CHANGE_LEADER` 0x1B=27, etc.) sit below this cluster;
+  the v84 export did not expose where the 3 modes were inserted, so whether any of those shifted is
+  **not proven here** and was left untouched.
 - **`getShowItemGain`'s `writeShort(0)`** is mode 0 followed by a zero pad. Mode 0 is unshifted, so
   it is out of scope here, but whether the v84 mode-0 arm reads that second byte the same way was
   not checked. **UNPROVEN.**
