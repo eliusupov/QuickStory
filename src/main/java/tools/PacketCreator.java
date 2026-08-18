@@ -6794,17 +6794,39 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * {@code CASHSHOP_CASH_ITEM_GACHAPON_RESULT} mode discriminator. This is
+     * {@code CCashShop::OnCashItemGachaponResult} (@{@code 0x47f8fc} in
+     * {@code D:\games\MSv84\opcodes\ida_export_gms_v84.json}), <b>not</b>
+     * {@code CCashShop::OnCashItemResult} — so {@code cashShopMode}'s +3 does not apply here and
+     * must not be used: it would write 0xE7/0xE8 and the client would ignore them.
+     *
+     * <p>The v84 export names SUCCESS = <b>238 (0xEE)</b> and FAILED = <b>237 (0xED)</b>, a uniform
+     * +9 from v83's 0xE5/0xE4. The handler is the right one and not a lookalike: its SUCCESS arm
+     * reads sn:int64 + remain:int32 + newItem:55B GW_CashItemInfo and then delegates to
+     * {@code CUICashItemGachapon::OnCashItemGachaponResult} (@{@code 0x9db918}), which reads
+     * exactly Decode4 itemId, Decode1 count, Decode1 jackpot — field for field what
+     * {@code onCashGachaponOpenSuccess} writes. Only the mode byte moved. FAILED reads nothing
+     * beyond the mode in either version.
+     *
+     * <p>Wrong here is silent: Cash Shop Surprise sends the packet, the client dispatches to no
+     * arm, nothing happens and nothing errors.
+     */
+    private static int gachaponMode(int v83Mode) {
+        return ServerConstants.VERSION >= 84 ? v83Mode + 9 : v83Mode;
+    }
+
     // Cash Shop Surprise packets found thanks to Arnah (Vertisy)
     public static Packet onCashItemGachaponOpenFailed() {
         OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_CASH_ITEM_GACHAPON_RESULT);
-        p.writeByte(0xE4);
+        p.writeByte(gachaponMode(0xE4));
         return p;
     }
 
     public static Packet onCashGachaponOpenSuccess(int accountid, long boxCashId, int remainingBoxes, Item reward,
                                                    int rewardItemId, int rewardQuantity, boolean bJackpot) {
         OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_CASH_ITEM_GACHAPON_RESULT);
-        p.writeByte(0xE5);   // subopcode thanks to Ubaware
+        p.writeByte(gachaponMode(0xE5));   // subopcode thanks to Ubaware
         p.writeLong(boxCashId);
         p.writeInt(remainingBoxes);
         addCashItemInformation(p, reward, accountid);

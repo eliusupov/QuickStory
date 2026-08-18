@@ -52,6 +52,21 @@ class CashShopModeTest {
         assertMode(V84 ? 0x90 : 0x8D, PacketCreator.showBoughtQuestItem(4001126), "buy normal");
     }
 
+    /**
+     * CASHSHOP_CASH_ITEM_GACHAPON_RESULT is a different handler -
+     * {@code CCashShop::OnCashItemGachaponResult} @0x47f8fc, whose v84 export names SUCCESS = 238
+     * (0xEE) and FAILED = 237 (0xED). That is +9, not cashShopMode's +3, so these two must never
+     * route through cashShopMode (it would emit 0xE7/0xE8 and the client would silently ignore the
+     * packet - Cash Shop Surprise doing nothing, with no error at all).
+     */
+    @Test
+    void gachaponResultPacketsCarryTheVersionsOwnMode() {
+        assertMode(V84 ? 0xED : 0xE4, PacketCreator.onCashItemGachaponOpenFailed(), "gachapon failed");
+        assertMode(V84 ? 0xEE : 0xE5,
+                PacketCreator.onCashGachaponOpenSuccess(1, 0L, 1, item(), 4001126, 1, false),
+                "gachapon success");
+    }
+
     // ------------------------------------------------------------------
 
     private static void assertMode(int expected, Packet p, String what) {

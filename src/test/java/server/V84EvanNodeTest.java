@@ -149,26 +149,35 @@ class V84EvanNodeTest {
     }
 
     /**
-     * A stated gap, pinned so it cannot be forgotten or quietly "fixed" by guesswork.
+     * FIXED — this test used to assert the gap ({@code assertNull} on all three) and has been
+     * inverted to lock in the mapping.
      * <p>
-     * {@code Skill.wz/2001.img} also ships {@code 20011018} "Yeti Rider", {@code 20011019}
-     * "Witch's Broomstick" and {@code 20011031} "Balrog" — real v83-era mounts — and none of them
-     * is in {@code SKILL_MOUNTS}, because {@code constants.skills.Evan} declares no
-     * {@code YETI_MOUNT}/{@code WITCH_BROOMSTICK}/{@code BALROG_MOUNT}. The id offsets do not
-     * transfer: Beginner numbers them 1017/1018/1019 and Legend/Noblesse 1019/1022/1023, and
-     * Evan's 1018 is named "Yeti Rider" rather than "Yeti Mount 2", so which sprite each one wants
-     * cannot be derived — it would be the same speculation F4 warned about. Ticket 12 owns it.
-     * Cost today: an Evan given one of the three by {@code !maxskill} casts it and gets no mount.
+     * {@code Skill.wz/2001.img} ships {@code 20011018} "Yeti Rider", {@code 20011019} "Witch's
+     * Broomstick" and {@code 20011031} "Balrog" — real v83-era mounts. Each id was resolved on its
+     * own evidence, because the offset rule does <em>not</em> transfer (Beginner numbers them
+     * 1017/1018/1019, Legend/Noblesse 1019/1022/1023):
+     * <ul>
+     * <li><b>20011031 -&gt; 1932010</b>: the offset 1031 agrees across two independent job blocks
+     *     ({@code Beginner.BALROG_MOUNT} and {@code Legend.BALROG_MOUNT}) <em>and</em> the name
+     *     "Balrog" matches both. Offset + name.</li>
+     * <li><b>20011019 -&gt; 1932005</b>: <em>name only</em>. It is name-identical to
+     *     {@code Beginner.WITCH_BROOMSTICK}; the offset does not transfer, since Legend's 1019 is
+     *     {@code YETI_MOUNT1}.</li>
+     * <li><b>20011018 -&gt; 1932003</b>: neither offset nor name resolves it, and it does not
+     *     matter — {@code Character.wz/TamingMob/01932003.img} and {@code 01932004.img} are
+     *     byte-identical apart from their own node names (418 lines each, identical info and frame
+     *     geometry), so either renders the same yeti. 1932003 was taken.</li>
+     * </ul>
      */
     @Test
-    void evansThreeV83EraMountsAreNamedButUnmapped() {
+    void evansThreeV83EraMountsAreMapped() {
         Data skillNames = wz("String.wz").getData("Skill.img");
         assertEquals("Yeti Rider", DataTool.getString("name", skillNames.getChildByPath("20011018"), "").trim());
         assertEquals("Witch's Broomstick", DataTool.getString("name", skillNames.getChildByPath("20011019"), "").trim());
         assertEquals("Balrog", DataTool.getString("name", skillNames.getChildByPath("20011031"), "").trim());
-        for (int id : new int[]{20011018, 20011019, 20011031}) {
-            assertNull(StatEffect.skillMountItem(id), id + " unexpectedly mapped — update the doc on this test");
-        }
+        assertEquals(1932003, StatEffect.skillMountItem(20011018), "Yeti Rider -> mount sprite");
+        assertEquals(1932005, StatEffect.skillMountItem(20011019), "Witch's Broomstick -> mount sprite");
+        assertEquals(1932010, StatEffect.skillMountItem(20011031), "Balrog -> mount sprite");
     }
 
     /**

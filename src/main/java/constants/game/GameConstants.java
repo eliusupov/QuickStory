@@ -361,6 +361,7 @@ public class GameConstants {
             case MapId.KNIGHTS_CHAMBER_2:     // cygnus 2nd floor
             case MapId.KNIGHTS_CHAMBER_3:     // cygnus 3rd floor (beginners)
             case MapId.PALACE_OF_THE_MASTER:     // aran
+            case MapId.FOREST_HALL:     // evan
                 return true;
 
             default:

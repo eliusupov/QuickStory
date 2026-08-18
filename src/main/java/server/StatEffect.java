@@ -159,6 +159,21 @@ public class StatEffect {
         mounts.put(Noblesse.BALROG_MOUNT, 1932010);
         mounts.put(Legend.BALROG_MOUNT, 1932010);
 
+        // Evan ships three of the v83-era mounts too, at offsets that do NOT follow the beginner
+        // blocks — so each id was resolved on its own evidence, not by pattern:
+        //   20011031 "Balrog"            -> 1932010: offset 1031 agrees with Beginner.BALROG_MOUNT
+        //                                   and Legend.BALROG_MOUNT, and the name matches both.
+        //   20011019 "Witch's Broomstick"-> 1932005: NAME only. The offset does not transfer
+        //                                   (Legend's 1019 is YETI_MOUNT1).
+        //   20011018 "Yeti Rider"        -> 1932003: neither offset nor name resolves it, and the
+        //                                   choice is free: Character.wz/TamingMob/01932003.img and
+        //                                   01932004.img are byte-identical apart from their own
+        //                                   node names (418 lines each), so both render the same
+        //                                   yeti. 1932003 was taken.
+        mounts.put(Evan.BALROG_MOUNT, 1932010);
+        mounts.put(Evan.WITCH_BROOMSTICK, 1932005);
+        mounts.put(Evan.YETI_RIDER, 1932003);
+
         // The eight GMS v84 mounts. Unlike the v83 ones these ARE job-stable: v84 ships each at
         // 000102x, 1000102x, 2000102x and 2001102x — see docs/wz-baseline/add-list/Skill.txt and
         // String.wz/Skill.img. Sprite ids corroborated against two reimplementations of this

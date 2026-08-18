@@ -47,4 +47,27 @@ class GameConstantsEvanTest {
                 () -> assertTrue(GameConstants.isPqSkill(20001011), "legend power explosion")
         );
     }
+
+    /**
+     * Forest Hall (100030301) is Evan's Lv.200 hall of fame — v84's {@code String.wz/Npc.img/9901910}
+     * and {@code Etc.wz/NpcLocation.img/9901910/0} both name it. It was missing from
+     * {@code isHallOfFameMap}, which made the {@code EVAN1 -> 21} arm of {@code getHallOfFameBranch}
+     * unreachable: an Evan PlayerNPC fell through to the custom-map formula
+     * {@code 26 + 4 * (mapid / 100000000)} = 30.
+     */
+    @Test
+    void forestHallIsEvansHallOfFameMap() {
+        assertAll(
+                () -> assertTrue(GameConstants.isHallOfFameMap(MapId.FOREST_HALL), "100030301"),
+                () -> assertEquals((byte) 21, GameConstants.getHallOfFameBranch(Job.EVAN1, MapId.FOREST_HALL), "branch"),
+                () -> assertEquals((byte) 21, GameConstants.getHallOfFameBranch(Job.EVAN10, MapId.FOREST_HALL), "branch 2218"),
+
+                // the arms that were already there must not move
+                () -> assertEquals((byte) 20, GameConstants.getHallOfFameBranch(Job.ARAN4, MapId.PALACE_OF_THE_MASTER), "aran"),
+                () -> assertEquals((byte) 10, GameConstants.getHallOfFameBranch(Job.HERO, MapId.HALL_OF_WARRIORS), "warrior"),
+                () -> assertEquals((byte) 11, GameConstants.getHallOfFameBranch(Job.BISHOP, MapId.HALL_OF_MAGICIANS), "magician"),
+                // and a genuinely custom map still uses the fallback formula
+                () -> assertEquals((byte) 30, GameConstants.getHallOfFameBranch(Job.EVAN1, 100000000), "custom")
+        );
+    }
 }

@@ -267,6 +267,7 @@ public class MapId {
     public static final int KNIGHTS_CHAMBER_3 = 130000120;
     public static final int KNIGHTS_CHAMBER_LARGE = 130000101;
     public static final int PALACE_OF_THE_MASTER = 140010110; // Aran
+    public static final int FOREST_HALL = 100030301; // Evan
 
     // gm-goto
     public static final int EXCAVATION_SITE = 990000000;

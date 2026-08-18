@@ -11,6 +11,11 @@ public class Evan {
     public static final int JUMP_DOWN = 20011006;
     public static final int ECHO_OF_HERO = 20011005;
     public static final int MAKER = 20011007;
+    // v83-era mounts Evan also ships (String.wz/Skill.img names them "Yeti Rider",
+    // "Witch's Broomstick" and "Balrog"). Evan's offsets do NOT follow the beginner blocks.
+    public static final int YETI_RIDER = 20011018;
+    public static final int WITCH_BROOMSTICK = 20011019;
+    public static final int BALROG_MOUNT = 20011031;
     public static final int BAMBOO_THRUST = 20011009;
     public static final int INVINCIBLE_BARRIER = 20011010;
     public static final int POWER_EXPLOSION = 20011011;
