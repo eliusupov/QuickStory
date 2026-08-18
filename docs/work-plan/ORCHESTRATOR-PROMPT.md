@@ -187,3 +187,71 @@ criteria are unmet. Never report a GUI step as complete when it was staged but n
 ## Start
 
 Read `docs/work-plan/README.md`, then dispatch tickets 01 and 02.
+
+---
+
+# Session state — 2026-08-18
+
+The sections above predate this. Where they disagree with this one, **this one wins**: there are
+now **67 tickets**, not 16, and `docs/work-plan/SOURCES.md` governs what may be cited as evidence.
+
+## The role, restated
+
+**You orchestrate. You do not implement.** Dispatch subagents, then **verify their claims
+independently before relaying them** — several agents this session reported green while a
+different test class was failing, and one reported a fix live that had never been packaged.
+Never take completion on trust. When you relay an agent's finding to the owner, you own it.
+
+The owner does not want to be involved unless he must be. Do not hand him open questions you can
+answer from the data; hand him a recommendation, or nothing.
+
+## Standing constraints
+
+* **The owner is usually playing.** He has given **standing permission to restart** — restart when
+  work is ready and tell him after. Do not ask each time.
+* **Changesets and resources live inside the jar.** A restart without `./mvnw -o package` applies
+  nothing. This was missed once; verify the change landed **in the database**, not in the log.
+* Never `git add -A` — the index is shared with concurrent agents. Never bare `git stash` or
+  `git reset`. Explicit pathspecs only.
+* Never launch a game client (it rewrites a shared registry key). Never write to
+  `D:\games\MapleStory\`, `D:\games\dreamms\`, or `D:\games\MSv84\client\` — the last is the
+  owner's live client and is **off limits entirely** while he plays.
+* Parallel agents collide on `target/`. Either forbid maven in the fan-out and run the suite
+  yourself before the restart, or allow exactly one agent to hold it.
+* **v84 parity only.** If v84 ships it and we do not support it, that is work. If v84 does not
+  have it, we do not build it — regardless of what a tracker says.
+
+## What landed today
+
+Maps: v84 foothold tables taken verbatim on **52 terrain + 20 renumbered + 17 town** maps
+(`fhid` equals v84 on every one), **28 + 57 + 19** portal arrays index-aligned, Forest Hall
+(`100030301`) imported, a loader guard so a missing map image cannot NPE.
+
+Gameplay: cash-shop enum shifted +3 for v84 (entry, locker and gifts were all silently failing);
+quest SP now pays into the job its reward names, with changeSet 169 restoring what the old
+behaviour ate; SP reset items enforce their tier and no longer consume on a failed reset; Evan's
+mastery books drop and are stocked; quest requirement halving repaired on both sides.
+
+Data: changeSets **164-172**. Sweeps committed: `V84-QUEST-SWEEP.*` (198 quests, five checks),
+`V84-QUEST-DROPPER-SWEEP.*` (46 pairs, 12 flagged and all cleared on the text).
+
+## Method that worked, and should be reused
+
+1. **Survey first, then fan out.** One agent produces a machine-readable list whose rows carry the
+   *precedent to copy*; cheap agents then work row ranges in parallel without re-deriving.
+2. **Read the whole quest, not one token.** Quest 22529's drop row was justified by the same mob
+   token it was derived from — circular. The pre-accept text, the objective and `Say.img` together
+   are the authority. A heuristic is triage, never a verdict.
+3. **Derive, never invent.** Copy a real analogue row and name it in the changeSet header. Mark
+   owner-directed overrides as overrides, not as recovered v84 data.
+
+## Open
+
+* The **coverage matrix** — `add-list/` is what v84 added; the missing artifact is one table of
+  added-vs-supported per archive. `STATUS.md` is to become that front page and the 67 tickets
+  marked done/open/superseded/refused. **Do not create a fifth progress document.**
+* **HD client** — resolution and `config.ini` work; a fork for a faithful v84 build lives at
+  `D:\games\MSv84\MapleEzorsia-v2-v84\` branch `v84`. The login-frame offset bug is fixed. The
+  world-select descriptor cannot be resolved without a running client.
+* **Dragon equipment slots** — Evan cannot equip his dragon gear; in progress.
+* **Dual Blade** — not started, deliberately. Evan first, by the owner's instruction.
