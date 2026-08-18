@@ -80,6 +80,13 @@ public class MapId {
     public static final int FROM_EREVE_TO_ORBIS = 200090021;
     public static final int ORBIS_STATION = 200000161;
     public static final int FROM_ORBIS_TO_EREVE = 200090020;
+    // Olaf's ship, Lith Harbour <-> Slumbering Dragon Island. Direction is read off each ride map's
+    // own hd00..hd07 portals, which warp back to the ORIGIN exactly as 200090020's do
+    // (200090080/hd** -> 104000000, 200090090/hd** -> 914100000), and agrees with the out00..out05
+    // script names move_RitSDI / move_SDIRit.
+    public static final int FROM_LITH_TO_SDI = 200090080;
+    public static final int FROM_SDI_TO_LITH = 200090090;
+    public static final int SDI_TEMPORARY_HARBOR = 914100000; // Slumbering Dragon Island docks
 
     // Aran
     public static final int ARAN_TUTORIAL_START = 914000000;

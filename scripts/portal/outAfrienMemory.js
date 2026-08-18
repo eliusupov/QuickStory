@@ -20,11 +20,12 @@
 //
 // And this portal is the only server-reachable hook the memory has. 900030000's info/onUserEnter
 // and info/onFirstUserEnter are both the EMPTY STRING, its reactor node is empty, and its portal
-// list is two entries - sp and this one. Its one NPC, 1013205, is client-scripted
-// (Npc.wz/1013205.img/info/script/0/script = "Afirentalk"), the same mechanism as the ferry NPC
-// 1013207, so no server NPC conversation is ever opened for it and no scripts/npc/1013205.js is
-// owed. Present-day Afrien 1205000 has no info/script node, which is why HE is server-talkable and
-// serves as Check.img/22591/1/npc.
+// list is two entries - sp and this one. Its one NPC, 1013205, carries
+// Npc.wz/1013205.img/info/script/0/script = "Afirentalk" and has no server script, and 22591's own
+// completion NPC is present-day Afrien 1205000 (Check.img/22591/1/npc), so no scripts/npc/1013205.js
+// is owed. Note the reason is "nothing in the quest data needs him", NOT "info/script makes an NPC
+// unreachable" - that inference is false and was corrected in ticket 55 R46: 1200004, 1100008 and
+// 1013207 all carry an info/script leaf and all three are server-talkable.
 //
 // The guard picks the record: 22601 sits in the COMPLETE block, so Quest.getInfoNumber only
 // resolves it for a STARTED 22591. The player lands one map from the npc that consumes it.

@@ -2670,6 +2670,27 @@ public class MapleMap {
                     chr.changeMap(MapId.SKY_FERRY, 0);
                 }
             }, travelTime);
+        } else if (mapid == MapId.FROM_LITH_TO_SDI) { // To Slumbering Dragon Island
+            // v84 states no ride duration for this route anywhere. 1 minute is copied from the only
+            // other ship off the same Lith Harbour dock, FROM_LITH_TO_RIEN above; it is not invented.
+            int travelTime = getWorldServer().getTransportationTime((int) MINUTES.toMillis(1));
+            chr.sendPacket(PacketCreator.getClock(travelTime / 1000));
+            TimerManager.getInstance().schedule(() -> {
+                if (chr.getMapId() == MapId.FROM_LITH_TO_SDI) {
+                    // 914100000 has exactly two portals, sp(0) and in00(1) - the tn="st00" that
+                    // 200090090's hd** name does not exist there, so slot 0 is the only landing.
+                    // Same slot enterSDI.js uses.
+                    chr.changeMap(MapId.SDI_TEMPORARY_HARBOR, 0);
+                }
+            }, travelTime);
+        } else if (mapid == MapId.FROM_SDI_TO_LITH) { // To Lith Harbour
+            int travelTime = getWorldServer().getTransportationTime((int) MINUTES.toMillis(1));
+            chr.sendPacket(PacketCreator.getClock(travelTime / 1000));
+            TimerManager.getInstance().schedule(() -> {
+                if (chr.getMapId() == MapId.FROM_SDI_TO_LITH) {
+                    chr.changeMap(MapId.LITH_HARBOUR, 3);
+                }
+            }, travelTime);
         } else if (MiniDungeonInfo.isDungeonMap(mapid)) {
             MiniDungeon mmd = chr.getClient().getChannelServer().getMiniDungeon(mapid);
             if (mmd != null) {

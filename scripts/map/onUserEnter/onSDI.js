@@ -10,8 +10,10 @@
 // Mir, a summoned dragon placed on no map. The maps before this one declare no hook to write it
 // from: 200090080 and 914100000 both carry info/onUserEnter and info/onFirstUserEnter as the
 // EMPTY STRING (v84 positively saying "no script"), 914100000/portal/1/script is "" as well, its
-// reactor node is empty, and its one NPC 1013207 Olaf is client-scripted
-// (Npc.wz/1013207.img/info/script/0/script = contimoveRitSDI). This is the first hook on the path.
+// reactor node is empty, and its one NPC 1013207 Olaf only boards the ferry
+// (scripts/npc/1013207.js, ticket 55 R46 - the earlier note here called him "client-scripted and
+// therefore unreachable", which is wrong: 1200004 and 1100008 carry the same info/script node and
+// are server-talkable today). He writes no record, so this is still the first hook on the path.
 // Mir's line fits the room: Say.img/22580/0/0 "I don't hear anything, not even birds chirping,
 // squirrels running, or leaves rustling in the wind" - and 914100010 is the forest, with life EMPTY.
 //

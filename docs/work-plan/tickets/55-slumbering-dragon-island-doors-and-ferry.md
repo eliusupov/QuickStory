@@ -126,7 +126,13 @@ which map the click comes from.
 
 Neither `scripts/npc/1002101.js` nor `scripts/npc/1013207.js` exists.
 
-### This row overturns ticket 37's standing refusal - say so, do not do it silently
+### ~~This row overturns ticket 37's standing refusal~~ - WITHDRAWN, see "Delivered - R46"
+
+**Everything from here to the end of R46 is superseded.** It was written before the carve was read.
+The ferry is real, but it is an NPC ride; ticket 37's refusal of `move_RitSDI` / `move_SDIRit`
+stands and is now *more* firmly correct, not less. The rest of this section is kept as the record of
+what was believed.
+
 
 `docs/work-plan/tickets/37-ereve-rien-ferry-portals.md:87-88` lists `move_RitSDI` and `move_SDIRit`
 in its refused table, and `:106-114` ("Why no fix was written") refuses implementing `out00..out05`
@@ -187,8 +193,10 @@ agent may perform**.
       otherwise. Each branch is asserted by name in a test.
 - [ ] `wz/Npc.wz/1002101.img.xml` carries `info/script/0/script` = `contimoveSDIRit`, merged from the
       carve. This leaf is absent today and R46 does not work without it.
-- [ ] `scripts/portal/move_RitSDI.js` and `scripts/portal/move_SDIRit.js` exist and load; each is
-      driven by all six `out00`..`out05` portals on its map without duplicating the ride.
+- [x] ~~`scripts/portal/move_RitSDI.js` and `scripts/portal/move_SDIRit.js` exist and load~~
+      **WITHDRAWN - see "Delivered - R46".** These two are the wrong mechanism and ticket 37's
+      refusal of them is correct and now live. The ferry is boarded from an NPC, not from
+      `out00`..`out05`.
 - [ ] `MapAndPortalScriptsRealLoad` covers all four new scripts: real engine load, `enter(pi)`
       invoked against a Mockito `PortalPlayerInteraction`, exact interactions asserted with
       `verifyNoMoreInteractions`, and **no `Effect.wz` `Direction*` scene named by any of them**.
@@ -226,7 +234,7 @@ nothing. Out of scope here; do not write NPC scripts to paper over it.
   being un-refused, and only on the argument recorded above.
 - Do not launch a client to check Olaf. Record the question and hand it to the owner.
 
-## Delivered - R03 only
+## Delivered - R03
 
 `scripts/portal/enterSDI.js` warps to **914100000** slot 0 (the island's only `town=1` map, the
 landing `200090090/portal/1..8` declare, and the map whose `in00` reaches 914100010 where `onSDI.js`
@@ -252,3 +260,94 @@ both hold: `wz/Npc.wz/1002101.img.xml` carries no `info/script` node at all (onl
 `grep -rl contimoveSDIRit` over `wz/`, `scripts/` and `src/` returns nothing, while
 `wz/Npc.wz/1013207.img.xml:6` does carry `contimoveRitSDI`. R46 therefore still needs an add-list
 merge plus the ticket-37 reversal, and remains open.
+
+## Delivered - R46: the ferry is in v84, and it is an NPC ride, not two portal scripts
+
+**Adjudication: the ferry IS in v84's data, decisively.** Four facts, all from the pristine carve
+`D:\games\MapleStory\Server\porting-resources\wz-data\v84\`, read with `WzPeek`:
+
+1. `Npc.wz/1002101.img/info/script/0/script` = **`contimoveSDIRit`** in pristine. Our tree carried
+   only `speak/0..1`. The leaf is now merged.
+2. `Etc.wz/ScriptInfo.img/contimoveSDIRit` = **"Ask about boarding the ship."** - and it is the
+   **only** `contimove*` entry in the whole of `ScriptInfo.img`. v84 wrote a boarding tooltip for
+   this route and for no other.
+3. Both ends ship complete. `Map2/200090080` and `Map2/200090090` each carry `sp`, `hd00`..`hd07`
+   and `out00`..`out05`, and each places `life/0 n 1013207`. `WzPeek scan Map.wz id` over all 4,848
+   pristine images: **1002101 appears in exactly one map, `Map1/104000000` (Lith Harbour) `life/11`;
+   1013207 in exactly three, `914100000`, `200090080`, `200090090`.** A boarding NPC at each end and
+   a deckhand on each ship.
+4. Add-list rows exist for both unmerged leaves: `docs/wz-baseline/add-list/Npc.txt:5`
+   (`Npc.wz/1002101.img/info/script`) and `docs/wz-baseline/add-list/Etc.txt:10633`
+   (`Etc.wz/ScriptInfo.img/contimoveSDIRit`).
+
+### The claim that blocked this for two passes is false
+
+Both this ticket and two shipped script comments asserted that an `info/script` leaf makes an NPC
+**client-scripted and therefore unreachable by a server conversation**, so `contimoveSDIRit` had to
+be some client mechanism we could not drive. That is wrong, and this tree already disproves it:
+
+| NPC | `info/script` leaf (pristine **and** `wz/Npc.wz` today) | server script | status |
+|---|---|---|---|
+| 1200004 Puro, Lith Harbour | `contimoveRitRie` | `scripts/npc/1200004.js` | **works in production** |
+| 1100008, Orbis Station | `contimoveOrbEre` | `scripts/npc/1100008.js` | **works in production** |
+| 1002101 Olaf, Lith Harbour | `contimoveSDIRit` | added here | - |
+
+1200004 stands on the same map as Olaf, 104000000. So the `divi == 1040000` worry above is answered
+too: **no `ChangeMapHandler` branch was needed.** That branch list only whitelists client-requested
+cutscene transfers; a ferry boards through a server NPC conversation and `cm.warp`, which never
+reaches it. The proof is that the Rien whale on that exact map works today with no branch.
+
+### Ticket 37 is NOT overturned - it governs, and it is right
+
+The "R46 overturns ticket 37" section above is **withdrawn**. Ticket 37 refused
+`move_RitSDI` / `move_SDIRit` because implementing `out00`..`out05` is either a ride-skip exploit or
+a duplicate of the `hd**` portals. Its own escape clause - *"if a scheduled ride is later added to
+these two maps, ticket 37's refusal becomes live again"* - has now fired: **this row added the ride.**
+And the parity argument is decisive on its own: **every working ferry in this server has its
+`out00`..`out05` scripts missing.** `move_RitRie`, `move_RieRit`, `move_OrbEre`, `move_EreOrb`,
+`move_EliEre`, `move_EreEli` are all absent and all six rides work. Writing the SDI pair would make
+this the only ferry in the game with a door that skips its own ride.
+`SlumberingDragonFerryScriptTest.theOutPortalScriptsStayRefused` pins all three names as absent.
+
+### What shipped
+
+* `wz/Npc.wz/1002101.img.xml` - `info/script/0/script` = `contimoveSDIRit`, merged from the carve
+  (add-list row `Npc.txt:5`). `Etc.wz/ScriptInfo.img/contimoveSDIRit` was **not** merged: it is a
+  client tooltip, the server never reads `Etc.wz/ScriptInfo.img`, and `Etc.wz` is another row's lane.
+* `scripts/npc/1002101.js` - Olaf at Lith Harbour, warps to **200090080**.
+* `scripts/npc/1013207.js` - Olaf at 914100000, warps to **200090090**; on the two ride maps he
+  refuses to board and just talks. That guard is the ticket-37 exploit closed by construction.
+* `constants/id/MapId.java` - `FROM_LITH_TO_SDI` 200090080, `FROM_SDI_TO_LITH` 200090090,
+  `SDI_TEMPORARY_HARBOR` 914100000.
+* `server/maps/MapleMap.java` `addPlayer` - two branches copied from the `FROM_LITH_TO_RIEN` pair.
+
+Every derived value, and where it comes from:
+
+| value | derived from |
+|---|---|
+| outbound ride map 200090080 | its `hd00..hd07` warp to 104000000 and its `returnMap`/`forcedReturn` are 104000000, so Lith is the ORIGIN - same shape as `200090020`; its `out00..out05` name `move_RitSDI` |
+| return ride map 200090090 | `hd**` -> 914100000, `out**` name `move_SDIRit` |
+| island landing 914100000 slot **0** | 914100000 has two portals, `sp`(0) and `in00`(1). The `tn="st00"` that `200090090/hd**` name does not exist there. Same slot `enterSDI.js` already uses |
+| Lith landing 104000000 slot **3** | verbatim from the shipped `FROM_RIEN_TO_LITH` arrival - the other ship docking at Lith |
+| ride time **1 minute** | v84 states no duration for this route anywhere. Copied from `FROM_LITH_TO_RIEN`, the only other ship off the same dock |
+| fare **none** | 1200003/1200004 charge 800 mesos, but v84 prices this route nowhere - `ScriptInfo` is one sentence with no number. Inventing a fare is what the evidence rules forbid; one `gainMeso` line if the owner wants one |
+
+### Which NPC drives which direction
+
+**1002101** (Lith Harbour) drives **outbound**, Lith -> island. **1013207** (island harbour, and the
+deckhand on both ships) drives the **return**. Note the `contimove` suffixes are crossed relative to
+the `move_` portal names - the Lith NPC carries `SDIRit`, the island NPC carries `RitSDI` - so the
+map the click comes from decides the direction, never the name.
+
+### The one step only a client can confirm
+
+Whether clicking Olaf opens the conversation at all cannot be checked without launching a client,
+which no agent may do. The risk is as low as it can be made without one: 1200004 and 1100008 carry
+the identical `info/script` node, stand on the same or an equivalent map, and their conversations
+open on the owner's live server today. If Olaf turns out to be silent, so would Puro be.
+
+Also corrected: the "client-scripted, therefore unreachable" claim written into
+`scripts/map/onUserEnter/onSDI.js` and `scripts/portal/outAfrienMemory.js`. Both comments now state
+the fact without the false inference. Neither script's behaviour changed.
+
+No maven was run - ticket 68 holds `target/`.
