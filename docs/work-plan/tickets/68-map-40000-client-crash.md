@@ -114,3 +114,46 @@ they collide on `target/`.
   this is a third one and it survived them.
 - Do not guess at a fix by widening a packet until the crash stops being reported. The named-opcode
   criterion exists so the change is evidenced before it ships.
+
+---
+
+## RESOLVED - already fixed by `ade31567b`, and this ticket misread its own evidence
+
+The premise above ("this crash survived `ade31567b`") is wrong. `CLIENT_START_ERROR` is the client's
+**cumulative crash-history file, uploaded at client start** - the upload timestamp is not the crash
+timestamp. The `00:01:38.237` blob is a 12-entry history containing five stale `ver(83)` 11001
+entries, so it plainly predates itself.
+
+**The last map-40000 crash is at 22:44:52, 2026-08-16**, seven minutes *before* the fix:
+
+* `tools/v84/cutover-server.prev.log` - server started `22:43:40`, i.e. on a build older than
+  `ade31567b` (`22:59:44`). Its `22:44:22` upload carries **two** `FieldID(40000)` entries.
+* `:131` `22:44:52.904` `CLOSE_RANGE_ATTACK` on 40000 -> `:137` `22:44:52.927`
+  `DROP_ITEM_FROM_MAPOBJECT [113] (40)` - the 38-byte body -> `22:44:53.541` `Connection reset`,
+  client dead. That is the third crash, and the named opcode is `DROP_ITEM_FROM_MAPOBJECT`.
+* `tools/v84/cutover-server.2026-08-17-0002.log` - server started `23:03:45`, **after** the fix.
+  Its `00:01:38` upload carries **three** `FieldID(40000)` entries: the two old ones plus that
+  22:44:52 kill. Nothing crashed at 00:01:38.
+
+**The fixed build then survived the same sequence on the same map**, in that very log:
+
+* `00:01:50.051` `FIELD_EFFECT maplemap/enter/40000` - uguuh is on the map.
+* `00:01:54.390` `DROP_ITEM_FROM_MAPOBJECT [113] (41)` - **41 bytes, one more than the 40 that
+  killed it**, exactly what `ade31567b` added.
+* `00:01:59.305` and `00:02:00.074` `CLOSE_RANGE_ATTACK`, `00:02:00.077` `KILL_MONSTER` - a kill on
+  40000, and the session runs on normally to the map change at `00:02:07`.
+
+**And no fourth entry ever appeared.** The history stayed at 12 entries with three 40000 lines across
+every later upload (`cutover-server.2026-08-17-1425.log:20`, "12 entries uploaded" at `14:26:42`);
+the only entries that accrued afterwards are `evan @ map 100030102` (`1425.log:590`) and an unparsed
+`com_error`.
+
+Acceptance criteria 1-4 are already satisfied on the tree: the opcode is named
+(`DROP_ITEM_FROM_MAPOBJECT`, body 38 -> 39), the fix is `VERSION >= 84`-guarded in
+`PacketCreator.writeV84DropSpawnExtra`, and `src/test/java/tools/DropSpawnPacketTest.java` pins both
+byte lengths (`itemDropCarriesTheV84TrailingByte`, `mapItemUpdateCarriesTheV84TrailingByte`). No
+further code change exists to make.
+
+**Cannot be settled offline, and remains the owner's step:** a live v84 client killing a mob on
+40000 with no new crash entry, and quest 1035 end to end. The logs above are the owner's own past
+session and are strong evidence, but not the in-client confirmation the ticket asks for.
