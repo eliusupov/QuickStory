@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Pins changeSet 160 - drop rows for items the v84 client itself lists against a mob but that
@@ -57,6 +58,12 @@ class MonsterBookDropV84RealLoad {
     /** Monster cards are changeSet 157's lane; a card here would double-insert. */
     private static final int CARD_FLOOR = 2380000;
     private static final int CARD_CEILING = 2389999;
+
+    /** R49, ticket 67: the unplaced mob whose 17 rows stay, and the 10 tablets that get none. */
+    private static final int DRAGON_RIDER = 8300007;
+    private static final int ACCESSORY_TABLET_FLOOR = 2047300;
+    private static final int ACCESSORY_TABLET_CEILING = 2047309;
+    private static final Pattern ACCESSORY_TABLET = Pattern.compile("204730[0-9]");
 
     /** drop_data chance is out of 1,000,000, and 999999 is the guaranteed-drop idiom. */
     private static final int MAX_CHANCE = 999999;
@@ -142,6 +149,53 @@ class MonsterBookDropV84RealLoad {
         for (int[] row : dropRows()) {
             String pair = row[0] + ":" + row[1];
             assertTrue(seen.add(pair), "changeSet 160 lists mob/item " + pair + " more than once");
+        }
+    }
+
+    /**
+     * R49, ticket 67, both halves of one decision.
+     *
+     * <p>Mob 8300007 "Dragon Rider" keeps all <strong>seventeen</strong> of its rows - it is placed
+     * by no map, so they are inert, but {@code MonsterBook.img/8300007/reward} names exactly those
+     * seventeen items and {@code 153-crimson-sky-drop-data.sql}'s refusal to table it was scoped to
+     * the Crimson Sky work, not general. The annotation above changeSet 160 in
+     * {@code changelog-data.xml} carries the reasoning.
+     *
+     * <p>The ten <em>accessory</em> tablets {@code 2047300-2047309} get no row, and this is the
+     * assertion that keeps it that way. Their only analogue is the six weapon tablets on 8300007;
+     * copying those would propagate the same unplaced dropper and manufacture a source. The second
+     * half re-checks the reason rather than the conclusion: no mob in the whole MonsterBook names
+     * any of the ten, so there is nothing to transcribe.
+     */
+    @Test
+    void dragonRiderRowsStayAndAccessoryTabletsGetNone() throws IOException {
+        long dragonRider = dropRows().stream().filter(r -> r[0] == DRAGON_RIDER).count();
+        assertEquals(17, dragonRider, "changeSet 160 must table all 17 of mob " + DRAGON_RIDER
+                + "'s MonsterBook reward items; R49 decided the rows stay and that it is 17, not 6");
+
+        try (var files = Files.walk(Path.of("src", "main", "resources", "db"))) {
+            for (Path sql : files.filter(p -> p.toString().endsWith(".sql")).toList()) {
+                Matcher tablet = ACCESSORY_TABLET.matcher(Files.readString(sql, StandardCharsets.UTF_8));
+                if (tablet.find()) {
+                    fail(sql.getFileName() + " mentions accessory tablet " + tablet.group()
+                            + "; those ten have no source in v84 and no row may be added by copying "
+                            + "the six weapon tablets on mob " + DRAGON_RIDER);
+                }
+            }
+        }
+
+        Data book = DataProviderFactory.getDataProvider(WZFiles.STRING).getData("MonsterBook.img");
+        assertNotNull(book, "String.wz/MonsterBook.img did not parse");
+        for (Data mob : book.getChildren()) {
+            Set<Integer> listed = rewardList(Integer.parseInt(mob.getName()));
+            if (listed == null) {
+                continue;
+            }
+            for (int id = ACCESSORY_TABLET_FLOOR; id <= ACCESSORY_TABLET_CEILING; id++) {
+                assertTrue(!listed.contains(id), "MonsterBook now names accessory tablet " + id
+                        + " as a drop of mob " + mob.getName() + "; R49 refused a row for the ten on the "
+                        + "grounds that no mob lists them, so that refusal needs re-deciding, not this assert relaxing");
+            }
         }
     }
 

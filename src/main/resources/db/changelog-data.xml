@@ -104,6 +104,39 @@
         </rollback>
     </changeSet>
 
+    <!--
+      R49, ticket 67 - mob 8300007 "Dragon Rider": the rows STAY, and there are SEVENTEEN of them.
+
+      Two of our own changeSets looked like they contradicted each other.
+      153-crimson-sky-drop-data.sql:39-40 refused to table 8300007: "no map IN SCOPE places it and
+      no v84 mob-skill summon list names it, so nothing can kill it. Add one when a spawner
+      exists." That refusal was scoped to the Crimson Sky work, not a general prohibition, so
+      160-monsterbook-drop-data.sql:271-287 tabling it later is compatible with it and is the
+      later, more specific statement. 153 is APPLIED and is NOT edited; this note is the
+      annotation. No row was added or removed by ticket 67.
+
+      All seventeen rows at 160-monsterbook-drop-data.sql:271-287 are covered by this decision, not
+      just the six weapon tablets at :282-287 that R49 was written about:
+        :271     2000005
+        :272-276 2049100, 2049201, 2049203, 2049205, 2049207
+        :277-281 2040502, 2040505, 2040514, 2040517, 2040534
+        :282-287 2047000, 2047001, 2047002, 2047100, 2047101, 2047102
+
+      They are not derived. String.wz/MonsterBook.img/8300007/reward lists exactly those seventeen
+      item ids in exactly that order - the client's own per-mob drop list, which is what all of
+      changeSet 160 transcribes and what MonsterBookDropV84RealLoad re-derives row by row.
+
+      The mob is still placed by nothing: no file under wz/Map.wz/ names 8300007, so every one of
+      the seventeen rows is inert until a spawner exists. Inert is not wrong - removing a working
+      table to satisfy a scoped aside would lose it for whenever a spawner does appear. The
+      MonsterBook entry's own map/0=240080800 is a client display hint, not a server spawn.
+
+      The ten ACCESSORY tablets 2047300-2047309 get NO row. No mob's MonsterBook reward list names
+      any of them anywhere in v84, so there is nothing to transcribe, and their only analogue is
+      the six weapon tablets above - copying those would propagate the same unplaced dropper and
+      manufacture the appearance of a source. The fix for them is a spawner, not a drop row.
+      MonsterBookDropV84RealLoad.dragonRiderRowsStayAndAccessoryTabletsGetNone pins both halves.
+    -->
     <changeSet id="160" author="v84-data-gaps">
         <sqlFile path="db/data/160-monsterbook-drop-data.sql"/>
         <rollback>

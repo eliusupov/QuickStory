@@ -106,22 +106,51 @@ no applicable case across the 127.
 
 ## Acceptance criteria
 
-- [ ] R18 is closed with **no row added** and the Iron Hook parallel recorded here. If a
+- [x] R18 is closed with **no row added** and the Iron Hook parallel recorded here. If a
       `shopitems`/`Commodity` entry is ever added instead, its `Period` and `OnSale` are copied from
       60001000-60001005 and its header names that copy - but that is a new request, not this row.
-- [ ] R49's resolution is written into a changeSet header or into `153-crimson-sky-drop-data.sql` as
+- [x] R49's resolution is written into a changeSet header or into `153-crimson-sky-drop-data.sql` as
       an annotation: the 8300007 rows stay, 153's refusal was scoped to Crimson Sky and is not a
       general prohibition, and the mob remains unplaced so the rows are inert until a spawner exists.
-- [ ] That annotation accounts for **all 17** rows on 8300007, not the six tablets alone, and names
+- [x] That annotation accounts for **all 17** rows on 8300007, not the six tablets alone, and names
       the `160-monsterbook-drop-data.sql:271-287` range.
-- [ ] No row for **2047300-2047309** is added by copying the six. Asserted by a test or a grep over
+- [x] No row for **2047300-2047309** is added by copying the six. Asserted by a test or a grep over
       `src/main/resources/db/` that finds zero rows for those ten ids.
-- [ ] `python tools/playthrough/itemsweep.py` runs clean and reproduces the 273-row sweep, and the
+- [x] `python tools/playthrough/itemsweep.py` runs clean and reproduces the 273-row sweep, and the
       bucket counts in `V84-ITEM-SOURCE-SWEEP.md` still read 121 / 127 / 37 / 15 / 46 / 48.
-- [ ] Any entry worked out of the 127 names, in its changeSet header, the analogue row it copied and
+- [x] Any entry worked out of the 127 names, in its changeSet header, the analogue row it copied and
       the mob family or level band that justified the copy.
-- [ ] `drop_data` row count changes by exactly the number of rows the ticket says it added, and by
+- [x] `drop_data` row count changes by exactly the number of rows the ticket says it added, and by
       zero if the ticket adds none.
+
+## Outcome - 2026-08-18
+
+**Zero drop rows added, zero removed.** `drop_data` still holds 23362 rows.
+
+* **R18** - closed as decided. Re-verified: `5000067` has 0 rows in `drop_data`, `shopitems` and
+  `reactordrops`, no `ItemId` match in `Etc.wz/Commodity.img`, no mention in `Quest.wz/Act.img`; its
+  food `5240028` is on SNs 10002346 / 10002347 / 60200078 / 60200079, all `OnSale=1`. The sweep
+  independently buckets it `NO_SOURCE_IN_V84:pet`. No row added.
+* **R49** - annotated in `src/main/resources/db/changelog-data.xml` immediately above changeSet 160.
+  `153` is applied and was **not** edited (editing it fails checksum validation), so the annotation
+  lives on 160, names all seventeen rows at `160-monsterbook-drop-data.sql:271-287`, and records
+  that 153's refusal was scoped to Crimson Sky.
+  **Stronger evidence than this ticket carried:** the seventeen are not derived at all -
+  `wz/String.wz/MonsterBook.img.xml` lists exactly those seventeen ids, in that order, under
+  `8300007/reward`. They are transcribed v84 data, which settles the contradiction outright rather
+  than on the balance of two changeSet comments. The mob is still placed by nothing (no file under
+  `wz/Map.wz/` names 8300007), so the rows stay inert; the `map/0=240080800` inside its MonsterBook
+  entry is a client display hint, not a spawn.
+  The same source is why **2047300-2047309** get nothing: `grep -c 204730 wz/String.wz/MonsterBook.img.xml`
+  is **0**, so no v84 mob names them and there is nothing to transcribe.
+* **R50** - **0 of 127 sourced, all 127 deliberately left with no row**, which is what the sweep
+  already concluded: no analogue rule applies across them. `python tools/playthrough/itemsweep.py`
+  re-run clean against fresh SELECT-only dumps and reproduces the split exactly - 394 v84-new items,
+  273 rows written, 121 / 127 / 37 / 15 / 46 / 48. The regenerated TSV was reverted rather than
+  committed: its only diff was ten item names now resolvable from an updated `String.wz`, which is
+  another agent's lane.
+* **No changeSet number was consumed.** Nothing changes in the database, so a no-op changeSet would
+  have been a checksum row bought for a comment.
 
 ## Do not
 
