@@ -273,3 +273,21 @@ jump-table decoding is the one case this project has actually needed it for.
 
 A brief good enough for `gp-opus-medium` is the goal — if a task seems to need high, first ask
 whether the brief is underspecified rather than the task being hard.
+
+### Do not escalate. Decide.
+
+The owner's standing position, in his words: *"None of them need my judgment. You have data here in
+the files and client files and server. And also you have online sources."*
+
+Before putting any question to him, exhaust: the pristine v84 carve, the client binary, our `wz/`
+tree, the database, `git log`, and dated online sources. A question is only his if answering it
+would require **inventing** data that provably does not exist anywhere — and then the answer is
+usually already fixed by the standing rules below, so there is still nothing to ask.
+
+Standing rules that pre-answer most "decisions":
+- v84 parity only. If v84 has no source for a thing, we do not invent one.
+- A defect proved by its own sibling rows is a fix, not a scope change. Make it.
+- Contradictory changeSets: the one backed by the data wins; say which in the commit.
+- Never invent a value. If it cannot be derived, the row is research and closes as unknown.
+
+**Answer style: very short.** Bullets, no preamble, `**tldr:**` at the end.
