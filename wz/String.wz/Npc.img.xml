@@ -412,6 +412,7 @@
   <imgdir name="1022008">
     <string name="name" value="Burnt Sword"/>
     <string name="d1" value="......"/>
+    <string name="d0" value="(There&apos;s a burnt sword...)"/>
   </imgdir>
   <imgdir name="1022100">
     <string name="name" value="Sophia"/>
@@ -475,6 +476,7 @@
     <string name="func" value="Item Creator"/>
     <string name="n0" value="Do you need anything...?"/>
     <string name="n1" value="Here...I have some goods here, so come take a look at them!"/>
+    <string name="d0" value="Great research like mine will always be oppressed. The Magician Association may have expelled me for making prohibited items, but I will never stop my research. They&apos;ll never find me here... Puhaha!"/>
   </imgdir>
   <imgdir name="1032003">
     <string name="name" value="Shane"/>
@@ -537,6 +539,7 @@
     <string name="func" value="Pet Master"/>
     <string name="n0" value="Hi, I&apos;m Mar the Fairy and I study various kinds of magic."/>
     <string name="n1" value="I&apos;ve been studying on life magic for hundreds of years, but I see no end to it."/>
+    <string name="d0" value="Please love and take care of pets. They are our valued friends."/>
   </imgdir>
   <imgdir name="1032103">
     <string name="name" value="El Moth"/>
@@ -652,6 +655,7 @@
     <string name="func" value="Item Creator"/>
     <string name="n0" value="Hmm... can I see you for a sec ...?"/>
     <string name="n1" value="Hmm ... the items you may need ... I have them all."/>
+    <string name="d0" value="Got a secret transaction you need done? You&apos;ve come to the right place... Kerning City&apos;s the hub of all dangerous transactions."/>
   </imgdir>
   <imgdir name="1052003">
     <string name="name" value="Chris"/>
@@ -677,6 +681,7 @@
     <string name="func" value="Subway Worker"/>
     <string name="n0" value="Do you want in? Then please purchase a ticket here."/>
     <string name="n1" value="No one is allowed in without a ticket."/>
+    <string name="d0" value="Monster who like darkness often find their ways into the Subway, so be careful!"/>
   </imgdir>
   <imgdir name="1052007">
     <string name="name" value="The Ticket Gate"/>
@@ -798,6 +803,7 @@
     <string name="name" value="Chrishrama"/>
     <string name="func" value="Item Creator"/>
     <string name="n0" value="You need something...?"/>
+    <string name="d0" value="It&apos;s been years and years since Sabitrama and I first came to this place. Yet we still have not discovered the truth..."/>
   </imgdir>
   <imgdir name="1061001">
     <string name="name" value="24 Hr Mobile Store"/>
@@ -832,6 +838,7 @@
   </imgdir>
   <imgdir name="1061006">
     <string name="name" value="Mysterious Statue"/>
+    <string name="d0" value="(A strange statue. You can&apos;t tell whether it is laughing or crying.)"/>
   </imgdir>
   <imgdir name="1061007">
     <string name="name" value="Crumbling Statue"/>
@@ -927,27 +934,35 @@
   </imgdir>
   <imgdir name="1063003">
     <string name="name" value="Wanted : G. Mushroom"/>
+    <string name="d0" value="Are you strong enough to defeat these?"/>
   </imgdir>
   <imgdir name="1063004">
     <string name="name" value="Wanted : Curse Eye"/>
+    <string name="d0" value="Are you strong enough to defeat these?"/>
   </imgdir>
   <imgdir name="1063005">
     <string name="name" value="Wanted : Evil Eye"/>
+    <string name="d0" value="Are you strong enough to defeat these?"/>
   </imgdir>
   <imgdir name="1063006">
     <string name="name" value="Wanted : Cold Eye"/>
+    <string name="d0" value="Are you strong enough to defeat these?"/>
   </imgdir>
   <imgdir name="1063007">
     <string name="name" value="Wanted : Z. Mushroom"/>
+    <string name="d0" value="Are you strong enough to defeat these?"/>
   </imgdir>
   <imgdir name="1063008">
     <string name="name" value="Wanted : H. Mushroom"/>
+    <string name="d0" value="Are you strong enough to defeat these?"/>
   </imgdir>
   <imgdir name="1063009">
     <string name="name" value="Wanted : Jr. Boogie"/>
+    <string name="d0" value="Are you strong enough to defeat these?"/>
   </imgdir>
   <imgdir name="1063010">
     <string name="name" value="Wanted : Drake"/>
+    <string name="d0" value="Are you strong enough to defeat these?"/>
   </imgdir>
   <imgdir name="1063011">
     <string name="name" value="Cave Wall of Evil Eye"/>
@@ -1676,11 +1691,13 @@
     <string name="name" value="Cliff"/>
     <string name="n0" value="There&apos;s a huge tree in this town."/>
     <string name="n1" value="Do you want to know how to decorate the tree?"/>
+    <string name="d0" value="우리 마을엔 무슨 일인가?"/>
   </imgdir>
   <imgdir name="2001001">
     <string name="name" value="Branch Snowman"/>
     <string name="n0" value="Want to decorate a Maplemas Trees? Come talk to me!"/>
     <string name="n1" value="Please hurry! There aren&apos;t many rooms left."/>
+    <string name="d0" value="앗! 또 눈이 오기 시작하네요~ 전 눈이 아주아주 많이 왔으면 좋겠어요."/>
   </imgdir>
   <imgdir name="2001002">
     <string name="name" value="Metal Bucket Snowman"/>
@@ -1727,6 +1744,7 @@
     <string name="w2" value="We instructors are all related. Roger, my older brother, and Robin, my younger brother, all work together here."/>
     <string name="h0" value="Yoohoo~"/>
     <string name="h1" value="So what&apos;s my relationship with Roger? Hahaha...he&apos;s my older brother!"/>
+    <string name="d0" value="Do you have a pleasant journey?"/>
   </imgdir>
   <imgdir name="2002000">
     <string name="name" value="Rupi"/>
@@ -1758,6 +1776,7 @@
     <string name="w0" value="You met up with my brothers Roger and Peter before, right?"/>
     <string name="w1" value="Best of luck to you!"/>
     <string name="h0" value="Yoohoo~"/>
+    <string name="d0" value="Hello, I am Robin."/>
   </imgdir>
   <imgdir name="2004">
     <string name="name" value="Todd"/>
@@ -2108,6 +2127,7 @@
     <string name="func" value="Shoemaker"/>
     <string name="n0" value="Hey, there! Your shoes look worn out...how about trying on MY pair of shoes?"/>
     <string name="n1" value="I have been making shoes in this town for over 50 years now...hahah"/>
+    <string name="d0" value="What can I do for you?"/>
   </imgdir>
   <imgdir name="2020003">
     <string name="name" value="Master Sergeant Fox"/>
@@ -2322,6 +2342,7 @@
   </imgdir>
   <imgdir name="2032004">
     <string name="name" value="Suspicious Lava"/>
+    <string name="d0" value="Lava is boiling."/>
   </imgdir>
   <imgdir name="2040000">
     <string name="name" value="Mel"/>
@@ -2957,6 +2978,7 @@
     <string name="name" value="Jr. Officer Medin"/>
     <string name="n0" value="I&apos;m in charge of protecting the general as well as directing the army."/>
     <string name="n1" value="I am not going to tolerate anyone slacking off!"/>
+    <string name="d0" value="Atten-hut! Can you help me perhaps?"/>
   </imgdir>
   <imgdir name="2050010">
     <string name="name" value="Rice the Medic"/>
@@ -3060,6 +3082,7 @@
     <string name="func" value="Zoo Trainer"/>
     <string name="s0" value="Aren&apos;t they adorable?"/>
     <string name="s1" value="You can only see these animals on land. Please don&apos;t get them riled up!"/>
+    <string name="d0" value="Welcome to the Aquarium Zoo. My name is Kenta, the Zoo trainer. Please don&apos;t feed the animals."/>
   </imgdir>
   <imgdir name="2060006">
     <string name="name" value="Muse"/>
@@ -4237,11 +4260,13 @@
     <string name="name" value="Juliet"/>
     <string name="s0" value="Romeo...Please God keep him safe!"/>
     <string name="s1" value="Why?...Why nobody understand me?"/>
+    <string name="d0" value="If loving Romeo is a sin... Then a sinner I shall gladly be!"/>
   </imgdir>
   <imgdir name="2112004">
     <string name="name" value="Romeo"/>
     <string name="s0" value="Juliet...Please God keep her safe."/>
     <string name="s1" value="Alcadno and Zenumist...i didn&apos;t know how big the wall between them is..."/>
+    <string name="d0" value="The more our love is forbidden, the more my love for Juliet grows! Why must it be so...?"/>
   </imgdir>
   <imgdir name="2112005">
     <string name="name" value="Juliet"/>
@@ -4584,6 +4609,7 @@
     <string name="name" value="Shanks"/>
     <string name="n0" value="I am the captain, dang it!! Don&apos;t be looking down on me!"/>
     <string name="n1" value="I&apos;ll take you anywhere you want"/>
+    <string name="d0" value="If you want to experience the world outside Maple Island, just let me know!"/>
   </imgdir>
   <imgdir name="9000000">
     <string name="name" value="Paul"/>
@@ -4622,15 +4648,18 @@
     <string name="n0" value="Don&apos;t talk to me..."/>
     <string name="n1" value="Leave now...before you get hurt"/>
     <string name="n2" value="Are you telling me I&apos;m worse than Manji??"/>
+    <string name="d0" value="Manji will never be as good as I..."/>
   </imgdir>
   <imgdir name="9000008">
     <string name="name" value="Mr. Pickall"/>
     <string name="func" value="Master of Lock-Picking"/>
     <string name="n0" value="There is no lock in the world that I can&apos;t pick...!"/>
+    <string name="d0" value="Got a box you just can&apos;t open? Bring it to me! There&apos;s not a box in the world that can&apos;t be opened by Mr. Pickall!"/>
   </imgdir>
   <imgdir name="9000009">
     <string name="name" value="Vikin"/>
     <string name="n0" value="We&apos;re the descendants of Viking, the king of the sea."/>
+    <string name="d0" value="Hahaha! I&apos;am the king of the sea!"/>
   </imgdir>
   <imgdir name="9000010">
     <string name="name" value="Pietra"/>
@@ -4931,11 +4960,13 @@
     <string name="name" value="Lolo"/>
     <string name="n0" value="Over here you can see cute star and Aurora"/>
     <string name="n1" value="Make a wish, When you see shooting star falling down,"/>
+    <string name="d0" value="아름다운 별들이 가득한 코-크타운에 오신것을 환영합니다."/>
   </imgdir>
   <imgdir name="9001002">
     <string name="name" value="Polar bear Poch"/>
     <string name="s0" value="Hello!  "/>
     <string name="s1" value="Sliding against cool wind is so exciting!"/>
+    <string name="d0" value="안녕하세요? 저는 포치라고 해요. 우리형은 푸치이고요."/>
   </imgdir>
   <imgdir name="9001003">
     <string name="name" value="Polar bear Nell"/>
@@ -4951,11 +4982,13 @@
     <string name="name" value="Polar bear Poch"/>
     <string name="s0" value="The weather is cooling. Isn&apos;t it?"/>
     <string name="s1" value="There&apos;s nothing exciting except snow boarding!"/>
+    <string name="d0" value="제 동생 포치와 저는 코-크타운에서 의좋기로 소문난 형제랍니다."/>
   </imgdir>
   <imgdir name="9001006">
     <string name="name" value="Polar bear Poch"/>
     <string name="s0" value="The weather is cooling. Isn&apos;t it?"/>
     <string name="s1" value="There&apos;s nothing exciting except snow boarding!"/>
+    <string name="d0" value="어때? 나와 함께 스노우보드를 타러 가지 않을래?"/>
   </imgdir>
   <imgdir name="9001008">
     <string name="name" value="Bohun"/>
@@ -5142,6 +5175,7 @@
     <string name="name" value="Lakelis"/>
     <string name="n0" value="Do you want to combine powers of your party members to solve this quest?"/>
     <string name="n1" value="There are lots of obstacles here where the only way you&apos;ll pass is by joining forces with your party members."/>
+    <string name="d0" value="Party members must combine their powers to successfully complete their goals."/>
   </imgdir>
   <imgdir name="9020001">
     <string name="name" value="Cloto"/>
@@ -6810,6 +6844,7 @@
     <string name="n0" value="The Floating Market is full of energy! I love it!"/>
     <string name="n1" value="Hey, I don&apos;t think we&apos;ve ever met..."/>
     <string name="d1" value="By the way, are you aware that the Floating Market offers numerous types of delicious food? It&apos;s so good that you&apos;ll want to bring your family and your relatives here to share the love!"/>
+    <string name="d0" value="Why do you come to see me?"/>
   </imgdir>
   <imgdir name="9250006">
     <string name="name" value="Nid"/>
@@ -6840,6 +6875,7 @@
     <string name="name" value="Pornsak"/>
     <string name="n0" value="We won&apos;t wait for you if you&apos;re late."/>
     <string name="n1" value="It&apos;s so hot today. A day like this should be spent under the palm trees, enjoying the summer breeze."/>
+    <string name="d0" value="What do you want with me?"/>
   </imgdir>
   <imgdir name="9250011">
     <string name="name" value="Chut"/>
@@ -6881,6 +6917,7 @@
     <string name="func" value="Fortune Teller"/>
     <string name="n0" value="How about some fortune-telling?"/>
     <string name="n1" value="Don&apos;t you want to find out about your future?"/>
+    <string name="d0" value="What are you here for?"/>
   </imgdir>
   <imgdir name="9250023">
     <string name="name" value="Aquarium Maple TV"/>
@@ -7703,6 +7740,7 @@
   <imgdir name="1012119">
     <string name="name" value="Power B. Fore"/>
     <string name="func" value="Entrance to Bowman Training Center"/>
+    <string name="d0" value="Hello! This is a Training Center for beginning adventurers. When you reach Level 20, you will be forced to leave."/>
   </imgdir>
   <imgdir name="1022104">
     <string name="name" value="Power B. Fore"/>
@@ -8184,6 +8222,7 @@
   </imgdir>
   <imgdir name="1013000">
     <string name="name" value="Mir"/>
+    <string name="d0" value="The outside world is so much better than what I imagined in my egg!"/>
   </imgdir>
   <imgdir name="1013001">
     <string name="name" value="Dragon"/>
@@ -8356,6 +8395,7 @@
   </imgdir>
   <imgdir name="2030015">
     <string name="name" value="Hidden Rock"/>
+    <string name="d0" value="(A strange Stump. When you put your hand in it, you discover it&apos;s hollow inside.)"/>
   </imgdir>
   <imgdir name="2060010">
     <string name="name" value="Dolphin"/>
