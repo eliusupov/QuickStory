@@ -3418,12 +3418,23 @@
    "size": 4,
    "value": -360,
    "comment": "push -300\t\t\t\t!!game login frame!! turn this on if you edit UI.wz and use a frame that matches your res",
-   "drop": "guard `MainMain::CustomLoginFrame` is false in the shipped configuration (mutually exclusive arm)",
+   "drop": null,
    "fixed": false,
    "tier": "T1-context",
-   "v84": null,
-   "checks": {},
-   "verdict": "DROPPED"
+   "v84": 6330039,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "expect": "d4feffff",
+   "v84_insn": "push 0xfffffed4",
+   "v84_verdict": "ok",
+   "van83": 4294966996,
+   "van84": 4294966996
   },
   {
    "id": "P117",
@@ -3434,12 +3445,23 @@
    "size": 4,
    "value": -640,
    "comment": "push -400 ; RelMove?\t\t\t\t!!game login frame!! turn this on if you edit UI.wz and use a frame that matches your res",
-   "drop": "guard `MainMain::CustomLoginFrame` is false in the shipped configuration (mutually exclusive arm)",
+   "drop": null,
    "fixed": false,
    "tier": "T1-context",
-   "v84": null,
-   "checks": {},
-   "verdict": "DROPPED"
+   "v84": 6330045,
+   "checks": {
+    "ADDR": true,
+    "DUAL": true,
+    "FIT": true,
+    "SHAPE": true,
+    "SLOT": true
+   },
+   "verdict": "PASS",
+   "expect": "70feffff",
+   "v84_insn": "push 0xfffffe70",
+   "v84_verdict": "ok",
+   "van83": 4294966896,
+   "van84": 4294966896
   },
   {
    "id": "P118",

@@ -118,6 +118,8 @@ static const HdPatch kHdPatches[] = {
   { 0x005D34EC,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P111", 0x005C2D62, 4, {0x58,0x02,0x00,0x00} },  // mov eax,600
   { 0x005D34FC,   4, K_INT      ,          {2,0,0,0,0}, 'C', "P112", 0x005C2D72, 4, {0x20,0x03,0x00,0x00} },  // mov eax,800 ; RelMove?
   { 0x006094E5,  10, K_CAVE     ,          {0,0,0,0,0}, 'E', "P114", 0x005F464D, 8, {0xB8,0x85,0x02,0x00,0x00,0x2B,0x45,0xE4} },  // CONST (non-linear)  // game version number fix //use this if you use no frame or de
+  { 0x006096B7,   4, K_INT      ,         {0,-1,0,0,0}, 'E', "P116", 0x005F481E, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300				!!game login frame!! turn this on if you edit U
+  { 0x006096BD,   4, K_INT      ,         {-1,0,0,0,0}, 'E', "P117", 0x005F4824, 4, {0x70,0xFE,0xFF,0xFF} },  // push -400 ; RelMove?				!!game login frame!! turn this on if
   { 0x0060B418,   4, K_INT      ,         {0,-1,0,0,0}, 'E', "P118", 0x005F64DE, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300 ;
   { 0x0060B561,   4, K_INT      ,         {0,-1,0,0,0}, 'E', "P119", 0x005F6627, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300 ;
   { 0x006190B9,   4, K_INT      ,          {0,2,0,0,0}, 'E', "P124", 0x0060411C, 4, {0x58,0x02,0x00,0x00} },  // push 600

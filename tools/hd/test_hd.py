@@ -160,6 +160,26 @@ def test_generated_inc_wellformed():
     print(f'  inc: ok ({len(rows)} rows, {len(ids)} defines, all rows PASS-backed)')
 
 
+def test_login_frame_relmove_ships():
+    """P116/P117 position the HD login frame. They must ship whenever the archive does.
+
+    Client.cpp:533-535 writes both under `if (MainMain::CustomLoginFrame)`, and
+    MainMain.cpp:56 forces that flag TRUE whenever EzorsiaV2_UI.wz sits next to the exe
+    -- our shipped configuration. They were once dropped by conflating that flag with
+    `bigLoginFrame` (config-only, genuinely false), which left the 1280x720 frame canvas
+    positioned with v84's stock -300/-400 and put the login screen visibly off-centre.
+    `bigLoginFrame`'s own arm (P115) must stay dropped: it collides with P114's cave.
+    """
+    src = open(os.path.join(paths.HD, 'loader', 'hd_patches.inc')).read()
+    emitted = set(re.findall(r'"(P\d+)"', src))
+    assert {'P116', 'P117'} <= emitted, 'login-frame RelMove rows are not shipping'
+    assert 'P115' not in emitted, 'P115 is the bigLoginFrame arm; it collides with P114'
+    # value must be the frame's own centring, not a constant
+    assert re.search(r"\{0,-1,0,0,0\}, 'E', \"P116\"", src), 'P116 must be -height/2'
+    assert re.search(r"\{-1,0,0,0,0\}, 'E', \"P117\"", src), 'P117 must be -width/2'
+    print('  login frame RelMove: ok (P116 -H/2, P117 -W/2 shipping; P115 held)')
+
+
 def test_archive_hooks_match_dumps():
     """The v2 archive hooks are hand-written addresses, not generated rows.
 
@@ -274,6 +294,7 @@ if __name__ == '__main__':
     test_patchset_clean()
     test_no_overlapping_writes()
     test_generated_inc_wellformed()
+    test_login_frame_relmove_ships()
     test_archive_hooks_match_dumps()
     test_archive_mount_site()
     test_tubi_site()

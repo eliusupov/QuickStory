@@ -180,13 +180,23 @@ def main():
         'P113': {'drop': 'sizeof, not a resolution constant (v84 reads 608)'},
     }
     # ---- conditional arms the shipped configuration does not take.
-    # Client.cpp guards six blocks. `bigLoginFrame` defaults to false (MainMain.cpp:11)
-    # and is only set true by CustomLoginFrame, which needs a hand-edited UI.wz we are
-    # not shipping. So the `bigLoginFrame` arm must NOT be applied -- and it is not
-    # merely redundant: its WriteInt at 0x005F464D+1 lands on bytes +1..+4 of the
-    # VersionNumberFix cave's own `E9 rel32`, so applying both sends the login screen
-    # to a garbage address. They are the two arms of one if/else.
-    GUARD_FALSE = {'MainMain::bigLoginFrame', 'MainMain::CustomLoginFrame'}
+    # `bigLoginFrame` defaults to false (MainMain.cpp:11) and is set true ONLY by
+    # config.ini `CustomLoginFrame=true` (MainMain.cpp:52), which we do not set. So the
+    # `bigLoginFrame` arm must NOT be applied -- and it is not merely redundant: its
+    # WriteInt at 0x005F464D+1 lands on bytes +1..+4 of the VersionNumberFix cave's own
+    # `E9 rel32`, so applying both sends the login screen to a garbage address. They are
+    # the two arms of one if/else.
+    #
+    # `CustomLoginFrame` is NOT the same flag and must not be lumped in with it. It is
+    # forced TRUE at MainMain.cpp:56 whenever EzorsiaV2_UI.wz is present next to the exe
+    # -- which is exactly our shipped configuration -- independently of the config key of
+    # the same name (that key only feeds ownLoginFrame/bigLoginFrame at MainMain.cpp:52).
+    # Client.cpp:533-535 then writes the login frame's RelMove under it:
+    #     0x005F481E+1 = floor(-height/2)   and   0x005F4824+1 = floor(-width/2)
+    # Dropping these two left the HD frame canvas (frame1280, 1280x720) positioned with
+    # v84's stock -300/-400, i.e. centred for 800x600 -- the frame sat (240,60) off.
+    # That was the "login screen is off" defect. Only P116/P117 carry this guard.
+    GUARD_FALSE = {'MainMain::bigLoginFrame'}
     for p in patches:
         if p.get('guard') in GUARD_FALSE:
             FIXED[p['id']] = {'drop': f'guard `{p["guard"]}` is false in the shipped '
