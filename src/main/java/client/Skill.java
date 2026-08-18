@@ -52,12 +52,19 @@ public class Skill {
         return effects.size();
     }
 
+    // True when the skill carries a Skill.wz masterLevel node, so the char-data skill record must
+    // include the extra masterLevel int (PacketCreator.addSkillInfo) and SP is capped at masterLevel
+    // rather than maxLevel (AssignSPProcessor). This mirrors the v84/v95 client's
+    // SkillConstants.IsSkillNeedMasterLevel (Edelstein reference): the server MUST agree with the
+    // client on whether that int is present, or the char-entry packet desyncs and the client crashes.
     public boolean isFourthJob() {
-        if (job == 2212) {
-            return false;
-        }
-        if (id == 22170001 || id == 22171003 || id == 22171004 || id == 22181002 || id == 22181003) {
-            return true;
+        if (job / 100 == 22) { // Evan (job race 22 magician). EvanJr (job 2001) is race 20, excluded.
+            // Magic Guard/Critical/Booster carry a masterLevel node below their top growth; every
+            // skill of the last two growths (2217 = jobLevel 9, 2218 = jobLevel 10) carries one too.
+            if (id == 22111001 || id == 22140000 || id == 22141002) {
+                return true;
+            }
+            return job == 2217 || job == 2218;
         }
         return job % 10 == 2;
     }
