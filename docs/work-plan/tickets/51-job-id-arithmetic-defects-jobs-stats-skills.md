@@ -1,6 +1,7 @@
 # 51 - Job-id arithmetic: the rest of the Evan defects in jobs, stats and skills
 
-Status: **one fixed, five reported.** Hunt for further instances of the defect class behind
+Status: **CLOSED.** Items 1-3 fixed (1 here, 2 by `f7657c736`, 3 by `48a413961` + `a4f804f78`);
+items 4-6 are recorded, verified-in-HEAD refusals - dormant or unreachable, deliberately left alone. Hunt for further instances of the defect class behind
 ticket 50: Cosmic classifies jobs by arithmetic on the job id, and Evan's ids break the arithmetic's
 assumptions. Evan's beginner job is **2001**, the only beginner id that is not a round thousand, and
 Evan has **ten** advancements (2200-2218) where every other class has four.
@@ -66,7 +67,7 @@ Test: `src/test/java/client/processor/stat/AssignSPProcessorTest.java` (3 tests)
 WZ-backed static map, empty outside a running server, so it is stubbed with `Mockito.mockStatic`;
 only `getMaxLevel()` matters to the code under test. This is the first `mockStatic` in the suite.
 
-### 2 - REPORTED. Evan is not a magician for AP-to-HP/MP: 6 MP per point instead of 18
+### 2 - FIXED by `f7657c736`. Evan is not a magician for AP-to-HP/MP: 6 MP per point instead of 18
 
 `src/main/java/client/processor/stat/AssignAPProcessor.java:669` `calcHpChange`, `:764`
 `calcMpChange`, and the same chains in `takeHp:842` / `takeMp:862`.
@@ -94,11 +95,11 @@ add `|| job.isA(Job.EVAN1)` to the magician branch of `calcHpChange`, `calcMpCha
 beginner Evan already gets the beginner numbers, same as job 0. The skill lookups inside those
 branches are safe for an Evan: `getSkillLevel` of a magician skill an Evan cannot have returns 0.
 
-**Not applied here.** It is a two-way change: MP per point goes 6 -> 18, but HP per point goes
+**Applied later, in `f7657c736`.** Was: It is a two-way change: MP per point goes 6 -> 18, but HP per point goes
 8 -> 6, which is a nerf to a character already levelling on the live server. That is the owner's
 call, not mine.
 
-### 3 - REPORTED. Evan and Aran's Legend have no AP-reset HP/MP floor at all
+### 3 - FIXED by `48a413961` (floors added) and `a4f804f78` (they are live, not dormant). Evan and Aran's Legend had no AP-reset HP/MP floor
 
 `src/main/java/client/processor/stat/AssignAPProcessor.java:882` `getMinHp`, `:933` `getMinMp`.
 
@@ -123,7 +124,7 @@ through an AP Reset, so lower than #2, but it is the same omission.
 Recommendation: give Evan the magician rows and `LEGEND`/`EVAN` the beginner row. Note the two-tier
 split the magician entries already use - `job == Job.MAGICIAN` for 1st job against `isA(FP_WIZARD)`
 etc. for 2nd and up - so the conforming shape is `job == Job.EVAN1` in the first tier and
-`job.isA(Job.EVAN2)` (true for exactly 2210-2218) in the second. **Deliberately not applied**: the
+`job.isA(Job.EVAN2)` (true for exactly 2210-2218) in the second. **Applied later, in `48a413961`, with evidenced offsets. Was deliberately not applied**: the
 offsets are HP-pool constants, and picking magician's numbers for Evan is a guess about Evan's real
 pool. Setting the floor too high turns a silent gap into a false "you don't have the minimum HP pool
 required to swap". Wants the owner's number, not mine.
