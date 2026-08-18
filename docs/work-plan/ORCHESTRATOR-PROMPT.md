@@ -255,3 +255,18 @@ Data: changeSets **164-172**. Sweeps committed: `V84-QUEST-SWEEP.*` (198 quests,
   world-select descriptor cannot be resolved without a running client.
 * **Dragon equipment slots** — Evan cannot equip his dragon gear; in progress.
 * **Dual Blade** — not started, deliberately. Evan first, by the owner's instruction.
+
+### Effort tiers — pick one, do not default to high
+
+The owner called this out directly: evaluate the task, then choose. Spending xhigh on a grep is
+as much a defect as spending medium on a jump table.
+
+| tier | use it for |
+|---|---|
+| `gp-sonnet-medium` | mechanical bulk — log triage, greps across many files, routine sweeps, doc regeneration |
+| `gp-opus-medium` | implementation from a precise brief: exact ids, the precedent row named, "done" defined. Most changeSet authoring lands here |
+| `gp-opus-high` | multi-file server changes that need judgment about where the fix belongs |
+| `gp-opus-xhigh` | adversarial verification, binary/jump-table decoding, subtle correctness. Rare |
+
+A brief good enough for `gp-opus-medium` is the goal — if a task seems to need high, first ask
+whether the brief is underspecified rather than the task being hard.
