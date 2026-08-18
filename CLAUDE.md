@@ -1,10 +1,21 @@
-# QuickStory — a GMS v83 MapleStory server being ported to v84
+# QuickStory — the owner's own MapleStory server
 
-**Where the project is:** v83 works and the owner plays it. The migration to v84 is underway and
-partly landed — an Evan already plays on a real v84 client. The remaining work is the gap between
-what v84 ships and what this server serves. **Feature parity with GMS v84 is the finish line.**
+A private MapleStory server, descended from HeavenMS/OdinMS. Java, ~2,900 tests, a MySQL database
+under Liquibase, and the game's own `.wz` data tree. **The owner plays on it.** That is the point of
+the project and the constraint on everything in it.
 
-## The one rule
+**Current major effort:** porting from GMS v83 to **v84**. v83 works and is playable today; the v84
+migration is partly landed — an Evan already plays on a real v84 client. It is not the only work the
+project will ever have, and the workflow below applies to whatever comes after it.
+
+## How work gets done — read `docs/work-plan/WORKFLOW.md`
+
+Every piece of work, however small: **spec → tickets → ledger → `/implement` → `/code-review`.**
+Implement agents commit their own work; review agents commit their own fixes; **the orchestrator
+commits only the ledger and never reviews or writes code.** Each ticket names the agent tier its
+effort deserves. Opus only.
+
+## The rule for the v84 migration
 
 **Is it in the v84 data?** If yes, the server should support it. If no, we do not build it — however
 broken it looks, and whatever any tracker says. The owner: *"i want feature parity to v84 only."*
@@ -16,7 +27,8 @@ request. They are marked `v83 legacy` and must never be relabelled as parity gap
 
 | file | what it answers |
 |---|---|
-| `docs/work-plan/TICKET-LEDGER.tsv` | **the work queue.** What is done, what is next, what is blocked |
+| `docs/work-plan/WORKFLOW.md` | **how any work gets done here.** Spec, tickets, agent tiers, who commits |
+| `docs/work-plan/TICKET-LEDGER.tsv` | **the work queue.** What is done, what is next, what is blocked, and which agent runs each row |
 | `docs/work-plan/tickets/NN-*.md` | one ticket each, with ids, precedent and acceptance criteria |
 | `docs/work-plan/V84-REMAINING-SPEC.md` | why the remaining work exists |
 | `docs/work-plan/SOURCES.md` | **what may be cited as evidence, and the traps this project has hit** |

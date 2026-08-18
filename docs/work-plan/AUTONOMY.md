@@ -47,11 +47,15 @@ Per ticket, the orchestrator does exactly this and nothing else:
 
 1. Read `TICKET-LEDGER.tsv`. Pick the first row that is startable and unblocked.
 2. Mark it `in-progress` in the ledger.
-3. Dispatch an implement agent: *"Work `docs/work-plan/tickets/NN-*.md` to its acceptance criteria"*
-   plus the report contract.
-4. On DONE, dispatch a review agent against the same ticket — **adversarial**, told to refute.
-5. Write the verdict to the ledger. Commit the ledger.
-6. Next row.
+3. Dispatch the agent named in the row's `agent` column, with the **`/implement`** skill, pointed at
+   `docs/work-plan/tickets/NN-*.md`, plus the report contract. **That agent commits its own work.**
+4. Write its verdict to the ledger.
+5. After a chunk of tickets lands, dispatch a `gp-opus-high` agent with the **`/code-review`** skill
+   over that chunk. **It fixes what it finds and commits its own fixes.**
+6. Commit **the ledger only**. Next row.
+
+The orchestrator never reviews code and never commits code. It commits the ledger, nothing else.
+Reviewing your own dispatch is how a wrong claim survives — see `WORKFLOW.md`.
 
 **One agent at a time holds `target/`.** Either the implement agent runs maven and the reviewer does
 not, or the fan-out forbids maven entirely and the orchestrator runs the suite between tickets.
@@ -78,10 +82,12 @@ short-interval wakeup to "check on it" is pure waste. Schedule long, or not at a
 Ordinary run, owner present:
 
 ```
-Work the ticket queue in docs/work-plan/TICKET-LEDGER.tsv. One ticket at a time:
-dispatch an implement agent, then an adversarial review agent, then write the verdict
-to the ledger and commit. Do not open project files yourself. Stop when the queue is
-empty or three tickets in a row fail.
+Work the ticket queue in docs/work-plan/TICKET-LEDGER.tsv, per docs/work-plan/WORKFLOW.md.
+One ticket at a time: dispatch the agent named in its `agent` column with /implement, let it
+commit its own work, write the verdict to the ledger. Every few tickets, run /code-review over
+the chunk and let that agent commit its own fixes. Do not open project files yourself, do not
+review code, do not commit anything but the ledger. Stop when the queue is empty or three
+tickets in a row fail.
 ```
 
 Unattended overnight — same instruction, wrapped:
