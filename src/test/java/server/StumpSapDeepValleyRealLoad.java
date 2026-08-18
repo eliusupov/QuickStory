@@ -32,6 +32,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * was itself authored from that same token and is not independent evidence. The point of this
  * class is that a later "cleanup" sweep, seeing the token, does not collapse this back to one row.
  *
+ * <p><strong>The dropper set is now externally sourced and should not be re-litigated.</strong>
+ * changeSet 172 completes it with 1110101 Dark Stump and 1140130 Smirking Ghost Stump on the
+ * strength of the 2010 MapleSEA Hidden Street drop table for this item (localised "Cold Sap of
+ * Stump"; that SEA quest page is our 22529 line for line - same prerequisite, level 22+, collect
+ * 3, 3,100 exp, NPC in Deep Valley II), which lists Ghost Stump, Axe Stump, Dark Stump, Stump and
+ * Dark Axe Stump; the 2010 GMS BasilMarket guide, pre-Big-Bang - "You can get these from all
+ * stumps in the surrounding area (deep valley)"; and MapleWiki, which adds Smirking Ghost Stump.
+ * Those confirm changeSet 170's four from outside this tree. What they do NOT give is a rate:
+ * no source records one, GMS Hidden Street's drop field is blank, so 150000 stays changeSet 171's
+ * owner-directed pick and nothing here should be read as recovering it.
+ *
  * <p><strong>Not a {@code *Test} class on purpose</strong>, same reason as its siblings
  * ({@link EvanPorkSourceRealLoad}, {@link V84QuestItemSourcesRealLoad}): {@link WZFiles#DIRECTORY}
  * is resolved once per JVM and {@code MobSkillFactoryTest} points {@code wz-path} at a
@@ -45,6 +56,8 @@ class StumpSapDeepValleyRealLoad {
             Path.of("src", "main", "resources", "db", "data", "170-stump-sap-deep-valley-drop-data.sql");
     private static final Path CHANGESET_171 =
             Path.of("src", "main", "resources", "db", "data", "171-stump-sap-rate-override.sql");
+    private static final Path CHANGESET_172 =
+            Path.of("src", "main", "resources", "db", "data", "172-stump-sap-full-dropper-set.sql");
     private static final Path CHANGELOG =
             Path.of("src", "main", "resources", "db", "changelog-data.xml");
 
@@ -87,6 +100,39 @@ class StumpSapDeepValleyRealLoad {
                 "170 exists on disk but is not registered in changelog-data.xml, so it never runs");
         assertTrue(changelog.contains("156-evan-chain-drop-data.sql"),
                 "the APPLIED changeSet that owns the plain-Stump row vanished from the changelog");
+    }
+
+    /**
+     * changeSet 172: the two variants the sourced drop list names that 156/170 did not carry.
+     * Their ids are pinned by NAME against the WZ, because two wrong ids were floated while this
+     * was being written (1130101, which does not exist in v84, and 2230101, "Zombie Mushroom").
+     */
+    @Test
+    void darkStumpAndSmirkingGhostStumpCompleteTheSourcedDropperSet() throws IOException {
+        assertEquals("Dark Stump", stringName("Mob.img", "1110101"));
+        assertEquals("Smirking Ghost Stump", stringName("Mob.img", "1140130"));
+        assertEquals(10, DataTool.getInt(mobInfo(1110101, "level"), -1));
+        assertEquals(19, DataTool.getInt(mobInfo(1140130, "level"), -1));
+
+        assertTrue(Files.isRegularFile(CHANGESET_172), "changeSet 172 seed file is missing");
+        String sql172 = Files.readString(CHANGESET_172, StandardCharsets.UTF_8);
+        for (int dropper : new int[]{1110101, 1140130}) {
+            assertTrue(sql172.contains("(" + dropper + ", 4032460, 1, 1, 22529, 150000)"),
+                    "changeSet 172 no longer carries dropper " + dropper + " at the family rate. The "
+                            + "dropper set is sourced (2010 SEA drop table, 2010 GMS guide) - read the "
+                            + "header of 172 before trimming it back");
+        }
+
+        // Neither spawns in Deep Valley, so these two are reach, not quest path. If that changes,
+        // the "only the variants spawn there" argument in changeSet 170 needs re-reading.
+        for (int map : DEEP_VALLEY) {
+            assertEquals(0, lifeCount(map, "m", 1110101));
+            assertEquals(0, lifeCount(map, "m", 1140130));
+        }
+
+        assertTrue(Files.readString(CHANGELOG, StandardCharsets.ISO_8859_1)
+                        .contains("172-stump-sap-full-dropper-set.sql"),
+                "172 exists on disk but is not registered in changelog-data.xml, so it never runs");
     }
 
     /**

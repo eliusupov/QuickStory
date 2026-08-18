@@ -277,4 +277,12 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="172" author="stump-sap-droppers">
+        <sqlFile path="db/data/172-stump-sap-full-dropper-set.sql"/>
+        <rollback>
+            DELETE FROM drop_data WHERE itemid = 4032460 AND questid = 22529
+                AND dropperid IN (1110101, 1140130);
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>
