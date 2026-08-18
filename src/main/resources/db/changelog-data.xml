@@ -265,4 +265,16 @@
         </rollback>
     </changeSet>
 
+    <!--
+      Rollback restores 80000, the value every one of the four rows held before this changeSet -
+      changeSets 156 and 170 both wrote 80000, so a single literal is exact here, no stored delta.
+    -->
+    <changeSet id="171" author="stump-sap-rate">
+        <sqlFile path="db/data/171-stump-sap-rate-override.sql"/>
+        <rollback>
+            UPDATE drop_data SET chance = 80000 WHERE itemid = 4032460 AND questid = 22529
+                AND dropperid IN (130100, 1130100, 1140100, 2130100);
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>

@@ -43,6 +43,10 @@ class StumpSapDeepValleyRealLoad {
             Path.of("src", "main", "resources", "db", "data", "156-evan-chain-drop-data.sql");
     private static final Path CHANGESET_170 =
             Path.of("src", "main", "resources", "db", "data", "170-stump-sap-deep-valley-drop-data.sql");
+    private static final Path CHANGESET_171 =
+            Path.of("src", "main", "resources", "db", "data", "171-stump-sap-rate-override.sql");
+    private static final Path CHANGELOG =
+            Path.of("src", "main", "resources", "db", "changelog-data.xml");
 
     /** The three Deep Valley maps the quest stages itself on, and what actually stands in them. */
     private static final int[] DEEP_VALLEY = {106000000, 106000100, 106000200};
@@ -55,7 +59,13 @@ class StumpSapDeepValleyRealLoad {
                         + "test class won the WZFiles.DIRECTORY race, so this says nothing about 22529");
     }
 
-    /** All four droppers carry the item, all four quest-gated to 22529. The whole point. */
+    /**
+     * All four droppers carry the item, all four quest-gated to 22529. The whole point.
+     *
+     * <p>The 80000 in these literals is the rate 156 and 170 were AUTHORED with, not the live
+     * rate - both are applied and must not be edited. changeSet 171 raises all four to 150000;
+     * {@link #theRateIsTheOwnerDirected150000Override()} is what pins the effective rate.
+     */
     @Test
     void allFourStumpsDropTheSapGatedToQuest22529() throws IOException {
         assertTrue(Files.isRegularFile(CHANGESET_170), "changeSet 170 seed file is missing");
@@ -72,12 +82,43 @@ class StumpSapDeepValleyRealLoad {
                             + "of 170 first - the deviation is deliberate and owner-approved");
         }
 
-        String changelog = Files.readString(
-                Path.of("src", "main", "resources", "db", "changelog-data.xml"), StandardCharsets.ISO_8859_1);
+        String changelog = Files.readString(CHANGELOG, StandardCharsets.ISO_8859_1);
         assertTrue(changelog.contains("170-stump-sap-deep-valley-drop-data.sql"),
                 "170 exists on disk but is not registered in changelog-data.xml, so it never runs");
         assertTrue(changelog.contains("156-evan-chain-drop-data.sql"),
                 "the APPLIED changeSet that owns the plain-Stump row vanished from the changelog");
+    }
+
+    /**
+     * changeSet 171: all four rows at 150000 (15%), owner-directed, sourced from DreamMS (a v92
+     * server) rather than from v84 - see 171's header. Nothing here claims 80000 was wrong; the
+     * point is that the override exists, covers exactly the four rows, and touches only chance.
+     */
+    @Test
+    void theRateIsTheOwnerDirected150000Override() throws IOException {
+        assertTrue(Files.isRegularFile(CHANGESET_171), "changeSet 171 seed file is missing");
+        String sql171 = Files.readString(CHANGESET_171, StandardCharsets.UTF_8);
+
+        assertTrue(sql171.contains("SET chance = 150000"),
+                "changeSet 171 no longer sets 150000 - the owner-directed 15% is gone");
+        assertTrue(sql171.contains("itemid = 4032460") && sql171.contains("questid = 22529"),
+                "changeSet 171's UPDATE is no longer scoped to 4032460/22529, so it can hit other items");
+        for (int dropper : new int[]{130100, 1130100, 1140100, 2130100}) {
+            assertTrue(sql171.contains(String.valueOf(dropper)),
+                    "changeSet 171 no longer covers dropper " + dropper + " - the four rows must "
+                            + "share one rate");
+        }
+        // Rate-only: one UPDATE, no row churn and no quantity edits.
+        assertEquals(1, sql171.split("(?i)\\bUPDATE\\b", -1).length - 1,
+                "changeSet 171 is no longer a single UPDATE");
+        for (String forbidden : new String[]{"INSERT", "DELETE", "minimum_quantity", "maximum_quantity"}) {
+            assertTrue(!sql171.contains(forbidden),
+                    "changeSet 171 mentions '" + forbidden + "' - it must only change chance");
+        }
+
+        String changelog = Files.readString(CHANGELOG, StandardCharsets.ISO_8859_1);
+        assertTrue(changelog.contains("171-stump-sap-rate-override.sql"),
+                "171 exists on disk but is not registered in changelog-data.xml, so it never runs");
     }
 
     /**
