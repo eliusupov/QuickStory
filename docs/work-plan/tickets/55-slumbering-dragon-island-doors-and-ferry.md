@@ -225,3 +225,30 @@ nothing. Out of scope here; do not write NPC scripts to paper over it.
   stands: extra door names on a ferry map create a ride-skip exploit. Only the two *scripts* are
   being un-refused, and only on the argument recorded above.
 - Do not launch a client to check Olaf. Record the question and hand it to the owner.
+
+## Delivered - R03 only
+
+`scripts/portal/enterSDI.js` warps to **914100000** slot 0 (the island's only `town=1` map, the
+landing `200090090/portal/1..8` declare, and the map whose `in00` reaches 914100010 where `onSDI.js`
+writes 22599="1"). Slot 0 by index, not by the ferry's dangling `tn="st00"`.
+
+`scripts/portal/enterSnowDragon.js` routes 22580 -> 914100020, 22588 -> 914100022,
+22589 -> 914100023, 22590/22591 -> 914100021. Every room claim was re-verified against the map image
+and `Check.img` before writing; all four hold as the ticket states.
+
+**OWNER Q1 answered provisionally, one line to change.** The fallback is **914100020** because it is
+the only inert room: `life` empty, `reactor` empty, `info/onUserEnter=""`, and its ten `scr0*`
+triggers run `stopIceWall.js`, which no-ops unless 22580 is STARTED. 914100021 places Afrien,
+914100022 declares the unwritten `summonIceWall`, 914100023 places ten mobs. Nothing fires for a
+passer-by in 914100020. If the owner prefers another room it is the single `warp` in the else-branch.
+
+No WZ edit was needed: both portal nodes are already merged and byte-identical to pristine.
+`MapAndPortalScriptsRealLoad` covers both names (real-engine load, every arm invoked against a
+Mockito `PortalPlayerInteraction` with `verifyNoMoreInteractions`, and the no-`Direction`-node
+guard). 11 tests, 0 failures.
+
+**R46 not implemented** - out of scope for this pass. Its two blocking facts were re-verified and
+both hold: `wz/Npc.wz/1002101.img.xml` carries no `info/script` node at all (only `speak/0..1`), and
+`grep -rl contimoveSDIRit` over `wz/`, `scripts/` and `src/` returns nothing, while
+`wz/Npc.wz/1013207.img.xml:6` does carry `contimoveRitSDI`. R46 therefore still needs an add-list
+merge plus the ticket-37 reversal, and remains open.

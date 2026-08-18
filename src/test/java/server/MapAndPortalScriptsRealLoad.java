@@ -86,6 +86,8 @@ class MapAndPortalScriptsRealLoad {
         PORTAL_HOOKS.put("outAfrienMemory", 900030000);
         PORTAL_HOOKS.put("enterBlackBC", 220011000);
         PORTAL_HOOKS.put("evanGolemDoor", 106010101);
+        PORTAL_HOOKS.put("enterSDI", 922030000);
+        PORTAL_HOOKS.put("enterSnowDragon", 914100010);
     }
 
     /**
@@ -301,6 +303,95 @@ class MapAndPortalScriptsRealLoad {
         verify(onTest).playPortalSound();
         verify(onTest).warp(910600000, 0);
         verifyNoMoreInteractions(onTest);
+    }
+
+    /**
+     * 922030000's {@code tel00} - {@code pt} 8, {@code tm=999999999} - the only door into
+     * Slumbering Dragon Island. A {@code tm} scan over all 4848 pristine v84 map images returns
+     * zero hits for 922030000, 200090080 and 200090090, so no portal in the game supplies the
+     * island and this script is the whole entrance. 914100000 is the landing: the island's only
+     * {@code info/town=1} map, the destination the ferry's own {@code 200090090/portal/1..8}
+     * declare, and the map whose {@code in00} leads to 914100010, where {@code onSDI.js} writes
+     * 22599="1". Slot 0, not a name - the ferry's {@code tn="st00"} names a portal 914100000 does
+     * not have.
+     */
+    @Test
+    void enterSDIOpensTheIslandAtItsOnlyTownMap() throws Exception {
+        runPortal("enterSDI", pi -> {
+            verify(pi).playPortalSound();
+            verify(pi).warp(914100000, 0);
+        });
+    }
+
+    /**
+     * 914100010's {@code in00}, the shared front door of the four Cave of Silence rooms. Every arm
+     * is decided by the room's own contents plus that quest's {@code Check.img} gate: 914100020's
+     * ten {@code stopIceWall} triggers write 22599="2" (22580's COMPLETE gate), 914100022's
+     * reactor 1409000 writes 22605=1 (22588's), 914100023's ten 9300392 plus {@code blackSDI}
+     * write 22604=1 (22589's), and 914100021 holds Afrien 1205000, the npc {@code Check.img/22590/1}
+     * and {@code /22591/0} and {@code /1} all name.
+     *
+     * <p>Every arm runs, the default included - it is the one branch the data does not decide
+     * (ticket 55's OWNER Q1), and 914100020 is the inert room: empty life, empty reactor,
+     * {@code onUserEnter=""} and ten triggers that no-op unless 22580 is STARTED.
+     */
+    @Test
+    void enterSnowDragonPicksTheCaveOfSilenceRoomByQuestState() throws Exception {
+        runPortal("enterSnowDragon", pi -> {
+            verify(pi).isQuestStarted(22580);
+            verify(pi).isQuestStarted(22588);
+            verify(pi).isQuestStarted(22589);
+            verify(pi).isQuestStarted(22590);
+            verify(pi).isQuestStarted(22591);
+            verify(pi).playPortalSound();
+            verify(pi).warp(914100020, 0);
+        });
+
+        Invocable iv = evalOrNull("portal/enterSnowDragon.js");
+        assertNotNull(iv, "enterSnowDragon.js did not load");
+
+        PortalPlayerInteraction centre = mock(PortalPlayerInteraction.class);
+        when(centre.isQuestStarted(22580)).thenReturn(true);
+        iv.invokeFunction("enter", centre);
+        verify(centre).isQuestStarted(22580);
+        verify(centre).playPortalSound();
+        verify(centre).warp(914100020, 0);
+        verifyNoMoreInteractions(centre);
+
+        PortalPlayerInteraction altar = mock(PortalPlayerInteraction.class);
+        when(altar.isQuestStarted(22588)).thenReturn(true);
+        iv.invokeFunction("enter", altar);
+        verify(altar).isQuestStarted(22580);
+        verify(altar).isQuestStarted(22588);
+        verify(altar).playPortalSound();
+        verify(altar).warp(914100022, 0);
+        verifyNoMoreInteractions(altar);
+
+        PortalPlayerInteraction ambush = mock(PortalPlayerInteraction.class);
+        when(ambush.isQuestStarted(22589)).thenReturn(true);
+        iv.invokeFunction("enter", ambush);
+        verify(ambush).isQuestStarted(22580);
+        verify(ambush).isQuestStarted(22588);
+        verify(ambush).isQuestStarted(22589);
+        verify(ambush).playPortalSound();
+        verify(ambush).warp(914100023, 0);
+        verifyNoMoreInteractions(ambush);
+
+        for (int afrienQuest : new int[]{22590, 22591}) {
+            PortalPlayerInteraction afrien = mock(PortalPlayerInteraction.class);
+            when(afrien.isQuestStarted(afrienQuest)).thenReturn(true);
+            iv.invokeFunction("enter", afrien);
+            verify(afrien).isQuestStarted(22580);
+            verify(afrien).isQuestStarted(22588);
+            verify(afrien).isQuestStarted(22589);
+            verify(afrien).isQuestStarted(22590);
+            if (afrienQuest == 22591) {
+                verify(afrien).isQuestStarted(22591);
+            }
+            verify(afrien).playPortalSound();
+            verify(afrien).warp(914100021, 0);
+            verifyNoMoreInteractions(afrien);
+        }
     }
 
     /**
