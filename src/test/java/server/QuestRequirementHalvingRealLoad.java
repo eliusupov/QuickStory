@@ -63,6 +63,7 @@ class QuestRequirementHalvingRealLoad {
             {22520, 1210101, 200, 100}, // the longest grind in the Evan chain
             {22587, 7130104, 100, 50},
             {22587, 6130208, 100, 50},  // second mob row of the same quest
+            {22531, 2230131, 100, 50},  // "A Guard's Fourth Assignment" - the owner's soft-locked HD-client report
     };
 
     /** {questId, itemId, pristine count, halved count} - the "collect"/"pick up" half of the rule. */
