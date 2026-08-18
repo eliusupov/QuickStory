@@ -1,9 +1,12 @@
 # The remaining v84-parity work
 
-**Scope:** the 52 open work rows, decomposed into 20 tickets numbered 54-73. This is the
+**Scope:** the open work rows R01-R52, decomposed into 20 tickets numbered 54-73. This is the
 specification; the tickets carry the file-level detail, the exact ids and the acceptance criteria.
 Nothing here restates a file path or a code fragment, because both go stale and the tickets are the
 place they belong.
+
+This revision is written **after** the ticket audit that corrected all twenty tickets. Where this
+document and a ticket disagree, the ticket is right.
 
 The standard, unchanged: **is it in the v84 data?** If yes, the server should support it. If no, we
 do not build it, however broken it looks.
@@ -13,11 +16,12 @@ do not build it, however broken it looks.
 ## Problem Statement
 
 The v84 cutover is done and an Evan plays on a real GMS v84 client. What remains is the difference
-between what the v84 archives ship and what this server actually serves - 395 leaf-level data gaps
-and a short list of code paths written before Evan existed. The remainder is small in bytes and
-large in consequence, because the gaps cluster on exactly the content a player walks through.
+between what the v84 archives ship and what this server actually serves - a few hundred leaf-level
+data gaps and a short list of code paths written before Evan existed. The remainder is small in
+bytes and large in consequence, because the gaps cluster on exactly the content a player walks
+through.
 
-Six problems, in the order a player meets them.
+Five problems, in the order a player meets them.
 
 **1. The Evan chain stops at level 68.** Two quests want mobs that live on maps behind portals our
 tree routes past. In v84 those portals are scripted branch portals; in our tree they are plain warps
@@ -27,30 +31,30 @@ of its doors, the Frog House route and the ferry.
 
 **2. Items and NPCs render as nothing.** Fourteen items have an image and stats but no name string,
 so they display as null or as the item id. Forty NPCs have no default line and answer with the
-server's `(...)` placeholder. One NPC has no name at all and renders MISSINGNO.
+server's placeholder.
 
-**3. Quest requirements are looser than v84 wrote them.** 108 quests have no level cap and stay
-startable past it. Fourteen date and repeat fields are missing, so repeatable quests have no cooldown
-and date-retired quests stay live.
+**3. Quest requirements are looser than v84 wrote them.** 123 requirement leaves are missing: 108
+quests have no level cap and stay startable past it, and fifteen date and repeat fields are absent,
+so repeatable quests have no cooldown and date-retired quests stay live.
 
-**4. Server-read data nodes are simply absent.** Reactor arrays on seven maps are short. One map's
-entire info block is missing. Fifteen mob-skill levels, six Maker recipes, two reward-box entries and
-160 cash-shop price and period values are not in our tree at all.
+**4. Server-read data nodes are simply absent.** Reactor arrays on seven maps are short by 31
+entries. Fourteen mob-skill levels, six Maker recipes and two reward-box entries are not in our tree
+at all. Four whole-new v84 chairs carry their own heal rates and the server reads none of them, so
+every chair heals identically.
 
-**5. Java paths written before Evan existed drop Evan out.** An Evan gains 6 MP per AP point where a
-magician gains 18, and 8 HP where a magician gains 6 - a two-way error on every point ever spent. He
-has no AP-reset floor, so the guard that refuses an illegal swap can never fire. His mounts render
-nothing. His statue lands in the wrong Hall of Fame branch. Separately, the cash gachapon sends v83
-mode bytes to a v84 client and fails silently, and three v84-new cash items have no handler at all.
+**5. Java paths written before Evan existed drop Evan out.** His mounts render nothing and his
+statue lands in the wrong Hall of Fame branch. Separately, the cash gachapon sends v83 mode bytes to
+a v84 client and fails silently, three v84-new cash items have no handler at all, and the v84 client
+crashes outright when a player attacks on the first Maple Road hunting map. One database table also
+disagrees with the item data it was built from, on seven monster-card rows.
 
-**6. Two databases disagree with the data they were built from.** Two drop rows are missing the quest
-gate their own sibling rows carry, so two items are lootable by players who are not on the quest.
-Seven monster-card rows name a different mob than the item data does.
-
-Underneath all six sits a discipline problem this spec exists to enforce as much as the work itself:
-**several of these gaps are tempting to fill with a value that looks right and is not.** v84 never
-shipped drop tables. A quest's mob token is not a drop table. An item named after a boss is not
-dropped by that boss. Every value in this work either comes from the pristine v84 carve, is copied
+Underneath all five sits a discipline problem this spec exists to enforce as much as the work
+itself: **several of these gaps are tempting to fill with a value that looks right and is not.** v84
+never shipped drop tables. A quest's mob token is not a drop table. An item named after a boss is
+not dropped by that boss. And a gap measured with the wrong key is not a gap at all - the largest
+single number this spec used to carry, 162 cash-shop price and period leaves, was an artifact of
+comparing two differently-ordered arrays by index, and it closed as a non-defect once it was keyed
+on the shop number. Every value in this work either comes from the pristine v84 carve, is copied
 verbatim from an analogue row this database already holds, or does not get written.
 
 ---
@@ -62,24 +66,27 @@ declares what it covers, what gates it, and how it is checked.
 
 **Four classes of ticket, handled differently.**
 
-*v84 parity* (13 tickets) is the real work: a gap between v84's data and ours, closed by copying v84.
+*v84 parity* (13 live tickets, plus one that the audit closed as a non-defect and which now exists
+only as the record of its own refusal) is the real work: a gap between v84's data and ours, closed
+by copying v84.
 
 *v83 legacy* (3 tickets) is real defects that are **not** v84 parity gaps - every one has zero
-add-list rows, meaning v84 added nothing there. The owner asked for them to be ticketed anyway so the
-known fixes stop being rediscovered. Each states its class in its first line so the distinction
-survives the ticket being read alone.
+add-list rows for the thing that is broken, meaning v84 added nothing there. The owner asked for
+them to be ticketed anyway so the known fixes stop being rediscovered. Each states its class in its
+first line so the distinction survives the ticket being read alone.
 
-*research* (2 tickets) is work whose scope is undecided or unknowable. These state a question and the
-evidence that would settle it. They contain no implementation plan, because planning implementation
-for undecided scope is how a guess gets shipped.
+*research* (2 tickets) is work whose scope is undecided or unknowable. These state a question and
+the evidence that would settle it. They contain no implementation plan, because planning
+implementation for undecided scope is how a guess gets shipped.
 
-*mixed* (2 tickets) pairs a parity row with a legacy row that shares its seam and its owner decision;
-the class is declared per row.
+*mixed* (1 ticket) pairs three legacy rows with one parity row that shares their seam and their
+owner decision; the class is declared per row. That parity row is the chairs, which the audit moved
+back out of legacy after finding four whole-new v84 chairs in the add-list.
 
 **Ordering.** Only one genuine dependency exists across the whole set, and it was resolved by
 grouping rather than sequencing: the Golem's Temple portal is the same edit as the quest-branch
 portal with a different destination table, so the two ride together and the second copies the first.
-Everything else is independent and can start today. Six tickets carry an owner decision - not a
+Everything else is independent and can start today. Three tickets carry an owner decision - not a
 technical blocker, a question only the owner can answer - and each names which decision and which
 half of the ticket it gates.
 
@@ -91,9 +98,11 @@ neighbour, an NX credit, has two, and folding them would let the easy one carry 
 
 **Sequencing recommendation.** Work the Evan route first (tickets 54 and 55): it is the only cluster
 that currently stops a player mid-playthrough, and every other row is either invisible today or
-latent. Then the string and quest data, which is mechanical and unblocks nothing but costs nothing.
-Then the Java rows. The owner-gated tickets can be prepared - changeSet written, header reasoned - and
-held for the decision.
+latent. The one exception is the map-crash row, which stops *every* class on the fourth map of a
+fresh character and should be worked as early as the owner can supply a client observation. Then the
+string and quest data, which is mechanical and unblocks nothing but costs nothing. Then the Java
+rows. The owner-gated tickets can be prepared - changeSet written, header reasoned - and held for
+the decision.
 
 ---
 
@@ -131,77 +140,68 @@ held for the decision.
     gear v84 shipped is legible.
 13. As a player who clicks an NPC with no script, I want the line v84 wrote for that NPC, so that
     forty NPCs stop answering with a placeholder.
-14. As a player, I want every NPC to have a name, so that none renders as MISSINGNO.
 
 ### Quest rules
 
-15. As a player, I want the 108 instructor training quests to refuse to start once I am past their
-    level cap, so that quest availability matches the game being matched.
-16. As a player part-way through a repeatable request chain, I want its cooldown and its date window
-    honoured, so that a repeatable quest behaves like one instead of being infinitely farmable.
-17. As a player, I want date-retired quests to stay retired, so that dead content does not clutter
+14. As a player, I want the 108 quests v84 capped to refuse to start once I am past their level cap,
+    so that quest availability matches the game being matched.
+15. As a player part-way through a repeatable request chain, I want its cooldown honoured, so that a
+    repeatable quest behaves like one instead of being infinitely farmable.
+16. As a player, I want date-retired quests to stay retired, so that dead content does not clutter
     live content.
 
 ### Data the server reads
 
-18. As a player on the Aquarium maps, I want every reactor v84 places to be there, so that the map
-    plays as its own data describes.
-19. As a player entering Ludibrium's sky terrace, I want its map flags and entry hooks to exist, so
-    that the map behaves rather than silently doing nothing.
-20. As a player, I want the NPC and the rope v84 added to two maps to be present, so that the maps
-    are not one object short of themselves.
-21. As a player fighting mobs that use higher-level skills, I want those skill levels to exist, so
-    that combat matches v84 rather than falling back on a lower tier.
-22. As a player using either of two reward boxes, I want the full v84 reward table rolled, so that the
+17. As a player on the six Aquarium maps and the Sheep Ranch event map, I want every reactor v84
+    places to be there, so that each map's reactor array is as long as v84's and the map plays as its
+    own data describes.
+18. As a player fighting mobs that use higher-level skills, I want those fourteen skill levels to
+    exist, so that combat matches v84 rather than falling back on a lower tier.
+19. As a player using either of two reward boxes, I want the full v84 reward table rolled, so that the
     44th entry is not silently unreachable.
-23. As a player using Maker, I want the six recipes v84 added to be craftable, so that the Maker data
+20. As a player using Maker, I want the six recipes v84 added to be craftable, so that the Maker data
     is the v84 data.
-24. As a server operator, I want every cash-shop row to carry its v84 price and period, so that when a
-    row is put on sale it is not mispriced by default.
+21. As a player sitting on one of the four chairs v84 added, I want its own heal rate to apply, so
+    that data v84 shipped to differentiate those chairs is not thrown away.
 
 ### Playing an Evan
 
-25. As an Evan player, I want each AP point to give me the magician spread v84 gives me, so that my
-    character is not quietly weaker than the class it is.
-26. As an Evan player who has already spent AP under the wrong spread, I want a decision recorded
-    about those points, so that the fix does not leave half my character mis-valued forever.
-27. As an Evan player using AP reset, I want the illegal-swap guard to actually apply to me, so that I
-    cannot reset myself into an invalid pool.
-28. As an Evan player whose completed card sets wrote the wrong stat, I want that repaired on my
-    saved character, so that the code fix reaches the damage it was written for.
-29. As an Evan player, I want my three mount skills to render their mounts, so that riding shows a
+22. As an Evan player, I want my three mount skills to render their mounts, so that riding shows a
     mount rather than nothing.
-30. As a max-level Evan, I want my statue to appear in the Evan branch of the Hall of Fame, so that I
+23. As a max-level Evan, I want my statue to appear in the Evan branch of the Hall of Fame, so that I
     am not filed under a default that belongs to nobody.
 
 ### Cash and items
 
-31. As a player buying from the Cash Shop Surprise, I want the result to arrive, so that a gachapon
+24. As a player buying from the Cash Shop Surprise, I want the result to arrive, so that a gachapon
     pull is not a silent failure caused by two stale bytes.
-32. As a player using either NX coupon, I want the stated points credited, so that a v84-new item does
+25. As a player using either NX coupon, I want the stated points credited, so that a v84-new item does
     something when consumed.
-33. As a player using the cash slot-expansion item, I want the seven-day expansion granted, so that a
+26. As a player using the cash slot-expansion item, I want the seven-day expansion granted, so that a
     v84-new cash item is not inert.
-34. As a player, I want an item I cannot use for a quest I am not on to stay invisible, so that the
-    quest gate on a drop works the way its sibling rows already do.
-35. As a player collecting monster cards, I want each card to name the mob its own item data names, so
+27. As a player collecting monster cards, I want each card to name the mob its own item data names, so
     that the book and the drops agree.
 
 ### Playing at all
 
-36. As any player on any class, I want to attack a monster on the first Maple Road hunting map without
+28. As any player on any class, I want to attack a monster on the first Maple Road hunting map without
     the client crashing, so that a fresh character can complete the first hunting quest in the game.
 
 ### Operating the server
 
-37. As the server operator, I want every derived value to name the row it was copied from, so that
+29. As the server operator, I want every derived value to name the row it was copied from, so that
     recovered data, derived data and owner-directed overrides stay distinguishable a year from now.
-38. As the server operator, I want the rows that cannot be answered from v84 recorded as closed rather
-    than left open, so that they stop being re-filed as work.
-39. As the server operator, I want the tempting-but-wrong rows written down by name, so that the next
+30. As the server operator, I want the rows that cannot be answered from v84, and the rows that turned
+    out not to be defects, recorded as closed rather than left open, so that they stop being re-filed
+    as work.
+31. As the server operator, I want the tempting-but-wrong rows written down by name, so that the next
     agent who spots the name link does not write the row.
-40. As the server operator, I want defects that are real but not v84 parity ticketed and labelled as
+32. As the server operator, I want defects that are real but not v84 parity ticketed and labelled as
     such, so that they are neither lost nor mistaken for parity work.
+33. As the server operator, I want the two dead skill rows left behind by an old Evan login path
+    removed, so that the database stops carrying rows nothing writes and nothing reads.
+34. As the server operator, I want the unsourced-item list treated as a standing queue that is re-run
+    rather than re-derived by hand, so that it shrinks by evidence instead of growing by invention.
 
 ---
 
@@ -237,13 +237,28 @@ lands in - it is an owner decision, not an implementation detail.
 every female Evan was crashing before the cutover, and none of the scripts in this work appears among
 the client's scene nodes.
 
-**Array nodes are compared by name, never by position.** Storage order is not name order. The
-cash-shop commodity table is the sharp case: its children are array indices, not the shop numbers that
-identify a row, and a positional merge there writes the right value onto the wrong product. Keying on
-the shop number is a stated acceptance criterion, not advice.
+**Array nodes are compared by name, never by position - and this rule has already caught a false
+gap.** Storage order is not name order. The cash-shop commodity table is the case that proves it: its
+children are array indices, not the shop numbers that identify a row. Compared by index it showed a
+162-leaf gap; keyed on the shop number the values are not in the carve at all and our tree already
+matches v84 on every leaf the cash shop reads. The row closed as a non-defect. Keying on the
+identifying leaf is a stated acceptance criterion, not advice, and it is as much a guard against
+inventing work as against writing the right value onto the wrong product.
+
+**A merged node with no reader is still parity, and must be labelled as such.** Several leaves in
+this work change no behaviour today: five of the fifteen quest date leaves have no enforcement path,
+the Maker recipes are inert until the fetcher runs, and every one of the 31 reactor entries is on a
+map that either routes nobody or holds a reactor with no script and no drops. They are merged for
+parity and no ticket may claim a behaviour change it cannot demonstrate.
+
+**A row is scoped out when merging it cannot work, not when it is inconvenient.** One mob skill is
+excluded from its merge on exactly that basis: it is referenced by a live mob, but the server's skill
+type enumeration has no constant for it, so the node would load into nothing.
 
 **An empty leaf is data.** Dropping a present-but-empty node while copying a section is a deletion,
-and the checks in this work distinguish "absent" from "present and empty".
+and the checks in this work distinguish "absent" from "present and empty". The converse also holds:
+where the carve's value for a leaf is the same as the code's fallback for the leaf being absent,
+merging it is a no-op and the row is dropped rather than counted.
 
 **A present array index is not proof of equal content.** The coverage tool can see that our array is
 shorter than v84's; it cannot see that index N holds the same thing on both sides. Where that
@@ -252,21 +267,26 @@ question matters, the precedent for resolving it is the whole-image terrain work
 **Job branches name Evan; the job predicates stay untouched.** Evan falls out of magician branches
 because the predicate compares a truncated job id. The predicate is load-bearing across the tree and
 is left alone; Evan is named in each individual chain instead, which is the pattern a dozen sites
-already follow.
+already follow. The AP-gain and AP-reset-floor sites have already been fixed this way and are the
+worked precedent for the remaining ones.
 
 **Version-gated protocol changes.** Mode bytes and enum values that moved between v83 and v84 go
 behind a version guard using the existing helper, with the disassembly evidence recorded in the
 javadoc beside the value - the same shape the already-landed mode fixes use.
 
-**Database changes are additive by default and applied by the owner.** Agents read the database and
-never write it. Corrections ship as new changeSets rather than edits to frozen ones. Two rows in this
-work are genuinely UPDATEs against existing data, and they are gated on an explicit owner decision
-precisely because they break the additive rule.
+**Database changes are additive by default, and the exception is argued from precedent rather than
+waived.** Agents read the database and never write it. Corrections ship as new changeSets rather than
+edits to frozen ones. One correction in this work is genuinely a set of UPDATEs against existing
+data, and it ships because the table has no additive way to express "this row is wrong" - an INSERT
+would leave two mobs named for one card - and because three earlier changeSets have already made
+exactly this call. The other proposed UPDATE was withdrawn outright: its target quest does not exist,
+and applying it would have made a live quest item permanently unlootable.
 
 **No value gets invented to close a row.** Where a needed value cannot be derived, the row is a
 research ticket, not an implementation ticket. Two rows are blocked on a client binary disassembly
 that does not exist yet, and four close as permanent unknowns. Neither set gets a plausible
-placeholder.
+placeholder. The same rule closed a database repair that had no measurable damage to repair: no
+correction ships against damage that cannot be shown to exist.
 
 **Two rows require a client and no agent may launch one.** The map-crash row and the ferry-click
 confirmation both bottom out in something only the owner can observe. Those tickets split their
@@ -283,6 +303,11 @@ once per JVM and one fixture-based class repoints it. Those classes were invisib
 test runner until recently; they are included now, but a ticket that adds one still names it
 explicitly so a reviewer can run it directly.
 
+**Tests that pin the broken state must be found before the fix is written.** The portal work has
+assertions across four test classes that currently assert today's wrong destination, and three of
+those classes are outside the obvious invocation. A run that misses them looks green and breaks the
+suite, so each ticket lists the tests its change invalidates alongside the tests it adds.
+
 **Maven is not run by implementing agents.** Sibling agents share a build directory and collide.
 Every ticket states its test invocation and hands the run to the orchestrator. A ticket is not done
 because its tests were written; it is done when someone has run them.
@@ -295,9 +320,11 @@ not decorative.
 
 **Data merges are verified by measurement, not inspection.** Node-for-node and value-for-value against
 the pristine carve, keyed on name; array lengths compared; empty-valued leaves preserved; the diff
-confined to the nodes the ticket claims. Line endings matter - the map data in this tree uses a
-different convention from the blobs, and a writer that forces the wrong one shows every line as
-changed and buries the real edit.
+confined to the nodes the ticket claims. Ids our tree holds and the carve does not are protected
+rather than reconciled away, because a wholesale reconciliation to the carve is a deletion of v83
+content nobody asked to remove. Line endings matter - the map data in this tree uses a different
+convention from the blobs, and a writer that forces the wrong one shows every line as changed and
+buries the real edit.
 
 **Acceptance criteria are objective or they are not criteria.** Every checkbox in every ticket is a
 named test that passes, an exact node value present in the tree, a specific database row, an exact
@@ -305,8 +332,9 @@ byte, or an observable in-game behaviour. "Works correctly" appears in none of t
 
 **Negative assertions are first-class.** Several tickets are partly or wholly about what must *not*
 appear: no drop row for a particular item, no shop stock for a particular NPC, no script file for a
-particular hook, no rows copied onto an unplaced dropper. Those are asserted by count queries and by
-tests that pin absence, because a refusal nobody checks quietly stops being a refusal.
+particular hook, no static life row in the PlayerNPC band, no rows copied onto an unplaced dropper.
+Those are asserted by count queries and by tests that pin absence, because a refusal nobody checks
+quietly stops being a refusal.
 
 **Regression surface to re-check on the data tickets.** Quest acceptance for the affected ids, map
 load for the affected maps, and the existing terrain, portal-index and map-life parity suites, which
@@ -320,47 +348,92 @@ stop there.
 
 ## Out of Scope
 
+### Already landed - not remaining work
+
+* **Evan's AP gains.** An Evan gained the wrong HP and MP per AP point because a job predicate
+  compares a truncated id. Fixed, with the Evan job named in all four sites, and pinned by tests.
+* **Evan's AP-reset floor.** Evan and the two beginner jobs had no HP/MP floor, so the illegal-swap
+  guard could never fire. Fixed and corrected by a follow-up commit.
+* **The persisted monster-card stat damage those fixes were expected to leave behind.** Measured
+  against the live database, the character the row named has no card rows at all, and the one Evan
+  that does shows no recoverable discrepancy. No correction ships; the row reopens only on a real
+  observation.
+
+### Closed by the audit - investigated, refused, and not to be re-filed
+
+* **Cash-shop price and period, the largest number this spec used to carry.** Keyed on the shop
+  number - the only valid key, which the ticket itself always said - the carve carries none of those
+  values. The gap was produced by comparing two differently-ordered arrays by index. Our tree already
+  matches v84 on every leaf the cash shop reads. There is nothing to merge.
+* **The one NPC said to render MISSINGNO.** That id is inside the PlayerNPC band, takes its name from
+  the database rather than the string archive, and is never rendered as a plain NPC. Merging the
+  carve's static name would pin a fake name onto a slot the allocator hands to a real player.
+* **The static life row on a Hall of Fame map.** Same id, same reason, and already refused
+  permanently by an earlier ticket for the whole class.
+* **The drop-row quest gate.** One of the two proposed UPDATEs targets a quest that does not exist;
+  applying it would make a live quest item permanently unlootable. Withdrawn. Its sibling half is
+  unshipped and needs its own row before it is worked.
+* **One mob skill, excluded from the mob-skill merge.** It is referenced by a live mob, but the
+  server's skill type enumeration has no constant for it, so merging the node would load into
+  nothing.
+* **Six map nodes dropped from the reactor ticket.** A rope array and three map flags are read by
+  nothing anywhere in the tree; two entry hooks are present in the carve as the empty string, which
+  the loader turns into the identical result it produces when the node is absent. Two further nodes
+  were client-read rather than gaps and were never in scope.
+* **The sourceless v84 pet.** v84 ships it with no drop, no shop, no reactor, no cash-shop and no
+  quest grant. That is an answer, not a gap, and no row is added.
+* **The contradiction over one unplaced mob's drop table.** The older changeSet's refusal was scoped
+  to a different body of work, so the two changeSets never actually disagreed. The rows stay - all
+  seventeen of them, not the six the row named - and the older note is annotated rather than
+  reverted.
+
 ### Rows that are already v84-correct - no ticket, nothing to build
 
 Six rows were investigated and need no work. They are listed here so they stop being re-filed.
 
-* **R30 - the unread pickup-only item flag on 83 items.** Every affected item is already covered by
+* **The unread pickup-only item flag on 83 items.** Every affected item is already covered by
   something else: 63 carry a consume-on-pickup flag and are destroyed before they reach inventory, so
   enforcement would be a no-op; the other 20 are trade-blocked. The five v84-new ones work already.
-* **R31 - the claimed unhandled equip-stat fields.** Two of the five are Maker reagents and are
+* **The claimed unhandled equip-stat fields.** Two of the five are Maker reagents and are
   handled after a rename the Maker path already performs; one is skipped deliberately; one is a cash
   item that never routes through that code. Only a craft field on two tablet scrolls genuinely falls
   through, and no craft field exists on equipment because the profession system is post-v83 content.
-* **R37 - "328 non-Evan quests with no script".** 327 of the 328 carry an end date in the past - the
+* **"328 quests with no script".** 327 of the 328 carry an end date in the past - the
   latest is mid-2010, all dead before the v84 client shipped - and the date requirement refuses them
   before anything else is consulted. The one survivor's start NPC is placed on none of the 5,338 map
   images. None is an Evan quest, and a missing quest script fails softly with a warning. Two wording
   corrections belong to the tracker, not to code: the discriminator is "non-medal", not "non-Evan",
   and the medal-quest count is 39.
-* **R38 - the dead-portal and silent-map figures.** The numbers do not reproduce and the corrected
+* **The dead-portal and silent-map figures.** The numbers do not reproduce and the corrected
   ones are benign: none of the dead portals carries a real destination and none is a warp type, so the
   fallback branch a prior ticket worried about has no instance in this map data. The town cases are
   cosmetic unity portals on six major towns. The Evan cases are already inside two other rows.
-* **R39 - a map's unimplemented entry hook.** Our node is byte-identical to v84's, hook included. The
+* **A map's unimplemented entry hook.** Our node is byte-identical to v84's, hook included. The
   name is shared with a v83 cave family whose maps have no scripts either and which works. The claim
   that the map is unreachable is wrong - a live portal warps there for anyone on the relevant quest,
   and the quests around it work today.
-* **R40 - a map with no inbound portal.** Deliberate and already handled: it is a client-side cutscene
+* **A map with no inbound portal.** Deliberate and already handled: it is a client-side cutscene
   map entered by a client-side warp, like its whole band, and both halves are already explained in the
   code that handles them.
 
 ### Not v84 parity - ticketed as v83 legacy, deliberately not built as parity work
 
-Eleven rows are real defects with zero add-list rows, meaning v84 added nothing to them. They are
-ticketed (71, 72, 73 and the legacy half of 66) so their known fixes are not rediscovered, and every
-one of those tickets says in its first line that it is v83 legacy. They are **not** part of v84
-parity and must not be scheduled as if they were: five chaos scrolls that burn the upgrade slot;
-seven potions whose percentage half is dropped; six battlefield-skill items wired to nothing; a
-damage-over-time effect that was commented out on purpose upstream in the same commit as the health
-overhaul that would have made it abusive; a hero-buff bonus that never reaches local stats; chairs
-that all heal identically; seven stale monster-card rows; packet-validator coverage; an in-memory
-de-duplication that re-warns once per restart; an unimplemented v83 event NPC; and one tracker claim
-about endgame weapons that is refuted on all three of its assertions and closes as a restatement.
+Ten rows are real defects with zero add-list rows for the thing that is broken, meaning v84 added
+nothing to them. They are ticketed (71, 73, the legacy rows of 72, and the surviving row of 66) so
+their known fixes are not rediscovered, and every one of those tickets says in its first line that it
+is v83 legacy. They are **not** part of v84 parity and must not be scheduled as if they were: five
+chaos scrolls that burn the upgrade slot; seven potions whose percentage half is dropped; six
+battlefield-skill items wired to nothing; a damage-over-time effect that was commented out on purpose
+upstream in the same commit as the health overhaul that would have made it abusive; a hero-buff bonus
+that never reaches local stats; seven stale monster-card rows; packet-validator coverage; an
+in-memory de-duplication that re-warns once per restart; an unimplemented v83 event NPC; and one
+tracker claim about endgame weapons that is refuted on all three of its assertions and closes as a
+restatement.
+
+**The chairs are no longer on this list.** An earlier revision put them here on the claim that they
+had zero add-list rows. They have five, and four of those are whole-new v84 chairs carrying the very
+heal-rate nodes the row is about. The chairs are v84 parity, in scope, and need no scope waiver - the
+old tracker was right and the correction is one of the more important things the audit produced.
 
 ### Excluded from this spec entirely
 
@@ -384,13 +457,13 @@ permanently unknowable because no client version ever carried drop tables.
 
 ## Further Notes
 
-**Six owner decisions gate parts of this work.** None blocks the majority of any ticket, and each is
-named in the ticket that needs it: which room the island's shared cave door uses as its fallback;
-whether a v84-new pet gets a purchase source or closes as v84-faithful with no source; whether two
-database corrections may be applied as updates against the additive-only rule; how already-spent AP
-points are treated once the spread is fixed; what an Evan's AP-reset floor numbers actually are; and
-whether the persisted stat repair may run against the owner's own character. The tickets can be
-written, reasoned and prepared without the answers; they cannot be applied without them.
+**Three owner decisions gate parts of this work,** down from six: three of the original six were
+answered from the data during the audit and two were closed by the fixes that landed. None of the
+three blocks the majority of any ticket, and each is named in the ticket that needs it: which room
+the island's shared cave door uses as its fallback; whether the v83-legacy effect rows may be worked
+at all, which is a scope waiver rather than a technical question; and the balance calls inside those
+rows, where the plumbing does not exist and no precedent says what the number should be. The tickets
+can be written, reasoned and prepared without the answers; they cannot be applied without them.
 
 **Two artifacts are missing and no amount of effort in this repo produces them.** A v84 client
 disassembly would settle the element mapping behind a buff that is written and never read, and the
@@ -398,9 +471,16 @@ failure-reason table that is currently v83's values carried over untested. Both 
 research with the question stated and the artifact named, so neither is mistaken for a small Java
 fix.
 
-**The largest single number in the gap is also the least urgent.** 160 cash-shop price and period
-values are missing, and every affected row is off sale, so nothing is mispriced today. It is latent
-debt. It must not outrank a row a player can hit.
+**One ticket in this set exists only to hold its own refusal.** The cash-shop price row is now a
+document explaining why there is nothing to merge and recording the measurements, so the same wrong
+key never produces the same phantom gap again. A closed ticket that is kept is cheaper than a row
+that gets re-filed every quarter.
+
+**The reactor merge raises a question it deliberately does not answer.** The reactor those twelve
+Aquarium entries would add matches the quest text for an Evan quest whose drop row currently sits on
+a differently-named reactor. That is a question for whoever owns the changeSet in question. The
+reactor ticket adds the nodes and nothing else; if the changeSet is corrected later, those rows stop
+being inert.
 
 **Four sweeps are complete and should be cited rather than repeated.** The v84 coverage matrix, the
 quest sweep, the quest-dropper sweep and the item-source sweep between them have already answered
@@ -408,16 +488,19 @@ quest sweep, the quest-dropper sweep and the item-source sweep between them have
 and "does every added item have a source". Each is regenerable by script. Re-deriving any of them by
 hand has happened before and produced numbers that disagreed with the tooling; the tooling was right.
 
-**Counts in the old narrative tracker are unreliable and several are corrected by these rows.** The
-item-source figure, the missing-script discriminator, the dead-portal counts, the "several v84-new"
-chair claim, the endgame-weapon count, and a skill class attributed to the wrong job are all wrong in
-the tracker and right in the work rows. Where a ticket restates one, the restatement is the
-deliverable and it lands in the narrative tracker only - the coverage files, the work rows, the status
-page and the ticket ledger are owned by other agents and are not edited by implementing agents.
+**Counts are the thing this document has been wrong about most often.** The audit corrected numbers
+in every one of the twenty tickets, and this revision carries the corrected ones: 123 quest leaves,
+not 122; fourteen mob-skill levels, not fifteen; 31 reactor entries across seven maps, not forty
+nodes; seventeen rows on the unplaced mob, not six; four v84-new chairs, not zero. Where a ticket and
+a tracker disagree on a count, the ticket has been measured and the tracker has not.
 
 **One row is a queue, not a task.** 127 v84-new items have no source of any kind. It has zero live
 blockers, no new drop row is proposed by the sweep, and none should be added from it. It shrinks as
 individual entries are established and is re-run rather than re-derived.
+
+**Restatements land in the narrative tracker only.** Where a ticket corrects a claim rather than
+shipping code, the correction is the deliverable - and the coverage files, the work rows, the status
+page and the ticket ledger are owned by other agents and are not edited by implementing agents.
 
 **The server is live and the owner plays on it.** Never restart it, never kill it, never launch a
 client. Packet visibility toggles live through an in-game command, so no restart is needed for it -
