@@ -13,6 +13,13 @@
 //             106010101/in00 is the Warning Sign.)
 // 106010102 - everyone else, and not a "nobody" branch: QuestInfo.img/22556 sends the player to
 //             #m106010102# by name, and this portal is the temple's only route in.
+//
+// STARTED only, not started-or-completed, which is the opposite of enterDollcave.js and matches
+// enterBlackFrog.js. The difference is what is behind the door: enterDollcave keeps 910050300 open
+// after 22549 because npc 1063018 lives there alone and eight later quests need him. 910600000 has
+// no npc, appears in exactly one QuestInfo string in the whole tree (22555's), and holds one mob
+// with mobTime -1 - so once 22555 is handed in nothing asks the player back, and leaving the branch
+// open would only take 106010102 away from him.
 function enter(pi) {
     if (pi.isQuestStarted(22555)) {
         pi.playPortalSound();
