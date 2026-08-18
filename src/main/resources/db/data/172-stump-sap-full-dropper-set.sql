@@ -1,0 +1,48 @@
+-- ============================================================================================
+-- Item 4032460 "Refreshing Stump Sap" (quest 22529): complete the dropper set with the two
+-- stump variants the table was still missing, at the rate changeSet 171 set for the other four.
+--
+--     1110101  Dark Stump             1140130  Smirking Ghost Stump
+--
+-- Additive. changeSets 156 (130100) and 170 (1130100 / 1140100 / 2130100) are APPLIED and
+-- untouched; 171's 150000 is what these two match.
+--
+-- WHY THESE TWO, AND WHY THIS IS DIFFERENT FROM 170: 170 had to argue from map staging because
+-- no drop list existed. One now does, from outside this tree:
+--   * 2010 MapleSEA Hidden Street drop table for this item (localised "Cold Sap of Stump") lists
+--     its droppers as: Ghost Stump, Axe Stump, Dark Stump, Stump, Dark Axe Stump. The SEA quest
+--     page is our 22529 line for line - same prerequisite, level 22+, collect 3, 3,100 exp, NPC
+--     in Deep Valley II. That names Dark Stump directly and independently confirms 170's four.
+--   * 2010 GMS BasilMarket guide, pre-Big-Bang: "You can get these from all stumps in the
+--     surrounding area (deep valley)." Same reading, GMS side.
+--   * MapleWiki additionally lists Smirking Ghost Stump.
+-- So the dropper SET is now sourced, not inferred. That is the part not to re-litigate.
+--
+-- THE RATE STILL IS NOT. No source records a drop chance for this item - GMS Hidden Street's
+-- drop field is blank. 150000 remains changeSet 171's owner-directed pick (informed by
+-- dreamms.gg, a v92 private server, which is not an independent authority here); see 171's
+-- header. These two rows take 150000 to match their siblings, nothing more.
+--
+-- IDS RESOLVED FROM THE PRISTINE v84 CARVE, not from a guess. Against
+-- porting-resources/wz-data/v84/String.wz via WzPeek:
+--     Mob.img/1110101/name = "Dark Stump"            Mob.img/1140130/name = "Smirking Ghost Stump"
+-- Both exist in v84 Mob.wz (1110101.img, 1140130.img; levels 10 and 19). Two ids floated
+-- earlier were WRONG and are recorded here so nobody re-derives them: 1130101 does not exist in
+-- v84 at all, and 2230101 is "Zombie Mushroom".
+--
+-- Corroboration inside this tree: the stump family's OTHER quest item, 4031773 (quest 2145),
+-- already sits on exactly these six mobs - 130100, 1110101, 1130100, 1140100, 1140130, 2130100.
+-- These two ids are the ones 4032460 was missing to match that same set.
+--
+-- PLACEMENT, for the record: neither variant spawns in Deep Valley (106000000/100/200), so
+-- neither changes how the owner's current run of 22529 plays. Both ARE placed in this tree -
+-- Dark Stump across 20 maps (Ellinia/Perion roads and others), Smirking Ghost Stump 11x in
+-- 101030101 "Excavation Site I". Reachable, just not where the quest sends you.
+--
+-- GATING: questid 22529, same as the other four, load-bearing because
+-- Item.wz/Etc/0403.img/04032460 carries info/quest = 1 (MapleMap.sortDropEntries only consults
+-- needQuestItem for items flagged that way).
+-- ============================================================================================
+INSERT INTO drop_data (dropperid, itemid, minimum_quantity, maximum_quantity, questid, chance)
+VALUES (1110101, 4032460, 1, 1, 22529, 150000),
+       (1140130, 4032460, 1, 1, 22529, 150000);

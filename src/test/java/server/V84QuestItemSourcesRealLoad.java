@@ -147,10 +147,19 @@ class V84QuestItemSourcesRealLoad {
     }
 
     /**
-     * Quest 22529 "Helping Beginner Adventurer Christopher", the report that triggered the sweep.
-     * The row exists; what makes it look broken is that v84 names <em>plain</em> Stump 130100, and
-     * the Deep Valleys the quest sends you to carry Axe Stump and Ghost Stump instead. Both halves
-     * are pinned, because "fixing" this by adding a row on 1130100 would be inventing content.
+     * Quest 22529 "Helping Beginner Adventurer Christopher", the report that started all of this.
+     *
+     * <p><strong>Corrected.</strong> An earlier version of this test asserted that a row on Axe or
+     * Ghost Stump would be "invented content, not parity". That was wrong, and it was wrong in a
+     * way worth recording: client WZ never held drop tables, so changeSet 156's 130100 row is not
+     * recovered v84 data either - it was authored by reading {@code #o0130100#} out of this very
+     * string. Citing the string back at the row is circular. The owner's rule settles it: the whole
+     * quest text is the authority, and this quest stages itself in Deep Valley I/II/III, at level
+     * 22, against a bare plural "Stumps". changeSet 170 adds the three Deep Valley variants as a
+     * declared deviation; 156's row stays.
+     *
+     * <p>What is pinned here is only what is not in dispute: the requirement, the names, the token,
+     * and 156's own row surviving untouched.
      */
     @Test
     void quest22529AsksForStumpSapFromPlainStumpAndTheRowExists() throws IOException {
@@ -167,14 +176,15 @@ class V84QuestItemSourcesRealLoad {
         assertTrue(sql.contains("(130100, 4032460, 1, 1, 22529, 80000)"),
                 "changeSet 156 no longer carries the Refreshing Stump Sap row");
         assertFalse(sql.contains("1130100") || sql.contains("1140100"),
-                "a row has been added on Axe Stump or Ghost Stump - v84 names only mob 130100, so "
-                        + "that is invented content, not parity");
+                "changeSet 156 has grown stump-family rows. 156 is APPLIED - it must not be edited "
+                        + "at all; the family rows belong in changeSet 170.");
     }
 
     /**
-     * The other half of the same finding, and the reason the report looked like a missing drop: the
-     * three maps quest 22529 sends the player to carry no plain Stumps at all. Pristine v84 agrees
-     * (Deep Valley I is 32x 1130100 + 10x 1140100 + npc 1022106), so this is parity, not a gap.
+     * The map evidence changeSet 170 rests on: the three maps quest 22529 sends the player to carry
+     * no plain Stumps at all, only the three variants. Pristine v84 agrees (Deep Valley I is
+     * 32x 1130100 + 10x 1140100 + npc 1022106), so the composition is parity - it is the drop row
+     * that had to move, not the map.
      */
     @Test
     void theDeepValleysCarryAxeAndGhostStumpsAndNoPlainStump() {
@@ -189,6 +199,33 @@ class V84QuestItemSourcesRealLoad {
         // and the mob the quest does name is reachable, one map out of Perion
         assertTrue(lifeCount(101030000, "m", 130100) > 0,
                 "East Domain of Perion no longer carries plain Stump, so 22529 has no live source");
+    }
+
+    /**
+     * Quest 22559 "Eliminate the Golems" - the one flagged row whose only real question was whether
+     * the player can get to the mob. Its Enraged Golems sit on 910600010, which <strong>no {@code tm}
+     * in Map.wz points at</strong>: the route is a portal script. A reachability check that reads
+     * only {@code tm} calls that map orphaned and the drop row dead, and it is neither. Pinned
+     * because deleting {@code evanDollGR.js} would strand the quest silently.
+     */
+    @Test
+    void theEnragedGolemsAreReachableOnlyThroughAPortalScript() throws IOException {
+        assertEquals(4032466, DataTool.getInt(questCheck("22559/1/item/0/id"), -1));
+        assertEquals("Golem Doll", stringName("Etc.img", "Etc/4032466"));
+        assertEquals("Enraged Golem", stringName("Mob.img", "9300387"));
+        assertTrue(lifeCount(910600010, "m", 9300387) > 0,
+                "910600010 Abandoned Hideout no longer carries Enraged Golems");
+
+        Data portal = DataProviderFactory.getDataProvider(WZFiles.MAP)
+                .getData("Map/Map1/106010102.img").getChildByPath("portal/8");
+        assertNotNull(portal, "106010102 lost the scripted door portal quest 22559 sends you through");
+        assertEquals("evanDollGR", DataTool.getString(portal.getChildByPath("script"), ""));
+        assertEquals(999999999, DataTool.getInt(portal.getChildByPath("tm"), 0),
+                "the door now carries a real tm - if that is deliberate, the script route below is dead code");
+
+        assertTrue(Files.readString(Path.of("scripts", "portal", "evanDollGR.js"), StandardCharsets.ISO_8859_1)
+                        .contains("910600010"),
+                "evanDollGR.js no longer warps to 910600010, so 22559's Golem Doll is unobtainable");
     }
 
     // ---------------------------------------------------------------- helpers
