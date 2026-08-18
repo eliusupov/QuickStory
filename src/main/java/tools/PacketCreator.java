@@ -3565,6 +3565,48 @@ public class PacketCreator {
     }
 
     /**
+     * {@code CASHSHOP_OPERATION} mode discriminator ({@code CCashShop::OnCashItemResult}), expressed
+     * throughout this server in the <b>v83</b> enum. v84 inserted three arms ahead of the locker
+     * family, so every mode this server sends moved up by <b>3</b>. Nothing throws when it is wrong:
+     * the client just dispatches to a different arm, which is why the shop drew and then failed with
+     * no server-side log at all.
+     *
+     * <p>Evidence, read out of the v84 client's own dispatcher
+     * ({@code D:\games\MSv84\opcodes\ida_export_gms_v84.json}, {@code CCashShop::OnCashItemResult}
+     * arms). Every one of the 21 modes this server writes lands on a v84 arm whose name AND decode
+     * shape match the payload we emit, all at +3:
+     * <ul>
+     * <li>0x4B {@code showCashInventory} -&gt; 0x4E {@code LOAD_LOCKER_DONE} @0x47c694
+     *     (Decode2 count / 55B blobs / Decode2 / Decode2)</li>
+     * <li>0x4D {@code showGifts} -&gt; 0x50 {@code LOAD_GIFT_SUCCESS} @0x47c73c (Decode2 count, 98B entries)</li>
+     * <li>0x4F {@code showWishList(false)} -&gt; 0x52 {@code LOAD_WISH_DONE} @0x47c980 (40B = 10 x int32)</li>
+     * <li>0x55 {@code showWishList(true)} -&gt; 0x58 {@code SET_WISH_DONE} @0x47c9e2</li>
+     * <li>0x57 buy -&gt; 0x5A {@code BUY_DONE}; 0x59 coupon -&gt; 0x5C {@code USE_COUPON_SUCCESS} @0x47cf28;
+     *     0x5C notice -&gt; 0x5F {@code USE_COUPON_FAILED} @0x47d979; 0x5E gift -&gt; 0x61 {@code GIFT_SUCCESS};
+     *     0x60/0x62/0x64 slots -&gt; 0x63/0x65/0x67; 0x68/0x6A moves -&gt; 0x6B/0x6D; 0x6C -&gt; 0x6F
+     *     {@code DESTROY_SUCCESS}; 0x85 -&gt; 0x88 {@code REBATE_SUCCESS}; 0x87 -&gt; 0x8A
+     *     {@code COUPLE_SUCCESS}; 0x89 -&gt; 0x8C {@code BUY_PACKAGE_SUCCESS}; 0x8D -&gt; 0x90
+     *     {@code BUY_NORMAL_SUCCESS}; 0x9E -&gt; 0xA1 {@code NAME_CHANGE_BUY_DONE}; 0xA0 -&gt; 0xA3
+     *     {@code TRANSFER_WORLD_SUCCESS}.</li>
+     * </ul>
+     *
+     * <p>The live symptom this fixes: at v84 the wish-list packet's 0x4F collided with v84's
+     * {@code LOAD_LOCKER_FAILED} (@0x47c71a, body = one {@code NoticeFailReason} byte). Entering the
+     * Cash Shop drew the shop from {@code SET_CASH_SHOP}, then read the first wish-list int's low
+     * byte - 0 for an empty wish list - as reason 0x00, "Due to an unknown error, the request for
+     * Cash Shop has failed".
+     *
+     * <p>0x4B is the lowest mode this server sends, so the guard is a floor, not a proven insertion
+     * point; v84's {@code LIMIT_GOODS_COUNT_CHANGED} sits just below it at 0x4A.
+     *
+     * @param v83Mode mode in the v83 enum
+     */
+    private static int cashShopMode(int v83Mode) {
+        return ServerConstants.VERSION >= 84 && v83Mode >= 0x4B ? v83Mode + 3 : v83Mode;
+    }
+
+
+    /**
      * Possible values for <code>speaker</code>:<br> 0: Npc talking (left)<br>
      * 1: Npc talking (right)<br> 2: Player talking (left)<br> 3: Player talking
      * (left)<br>
@@ -5785,7 +5827,7 @@ public class PacketCreator {
 
     public static Packet showWorldTransferSuccess(Item item, int accountId) {
         final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
-        p.writeByte(0xA0);
+        p.writeByte(cashShopMode(0xA0));
         addCashItemInformation(p, item, accountId);
         return p;
     }
@@ -5820,7 +5862,7 @@ public class PacketCreator {
 
     public static Packet showNameChangeSuccess(Item item, int accountId) {
         final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
-        p.writeByte(0x9E);
+        p.writeByte(cashShopMode(0x9E));
         addCashItemInformation(p, item, accountId);
         return p;
     }
@@ -5937,7 +5979,7 @@ public class PacketCreator {
 
     public static Packet showCouponRedeemedItems(int accountId, int maplePoints, int mesos, List<Item> cashItems, List<Pair<Integer, Integer>> items) {
         final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
-        p.writeByte(0x59);
+        p.writeByte(cashShopMode(0x59));
         p.writeByte((byte) cashItems.size());
         for (Item item : cashItems) {
             addCashItemInformation(p, item, accountId);
@@ -6716,7 +6758,7 @@ public class PacketCreator {
     public static Packet showBoughtCashPackage(List<Item> cashPackage, int accountId) {
         final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
 
-        p.writeByte(0x89);
+        p.writeByte(cashShopMode(0x89));
         p.writeByte(cashPackage.size());
 
         for (Item item : cashPackage) {
@@ -6730,7 +6772,7 @@ public class PacketCreator {
 
     public static Packet showBoughtQuestItem(int itemId) {
         final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
-        p.writeByte(0x8D);
+        p.writeByte(cashShopMode(0x8D));
         p.writeInt(1);
         p.writeShort(1);
         p.writeByte(0x0B);
@@ -7228,9 +7270,9 @@ public class PacketCreator {
         final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
 
         if (update) {
-            p.writeByte(0x55);
+            p.writeByte(cashShopMode(0x55));
         } else {
-            p.writeByte(0x4F);
+            p.writeByte(cashShopMode(0x4F));
         }
 
         for (int sn : mc.getCashShop().getWishList()) {
@@ -7247,7 +7289,7 @@ public class PacketCreator {
     public static Packet showBoughtCashItem(Item item, int accountId) {
         final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
 
-        p.writeByte(0x57);
+        p.writeByte(cashShopMode(0x57));
         addCashItemInformation(p, item, accountId);
 
         return p;
@@ -7255,7 +7297,7 @@ public class PacketCreator {
 
     public static Packet showBoughtCashRing(Item ring, String recipient, int accountId) {
         final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
-        p.writeByte(0x87);
+        p.writeByte(cashShopMode(0x87));
         addCashItemInformation(p, ring, accountId);
         p.writeString(recipient);
         p.writeInt(ring.getItemId());
@@ -7317,7 +7359,7 @@ public class PacketCreator {
      */
     public static Packet showCashShopMessage(byte message) {
         OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
-        p.writeByte(0x5C);
+        p.writeByte(cashShopMode(0x5C));
         p.writeByte(message);
         return p;
     }
@@ -7325,7 +7367,7 @@ public class PacketCreator {
     public static Packet showCashInventory(Client c) {
         final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
 
-        p.writeByte(0x4B);
+        p.writeByte(cashShopMode(0x4B));
         p.writeShort(c.getPlayer().getCashShop().getInventory().size());
 
         for (Item item : c.getPlayer().getCashShop().getInventory()) {
@@ -7341,7 +7383,7 @@ public class PacketCreator {
     public static Packet showGifts(List<Pair<Item, String>> gifts) {
         final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
 
-        p.writeByte(0x4D);
+        p.writeByte(cashShopMode(0x4D));
         p.writeShort(gifts.size());
 
         for (Pair<Item, String> gift : gifts) {
@@ -7354,7 +7396,7 @@ public class PacketCreator {
     public static Packet showGiftSucceed(String to, CashItem item) {
         final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
 
-        p.writeByte(0x5E); //0x5D, Couldn't be sent
+        p.writeByte(cashShopMode(0x5E)); //0x5D, Couldn't be sent
         p.writeString(to);
         p.writeInt(item.getItemId());
         p.writeShort(item.getCount());
@@ -7366,7 +7408,7 @@ public class PacketCreator {
     public static Packet showBoughtInventorySlots(int type, short slots) {
         OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
 
-        p.writeByte(0x60);
+        p.writeByte(cashShopMode(0x60));
         p.writeByte(type);
         p.writeShort(slots);
 
@@ -7376,7 +7418,7 @@ public class PacketCreator {
     public static Packet showBoughtStorageSlots(short slots) {
         OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
 
-        p.writeByte(0x62);
+        p.writeByte(cashShopMode(0x62));
         p.writeShort(slots);
 
         return p;
@@ -7385,7 +7427,7 @@ public class PacketCreator {
     public static Packet showBoughtCharacterSlot(short slots) {
         OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
 
-        p.writeByte(0x64);
+        p.writeByte(cashShopMode(0x64));
         p.writeShort(slots);
 
         return p;
@@ -7394,7 +7436,7 @@ public class PacketCreator {
     public static Packet takeFromCashInventory(Item item) {
         final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
 
-        p.writeByte(0x68);
+        p.writeByte(cashShopMode(0x68));
         p.writeShort(item.getPosition());
         addItemInfo(p, item, true);
 
@@ -7403,14 +7445,14 @@ public class PacketCreator {
 
     public static Packet deleteCashItem(Item item) {
         final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
-        p.writeByte(0x6C);
+        p.writeByte(cashShopMode(0x6C));
         p.writeLong(item.getCashId());
         return p;
     }
 
     public static Packet refundCashItem(Item item, int maplePoints) {
         final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
-        p.writeByte(0x85);
+        p.writeByte(cashShopMode(0x85));
         p.writeLong(item.getCashId());
         p.writeInt(maplePoints);
         return p;
@@ -7419,7 +7461,7 @@ public class PacketCreator {
     public static Packet putIntoCashInventory(Item item, int accountId) {
         final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
 
-        p.writeByte(0x6A);
+        p.writeByte(cashShopMode(0x6A));
         addCashItemInformation(p, item, accountId);
 
         return p;
