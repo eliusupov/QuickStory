@@ -422,12 +422,16 @@ class V84MiscAreasNodeTest {
      * zero hits. It is a scripted spawn: 922030001 carries {@code info/onUserEnter="enterBlackfrog"}
      * (lowercase f - a different name from the portal script) and an empty {@code life}.
      *
-     * <p>Pinned as a gap rather than filled, because the spawn COORDINATES exist in no WZ file.
-     * The day {@code scripts/map/onUserEnter/enterBlackfrog.js} is written on a real source, this
-     * test says so out loud instead of letting it land unnoticed.
+     * <p>The hook is now written. Its one free parameter, the spawn x, has a source after all:
+     * 922030001 is 922030000 with the platforms stripped - footholds 1/2/3 are identical in both
+     * (the shell, whose only walkable surface is one floor at y=31 running x=-310 to x=314) and
+     * 922030001 keeps nothing else but the entry ledge. Hiver stands in the twin room at
+     * {@code Map9/922030000.img/life/0} x=-221, so the hook mirrors that x and lets
+     * {@code spawnMonsterOnGroundBelow} settle the y onto the single floor. The room's geometry is
+     * asserted below, because that is what makes the x safe rather than lucky.
      */
     @Test
-    void theRageMobIsAScriptedSpawnAndTheHookIsStillMissing() {
+    void theRageMobIsAScriptedSpawnAndTheHookNowExists() {
         assertEquals("enterBlackfrog",
                 DataTool.getString("onUserEnter", map(922030001).getChildByPath("info"), null),
                 "922030001 no longer declares the hook that has to spawn mob 9300393");
@@ -435,6 +439,25 @@ class V84MiscAreasNodeTest {
         assertTrue(life == null || life.getChildren().isEmpty(),
                 "922030001 now places life - if that is mob 9300393 from a real v84 source, say "
                         + "where, because pristine v84 places it on no map at all");
+
+        Path hook = Path.of("scripts", "map", "onUserEnter", "enterBlackfrog.js");
+        assertTrue(Files.exists(hook), "missing map hook " + hook + " - 922030001 declares it by "
+                + "name, and without it quest 22596's only kill never appears");
+
+        // the geometry the spawn x rests on: one floor, spanning the x the twin room puts Hiver at
+        Data floor = map(922030001).getChildByPath("foothold/3/0/2");
+        assertNotNull(floor, "922030001's floor foothold is gone");
+        assertEquals(-310, DataTool.getInt(floor.getChildByPath("x1"), 0));
+        assertEquals(314, DataTool.getInt(floor.getChildByPath("x2"), 0));
+        assertEquals(DataTool.getInt(floor.getChildByPath("y1"), 0),
+                DataTool.getInt(floor.getChildByPath("y2"), -1), "the floor is no longer level");
+        assertNull(map(922030001).getChildByPath("foothold/3/0/5"),
+                "922030001 has grown the twin room's platforms back - the spawn is no longer "
+                        + "guaranteed to land on the one floor and the hook's x wants re-checking");
+        assertEquals(-221, DataTool.getInt(
+                        map(922030000).getChildByPath("life/0/x"), 0),
+                "922030000 no longer stands Hiver at x=-221, which is the sole source for the x "
+                        + "the enterBlackfrog hook spawns him at");
     }
 
     /** Asserts a named portal has none of the given child fields - i.e. no refused row landed on it. */

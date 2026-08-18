@@ -187,6 +187,68 @@ class EvanChainRealLoad {
     }
 
     /**
+     * <strong>The second unplaced Evan npc, and it needs nothing either.</strong> 1013202
+     * "Black Shadow" starts 22575, 22576, 22577 and 22581 and stands on no map - not here and not
+     * in pristine v84. He is not a gap: he is Hiver in disguise, a voice that accosts you, and
+     * v84 says so three ways.
+     *
+     * <ol>
+     *   <li>{@code QuestInfo.img/22581/2} unmasks him outright - "#p1013202#'s name is
+     *       #p1013203#" - and 1013203 Hiver IS placed, on 922030000, which is where 22581's
+     *       COMPLETION npc is. Pristine {@code Say.img/22581/1/0} calls that meeting "our first
+     *       meeting face to face", and {@code Say.img/22576/0/0} says "you don't need to come all
+     *       the way to see me in person, though".
+     *   <li>{@code Etc.wz/NpcLocation.img/1013202/0} is {@code -1}, byte-identical to Mir's marker
+     *       above, and {@code docs/wz-baseline/add-list/Etc.txt} shows v84 ADDED that node - so the
+     *       {@code -1} is a v84 authoring decision, not an v83 leftover.
+     *   <li>All four quests are {@code autoStart}, and {@code QuestActionHandler}'s whole
+     *       proximity block sits inside a {@code !isAutoStart() && !isAutoComplete()} guard, so the
+     *       placement check is never reached. Unlike Mir, this one needs no special case at all.
+     * </ol>
+     *
+     * <p>Recorded as a test because a sweep has already re-filed it once as four blockers.
+     */
+    @Test
+    void blackShadowIsSpawnedOnNoMapAndNeedsNoSpecialCaseBecauseHisQuestsAreAutoStart()
+            throws IOException {
+        final int blackShadow = 1013202;
+        final int hiver = 1013203;
+
+        List<String> found = new ArrayList<>();
+        try (Stream<Path> walk = Files.walk(Path.of(WZFiles.DIRECTORY, "Map.wz", "Map"))) {
+            for (Path p : walk.filter(Files::isRegularFile).toList()) {
+                if (new String(Files.readAllBytes(p), StandardCharsets.ISO_8859_1)
+                        .contains(String.valueOf(blackShadow))) {
+                    found.add(p.getFileName().toString());
+                }
+            }
+        }
+        assertEquals(List.of(), found, "1013202 is on a map after all - re-derive this");
+
+        for (int id : new int[]{22575, 22576, 22577, 22581}) {
+            Quest q = Quest.getInstance(id);
+            assertEquals(blackShadow, q.getNpcRequirement(false), "quest " + id + " start npc");
+            assertTrue(q.isAutoStart(), "quest " + id + " is no longer autoStart, so isNpcNearby "
+                    + "now demands a placed 1013202 and the quest is genuinely blocked");
+        }
+
+        // the reveal, and the fact that the man behind it IS placed where 22581 ends
+        assertTrue(questInfoText(22581, "2").contains("#p" + hiver + "#"),
+                "QuestInfo 22581/2 no longer names 1013203, which is the sole warrant for treating "
+                        + "1013202 as a disguise rather than a missing npc");
+        assertEquals(hiver, Quest.getInstance(22581).getNpcRequirement(true),
+                "22581 no longer ENDS at Hiver");
+
+        String npcLocation = Files.readString(
+                Path.of(WZFiles.DIRECTORY, "Etc.wz", "NpcLocation.img.xml"), StandardCharsets.ISO_8859_1);
+        int at = npcLocation.indexOf("<imgdir name=\"" + blackShadow + "\">");
+        assertTrue(at > 0, "NpcLocation.img has no entry for 1013202 at all");
+        assertTrue(npcLocation.substring(at, at + 120).contains("value=\"-1\""),
+                "NpcLocation.img now gives 1013202 a real field map; if that is genuine v84 data "
+                        + "then he should be placed rather than treated as a disguise");
+    }
+
+    /**
      * <strong>The fix for the 25 blocked starts and 22 blocked ends.</strong> Exercises the real
      * {@code QuestActionHandler.isNpcNearby} against the real quest 22500. With a dragon out the
      * check passes; without one it still refuses, so the guard is scoped to actual Evans and cannot
@@ -346,6 +408,12 @@ class EvanChainRealLoad {
             }
         }
         return false;
+    }
+
+    /** One string node off {@code Quest.wz/QuestInfo.img/<id>}, "" when absent. */
+    private static String questInfoText(int id, String node) {
+        return DataTool.getString(DataProviderFactory.getDataProvider(WZFiles.QUEST)
+                .getData("QuestInfo.img").getChildByPath(id + "/" + node), "");
     }
 
     /** Level 10 Evan standing next to the quest npc with the quest already STARTED. */

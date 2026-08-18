@@ -24,13 +24,11 @@
 //                            ("Gentleman") x1. That is the fight room.
 // tm=999999999 on a pt=7 portal means the server picks; nothing about that choice is client-side.
 //
-// ponytail: 922030001 is the right map but it will be EMPTY on arrival. v84 places mob 9300393 in
-// no map's life (scanned: 0 hits for id=9300393 over all 4505 v84 map images), so the spawn is
-// done by the map hook 922030001 declares - scripts/map/onUserEnter/enterBlackfrog.js, note the
-// lowercase f, a different name from this file - and that hook does not exist here. Its spawn
-// COORDINATES are server-side data that is in no WZ file, so they are not invented here. Write
-// that hook the day a source for the position exists; until then 22596 gets the right room and
-// no monster, which is strictly better than the wrong room.
+// The room fills itself. v84 places mob 9300393 in no map's life (scanned: 0 hits for id=9300393
+// over all 4848 v84 map images) and Mob.wz/9300393 has no info/revive, so the spawn is done by the
+// map hook 922030001 declares - scripts/map/onUserEnter/enterBlackfrog.js, note the lowercase f, a
+// different name from this file. That hook now exists; its header carries the derivation of the
+// one coordinate it has to choose.
 function enter(pi) {
     if (pi.isQuestStarted(22596)) {
         pi.playPortalSound();

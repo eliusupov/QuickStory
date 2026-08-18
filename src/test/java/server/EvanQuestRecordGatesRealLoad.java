@@ -9,7 +9,9 @@ import provider.Data;
 import provider.DataProviderFactory;
 import provider.DataTool;
 import provider.wz.WZFiles;
+import scripting.map.MapScriptMethods;
 import scripting.npc.NPCConversationManager;
+import scripting.portal.PortalPlayerInteraction;
 import scripting.reactor.ReactorActionManager;
 import server.quest.Quest;
 
@@ -30,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.intThat;
 import static org.mockito.Mockito.mock;
@@ -56,7 +59,8 @@ import static org.mockito.Mockito.when;
  * {@code Quest.wz}.
  *
  * <p>This class pins the nine gates as data, pins the fact that the WZ only ever READS these
- * records, and asserts the one writer the v84 data actually settles - quest 22530's. The other six
+ * records, and asserts every writer the v84 data actually settles - 22530's Warning Post, 22588's
+ * Ice Wall altar, and the Golem's Temple puppet door that serves 22556 and 22557. The remaining
  * quests deliberately have no writer asserted here; inventing one would be inventing content.
  */
 class EvanQuestRecordGatesRealLoad {
@@ -99,6 +103,23 @@ class EvanQuestRecordGatesRealLoad {
      * animation script; naming the server file after it would leave a file nothing ever loads.
      */
     private static final Path ICE_WALL_ALTAR_SCRIPT = Path.of("scripts", "reactor", "1409000.js");
+
+    /**
+     * The Golem's Temple puppet door, writer of record 22598 for BOTH 22556 and 22557. Portal
+     * scripts are dispatched by the {@code script} string on the portal node, not by map or index -
+     * {@code PortalScriptManager.getPortalScript} builds {@code "portal/" + name + ".js"} - so this
+     * file is named after {@code Map1/106010102.img/portal/8/script}.
+     */
+    private static final Path PUPPET_DOOR_SCRIPT = Path.of("scripts", "portal", "evanDollGR.js");
+
+    /** The five Slumbering Dragon Island hooks, each named by the map node that declares it. */
+    private static final Path ISLAND_ARRIVAL_HOOK =
+            Path.of("scripts", "map", "onUserEnter", "onSDI.js");
+    private static final Path AMBUSH_ROOM_HOOK =
+            Path.of("scripts", "map", "onUserEnter", "blackSDI.js");
+    private static final Path ICE_WALL_TRIGGER_SCRIPT = Path.of("scripts", "portal", "stopIceWall.js");
+    private static final Path CAVE_EXIT_SCRIPT = Path.of("scripts", "portal", "outSDI.js");
+    private static final Path MEMORY_EXIT_SCRIPT = Path.of("scripts", "portal", "outAfrienMemory.js");
 
     @BeforeAll
     static void muteGraal() {
@@ -393,6 +414,320 @@ class EvanQuestRecordGatesRealLoad {
                         + "should be play-tested end to end");
     }
 
+    /**
+     * <strong>22598's writer, and why it is that one portal.</strong> 22556 demands 22598 = "1" and
+     * 22557 demands "2" - one record slot carrying two values, which is one hook hit twice. This
+     * test pins the hook.
+     *
+     * <p>The identification is the client's own, not an inference. {@code QuestInfo.img/22556}
+     * carries {@code showLayerTag = "22556"}, and in the PRISTINE v84 archive exactly one map object
+     * answers to that tag: {@code Map/Map1/106010102.img/3/obj/13}, an {@code oS=guide l0=tutorial
+     * l1=key} sprite - the client's "press UP here" prompt - at x=1458, y=193, drawn only while
+     * 22556 is in progress. The script portal below sits at x=1453, y=252. The prompt is pointing at
+     * it. Both the object and the portal are v84 additions
+     * ({@code docs/wz-baseline/add-list/Map.txt} lines 246 and 297), as is the golem-door scenery
+     * around them (objs 6-12), which is what Stan asks you to report in {@code Say.img/22556/1/0}:
+     * "There was a door with a strange puppet sitting on top."
+     *
+     * <p>Our merged {@code wz/} carries the portal but not the decoration layer, so the tag itself
+     * is a pristine-archive citation here rather than an assertion - the same footing as the
+     * {@code Say.img} citation in {@link #theObjectiveNamesFiveSignsAndTheEvanSayLinesAreStillAbsentFromThisTree()}.
+     * What is asserted is the half the server actually reads.
+     */
+    @Test
+    void thePuppetDoorIsTheOnlyScriptHookOnTheWholeGolemsTemplePath() {
+        assertEquals("22556", DataTool.getString(
+                        DataProviderFactory.getDataProvider(WZFiles.QUEST).getData("QuestInfo.img")
+                                .getChildByPath("22556/showLayerTag"), ""),
+                "22556 no longer carries the showLayerTag that ties it to the map object above the "
+                        + "puppet door - the identification of this portal as the trigger rests on it");
+
+        Data portal = mapData(106010102).getChildByPath("portal/8");
+        assertNotNull(portal, "106010102 has lost portal/8 - the v84 puppet door is not merged");
+        assertEquals("evanDollGR", DataTool.getString(portal.getChildByPath("script"), ""));
+        assertEquals("scr00", DataTool.getString(portal.getChildByPath("pn"), ""));
+        assertEquals(1453, DataTool.getInt(portal.getChildByPath("x"), -1),
+                "the puppet door moved; re-check it against the guide/tutorial/key prompt at x=1458");
+        assertEquals(252, DataTool.getInt(portal.getChildByPath("y"), -1));
+
+        // and it is the ONLY scripted portal anywhere on the path Stan sends you down
+        assertEquals(1, scriptedPortals(106010102),
+                "106010102 now has more than one scripted portal, so 'the only hook' no longer picks "
+                        + "this one out and 22598's writer needs re-deriving");
+        assertEquals(0, scriptedPortals(910600010));
+        assertEquals(0, scriptedPortals(910600000));
+
+        // no map hook exists to compete with it. 910600010 declares onUserEnter as the EMPTY STRING,
+        // which is v84 positively saying "no script"; 106010102 carries no such node at all.
+        assertEquals("", DataTool.getString(mapData(910600010).getChildByPath("info/onUserEnter"), "!"),
+                "910600010 has grown a real onUserEnter - a map hook now competes with the portal and "
+                        + "22557's write may belong there instead");
+        assertEquals("", DataTool.getString(mapData(910600010).getChildByPath("info/onFirstUserEnter"), "!"));
+        assertNull(mapData(106010102).getChildByPath("info/onUserEnter"),
+                "106010102 has grown an onUserEnter, so map-arrival is now a candidate trigger");
+
+        // the door leads somewhere a Golem could have taken Camila, and that room returns through it
+        assertEquals(106010102, DataTool.getInt(mapData(910600010).getChildByPath("portal/1/tm"), -1),
+                "910600010's out00 no longer returns to 106010102");
+        assertEquals("scr00", DataTool.getString(mapData(910600010).getChildByPath("portal/1/tn"), ""),
+                "910600010's exit no longer names scr00, so it is not this door's other side");
+        assertEquals(3, lifeCount(910600010, "m", 9300387),
+                "the Abandoned Hideout no longer holds the three Enraged Golems 22559 sends you back "
+                        + "to kill, so it is not the room behind the puppet door any more");
+    }
+
+    /**
+     * <strong>And the door is reachable, which is not a given.</strong> In PRISTINE v84 nothing
+     * warps to 106010102 from outside the temple at all: a {@code tm} scan over all 4848 Map.wz
+     * images finds inbound edges only from 910600010 and from the four inner rooms
+     * (106010103-106010106). v84 turned the one route in, {@code 106010101/portal/5}, into
+     * {@code pt=7 tm=999999999 script=evanGolemDoor}, and that script exists in no client file.
+     *
+     * <p>Ticket 08 refused to merge that row - index 5 is a different portal in the live client, so
+     * merging would have attached the script to the exit - and this tree therefore still carries the
+     * v83 plain warp. That refusal is the ONLY reason 22556 is playable today, so it is pinned here
+     * rather than left to chance: if a later merge lands the v84 row without also writing
+     * {@code evanGolemDoor.js}, the Golem's Temple silently seals and this test says why.
+     */
+    @Test
+    void theOnlyRouteIntoTheGolemsTempleIsStillTheUnscriptedV83Portal() {
+        Data route = mapData(106010101).getChildByPath("portal/5");
+        assertEquals("in00", DataTool.getString(route.getChildByPath("pn"), ""));
+        assertEquals(106010102, DataTool.getInt(route.getChildByPath("tm"), -1),
+                "106010101/portal/5 no longer warps to 106010102 - if it now carries v84's "
+                        + "evanGolemDoor script, that file must be written or the temple is sealed");
+        assertEquals("", DataTool.getString(route.getChildByPath("script"), ""),
+                "106010101/portal/5 has grown a script node (v84 puts evanGolemDoor here, with "
+                        + "tm=999999999); scripts/portal/evanGolemDoor.js must exist or 22556-22559 "
+                        + "are all unreachable");
+    }
+
+    /**
+     * <strong>The writer, actually run.</strong> Loaded under the same Graal engine
+     * {@code AbstractScriptManager} uses and driven exactly as a player pressing UP on the door.
+     *
+     * <p>The two quests can never both be STARTED - {@code Check.img/22557/0/quest/0} requires 22556
+     * at state 2 - so the branches are mutually exclusive by construction, and each visit must write
+     * exactly one value. A passer-by on neither quest must get the warp and no write at all: the
+     * door is permanent scenery, and a stray write would park a value on a record two quests read.
+     */
+    @Test
+    void pressingUpAtThePuppetDoorWrites22598OnceForWhicheverQuestIsRunning() throws Exception {
+        assertTrue(Files.isRegularFile(PUPPET_DOOR_SCRIPT),
+                "scripts/portal/evanDollGR.js is missing, so 22556 and 22557 can never be completed");
+
+        PortalPlayerInteraction onInvestigation = mock(PortalPlayerInteraction.class);
+        when(onInvestigation.isQuestStarted(22556)).thenReturn(true);
+        eval(PUPPET_DOOR_SCRIPT, "pi", onInvestigation).invokeFunction("enter", onInvestigation);
+        verify(onInvestigation).setQuestProgress(22556, 22598, 1);
+        verify(onInvestigation, times(1)).setQuestProgress(anyInt(), anyInt(), anyInt());
+        verify(onInvestigation).warp(910600010, "out00");
+
+        PortalPlayerInteraction onRescue = mock(PortalPlayerInteraction.class);
+        when(onRescue.isQuestStarted(22557)).thenReturn(true);
+        eval(PUPPET_DOOR_SCRIPT, "pi", onRescue).invokeFunction("enter", onRescue);
+        verify(onRescue).setQuestProgress(22557, 22598, 2);
+        verify(onRescue, times(1)).setQuestProgress(anyInt(), anyInt(), anyInt());
+        verify(onRescue).warp(910600010, "out00");
+
+        PortalPlayerInteraction passerby = mock(PortalPlayerInteraction.class);
+        eval(PUPPET_DOOR_SCRIPT, "pi", passerby).invokeFunction("enter", passerby);
+        verify(passerby, never()).setQuestProgress(anyInt(), anyInt(), anyInt());
+        verify(passerby).warp(910600010, "out00");
+    }
+
+    /**
+     * The value written must string-match what {@code canQuestByInfoProgress} compares it against,
+     * and 22557's must be reachable from 22556's rather than resetting it - they share slot 22598,
+     * so "2" has to be a legal successor of "1" and not a competing counter.
+     */
+    @Test
+    void theTwoWritesLandOnTheSameSlotInAscendingOrder() {
+        QuestStatus investigating = new QuestStatus(Quest.getInstance(22556), Status.STARTED);
+        QuestStatus rescuing = new QuestStatus(Quest.getInstance(22557), Status.STARTED);
+
+        assertEquals(22598, investigating.getInfoNumber(),
+                "a STARTED 22556 no longer resolves to record 22598, so setQuestProgress would park "
+                        + "the value on quest 22556 itself and the gate would never open");
+        assertEquals(22598, rescuing.getInfoNumber(), "a STARTED 22557 no longer resolves to 22598");
+        assertEquals("1", investigating.getInfoEx(0));
+        assertEquals("2", rescuing.getInfoEx(0));
+
+        assertEquals(22556, DataTool.getInt(questCheck("22557/0/quest/0/id"), -1),
+                "22557 no longer requires 22556, so the two could be STARTED at once and the "
+                        + "else-if in evanDollGR.js would silently drop one of the writes");
+        assertEquals(2, DataTool.getInt(questCheck("22557/0/quest/0/state"), -1));
+    }
+
+    /**
+     * <strong>The sharp edge under every writer in this file.</strong>
+     * {@code Character.setQuestProgress(quest, record, value)} does NOT write to the record you
+     * name. It looks up {@code QuestStatus.getInfoNumber()} for the quest's CURRENT status and only
+     * writes to the record slot when the two agree; otherwise it falls through to
+     * {@code qs.setProgress(infoNumber, value)} and parks the value on the quest itself, silently.
+     * And {@code Quest.getInfoNumber} reads the START block for a NOT_STARTED quest and the
+     * COMPLETE block for a STARTED one.
+     *
+     * <p>That is why every guard shipped here tests a quest STATUS and not merely "am I on this
+     * quest". Two of the rows below are the ones that bite: a NOT_STARTED 22589 resolves to 22600
+     * and a STARTED 22589 to 22604, so {@code outSDI.js} firing one step late would satisfy the
+     * COMPLETION gate of a quest the player has not finished, and {@code onSDI.js} firing one step
+     * late would stamp "1" over the "2" {@code stopIceWall.js} wrote and lock 22580 forever.
+     */
+    @Test
+    void eachWriterTargetsTheSlotItsGuardedStatusActuallyResolvesTo() {
+        Object[][] rows = {
+                // quest, status the writer's guard admits, record it must resolve to, value demanded
+                {22580, Status.NOT_STARTED, 22599, "1"},   // onSDI.js
+                {22580, Status.STARTED, 22599, "2"},       // stopIceWall.js
+                {22589, Status.NOT_STARTED, 22600, "1"},   // outSDI.js
+                {22589, Status.STARTED, 22604, "1"},       // blackSDI.js
+                {22591, Status.STARTED, 22601, "1"},       // outAfrienMemory.js
+                {22556, Status.STARTED, 22598, "1"},       // evanDollGR.js
+                {22557, Status.STARTED, 22598, "2"},       // evanDollGR.js
+        };
+        for (Object[] row : rows) {
+            QuestStatus qs = new QuestStatus(Quest.getInstance((Integer) row[0]), (Status) row[1]);
+            assertEquals((int) (Integer) row[2], qs.getInfoNumber(),
+                    "a " + row[1] + " " + row[0] + " resolves to record " + qs.getInfoNumber()
+                            + ", not " + row[2] + " - its writer now parks the value on the quest "
+                            + "itself and the gate never opens");
+            assertEquals(row[3], qs.getInfoEx(0),
+                    "quest " + row[0] + " at " + row[1] + " no longer demands \"" + row[3] + "\"");
+        }
+    }
+
+    /**
+     * <strong>The four Slumbering Dragon Island writers, run for real.</strong> Each is the only
+     * server-reachable hook its map declares - {@code 914100010/info/onUserEnter="onSDI"},
+     * {@code 914100020/portal/2..11/script="stopIceWall"}, {@code 914100022/portal/2/script="outSDI"},
+     * {@code 914100023/info/onUserEnter="blackSDI"}, {@code 900030000/portal/1/script="outAfrienMemory"} -
+     * with every competing node in those maps declared as the empty string, which is v84 positively
+     * saying "no script here".
+     *
+     * <p>Each is driven twice: once in the state its guard admits, and once as a passer-by, because
+     * these are all permanent scenery that anyone can walk into. A stray write here is worse than a
+     * missing one - it satisfies a gate out of order.
+     *
+     * <p><strong>Academic until the island opens.</strong> {@code 914100010/portal/2} is
+     * {@code script=enterSnowDragon, tm=999999999} and that file does not exist, so no Cave of
+     * Silence room has an inbound route today. The writers are correct the moment it lands; that is
+     * the same footing 22588's altar has sat on since it was built.
+     */
+    @Test
+    void theIslandWritersFireOnlyInTheQuestStateTheirGateNeeds() throws Exception {
+        // 22599 = "1" on arrival in the Snowy Forest, once 22579 is done and 22580 not yet taken
+        MapScriptMethods arriving = mock(MapScriptMethods.class);
+        when(arriving.getQuestStatus(22579)).thenReturn(2);
+        when(arriving.getQuestStatus(22580)).thenReturn(0);
+        eval(ISLAND_ARRIVAL_HOOK, "ms", arriving).invokeFunction("start", arriving);
+        verify(arriving).setQuestProgress(22580, 22599, 1);
+
+        // and never again once 22580 is running, or it stamps "1" back over stopIceWall's "2"
+        MapScriptMethods returning = mock(MapScriptMethods.class);
+        when(returning.getQuestStatus(22579)).thenReturn(2);
+        when(returning.getQuestStatus(22580)).thenReturn(1);
+        eval(ISLAND_ARRIVAL_HOOK, "ms", returning).invokeFunction("start", returning);
+        verify(returning, never()).setQuestProgress(anyInt(), anyInt(), anyInt());
+
+        // 22599 = "2" at the centre of the ice-wall room, and the trigger must NOT warp
+        PortalPlayerInteraction atTheWall = mock(PortalPlayerInteraction.class);
+        when(atTheWall.getQuestStatus(22580)).thenReturn(1);
+        eval(ICE_WALL_TRIGGER_SCRIPT, "pi", atTheWall).invokeFunction("enter", atTheWall);
+        verify(atTheWall).setQuestProgress(22580, 22599, 2);
+        verify(atTheWall, never()).warp(anyInt(), anyString());
+        verify(atTheWall, never()).warp(anyInt(), anyInt());
+
+        PortalPlayerInteraction wandering = mock(PortalPlayerInteraction.class);
+        eval(ICE_WALL_TRIGGER_SCRIPT, "pi", wandering).invokeFunction("enter", wandering);
+        verify(wandering, never()).setQuestProgress(anyInt(), anyInt(), anyInt());
+
+        // 22600 = "1" leaving the altar room, and only while the altar errand is still open
+        PortalPlayerInteraction leavingTheCave = mock(PortalPlayerInteraction.class);
+        when(leavingTheCave.getQuestStatus(22588)).thenReturn(1);
+        when(leavingTheCave.getQuestStatus(22589)).thenReturn(0);
+        eval(CAVE_EXIT_SCRIPT, "pi", leavingTheCave).invokeFunction("enter", leavingTheCave);
+        verify(leavingTheCave).setQuestProgress(22589, 22600, 1);
+        verify(leavingTheCave).warp(914100010, "in00");
+
+        // the same exit taken again with 22589 already STARTED must write NOTHING: the slot has
+        // moved to 22604 by then, so a write here would complete a quest that has not been done
+        PortalPlayerInteraction leavingAgain = mock(PortalPlayerInteraction.class);
+        when(leavingAgain.getQuestStatus(22588)).thenReturn(1);
+        when(leavingAgain.getQuestStatus(22589)).thenReturn(1);
+        eval(CAVE_EXIT_SCRIPT, "pi", leavingAgain).invokeFunction("enter", leavingAgain);
+        verify(leavingAgain, never()).setQuestProgress(anyInt(), anyInt(), anyInt());
+        verify(leavingAgain).warp(914100010, "in00");
+
+        // 22604 = "1" walking back into the Black Wings ambush room
+        MapScriptMethods ambushed = mock(MapScriptMethods.class);
+        when(ambushed.getQuestStatus(22589)).thenReturn(1);
+        eval(AMBUSH_ROOM_HOOK, "ms", ambushed).invokeFunction("start", ambushed);
+        verify(ambushed).setQuestProgress(22589, 22604, 1);
+
+        MapScriptMethods sightseeing = mock(MapScriptMethods.class);
+        eval(AMBUSH_ROOM_HOOK, "ms", sightseeing).invokeFunction("start", sightseeing);
+        verify(sightseeing, never()).setQuestProgress(anyInt(), anyInt(), anyInt());
+
+        // 22601 = "1" on the way out of Afrien's memory
+        PortalPlayerInteraction leavingTheMemory = mock(PortalPlayerInteraction.class);
+        when(leavingTheMemory.getQuestStatus(22591)).thenReturn(1);
+        eval(MEMORY_EXIT_SCRIPT, "pi", leavingTheMemory).invokeFunction("enter", leavingTheMemory);
+        verify(leavingTheMemory).setQuestProgress(22591, 22601, 1);
+        verify(leavingTheMemory).warp(914100021, 0);
+
+        PortalPlayerInteraction justPassing = mock(PortalPlayerInteraction.class);
+        eval(MEMORY_EXIT_SCRIPT, "pi", justPassing).invokeFunction("enter", justPassing);
+        verify(justPassing, never()).setQuestProgress(anyInt(), anyInt(), anyInt());
+        verify(justPassing).warp(914100021, 0);
+    }
+
+    /**
+     * The hook NAMES, read off Map.wz. Each writer above is justified by being the sole scripted
+     * thing in its map, so if a map ever grows a second hook - or renames the one it has - the
+     * derivation has to be redone rather than the script quietly kept.
+     */
+    @Test
+    void eachIslandWriterIsStillTheOnlyScriptedThingInItsMap() {
+        assertEquals("onSDI", mapHook(914100010, "onUserEnter"));
+        assertEquals("", mapHook(914100010, "onFirstUserEnter"));
+        assertEquals("blackSDI", mapHook(914100023, "onUserEnter"));
+        assertEquals("", mapHook(914100023, "onFirstUserEnter"));
+        assertEquals(0, scriptedPortals(914100023), "the ambush room's exit is now scripted too");
+
+        // the landing maps are deliberately dead, which is why the arrival write is one map inland
+        assertEquals("", mapHook(914100000, "onUserEnter"));
+        assertEquals("", mapHook(914100000, "onFirstUserEnter"));
+        assertEquals(0, scriptedPortals(914100000),
+                "914100000 has grown a scripted portal - it is a nearer candidate for 22599=\"1\" "
+                        + "than 914100010 and onSDI.js should be re-derived");
+
+        // the ice-wall room: no map hook, ten identical triggers, all one script
+        assertEquals("", mapHook(914100020, "onUserEnter"));
+        assertEquals("", mapHook(914100020, "onFirstUserEnter"));
+        assertEquals(10, scriptedPortals(914100020),
+                "914100020 no longer carries ten scripted triggers");
+        for (int i = 2; i <= 11; i++) {
+            assertEquals("stopIceWall", DataTool.getString(
+                            mapData(914100020).getChildByPath("portal/" + i + "/script"), ""),
+                    "914100020/portal/" + i + " is no longer a stopIceWall trigger");
+        }
+
+        // the memory: both map hooks empty, exactly one scripted portal
+        assertEquals("", mapHook(900030000, "onUserEnter"));
+        assertEquals("", mapHook(900030000, "onFirstUserEnter"));
+        assertEquals(1, scriptedPortals(900030000));
+        assertEquals("outAfrienMemory", DataTool.getString(
+                mapData(900030000).getChildByPath("portal/1/script"), ""));
+
+        // and outSDI really is the odd one out among four otherwise identical exits
+        assertEquals("outSDI", DataTool.getString(
+                mapData(914100022).getChildByPath("portal/2/script"), ""));
+        assertEquals("", DataTool.getString(mapData(914100020).getChildByPath("portal/1/script"), ""));
+        assertNull(mapData(914100021).getChildByPath("portal/2/script"));
+        assertNull(mapData(914100023).getChildByPath("portal/1/script"));
+    }
+
     /** Guards against the Quest cache being empty, which would make every lookup above vacuous. */
     @Test
     void theGatedQuestsActuallyLoad() {
@@ -469,6 +804,26 @@ class EvanQuestRecordGatesRealLoad {
         int n = 0;
         for (Data entry : reactors.getChildren()) {
             if (Integer.parseInt(DataTool.getString(entry.getChildByPath("id")).trim()) == reactorId) {
+                n++;
+            }
+        }
+        return n;
+    }
+
+    /** A map's {@code info/<name>} hook string. Empty string and absent node both read as "". */
+    private static String mapHook(int mapId, String name) {
+        return DataTool.getString(mapData(mapId).getChildByPath("info/" + name), "");
+    }
+
+    /** How many of a map's portals carry a {@code script} node, i.e. are server-scripted at all. */
+    private static int scriptedPortals(int mapId) {
+        Data portals = mapData(mapId).getChildByPath("portal");
+        if (portals == null) {
+            return 0;
+        }
+        int n = 0;
+        for (Data entry : portals.getChildren()) {
+            if (!DataTool.getString(entry.getChildByPath("script"), "").isEmpty()) {
                 n++;
             }
         }

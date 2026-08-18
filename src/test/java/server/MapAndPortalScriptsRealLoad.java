@@ -73,6 +73,8 @@ class MapAndPortalScriptsRealLoad {
         MAP_HOOKS.put("undomorphdarco", new int[]{240000110});
         MAP_HOOKS.put("reundodraco", new int[]{270000100});
         MAP_HOOKS.put("evanTogether", new int[]{100030102, 914100021});
+        MAP_HOOKS.put("onSDI", new int[]{914100010});
+        MAP_HOOKS.put("blackSDI", new int[]{914100023});
 
         PORTAL_HOOKS.put("hontale_morph", 240040700);
         PORTAL_HOOKS.put("investigate1", 106020300);
@@ -80,6 +82,8 @@ class MapAndPortalScriptsRealLoad {
         PORTAL_HOOKS.put("piramid_in00", 926010000);
         PORTAL_HOOKS.put("outSDI", 914100022);
         PORTAL_HOOKS.put("enterBlackFrog", 220000300);
+        PORTAL_HOOKS.put("stopIceWall", 914100020);
+        PORTAL_HOOKS.put("outAfrienMemory", 900030000);
     }
 
     /**
@@ -130,6 +134,10 @@ class MapAndPortalScriptsRealLoad {
     void everyMapHookDoesExactlyWhatItsMapNeeds() throws Exception {
         run("aranTutorAlone", 914000000, ms -> verify(ms).unlockUI());
         run("evanTogether", 100030102, ms -> verify(ms).unlockUI());
+        // both island hooks are also Evan quest-record writers; the write paths are pinned by
+        // EvanQuestRecordGatesRealLoad, here they only have to unlock the UI for a passer-by
+        run("onSDI", 914100010, ms -> verify(ms).unlockUI());
+        run("blackSDI", 914100023, ms -> verify(ms).unlockUI());
         run("TD_MC_gasi2", 106020501, ms -> verify(ms).unlockUI());
 
         run("go1010400", 1010400, ms -> verify(ms).mapEffect("maplemap/enter/1010400"));
@@ -168,10 +176,24 @@ class MapAndPortalScriptsRealLoad {
         // 914100022's out00 is the only exit of the Cave of Silence ice-wall room and it is
         // scripted, so without this file the room is a one-way trip. The destination is taken from
         // the three sibling rooms, which put out00 on the same pixel as a plain tm/tn portal.
+        // it also writes Evan record 22600 on the way out, so a passer-by asks after the two quest
+        // states and then does nothing about them - the write path is EvanQuestRecordGatesRealLoad's
         runPortal("outSDI", pi -> {
+            verify(pi).getQuestStatus(22588);
             verify(pi).playPortalSound();
             verify(pi).warp(914100010, "in00");
         });
+
+        // 900030000's only server-reachable hook. Same shape: warp always, record only on quest.
+        runPortal("outAfrienMemory", pi -> {
+            verify(pi).getQuestStatus(22591);
+            verify(pi).playPortalSound();
+            verify(pi).warp(914100021, 0);
+        });
+
+        // pt=9 trigger, not a door: it must never warp, or the ten scr portals of 914100020 would
+        // throw the player out of the room every time he crossed the middle of it
+        runPortal("stopIceWall", pi -> verify(pi).getQuestStatus(22580));
     }
 
     /**

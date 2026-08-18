@@ -5,7 +5,34 @@
 // String.wz/ToolTipHelp.img/PortalTooltip/900030000/out00 calls the far side the "Black
 // Magician Expedition Force Stronghold", but no such map exists in this WZ, so fall back on
 // the map's own returnMap/forcedReturn, 914100021.
+//
+// It is also the writer of quest record 22601 = "1", the COMPLETE gate of quest 22591 "The Past,
+// Onyx Dragons, Black Mage" (Check.img/22591/1: infoNumber 22601, infoex/0/value "1").
+//
+// That the write belongs INSIDE the memory rather than on the accept is stated by
+// Say.img/22591/1/stop/default/0, the line shown while 22601 is not yet "1": "If you desire to see
+// the past again, #bforfeit the quest#k and speak with me" - i.e. you are sent into the past by
+// accepting (Check.img/22591/0/startscript = q22591s), so the gate can only be satisfied by
+// something that happens after you get there. QuestInfo.img/22591/1 "#bInside #p1205000#'s memory,
+// become Freud#k" identifies this map: 900030000 is the only map in this tree with a user node
+// forcing the player's look (user/0 and user/1, by gender), and its returnMap/forcedReturn is
+// 914100021, Afrien's cave.
+//
+// And this portal is the only server-reachable hook the memory has. 900030000's info/onUserEnter
+// and info/onFirstUserEnter are both the EMPTY STRING, its reactor node is empty, and its portal
+// list is two entries - sp and this one. Its one NPC, 1013205, is client-scripted
+// (Npc.wz/1013205.img/info/script/0/script = "Afirentalk"), the same mechanism as the ferry NPC
+// 1013207, so no server NPC conversation is ever opened for it and no scripts/npc/1013205.js is
+// owed. Present-day Afrien 1205000 has no info/script node, which is why HE is server-talkable and
+// serves as Check.img/22591/1/npc.
+//
+// The guard picks the record: 22601 sits in the COMPLETE block, so Quest.getInfoNumber only
+// resolves it for a STARTED 22591. The player lands one map from the npc that consumes it.
 function enter(pi) {
+    if (pi.getQuestStatus(22591) == 1) {
+        pi.setQuestProgress(22591, 22601, 1);
+    }
+
     pi.playPortalSound();
     pi.warp(914100021, 0);
     return true;

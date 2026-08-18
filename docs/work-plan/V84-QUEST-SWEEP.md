@@ -71,15 +71,29 @@ records with no writer** (`infoNumber` with no `setQuestProgress` anywhere in `s
 `MISSING_ITEM_SOURCE` row in the file sits behind an expired `end` date or in the Korean 1049x event
 block. Nothing here needs a new `drop_data` row.
 
-The live blockers are all placement or writer questions, and every one of them needs the owner:
+The live blockers were all placement or writer questions:
 
-| rows | what | quests |
-|---|---|---|
-| 2 P0 | quest record 22598 has no writer | 22556, 22557 |
-| 4 P1 | quest records 22599 / 22600 / 22601 / 22604 have no writer | 22580, 22589 (x2), 22591 |
-| 4 P1 | npc 1013202 placed on no map - **and on none in pristine v84 either** | 22575, 22576, 22577, 22581 |
-| 1 P1 | PlayerNPC 9901000 has no `playernpcs` row | 22402 |
-| 1 P1 | mob 9300393 "Gentleman" placed on no map, in either tree | 22596 |
+| rows | what | quests | outcome |
+|---|---|---|---|
+| 2 P0 | quest record 22598 has no writer | 22556, 22557 | **FIXED** - `scripts/portal/evanDollGR.js` |
+| 4 P1 | quest records 22599 / 22600 / 22601 / 22604 have no writer | 22580, 22589 (x2), 22591 | **FIXED** - `onSDI.js`, `stopIceWall.js`, `outSDI.js`, `blackSDI.js`, `outAfrienMemory.js` |
+| 4 P1 | npc 1013202 placed on no map - **and on none in pristine v84 either** | 22575, 22576, 22577, 22581 | **NOT A DEFECT** - see below |
+| 1 P1 | PlayerNPC 9901000 has no `playernpcs` row | 22402 | **NOT A DEFECT** - the table has 6 rows, seeded by changeSet 163 |
+| 1 P1 | mob 9300393 "Gentleman" placed on no map, in either tree | 22596 | **FIXED** - `scripts/map/onUserEnter/enterBlackfrog.js` |
+
+**Not one of the twelve turned out to need an owner decision.** Every one was settled by reading the
+quest's own `QuestInfo` / `Say` / `Check` / `Act` text against the hook list of the maps that text
+names. The general method, which the next sweep should use before escalating anything:
+
+1. `QuestInfo.img/<id>/showLayerTag`, then `WzPeek scan Map.wz tags <tag>`, finds the exact map
+   OBJECT the client highlights during that quest - and its x/y usually lands on a portal. That is
+   how 22598 was pinned: a `guide/tutorial/key` "press UP" sprite 5px from `evanDollGR`.
+2. Then the **exhaustiveness argument**. Grep `add-list/Map.txt` for the map ids and list every
+   `portal/N/script` and `info/onUserEnter`/`onFirstUserEnter` v84 declares. An `onUserEnter` whose
+   value is the EMPTY STRING is v84 positively saying "no script here", not a missing node. If the
+   whole area declares one hook and one record must be written, that hook is the writer.
+3. One record slot carrying two values is one hook hit twice (22598, 22599). Two slots on one quest
+   is two distinct triggers (22589 uses 22600 and 22604).
 
 44 P2 rows are `NON_DEFECT`: 43 of them are npc **1013000 Mir**, who is the summoned dragon and not
 a map NPC (`QuestActionHandler.java:52,91`), and one is mob **9101004**, a virtual kill counter
@@ -89,8 +103,23 @@ a map NPC (`QuestActionHandler.java:52,91`), and one is mob **9101004**, a virtu
 event, the Dragon Rider 375x line, the Korean winter event - and `EndDateRequirement` refuses them
 before anything else is consulted. Ticket 44 established that precedent for quests 1048-1054.
 
-### Two false positives the sweep had to learn about - do not re-file them
+### Four false positives the sweep had to learn about - do not re-file them
 
+- **npc 1013202 "Black Shadow"** (22575, 22576, 22577, 22581) is not a placement gap. He is Hiver in
+  disguise, and v84 unmasks him in the quest text: `QuestInfo.img/22581/2` reads *"#p1013202#'s name
+  is #p1013203#"*, and 1013203 Hiver IS placed, on 922030000, where 22581 completes. Pristine
+  `Say.img/22576/0/0` - *"Oh, you don't need to come all the way to see me in person, though"* - and
+  `Say.img/22581/1/0` - *"I think this is our first meeting face to face"* - say outright that he is
+  never physically present. `Etc.wz/NpcLocation.img/1013202/0` is `-1`, byte-identical to Mir's
+  marker, and v84 ADDED that node. All four quests are `autoStart`, and `QuestActionHandler`'s whole
+  proximity block sits inside a `!isAutoStart() && !isAutoComplete()` guard, so unlike Mir this one
+  needs no special case at all. Pinned by
+  `EvanChainRealLoad.blackShadowIsSpawnedOnNoMapAndNeedsNoSpecialCaseBecauseHisQuestsAreAutoStart`.
+- **PlayerNPC 9901000** (22402) - the "`playernpcs` has 0 rows" premise was stale. It has 6, and row
+  12 is `scriptid=9901000, map=102000004`, seeded by changeSet **163** and re-anchored onto v84
+  footholds by **165**, both EXECUTED. A row genuinely is required (`QuestActionHandler` falls
+  through `getNPCById` to `MapleMap.getPlayerNPCByScriptId`, and `null` is a hard refusal), and it is
+  there. Query the table before filing this again.
 - **4032474 "Seruf Pearl"** (22404, 22405) looks unsourced: its two `drop_data` rows sit on mobs
   4220000 and 9303014 and neither is in any map's `life`. It is fine. `scripts/event/AreaBossSeruf.js`
   spawns 4220001 into 230020100 at boot and `Mob.wz/4220001/info/revive` turns it into 4220000 on
@@ -107,11 +136,11 @@ before anything else is consulted. Ticket 44 established that precedent for ques
 |---|---|
 | quests swept | 198 |
 | rows in the TSV | 99, over 81 distinct quests |
-| P0 | 3 - two `DECISION` (22556, 22557), one `NON_DEFECT` (22529) |
-| P1 | 10, all `DECISION` |
+| P0 | 3 - two were `DECISION` (22556, 22557), both now **FIXED**; one `NON_DEFECT` (22529) |
+| P1 | 10 were `DECISION` - 5 now **FIXED**, 5 **NOT A DEFECT** |
 | P2 | 86 - 44 `NON_DEFECT`, 42 `DO_NOT_FIX` |
-| **mechanical fixes available** | **0** |
-| needing an owner decision | 12 rows over 9 quests |
+| **mechanical fixes available** | **0** at sweep time; **7 scripts** once the quest text was read |
+| needing an owner decision | **0** - all 12 rows over 9 quests were settled from the quest text |
 
 ## The quest that started this: 22529 "Helping Beginner Adventurer Christopher"
 
