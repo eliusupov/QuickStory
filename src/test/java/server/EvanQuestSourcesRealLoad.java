@@ -1,5 +1,6 @@
 package server;
 
+import constants.id.MobId;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import provider.Data;
@@ -254,14 +255,17 @@ class EvanQuestSourcesRealLoad {
     }
 
     /**
-     * <strong>The one gap changeSet 156 cannot close.</strong> 22524 counts kills of mob 9101004,
-     * which has no Mob.wz image in either tree - it is one of Nexon's "merge" ids that stands for two
-     * real mobs at once. The server already implements exactly that mechanism for three other ids, so
-     * the shape is known and only 9101004's entry is missing. This pins the facts that make the fix
-     * unambiguous; it does not assert the fix, so it keeps passing once someone lands it.
+     * <strong>Closed.</strong> 22524 counts kills of mob 9101004, which has no Mob.wz image in either
+     * tree - it is one of Nexon's "merge" ids that stands for two real mobs at once
+     * ({@code Mob.wz/QuestCountGroup/9101004.img} = 2220100 + 2220110, both spawned on 106010000 /
+     * 106010100). {@code Character.raiseQuestMobCount} carries the branch, so 9101004 must never be
+     * placed as map life.
      */
     @Test
     void quest22524CountsAMergeIdThatHasNoMobImage() {
+        assertEquals(9101004, MobId.BLUE_MUSHROOM_QUEST, "the merge id 22524 counts");
+        assertEquals(2220100, MobId.BLUE_MUSHROOM);
+        assertEquals(2220110, MobId.CRYING_BLUE_MUSHROOM);
         assertEquals(9101004, DataTool.getInt(questCheck("22524/1/mob/0/id"), -1),
                 "22524 no longer counts mob 9101004");
         assertEquals(50, DataTool.getInt(questCheck("22524/1/mob/0/count"), -1),

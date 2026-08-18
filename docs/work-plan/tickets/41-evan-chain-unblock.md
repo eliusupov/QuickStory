@@ -118,9 +118,15 @@ Later in the chain, all from the same root cause: **this repo's `wz/Map.wz` is a
 `wz/Quest.wz` is v84**, so v84-era NPCs and mobs are absent from the map data. These need an
 additive Map.wz merge, not a drop row or a `plife` hack.
 
-- **Unspawned mobs:** 9101004 (quest 22524), 2230112 (22532). ~~9300393 (22596)~~ closed by
-  `enterBlackfrog.js`.
-- **Unplaced npcs:** 1022106 (22529). ~~1052002 (22535)~~, ~~2092001 (22587)~~ and ~~2030015
+- ~~**Unspawned mobs:** 9101004 (quest 22524), 2230112 (22532).~~ Neither was a gap. **9101004** is
+  not a spawnable mob at all - it is a merge id, `Mob.wz/QuestCountGroup/9101004.img` = 2220100 +
+  2220110, and `Character.raiseQuestMobCount:7470` already raises it on either kill; both real mobs
+  spawn on 106010000/106010100. Placing it as life would be the hack. **2230112** was placed by
+  `ce3895453` - 24 entries on 101030001, which is also what changeSet 156's 4032462 row drops from.
+  ~~9300393 (22596)~~ closed by `enterBlackfrog.js`.
+- ~~**Unplaced npcs:** 1022106 (22529).~~ Also placed by `ce3895453`, on all three maps
+  `NpcLocation.img/1022106` names (106000000 / 106000100 / 106000200), `limitedname q225290`.
+  ~~1052002 (22535)~~, ~~2092001 (22587)~~ and ~~2030015
   (22576)~~ were placed by the 38 life placements in `ce3895453`, each on the map
   `Etc.wz/NpcLocation.img` names for it (103000000 / 251000000 / 211040400). ~~1013202
   (22575/22576/22577/22581)~~ was never a gap: `NpcLocation.img/1013202/0` is **-1**, the same
@@ -132,10 +138,15 @@ additive Map.wz merge, not a drop row or a `plife` hack.
   Reserved allocator range is **9900000-9906599 and 9977777** (`PlayerNPC.java:321-323`,
   `NpcId.java:38`) - the "9901910-9901919" figure in the original brief describes which `Npc.wz`
   images are fabricated, not what the allocator hands out.
-- Quest items still lacking a source further along: 4032453 (22503), 4032459 (22524), 4032460
-  (22529), 4032461 (22531), 4032462 (22532), 4032463 (22548), 4032466 (22559), 4032467 (22562),
-  4032470 (22572), 4032472 (22586). Each needs the same evidence pass done above before any row is
-  written. Two came off this list on re-verification and neither was ever a drop:
+- ~~Quest items still lacking a source further along.~~ **All closed; the list below is history.**
+  Sourced by later changeSets: 4032453 (22503) changeSet 159; 4032459 / 4032460 / 4032461 / 4032462 /
+  4032463 / 4032466 all changeSet 156 (4032460 later tuned by 170-172). The last three are **not
+  drops and must never get a row** - each is handed over by a repeatable sibling exchange quest, the
+  same shape as 4032468/22568: `Act.img/22563/1` grants **4032467** for 25x 4000204 (start npc 1013000
+  Mir, covered by this ticket's dragon guard); `Act.img/22573/1` grants **4032470** for 60k mesos +
+  3x4000136 / 15x4000029 / 15x4000044 (npc 1081100, placed on 110000000); `Act.img/22587/1` grants
+  **4032472** (npc 2092001, placed by `ce3895453`). Each is `interval 0`, gated on its consuming
+  quest being state 1. Original list, and the two that came off it first - neither was ever a drop:
   **4032455** (22510) is handed over by 22510's own `startscript q22510s` -
   `scripts/quest/22510.js:13` - which is why the drop tables have no row for it; **4032468**
   (22567) is granted 10 at a time by `Act.img/22568/1`, the repeatable hand-in at npc 2030012 that
