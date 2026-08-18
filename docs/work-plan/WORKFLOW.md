@@ -33,6 +33,18 @@ raise the tier.
 
 ---
 
+### Reading the ledger
+
+`TICKET-LEDGER.tsv` is plain TSV — header on line 1, data after, **no comment convention**. Do not
+add one; parsers here do not skip comments.
+
+- **Queue filter:** `state != REFUSED && startable_now == YES`
+- **Dispatch target:** the `agent` column
+- Rows are **ragged by design** — early tickets carry fewer fields than later ones. Any reader must
+  tolerate short rows rather than assume a fixed column count.
+
+---
+
 ## 2. Every ticket names its own agent
 
 The ledger carries an `agent` column. Effort decides the tier; nobody defaults to high.
