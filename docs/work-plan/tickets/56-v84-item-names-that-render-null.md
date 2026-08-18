@@ -150,3 +150,30 @@ byte" criterion below passes against corrupted data.
   `Item.wz` and `Character.wz` images are untouched by this ticket.
 - Do not drop an empty-valued leaf while copying a section. `SOURCES.md`: empty is not absent.
 - Do not compare positionally. Match on node name, never on storage order.
+
+## Closure for 1702248 and 1702254 - UNUSED, no name merged (2026-08-18)
+
+The owner authorised one tier-2 lookup on <https://dreamms.gg/items> for these two ids. Result, and
+it is **not v84 data** - it is a modern private server's own database, cited here only as context:
+
+| id | dreamms.gg name | dreamms.gg source |
+|---|---|---|
+| 1702248 | `Rudolph` | Christmas event Surprise Style Box, 2022 and 2023 - a dreamms event, not v84 |
+| 1702254 | `루돌프` (untranslated) | *"No known source for this item."* |
+
+Neither name may be merged, because **neither id is obtainable on this server**. Verified:
+
+- `wz/Etc.wz/Commodity.img.xml` - **no row** for either id, so the cash shop cannot sell them.
+  (`V84-ITEM-SOURCE-SWEEP.tsv:122,124` reached the same conclusion independently: `NO_SOURCE_IN_V84`.)
+- `wz/` - the only files mentioning either id are the art images
+  `wz/Character.wz/Weapon/01702248.img.xml` and `01702254.img.xml`. No quest act, no reactor, no NPC.
+- `scripts/` and `src/` - zero references; the sole hit is the explanatory comment at
+  `src/test/java/server/V84MissingItemNameRealLoad.java:22`.
+- Database (SELECT-only) - zero rows in `inventoryitems`, `drop_data`, `drop_data_global`,
+  `shopitems`, `reactordrops`, `mts_items`, `nxcode_items`, `makercreatedata`, `makerrewarddata`.
+
+Nothing in the game can hand a player either item, so nothing renders their missing name. v84 ships
+the art and no name and no way to obtain them; that is consistent, not a defect. **UNKNOWN is the
+final answer for both ids** - the acceptance box "appear in this ticket's UNKNOWN list" is satisfied
+here. If a future ticket ever makes one obtainable, the name must come from a v84 source, not from
+this table.
