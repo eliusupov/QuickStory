@@ -1,3 +1,13 @@
+> **SUPERSEDED 2026-08-18. Do not read this for current state.**
+> This was the cutover-day narrative and it is now wrong in several places - its title still says
+> the target is v92, and it lists "Evan enters the world" and "equipped items render" as broken
+> when both were fixed by ticket 24 the same week. It is kept because the four-bug cutover story
+> and the registry-collision writeup are worth having.
+>
+> Current state lives in **`docs/work-plan/STATUS.md`**.
+
+---
+
 # STATUS — GMS v83 → **v92** upgrade (target changed 2026-08-16)
 
 ---
