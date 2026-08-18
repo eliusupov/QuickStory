@@ -337,7 +337,15 @@ __declspec(naked) void ccLoginBackBtnFix() {	//un used
 	}
 }
 
-int a1x = 0; int a2x = 0; int a2y = 0; int a3 = 0; int a1y = 0; 
+int a1x = 0; int a2x = 0; int a2y = 0; int a3 = 0; int a1y = 0;
+// Resolution-INDEPENDENT constant (owner-directed HD fix, not a value we may vary by res).
+// Read live from the full-process channel-select dump (hdclient-full.bin): the drawn
+// descriptor object 0x5E90223C has draw top-left at obj+0xfc/+0x100 = (240,234) and hit
+// top-left at obj+0x9c/+0x98 = (240,93). X already matches (240); the hit-rect top is 141px
+// ABOVE the button's drawn top (owner's "top end only"). Both tops carry +myHeight (draw
+// rides P127's 125+myHeight canvas; hit gets a2y), so 234-93=141 is a pure constant that
+// holds at any resolution. ponytail: single dump-derived constant; owner visually confirms.
+int ccLoginDescriptorYAdj = 141;
 
 // v84 BODY EDIT (not upstream). v84 recompiled Client::UpdateResolution's LoginDescriptor
 // setup: the world/channel DESCRIPTOR coordinates that v83 baked as literals were hoisted
@@ -360,8 +368,9 @@ __declspec(naked) void ccLoginDescriptorFix() {
 		dec    eax            // 0x00622900  replay
 		and    eax, 0x3f      // 0x00622901  replay
 		add    eax, 0x21      // 0x00622904  replay
-		add    eax, a2y       // EFFECT 1: Y += myHeight  (arm1; arm2 overwrites eax)
-		mov    edx, a1x       // EFFECT 3: X  = myWidth    (arm1; arm2 overwrites edx)
+		add    eax, a2y                  // EFFECT 1: Y += myHeight   (arm1; arm2 overwrites eax)
+		add    eax, ccLoginDescriptorYAdj // EFFECT 1b: align hit-rect top to button draw top (+141)
+		mov    edx, a1x                  // EFFECT 3: X  = myWidth    (arm1; arm2 overwrites edx)
 		jmp dword ptr[dwLoginDescriptorFixRetn]   // -> 0x00622907 (cmp ebx,4)
 	}
 }
