@@ -1893,8 +1893,13 @@ public class ItemInformationProvider {
             return false;
         }
 
-        String islot = getEquipmentSlot(id);
-        if (!EquipSlot.getFromTextSlot(islot).isAllowed(dst, isCash(id))) {
+        // Dragon equips share islot "Tm" with taming mounts, so EquipSlot would send all twelve to the
+        // mount slot -18; their real body parts are 1000-1003 and are keyed off the item id. Only an
+        // Evan has the four slots at all - no other client can even address them.
+        boolean allowed = ItemConstants.isDragonItem(id)
+                ? dst == ItemConstants.getDragonSlot(id) && GameConstants.isEvan(chr.getJob().getId())
+                : EquipSlot.getFromTextSlot(getEquipmentSlot(id)).isAllowed(dst, isCash(id));
+        if (!allowed) {
             equip.wear(false);
             String itemName = ItemInformationProvider.getInstance().getName(equip.getItemId());
             Server.getInstance().broadcastGMMessage(chr.getWorld(), PacketCreator.sendYellowTip("[Warning]: " + chr.getName() + " tried to equip " + itemName + " into slot " + dst + "."));

@@ -337,6 +337,33 @@ public final class ItemConstants {
         return itemType == 1902 || itemType == 1912;
     }
 
+    /**
+     * Evan's dragon equipment - 1942xxx mask, 1952xxx pendant, 1962xxx wings, 1972xxx tail. Same range
+     * {@code ItemInformationProvider.getStringData} routes to {@code Eqp/Dragon}.
+     *
+     * <p>All twelve carry {@code info/islot = "Tm"}, the taming-mount string, so {@link EquipSlot}
+     * cannot tell a dragon piece from a mount and the slot has to come off the item id - which is
+     * exactly what the client does, see {@link #getDragonSlot}.
+     */
+    public static boolean isDragonItem(int itemId) {
+        return itemId >= 1940000 && itemId < 1980000;
+    }
+
+    /**
+     * The equipped-inventory position of a dragon equip: -1000 mask, -1001 pendant, -1002 wings,
+     * -1003 tail.
+     *
+     * <p>Read out of the client, not guessed. `GetEquipPartFromItemID` switches on
+     * {@code itemId / 10000}; its 180-197 jump table (v83 {@code localhome.exe} @0x460a38, dispatched
+     * at @0x4607e3) sends 194/195/196/197 to the arms at 0x460823/31/3f/4d, which load 0x3e8/0x3e9/
+     * 0x3ea/0x3eb = 1000/1001/1002/1003. The same table gives 190 -> 18 and 191 -> 19, i.e. the mount
+     * and saddle slots {@link EquipSlot} already has, so it is the right table. Corroborated on the
+     * wire: the owner's v84 client sent slot -1000 for 1942000 Silver Mask.
+     */
+    public static short getDragonSlot(int itemId) {
+        return (short) -(1000 + (itemId / 10000 - 194));
+    }
+
     public static boolean isTownScroll(int itemId) {
         return itemId >= 2030000;
     }

@@ -333,6 +333,9 @@ public class PacketCreator {
         Map<Short, Integer> myEquip = new LinkedHashMap<>();
         Map<Short, Integer> maskedEquip = new LinkedHashMap<>();
         for (Item item : ii) {
+            if (item.getPosition() <= -1000) {
+                continue;   // dragon equips: body parts 1000-1003 do not fit the avatar's byte slots
+            }
             short pos = (byte) (item.getPosition() * -1);
             if (pos < 100 && myEquip.get(pos) == null) {
                 myEquip.put(pos, item.getItemId());
@@ -444,7 +447,10 @@ public class PacketCreator {
                 if (pos < 0) {
                     pos *= -1;
                 }
-                p.writeShort(pos > 100 ? pos - 100 : pos);
+                // 101-199 are cash equips: they ride their own list with the +100 stripped off.
+                // 1000-1003 are Evan's dragon slots and go out raw - the client's fourth equip loop
+                // tests 1000 <= pos < 1004 before it stores (v83 localhome.exe @0x4e5f37).
+                p.writeShort(pos > 100 && pos < 1000 ? pos - 100 : pos);
             } else {
                 p.writeByte(pos);
             }
@@ -539,8 +545,11 @@ public class PacketCreator {
         Collection<Item> equippedC = iv.list();
         List<Item> equipped = new ArrayList<>(equippedC.size());
         List<Item> equippedCash = new ArrayList<>(equippedC.size());
+        List<Item> equippedDragon = new ArrayList<>(4);
         for (Item item : equippedC) {
-            if (item.getPosition() <= -100) {
+            if (item.getPosition() <= -1000) {
+                equippedDragon.add(item);
+            } else if (item.getPosition() <= -100) {
                 equippedCash.add(item);
             } else {
                 equipped.add(item);
@@ -557,7 +566,11 @@ public class PacketCreator {
         for (Item item : chr.getInventory(InventoryType.EQUIP).list()) {
             addItemInfo(p, item);
         }
-        p.writeInt(0);
+        p.writeShort(0); // start of the dragon equips - the fourth and last equip list
+        for (Item item : equippedDragon) {
+            addItemInfo(p, item);
+        }
+        p.writeShort(0);
         for (Item item : chr.getInventory(InventoryType.USE).list()) {
             addItemInfo(p, item);
         }
