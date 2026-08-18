@@ -84,12 +84,6 @@ disagreeing status files were consolidated once already.
   client binary, our tree, the database, `git log` and dated sources before asking anything.
 - **Agents are Opus only** — `gp-opus-low` / `-medium` / `-high`. Never Sonnet. Pick the tier; do not
   default to high.
-- **Answer the owner very short.** Bullets, no preamble, `**tldr:**` at the end.
-  - Default is the shortest answer that is still true — a handful of bullets, not a report. The
-    owner has said plainly: *"i cant read so much."*
-  - **When he has to decide something, give the options as a short list with your pick in bold**,
-    one line of consequence each. Recommend; do not survey. He answers by naming the ones he wants.
-  - Detail is opt-in. Long-form only when he asks for it, or when a fact would change what he does
-    next — a regression that hit his characters, a decision that cannot be defaulted.
-  - Everything else lives in the ledger and `git log`, which is where he reads it in the morning.
-    Say it once, briefly, and let the row carry the rest.
+- **Answer the owner very short.** Bullets, no preamble, `**tldr:**` at the end. *"i cant read so
+  much."* Decisions go as a short list with your pick in bold. Detail only if he asks.
+- **Write short too.** Ledger cells and docs get the finding, not the transcript. One or two lines.
