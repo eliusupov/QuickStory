@@ -54,6 +54,7 @@ import net.packet.out.SendNoteSuccessPacket;
 import net.server.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import server.CashShop;
 import server.ItemInformationProvider;
 import server.Shop;
 import server.ShopFactory;
@@ -426,7 +427,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             c.sendPacket(PacketCreator.enableActions());
             remove(c, position, itemId);
         } else if (itemType == 520) {
-            player.gainMeso(ii.getMeso(itemId), true, false, true);
+            creditMoneyItem(player, itemId);
             remove(c, position, itemId);
             c.sendPacket(PacketCreator.enableActions());
         } else if (itemType == 523) {
@@ -688,6 +689,30 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             return (to == first || to == first + 1) && (from == first || from == first + 1);
         }
         return to == tier && from >= 1 && from <= tier;
+    }
+
+    /**
+     * 520xxxx is money. The three v83 items of that type carry {@code info/meso}; the two v84
+     * added - 5200009 (1,000,000) and 5200010 (10,000) - carry {@code info/maplepoint} instead.
+     * Both are read off the item, so a future sibling needs no code here.
+     *
+     * <p>Neither node present means credit nothing: {@code getMeso} returns -1 for an item with no
+     * {@code info/meso}, and the old unguarded {@code gainMeso(-1, ...)} charged the player a meso
+     * for using either coupon.
+     */
+    static void creditMoneyItem(Character player, int itemId) {
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
+
+        int maplePoints = ii.getMaplePoint(itemId);
+        if (maplePoints > 0) {
+            player.getCashShop().gainCash(CashShop.MAPLE_POINT, maplePoints);
+            return;
+        }
+
+        int meso = ii.getMeso(itemId);
+        if (meso > 0) {
+            player.gainMeso(meso, true, false, true);
+        }
     }
 
     private static void remove(Client c, short position, int itemid) {

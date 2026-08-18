@@ -408,6 +408,17 @@ public class ItemInformationProvider {
         return pEntry;
     }
 
+    /**
+     * {@code info/maplepoint} - the Maple Point value of a 520xxxx coupon. v84 added two
+     * (5200009 = 1,000,000 and 5200010 = 10,000); the three v83 items of that type carry
+     * {@code info/meso} instead and return 0 here.
+     */
+    public int getMaplePoint(int itemId) {
+        // ponytail: no cache, unlike getMeso - a coupon use is a once-in-a-while packet.
+        Data item = getItemData(itemId);
+        return item == null ? 0 : DataTool.getIntConvert("info/maplepoint", item, 0);
+    }
+
     private static double getRoundedUnitPrice(double unitPrice, int max) {
         double intPart = Math.floor(unitPrice);
         double fractPart = unitPrice - intPart;
