@@ -1,3 +1,6 @@
+> **REFUSED by the owner, 2026-08-18.** R25/R26/R27 fall outside the standing v84-parity-only scope and no
+> add-list row backs them. R29 needed no decision but is not worth a lone ticket.
+
 # 72 - four effect rows that need a decision before any code (three v83 legacy, one v84 parity)
 
 **Class:** MIXED - see the per-row table below. **R29 is v84 parity**; R25, R26, R27 are v83 legacy.

@@ -1,3 +1,6 @@
+> **REFUSED by the owner, 2026-08-18.** The whole ticket is v83-legacy debt and record-keeping with no
+> parity consequence.
+
 # 73 - v83 legacy: engineering debt and two records with no parity consequence
 
 **Class:** v83 legacy - NOT a v84 parity gap

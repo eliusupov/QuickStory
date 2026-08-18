@@ -1,3 +1,7 @@
+> **REFUSED by the owner, 2026-08-18.** 5550000/5550001 are pendant equip slot coupons, not cash-inventory expansions.
+> Supporting them needs a second pendant equip position (`EquipSlot` carries `PENDANT("Pe", -17)` only) plus a
+> per-character timed-grant schema with no precedent in the tree. Not worth it.
+
 # 64 - cash items 5550000 and 5550001 have no handler at all
 
 **Class:** v84 parity
