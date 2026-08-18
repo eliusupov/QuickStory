@@ -246,4 +246,15 @@
         </rollback>
     </changeSet>
 
+    <!--
+      Empty rollback on purpose. The credit is computed as the gap between a growth's designed SP
+      income and what the character holds, so once applied the same query yields zero for everyone -
+      it is idempotent, and there is no stored delta to subtract back out. Measured on this database:
+      1 character, 3 points. See the header of the .sql for the formula and why it cannot double-pay.
+    -->
+    <changeSet id="169" author="evan-quest-sp">
+        <sqlFile path="db/data/169-evan-scoped-quest-sp.sql"/>
+        <rollback/>
+    </changeSet>
+
 </databaseChangeLog>

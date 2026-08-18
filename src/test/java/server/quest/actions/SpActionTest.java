@@ -19,7 +19,6 @@ import java.nio.file.Path;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -109,13 +108,21 @@ class SpActionTest {
         verify(chr).gainSp(3, 2, false);
     }
 
-    /** No entry lists this job, so nothing is awarded. */
+    /**
+     * No entry lists this job, so the first entry is paid - into the book <em>its</em> scope names,
+     * 2200's book 0, not the player's current one.
+     * <p>
+     * This used to award nothing, and that was the live defect: an Evan who advanced with a growth
+     * quest still open forfeited its point for good, because the book he had just left has no other
+     * income. A reward is now attached to the growth that wrote it, not to where the player is
+     * standing. Who may complete an Evan quest at all is still {@code Check.img}'s job, and it
+     * admits only 2200-2218 on every quest that carries an {@code sp} node.
+     */
     @Test
-    void aJobOnNoListGetsNothing() throws IOException {
+    void aJobOnNoListIsPaidTheFirstEntryIntoThatEntrysBook() throws IOException {
         Character chr = playerOf(Job.MAGICIAN);
         action(TWO_BRANCHES).run(chr, null);
-        verify(chr, never()).gainSp(org.mockito.ArgumentMatchers.anyInt(),
-                org.mockito.ArgumentMatchers.anyInt(), org.mockito.ArgumentMatchers.anyBoolean());
+        verify(chr).gainSp(1, 0, false);
     }
 
     /** An award carrying no {@code job} child is unfiltered and applies to whoever completes it. */
