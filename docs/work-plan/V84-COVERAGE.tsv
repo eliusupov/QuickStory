@@ -10551,12 +10551,6 @@ Etc	Etc.wz/Commodity.img/996/Bonus	NODE_ABSENT	benign	CashShop.java:243-248 read
 Etc	Etc.wz/Commodity.img/997/Bonus	NODE_ABSENT	benign	CashShop.java:243-248 reads only SN/ItemId/Price/Period/Count/OnSale
 Etc	Etc.wz/Commodity.img/998/Bonus	NODE_ABSENT	benign	CashShop.java:243-248 reads only SN/ItemId/Price/Period/Count/OnSale
 Etc	Etc.wz/Commodity.img/999/Bonus	NODE_ABSENT	benign	CashShop.java:243-248 reads only SN/ItemId/Price/Period/Count/OnSale
-Etc	Etc.wz/ItemMake.img/0/01142156	NODE_ABSENT	GAP	
-Etc	Etc.wz/ItemMake.img/0/01142157	NODE_ABSENT	GAP	
-Etc	Etc.wz/ItemMake.img/2/01942002	NODE_ABSENT	GAP	
-Etc	Etc.wz/ItemMake.img/2/01952002	NODE_ABSENT	GAP	
-Etc	Etc.wz/ItemMake.img/2/01962002	NODE_ABSENT	GAP	
-Etc	Etc.wz/ItemMake.img/2/01972002	NODE_ABSENT	GAP	
 Etc	Etc.wz/NpcLocation.img/1012118/1	NODE_ABSENT	client	
 Etc	Etc.wz/NpcLocation.img/1102003/1	NODE_ABSENT	client	
 Etc	Etc.wz/NpcLocation.img/1202010/1	NODE_ABSENT	client	
@@ -10668,7 +10662,6 @@ Map	Map.wz/Map/Map1/106010101.img/5/tile/86	NODE_ABSENT	client
 Map	Map.wz/Map/Map1/106010101.img/5/tile/87	NODE_ABSENT	client	
 Map	Map.wz/Map/Map1/106010101.img/5/tile/88	NODE_ABSENT	client	
 Map	Map.wz/Map/Map1/106010101.img/5/tile/89	NODE_ABSENT	client	
-Map	Map.wz/Map/Map1/106010101.img/portal/5/script	NODE_ABSENT	GAP	
 Map	Map.wz/Map/Map1/106010102.img/3/obj/10	NODE_ABSENT	client	
 Map	Map.wz/Map/Map1/106010102.img/3/obj/11	NODE_ABSENT	client	
 Map	Map.wz/Map/Map1/106010102.img/3/obj/12	NODE_ABSENT	client	
@@ -10729,32 +10722,12 @@ Map	Map.wz/Map/Map1/109090000.img/1/tile/138	NODE_ABSENT	client
 Map	Map.wz/Map/Map1/109090000.img/1/tile/139	NODE_ABSENT	client	
 Map	Map.wz/Map/Map1/109090000.img/1/tile/140	NODE_ABSENT	client	
 Map	Map.wz/Map/Map1/109090000.img/1/tile/141	NODE_ABSENT	client	
-Map	Map.wz/Map/Map1/109090300.img/reactor/14	NODE_ABSENT	GAP	
-Map	Map.wz/Map/Map1/109090300.img/reactor/15	NODE_ABSENT	GAP	
-Map	Map.wz/Map/Map1/109090300.img/reactor/16	NODE_ABSENT	GAP	
-Map	Map.wz/Map/Map1/109090300.img/reactor/17	NODE_ABSENT	GAP	
-Map	Map.wz/Map/Map1/109090300.img/reactor/18	NODE_ABSENT	GAP	
-Map	Map.wz/Map/Map1/109090300.img/reactor/19	NODE_ABSENT	GAP	
-Map	Map.wz/Map/Map1/109090300.img/reactor/20	NODE_ABSENT	GAP	
-Map	Map.wz/Map/Map1/109090300.img/reactor/21	NODE_ABSENT	GAP	
-Map	Map.wz/Map/Map1/109090300.img/reactor/22	NODE_ABSENT	GAP	
-Map	Map.wz/Map/Map1/109090300.img/reactor/23	NODE_ABSENT	GAP	
-Map	Map.wz/Map/Map1/109090300.img/reactor/24	NODE_ABSENT	GAP	
-Map	Map.wz/Map/Map1/109090300.img/reactor/25	NODE_ABSENT	GAP	
-Map	Map.wz/Map/Map1/109090300.img/reactor/26	NODE_ABSENT	GAP	
-Map	Map.wz/Map/Map1/109090300.img/reactor/27	NODE_ABSENT	GAP	
-Map	Map.wz/Map/Map1/109090300.img/reactor/28	NODE_ABSENT	GAP	
-Map	Map.wz/Map/Map1/109090300.img/reactor/29	NODE_ABSENT	GAP	
-Map	Map.wz/Map/Map1/109090300.img/reactor/30	NODE_ABSENT	GAP	
-Map	Map.wz/Map/Map1/109090300.img/reactor/31	NODE_ABSENT	GAP	
 Map	Map.wz/Map/Map1/120000105.img/1/obj/2	NODE_ABSENT	client	
 Map	Map.wz/Map/Map1/120000105.img/1/obj/3	NODE_ABSENT	client	
 Map	Map.wz/Map/Map1/120000105.img/ladderRope/1	NODE_ABSENT	GAP	
 Map	Map.wz/Map/Map1/130000000.img/1/obj/0	NODE_ABSENT	client	
 Map	Map.wz/Map/Map1/130000101.img/4/obj/52	NODE_ABSENT	client	
 Map	Map.wz/Map/Map1/130000101.img/4/obj/53	NODE_ABSENT	client	
-Map	Map.wz/Map/Map2/220011000.img/portal/4/horizontalImpact	NODE_ABSENT	GAP	
-Map	Map.wz/Map/Map2/220011000.img/portal/4/script	NODE_ABSENT	GAP	
 Map	Map.wz/Map/Map2/220011001.img/2/info/tS	NODE_ABSENT	client	
 Map	Map.wz/Map/Map2/220011001.img/2/info/tSMag	NODE_ABSENT	client	
 Map	Map.wz/Map/Map2/220011001.img/2/tile/0	NODE_ABSENT	client	
@@ -10781,18 +10754,6 @@ Map	Map.wz/Map/Map2/220011001.img/info/onFirstUserEnter	NODE_ABSENT	GAP
 Map	Map.wz/Map/Map2/220011001.img/info/onUserEnter	NODE_ABSENT	GAP	
 Map	Map.wz/Map/Map2/220011001.img/info/swim	NODE_ABSENT	GAP	
 Map	Map.wz/Map/Map2/220011001.img/miniMap	NODE_ABSENT	client	
-Map	Map.wz/Map/Map2/230010400.img/reactor/1	NODE_ABSENT	GAP	
-Map	Map.wz/Map/Map2/230020000.img/reactor/1	NODE_ABSENT	GAP	
-Map	Map.wz/Map/Map2/230020000.img/reactor/2	NODE_ABSENT	GAP	
-Map	Map.wz/Map/Map2/230040000.img/reactor/5	NODE_ABSENT	GAP	
-Map	Map.wz/Map/Map2/230040000.img/reactor/6	NODE_ABSENT	GAP	
-Map	Map.wz/Map/Map2/230040100.img/reactor/5	NODE_ABSENT	GAP	
-Map	Map.wz/Map/Map2/230040100.img/reactor/6	NODE_ABSENT	GAP	
-Map	Map.wz/Map/Map2/230040200.img/reactor/5	NODE_ABSENT	GAP	
-Map	Map.wz/Map/Map2/230040200.img/reactor/6	NODE_ABSENT	GAP	
-Map	Map.wz/Map/Map2/230040200.img/reactor/7	NODE_ABSENT	GAP	
-Map	Map.wz/Map/Map2/230040400.img/reactor/7	NODE_ABSENT	GAP	
-Map	Map.wz/Map/Map2/230040400.img/reactor/8	NODE_ABSENT	GAP	
 Map	Map.wz/MapHelper.img/mark/Balog	NODE_ABSENT	client	
 Map	Map.wz/MapHelper.img/mark/DragonDream	NODE_ABSENT	client	
 Map	Map.wz/MapHelper.img/mark/Dragonrider	NODE_ABSENT	client	
@@ -12054,7 +12015,6 @@ Npc	Npc.wz/9901000.img/say/0/delay	NODE_ABSENT	client
 Npc	Npc.wz/9901000.img/say/0/z	NODE_ABSENT	client	
 Npc	Npc.wz/9901000.img/stand/0/delay	NODE_ABSENT	client	
 Npc	Npc.wz/9901000.img/stand/0/z	NODE_ABSENT	client	
-Quest	Quest.wz/Check.img/10109/0/interval	NODE_ABSENT	GAP	
 Quest	Quest.wz/Check.img/2208/0/end	NODE_ABSENT	GAP	
 Quest	Quest.wz/Check.img/2208/0/interval	NODE_ABSENT	GAP	
 Quest	Quest.wz/Check.img/2208/0/start	NODE_ABSENT	GAP	
@@ -12176,7 +12136,6 @@ Quest	Quest.wz/Check.img/28282/0/lvmax	NODE_ABSENT	GAP
 Quest	Quest.wz/Check.img/28283/0/lvmax	NODE_ABSENT	GAP	
 Quest	Quest.wz/Check.img/28325/0/lvmax	NODE_ABSENT	GAP	
 Quest	Quest.wz/Check.img/3845/0/end	NODE_ABSENT	GAP	
-Quest	Quest.wz/Check.img/9260/0/dayByDay	NODE_ABSENT	GAP	
 Quest	Quest.wz/Exclusive.img/0	NODE_ABSENT	client	
 Quest	Quest.wz/Exclusive.img/1	NODE_ABSENT	client	
 Quest	Quest.wz/Exclusive.img/2	NODE_ABSENT	client	
@@ -12320,21 +12279,7 @@ Quest	Quest.wz/Say.img/22595	NODE_ABSENT	client
 Quest	Quest.wz/Say.img/22596	NODE_ABSENT	client	
 Quest	Quest.wz/Say.img/22602	NODE_ABSENT	client	
 Quest	Quest.wz/Say.img/22603	NODE_ABSENT	client	
-Skill	Skill.wz/MobSkill.img/110/level/10	NODE_ABSENT	GAP	
-Skill	Skill.wz/MobSkill.img/114/level/35	NODE_ABSENT	GAP	
-Skill	Skill.wz/MobSkill.img/114/level/36	NODE_ABSENT	GAP	
-Skill	Skill.wz/MobSkill.img/115/level/2	NODE_ABSENT	GAP	
-Skill	Skill.wz/MobSkill.img/123/level/24	NODE_ABSENT	GAP	
-Skill	Skill.wz/MobSkill.img/123/level/25	NODE_ABSENT	GAP	
-Skill	Skill.wz/MobSkill.img/123/level/26	NODE_ABSENT	GAP	
-Skill	Skill.wz/MobSkill.img/125/level/11	NODE_ABSENT	GAP	
-Skill	Skill.wz/MobSkill.img/127/level/15	NODE_ABSENT	GAP	
-Skill	Skill.wz/MobSkill.img/128/level/15	NODE_ABSENT	GAP	
-Skill	Skill.wz/MobSkill.img/133/level/6	NODE_ABSENT	GAP	
 Skill	Skill.wz/MobSkill.img/137	NODE_ABSENT	GAP	
-Skill	Skill.wz/MobSkill.img/145/level/6	NODE_ABSENT	GAP	
-Skill	Skill.wz/MobSkill.img/200/level/177	NODE_ABSENT	GAP	
-Skill	Skill.wz/MobSkill.img/200/level/178	NODE_ABSENT	GAP	
 Skill	Skill.wz/Dragon	UNRESOLVED_PATH	GAP	
 Sound	Sound.wz/Bgm00.img/DragonDream	NODE_ABSENT	client	
 Sound	Sound.wz/Item.img/02022621	NODE_ABSENT	client	
@@ -12452,91 +12397,51 @@ String	String.wz/Npc.img/1012106/quest	NODE_ABSENT	benign	the server reads name 
 String	String.wz/Npc.img/1012107/quest	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
 String	String.wz/Npc.img/1012108/quest	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
 String	String.wz/Npc.img/1012109/quest	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/1012119/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/1012119/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/1013000/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/1013000/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
 String	String.wz/Npc.img/1013000/quest	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
 String	String.wz/Npc.img/1013201/n0	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
 String	String.wz/Npc.img/1013201/n1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/1022008/d0	NODE_ABSENT	GAP	
-String	String.wz/Npc.img/1032002/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/1032002/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/1032102/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/1032102/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/1052002/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/1052002/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/1052006/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/1052006/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/1061000/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/1061000/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/1061006/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/1061006/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
 String	String.wz/Npc.img/1061016/오늘도 날씨가 참 좋구만~	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/1063003/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/1063003/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/1063004/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/1063004/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/1063005/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/1063005/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/1063006/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/1063006/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/1063007/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/1063007/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/1063008/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/1063008/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/1063009/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/1063009/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/1063010/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/1063010/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/2001000/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/2001000/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/2001001/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/2001001/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/2002/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/2002/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/2003/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/2003/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/2020002/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/2020002/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/2030015/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/2030015/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/2032004/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/2032004/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/2050009/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/2050009/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/2060005/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/2060005/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/2112003/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/2112003/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/2112004/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/2112004/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/22000/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/22000/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/9000007/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/9000007/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/9000008/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/9000008/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/9000009/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/9000009/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/9001001/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/9001001/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/9001002/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/9001002/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
 String	String.wz/Npc.img/9001003/func	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
 String	String.wz/Npc.img/9001004/func	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/9001005/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/9001005/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/9001006/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/9001006/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/9020000/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/9020000/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
 String	String.wz/Npc.img/9201035/func	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
 String	String.wz/Npc.img/9201036/func	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/9250005/d0	NODE_ABSENT	GAP	
-String	String.wz/Npc.img/9250010/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/9250010/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
-String	String.wz/Npc.img/9250022/d0	NODE_ABSENT	GAP	
 String	String.wz/Npc.img/9250022/d1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
 String	String.wz/Npc.img/9300000/n0	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive
 String	String.wz/Npc.img/9300000/n1	NODE_ABSENT	benign	the server reads name (LifeFactory.java:295) and d0 (:299) only; func/d1/n0/n1 are drawn by the client from its own archive

@@ -23,23 +23,26 @@ three times. `add-list/` was always the answer.
 | Base | 0 | 0 | 0 | 0 | 0 |
 | Character | 438 | 251 | **0** | 0 | 187 |
 | Effect | 23 | 1 | **0** | 0 | 22 |
-| Etc | 10634 | 216 | **168** | 10181 | 69 |
+| Etc | 10634 | 222 | **162** | 10181 | 69 |
 | Item | 391 | 389 | **2** | 0 | 0 |
-| Map | 601 | 410 | **40** | 0 | 151 |
+| Map | 601 | 443 | **7** | 0 | 151 |
 | Mob | 1216 | 37 | **0** | 1170 | 9 |
 | Morph | 25 | 25 | 0 | 0 | 0 |
 | Npc | 98 | 42 | **0** | 9 | 47 |
-| Quest | 924 | 658 | **128** | 0 | 138 |
+| Quest | 924 | 660 | **126** | 0 | 138 |
 | Reactor | 6 | 6 | 0 | 0 | 0 |
-| Skill | 55 | 39 | **16** | 0 | 0 |
+| Skill | 55 | 53 | **2** | 0 | 0 |
 | Sound | 62 | 24 | **0** | 0 | 38 |
-| String | 1579 | 1385 | **41** | 115 | 38 |
+| String | 1579 | 1425 | **1** | 115 | 38 |
 | TamingMob | 0 | 0 | 0 | 0 | 0 |
 | UI | 61 | 2 | **0** | 0 | 59 |
-| **TOTAL** | **16113** | **3485** | **395** | **11475** | **758** |
+| **TOTAL** | **16113** | **3580** | **300** | **11475** | **758** |
 
-**The headline: of 16,113 nodes v84 added, 395 are genuine server-side gaps.** Everything else is
+**The headline: of 16,113 nodes v84 added, 300 are genuine server-side gaps.** Everything else is
 either already in our tree, or is a node the server never opens.
+
+**Regenerated 2026-08-18**, after the day's merges landed (tickets 55, 57, 59, 61) and after ticket
+58's merge was reverted. The previous figure was 395.
 
 ### Two results worth stating on their own
 
@@ -55,31 +58,39 @@ re-filed.** They are carved out in the tool with their reasons attached, so they
   Priority,Limit,PbPoint,PbGift,PbCash}`.** `category` is the `mobType` rename — a dead field before
   and after, already swept. The Commodity leaves are ones `CashShop.java:243-248` never reads; it
   reads `SN`, `ItemId`, `Price`, `Period`, `Count` and `OnSale` and nothing else.
-- **115 are `String.wz/Npc.img/<id>/{d1,n0,n1,func}`** — NPC idle chatter and role labels, drawn by
-  the client from its own archive. `LifeFactory.java:295` reads `name` and `:299` reads `d0`; those
-  two are counted as gaps, everything else in that image is not.
+- **115 benign String misses, of which 73 are `String.wz/Npc.img/<id>/{d1,n0,n1,func}`** — NPC idle
+  chatter and role labels, drawn by the client from its own archive (38 `d1`, 13 `func`, 11 `n0`,
+  11 `n1`). `LifeFactory.java:295` reads `name` and `:299` reads `d0`; those two are counted as gaps,
+  everything else in that image is not. The other 42 are 32 `String.wz/Map.img/*/{help0,help1,help2,
+  mapDesc}` map blurbs (the server reads `mapName`/`streetName` only) plus 10 more `Npc.img` leaves
+  in the same non-read class. **73 and 115 are different numbers about different sets; do not quote
+  either as the other.**
 
 ---
 
-## The 395, decomposed
+## The 300, decomposed
 
 Every gap below is a leaf the server demonstrably reads. Each is one work row.
 
 | # | gap | count | server reader | note |
 |---|---|---:|---|---|
-| 1 | `Quest.wz/Check.img/<id>/0/lvmax` | 108 | `QuestRequirementType.java:74` | quests 28162-28266, 28282, 28283, 28325 — the job-instructor training line. v84 added a level cap; we have none, so they stay startable past it. |
-| 2 | `Etc.wz/Commodity.img/<i>/Price` | 82 | `CashShop.java:245` | see the caveat below |
-| 3 | `Etc.wz/Commodity.img/<i>/Period` | 78 | `CashShop.java:246` | every affected row is `OnSale=0`, so this is latent, not live |
-| 4 | `Map.wz/.../{reactor,life,portal,info}` | 40 | `MapFactory` | enumerated below |
-| 5 | `String.wz/Npc.img/<id>/d0` | 40 | `LifeFactory.java:299` | the default line a scripted NPC falls back to (`NPCConversationManager.java:95`); missing means `(...)` |
-| 6 | `Skill.wz/MobSkill.img/<id>/level/<n>` | 15 | `MobSkillFactory` | v84 added higher levels to 9 existing mob skills |
-| 7 | `Etc.wz/ItemMake.img/{0,2}/<id>` | 6 | `ItemInformationProvider.java:2258` | the six v84 Maker recipes — see below, fully settled |
-| 8 | `Quest.wz/Check.img/<id>/0/{start,end,interval}` | 14 | `QuestRequirementType.java:84`, `EndDateRequirement` | quests 2208-2211 (Bartol), 3845, 10109, 9260 |
-| 9 | `Skill.wz/MobSkill.img/137` | 1 | `MobSkillFactory` | already recorded: no mob references skill 137 |
-| 10 | `Skill.wz/Dragon` (whole directory) | 1 | none | Mir's animation set — client art, the client has its own copy |
-| 11 | `Quest.wz/QuestInfo.img/<id>/{type,demandSummary,rewardSummary}` | 5 | quest window text | cosmetic |
-| 12 | `String.wz/Npc.img/<id>/name` | 1 | `LifeFactory.java:295` | one NPC; a missing name renders `MISSINGNO` |
-| 13 | `Item.wz/Consume/0202.img/{02022503,02022514}/reward/43` | 2 | `ItemRewardHandler.java:66` | v84 added a 44th entry to two reward boxes; ours stop at 43 |
+| 1 | `Quest.wz/Check.img/<id>/0/lvmax` | 108 | `QuestRequirementType.java:74` | quests 28162-28266, 28282, 28283, 28325. **PERMANENTLY REFUSED, twice.** Ticket 09 (`8e740646b`, `merge-lists/09/DEEP-ROWS.md`) refused it on evidence; ticket 58 merged it anyway (`dcba0f8e0`) and it was reverted (`9890254b3`) - `lvmax=40` caps 108 live quests, 102 of which carry no `lvmin`, for the 21 characters above Lv.40. Counted here because the node is absent; it is not open work. |
+| 2 | `Etc.wz/Commodity.img/<i>/Price` | 82 | `CashShop.java:245` | see the caveat below - non-defect, R10 closed |
+| 3 | `Etc.wz/Commodity.img/<i>/Period` | 78 | `CashShop.java:246` | same caveat; every affected row is `OnSale=0` |
+| 4 | `Quest.wz/Check.img/<id>/0/{start,end,interval}` | 13 | `QuestRequirementType.java:84`, `EndDateRequirement` | quests 2208-2211 (Bartol) and 3845. Same ticket-58 revert as row 1: merging `end` retires live quests permanently. The two that DID land are `10109/0/interval` and `9260/0/dayByDay`, both provably inert. |
+| 5 | `Map.wz/.../{info,life,ladderRope}` | 7 | `MapFactory` | enumerated below - 1 permanently refused, 6 audited out |
+| 6 | `Quest.wz/QuestInfo.img/<id>/{type,demandSummary,rewardSummary}` | 5 | quest window text | cosmetic |
+| 7 | `Etc.wz/Commodity.img/<i>/OnSale` | 2 | `CashShop.java:247` | same `SN`-keying caveat as rows 2 and 3 |
+| 8 | `Item.wz/Consume/0202.img/{02022503,02022514}/reward/43` | 2 | `ItemRewardHandler.java:66` | v84 added a 44th entry to two reward boxes; ours stop at 43 |
+| 9 | `String.wz/Npc.img/9901000/name` | 1 | `LifeFactory.java:295` | one NPC; a missing name renders `MISSINGNO` |
+| 10 | `Skill.wz/MobSkill.img/137` | 1 | `MobSkillFactory` | **scoped out permanently.** `MobSkillType` jumps FEAR(136) -> PHYSICAL_IMMUNE(140), so the server cannot construct it. Its real referrer is mob 8300003 via `attack<N>/info/disease` - the old "referenced by no mob" note was wrong. |
+| 11 | `Skill.wz/Dragon` (whole directory) | 1 | none | Mir's animation set - client art, the client has its own copy |
+
+**Closed since the last regeneration**, and no longer in the table: the 40 `String.wz/Npc.img/<id>/d0`
+default lines (ticket 57, `dc45b1819`), the 6 `Etc.wz/ItemMake.img/{0,2}/<id>` Maker recipes and 14
+`Skill.wz/MobSkill.img/<id>/level/<n>` mob-skill levels (ticket 59, `c5a800f0b`), the 30 `Map.wz`
+reactor entries (ticket 61, `35aa6a7ae`), and the 3 `Map.wz` portal leaves on 106010101 / 220011000
+(tickets 54 and 55, `38a6dcd7c` / `70fe8d0e3`).
 
 Two classes that *look* like gaps and are not, carved out in the tool with their reasons: all nine
 `Npc.wz/<id>/info/{reg/*,script,default}` misses (the server reads `info/trunkPut` and
@@ -111,17 +122,19 @@ must be keyed on `SN`, never on the array index** - not "if this row is ever wor
 future comparison of this archive, because index-keyed comparison of `Commodity.img` produces
 fabricated gaps by construction.
 
-### Row 4, enumerated
+### Row 5, enumerated
 
-| map | missing |
-|---|---|
-| `109090300` | `reactor/14` … `reactor/31` (18) |
-| `230040000`, `230040100`, `230040200`, `230040400`, `230020000`, `230010400` | 12 reactors across the Aquarium maps |
-| `220011001` | its whole `info` block: `fly`, `swim`, `noMapCmd`, `onUserEnter`, `onFirstUserEnter`, plus `2/info/tS` and `tSMag` |
-| `220011000` | `portal/4/script`, `portal/4/horizontalImpact` |
-| `102000003` | `life/1` |
-| `106010101` | `portal/5/script` — this is the known `evanGolemDoor` refusal, deliberate |
-| `120000105` | `ladderRope/1` |
+| map | missing | status |
+|---|---|---|
+| `220011001` | `fly`, `swim`, `noMapCmd`, `onUserEnter`, `onFirstUserEnter` on its `info` block (5) | audited out - ticket 61 |
+| `120000105` | `ladderRope/1` | audited out - ticket 61 |
+| `102000003` | `life/1` | **permanently refused** - npc 9901000, ticket 53, changeSet 163 |
+
+The reactor arrays that used to fill this table are gone: ticket 61 (`35aa6a7ae`) merged 30 entries
+across `109090300` and the six Aquarium maps, and the 31st row in the old table was this same refused
+`102000003/life/1`. **Ticket 61's acceptance criterion of "9 remaining" is wrong** - it double-counted
+the three portal leaves on `106010101`/`220011000` that tickets 54 and 55 had already landed. The
+measured figure is **7**.
 
 `life`, `portal` and `reactor` are arrays. A missing index N means **our array is shorter than
 v84's**, which is a real difference. It does **not** follow that a present index N holds the same
@@ -140,9 +153,11 @@ Etc.wz/ItemMake.img/0/01142157      Etc.wz/ItemMake.img/2/01952002
                                     Etc.wz/ItemMake.img/2/01972002
 ```
 
-The server reads only `catalyst` from this image (`ItemInformationProvider.java:2258`, `:2262`), so
-merging them changes no behaviour today. It matters because a future `SkillMakerFetcher` run would
-otherwise silently drop all six.
+The server reads only `catalyst` from this image (`ItemInformationProvider.getMakerStimulant` at
+`ItemInformationProvider.java:2269`, the `ItemMake.img` loop at `:2276`, the `catalyst` read at
+`:2280`), so merging them changed no behaviour today. **Landed** in ticket 59 / R09, commit
+`c5a800f0b`; it mattered because a future `SkillMakerFetcher` run would otherwise have silently
+dropped all six.
 
 ---
 
@@ -152,7 +167,7 @@ Stated rather than hidden, in the house style:
 
 - **Presence is not correctness.** A node can exist in our tree carrying a v83 value. This tool
   answers "is it there", never "is it right".
-- **Arrays are index-keyed**, so array divergence is undercounted — see row 4.
+- **Arrays are index-keyed**, so array divergence is undercounted — see row 5.
 - **`add-list` is v84-minus-v83-stock.** It says nothing about content this project added itself;
   `docs/wz-baseline/protect-list/` is that side of the ledger.
 - **A merged node the server never reads is still not support.** This matrix is the *data* half of

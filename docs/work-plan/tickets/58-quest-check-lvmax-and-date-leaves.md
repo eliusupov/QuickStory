@@ -4,6 +4,11 @@
 **Work rows:** R07, R08 - `docs/work-plan/V84-WORK-ROWS.tsv`
 **Blocked by:** None - can start immediately
 
+> **REVERTED - read the Delivered section before touching a single leaf.** 121 of these 123
+> leaves were merged (`dcba0f8e0`) and removed again (`9890254b3`) because ticket 09 had already
+> refused them on evidence in `docs/wz-baseline/merge-lists/09/DEEP-ROWS.md`. The premise below -
+> that the absence of v84’s caps is a gap - is the thing that was wrong. Do not merge them again.
+
 **123 leaves** under `Quest.wz/Check.img` are missing: **108** `lvmax` level caps (R07) and **15**
 date and repeat fields (R08). The earlier headline of 122 = 108 + 14 was an arithmetic error - the
 R08 table below has always listed 15 paths, and `docs/wz-baseline/add-list/Quest.txt` carries exactly
@@ -158,48 +163,59 @@ does not own.
   leaves must still be matched by name.
 - Do not drop an empty-valued leaf while copying. Empty is not absent.
 
-## Delivered
+## Delivered - MERGED, THEN REVERTED. 2 leaves of 123 stand.
 
-All **123** leaves merged into `wz/Quest.wz/Check.img.xml`, additive: **123 insertions, 0 deletions**,
-every value read out of the pristine carve with `WzPeek dump Check.img 3` and compared per path, not
-in aggregate. **R07: 108** `lvmax` (28162..28266 plus 28282, 28283, 28325 - all 108 are `40` in the
-carve, no exceptions). **R08: 15** (`2208`-`2211` x `start`/`end`/`interval`, `10109/0/interval`,
-`3845/0/end`, `9260/0/dayByDay`). Our `lvmax` count went 327 -> 435. `28002/0/lvmax` and
-`28004/0/lvmax` (both `51`, v83-only) are untouched and still present.
+**Do not merge these leaves a third time.** `dcba0f8e0` merged all 123. `9890254b3` removed 121 of
+them the same day as a regression, and `c3dee9123` recorded the reversal in the ledger. Only
+`10109/0/interval` and `9260/0/dayByDay` remain in `wz/Quest.wz/Check.img.xml`; our `lvmax` count is
+back to **327**, the pre-58 figure.
 
-Test: `src/test/java/server/quest/QuestCheckDateAndLevelCapRealLoad.java`, run as
-`mvnw.cmd -o test -Dtest=QuestCheckDateAndLevelCapRealLoad`. It lives in package `server.quest` so it
-can read `Quest.startReqs` (protected) and assert on the requirement objects the loader actually
-built - `Quest.canStart` is not a usable seam for these ids because it also loops over their `npc`,
-`job` and `quest` requirements, which no mock satisfies; but it refuses on the *first* unmet
-requirement, so a requirement that refuses in the test refuses there.
+### Why the revert - ticket 09 had already refused this, on evidence
 
-**Reader claims that failed verification.** The corrected header is right; two of the three readers
-do not do what the original prose claimed:
+Commit `8e740646b` (ticket 09) measured all 132 `add-list` rows that write INTO quests the live
+client already ships, refused every one, and wrote the reasoning up in
+**`docs/wz-baseline/merge-lists/09/DEEP-ROWS.md`**, leaving three tests standing to pin the refusal.
+This ticket merged 123 of those rows without ever citing that file, framing the absence of v84's caps
+as a parity gap. The three tests fired exactly as designed.
 
-* `dayByDay` - **confirmed inert.** `QuestRequirementType.java:108` is `case "daybyday":` and Java's
-  string switch is case-sensitive, so the WZ name `dayByDay` falls to `default:` -> `UNDEFINED`
-  (`:116-117`). `Quest.getRequirement` has no `DAY_BY_DAY` case, there is no
-  `DayByDayRequirement.java`, and `Quest.java:166-168` `continue`s on the null. Not fixed here, on
-  purpose - it is its own behaviour change.
-* `start` - **confirmed inert.** Maps to `START` (`QuestRequirementType.java:104`), and
-  `Quest.java:600-602` is `case NORMAL_AUTO_START: case START: case END: break;` - no requirement
-  built. `EndDateRequirement.java:53-58` reads one `timeStr` and returns `cal >= now`; the end only.
-* `lvmax` -> `MAX_LEVEL` -> `MaxLevelRequirement`, and `interval` -> `INTERVAL` ->
-  `IntervalRequirement`, both **hold as claimed**.
+The refusal stands, and the mechanism is the reason:
 
-**Effect on a character mid-quest in 2208-2211.** None on their existing row.
-`start`/`end`/`interval` land under `Check.img/<id>/0`, the **start** requirement block;
-`Quest.canComplete` reads `completeReqs` and never consults `startReqs`. A `queststatus` row in
-state 1 can still be handed in. What changes is that nobody can start 2208-2211 again, ever:
-`EndDateRequirement` refuses `200801020000` and `canStart` returns on the first refusal. 3845 is
-retired the same way by `end = 2010010100`. Same shape as ticket 44's 1048-1054. No `queststatus`
-row was touched.
+* `MaxLevelRequirement.check` is `maxLevel >= chr.getLevel()`, and `Quest.canStart` returns on the
+  first unmet start requirement. `lvmax = 40` on `Check.img/<id>/0` therefore makes the quest
+  **unstartable above Lv.40**.
+* **102 of the 108 ids carry no `lvmin` at all** - they were open to every level before the merge.
+* The database holds **21 characters above Lv.40**, and 15 `queststatus` rows on 3845 alone (13 in
+  state 1). The merge capped **108 live quests** for those characters.
 
-Two side effects worth recording: `interval` sets `repeatable = true` (`Quest.java:155-157`), which
-loosens `canStartQuestByStatus` - moot for 2208-2211, since `end` refuses first. And 10109 already
-carried `start`/`end` before this merge, so its `END_DATE` (`2008121900`) already refused; only its
-`interval` was missing.
+*"Is it in the v84 data"* does not reach content the owner can play today. That is the boundary this
+ticket crossed.
 
-Not run: maven, and `tools/playthrough/v84coverage.py`. The test was compile-checked with `javac`
-against `target/classes` only.
+### What still stands
+
+* `10109/0/interval` - the quest is already dead on its own `end` date of `2008121900`, so the
+  interval can never be reached through `canStart`. Provably inert.
+* `9260/0/dayByDay` - no reader at all. `QuestRequirementType.java:108` is `case "daybyday":` and
+  Java's string switch is case-sensitive, so the WZ name `dayByDay` falls to `default:` ->
+  `UNDEFINED`; `Quest.getRequirement` has no `DAY_BY_DAY` case and there is no
+  `DayByDayRequirement.java`. Provably inert.
+* `28002/0/lvmax` and `28004/0/lvmax` (both `51`, v83-only) were never touched.
+* No `queststatus` row was ever modified.
+
+The reader findings from the merge attempt survive the revert and are worth keeping: `start` maps to
+`START` and `Quest.java:600-602` (`case NORMAL_AUTO_START: case START: case END: break;`) builds no
+requirement from it; `EndDateRequirement.java:53-58` reads one `timeStr` and enforces the end bound
+only; `lvmax -> MAX_LEVEL -> MaxLevelRequirement` and `interval -> INTERVAL -> IntervalRequirement`
+hold as claimed. The `lvmax` reader working correctly is precisely what made the merge harmful.
+
+Test: `src/test/java/server/quest/QuestCheckDateAndLevelCapRealLoad.java` is kept and **inverted** -
+it now pins the refusal at the loader rather than asserting the XML, and every absent-requirement
+assertion carries a live control on the same type (28002's v83-only `lvmax` 51, 10109's 2008 end
+date) so it cannot pass on a loader that stopped reading these leaves. V84QuestNodeTest 20,
+V84RegressionTest 3, QuestCheckDateAndLevelCapRealLoad 5 - 28 run, 0 failures.
+
+The acceptance criteria above are **superseded**: criteria 1-3 and 6 describe the merge that was
+reverted, and the test criteria are satisfied by the inverted test. `V84-COVERAGE.tsv` now shows
+Quest GAP **126** - 128 minus the two inert leaves that stand.
+
+Not run: maven, and `tools/playthrough/v84coverage.py` (regenerated later by the reconciliation pass,
+not by this ticket).

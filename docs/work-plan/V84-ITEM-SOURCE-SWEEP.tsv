@@ -48,29 +48,29 @@ item_id	item_name	category	add_list_path	sources_found	bucket	verdict	note
 34066	Purple Bow Hair	Hair	Character.wz/Hair/00034066.img		cosmetic_hair_face	COSMETIC_NOT_APPLICABLE	beauty-shop content: applied by an NPC from Character.wz, never an item
 34067	Brown Bow Hair	Hair	Character.wz/Hair/00034067.img		cosmetic_hair_face	COSMETIC_NOT_APPLICABLE	beauty-shop content: applied by an NPC from Character.wz, never an item
 1003010	Dancing Blue Butterfly	Cap	Character.wz/Cap/01003010.img		equip_armor	NO_SOURCE_IN_V84	info/cash=1 but NO row in Etc.wz/Commodity.img - v84 ships the art and lists no way to buy it
-1003029		Cap	Character.wz/Cap/01003029.img		equip_armor	NO_SOURCE_IN_V84	info/cash=1 but NO row in Etc.wz/Commodity.img - v84 ships the art and lists no way to buy it
-1003030		Cap	Character.wz/Cap/01003030.img		equip_armor	NO_SOURCE_IN_V84	info/cash=1 but NO row in Etc.wz/Commodity.img - v84 ships the art and lists no way to buy it
-1003043		Cap	Character.wz/Cap/01003043.img		equip_armor	NO_SOURCE_IN_V84	info/cash=1 but NO row in Etc.wz/Commodity.img - v84 ships the art and lists no way to buy it
+1003029	Former Hero Female Face	Cap	Character.wz/Cap/01003029.img		equip_armor	NO_SOURCE_IN_V84	info/cash=1 but NO row in Etc.wz/Commodity.img - v84 ships the art and lists no way to buy it
+1003030	Former Hero Male Face	Cap	Character.wz/Cap/01003030.img		equip_armor	NO_SOURCE_IN_V84	info/cash=1 but NO row in Etc.wz/Commodity.img - v84 ships the art and lists no way to buy it
+1003043	순록의 뿔	Cap	Character.wz/Cap/01003043.img		equip_armor	NO_SOURCE_IN_V84	info/cash=1 but NO row in Etc.wz/Commodity.img - v84 ships the art and lists no way to buy it
 1003058	Christmas Hairpin	Cap	Character.wz/Cap/01003058.img		equip_armor	NO_SOURCE_IN_V84	info/cash=1 but NO row in Etc.wz/Commodity.img - v84 ships the art and lists no way to buy it
 1003074	Strawberry Hat	Cap	Character.wz/Cap/01003074.img	cashshop(SN 20000656 OnSale=0)	equip_armor	CASH_ONLY	Commodity.img row exists with OnSale=0 - v84 shipped it switched off but its SN 20000656 is inside a CashPackage.img package
 1003079	Green Leaf Hat	Cap	Character.wz/Cap/01003079.img	cashshop(SN 20000657 OnSale=0)	equip_armor	CASH_ONLY	Commodity.img row exists with OnSale=0 - v84 shipped it switched off but its SN 20000657 is inside a CashPackage.img package
 1003090	Pink Bean Hairband	Cap	Character.wz/Cap/01003090.img		equip_armor	PARITY_GAP	
 1012161	루돌프의 빛나는 코	Accessory	Character.wz/Accessory/01012161.img		equip_accessory	PARITY_GAP	
 1022097	Dragon Glasses	Accessory	Character.wz/Accessory/01022097.img	questreward(10482 end 200906010000,28346 end 201005050000 - all expired)	equip_accessory	PARITY_GAP	
-1042180		Coat	Character.wz/Coat/01042180.img		equip_armor	PARITY_GAP	
+1042180	Checkered Shirt	Coat	Character.wz/Coat/01042180.img		equip_armor	PARITY_GAP	
 1050161	Bunny Boy	Longcoat	Character.wz/Longcoat/01050161.img		equip_armor	NO_SOURCE_IN_V84	info/cash=1 but NO row in Etc.wz/Commodity.img - v84 ships the art and lists no way to buy it
 1051200	Bunny Girl	Longcoat	Character.wz/Longcoat/01051200.img		equip_armor	NO_SOURCE_IN_V84	info/cash=1 but NO row in Etc.wz/Commodity.img - v84 ships the art and lists no way to buy it
 1051208	Strawberry Girl	Longcoat	Character.wz/Longcoat/01051208.img	cashshop(SN 20300392 OnSale=0)	equip_armor	CASH_ONLY	Commodity.img row exists with OnSale=0 - v84 shipped it switched off but its SN 20300392 is inside a CashPackage.img package
-1052226		Longcoat	Character.wz/Longcoat/01052226.img		equip_armor	PARITY_GAP	
+1052226	Former Hero Robe	Longcoat	Character.wz/Longcoat/01052226.img		equip_armor	PARITY_GAP	
 1052231	Little Prince	Longcoat	Character.wz/Longcoat/01052231.img		equip_armor	NO_SOURCE_IN_V84	info/cash=1 but NO row in Etc.wz/Commodity.img - v84 ships the art and lists no way to buy it
 1052245	Green Leaf Overall	Longcoat	Character.wz/Longcoat/01052245.img	cashshop(SN 20300393 OnSale=0)	equip_armor	CASH_ONLY	Commodity.img row exists with OnSale=0 - v84 shipped it switched off but its SN 20300393 is inside a CashPackage.img package
-1060138		Pants	Character.wz/Pants/01060138.img		equip_armor	PARITY_GAP	
-1061160		Pants	Character.wz/Pants/01061160.img		equip_armor	PARITY_GAP	
-1072418		Shoes	Character.wz/Shoes/01072418.img		equip_armor	PARITY_GAP	
-1072425		Shoes	Character.wz/Shoes/01072425.img		equip_armor	NO_SOURCE_IN_V84	info/cash=1 but NO row in Etc.wz/Commodity.img - v84 ships the art and lists no way to buy it
+1060138	Denim Shorts	Pants	Character.wz/Pants/01060138.img		equip_armor	PARITY_GAP	
+1061160	Denim Skirt	Pants	Character.wz/Pants/01061160.img		equip_armor	PARITY_GAP	
+1072418	Black Boots	Shoes	Character.wz/Shoes/01072418.img		equip_armor	PARITY_GAP	
+1072425	Freud's Shoes	Shoes	Character.wz/Shoes/01072425.img		equip_armor	NO_SOURCE_IN_V84	info/cash=1 but NO row in Etc.wz/Commodity.img - v84 ships the art and lists no way to buy it
 1072438	Green Leaf Shoes	Shoes	Character.wz/Shoes/01072438.img	cashshop(SN 20600262 OnSale=0)	equip_armor	CASH_ONLY	Commodity.img row exists with OnSale=0 - v84 shipped it switched off but its SN 20600262 is inside a CashPackage.img package
 1072439	Strawberry Shoes	Shoes	Character.wz/Shoes/01072439.img	cashshop(SN 20600263 OnSale=0)	equip_armor	CASH_ONLY	Commodity.img row exists with OnSale=0 - v84 shipped it switched off but its SN 20600263 is inside a CashPackage.img package
-1082261		Glove	Character.wz/Glove/01082261.img		equip_armor	NO_SOURCE_IN_V84	info/cash=1 but NO row in Etc.wz/Commodity.img - v84 ships the art and lists no way to buy it
+1082261	Freud's Gloves	Glove	Character.wz/Glove/01082261.img		equip_armor	NO_SOURCE_IN_V84	info/cash=1 but NO row in Etc.wz/Commodity.img - v84 ships the art and lists no way to buy it
 1082263	Bunny Gloves	Glove	Character.wz/Glove/01082263.img		equip_armor	NO_SOURCE_IN_V84	info/cash=1 but NO row in Etc.wz/Commodity.img - v84 ships the art and lists no way to buy it
 1082270	Lita's Ocean Gloves	Glove	Character.wz/Glove/01082270.img		equip_armor	PARITY_GAP	
 1082271	Lita's Hero Gloves	Glove	Character.wz/Glove/01082271.img		equip_armor	PARITY_GAP	
