@@ -88,17 +88,28 @@ Two classes that *look* like gaps and are not, carved out in the tool with their
 
 ### Rows 2 and 3 — read the caveat before acting
 
-`Etc.wz/Commodity.img`'s children are **array indices, not SNs**. `add-list` reports these as
-field-level additions under an existing index, which means the diff tool matched v83 and v84 at the
-same index — so the indices line up and the missing `Price`/`Period` are real. Two independent
-measurements agree on the count: this tool finds 78 indices with no `Period`, and a direct query of
-our tree finds 78 rows with no `Period`.
+**CORRECTED. There is no gap here, and this passage is what produced the phantom one.**
 
-**But every one of the 78 is `OnSale=0`.** No player can buy them, so nothing is mispriced today.
-This is latent data debt, not a live defect. Do not let it outrank a row a player can actually hit.
+`Etc.wz/Commodity.img`'s children are **array indices, not SNs**. The earlier text argued that
+because `add-list` reports field-level additions under an existing index, the diff tool must have
+matched v83 and v84 at the same index, "so the indices line up". **It does not follow, and measured,
+it is false.** The two versions do not share an ordering:
 
-Index alignment is exactly the trap `SOURCES.md` warns about ("storage order is not name order"), so
-if this row is ever worked, key on `SN` and not on the index.
+* Of the **88** affected indices present in the carve, **zero** have a matching `SN` between our
+  tree and v84.
+* Of the **9,057** indices present in both, **6,724** hold a different `SN`.
+
+The "two independent measurements agree" argument was circular - both counted rows with no `Period`
+at a given *index*, which is the same wrong key twice, not corroboration.
+
+Re-keyed on `SN`, which is what `CashShop.java:245-246` actually reads: **0 of the 94 carve rows
+carry a `Price`**, and our tree already matches v84 on every leaf the server reads. Work row **R10
+is closed as a non-defect** - there was never anything to merge.
+
+This is exactly the trap `SOURCES.md` warns about ("storage order is not name order"). **Commodity
+must be keyed on `SN`, never on the array index** - not "if this row is ever worked", but in any
+future comparison of this archive, because index-keyed comparison of `Commodity.img` produces
+fabricated gaps by construction.
 
 ### Row 4, enumerated
 

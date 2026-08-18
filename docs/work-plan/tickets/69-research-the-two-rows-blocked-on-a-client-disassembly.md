@@ -36,7 +36,9 @@ Effort once unblocked: large.
 
 ## R23 - the NoticeFailReason byte table is v83 values carried over untested
 
-* `PacketCreator.java:7309-7358`, roughly 50 reason codes.
+* `PacketCreator.java:7321-7372` - the `/* ... */` block opening at `:7321` and closing at
+  `:7372`, carrying **49** `NN = <string>` reason lines. (The old `:7309-7358` citation was ~12
+  lines stale; `:7309` is inside `showBoughtCashItem`.)
 
 **The question to answer:** do v84's NoticeFailReason byte values match v83's, and where they differ,
 what are they?

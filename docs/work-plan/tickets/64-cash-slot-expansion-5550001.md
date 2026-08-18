@@ -1,42 +1,58 @@
-# 64 - v84 cash item 5550001 has no handler at all
+# 64 - cash items 5550000 and 5550001 have no handler at all
 
 **Class:** v84 parity
 **Work rows:** R17 - `docs/work-plan/V84-WORK-ROWS.tsv`
 **Blocked by:** None - can start immediately
 
 Item **5550001** is a v84-new cash item whose three `info` leaves describe a seven-day cash
-inventory slot expansion, and nothing in the tree reads any of them. **No precedent exists in this
-repo for a timed slot expansion** - that absence is the entire reason this row was split out of
-ticket 63 and it must not be folded back in. Effort is medium because the storage shape has to be
-chosen and justified before any handler is written.
+inventory slot expansion, and nothing in the tree reads any of them. It has a **sibling already in
+this tree** - `5550000`, same three leaves, 30 days - which is equally unhandled. Effort is medium
+because the storage shape has to be chosen and justified before any handler is written.
 
 ## R17 - `slotIndex` and `addDay` are read nowhere
 
-| item | node | value |
-|---|---|---|
-| **5550001** | `info/cash` | **1** |
-| **5550001** | `info/slotIndex` | **0** |
-| **5550001** | `info/addDay` | **7** |
+Both items live in `wz/Item.wz/Cash/0555.img.xml`, and that file contains exactly these two:
 
-`add-list/Item.txt:110` makes this a whole v84-new item. There are **zero references to `slotIndex`
-or `addDay` anywhere in the tree** - not in `src/main/java`, not in `scripts/`, not in the
-packet-validator tools. `slotIndex` names which cash inventory partition grows; `addDay` is the
-lifetime in days.
+| item | `info/cash` | `info/slotIndex` | `info/addDay` | v84-new? |
+|---|---|---|---|---|
+| **5550000** | 1 | 0 | **30** | **no** - not in `add-list` |
+| **5550001** | 1 | 0 | **7** | yes - `add-list/Item.txt:110` |
 
-Not obtainable today, so nothing regresses whichever shape is chosen.
+There are **zero references to `slotIndex` or `addDay` anywhere in the tree** - not in
+`src/main/java`, not in `scripts/`, not in the packet-validator tools (the only grep hits are inside
+a vendored `spine-csharp.dll`). `slotIndex` names which cash inventory partition grows; `addDay` is
+the lifetime in days.
+
+**Neither item has a handler.** `UseCashItemHandler` dispatches on `itemType = itemId / 10000`
+(`:102`) and has branches for 504, 505, 506, 507, 508, 509, 510, 512, 517, 520, 523, 524, 530, 533,
+537, 539, 540, 543, 545, 550, 552, 553, 557, 561 and 562 - **no 555**. Both items fall to the
+default at `:646`, `log.warn("NEW CASH ITEM TYPE: {}, packet: {}", itemType, p)`.
+
+**Whatever handler is written is therefore type-keyed and covers both items automatically.** Do not
+write it for 5550001 alone.
+
+Neither is obtainable today, so nothing regresses whichever shape is chosen.
 
 ## Precedent
 
-**UNKNOWN.** There is no timed slot expansion anywhere in this repo to copy. Permanent slot growth
-and expiring cash items both exist separately; nothing combines them.
+**No code precedent.** There is no timed slot expansion implemented anywhere in this repo to copy.
+Permanent slot growth and expiring cash items both exist separately; nothing combines them.
+
+There *is* a **data** precedent, and it weakens the case that this shape is unprecedented: 5550000
+has carried the identical three-leaf shape - including a non-zero `addDay` - since before the v84
+cutover. v84 did not introduce the concept here, it added a second duration to a shape this tree
+already shipped and never implemented. That is an argument for treating `addDay` as real data rather
+than as a field v84's client ignores.
 
 The implementing agent must choose one of two shapes and state the evidence in the commit:
 
 1. **Permanent slot column.** The existing slot-count columns are incremented and the expiry is
-   dropped. Cheapest, and wrong against `addDay=7` unless evidence is found that v84's own client
-   ignores the field.
+   dropped. Cheapest, and wrong against `addDay` unless evidence is found that the client ignores
+   the field. Note this shape cannot distinguish 5550000 from 5550001 at all - both would grant the
+   same permanent slot, which is a visible argument against it.
 2. **An expiring row.** A dated grant that the slot-count read consults, expiring after `addDay`
-   days. Faithful to the data; needs a new persisted row and an expiry sweep.
+   days. Faithful to the data; needs a new persisted row and an expiry sweep. This is the only shape
+   under which 30 and 7 mean different things.
 
 If neither shape can be evidenced from v84 data or from an existing analogue in this tree, **this
 row degrades to an owner decision** and no code is written. Say so plainly in the ticket's closing
@@ -47,14 +63,18 @@ makes the row a decision, not an implementation.
 
 - [ ] The chosen shape - permanent column or expiring row - is named in the commit message together
       with the evidence that selected it, or the ticket is closed as an owner decision with no code.
-- [ ] Using 5550001 increases the usable cash inventory slot count for partition `slotIndex=0` by
-      the amount the item states, asserted by a test that reads the slot count before and after.
-- [ ] If the expiring shape is taken: a grant whose timestamp is more than `addDay=7` days old no
-      longer counts toward the slot total, asserted by a test that sets the timestamp back rather
-      than by waiting.
-- [ ] The 7 and the 0 come from `DataTool.getInt` reads of `info/addDay` and `info/slotIndex`, not
-      from literals in Java.
-- [ ] Using the item twice grants twice, and neither use throws.
+- [ ] The handler is keyed on `itemType == 555` and **both 5550000 and 5550001 route through it**.
+      Neither id appears as a literal.
+- [ ] Using either item increases the usable cash inventory slot count for partition `slotIndex=0`
+      by the amount the item states, asserted by a test that reads the slot count before and after.
+- [ ] If the expiring shape is taken: a grant from 5550001 whose timestamp is more than **7** days
+      old no longer counts toward the slot total, and one from 5550000 is still counted at day 7 and
+      gone at day 31 - asserted by a test that sets the timestamp back rather than by waiting. The
+      two items must be distinguishable by this test.
+- [ ] The 30, the 7 and the 0 come from `DataTool.getInt` reads of `info/addDay` and
+      `info/slotIndex`, not from literals in Java.
+- [ ] Using an item twice grants twice, and neither use throws.
+- [ ] `UseCashItemHandler` no longer reaches its `NEW CASH ITEM TYPE` warning for type 555.
 - [ ] No change to the NX/Maple Point credit path from ticket 63 appears in this diff.
 
 Run the new test class with `-Dtest=<Name>`. **Do not run maven while sibling agents are active** -
@@ -62,8 +82,11 @@ they collide on `target/`.
 
 ## Do not
 
-- Do not fold this into ticket 63. The two rows were split deliberately; 63 has a precedent and this
-  one does not.
+- Do not write the handler for 5550001 only. 5550000 is in the same img with the same three leaves
+  and the same absent handler; a type-keyed branch covers both and an id-keyed one leaves half the
+  data broken.
+- Do not fold this into ticket 63. The two rows were split deliberately; 63's fix is a read inside an
+  existing branch and this one needs a new branch and a storage decision.
 - Do not invent an expiry mechanism modelled on pet or equipment expiry without saying so. If an
   existing expiry path is reused, name it.
-- Do not hardcode 7 days or partition 0. Both are data.
+- Do not hardcode 7 days, 30 days, or partition 0. All three are data.

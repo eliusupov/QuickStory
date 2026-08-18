@@ -14,9 +14,14 @@ same two files.
 ## R24 - Five chaos scrolls burn the upgrade slot and apply nothing
 
 Items **2049103**, **2049104**, **2049112**, **2049113**, **2049114** all carry `info/randstat=1`.
-`ItemInformationProvider.java:1170-1172` special-cases only **2049100**, **2049101** and **2049102**
-by id. The other five fall through to `default:` at `:1176` and run `improveEquipStats` against an
-empty stat map - no stat moves - while the upgrade slot is consumed at `:1183`.
+`ItemInformationProvider.java:1170-1172` special-cases only **2049100** (`CHAOS_SCROll_60`),
+**2049101** (`LIAR_TREE_SAP`) and **2049102** (`MAPLE_SYRUP`) by id, routing them to
+`scrollEquipWithChaos`. The other five fall through to `default:` at `:1176` and run
+`improveEquipStats` against an empty stat map - no stat moves - while the upgrade slot is consumed at
+**`:1182`** (`:1183` is that block's closing brace).
+
+There is a **second** decrement at `:1188`, on the scroll-failure path in the `else` arm. Any change
+here must leave both alone; between them they are what acceptance criterion 3 pins.
 
 The known fix is two lines:
 
@@ -48,7 +53,8 @@ ECHO_OF_HERO as skill **20011005**.
 
 **R24.** The three ids already special-cased at `ItemInformationProvider.java:1170-1172` are the
 behaviour to generalise - the correct outcome for the five is exactly what 2049100/101/102 already
-do. `"fs"` at `:580` is the analogue harvest line: same map, same shape, one more key.
+do. `"fs"` at `:580` is the analogue harvest line - the last `put` in `getEquipStats` - same map, same
+shape, one more key.
 
 **R28.** The WATK block immediately above the insertion point at `Character.java:7784-7787` is the
 precedent - same method, same local, same percentage-application idiom. Nothing is derived; the 4%
