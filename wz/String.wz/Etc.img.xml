@@ -92,6 +92,10 @@
       <string name="name" value="Maple Necklace Pendant"/>
       <string name="desc" value="This can be used to create the Mind of Maple Necklace."/>
     </imgdir>
+    <imgdir name="4032526">
+      <string name="name" value="John&apos;s Map"/>
+      <string name="desc" value="John&apos;s map that contains information on some island. That island is said to be the place where the dragon lies asleep."/>
+    </imgdir>
     <imgdir name="4032527">
       <string name="name" value="Strange Pig "/>
     </imgdir>

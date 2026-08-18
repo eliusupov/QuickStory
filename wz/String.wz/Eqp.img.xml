@@ -1606,6 +1606,18 @@
       </imgdir>
     </imgdir>
     <imgdir name="Cap">
+      <imgdir name="1003028">
+        <string name="name" value="Straw Hat"/>
+      </imgdir>
+      <imgdir name="1003029">
+        <string name="name" value="Former Hero Female Face"/>
+      </imgdir>
+      <imgdir name="1003030">
+        <string name="name" value="Former Hero Male Face"/>
+      </imgdir>
+      <imgdir name="1003043">
+        <string name="name" value="순록의 뿔"/>
+      </imgdir>
       <imgdir name="1002859">
         <string name="name" value="MV&apos;s Hat (DEX)"/>
       </imgdir>
@@ -4954,6 +4966,9 @@
       </imgdir>
     </imgdir>
     <imgdir name="Coat">
+      <imgdir name="1042180">
+        <string name="name" value="Checkered Shirt "/>
+      </imgdir>
       <imgdir name="1040000">
         <string name="name" value="Yellow Jangoon Armor"/>
       </imgdir>
@@ -7971,6 +7986,9 @@
       </imgdir>
     </imgdir>
     <imgdir name="Glove">
+      <imgdir name="1082261">
+        <string name="name" value="Freud&apos;s Gloves"/>
+      </imgdir>
       <imgdir name="1080000">
         <string name="name" value="White Ninja Gloves"/>
       </imgdir>
@@ -13383,6 +13401,9 @@
       </imgdir>
     </imgdir>
     <imgdir name="Longcoat">
+      <imgdir name="1052226">
+        <string name="name" value="Former Hero Robe"/>
+      </imgdir>
       <imgdir name="1050000">
         <string name="name" value="White Crusader Chainmail"/>
       </imgdir>
@@ -14912,6 +14933,12 @@
       </imgdir>
     </imgdir>
     <imgdir name="Pants">
+      <imgdir name="1060138">
+        <string name="name" value="Denim Shorts "/>
+      </imgdir>
+      <imgdir name="1061160">
+        <string name="name" value="Denim Skirt "/>
+      </imgdir>
       <imgdir name="1060000">
         <string name="name" value="Black Jangoon Pants"/>
       </imgdir>
@@ -17025,6 +17052,12 @@
       </imgdir>
     </imgdir>
     <imgdir name="Shoes">
+      <imgdir name="1072418">
+        <string name="name" value="Black Boots "/>
+      </imgdir>
+      <imgdir name="1072425">
+        <string name="name" value="Freud&apos;s Shoes"/>
+      </imgdir>
       <imgdir name="1070000">
         <string name="name" value="Blue Gomushin"/>
       </imgdir>
