@@ -833,6 +833,103 @@
         <int name="f" value="0"/>
         <int name="zM" value="9"/>
       </imgdir>
+      <imgdir name="6">
+        <string name="oS" value="acc1"/>
+        <string name="l0" value="grassySoil"/>
+        <string name="l1" value="golem"/>
+        <string name="l2" value="20"/>
+        <int name="x" value="1437"/>
+        <int name="y" value="180"/>
+        <int name="z" value="9"/>
+        <int name="f" value="0"/>
+        <int name="zM" value="2"/>
+        <int name="r" value="0"/>
+      </imgdir>
+      <imgdir name="7">
+        <string name="oS" value="acc1"/>
+        <string name="l0" value="grassySoil"/>
+        <string name="l1" value="golem"/>
+        <string name="l2" value="1"/>
+        <int name="x" value="1310"/>
+        <int name="y" value="207"/>
+        <int name="z" value="7"/>
+        <int name="f" value="0"/>
+        <int name="zM" value="2"/>
+        <int name="r" value="0"/>
+      </imgdir>
+      <imgdir name="8">
+        <string name="oS" value="acc1"/>
+        <string name="l0" value="darkWood"/>
+        <string name="l1" value="nature"/>
+        <string name="l2" value="20"/>
+        <int name="x" value="1371"/>
+        <int name="y" value="309"/>
+        <int name="z" value="9"/>
+        <int name="f" value="0"/>
+        <int name="zM" value="2"/>
+        <int name="r" value="0"/>
+      </imgdir>
+      <imgdir name="9">
+        <string name="oS" value="acc1"/>
+        <string name="l0" value="darkWood"/>
+        <string name="l1" value="nature"/>
+        <string name="l2" value="20"/>
+        <int name="x" value="1221"/>
+        <int name="y" value="298"/>
+        <int name="z" value="9"/>
+        <int name="f" value="0"/>
+        <int name="zM" value="2"/>
+        <int name="r" value="0"/>
+      </imgdir>
+      <imgdir name="10">
+        <string name="oS" value="acc1"/>
+        <string name="l0" value="grassySoil"/>
+        <string name="l1" value="golem"/>
+        <string name="l2" value="16"/>
+        <int name="x" value="1074"/>
+        <int name="y" value="268"/>
+        <int name="z" value="9"/>
+        <int name="f" value="0"/>
+        <int name="zM" value="2"/>
+        <int name="r" value="0"/>
+      </imgdir>
+      <imgdir name="11">
+        <string name="oS" value="acc1"/>
+        <string name="l0" value="grassySoil"/>
+        <string name="l1" value="golem"/>
+        <string name="l2" value="7"/>
+        <int name="x" value="1242"/>
+        <int name="y" value="228"/>
+        <int name="z" value="8"/>
+        <int name="f" value="0"/>
+        <int name="zM" value="2"/>
+        <int name="r" value="0"/>
+      </imgdir>
+      <imgdir name="12">
+        <string name="oS" value="acc1"/>
+        <string name="l0" value="grassySoil"/>
+        <string name="l1" value="golem"/>
+        <string name="l2" value="8"/>
+        <int name="x" value="1311"/>
+        <int name="y" value="101"/>
+        <int name="z" value="6"/>
+        <int name="f" value="0"/>
+        <int name="zM" value="2"/>
+        <int name="r" value="0"/>
+      </imgdir>
+      <imgdir name="13">
+        <string name="oS" value="guide"/>
+        <string name="l0" value="tutorial"/>
+        <string name="l1" value="key"/>
+        <string name="l2" value="4"/>
+        <int name="x" value="1458"/>
+        <int name="y" value="193"/>
+        <int name="z" value="10"/>
+        <int name="f" value="0"/>
+        <int name="zM" value="2"/>
+        <int name="r" value="0"/>
+        <string name="tags" value="22556"/>
+      </imgdir>
     </imgdir>
   </imgdir>
   <imgdir name="4">
