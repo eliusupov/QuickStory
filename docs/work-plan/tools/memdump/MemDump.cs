@@ -11,8 +11,10 @@
 // Build: csc.exe /platform:x64 /out:MemDump.exe MemDump.cs
 //
 // Modes:
-//   dump  --pid N | --name X  [--out F] [--base 0xHEX --size 0xHEX]
-//   full  --pid N | --name X  [--out F]                   (whole user address space + .idx)
+//   dump     --pid N | --name X  [--out F] [--base 0xHEX --size 0xHEX]
+//   full     --pid N | --name X  [--out F]                   (whole user address space + .idx)
+//   waitfull --pid N | --name X  --watch-va 0xHEX [--watch-size 4] [--timeout-sec 300]
+//            [--poll-ms 300] [--out F]   (poll VA until non-zero, then run full capture)
 //   scan  --blob F --blobbase 0xHEX --pat HEXBYTES        (count+list occurrences)
 //   read  --blob F --blobbase 0xHEX --va 0xHEX --len N    (hex dump at a VA)
 //
@@ -63,6 +65,7 @@ static class MemDump
         {
             if (mode == "dump") return Dump(arg);
             if (mode == "full") return Full(arg);
+            if (mode == "waitfull") return WaitFull(arg);
             if (mode == "scan") return Scan(arg);
             if (mode == "read") return ReadVa(arg);
         }
@@ -196,6 +199,55 @@ static class MemDump
         Console.WriteLine("skipped: uncommitted=" + skipUncommitted + " guard/noaccess=" + skipGuardNoaccess + " unreadable_pages=" + failPages);
         Console.WriteLine("idx=" + idxPath);
         return regions == 0 ? 1 : 0;
+    }
+
+    // Poll a watched VA until it reads non-zero, then run the same full-mode capture.
+    // Fixes the timing problem: CChannelSelectDlg isn't instantiated at an arbitrary
+    // capture instant, so we wait for its pointer to go non-zero before dumping.
+    static int WaitFull(Dictionary<string, string> arg)
+    {
+        Process p = ResolveProc(arg);
+        if (p == null) return 1;
+        if (!arg.ContainsKey("watch-va")) { Console.Error.WriteLine("waitfull needs --watch-va"); return 2; }
+        ulong watchVa = Hex(arg["watch-va"]);
+        int watchSize = arg.ContainsKey("watch-size") ? int.Parse(arg["watch-size"]) : 4;
+        int timeoutSec = arg.ContainsKey("timeout-sec") ? int.Parse(arg["timeout-sec"]) : 300;
+        int pollMs = arg.ContainsKey("poll-ms") ? int.Parse(arg["poll-ms"]) : 300;
+
+        IntPtr h = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, false, p.Id);
+        if (h == IntPtr.Zero) { Console.Error.WriteLine("OpenProcess failed, win32=" + Marshal.GetLastWin32Error()); return 1; }
+
+        Console.WriteLine("pid=" + p.Id + " waitfull watch-va=0x" + watchVa.ToString("X") + " size=" + watchSize + " timeout=" + timeoutSec + "s");
+        var buf = new byte[watchSize];
+        var sw = System.Diagnostics.Stopwatch.StartNew();
+        long lastBeat = -2000;
+        ulong val = 0;
+        bool fired = false;
+        while (sw.Elapsed.TotalSeconds < timeoutSec)
+        {
+            IntPtr got;
+            if (ReadProcessMemory(h, new IntPtr((long)watchVa), buf, new IntPtr(watchSize), out got) && got.ToInt64() == watchSize)
+            {
+                val = 0;
+                for (int i = 0; i < watchSize && i < 8; i++) val |= (ulong)buf[i] << (8 * i);
+                if (val != 0) { fired = true; break; }
+            }
+            if (sw.ElapsedMilliseconds - lastBeat >= 2000)
+            {
+                Console.WriteLine("waiting for channel dialog... VA=0x" + val.ToString("X") + " (" + (int)sw.Elapsed.TotalSeconds + "s/" + timeoutSec + "s)");
+                lastBeat = sw.ElapsedMilliseconds;
+            }
+            System.Threading.Thread.Sleep(pollMs);
+        }
+        CloseHandle(h);
+
+        if (!fired)
+        {
+            Console.Error.WriteLine("FAILED: watched VA stayed 0 for " + timeoutSec + "s -- dialog never appeared. Make sure the channel grid is on screen.");
+            return 1;
+        }
+        Console.WriteLine("watched value non-zero: 0x" + val.ToString("X") + " -- capturing now.");
+        return Full(arg);
     }
 
     static byte[] ParsePat(string s)
