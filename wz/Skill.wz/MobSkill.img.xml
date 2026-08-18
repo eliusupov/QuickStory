@@ -1449,6 +1449,58 @@
         <vector name="lt" x="-300" y="-200"/>
         <vector name="rb" x="300" y="200"/>
       </imgdir>
+      <imgdir name="10">
+        <int name="x" value="130"/>
+        <int name="mpCon" value="15"/>
+        <int name="interval" value="120"/>
+        <int name="time" value="10"/>
+        <imgdir name="effect">
+          <canvas name="0" width="1" height="1">
+            <vector name="origin" x="15" y="25"/>
+            <imgdir name="map">
+              <vector name="brow" x="-14" y="-42"/>
+            </imgdir>
+            <string name="z" value="accessoryFace"/>
+          </canvas>
+          <int name="pos" value="3"/>
+        </imgdir>
+        <imgdir name="mob">
+          <canvas name="0" width="71" height="80">
+            <vector name="origin" x="7" y="94"/>
+            <int name="z" value="0"/>
+            <int name="delay" value="150"/>
+          </canvas>
+          <canvas name="1" width="82" height="82">
+            <vector name="origin" x="12" y="95"/>
+            <int name="z" value="0"/>
+            <int name="delay" value="150"/>
+          </canvas>
+          <canvas name="2" width="79" height="80">
+            <vector name="origin" x="10" y="93"/>
+            <int name="z" value="0"/>
+            <int name="delay" value="150"/>
+          </canvas>
+          <canvas name="3" width="79" height="85">
+            <vector name="origin" x="11" y="97"/>
+            <int name="z" value="0"/>
+            <int name="delay" value="150"/>
+          </canvas>
+          <canvas name="4" width="81" height="84">
+            <vector name="origin" x="14" y="97"/>
+            <int name="z" value="0"/>
+            <int name="delay" value="150"/>
+          </canvas>
+          <canvas name="5" width="79" height="81">
+            <vector name="origin" x="13" y="96"/>
+            <int name="z" value="0"/>
+            <int name="delay" value="150"/>
+          </canvas>
+          <int name="pos" value="2"/>
+          <int name="repeat" value="1"/>
+        </imgdir>
+        <vector name="lt" x="-800" y="-800"/>
+        <vector name="rb" x="800" y="50"/>
+      </imgdir>
       <imgdir name="2">
         <int name="x" value="115"/>
         <int name="mpCon" value="5"/>
@@ -2465,6 +2517,38 @@
         <uol name="effect" value="../../../114/level/2/effect"/>
         <vector name="lt" x="-400" y="-350"/>
         <vector name="rb" x="400" y="250"/>
+      </imgdir>
+      <imgdir name="35">
+        <string name="info" value="플라잉 다크 와이번"/>
+        <int name="x" value="20000"/>
+        <int name="y" value="3000"/>
+        <int name="hp" value="20"/>
+        <int name="mpCon" value="50"/>
+        <int name="interval" value="45"/>
+        <int name="time" value="1"/>
+        <vector name="lt" x="-800" y="-350"/>
+        <vector name="rb" x="800" y="250"/>
+        <imgdir name="mob">
+          <canvas name="0" width="1" height="1">
+            <vector name="origin" x="0" y="0"/>
+          </canvas>
+        </imgdir>
+      </imgdir>
+      <imgdir name="36">
+        <string name="info" value="드래곤 라이더"/>
+        <int name="x" value="100000"/>
+        <int name="y" value="20000"/>
+        <int name="hp" value="20"/>
+        <int name="mpCon" value="50"/>
+        <int name="interval" value="90"/>
+        <int name="time" value="1"/>
+        <vector name="lt" x="-80" y="-176"/>
+        <vector name="rb" x="80" y="16"/>
+        <imgdir name="mob">
+          <canvas name="0" width="1" height="1">
+            <vector name="origin" x="0" y="0"/>
+          </canvas>
+        </imgdir>
       </imgdir>
       <imgdir name="4">
         <int name="x" value="30000"/>
@@ -3612,6 +3696,22 @@
         </imgdir>
         <vector name="lt" x="-400" y="-350"/>
         <vector name="rb" x="400" y="250"/>
+      </imgdir>
+      <imgdir name="2">
+        <string name="info" value="불량 루돌프"/>
+        <int name="x" value="30"/>
+        <int name="time" value="5"/>
+        <int name="interval" value="5"/>
+        <int name="mpCon" value="1"/>
+        <imgdir name="mob">
+          <canvas name="0" width="21" height="18">
+            <vector name="origin" x="10" y="42"/>
+          </canvas>
+          <int name="pos" value="2"/>
+          <int name="icon" value="1"/>
+        </imgdir>
+        <vector name="lt" x="-17" y="-80"/>
+        <vector name="rb" x="15" y="15"/>
       </imgdir>
     </imgdir>
   </imgdir>
@@ -6092,6 +6192,75 @@
           <int name="repeat" value="1"/>
         </imgdir>
       </imgdir>
+      <imgdir name="24">
+        <string name="info" value="드래곤 라이더"/>
+        <int name="mpCon" value="5"/>
+        <int name="interval" value="20"/>
+        <int name="time" value="5"/>
+        <int name="prop" value="5"/>
+        <vector name="lt" x="-130" y="-74"/>
+        <vector name="rb" x="10" y="10"/>
+        <imgdir name="affected">
+          <canvas name="0" width="66" height="18">
+            <vector name="origin" x="30" y="9"/>
+            <int name="delay" value="100"/>
+          </canvas>
+          <canvas name="1" width="58" height="17">
+            <vector name="origin" x="26" y="9"/>
+            <int name="delay" value="100"/>
+          </canvas>
+          <canvas name="2" width="58" height="17">
+            <vector name="origin" x="25" y="9"/>
+            <int name="delay" value="100"/>
+          </canvas>
+          <int name="pos" value="1"/>
+          <int name="repeat" value="1"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="25">
+        <int name="mpCon" value="0"/>
+        <int name="interval" value="0"/>
+        <int name="time" value="1"/>
+        <int name="prop" value="100"/>
+        <imgdir name="affected">
+          <canvas name="0" width="66" height="18">
+            <vector name="origin" x="30" y="9"/>
+            <int name="delay" value="100"/>
+          </canvas>
+          <canvas name="1" width="58" height="17">
+            <vector name="origin" x="26" y="9"/>
+            <int name="delay" value="100"/>
+          </canvas>
+          <canvas name="2" width="58" height="17">
+            <vector name="origin" x="25" y="9"/>
+            <int name="delay" value="100"/>
+          </canvas>
+          <int name="pos" value="1"/>
+          <int name="repeat" value="1"/>
+        </imgdir>
+      </imgdir>
+      <imgdir name="26">
+        <int name="mpCon" value="0"/>
+        <int name="interval" value="0"/>
+        <int name="time" value="3"/>
+        <int name="prop" value="100"/>
+        <imgdir name="affected">
+          <canvas name="0" width="66" height="18">
+            <vector name="origin" x="30" y="9"/>
+            <int name="delay" value="100"/>
+          </canvas>
+          <canvas name="1" width="58" height="17">
+            <vector name="origin" x="26" y="9"/>
+            <int name="delay" value="100"/>
+          </canvas>
+          <canvas name="2" width="58" height="17">
+            <vector name="origin" x="25" y="9"/>
+            <int name="delay" value="100"/>
+          </canvas>
+          <int name="pos" value="1"/>
+          <int name="repeat" value="1"/>
+        </imgdir>
+      </imgdir>
       <imgdir name="3">
         <int name="mpCon" value="5"/>
         <int name="interval" value="10"/>
@@ -6985,6 +7154,38 @@
           <int name="repeat" value="1"/>
         </imgdir>
       </imgdir>
+      <imgdir name="11">
+        <int name="time" value="10"/>
+        <int name="prop" value="100"/>
+        <int name="interval" value="100"/>
+        <int name="x" value="5"/>
+        <imgdir name="affected">
+          <canvas name="0" width="26" height="37">
+            <vector name="origin" x="13" y="28"/>
+            <int name="delay" value="70"/>
+          </canvas>
+          <canvas name="1" width="29" height="41">
+            <vector name="origin" x="14" y="28"/>
+            <int name="delay" value="70"/>
+          </canvas>
+          <canvas name="2" width="37" height="40">
+            <vector name="origin" x="17" y="30"/>
+            <int name="delay" value="70"/>
+          </canvas>
+          <canvas name="3" width="38" height="42">
+            <vector name="origin" x="19" y="30"/>
+            <int name="delay" value="70"/>
+          </canvas>
+          <canvas name="4" width="33" height="36">
+            <vector name="origin" x="16" y="28"/>
+            <int name="z" value="0"/>
+            <int name="delay" value="70"/>
+          </canvas>
+          <int name="pos" value="1"/>
+          <int name="repeat" value="1"/>
+        </imgdir>
+        <string name="info" value="너프 아이템용"/>
+      </imgdir>
       <imgdir name="2">
         <int name="mpCon" value="5"/>
         <int name="interval" value="35"/>
@@ -7672,6 +7873,19 @@
           <int name="pos" value="2"/>
         </imgdir>
       </imgdir>
+      <imgdir name="15">
+        <string name="info" value="플라잉 다크 와이벚ㄴ"/>
+        <int name="mpCon" value="5"/>
+        <int name="prop" value="5"/>
+        <vector name="lt" x="-800" y="-800"/>
+        <vector name="rb" x="800" y="50"/>
+        <imgdir name="affected">
+          <uol name="0" value="../../1/affected/0"/>
+          <int name="pos" value="2"/>
+        </imgdir>
+        <int name="hp" value="60"/>
+        <int name="interval" value="300"/>
+      </imgdir>
       <imgdir name="2">
         <int name="mpCon" value="5"/>
         <int name="interval" value="15"/>
@@ -8006,6 +8220,50 @@
         </imgdir>
         <int name="count" value="1"/>
         <int name="x" value="1"/>
+      </imgdir>
+      <imgdir name="15">
+        <int name="mpCon" value="5"/>
+        <int name="interval" value="65"/>
+        <int name="time" value="7"/>
+        <int name="prop" value="40"/>
+        <vector name="lt" x="-800" y="-800"/>
+        <vector name="rb" x="800" y="300"/>
+        <imgdir name="affected">
+          <canvas name="0" width="50" height="60">
+            <vector name="origin" x="25" y="122"/>
+            <int name="delay" value="130"/>
+          </canvas>
+          <canvas name="1" width="50" height="62">
+            <vector name="origin" x="25" y="124"/>
+            <int name="delay" value="130"/>
+          </canvas>
+          <canvas name="2" width="50" height="63">
+            <vector name="origin" x="25" y="125"/>
+            <int name="delay" value="130"/>
+          </canvas>
+          <canvas name="3" width="50" height="62">
+            <vector name="origin" x="25" y="124"/>
+            <int name="delay" value="130"/>
+          </canvas>
+          <canvas name="4" width="50" height="60">
+            <vector name="origin" x="25" y="122"/>
+            <int name="delay" value="130"/>
+          </canvas>
+          <canvas name="5" width="50" height="62">
+            <vector name="origin" x="25" y="124"/>
+            <int name="delay" value="130"/>
+          </canvas>
+          <canvas name="6" width="50" height="63">
+            <vector name="origin" x="25" y="125"/>
+            <int name="delay" value="130"/>
+          </canvas>
+          <canvas name="7" width="50" height="62">
+            <vector name="origin" x="25" y="124"/>
+            <int name="delay" value="130"/>
+          </canvas>
+          <int name="repeat" value="1"/>
+        </imgdir>
+        <int name="x" value="3"/>
       </imgdir>
       <imgdir name="2">
         <int name="mpCon" value="5"/>
@@ -11493,6 +11751,9 @@
         <vector name="lt" x="-800" y="-600"/>
         <vector name="rb" x="800" y="250"/>
       </imgdir>
+      <imgdir name="6">
+        <string name="info" value="글로벌"/>
+      </imgdir>
     </imgdir>
   </imgdir>
   <imgdir name="134">
@@ -12662,6 +12923,21 @@
         </imgdir>
         <int name="hp" value="80"/>
       </imgdir>
+      <imgdir name="6">
+        <int name="x" value="15000"/>
+        <int name="y" value="3000"/>
+        <int name="mpCon" value="50"/>
+        <int name="interval" value="88"/>
+        <int name="time" value="6"/>
+        <int name="hp" value="66"/>
+        <imgdir name="mob">
+          <canvas name="0" width="37" height="42">
+            <vector name="origin" x="18" y="45"/>
+          </canvas>
+          <int name="repeat" value="1"/>
+          <int name="pos" value="2"/>
+        </imgdir>
+      </imgdir>
     </imgdir>
   </imgdir>
   <imgdir name="150">
@@ -12821,6 +13097,24 @@
         <int name="limit" value="5"/>
         <int name="summonEffect" value="2"/>
         <int name="0" value="7130200"/>
+      </imgdir>
+      <imgdir name="177">
+        <string name="info" value="드래고니카"/>
+        <int name="hp" value="80"/>
+        <int name="limit" value="4"/>
+        <int name="summonEffect" value="12"/>
+        <int name="interval" value="90"/>
+        <int name="0" value="8300002"/>
+        <int name="1" value="8300003"/>
+      </imgdir>
+      <imgdir name="178">
+        <string name="info" value="드래곤 라이더"/>
+        <int name="hp" value="40"/>
+        <int name="limit" value="4"/>
+        <int name="summonEffect" value="12"/>
+        <int name="interval" value="75"/>
+        <int name="0" value="8300004"/>
+        <int name="1" value="8300004"/>
       </imgdir>
       <imgdir name="2">
         <int name="interval" value="50"/>

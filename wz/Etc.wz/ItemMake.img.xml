@@ -1537,6 +1537,66 @@
         </imgdir>
       </imgdir>
     </imgdir>
+    <imgdir name="01142156">
+      <int name="reqLevel" value="80"/>
+      <int name="reqSkillLevel" value="1"/>
+      <int name="itemNum" value="1"/>
+      <int name="reqItem" value="4032502"/>
+      <int name="tuc" value="0"/>
+      <int name="meso" value="0"/>
+      <imgdir name="recipe">
+        <imgdir name="0">
+          <int name="item" value="4032502"/>
+          <int name="count" value="1"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="item" value="4011006"/>
+          <int name="count" value="2"/>
+        </imgdir>
+        <imgdir name="2">
+          <int name="item" value="4000021"/>
+          <int name="count" value="1"/>
+        </imgdir>
+        <imgdir name="3">
+          <int name="item" value="4007001"/>
+          <int name="count" value="10"/>
+        </imgdir>
+        <imgdir name="4">
+          <int name="item" value="4007005"/>
+          <int name="count" value="10"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+    <imgdir name="01142157">
+      <int name="reqLevel" value="120"/>
+      <int name="reqSkillLevel" value="1"/>
+      <int name="itemNum" value="1"/>
+      <int name="reqItem" value="4032503"/>
+      <int name="tuc" value="0"/>
+      <int name="meso" value="0"/>
+      <imgdir name="recipe">
+        <imgdir name="0">
+          <int name="item" value="4032503"/>
+          <int name="count" value="1"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="item" value="4011006"/>
+          <int name="count" value="4"/>
+        </imgdir>
+        <imgdir name="2">
+          <int name="item" value="4000021"/>
+          <int name="count" value="1"/>
+        </imgdir>
+        <imgdir name="3">
+          <int name="item" value="4007006"/>
+          <int name="count" value="10"/>
+        </imgdir>
+        <imgdir name="4">
+          <int name="item" value="4007002"/>
+          <int name="count" value="10"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
     <imgdir name="02041058">
       <int name="reqLevel" value="50"/>
       <int name="reqSkillLevel" value="1"/>
@@ -8914,6 +8974,106 @@
         <imgdir name="3">
           <int name="item" value="4021010"/>
           <int name="count" value="3"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+    <imgdir name="01942002">
+      <int name="reqLevel" value="115"/>
+      <int name="reqSkillLevel" value="3"/>
+      <int name="itemNum" value="1"/>
+      <int name="tuc" value="3"/>
+      <int name="meso" value="300000"/>
+      <imgdir name="recipe">
+        <imgdir name="0">
+          <int name="item" value="4007002"/>
+          <int name="count" value="12"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="item" value="4260007"/>
+          <int name="count" value="8"/>
+        </imgdir>
+        <imgdir name="2">
+          <int name="item" value="4260008"/>
+          <int name="count" value="4"/>
+        </imgdir>
+        <imgdir name="3">
+          <int name="item" value="4020009"/>
+          <int name="count" value="15"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+    <imgdir name="01952002">
+      <int name="reqLevel" value="115"/>
+      <int name="reqSkillLevel" value="3"/>
+      <int name="itemNum" value="1"/>
+      <int name="tuc" value="3"/>
+      <int name="meso" value="300000"/>
+      <imgdir name="recipe">
+        <imgdir name="0">
+          <int name="item" value="4007001"/>
+          <int name="count" value="12"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="item" value="4260007"/>
+          <int name="count" value="8"/>
+        </imgdir>
+        <imgdir name="2">
+          <int name="item" value="4260008"/>
+          <int name="count" value="4"/>
+        </imgdir>
+        <imgdir name="3">
+          <int name="item" value="4020009"/>
+          <int name="count" value="15"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+    <imgdir name="01962002">
+      <int name="reqLevel" value="115"/>
+      <int name="reqSkillLevel" value="3"/>
+      <int name="itemNum" value="1"/>
+      <int name="tuc" value="3"/>
+      <int name="meso" value="300000"/>
+      <imgdir name="recipe">
+        <imgdir name="0">
+          <int name="item" value="4007005"/>
+          <int name="count" value="12"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="item" value="4260007"/>
+          <int name="count" value="8"/>
+        </imgdir>
+        <imgdir name="2">
+          <int name="item" value="4260008"/>
+          <int name="count" value="4"/>
+        </imgdir>
+        <imgdir name="3">
+          <int name="item" value="4020009"/>
+          <int name="count" value="15"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+    <imgdir name="01972002">
+      <int name="reqLevel" value="115"/>
+      <int name="reqSkillLevel" value="3"/>
+      <int name="itemNum" value="1"/>
+      <int name="tuc" value="3"/>
+      <int name="meso" value="300000"/>
+      <imgdir name="recipe">
+        <imgdir name="0">
+          <int name="item" value="4007006"/>
+          <int name="count" value="12"/>
+        </imgdir>
+        <imgdir name="1">
+          <int name="item" value="4260007"/>
+          <int name="count" value="8"/>
+        </imgdir>
+        <imgdir name="2">
+          <int name="item" value="4260008"/>
+          <int name="count" value="4"/>
+        </imgdir>
+        <imgdir name="3">
+          <int name="item" value="4020009"/>
+          <int name="count" value="15"/>
         </imgdir>
       </imgdir>
     </imgdir>

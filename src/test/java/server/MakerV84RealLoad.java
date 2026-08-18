@@ -34,13 +34,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * <p><strong>Not a {@code *Test} class on purpose</strong>, same reason as its siblings:
  * {@link WZFiles#DIRECTORY} is a {@code static final} resolved once per JVM.
  *
- * <p><strong>What this can and cannot check.</strong> The recipes were read out of the pristine v84
- * {@code Etc.wz} with {@code docs/wz-baseline/tool-peek}; the worktree's own
- * {@code wz/Etc.wz/ItemMake.img.xml} is still the v83 file and does not contain them, so this test
- * cannot re-read the ingredient lists from the tree - {@link #theRecipeIsNotInThisTreesItemMakeYet()}
- * asserts that state explicitly so the day it changes, someone is told to tighten this class.
- * What it <em>can</em> check without the archive is every derived value, and those are the ones a
- * human could have got wrong:
+ * <p><strong>What this checks.</strong> Ticket 59 R09 merged the six nodes into
+ * {@code wz/Etc.wz/ItemMake.img.xml}, so the ingredient lists are no longer literals this test has
+ * to take on trust: {@link #theRecipeIsInThisTreesItemMakeAndAgreesWithChangeSet158()} re-reads
+ * every scalar and every recipe pair out of the archive and compares them to the SQL. On top of
+ * that it checks the derived values, which are the ones a human could have got wrong:
  *
  * <ul>
  *   <li>{@code req_meso} is not the raw {@code meso} leaf. It is marked up by
@@ -184,24 +182,60 @@ class MakerV84RealLoad {
     }
 
     /**
-     * The stated gap, asserted rather than described. The six nodes are v84 additions this tree's
-     * Etc.wz has not merged; the server only reads ItemMake.img for the {@code catalyst} leaf so
-     * nothing misbehaves, but a fresh {@code SkillMakerFetcher} run would emit a maker-data.sql
-     * without them. When the merge lands, this test fails and the ingredient lists above should be
-     * re-read from the tree instead of being literals.
+     * The merge landed (ticket 59, R09): all six nodes now sit in this tree's ItemMake.img, under
+     * the group the changeSet records and with <strong>zero-padded</strong> 8-digit names, which is
+     * how {@code ItemInformationProvider#getMakerStimulant} looks them up. Since the tree now has
+     * them, changeSet 158's literals are no longer unverifiable: every scalar and every
+     * {@code recipe/<n>/{item,count}} pair is re-read from the archive and compared against the SQL,
+     * which is what a {@code SkillMakerFetcher} run would derive. Row set, not row count.
      */
     @Test
-    void theRecipeIsNotInThisTreesItemMakeYet() {
+    void theRecipeIsInThisTreesItemMakeAndAgreesWithChangeSet158() throws IOException {
         Data itemMake = DataProviderFactory.getDataProvider(WZFiles.ETC).getData("ItemMake.img");
         assertNotNull(itemMake, "Etc.wz has no ItemMake.img at all");
+
+        Map<Integer, int[]> create = createRows();
+        Map<Integer, List<int[]>> recipe = recipeRows();
+
         for (int itemId : allSix()) {
             String padded = String.format("%08d", itemId);
-            boolean present = itemMake.getChildByPath("0/" + padded) != null
-                    || itemMake.getChildByPath("2/" + padded) != null;
-            assertTrue(!present,
-                    "ItemMake.img now carries " + padded + ". The Etc.wz merge landed - good - but "
-                            + "changeSet 158's ingredient literals should now be re-derived from the "
-                            + "tree, and this assertion inverted.");
+            int group = create.get(itemId)[0];
+            Data node = itemMake.getChildByPath(group + "/" + padded);
+            assertNotNull(node, "ItemMake.img/" + group + " has no node named " + padded
+                    + " - an unpadded name would be invisible to getMakerStimulant");
+
+            assertEquals(create.get(itemId)[2], DataTool.getInt("reqLevel", node, -1),
+                    "reqLevel leaf of " + padded + " disagrees with changeSet 158");
+            assertEquals(create.get(itemId)[3], DataTool.getInt("reqSkillLevel", node, -1),
+                    "reqSkillLevel leaf of " + padded + " disagrees with changeSet 158");
+            assertEquals(create.get(itemId)[8], DataTool.getInt("itemNum", node, -1),
+                    "itemNum leaf of " + padded + " disagrees with changeSet 158");
+            assertEquals(create.get(itemId)[9], DataTool.getInt("tuc", node, -1),
+                    "tuc leaf of " + padded + " disagrees with changeSet 158");
+            assertEquals(create.get(itemId)[5], DataTool.getInt("reqItem", node, 0),
+                    "reqItem leaf of " + padded + " disagrees with changeSet 158");
+
+            // The WZ meso leaf is the RAW figure; makercreatedata.req_meso is it marked up.
+            int rawMeso = DataTool.getInt("meso", node, -1);
+            assertEquals(makerFee(rawMeso, rawMeso == 0 ? 0 : equipReqLevel(itemId)),
+                    create.get(itemId)[4],
+                    "req_meso for " + itemId + " is not generateUpdatedItemFee() of the tree's meso "
+                            + "leaf " + rawMeso);
+
+            List<String> fromTree = new ArrayList<>();
+            Data recipeNode = node.getChildByPath("recipe");
+            assertNotNull(recipeNode, "ItemMake.img/" + group + "/" + padded + " has no recipe array");
+            for (int i = 0; recipeNode.getChildByPath(String.valueOf(i)) != null; i++) {
+                Data entry = recipeNode.getChildByPath(String.valueOf(i));
+                fromTree.add(DataTool.getInt("item", entry, -1) + "x" + DataTool.getInt("count", entry, -1));
+            }
+            List<String> fromSql = new ArrayList<>();
+            for (int[] row : recipe.getOrDefault(itemId, List.of())) {
+                fromSql.add(row[0] + "x" + row[1]);
+            }
+            assertEquals(fromSql, fromTree,
+                    "changeSet 158's makerrecipedata rows for " + itemId + " are not the recipe array "
+                            + "a SkillMakerFetcher run would read out of ItemMake.img");
         }
     }
 
