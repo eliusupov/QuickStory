@@ -45,12 +45,12 @@ runtime and nothing needs regenerating to change resolution.
 
 Per **operation**: **306 PASS, 0 FAIL, 14 unresolved, 7 dropped**. Restricted to the
 shipping set (groups C–J; A/B/L are already done by `edits\`, K is optional gameplay
-caps): **289 ops → 289 PASS, 0 FAIL, 0 unresolved (100%).**
+caps): **289 ops → 288 PASS, 0 FAIL, 1 unresolved (99.7%).**
 
-Groups **C, D, E, F, G, H, I and J are complete.** E is 33/33: the last op,
-`ccLoginDescriptorFix` (`0x0060D85B`), was resolved against a live channel-select
-memory dump and now ships as a v84-shaped cave plus two pokes — see
-`data/manual-sites.json` under `resolved_v84_caves` and "What CANNOT be verified" below.
+Groups **C, D, F, G, H, I and J are complete.** E is 32/33. The single open op is
+`ccLoginDescriptorFix` (`0x0060D85B`), and it is not an address problem — see
+"What CANNOT be verified" below and `data/manual-sites.json`
+under `not_portable_as_is`.
 
 ### What phase 2 changed
 
@@ -427,18 +427,22 @@ prove any of this:
 4. **Interaction with `edits\`.** No two-writers-to-one-address conflict is possible from
    this table (groups A/B/L are excluded), but nothing proves `bypass` does not itself
    relocate code.
-5. **`ccLoginDescriptorFix` (`0x0060D85B`, group E) — RESOLVED from a live dump.**
-   v84 recompiled the argument setup: the literal coordinates were hoisted into stack
-   locals and a second arm (`cmp ebx,4 ; jne` at `0x00622907`, v84-new absolute coords)
-   was added. arm1 is the byte-for-byte v83 descendant. The prior finding's offsets were
-   2× too large — `myWidth=(W-800)/2=240`, `myHeight=(H-600)/2=60` at 1280×720 — so
-   `add eax,0x21`'s target `0x21+60=0x5D` fits an `imm8` and the "706px overflow" never
-   existed. Shipped as three rows (id P126): a redesigned cave at `0x00622900` that sets
-   `eax += myHeight` (Y) and `edx = myWidth` (X, the channel-button hit-rect), plus pokes
-   for a2x (`0x00622914`, `-149+myWidth`) and a3 (`0x00622958`, 25). arm2 overwrites
-   eax/edx/[ebp-0x1c], so the writes are inert there and it keeps its v84 layout.
-   Full working in `data/manual-sites.json` under `resolved_v84_caves`. Only re-verifiable
-   against the pristine dumps, which were deleted with an earlier session's scratch.
+5. **The one unresolved shipping operation**, `ccLoginDescriptorFix` (`0x0060D85B`,
+   group E). Its *function* is resolved beyond doubt — the enclosing code brackets
+   instruction-for-instruction and the three descriptor pointers relocate 1:1
+   (`0xAF70D0/84/80` → `0xB486D0/84/80`). The **cave** is not portable: it displaces 51
+   bytes of argument setup that no longer exists — `and edx,0x3f ; add edx,0x21` does not
+   occur *anywhere* in the v84 image — because v84 hoisted the literal coordinates into
+   stack locals and added a second arm (`cmp ebx,4 ; jne` at `0x00622907`) with four
+   constants v83 has no counterpart for.
+
+   Two of the cave's four effects do map onto plain immediate writes
+   (`0x00622956+2`, `and ebx,0x64` → 25; and `0x00622911+3`, the `-149` → `W-949`); two
+   do not, one of them because v84's `add eax,0x21` is a sign-extended `imm8` that
+   overflows above 706px of height. **Shipping the two portable halves alone would put
+   the descriptor somewhere neither version intends, so it is deliberately left out.**
+   Full working in `data/manual-sites.json` under `not_portable_as_is`. Finishing it
+   needs a running client — it is a design job, not address translation.
 
    The `0x0052307E` group-I block's **second arm** is likewise unpatched (see above).
 6. **The `0x0040013E` 4 GB edit.** It patches the PE `Characteristics` field, which the
@@ -474,7 +478,7 @@ Check in this order — each step gates the next, so stop at the first failure:
 | # | what | proves | if it fails |
 |---|---|---|---|
 | 1 | window opens at 1280×720, not 800×600 | `0x00A4127E` / `0x00A41283` (`InitializeGr2D`) landed | the whole set is mis-timed or mis-addressed; nothing below will be meaningful |
-| 2 | login screen: version number and world-select buttons in place, **and channel 1 is clickable** | group E, 33/33 ops, + the `VersionNumberFix` / `LoginBackCanvas` / `LoginViewRec` / `ccLoginDescriptorFix` caves | if ch1 draws shifted but only clicks near the old 800×600 spot, `ccLoginDescriptorFix`'s cave (`0x00622900`) or its a2x/a3 pokes did not land — check the startup report's applied count |
+| 2 | login screen: version number and world-select buttons in place | group E, 32/33 ops, + the `VersionNumberFix` / `LoginBackCanvas` / `LoginViewRec` caves | only `ccLoginDescriptorFix` (`0x0060D85B`) is unported — **expect the world-select descriptor to stay at its v84 position**; everything else on this screen should move |
 | 3 | mouse cursor reaches all four screen edges | `0x0059AC09/22`, `0x0059A898/8B1` cursor clamps | cursor clamp group in C |
 | 4 | in game: status bar spans the bottom, HP/MP/EXP bars aligned, **background layer moves with it** | group D, 31/31, + all three status-bar caves | if the background alone stays at 22px, `AdjustStatusBarBG`'s redesigned 9-byte cave is wrong — it is the one cave in the set whose body was rewritten rather than re-pointed |
 | 5 | open a skill window, hover a buff icon: tooltip stays on screen | `0x008F32CC/DF` tooltip clamp, both resolved | if it clips, the regalloc-tolerant match at `0x00929BE1` is wrong |

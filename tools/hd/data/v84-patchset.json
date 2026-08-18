@@ -3664,68 +3664,11 @@
    "value": null,
    "comment": "world LoginDescriptor fix",
    "drop": null,
-   "fixed": true,
-   "tier": "M-manual",
-   "v84": 6433024,
-   "checks": {
-    "ADDR": true,
-    "DUAL": true,
-    "FIT": true,
-    "SHAPE": true,
-    "CAVE83": true,
-    "CAVE": true,
-    "JMPIN": true,
-    "SLOT": null
-   },
-   "verdict": "PASS",
-   "size84": 7,
-   "expect": "4883e03f83c021",
-   "cave_v83_seq": [
-    "and edx,0x3f",
-    "add edx,0x21",
-    "...(51B v83 arg setup, a1x/a2x/a2y/a3 rewritten)"
-   ],
-   "cave_v84_seq": [
-    "dec eax",
-    "and eax,0x3f",
-    "add eax,0x21"
-   ],
-   "cave_retn_v84": 6433031,
-   "cave_body_same": false,
-   "jmpin": [],
-   "jmpin_aligned": true,
-   "extra_pokes": [
-    {
-     "v84": 6433044,
-     "v83": 6346888,
-     "kind": "K_INT",
-     "size": 4,
-     "f": [
-      1,
-      0,
-      0,
-      0,
-      -549
-     ],
-     "expect": "6bffffff",
-     "comment": "P126 effect4 a2x: mov [ebp-0x1c],-149 -> -149+myWidth"
-    },
-    {
-     "v84": 6433112,
-     "v83": 6346876,
-     "kind": "K_BYTE",
-     "size": 1,
-     "f": [
-      0,
-      0,
-      0,
-      0,
-      25
-     ],
-     "expect": "64",
-     "comment": "P126 effect2 a3: and ebx,0x64 -> and ebx,25"
-    }
-   ]
+   "fixed": false,
+   "tier": null,
+   "v84": null,
+   "checks": {},
+   "verdict": "UNRESOLVED"
   },
   {
    "id": "P127",

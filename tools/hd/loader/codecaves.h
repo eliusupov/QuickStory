@@ -337,41 +337,34 @@ __declspec(naked) void ccLoginBackBtnFix() {	//un used
 	}
 }
 
-int a1x = 0; int a2x = 0; int a2y = 0; int a3 = 0; int a1y = 0;
-// Resolution-INDEPENDENT constant (owner-directed HD fix, not a value we may vary by res).
-// Read live from the full-process channel-select dump (hdclient-full.bin): the drawn
-// descriptor object 0x5E90223C has draw top-left at obj+0xfc/+0x100 = (240,234) and hit
-// top-left at obj+0x9c/+0x98 = (240,93). X already matches (240); the hit-rect top is 141px
-// ABOVE the button's drawn top (owner's "top end only"). Both tops carry +myHeight (draw
-// rides P127's 125+myHeight canvas; hit gets a2y), so 234-93=141 is a pure constant that
-// holds at any resolution. ponytail: single dump-derived constant; owner visually confirms.
-int ccLoginDescriptorYAdj = 141;
+int a1x = 0; int a2x = 0; int a2y = 0; int a3 = 0; int a1y = 0; 
 
-// v84 BODY EDIT (not upstream). v84 recompiled Client::UpdateResolution's LoginDescriptor
-// setup: the world/channel DESCRIPTOR coordinates that v83 baked as literals were hoisted
-// into stack locals, and a second arm (`cmp ebx,4`) was added for a v84-new layout. The
-// v83 51-byte cave (whole arg block replayed) has no v84 counterpart. Only the arm the
-// server actually takes (arm1, the direct v83 descendant) needs the fix, and arm2
-// overwrites eax/edx/[ebp-0x1c] wholesale, so writing them here is inert for arm2.
-//
-// This cave replaces just v84 0x00622900..0x00622906 (dec eax; and eax,0x3f; add eax,0x21)
-// and injects the two coordinate offsets that ARE the channel-button hit-rect:
-//   effect 1  Y += a2y  (myHeight)    -- was `add edx,a2y` in v83
-//   effect 3  X  = a1x  (myWidth)     -- was `xor eax,eax; add eax,a1x` in v83; here the
-//                                        X args read edx (v84 `xor edx,edx`), so set edx.
-// The other two Ezorsia effects land on the far side of P125's operand, unreachable from
-// one jmp cave, and ship as plain poke rows instead (hd_patches.inc, id P126):
-//   effect 4  a2x = -149+myWidth  at 0x00622914   (K_INT)
-//   effect 2  a3  = 25            at 0x00622958   (K_BYTE)
 __declspec(naked) void ccLoginDescriptorFix() {
 	__asm {
-		dec    eax            // 0x00622900  replay
-		and    eax, 0x3f      // 0x00622901  replay
-		add    eax, 0x21      // 0x00622904  replay
-		add    eax, a2y                  // EFFECT 1: Y += myHeight   (arm1; arm2 overwrites eax)
-		add    eax, ccLoginDescriptorYAdj // EFFECT 1b: align hit-rect top to button draw top (+141)
-		mov    edx, a1x                  // EFFECT 3: X  = myWidth    (arm1; arm2 overwrites edx)
-		jmp dword ptr[dwLoginDescriptorFixRetn]   // -> 0x00622907 (cmp ebx,4)
+		and	edx, 0x3f
+		add    edx, 0x21
+		add    edx, a2y
+		cmp     ecx, edi
+		setl   bl
+		mov     ecx, esi
+		mov    DWORD PTR[esi + 0x4], 0xaf7084
+		mov    DWORD PTR[esi + 0x8], 0xaf7080
+		neg     ebx
+		sbb     ebx, ebx
+		and ebx, a3	//and ebx, 0x64
+		add     ebx, eax
+		push    ebx
+		push    edx
+		xor eax, eax
+		add eax, a1x //a1x
+		push    eax
+		push    edx
+		push    eax
+		push    edx
+		mov    eax, a2x	//mov    eax, 0xffffff6b
+		push    eax
+		push	edi
+		jmp dword ptr[dwLoginDescriptorFixRetn]
 	}
 }
 

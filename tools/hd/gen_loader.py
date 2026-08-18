@@ -149,21 +149,6 @@ def main():
                     f'{"" if fitted else "  // CONST (non-linear)"}'
                     f'{f"  // VANILLA-ADJ {adj:+d}" if adj else ""}'
                     f'  // {note}\n')
-            # A code cave whose v84 layout split one source op across sites a plain
-            # jmp cave cannot span (a shipped write sits between them) carries the
-            # leftover immediate writes here. They are emitted as ordinary poke rows
-            # under the SAME id -- the loader applies each independently. See P126:
-            # v84 recompiled ccLoginDescriptorFix so a3 and a2x land on either side of
-            # P125's operand, unreachable from the cave at 0x00622900.
-            for ep in r.get('extra_pokes', []):
-                pb = bytes.fromhex(ep.get('expect') or '')
-                pex = '{' + ','.join(f'0x{b:02X}' for b in pb) + '}' if pb else '{0}'
-                pexpr = '{' + ','.join(str(c) for c in ep['f']) + '}'
-                f.write(f'  {{ 0x{ep["v84"]:08X}, {ep.get("size", 4):3}, '
-                        f'{ep["kind"]:11}, {pexpr:>20},'
-                        f" '{r['group']}', \"{r['id']}\", 0x{ep['v83']:08X},"
-                        f' {len(pb)}, {pex} }},'
-                        f'  // {ep["comment"][:60]}\n')
         f.write('};\n')
         cave = [(r, p) for r, p, _, _, _ in out if r['op'] == 'CodeCave']
         f.write('\n// Code-cave origins and return addresses. codecaves.h from upstream is\n'

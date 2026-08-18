@@ -124,9 +124,6 @@ static const HdPatch kHdPatches[] = {
   { 0x0060B561,   4, K_INT      ,         {0,-1,0,0,0}, 'E', "P119", 0x005F6627, 4, {0xD4,0xFE,0xFF,0xFF} },  // push -300 ;
   { 0x006190B9,   4, K_INT      ,          {0,2,0,0,0}, 'E', "P124", 0x0060411C, 4, {0x58,0x02,0x00,0x00} },  // push 600
   { 0x0062294A,   4, K_INT      ,         {0,0,0,0,50}, 'E', "P125", 0x0060D849, 4, {0x2C,0x01,0x00,0x00} },  // speed 1	//temporary fix by increasing the speed of display u
-  { 0x00622900,   7, K_CAVE     ,          {0,0,0,0,0}, 'E', "P126", 0x0060D85B, 7, {0x48,0x83,0xE0,0x3F,0x83,0xC0,0x21} },  // CONST (non-linear)  // world LoginDescriptor fix
-  { 0x00622914,   4, K_INT      ,       {1,0,0,0,-549}, 'E', "P126", 0x0060D888, 4, {0x6B,0xFF,0xFF,0xFF} },  // P126 effect4 a2x: mov [ebp-0x1c],-149 -> -149+myWidth
-  { 0x00622958,   1, K_BYTE     ,         {0,0,0,0,25}, 'E', "P126", 0x0060D87C, 1, {0x64} },  // P126 effect2 a3: and ebx,0x64 -> and ebx,25
   { 0x006232D8,  11, K_CAVE     ,          {0,0,0,0,0}, 'E', "P127", 0x0060E1BF, 8, {0x68,0x60,0x01,0x00,0x00,0x6A,0x7D,0x6A} },  // CONST (non-linear)  // world select buttons fix		//thank you teto for pointing out 
   { 0x006248C7,   4, K_INT      ,       {0,1,0,0,-201}, 'E', "P128", 0x0060F79B, 4, {0x96,0x00,0x00,0x00} },  // ??possibly related to login utildlg
   { 0x006248D0,   4, K_INT      ,       {0,1,0,0,-181}, 'E', "P129", 0x0060F7A4, 4, {0xAA,0x00,0x00,0x00} },  // ??possibly related to login utildlg
@@ -353,11 +350,6 @@ static const HdPatch kHdPatches[] = {
 #define HD_ccMuruengraidTimerBar_RETN   0x00561F1F  // origin + 7 (2 nops after the 5-byte jmp)
 #define HD_VersionNumberFix_ORIGIN 0x006094E5
 #define HD_VersionNumberFix_RETN   0x006094EF  // origin + 10 (5 nops after the 5-byte jmp)
-#define HD_ccLoginDescriptorFix_ORIGIN 0x00622900
-#define HD_ccLoginDescriptorFix_RETN   0x00622907  // origin + 7 (2 nops after the 5-byte jmp)
-// BODY EDIT REQUIRED for ccLoginDescriptorFix:
-//   v83 displaced: and edx,0x3f ; add edx,0x21 ; ...(51B v83 arg setup, a1x/a2x/a2y/a3 rewritten)
-//   v84 displaced: dec eax ; and eax,0x3f ; add eax,0x21
 #define HD_ccLoginBackCanvasFix_ORIGIN 0x006232D8
 #define HD_ccLoginBackCanvasFix_RETN   0x006232E3  // origin + 11 (6 nops after the 5-byte jmp)
 #define HD_ccLoginViewRecFix_ORIGIN 0x0064083B
@@ -410,7 +402,7 @@ const unsigned long dwMuruengraidMonster1_2Retn = 0x0056157F;  // ccMuruengraidM
 const unsigned long dwMuruengraidTimerBarRetn = 0x00561F1F;  // ccMuruengraidTimerBar
 const unsigned long dwVersionNumberFixRtm = 0x006094EF;  // VersionNumberFix
 const unsigned long dwCLoginSendCheckPasswordPacketRetn = 0;  // ccCLoginSendCheckPasswordPacket NOT SHIPPED - unreachable
-const unsigned long dwLoginDescriptorFixRetn = 0x00622907;  // ccLoginDescriptorFix
+const unsigned long dwLoginDescriptorFixRetn = 0;  // ccLoginDescriptorFix NOT SHIPPED - unreachable
 const unsigned long dwLoginBackCanvasFixRetn = 0x006232E3;  // ccLoginBackCanvasFix
 const unsigned long dwLoginViewRecFixRetn = 0x0064084C;  // ccLoginViewRecFix
 const unsigned long dwAlwaysViewRestorerFixRtm = 0x00657981;  // AlwaysViewRestoreFix
