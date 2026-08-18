@@ -40,8 +40,15 @@ disagreeing status files were consolidated once already.
 
 ## Hard constraints
 
-- **Read-only, never write:** `D:\games\MapleStory\`, `D:\games\MSv84\client\`, `D:\games\dreamms\`,
-  `Server\porting-resources\wz-data\v84\`.
+- **Layout.** `D:\games\MapleStory\` holds the owner's **v83 HD client** at its root (`*.wz`,
+  `MapleStory.exe`) *and* the server repo at `D:\games\MapleStory\Server\Cosmic`. `D:\games\MSv84\`
+  holds the v84 side: `client\`, `client-hd\`, `opcodes\`, `bypass\`, and the Ezorsia fork.
+- **Read-only, never write:** the client files at the ROOT of `D:\games\MapleStory\` (not
+  `Server\`, which is the repo), `D:\games\MSv84\client\`, `D:\games\dreamms\`, and
+  `D:\games\MapleStory\Server\porting-resources\wz-data\v84\` — the pristine v84 carve.
+- **The repo is `D:\games\MapleStory\Server\Cosmic`**, branch `master`. Migration work happens on
+  the worktree branch `worktree-evan-dualblade` under `.claude\worktrees\`, and has **not** been
+  merged to master yet.
 - **Never launch a game client** — it rewrites a shared registry key.
 - **Changesets and resources ship INSIDE the jar.** A restart without `./mvnw -o package` applies
   nothing. Verify a change landed in the **database**, not in the log.
