@@ -181,7 +181,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                 }
 
                 int SPFrom = p.readInt();
-                if (!spResetCoversSkill(itemId, SPTo) || !spResetCoversSkill(itemId, SPFrom)) {
+                if (!spResetCovers(itemId, SPTo, SPFrom)) {
                     c.sendPacket(PacketCreator.enableActions());
                     return;
                 }
@@ -649,9 +649,9 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
     }
 
     /**
-     * Whether an SP reset scroll is allowed to touch this skill. Every scroll is sold for one
-     * advancement and String.wz/Cash.img says which, so a 1st-job scroll must not be able to shuffle
-     * 4th-job points around - it could, before this check existed:
+     * Whether an SP reset scroll may move a point from {@code skillFrom} to {@code skillTo}. Every
+     * scroll is sold for one advancement and String.wz/Cash.img says which, so a 1st-job scroll must
+     * not be able to shuffle 4th-job points around - it could, before this check existed:
      *
      * <pre>
      *   5050001-5050004  "SP Reset (Nth job)"                branch N
@@ -664,15 +664,30 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
      * <p>The two families do not overlap: the Evan scrolls say "Only for Evan", and letting an
      * explorer hold one would hand him a cross-tier reset anyway, since 5050006 covers branches 3
      * AND 4 - the very thing this check exists to stop.
+     *
+     * <p><b>The ends are not symmetric, and that is v84's rule, not an oversight.</b> The vanilla
+     * 2nd/3rd/4th descs state it outright - "The 1st job SP raised AFTER the 2nd job adv. can also
+     * be reset and applied to a 2nd job skill" - so the target is pinned to the scroll's own tier
+     * while the source may be any tier at or below it. GMS also required that the source point was
+     * raised after the advancement; we cannot enforce that half, because nothing here records WHEN
+     * a point was spent. Do not "tighten" the source to an exact tier match - that would be
+     * stricter than v84 was. Evan's scrolls keep both ends inside the pair: their descs are
+     * negative ("may NOT be applied to 1st or 3rd job skills") and never mention reaching below it.
      */
-    static boolean spResetCoversSkill(int itemId, int skillId) {
+    static boolean spResetCovers(int itemId, int skillTo, int skillFrom) {
         int tier = itemId - ItemId.AP_RESET;
-        if (GameConstants.isEvan(skillId / 10000) != (tier > 4)) {
+        boolean evanScroll = tier > 4;
+        if (GameConstants.isEvan(skillTo / 10000) != evanScroll || GameConstants.isEvan(skillFrom / 10000) != evanScroll) {
             return false;
         }
 
-        int branch = GameConstants.getSkillBranch(skillId);
-        return tier <= 4 ? branch == tier : branch == 2 * tier - 9 || branch == 2 * tier - 8;
+        int to = GameConstants.getSkillBranch(skillTo);
+        int from = GameConstants.getSkillBranch(skillFrom);
+        if (evanScroll) {
+            int first = 2 * tier - 9;   // 5050005 -> branches 1-2, ..., 5050009 -> branches 9-10
+            return (to == first || to == first + 1) && (from == first || from == first + 1);
+        }
+        return to == tier && from >= 1 && from <= tier;
     }
 
     private static void remove(Client c, short position, int itemid) {

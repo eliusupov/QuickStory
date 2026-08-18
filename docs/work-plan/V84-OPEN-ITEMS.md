@@ -74,8 +74,11 @@ Still open:
   `2218.img.xml:297,620`, all `value="10"`). Left alone deliberately: 22171004 has **no** `masterLevel`
   node, so reading it would demote that skill out of fourth-job and cap its SP at 5, which is a
   behaviour change, not a refactor. `GameConstants.getSkillBranch()` (added for the SP reset tier
-  check) does **not** replace the list: it says 9 or 10 for every 2217/2218 skill, while the list
-  names the four that actually have a master level plus 22170001. `QUEUED`
+  check) does **not** replace the list and must not be swapped in for it - it answers a different
+  question. It returns 9 for **every** 2217 skill and 10 for **every** 2218 one, i.e. which
+  advancement a skill belongs to; the list is five specific ids, and those five are disjoint from
+  the four that actually carry a `masterLevel` node (22171000, 22171002, 22181000, 22181001).
+  Advancement and fourth-job-ness are not the same predicate for Evan. `QUEUED`
 
 ## 3. Drops, cards, maker, reactors
 
