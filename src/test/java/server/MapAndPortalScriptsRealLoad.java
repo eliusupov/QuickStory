@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -473,6 +474,48 @@ class MapAndPortalScriptsRealLoad {
         }
     }
 
+    /**
+     * <strong>The case trap.</strong> {@code AbstractScriptManager} resolves a portal script through
+     * {@code Files.exists(Path.of("scripts", path))}, and on the owner's Windows/NTFS box that lookup
+     * is case-INSENSITIVE. So a file whose name differs from the {@code script=} string in Map.wz
+     * only by case works here and is a dead portal on any case-sensitive host - silently, because
+     * {@code GenericPortal.enterPortal} neither warps nor logs when a named script is missing.
+     *
+     * <p>Ticket 43 found exactly one: {@code Map.wz/.../103040400.img} declares
+     * {@code script="Depart_topFloor"} while the file shipped as {@code Depart_TopFloor.js}. This
+     * asserts the whole set rather than that one name, so the next one cannot slip in.
+     *
+     * <p>A declared name with NO file at all is skipped on purpose - that is ticket 43's documented
+     * backlog of dead portals, and it is a different failure from this one.
+     */
+    @Test
+    void everyPortalScriptFileIsSpelledExactlyAsMapWzNamesIt() throws IOException {
+        Set<String> declared = scanMapWzForPortalScriptNames();
+        assertFalse(declared.isEmpty(), "no portal script= names found in Map.wz");
+
+        Map<String, String> byLowerCase = new LinkedHashMap<>();
+        try (Stream<Path> list = Files.list(Path.of("scripts", "portal"))) {
+            for (Path f : list.filter(Files::isRegularFile).toList()) {
+                String file = f.getFileName().toString();
+                if (file.endsWith(".js")) {
+                    String base = file.substring(0, file.length() - 3);
+                    byLowerCase.put(base.toLowerCase(Locale.ROOT), base);
+                }
+            }
+        }
+
+        for (String name : declared) {
+            String sameLetters = byLowerCase.get(name.toLowerCase(Locale.ROOT));
+            if (sameLetters == null) {
+                continue;
+            }
+            assertEquals(name, sameLetters,
+                    "Map.wz declares script=\"" + name + "\" but the file is scripts/portal/"
+                            + sameLetters + ".js. Windows resolves that, a case-sensitive host does "
+                            + "not, and the portal dies there without a log line");
+        }
+    }
+
     // ------------------------------------------------------------------ helpers
 
     private interface Check<T> {
@@ -562,6 +605,30 @@ class MapAndPortalScriptsRealLoad {
                     out.computeIfAbsent(m.group(1), k -> new LinkedHashSet<>())
                             .add(Integer.parseInt(base));
                 }
+            }
+        }
+        return out;
+    }
+
+    /** every distinct portal {@code script=} name Map.wz declares. */
+    private static Set<String> scanMapWzForPortalScriptNames() throws IOException {
+        Pattern script = Pattern.compile("<string name=\"script\" value=\"([^\"]+)\"");
+        Set<String> out = new LinkedHashSet<>();
+        Path maps = Path.of(WZFiles.DIRECTORY, "Map.wz", "Map");
+        List<Path> files = new ArrayList<>();
+        try (Stream<Path> walk = Files.walk(maps)) {
+            walk.filter(Files::isRegularFile)
+                    .filter(p -> p.getFileName().toString().endsWith(".img.xml"))
+                    .forEach(files::add);
+        }
+        for (Path p : files) {
+            String base = p.getFileName().toString().replace(".img.xml", "");
+            if (!base.chars().allMatch(java.lang.Character::isDigit)) {
+                continue;
+            }
+            Matcher m = script.matcher(Files.readString(p, StandardCharsets.ISO_8859_1));
+            while (m.find()) {
+                out.add(m.group(1));
             }
         }
         return out;

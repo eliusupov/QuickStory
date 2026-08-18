@@ -1,6 +1,7 @@
 # 43 — Silent map hooks and dead portals on reachable maps
 
-**Status:** partially closed — 13 hooks written, the rest adjudicated below with reasons.
+**Status:** CLOSED — 13 hooks written, the `Depart_topFloor` case rename landed, and all three
+follow-ups adjudicated (see the last section). The rest is refused with reasons, below.
 
 ## What this is
 
@@ -87,11 +88,15 @@ backlog is a cutscene. `MapAndPortalScriptsRealLoad` pins that finding as an ass
 
 ### Cannot be written without breaking something
 
-- **`Depart_topFloor` @103040400** — this is a **case collision, not a missing file**.
-  `scripts/portal/Depart_TopFloor.js` exists and does exactly the right thing (`openNpc(1052125)`,
-  and NPC 1052125 is on that map). On Windows/NTFS the lookup already resolves; on a case-sensitive
-  filesystem it would not. Creating `Depart_topFloor.js` here would **overwrite** the existing file.
-  Fix is a rename, which is not additive — left for a deliberate call.
+- **`Depart_topFloor` @103040400** — **CLOSED by rename.** This was a case collision, not a missing
+  file: `scripts/portal/Depart_TopFloor.js` did exactly the right thing (`openNpc(1052125)`, and NPC
+  1052125 is on that map), but `Map.wz/.../103040400.img/portal` declares `script="Depart_topFloor"`
+  with a lowercase `t`. Windows/NTFS resolved it; a case-sensitive host would not, and
+  `GenericPortal` would neither warp nor log. `git mv`d to `Depart_topFloor.js` — nothing in `wz/`,
+  `scripts/` or `src/` referenced the capital spelling. A sweep of all 533 portal `script=` names in
+  `Map.wz` against the 473 files in `scripts/portal/` finds no other case mismatch, and
+  `MapAndPortalScriptsRealLoad.everyPortalScriptFileIsSpelledExactlyAsMapWzNamesIt` now pins that
+  for the whole set rather than for this one name.
 
 ### No evidence — a documented gap beats an invented one
 
@@ -128,13 +133,40 @@ and no derivable behaviour from map data. Writing them would mean inventing cont
   (`stopIceWall` ×10 portals, `summonIceWall` map hook) are also absent, so opening the door would
   lead into a half-built room. **Follow-up: needs the ice-wall chain, not a portal file.**
 
-## Follow-ups for owners of files outside this change
+## Follow-ups — all three adjudicated
 
-1. `scripts/npc/1300014.js` is a stub — `investigate1` now reaches it but it says nothing.
-2. `scripts/portal/Depart_TopFloor.js` → `Depart_topFloor.js` rename (case), for case-sensitive hosts.
-3. Evan's ice cave (914100020) chain, per above.
+1. **`scripts/npc/1300014.js` stub — REFUSED, no content exists.** `String.wz/Npc.img/1300014` has
+   `name="SELF"` and **no `func`, no `d0`, no `n0`** — the only NPC-side text the client ships for it
+   is the placeholder name. `grep 1300014` over every `Quest.wz` img (`Act`, `Check`, `Say`,
+   `QuestInfo`, `Exclusive`, `PQuest`, `PQuestSearch`) returns **0 hits**, so no quest hangs off it
+   either. Writing dialogue here would be inventing content, which is the one thing this ticket
+   refuses everywhere else. The `cm.dispose()` stub is the honest behaviour: `investigate1` fires,
+   the conversation opens and closes, nothing is faked. Same disposition as `find_james` above.
+2. **`Depart_topFloor` rename — DONE.** See "Cannot be written without breaking something".
+3. **Evan's ice cave (914100020) chain — DONE, by tickets 55 and the Evan record-writer work, not
+   here.** The room is reachable and the chain is closed end to end:
+   `scripts/portal/enterSDI.js` (922030000 `tel00`) → 914100000 → 914100010, where
+   `scripts/map/onUserEnter/onSDI.js` writes 22599="1", the **START** gate of 22580
+   (`Check.img/22580/0`: npc 1013000, infoNumber 22599, infoex value "1", lvmin 62, needs 22579
+   COMPLETE) → `scripts/portal/enterSnowDragon.js` on 914100010 `in00` warps a player with 22580
+   STARTED to **914100020** → the ten `scr00..scr09` pt=9 triggers at x=56/153, the horizontal
+   centre of a room whose VR is −636..723, all run `scripts/portal/stopIceWall.js`, which writes
+   22599="2" — exactly `Check.img/22580/1`, the **COMPLETE** gate — and then hands back to NPC
+   1013000. Pinned by `MapAndPortalScriptsRealLoad` and `EvanQuestRecordGatesRealLoad`
+   (rows `{22580, NOT_STARTED, 22599, "1"}` and `{22580, STARTED, 22599, "2"}`).
 4. No script added here depends on a client-side scene warp, so **no `ChangeMapHandler` whitelist
    change is needed**.
+
+### Still open, and deliberately so — 914100022's own two hooks
+
+914100022 (quest 22588's room, the sibling of 914100020) declares `info/onUserEnter=summonIceWall`
+and ten `scr00..scr09` pt=9 triggers on `script="stopIceWall2"`. **Neither file exists and neither is
+written here.** 22588's Check gate is already served — `scripts/reactor/1409000.js` writes 22605=1,
+which is `Check.img/22588/1` — so no quest record is left for either hook to carry. What the names
+describe is mob 9300391 ("ice wall", named in `QuestInfo.img/22580/2`), and 9300391 is **placed in no
+map in the tree**: its spawn count and positions are in no WZ file. Writing them means inventing the
+encounter. Documented gap, same rule as the table above. This does **not** block 914100020 or quest
+22580, which do not touch either name.
 
 ## Verification
 
