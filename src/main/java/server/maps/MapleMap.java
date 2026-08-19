@@ -1545,7 +1545,7 @@ public class MapleMap {
             return false;
         }
 
-        boolean killed = monster.damage(chr, damage, false);
+        boolean killed = monster.damage(chr, monster.modifyIncomingDamage(damage), false);
 
         selfDestruction selfDestr = monster.getStats().selfDestruction();
         if (selfDestr != null && selfDestr.getHp() > -1) {// should work ;p

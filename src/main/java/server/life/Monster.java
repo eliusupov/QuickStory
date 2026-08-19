@@ -1814,6 +1814,21 @@ public class Monster extends AbstractLoadedLife {
         }
     }
 
+    /** Applies the v84 Phantom Imprint curse's x-percent damage increase. */
+    public int modifyIncomingDamage(int damage) {
+        if (damage <= 0) {
+            return damage;
+        }
+
+        MonsterStatusEffect imprint = getStati(MonsterStatus.PHANTOM_IMPRINT);
+        if (imprint == null) {
+            return damage;
+        }
+
+        int increase = imprint.getStati().get(MonsterStatus.PHANTOM_IMPRINT);
+        return (int) Math.min(Integer.MAX_VALUE, damage * (100L + increase) / 100L);
+    }
+
     // ---- one can always have fun trying these pieces of codes below in-game rofl ----
 
     public final ChangeableStats getChangedStats() {
