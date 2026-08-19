@@ -5522,37 +5522,12 @@
    "size": 5,
    "value": null,
    "comment": "fix for preview On/Off button not being accurate on entering cash shop //thanks windyboy",
-   "drop": null,
+   "drop": "unsafe CashShopFixOnOff calling convention; keep v84 epilogue",
    "fixed": false,
    "tier": "T1-context",
-   "v84": 7967942,
-   "checks": {
-    "ADDR": true,
-    "DUAL": true,
-    "FIT": true,
-    "SHAPE": true,
-    "CAVE83": true,
-    "CAVE": true,
-    "JMPIN": true,
-    "SLOT": null
-   },
-   "verdict": "PASS",
-   "expect": "5bc9c20400",
-   "size84": 5,
-   "cave_v84_seq": [
-    "pop ebx",
-    "leave ",
-    "ret 4"
-   ],
-   "cave_v83_seq": [
-    "pop ebx",
-    "leave ",
-    "ret 4"
-   ],
-   "cave_retn_v84": 7967947,
-   "cave_body_same": true,
-   "jmpin": [],
-   "jmpin_aligned": true
+   "v84": null,
+   "checks": {},
+   "verdict": "DROPPED"
   },
   {
    "id": "P195",

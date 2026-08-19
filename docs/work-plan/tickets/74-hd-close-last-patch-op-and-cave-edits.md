@@ -5,6 +5,11 @@
 **Blocked by:** None - continues tickets 30 / 30b, whose verified patch set this closes out.
 **Startable now:** YES - fully offline. No client launch.
 
+**REOPENED 2026-08-19:** first-launch Cash Shop reached black screen and crashed. Static diagnosis
+found shipped cave P194 (`CashShopFixOnOff`) calls address zero; the apparent v84 target
+`0x00475E1C` is a `__thiscall` method incompatible with the cave. P194 must be dropped so the
+original v84 epilogue at `0x007994C6` executes. This supersedes the prior offline PASS for P194.
+
 The v83->v84 address port is at 306/317 ops PASS and the shipping set is 288/289 = 99.7%. One op is
 still open and two cave-body edits are flagged. This ticket closes all three. It is the last of the
 harness work that can be done without a human at the client.
@@ -41,6 +46,7 @@ of an already-passing op in the same class; name the analogue op in the commit.
       with the binary evidence for why it cannot be resolved - no invented address.
 - [ ] With the op resolved, the shipping set is **289/289** and `tools/hd/verify.py` reports it.
 - [ ] The two flagged cave-body edits are finished and pass the harness verifier.
+- [x] Unsafe P194 `CashShopFixOnOff` is dropped; generated output leaves v84's original epilogue.
 - [ ] `tools/hd/test_hd.py` passes; the address-port count and shipping-set count in
       `tools/hd/README` are updated to match.
 - [ ] The loader DLL rebuilds from the updated table via the harness `gen_loader` step. **No client

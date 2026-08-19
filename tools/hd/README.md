@@ -43,9 +43,9 @@ runtime and nothing needs regenerating to change resolution.
 | **rejected as false positive** | **1** | 0.3% |
 | unresolved | 14 | 4.4% |
 
-Per **operation**: **306 PASS, 0 FAIL, 14 unresolved, 7 dropped**. Restricted to the
+Per **operation**: **308 PASS, 0 FAIL, 13 unresolved, 6 dropped**. Restricted to the
 shipping set (groups C–J; A/B/L are already done by `edits\`, K is optional gameplay
-caps): **289 ops → 288 PASS, 0 FAIL, 1 unresolved (99.7%).**
+caps): **290 ops → 289 PASS, 0 FAIL, 1 unresolved (99.7%).**
 
 Groups **C, D, F, G, H, I and J are complete.** E is 32/33. The single open op is
 `ccLoginDescriptorFix` (`0x0060D85B`), and it is not an address problem — see
@@ -208,6 +208,7 @@ Full list in the `resolve.py` output and in `data/v84-resolved.json`
 | P031 | `0x004D59B2` | instruction is `cmp ecx,0x258` (`81 F9 …`), imm32 at **+2**; source uses +1. As shipped it writes `81 D0 02 00 00 00` = `adc eax,2` plus a stray `add [esi+0xE],bh`. The comment "mov eax,800" describes the neighbouring `0x004D599D`. | offset 2 |
 | P311 | `0x00A448B0` | instruction is `add eax,0xFFFFFED4` (`05 D4 …`), imm32 at **+1**; source uses +2, writing one byte past the immediate into the following `cmp`. Comment says "push -300"; it is an `add`. | offset 1 |
 | P158 | `0x0064061D` | is `idiv ecx` (`F7 F9`) — no immediate at all. The `mov ecx,600` the comment means is `0x00640618`, which the previous source line already patches. As shipped it writes `F7 D0 02 00 00` = `not eax` over the divisor setup. | **delete** |
+| P194 | `0x00776B5F` | `CashShopFixOnOff` loads its call target into ECX and calls it, but the resolved v83/v84 target is a `__thiscall` method that needs its object in ECX. The unported v84 parameter was zero, producing `call 0` when Cash Shop opened. | **do not port** — keep v84's original `pop ebx ; leave ; ret 4` epilogue at `0x007994C6` |
 | P302/P304 | `0x009F7079`, `0x009F707E` | not destructive, but the same two dwords as `0x009F7078+1` / `0x009F707D+1`. The source writes them twice under two spellings. | drop the duplicate spelling |
 | P323 | `0x00C08459` | manifest blank count is the v83 literal length. v84's literal is `requireAdministrator`, one byte longer; using v83's `0x15` leaves a stray quote and an invalid manifest. | count `0x16` |
 | P113 | `0x005E3FA0` | **not a resolution constant.** The site is `push 0x10 ; push 0x258 ; call 0x403196 ; pop ecx ; pop ecx ; mov [edi],eax` — a two-argument cdecl allocator. The 600 is a `sizeof`; Ezorsia matched it because the literal happened to be 600. v84's counterpart (`0x005F8BCF`, inside the monotone band and the only such call in it) reads **608**, while every genuine resolution site still reads 600. A structure grew by 8 bytes; a screen did not. | **do not port** — writing a height there over-allocates at 720 and *under*-allocates below 608 |

@@ -25,6 +25,8 @@ this was proven offline; this is where it meets the client.
 6. **Chat** - the chat window and input draw and scroll correctly.
 7. **Inventory / equip** - the item windows open, draw, and are usable.
 8. **Cash shop** - opens and renders.
+   **FAILED 2026-08-19:** black screen, then client crash. Routed to ticket 74: unsafe shipped
+   P194 `CashShopFixOnOff` cave (`call 0`), not a server error.
 9. **Boss HP bar** - draws correctly when a boss is present.
 10. **Super-megaphone (smega)** - the smega banner renders at widescreen.
 11. **Mu Lung Dojo** - the Dojo UI draws correctly.

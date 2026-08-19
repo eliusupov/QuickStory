@@ -32,7 +32,7 @@ cl /nologo /LD /O2 /GS- /MT /DNDEBUG /DHD_SELFTEST dllmain.cpp /Fe:hd-res-selfte
 cl /nologo /MT /DNDEBUG selftest.cpp /link /BASE:0x20000000 /OUT:hd-selftest.exe || exit /b 1
 .\hd-selftest.exe hd-res-selftest.dll || exit /b 1
 echo.
-echo Expected above: "applied 0, skipped 0, byte-mismatch 294 of 294"
+echo Expected above: "applied 0, skipped 0, byte-mismatch 293 of 293"
 echo   and an archive line reading "off (no EzorsiaV2_UI.wz)".
 echo That is the byte guard refusing to patch a process that is not the v84 client.
 echo A NON-ZERO applied count here means the guard is broken -- do not ship it.

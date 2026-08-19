@@ -160,6 +160,12 @@ def test_generated_inc_wellformed():
     print(f'  inc: ok ({len(rows)} rows, {len(ids)} defines, all rows PASS-backed)')
 
 
+def test_cash_shop_onoff_cave_not_shipped():
+    src = open(os.path.join(paths.HD, 'loader', 'hd_patches.inc')).read()
+    assert '"P194"' not in src, 'unsafe CashShopFixOnOff cave P194 is shipping'
+    print('  cash shop: ok (unsafe P194 cave not shipped)')
+
+
 def test_login_frame_relmove_ships():
     """P116/P117 position the HD login frame. They must ship whenever the archive does.
 
@@ -294,6 +300,7 @@ if __name__ == '__main__':
     test_patchset_clean()
     test_no_overlapping_writes()
     test_generated_inc_wellformed()
+    test_cash_shop_onoff_cave_not_shipped()
     test_login_frame_relmove_ships()
     test_archive_hooks_match_dumps()
     test_archive_mount_site()

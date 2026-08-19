@@ -178,6 +178,10 @@ def main():
         # sizeof, not a resolution. v84 raised it to 608 while every real resolution
         # site still reads 600. Writing a height there under-allocates below 608.
         'P113': {'drop': 'sizeof, not a resolution constant (v84 reads 608)'},
+        # P194 calls an address through ECX after replacing ECX with that address. The
+        # resolved v84 analogue is a __thiscall method, so the cave cannot call it safely;
+        # leaving the parameter at zero instead emits `call 0` when Cash Shop opens.
+        'P194': {'drop': 'unsafe CashShopFixOnOff calling convention; keep v84 epilogue'},
     }
     # ---- conditional arms the shipped configuration does not take.
     # `bigLoginFrame` defaults to false (MainMain.cpp:11) and is set true ONLY by

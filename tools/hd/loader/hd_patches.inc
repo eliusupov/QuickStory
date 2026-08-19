@@ -189,7 +189,6 @@ static const HdPatch kHdPatches[] = {
   { 0x0076D693,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P191", 0x0074B4A2, 4, {0x58,0x02,0x00,0x00} },  // push 600
   { 0x0076DB42,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P192", 0x0074B951, 4, {0x58,0x02,0x00,0x00} },  // push 600
   { 0x0076DC9A,   4, K_INT      ,          {0,2,0,0,0}, 'C', "P193", 0x0074BAA9, 4, {0x58,0x02,0x00,0x00} },  // push 600
-  { 0x007994C6,   5, K_CAVE     ,          {0,0,0,0,0}, 'F', "P194", 0x00776B5F, 5, {0x5B,0xC9,0xC2,0x04,0x00} },  // CONST (non-linear)  // fix for preview On/Off button not being accurate on entering
   { 0x007D89E0,   4, K_INT      ,        {0,1,0,0,-23}, 'D', "P196", 0x007B2C97, 4, {0x15,0x01,0x00,0x00} },  // sub ebx,277 ; Skill icon buff y-pos
   { 0x007D89FF,   4, K_INT      ,         {1,0,0,0,-3}, 'D', "P197", 0x007B2CB5, 4, {0x8D,0x01,0x00,0x00} },  // lea eax,[eax+esi+397] ; Skill icon buff x-pos
   { 0x007D8AE9,   4, K_INT      ,        {0,1,0,0,-23}, 'D', "P198", 0x007B2DA0, 4, {0x15,0x01,0x00,0x00} },  // sub ebx,277 ; Skill icon cooltime y-pos
@@ -356,8 +355,6 @@ static const HdPatch kHdPatches[] = {
 #define HD_ccLoginViewRecFix_RETN   0x0064084C  // origin + 17 (12 nops after the 5-byte jmp)
 #define HD_AlwaysViewRestoreFix_ORIGIN 0x0065797A
 #define HD_AlwaysViewRestoreFix_RETN   0x00657981  // origin + 7 (2 nops after the 5-byte jmp)
-#define HD_CashShopFixOnOff_ORIGIN 0x007994C6
-#define HD_CashShopFixOnOff_RETN   0x007994CB  // origin + 5 (0 nops after the 5-byte jmp)
 #define HD_ccMoreGainMsgs_ORIGIN 0x008CF377
 #define HD_ccMoreGainMsgs_RETN   0x008CF37D  // origin + 6 (1 nops after the 5-byte jmp)
 #define HD_ccMoreGainMsgsFade1_ORIGIN 0x008CF6D8
@@ -406,7 +403,7 @@ const unsigned long dwLoginDescriptorFixRetn = 0;  // ccLoginDescriptorFix NOT S
 const unsigned long dwLoginBackCanvasFixRetn = 0x006232E3;  // ccLoginBackCanvasFix
 const unsigned long dwLoginViewRecFixRetn = 0x0064084C;  // ccLoginViewRecFix
 const unsigned long dwAlwaysViewRestorerFixRtm = 0x00657981;  // AlwaysViewRestoreFix
-const unsigned long dwCashFixOnOffRtm = 0x007994CB;  // CashShopFixOnOff
+const unsigned long dwCashFixOnOffRtm = 0;  // CashShopFixOnOff NOT SHIPPED - unreachable
 const unsigned long dwMoreGainMsgsRetn = 0x008CF37D;  // ccMoreGainMsgs
 const unsigned long dwMoreGainMsgsFade1Retn = 0x008CF6DD;  // ccMoreGainMsgsFade1
 const unsigned long dwMoreGainMsgsFadeRetn = 0x008CF75C;  // ccMoreGainMsgsFade
