@@ -363,4 +363,11 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="176" author="evan-cash-mastery-books">
+        <sqlFile path="db/data/176-evan-cash-mastery-books-at-sly.sql"/>
+        <rollback>
+            DELETE FROM shopitems WHERE shopid = 2080001 AND itemid IN (5620006, 5620007, 5620008);
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>
