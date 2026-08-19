@@ -152,8 +152,9 @@ class CommandsNpcScriptTest {
         for (int rank = 0; rank <= 2; rank++) {
             session.select(rank);
             String page = session.dialogue();
+            char prefix = rank < 2 ? '@' : '!';
             assertTrue(page.contains("#b" + List.of("Common", "Donator", "JrGM").get(rank) + "#k"));
-            assertTrue(commandRows(page).stream().allMatch(row -> row.charAt(0) == (rank < 2 ? '@' : '!')));
+            assertTrue(commandRows(page).stream().allMatch(row -> row.charAt(0) == prefix));
             session.select(BACK_TO_RANKS);
         }
     }
