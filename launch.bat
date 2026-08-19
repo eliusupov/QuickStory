@@ -1,5 +1,5 @@
 @echo off
 @title Cosmic
-rem Opcode table: add -Dopcode-version=84 to load resources/opcodes/{send,recv}ops-84.properties (default 83)
+rem GMS v84 is the only supported protocol; its opcode tables are bundled and loaded automatically.
 java -Xmx2048m -Dwz-path=wz -jar target\Cosmic.jar
 pause

@@ -1,6 +1,5 @@
 package tools;
 
-import constants.net.ServerConstants;
 import net.packet.InPacket;
 import net.packet.Packet;
 import org.junit.jupiter.api.Test;
@@ -40,16 +39,10 @@ class MoveMonsterPacketTest {
                 7, 3, 0x02, 0x01,           // sEffect.m_Data: skillId, skillLevel, pOption
         };
 
-        if (ServerConstants.VERSION >= 84) {
-            assertArrayEquals(concat(head, new byte[8]), firstBytes(body, head.length + 8),
-                    "v84 must write both count-prefixed blocks before the movement body");
-        } else {
-            assertArrayEquals(head, firstBytes(body, head.length),
-                    "v83 must go straight from the skill data to the movement body");
-        }
+        assertArrayEquals(concat(head, new byte[8]), firstBytes(body, head.length + 8),
+                "v84 must write both count-prefixed blocks before the movement body");
 
-        int extras = ServerConstants.VERSION >= 84 ? 8 : 0;
-        assertEquals(head.length + extras + 4 + MOVEMENT_LENGTH, body.length,
+        assertEquals(head.length + 8 + 4 + MOVEMENT_LENGTH, body.length,
                 "head + v84 extras + start position + movement body");
     }
 

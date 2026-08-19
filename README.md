@@ -1,5 +1,5 @@
 ﻿# Cosmic
-Cosmic is a server emulator for Global MapleStory (GMS) version 83.
+Cosmic is a server emulator for Global MapleStory (GMS) version 84.
 
 ## Introduction
 

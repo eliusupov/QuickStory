@@ -15,10 +15,10 @@ class OpcodeTableTest {
     }
 
     @Test
-    void loadsV83Values() {
+    void loadsV84Values() {
         assertEquals(0x00, SendOpcode.LOGIN_STATUS.getValue());
-        assertEquals(0x166, SendOpcode.VEGA_SCROLL.getValue());
+        assertEquals(0x170, SendOpcode.VEGA_SCROLL.getValue());
         assertEquals(0x3713, RecvOpcode.CUSTOM_PACKET.getValue());
-        assertEquals(0x104, RecvOpcode.USE_HAMMER.getValue());
+        assertEquals(0x10B, RecvOpcode.USE_HAMMER.getValue());
     }
 }

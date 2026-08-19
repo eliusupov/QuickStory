@@ -33,8 +33,6 @@ import static org.mockito.Mockito.when;
  */
 class StatusInfoModeTest {
 
-    private static final boolean V84 = ServerConstants.VERSION >= 84;
-
     // ------------------------------------------------------------------ SHOW_STATUS_INFO
 
     @Test
@@ -49,16 +47,16 @@ class StatusInfoModeTest {
 
     @Test
     void statusInfoModesAtOrAboveFourShiftByOneOnV84() {
-        assertMode(V84 ? 5 : 4, PacketCreator.getShowFameGain(1), "fame");
-        assertMode(V84 ? 6 : 5, PacketCreator.getShowMesoGain(1, true), "meso in chat");
-        assertMode(V84 ? 7 : 6, PacketCreator.getGPMessage(1), "guild point");
-        assertMode(V84 ? 8 : 7, PacketCreator.getItemMessage(2010007), "give item");
-        assertMode(V84 ? 10 : 9, PacketCreator.showInfoText("x"), "system message");
-        assertMode(V84 ? 10 : 9, PacketCreator.getDojoInfoMessage("x"), "system message");
-        assertMode(V84 ? 10 : 9, PacketCreator.bunnyPacket(), "system message");
-        assertMode(V84 ? 11 : 10, PacketCreator.updateAreaInfo(1, "x"), "quest record ex");
-        assertMode(V84 ? 11 : 10, PacketCreator.getDojoInfo("x"), "quest record ex");
-        assertMode(V84 ? 11 : 10, PacketCreator.updateDojoStats(dojoChr(), 1), "quest record ex");
+        assertMode(5, PacketCreator.getShowFameGain(1), "fame");
+        assertMode(6, PacketCreator.getShowMesoGain(1, true), "meso in chat");
+        assertMode(7, PacketCreator.getGPMessage(1), "guild point");
+        assertMode(8, PacketCreator.getItemMessage(2010007), "give item");
+        assertMode(10, PacketCreator.showInfoText("x"), "system message");
+        assertMode(10, PacketCreator.getDojoInfoMessage("x"), "system message");
+        assertMode(10, PacketCreator.bunnyPacket(), "system message");
+        assertMode(11, PacketCreator.updateAreaInfo(1, "x"), "quest record ex");
+        assertMode(11, PacketCreator.getDojoInfo("x"), "quest record ex");
+        assertMode(11, PacketCreator.updateDojoStats(dojoChr(), 1), "quest record ex");
     }
 
     // ------------------------------------------------------------------ SERVERMESSAGE
@@ -76,8 +74,8 @@ class StatusInfoModeTest {
 
     @Test
     void broadcastModesAtOrAboveTwelveShiftByTwoOnV84() {
-        assertMode(V84 ? 14 : 12, PacketCreator.serverNotice(12, "x"), "v83 mode 12");
-        assertMode(V84 ? 15 : 13, PacketCreator.serverNotice(13, "x"), "v83 mode 13");
+        assertMode(14, PacketCreator.serverNotice(12, "x"), "v83 mode 12");
+        assertMode(15, PacketCreator.serverNotice(13, "x"), "v83 mode 13");
     }
 
     // ------------------------------------------------------------------ PARTY_OPERATION (OnPartyResult)
@@ -90,7 +88,7 @@ class StatusInfoModeTest {
      */
     @Test
     void partyPortalDoorModeShiftsByThreeOnV84() {
-        assertMode(V84 ? 0x26 : 0x23,
+        assertMode(0x26,
                 PacketCreator.partyPortal(100000000, 100000001, new java.awt.Point(0, 0)),
                 "party town-portal door update");
     }

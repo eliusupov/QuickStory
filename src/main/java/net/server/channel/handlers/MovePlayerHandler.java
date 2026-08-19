@@ -22,7 +22,6 @@
 package net.server.channel.handlers;
 
 import client.Client;
-import constants.net.ServerConstants;
 import net.packet.InPacket;
 import tools.PacketCreator;
 import tools.exceptions.EmptyMovementException;
@@ -39,12 +38,11 @@ public final class MovePlayerHandler extends AbstractMovementPacketHandler {
     //
     // With skip(33) the count byte reads 02 / 01 / 04 across three captured packets, and in each
     // case exactly that many well-formed 15-byte commands follow, then the trailer. Three for three.
-    private static final int V83_MOVEMENT_HEADER = 9;
-    private static final int V84_MOVEMENT_HEADER = 33;
+    private static final int MOVEMENT_HEADER = 33;
 
     @Override
     public final void handlePacket(InPacket p, Client c) {
-        p.skip(ServerConstants.VERSION >= 84 ? V84_MOVEMENT_HEADER : V83_MOVEMENT_HEADER);
+        p.skip(MOVEMENT_HEADER);
         try {   // thanks Sa for noticing empty movement sequences crashing players
             int movementDataStart = p.getPosition();
             updatePosition(p, c.getPlayer(), 0);

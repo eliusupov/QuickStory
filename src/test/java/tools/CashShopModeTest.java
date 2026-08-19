@@ -29,27 +29,25 @@ import static org.mockito.Mockito.when;
  */
 class CashShopModeTest {
 
-    private static final boolean V84 = ServerConstants.VERSION >= 84;
-
     @Test
     void cashShopEntryPacketsCarryTheVersionsOwnMode() {
         // Sent by EnterCashShopHandler right after openCashShop. The 0x4F one is the reported bug.
-        assertMode(V84 ? 0x50 : 0x4D, PacketCreator.showGifts(List.of()), "showGifts");
-        assertMode(V84 ? 0x52 : 0x4F, PacketCreator.showWishList(wishlistChr(), false), "showWishList load");
-        assertMode(V84 ? 0x58 : 0x55, PacketCreator.showWishList(wishlistChr(), true), "showWishList update");
+        assertMode(0x50, PacketCreator.showGifts(List.of()), "showGifts");
+        assertMode(0x52, PacketCreator.showWishList(wishlistChr(), false), "showWishList load");
+        assertMode(0x58, PacketCreator.showWishList(wishlistChr(), true), "showWishList update");
     }
 
     @Test
     void cashShopResultPacketsCarryTheVersionsOwnMode() {
-        assertMode(V84 ? 0x5F : 0x5C, PacketCreator.showCashShopMessage((byte) 0), "notice");
-        assertMode(V84 ? 0x5C : 0x59, PacketCreator.showCouponRedeemedItems(1, 0, 0, List.of(), List.of()), "coupon");
-        assertMode(V84 ? 0x63 : 0x60, PacketCreator.showBoughtInventorySlots(1, (short) 24), "inventory slots");
-        assertMode(V84 ? 0x65 : 0x62, PacketCreator.showBoughtStorageSlots((short) 4), "storage slots");
-        assertMode(V84 ? 0x67 : 0x64, PacketCreator.showBoughtCharacterSlot((short) 4), "character slots");
-        assertMode(V84 ? 0x6F : 0x6C, PacketCreator.deleteCashItem(item()), "destroy");
-        assertMode(V84 ? 0x88 : 0x85, PacketCreator.refundCashItem(item(), 0), "rebate");
-        assertMode(V84 ? 0x8C : 0x89, PacketCreator.showBoughtCashPackage(List.of(), 1), "buy package");
-        assertMode(V84 ? 0x90 : 0x8D, PacketCreator.showBoughtQuestItem(4001126), "buy normal");
+        assertMode(0x5F, PacketCreator.showCashShopMessage((byte) 0), "notice");
+        assertMode(0x5C, PacketCreator.showCouponRedeemedItems(1, 0, 0, List.of(), List.of()), "coupon");
+        assertMode(0x63, PacketCreator.showBoughtInventorySlots(1, (short) 24), "inventory slots");
+        assertMode(0x65, PacketCreator.showBoughtStorageSlots((short) 4), "storage slots");
+        assertMode(0x67, PacketCreator.showBoughtCharacterSlot((short) 4), "character slots");
+        assertMode(0x6F, PacketCreator.deleteCashItem(item()), "destroy");
+        assertMode(0x88, PacketCreator.refundCashItem(item(), 0), "rebate");
+        assertMode(0x8C, PacketCreator.showBoughtCashPackage(List.of(), 1), "buy package");
+        assertMode(0x90, PacketCreator.showBoughtQuestItem(4001126), "buy normal");
     }
 
     /**
@@ -61,8 +59,8 @@ class CashShopModeTest {
      */
     @Test
     void gachaponResultPacketsCarryTheVersionsOwnMode() {
-        assertMode(V84 ? 0xED : 0xE4, PacketCreator.onCashItemGachaponOpenFailed(), "gachapon failed");
-        assertMode(V84 ? 0xEE : 0xE5,
+        assertMode(0xED, PacketCreator.onCashItemGachaponOpenFailed(), "gachapon failed");
+        assertMode(0xEE,
                 PacketCreator.onCashGachaponOpenSuccess(1, 0L, 1, item(), 4001126, 1, false),
                 "gachapon success");
     }

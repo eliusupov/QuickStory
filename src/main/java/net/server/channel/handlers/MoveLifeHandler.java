@@ -24,7 +24,6 @@ package net.server.channel.handlers;
 import client.Character;
 import client.Client;
 import config.YamlConfig;
-import constants.net.ServerConstants;
 import net.packet.InPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -190,9 +189,6 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
      * variable, so read them rather than skipping a constant. See ticket 25.
      */
     private static void skipV84MobMoveExtras(InPacket p) {
-        if (ServerConstants.VERSION < 84) {
-            return;
-        }
         skipCounted(p, 8);          // nMultiTargetForBall: count x (int x, int y)
         skipCounted(p, 4);          // nRandTimeForAreaAttack: count x int
     }

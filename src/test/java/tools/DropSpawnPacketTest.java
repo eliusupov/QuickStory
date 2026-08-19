@@ -1,7 +1,6 @@
 package tools;
 
 import client.inventory.Item;
-import constants.net.ServerConstants;
 import net.packet.Packet;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -47,19 +46,15 @@ class DropSpawnPacketTest {
                 1,                              // pet EQP pickup (!playerDrop)
         };
 
-        if (ServerConstants.VERSION >= 84) {
-            assertArrayEquals(concat(v83, new byte[]{0}), body,
-                    "v84 CDropPool::OnDropEnterField reads one more trailing byte than v83");
-        } else {
-            assertArrayEquals(v83, body, "v83 must stay byte-exact");
-        }
+        assertArrayEquals(concat(v83, new byte[]{0}), body,
+                "v84 CDropPool::OnDropEnterField reads one more trailing byte than v83");
     }
 
     @Test
     void mapItemUpdateCarriesTheV84TrailingByte() {
         int body = PacketCreator.updateMapItemObject(itemDrop(), true).getBytes().length - 2;
         // mod, oid, isMeso, itemId, owner, dropType, pos, dropperId, expiration, playerDrop
-        assertEquals(1 + 4 + 1 + 4 + 4 + 1 + 4 + 4 + 8 + 1 + (ServerConstants.VERSION >= 84 ? 1 : 0),
+        assertEquals(1 + 4 + 1 + 4 + 4 + 1 + 4 + 4 + 8 + 1 + 1,
                 body, "same client function, same missing byte");
     }
 

@@ -55,7 +55,6 @@ import constants.id.ItemId;
 import constants.id.MapId;
 import constants.id.NpcId;
 import constants.inventory.ItemConstants;
-import constants.net.ServerConstants;
 import constants.skills.Buccaneer;
 import constants.skills.ChiefBandit;
 import constants.skills.Corsair;
@@ -519,15 +518,8 @@ public class PacketCreator {
             p.writeByte(0);
             p.writeByte(itemLevel); //Item Level
             p.writeInt((int) expNibble);
-            if (ServerConstants.VERSION >= 84) {
-                // nDurability, -1 = "no durability". v84's GW_ItemSlotEquip::RawDecode is a v95-era
-                // refactor that reads this int between experience and nIUC; v83's older inline decode
-                // does not, so a v83-shaped record under-runs a v84 client by 4 bytes per non-cash
-                // equip. Four starting equips = 16 bytes, which is what broke entering the world.
-                // Cash equips do NOT get this - their 10-byte 0x40 filler stands in for the whole
-                // levelType/level/exp/nIUC group and is unchanged at v84. See ticket 24 §9.
-                p.writeInt(-1);
-            }
+            // nDurability, -1 = "no durability". v84 reads this between experience and nIUC.
+            p.writeInt(-1);
             p.writeInt(equip.getVicious()); //WTF NEXON ARE YOU SERIOUS? (nIUC / hammers applied)
             p.writeLong(0);
         }
@@ -787,16 +779,8 @@ public class PacketCreator {
         p.writeByte(YamlConfig.config.server.ENABLE_PIN && !c.canBypassPin() ? 0 : 1); // 0 = Pin-System Enabled, 1 = Disabled
         p.writeByte(YamlConfig.config.server.ENABLE_PIC && !c.canBypassPic() ? (c.getPic() == null || c.getPic().equals("") ? 0 : 1) : 2); // 0 = Register PIC, 1 = Ask for PIC, 2 = Disabled
 
-        if (ServerConstants.VERSION >= 84) {
-            // v84's CLogin::OnCheckPasswordResult (@0x60d368) reads an 8-byte tail after the PIN/PIC
-            // bytes that v83's does not - a login session key. Without it the v84 client over-reads the
-            // end of LOGIN_STATUS; the crash it then takes at the world list is the reported symptom.
-            // Width 8 is from Edelstein v95 and Rebirth95 agreeing (the IDA trace records the read but
-            // not its size). Rebirth sends a constant 0 and works, and we never read the value back.
-            // Surplus trailing bytes are ignored by the client, so 0-padding here fails safe.
-            // Measured: ticket 22.
-            p.writeLong(0);
-        }
+        // v84 reads an 8-byte login session key after the PIN/PIC bytes.
+        p.writeLong(0);
 
         return p;
     }
@@ -1934,9 +1918,6 @@ public class PacketCreator {
      * <p>ponytail: written as 0 (no effect). The byte only selects a spawn effect/sound.
      */
     private static void writeV84DropSpawnExtra(OutPacket p) {
-        if (ServerConstants.VERSION < 84) {
-            return;
-        }
         p.writeByte(0);
     }
 
@@ -2436,9 +2417,6 @@ public class PacketCreator {
      * ball-attack mob ever renders wrong for observers.
      */
     private static void writeV84MobMoveExtras(OutPacket p) {
-        if (ServerConstants.VERSION < 84) {
-            return;
-        }
         p.writeInt(0);  // nMultiTargetForBall count
         p.writeInt(0);  // nRandTimeForAreaAttack count
     }
@@ -3504,7 +3482,7 @@ public class PacketCreator {
      * export artifact. See docs/work-plan/tickets/31-npc-dialogue-v84.md.
      */
     private static byte dialogType(byte v83Type) {
-        return ServerConstants.VERSION >= 84 && v83Type >= 1 ? (byte) (v83Type + 1) : v83Type;
+        return v83Type >= 1 ? (byte) (v83Type + 1) : v83Type;
     }
 
     /**
@@ -3514,7 +3492,7 @@ public class PacketCreator {
      * normalise once at the door rather than in ~40 scripts.
      */
     public static byte v83DialogType(byte clientType) {
-        return ServerConstants.VERSION >= 84 && clientType >= 2 ? (byte) (clientType - 1) : clientType;
+        return clientType >= 2 ? (byte) (clientType - 1) : clientType;
     }
 
     /**
@@ -3545,7 +3523,7 @@ public class PacketCreator {
      * @param v83Mode mode in the v83 enum
      */
     private static int statusInfoMode(int v83Mode) {
-        return ServerConstants.VERSION >= 84 && v83Mode >= 4 ? v83Mode + 1 : v83Mode;
+        return v83Mode >= 4 ? v83Mode + 1 : v83Mode;
     }
 
     /**
@@ -3574,7 +3552,7 @@ public class PacketCreator {
      * @param v83Mode mode in the v83 enum
      */
     private static int broadcastMsgMode(int v83Mode) {
-        return ServerConstants.VERSION >= 84 && v83Mode >= 12 ? v83Mode + 2 : v83Mode;
+        return v83Mode >= 12 ? v83Mode + 2 : v83Mode;
     }
 
     /**
@@ -3615,7 +3593,7 @@ public class PacketCreator {
      * @param v83Mode mode in the v83 enum
      */
     private static int cashShopMode(int v83Mode) {
-        return ServerConstants.VERSION >= 84 && v83Mode >= 0x4B ? v83Mode + 3 : v83Mode;
+        return v83Mode >= 0x4B ? v83Mode + 3 : v83Mode;
     }
 
 
@@ -3648,11 +3626,8 @@ public class PacketCreator {
         p.writeInt(NpcId.DIMENSIONAL_MIRROR);
         p.writeByte(dialogType((byte) 0x0E));   // AskSlideMenu
         p.writeByte(0);
-        if (ServerConstants.VERSION >= 84) {
-            // AskSlideMenu gained a leading slideDlgType int: v83 SetSlideMenuDlg@0x76b5c8 reads
-            // menuType+message (2 fields), v87 @0x7b92d1 and v95 @0x6dbe50 read slideDlgType first.
-            p.writeInt(0);
-        }
+        // v84 AskSlideMenu carries a leading slideDlgType int.
+        p.writeInt(0);
         p.writeInt(0);
         p.writeString(talk);
         return p;
@@ -4218,7 +4193,7 @@ public class PacketCreator {
         // Proven by decode-shape match in both images: v83 localhome.exe mode 0x23 @0xa3ec92 (Decode4 x3,
         // stores town/target) == v84 ida_export OnPartyResult @0xa89cf3 mode 0x26; the position-bearing
         // sibling 0x25 @0xa3ecd5 == v84 0x28. This town-portal send uses 0x23 -> 0x26 on v84. Ticket 36.
-        p.writeShort(ServerConstants.VERSION >= 84 ? 0x26 : 0x23);
+        p.writeShort(0x26);
         p.writeInt(townId);
         p.writeInt(targetId);
         p.writePos(position);
@@ -4859,14 +4834,8 @@ public class PacketCreator {
 
     public static Packet skillBookResult(Character chr, int skillid, int maxlevel, boolean canuse, boolean success) {
         final OutPacket p = OutPacket.create(SendOpcode.SKILL_LEARN_ITEM_RESULT);
-        if (ServerConstants.VERSION >= 84) {
-            // bOnExclRequest - leading byte the v84+ client reads before the character id, to clear
-            // the requester's exclusive-request lock. Measured, not inferred: gms_v84
-            // CWvsContext::OnSkillLearnItemResult decodes Decode1 then Decode4(characterId) @0xa6988,
-            // v87 @0xab5923 and v95 @0x9f7b35 likewise; v79/v83 start at Decode4. 15-byte body at
-            // v83, 16 at v84+. See ticket 25.
-            p.writeBool(true);
-        }
+        // bOnExclRequest clears the requester's exclusive-request lock.
+        p.writeBool(true);
         p.writeInt(chr.getId());
         p.writeByte(1);
         p.writeInt(skillid);
@@ -4942,9 +4911,7 @@ public class PacketCreator {
      * hired merchants keep the v83 shape - only the two game dialogs read it. See ticket 25.
      */
     private static void addMiniGameJobCode(final OutPacket p, Character chr) {
-        if (ServerConstants.VERSION >= 84) {
-            p.writeShort(chr.getJob().getId());
-        }
+        p.writeShort(chr.getJob().getId());
     }
 
     public static Packet getMiniGame(Client c, MiniGame minigame, boolean owner, int piece) {
@@ -6817,7 +6784,7 @@ public class PacketCreator {
      * arm, nothing happens and nothing errors.
      */
     private static int gachaponMode(int v83Mode) {
-        return ServerConstants.VERSION >= 84 ? v83Mode + 9 : v83Mode;
+        return v83Mode + 9;
     }
 
     // Cash Shop Surprise packets found thanks to Arnah (Vertisy)
@@ -7683,11 +7650,7 @@ public class PacketCreator {
         // 13 bytes after the owner id; we were sending 12. The client read past the end and threw
         // ZException error 38, which is a hard client crash - and because the dragon respawns on
         // every login for job 2200+, it was a LOGIN LOOP, not a one-off.
-        if (ServerConstants.VERSION >= 84) {
-            p.writeShort(0);
-        } else {
-            p.writeByte(0);
-        }
+        p.writeShort(0);
         p.writeShort(dragon.getOwner().getJob().getId());
         return p;
     }

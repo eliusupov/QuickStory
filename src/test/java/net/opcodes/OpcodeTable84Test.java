@@ -19,11 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * The v84 tables are inert - nothing loads them unless {@code -Dopcode-version=84} is passed - so
- * they get no coverage from the rest of the suite and a mistake in them would sit undetected until
- * ticket 29's cutover. These tests are the coverage: they check the files are loadable and
- * well-formed, and they load the enums for real in a child JVM classloader with the property set,
- * so the assertion is against the table the server would actually run on, not against the file.
+ * Pins the bundled v84 opcode tables used by the server. The v83 tables remain only as provenance
+ * for the collision and unchanged-low-band proofs below; no runtime selector can load them.
  */
 class OpcodeTable84Test {
 
@@ -102,15 +99,12 @@ class OpcodeTable84Test {
     }
 
     /**
-     * The zero-diff proof ticket 32 used: reload the enums in a classloader that sees
-     * {@code -Dopcode-version=84}, read the runtime value off every constant, and compare against
-     * the committed file. Asserting the file's own contents proves nothing about what the server
-     * would load; this does.
+     * Reload the enums in an isolated classloader, read the runtime value off every constant, and
+     * compare against the committed v84 file. Asserting the file's own contents alone would not
+     * prove what the server loads.
      */
     @Test
-    void runtimeTableUnderOpcodeVersion84MatchesTheCommittedFiles() throws Exception {
-        String previous = System.getProperty("opcode-version");
-        System.setProperty("opcode-version", "84");
+    void runtimeTableMatchesTheCommittedV84Files() throws Exception {
         try (URLClassLoader isolated = new URLClassLoader(classpath(), ClassLoader.getPlatformClassLoader())) {
             for (String kind : new String[]{"send", "recv"}) {
                 String enumName = "net.opcodes." + (kind.equals("send") ? "Send" : "Recv") + "Opcode";
@@ -123,13 +117,7 @@ class OpcodeTable84Test {
                             (Integer) loaded.getMethod("getValue").invoke(constant));
                 }
                 assertEquals(decode(read(kind, "84")), runtime,
-                        "runtime " + kind + " table under -Dopcode-version=84 differs from " + kind + "ops-84.properties");
-            }
-        } finally {
-            if (previous == null) {
-                System.clearProperty("opcode-version");
-            } else {
-                System.setProperty("opcode-version", previous);
+                        "runtime " + kind + " table differs from " + kind + "ops-84.properties");
             }
         }
     }

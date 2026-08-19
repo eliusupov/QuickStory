@@ -1,7 +1,6 @@
 package net.server.channel.handlers;
 
 import client.inventory.Pet;
-import constants.net.ServerConstants;
 import net.packet.InPacket;
 import net.packet.OutPacket;
 import org.junit.jupiter.api.Test;
@@ -45,10 +44,8 @@ import static org.mockito.Mockito.when;
  */
 @ExtendWith(MockitoExtension.class)
 class MovementHeaderTest extends HandlerTest {
-    private static final boolean V84 = ServerConstants.VERSION >= 84;
-
     /** Packet-level bytes the client writes before CMovePath's own 4-byte origin. */
-    private static final int PLAYER_PROLOGUE = V84 ? 29 : 5;
+    private static final int PLAYER_PROLOGUE = 29;
     private static final int DRAGON_PROLOGUE = 0;   // the dragon writes none, both versions
 
     private static final int ORIGIN_X = 0x0007;
@@ -62,7 +59,7 @@ class MovementHeaderTest extends HandlerTest {
     private MapleMap map;
 
     @Test
-    void movePlayerHeaderIsNineAtV83AndThirtyThreeAtV84() {
+    void movePlayerHeaderIsThirtyThreeAtV84() {
         when(chr.getMap()).thenReturn(map);
 
         new MovePlayerHandler().handlePacket(move(filler(PLAYER_PROLOGUE)), client);
@@ -77,9 +74,6 @@ class MovementHeaderTest extends HandlerTest {
      */
     @Test
     void movePlayerParsesACapturedV84Packet() {
-        if (!V84) {
-            return; // v83 client, v83 layout - nothing to check against this capture
-        }
         byte[] captured = HexTool.toBytes(
                 "FF FF FF FF FF FF FF FF 01 FF FF FF FF FF FF FF FF AE 12 4A BB 0F F6 50 FA 83 84 F8"
                         + " 6A 07 00 D7 00 01 00 47 00 D7 00 7D 00 00 00 04 00 02 FE 01 11 44 44 44 44"

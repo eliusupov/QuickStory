@@ -2,7 +2,6 @@ package net.server.guild;
 
 import client.Character;
 import client.Client;
-import constants.net.ServerConstants;
 import net.opcodes.SendOpcode;
 import net.packet.OutPacket;
 import net.packet.Packet;
@@ -74,14 +73,9 @@ public class GuildPackets {
         p.writeByte(0x05);
         p.writeInt(guildId);
         p.writeString(charName);
-        if (ServerConstants.VERSION >= 84) {
-            // The v84 client reads two trailing ints on the guild-invite arm that v83 does not:
-            // v83 CWvsContext::OnGuildResult @0xa37490 case 5 stops after DecodeStr(inviterName);
-            // v84 @0xa82e2b case 5 follows it with Decode4 + Decode4. v87/v95 match v84, so this is
-            // one of the fields where v84 leads rather than trails. See ticket 25.
-            p.writeInt(0);
-            p.writeInt(0);
-        }
+        // v84 reads two trailing ints after the inviter name.
+        p.writeInt(0);
+        p.writeInt(0);
         return p;
     }
 

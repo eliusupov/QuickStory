@@ -2,7 +2,6 @@ package tools;
 
 import client.Character;
 import client.Job;
-import constants.net.ServerConstants;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import server.maps.Dragon;
@@ -42,14 +41,9 @@ class DragonSpawnPacketTest {
         };
         byte[] job = new byte[]{(byte) 0x98, 0x08}; // job 2200 = 0x0898, little-endian
 
-        if (ServerConstants.VERSION >= 84) {
-            // stance byte + TWO shorts (the extra 0x00) + job short = 13 bytes after the owner id
-            assertArrayEquals(concat(head, concat(new byte[]{0, 0}, job)), body,
-                    "v84 CDragon decode reads short+short after the stance byte, not byte+short");
-        } else {
-            assertArrayEquals(concat(head, concat(new byte[]{0}, job)), body,
-                    "v83 must stay byte-exact (byte+short after the stance)");
-        }
+        // stance byte + TWO shorts (the extra 0x00) + job short = 13 bytes after the owner id
+        assertArrayEquals(concat(head, concat(new byte[]{0, 0}, job)), body,
+                "v84 CDragon decode reads short+short after the stance byte, not byte+short");
     }
 
     private static Dragon dragon() {

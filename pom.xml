@@ -8,7 +8,7 @@
     <packaging>jar</packaging>
 
     <name>Cosmic</name>
-    <description>Server emulator for Global MapleStory version 83</description>
+    <description>Server emulator for Global MapleStory version 84</description>
     <url>https://github.com/P0nk/Cosmic</url>
     <inceptionYear>2021</inceptionYear>
 

@@ -31,7 +31,6 @@ import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
 import config.YamlConfig;
 import constants.game.GameConstants;
-import constants.net.ServerConstants;
 import constants.id.ItemId;
 import constants.id.MapId;
 import constants.id.MobId;
@@ -621,9 +620,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
     }
 
     protected static void skipV84AttackWords(InPacket p, int words) {
-        if (ServerConstants.VERSION >= 84) {
-            p.skip(words * 4);
-        }
+        p.skip(words * 4);
     }
 
     protected AttackInfo parseDamage(InPacket p, Character chr, boolean ranged, boolean magic) {

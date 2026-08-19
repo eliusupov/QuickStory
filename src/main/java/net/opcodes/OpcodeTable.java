@@ -33,10 +33,8 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 /**
- * Packet opcodes live in {@code resources/opcodes/sendops-NN.properties} and {@code recvops-NN.properties}
- * rather than in compiled literals, so retargeting the server at another client version is a file swap.
- * Pick the table with {@code -Dopcode-version=NN} (default 83). An {@code opcodes/} directory in the
- * working directory overrides the bundled tables, so a version can be tried without rebuilding.
+ * Packet opcodes live in the bundled GMS v84 tables rather than in compiled literals. An
+ * {@code opcodes/} directory in the working directory may override those tables for diagnostics.
  * <p>
  * Mechanism after Chronicle20/Vertisy's {@code ExternalCodeTableGetter} (same OdinMS/AGPL lineage).
  * <p>
@@ -45,7 +43,7 @@ import java.util.stream.Collectors;
  */
 public final class OpcodeTable {
     private static final Logger log = LoggerFactory.getLogger(OpcodeTable.class);
-    private static final String VERSION = System.getProperty("opcode-version", "83");
+    private static final String VERSION = String.valueOf(ServerConstants.VERSION);
     private static final Properties SEND = load("sendops");
     private static final Properties RECV = load("recvops");
 
@@ -69,17 +67,6 @@ public final class OpcodeTable {
     public static void verify() {
         rejectUnknownKeys(SEND, "sendops", SendOpcode.values());
         rejectUnknownKeys(RECV, "recvops", RecvOpcode.values());
-
-        // launch.bat does not pass -Dopcode-version, so a build that moves ServerConstants.VERSION
-        // without it handshakes as one version and speaks the other. Recv ids largely agree between
-        // 83 and 84, so packets still arrive and decode - it is the send side that silently lands on
-        // the wrong client handler (NPC_TALK 0x130 vs 0x137, SET_FIELD 0x7D vs 0x80). Warn, don't
-        // throw: running a mismatched pair on purpose while bisecting is legitimate. Ticket 26.
-        if (!VERSION.equals(String.valueOf(ServerConstants.VERSION))) {
-            log.warn("Opcode table is v{} but ServerConstants.VERSION is {}. The client will not understand "
-                            + "packets whose id moved between the two tables. Start with -Dopcode-version={}.",
-                    VERSION, ServerConstants.VERSION, ServerConstants.VERSION);
-        }
     }
 
     private static Properties load(String kind) {
@@ -91,7 +78,7 @@ public final class OpcodeTable {
         try (InputStream in = fromDisk ? Files.newInputStream(onDisk)
                 : OpcodeTable.class.getClassLoader().getResourceAsStream(path)) {
             if (in == null) {
-                throw new IllegalStateException("Missing opcode table " + path + " (-Dopcode-version=" + VERSION + ")");
+                throw new IllegalStateException("Missing opcode table " + path);
             }
             Properties properties = new Properties();
             properties.load(in);

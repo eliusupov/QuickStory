@@ -4,7 +4,6 @@ import client.Character;
 import client.Client;
 import client.Job;
 import client.QuestStatus;
-import constants.net.ServerConstants;
 import io.netty.buffer.Unpooled;
 import net.packet.ByteBufInPacket;
 import net.packet.Packet;
@@ -171,8 +170,7 @@ class Quest1021RealLoad {
         verify(c, atLeastOnce()).sendPacket(sent.capture());
         byte[] talk = sent.getAllValues().get(sent.getAllValues().size() - 1).getBytes();
 
-        byte expected = ServerConstants.VERSION >= 84 ? (byte) 0x0D : (byte) 0x0C;
-        assertEquals(expected, talk[7],
+        assertEquals((byte) 0x0D, talk[7],
                 "AskYesNoQuest is 12 in the v83 dialog-type enum and 13 from v84 on; sending the "
                         + "wrong one lands on a switch case the client does not have and the "
                         + "dialogue never renders");
