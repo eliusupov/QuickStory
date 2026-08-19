@@ -32,6 +32,7 @@ public class Skill {
     private final List<StatEffect> effects = new ArrayList<>();
     private Element element;
     private int animationTime;
+    private int mobCode;
     private final int job;
     private boolean action;
 
@@ -87,6 +88,14 @@ public class Skill {
 
     public void incAnimationTime(int time) {
         animationTime += time;
+    }
+
+    public int getMobCode() {
+        return mobCode;
+    }
+
+    public void setMobCode(int mobCode) {
+        this.mobCode = mobCode;
     }
 
     public boolean isBeginnerSkill() {

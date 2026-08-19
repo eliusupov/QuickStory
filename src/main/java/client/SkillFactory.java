@@ -116,6 +116,7 @@ public class SkillFactory {
 
     private static Skill loadFromData(int id, Data data) {
         Skill ret = new Skill(id);
+        ret.setMobCode(DataTool.getInt("mobCode", data, 0));
         boolean isBuff = false;
         int skillType = DataTool.getInt("skillType", data, -1);
         String elem = DataTool.getString("elemAttr", data, null);

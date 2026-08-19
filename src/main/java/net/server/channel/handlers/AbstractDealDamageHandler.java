@@ -95,6 +95,7 @@ import server.life.MobSkillType;
 import server.life.Monster;
 import server.life.MonsterDropEntry;
 import server.life.MonsterInformationProvider;
+import server.life.LifeFactory;
 import server.maps.MapItem;
 import server.maps.MapObject;
 import server.maps.MapleMap;
@@ -896,6 +897,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
             for (int j = 0; j < ret.numDamage; j++) {
                 int damage = p.readInt();
                 long hitDmgMax = calcDmgMax;
+                hitDmgMax *= evanPigsWeaknessDamageCeilingMultiplier(chr, monster);
                 if (ret.skill == Buccaneer.BARRAGE || ret.skill == ThunderBreaker.BARRAGE) {
                     if (j > 3) {
                         hitDmgMax *= Math.pow(2, (j - 3));
@@ -967,6 +969,18 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
      */
     static double elementalWeaknessDamageCeilingMultiplier(Integer elementalReset) {
         return 1.5 - (elementalReset == null ? 0 : elementalReset) / 200.0;
+    }
+
+    /** Pig's Weakness is client-calculated; accept its WZ damage multiplier for the matching WZ mob family. */
+    static double evanPigsWeaknessDamageCeilingMultiplier(Character chr, Monster monster) {
+        int level = chr.getSkillLevel(Evan.PIGS_WEAKNESS);
+        if (level == 0 || monster == null) {
+            return 1.0;
+        }
+
+        Skill skill = SkillFactory.getSkill(Evan.PIGS_WEAKNESS);
+        return LifeFactory.isMobCode(monster.getId(), skill.getMobCode())
+                ? skill.getEffect(level).getDamage() / 100.0 : 1.0;
     }
 
     private AttackInfo parseMesoExplosion(InPacket p, AttackInfo attackInfo) {

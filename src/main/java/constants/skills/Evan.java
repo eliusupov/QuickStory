@@ -19,6 +19,7 @@ public class Evan {
     public static final int BAMBOO_THRUST = 20011009;
     public static final int INVINCIBLE_BARRIER = 20011010;
     public static final int POWER_EXPLOSION = 20011011;
+    public static final int PIGS_WEAKNESS = 20019000;
     // EVAN2
     public static final int DRAGON_SOUL = 22000000;
     public static final int MAGIC_MISSILE = 22001001;

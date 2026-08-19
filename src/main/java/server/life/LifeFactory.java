@@ -39,6 +39,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class LifeFactory {
     private static final Logger log = LoggerFactory.getLogger(LifeFactory.class);
@@ -47,6 +48,7 @@ public class LifeFactory {
     private static final Data mobStringData = stringDataWZ.getData("Mob.img");
     private static final Data npcStringData = stringDataWZ.getData("Npc.img");
     private static final Map<Integer, MonsterStats> monsterStats = new HashMap<>();
+    private static final Map<Integer, Integer> mobCodes = new ConcurrentHashMap<>();
     private static final Set<Integer> hpbarBosses = getHpBarBosses();
 
     private static Set<Integer> getHpBarBosses() {
@@ -263,6 +265,28 @@ public class LifeFactory {
             log.error("[SEVERE] MOB {} failed to load.", mid, npe);
             return null;
         }
+    }
+
+    /** Resolves a mob's WZ visual-link family for skill {@code mobCode} checks. */
+    public static boolean isMobCode(int mid, int mobCode) {
+        return mobCode != 0 && mobCodes.computeIfAbsent(mid, LifeFactory::resolveMobCode) == mobCode;
+    }
+
+    private static int resolveMobCode(int mid) {
+        int current = mid;
+        Set<Integer> visited = new HashSet<>();
+        while (visited.add(current)) {
+            Data mob = data.getData(StringUtil.getLeftPaddedStr(current + ".img", '0', 11));
+            if (mob == null) {
+                return mid;
+            }
+            int link = DataTool.getIntConvert("link", mob.getChildByPath("info"), 0);
+            if (link == 0) {
+                return current;
+            }
+            current = link;
+        }
+        return mid;
     }
 
     public static int getMonsterLevel(int mid) {
