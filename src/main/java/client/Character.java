@@ -1225,17 +1225,17 @@ public class Character extends AbstractCharacterObject {
         if (job_ == 100) {                      // 1st warrior
             addhp += Randomizer.rand(400, 500);
         } else if (job_ == 200) {               // 1st mage
-            addmp += Randomizer.rand(100, 150);
+            addmp += Randomizer.rand(200, 300);
         } else if (job_ % 100 == 0) {           // 1st others
             addhp += Randomizer.rand(200, 300);
-            addmp += Randomizer.rand(25, 50);
+            addmp += Randomizer.rand(50, 100);
         } else if (job_ > 0 && job_ < 200) {    // 2nd~4th warrior
             addhp += Randomizer.rand(600, 700);
         } else if (job_ < 300) {                // 2nd~4th mage
-            addmp += Randomizer.rand(450, 500);
+            addmp += Randomizer.rand(900, 1000);
         } else if (job_ > 0) {                  // 2nd~4th others
             addhp += Randomizer.rand(600, 700);
-            addmp += Randomizer.rand(150, 200);
+            addmp += Randomizer.rand(300, 400);
         }
         
         /*
@@ -6385,7 +6385,7 @@ public class Character extends AbstractCharacterObject {
         int addhp = 0, addmp = 0;
         if (isBeginner) {
             addhp += Randomizer.rand(24, 32);
-            addmp += Randomizer.rand(10, 12);
+            addmp += Randomizer.rand(20, 24);
         } else if (job.isA(Job.WARRIOR) || job.isA(Job.DAWNWARRIOR1)) {
             improvingMaxHP = isCygnus() ? SkillFactory.getSkill(DawnWarrior.MAX_HP_INCREASE) : SkillFactory.getSkill(Warrior.IMPROVED_MAXHP);
             if (job.isA(Job.CRUSADER)) {
@@ -6395,15 +6395,15 @@ public class Character extends AbstractCharacterObject {
             }
             improvingMaxHPLevel = getSkillLevel(improvingMaxHP);
             addhp += Randomizer.rand(48, 56);
-            addmp += Randomizer.rand(4, 6);
+            addmp += Randomizer.rand(8, 12);
         } else if (job.isA(Job.MAGICIAN) || job.isA(Job.BLAZEWIZARD1)) {
             improvingMaxMP = isCygnus() ? SkillFactory.getSkill(BlazeWizard.INCREASING_MAX_MP) : SkillFactory.getSkill(Magician.IMPROVED_MAX_MP_INCREASE);
             improvingMaxMPLevel = getSkillLevel(improvingMaxMP);
             addhp += Randomizer.rand(20, 28);
-            addmp += Randomizer.rand(22, 24);
+            addmp += Randomizer.rand(44, 48);
         } else if (job.isA(Job.BOWMAN) || job.isA(Job.THIEF) || (job.getId() > 1299 && job.getId() < 1500)) {
             addhp += Randomizer.rand(40, 48);
-            addmp += Randomizer.rand(14, 16);
+            addmp += Randomizer.rand(28, 32);
         } else if (job.isA(Job.GM)) {
             addhp += 30000;
             addmp += 30000;
@@ -6411,10 +6411,10 @@ public class Character extends AbstractCharacterObject {
             improvingMaxHP = isCygnus() ? SkillFactory.getSkill(ThunderBreaker.IMPROVE_MAX_HP) : SkillFactory.getSkill(Brawler.IMPROVE_MAX_HP);
             improvingMaxHPLevel = getSkillLevel(improvingMaxHP);
             addhp += Randomizer.rand(44, 56);
-            addmp += Randomizer.rand(18, 23);
+            addmp += Randomizer.rand(36, 46);
         } else if (job.isA(Job.ARAN1)) {
             addhp += Randomizer.rand(88, 96);
-            int aids = Randomizer.rand(4, 8);
+            int aids = Randomizer.rand(8, 16);
             addmp += aids + Math.floor(aids * 0.1);
         } else if (job.isA(Job.EVAN1)) {
             // Evan (2200-2218) is a magician-type class, so it follows the Magician curve. Without
@@ -6424,7 +6424,7 @@ public class Character extends AbstractCharacterObject {
             // list every Evan skill and none of them is one - so the improvingMaxMPLevel check
             // below is correct to leave Evan out.
             addhp += Randomizer.rand(20, 28);
-            addmp += Randomizer.rand(22, 24);
+            addmp += Randomizer.rand(44, 48);
         }
         if (improvingMaxHPLevel > 0 && (job.isA(Job.WARRIOR) || job.isA(Job.PIRATE) || job.isA(Job.DAWNWARRIOR1) || job.isA(Job.THUNDERBREAKER1))) {
             addhp += improvingMaxHP.getEffect(improvingMaxHPLevel).getX();
