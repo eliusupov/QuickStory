@@ -18,9 +18,10 @@ class EvanDragonFuryRealLoad {
 
     private static int totalMagicAt(int mp) {
         Character chr = Character.getDefault(Mockito.mock(Client.class));
-        chr.setJob(Job.EVAN9);
+        chr.setJob(Job.EVAN8);
         chr.changeSkillLevel(SkillFactory.getSkill(Evan.DRAGON_FURY), (byte) 10, 10, -1);
-        chr.updateMpMaxMp(mp, 100);
+        chr.updateMaxMp(100);
+        chr.updateMp(mp);
         chr.updateStrDexIntLuk(4, 4, 100, 4, 0);
         return chr.getTotalMagic();
     }
