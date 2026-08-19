@@ -15,6 +15,7 @@ import java.awt.Rectangle;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -63,18 +64,14 @@ class EvanSkillEffectsRealLoad {
         );
     }
 
-    /**
-     * 22181003. It has an effect node, so it always loaded as a buff - one with an empty statup
-     * list, and it was in no other list either, so casting it did nothing whatsoever.
-     *
-     * <p>The revive percentage comes from the same {@code x} the other three resurrections do not
-     * have, which is what keeps the new branch neutral for them.
-     */
     @Test
-    void soulStoneRevives() {
+    void soulStoneIsNotImmediateResurrection() {
+        StatEffect soulStone = SkillFactory.getSkill(Evan.SOUL_STONE).getEffect(20);
         assertAll(
-                () -> assertTrue(SkillFactory.getSkill(Evan.SOUL_STONE).getEffect(20).isResurrection(), "22181003"),
-                () -> assertEquals(50, SkillFactory.getSkill(Evan.SOUL_STONE).getEffect(20).getX(), "revives at 50%"),
+                () -> assertFalse(soulStone.isResurrection(), "22181003 must not use the immediate resurrection path"),
+                () -> assertEquals(50, soulStone.getX(), "revives at 50%"),
+                () -> assertEquals(2, soulStone.getY(), "two party members"),
+                () -> assertEquals(300000, soulStone.getDuration(), "300 seconds"),
                 () -> assertEquals(0, SkillFactory.getSkill(Bishop.RESURRECTION).getEffect(10).getX(),
                         "Resurrection has no x, so it still revives at full"),
                 () -> assertTrue(SkillFactory.getSkill(Bishop.RESURRECTION).getEffect(10).isResurrection(),

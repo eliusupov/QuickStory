@@ -290,6 +290,8 @@ public class Character extends AbstractCharacterObject {
     private final Map<Disease, Long> diseaseExpires = new LinkedHashMap<>();
     private final Map<Integer, Map<BuffStat, BuffStatValueHolder>> buffEffects = new LinkedHashMap<>(); // non-overriding buffs thanks to Ronan
     private final Map<Integer, Long> buffExpires = new LinkedHashMap<>();
+    private StatEffect soulStoneEffect;
+    private long soulStoneExpires;
     private final Map<Integer, KeyBinding> keymap = new LinkedHashMap<>();
     private final Map<Integer, Summon> summons = new LinkedHashMap<>();
     private final Map<Integer, CooldownValueHolder> coolDowns = new LinkedHashMap<>();
@@ -7531,6 +7533,10 @@ public class Character extends AbstractCharacterObject {
     }
 
     private void playerDead() {
+        if (reviveFromSoulStone()) {
+            return;
+        }
+
         if (this.getMap().isCPQMap()) {
             int losing = getMap().getDeathCP();
             if (getCP() < losing) {
@@ -7596,6 +7602,61 @@ public class Character extends AbstractCharacterObject {
 
         unsitChairInternal();
         sendPacket(PacketCreator.enableActions());
+    }
+
+    /** Soul Stone gives each selected party member one revival before its WZ duration expires. */
+    public void protectFromSoulStone(StatEffect effect) {
+        long startTime = Server.getInstance().getCurrentTime();
+        protectFromSoulStone(effect, startTime);
+        TimerManager.getInstance().schedule(() -> expireSoulStone(startTime + effect.getDuration()), effect.getDuration());
+    }
+
+    void protectFromSoulStone(StatEffect effect, long startTime) {
+        chrLock.lock();
+        try {
+            soulStoneEffect = effect;
+            soulStoneExpires = startTime + effect.getDuration();
+        } finally {
+            chrLock.unlock();
+        }
+    }
+
+    private boolean reviveFromSoulStone() {
+        return reviveFromSoulStone(Server.getInstance().getCurrentTime());
+    }
+
+    private void expireSoulStone(long expiration) {
+        chrLock.lock();
+        try {
+            if (soulStoneExpires == expiration) {
+                soulStoneEffect = null;
+            }
+        } finally {
+            chrLock.unlock();
+        }
+    }
+
+    boolean reviveFromSoulStone(long time) {
+        StatEffect effect;
+        chrLock.lock();
+        try {
+            if (soulStoneEffect == null || time >= soulStoneExpires || isAlive()) {
+                if (time >= soulStoneExpires) {
+                    soulStoneEffect = null;
+                }
+                return false;
+            }
+            effect = soulStoneEffect;
+            soulStoneEffect = null;
+        } finally {
+            chrLock.unlock();
+        }
+
+        updateHp(getCurrentMaxHp() * effect.getX() / 100);
+        if (map != null) {
+            broadcastStance(isFacingLeft() ? 5 : 4);
+        }
+        return true;
     }
 
     private void unsitChairInternal() {

@@ -1031,8 +1031,7 @@ public class StatEffect {
             }
         } else {
             if (isResurrection()) {
-                // Soul Stone revives at x% (50 at level 20); Resurrection has no x node at all
-                hpchange = x > 0 ? applyto.getCurrentMaxHp() * x / 100 : applyto.getCurrentMaxHp();
+                hpchange = applyto.getCurrentMaxHp();
                 applyto.broadcastStance(applyto.isFacingLeft() ? 5 : 4);
             }
         }
@@ -1236,21 +1235,23 @@ public class StatEffect {
             for (MapObject affectedmo : affecteds) {
                 Character affected = (Character) affectedmo;
                 if (affected != applyfrom && (isGmBuff() || applyfrom.getParty().equals(affected.getParty()))) {
-                    if (!isResurrection()) {
-                        if (affected.isAlive()) {
-                            affectedp.add(affected);
-                        }
-                    } else {
-                        if (!affected.isAlive()) {
-                            affectedp.add(affected);
-                        }
+                    if (affected.isAlive()) {
+                        affectedp.add(affected);
                     }
                 }
             }
 
+            if (isSoulStone()) {
+                Collections.shuffle(affectedp);
+                affectedp = affectedp.subList(0, Math.min(y, affectedp.size()));
+            }
             affectedc += affectedp.size();   // used for heal
             for (Character affected : affectedp) {
-                applyTo(applyfrom, affected, false, null, useMaxRange, affectedc);
+                if (isSoulStone()) {
+                    affected.protectFromSoulStone(this);
+                } else {
+                    applyTo(applyfrom, affected, false, null, useMaxRange, affectedc);
+                }
                 affected.sendPacket(PacketCreator.showOwnBuffEffect(sourceid, 2));
                 affected.getMap().broadcastMessage(affected, PacketCreator.showBuffEffect(affected.getId(), sourceid, 2), false);
             }
@@ -1636,17 +1637,12 @@ public class StatEffect {
         return sourceid == Cleric.HEAL || sourceid == SuperGM.HEAL_PLUS_DISPEL;
     }
 
-    /**
-     * Soul Stone 22181003 is Evan's revive. It registered as a buff with an empty statup list and
-     * was in no other list, so casting it did nothing at all.
-     *
-     * <p>Not modelled, because nothing in the WZ says how: the real skill hangs over the party for
-     * {@code time} (300s) and spends one of {@code y} (2) charges as members die, where this branch
-     * revives whoever is already down at cast time. The node carries no counter of any kind.
-     */
     boolean isResurrection() {
-        return sourceid == Bishop.RESURRECTION || sourceid == GM.RESURRECTION || sourceid == SuperGM.RESURRECTION
-                || sourceid == Evan.SOUL_STONE;
+        return sourceid == Bishop.RESURRECTION || sourceid == GM.RESURRECTION || sourceid == SuperGM.RESURRECTION;
+    }
+
+    private boolean isSoulStone() {
+        return sourceid == Evan.SOUL_STONE;
     }
 
     private boolean isTimeLeap() {
