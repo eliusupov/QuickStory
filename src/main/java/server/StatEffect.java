@@ -605,6 +605,12 @@ public class StatEffect {
                 case Evan.INVINCIBLE_BARRIER:
                     statups.add(new Pair<>(BuffStat.DIVINE_BODY, 1));
                     break;
+                case Evan.POWER_EXPLOSION:
+                    // Skill.wz/2001.img/20011011 has time=30 and x=200. Dojang Berserk's
+                    // protocol value is 1; the x value is its doubled-damage ceiling.
+                    ret.damage = ret.x;
+                    statups.add(new Pair<>(BuffStat.BERSERK_FURY, 1));
+                    break;
                 case Fighter.POWER_GUARD:
                 case Page.POWER_GUARD:
                     statups.add(new Pair<>(BuffStat.POWERGUARD, x));
@@ -780,11 +786,6 @@ public class StatEffect {
                 case Beginner.POWER_EXPLOSION:
                 case Noblesse.POWER_EXPLOSION:
                 case Legend.POWER_EXPLOSION:
-                    // Evan's 20011011 is deliberately absent. All four are the same skill in
-                    // String.wz - "Meteo Shower", damage +100% for 30s - but v84 gives Evan x 200
-                    // where the other three carry -3, and BOOSTER is an attack-speed delta, so 200
-                    // would be nonsense. Nothing in the node says where a damage percentage should
-                    // go instead, and this class has no passive damage multiplier to put it in.
                     statups.add(new Pair<>(BuffStat.BOOSTER, x));
                     break;
                 case Hero.MAPLE_WARRIOR:

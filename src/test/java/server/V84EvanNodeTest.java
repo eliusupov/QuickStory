@@ -24,6 +24,7 @@ import java.awt.Point;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -378,6 +379,23 @@ class V84EvanNodeTest {
                 "Phantom Imprint stopped applying its own monster status");
         assertFalse(imprint.getStatups().stream().anyMatch(s -> s.getLeft() == BuffStat.ARAN_COMBO),
                 "Phantom Imprint leaked into the Aran Combo Ability arm");
+    }
+
+    /** 20011011 is the Dojang Berserk damage buff, not an attack-speed booster. */
+    @Test
+    void evansMeteoShowerLoadsAsDojangBerserkWithItsV84DamageCeiling() {
+        StatEffect meteo = StatEffect.loadSkillEffectFromData(
+                wz("Skill.wz").getData("2001.img").getChildByPath("skill/20011011/level/1"),
+                Evan.POWER_EXPLOSION, true);
+
+        assertAll(
+                () -> assertEquals(30_000, meteo.getDuration(), "time"),
+                () -> assertEquals(200, meteo.getX(), "x"),
+                () -> assertEquals(200, meteo.getDamage(), "server damage ceiling"),
+                () -> assertEquals(List.of(BuffStat.BERSERK_FURY), meteo.getStatups().stream().map(Pair::getLeft).toList(),
+                        "Dojang Berserk status"),
+                () -> assertEquals(1, meteo.getStatups().getFirst().getRight(), "Dojang Berserk value")
+        );
     }
 
     /**
