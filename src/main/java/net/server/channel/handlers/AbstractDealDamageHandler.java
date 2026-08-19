@@ -109,7 +109,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
@@ -382,7 +381,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                         Skill slow = SkillFactory.getSkill(Evan.SLOW);
                         if (slow.getEffect(player.getSkillLevel(slow)).makeChanceResult()) {
                             MonsterStatusEffect monsterStatusEffect = new MonsterStatusEffect(Collections.singletonMap(MonsterStatus.SPEED, slow.getEffect(player.getSkillLevel(slow)).getX()), slow, null, false);
-                            long duration = MINUTES.toMillis(slow.getEffect(player.getSkillLevel(slow)).getY());
+                            long duration = evanSlowDebuffDuration(slow.getEffect(player.getSkillLevel(slow)));
                             monster.applyStatus(player, monsterStatusEffect, false, duration);
                         }
                     }
@@ -614,6 +613,10 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
     static double criticalDamageCeilingMultiplier(Character chr) {
         int level = chr.getSkillLevel(Evan.CRITICAL_MAGIC);
         return level > 0 ? SkillFactory.getSkill(Evan.CRITICAL_MAGIC).getEffect(level).getDamage() / 100.0 : 2.0;
+    }
+
+    static long evanSlowDebuffDuration(StatEffect effect) {
+        return SECONDS.toMillis(effect.getY());
     }
 
     protected static void skipV84AttackWords(InPacket p, int words) {
