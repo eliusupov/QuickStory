@@ -843,19 +843,19 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
             if (ret.skill != 0) {
                 Skill skill = SkillFactory.getSkill(ret.skill);
-                if (skill.getElement() != Element.NEUTRAL && chr.getBuffedValue(BuffStat.ELEMENTAL_RESET) == null) {
+                if (skill.getElement() != Element.NEUTRAL) {
                     // The skill has an element effect, so we need to factor that in.
                     if (monster != null) {
                         ElementalEffectiveness eff = monster.getElementalEffectiveness(skill.getElement());
                         if (eff == ElementalEffectiveness.WEAK) {
-                            calcDmgMax *= 1.5;
+                            calcDmgMax *= elementalWeaknessDamageCeilingMultiplier(chr.getBuffedValue(BuffStat.ELEMENTAL_RESET));
                         } else if (eff == ElementalEffectiveness.STRONG) {
                             //calcDmgMax *= 0.5;
                         }
                     } else {
                         // Since we already know the skill has an elemental attribute, but we dont know if the monster is weak or not, lets
                         // take the safe approach and just assume they are weak.
-                        calcDmgMax *= 1.5;
+                        calcDmgMax *= elementalWeaknessDamageCeilingMultiplier(chr.getBuffedValue(BuffStat.ELEMENTAL_RESET));
                     }
                 }
                 if (ret.skill == FPWizard.POISON_BREATH || ret.skill == FPMage.POISON_MIST || ret.skill == FPArchMage.FIRE_DEMON || ret.skill == ILArchMage.ICE_DEMON) {
@@ -947,6 +947,14 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
             ret.position.setLocation(p.readShort(), p.readShort());
         }
         return ret;
+    }
+
+    /**
+     * Elemental Reset moves an elemental weakness's +50% modifier towards neutral by its WZ x value.
+     * Damage is client-calculated; this is the matching server-side anti-hack ceiling.
+     */
+    static double elementalWeaknessDamageCeilingMultiplier(Integer elementalReset) {
+        return 1.5 - (elementalReset == null ? 0 : elementalReset) / 200.0;
     }
 
     private AttackInfo parseMesoExplosion(InPacket p, AttackInfo attackInfo) {
