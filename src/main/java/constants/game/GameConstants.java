@@ -781,13 +781,18 @@ public class GameConstants {
         } 
     }
 
-    // Quest EXP scaling by level: (level / 10) * 2.5
+    // Quest EXP multiplier by level band: 1x for 1-9, 2x for 10-39, 3x for 40-69, 4x for 70+.
     public static float getQuestExpRateForLevel(int level) {
-        if (level <= 0) {
-            return 1.0f;
+        if (level >= 70) {
+            return 4.0f;
         }
-        float scaled = (level / 10.0f) * 3.0f;
-        return Math.min(4.0f, Math.max(1.0f, scaled));
+        if (level >= 40) {
+            return 3.0f;
+        }
+        if (level >= 10) {
+            return 2.0f;
+        }
+        return 1.0f;
     }
 
     private static int getMaxObstacleMobDamageFromWz() {
