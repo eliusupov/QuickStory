@@ -7859,9 +7859,10 @@ public class Character extends AbstractCharacterObject {
             // and it is the first skill an Evan ever gets; Magic Mastery 22170001 adds x, 15 at
             // level 30. No job test is needed - nobody else can hold either skill.
             //
-            // Magic Mastery's other half, mastery 16, is not applied: there is no magic mastery
-            // concept in this codebase at all. Dragon Fury's MP-window multiplier is applied by
-            // getTotalMagic(), where every server-side magic damage validation reads it.
+            // Magic Mastery's mastery value is the client-side magic-damage floor. The server
+            // validates only an upper damage ceiling, so it has no authoritative minimum roll to
+            // apply. Dragon Fury's MP-window multiplier is applied by getTotalMagic(), where every
+            // server-side magic damage validation reads it.
             Skill dragonSoul = SkillFactory.getSkill(Evan.DRAGON_SOUL);
             int soulLevel = getSkillLevel(dragonSoul);
             if (soulLevel > 0) {
