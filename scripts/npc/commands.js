@@ -13,6 +13,12 @@ var staff_heading = "!";
 
 var levels = ["Common", "Donator", "JrGM", "GM", "SuperGM", "Developer", "Admin"];
 var commands;
+var rank;
+var page;
+var page_size = 10;
+var back_to_ranks = 10;
+var previous_page = 11;
+var next_page = 12;
 
 function writeHeavenMSCommands() {
     const CommandsExecutor = Java.type('client.command.CommandsExecutor');
@@ -20,53 +26,70 @@ function writeHeavenMSCommands() {
 }
 
 function start() {
-    status = -1;
     writeHeavenMSCommands();
-    action(1, 0, 0);
+    status = 0;
+    showRanks();
+}
+
+function showRanks() {
+    var sendStr = "There are all available commands for you:\r\n\r\n#b";
+    for (var i = 0; i <= cm.getPlayer().gmLevel(); i++) {
+        sendStr += "#L" + i + "#" + levels[i] + "#l\r\n";
+    }
+
+    cm.sendSimple(sendStr);
+}
+
+function showCommands() {
+    var lvComm = commands.get(rank).getLeft();
+    var lvDesc = commands.get(rank).getRight();
+    var lvHead = (rank < 2) ? common_heading : staff_heading;
+    var first = page * page_size;
+    var last = Math.min(first + page_size, lvComm.size());
+    var sendStr = "The following commands are available for #b" + levels[rank] + "#k:\r\n\r\n";
+
+    for (var i = first; i < last; i++) {
+        sendStr += "  #L" + (i - first) + "# " + lvHead + lvComm.get(i) + " - " + lvDesc.get(i) + "#l\r\n";
+    }
+
+    sendStr += "\r\n#L" + back_to_ranks + "#Back to ranks#l\r\n";
+    if (page > 0) {
+        sendStr += "#L" + previous_page + "#Previous page#l\r\n";
+    }
+    if (last < lvComm.size()) {
+        sendStr += "#L" + next_page + "#Next page#l\r\n";
+    }
+    cm.sendSimple(sendStr);
 }
 
 function action(mode, type, selection) {
-    if (mode == -1) {
+    if (mode == -1 || (mode == 0 && type > 0)) {
         cm.dispose();
-    } else {
-        if (mode == 0 && type > 0) {
+        return;
+    }
+
+    if (status == 0) {
+        if (mode != 1) {
             cm.dispose();
             return;
         }
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
+        rank = Math.max(0, Math.min(selection, cm.getPlayer().gmLevel()));
+        page = 0;
+        status = 1;
+        showCommands();
+        return;
+    }
 
-        if (status == 0) {
-            var sendStr = "There are all available commands for you:\r\n\r\n#b";
-            for (var i = 0; i <= cm.getPlayer().gmLevel(); i++) {
-                sendStr += "#L" + i + "#" + levels[i] + "#l\r\n";
-            }
-
-            cm.sendSimple(sendStr);
-        } else if (status == 1) {
-            var lvComm, lvDesc, lvHead = (selection < 2) ? common_heading : staff_heading;
-
-            if (selection > 6) {
-                selection = 6;
-            } else if (selection < 0) {
-                selection = 0;
-            }
-
-            lvComm = commands.get(selection).getLeft();
-            lvDesc = commands.get(selection).getRight();
-
-            var sendStr = "The following commands are available for #b" + levels[selection] + "#k:\r\n\r\n";
-            for (var i = 0; i < lvComm.size(); i++) {
-                sendStr += "  #L" + i + "# " + lvHead + lvComm.get(i) + " - " + lvDesc.get(i);
-                sendStr += "#l\r\n";
-            }
-
-            cm.sendPrev(sendStr);
-        } else {
-            cm.dispose();
-        }
+    if (selection == back_to_ranks) {
+        status = 0;
+        showRanks();
+    } else if (selection == previous_page && page > 0) {
+        page--;
+        showCommands();
+    } else if (selection == next_page && (page + 1) * page_size < commands.get(rank).getLeft().size()) {
+        page++;
+        showCommands();
+    } else {
+        showCommands();
     }
 }
