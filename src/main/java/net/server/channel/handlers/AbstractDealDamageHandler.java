@@ -593,8 +593,8 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
      * garbage monster ids, i.e. magic attacks that deal no damage. See ticket 25.
      */
     /**
-     * Whether this character can land a critical hit, which both doubles the damage ceiling the
-     * autoban checks against and lets parseDamage() invert the damage so the client draws a crit.
+     * Whether this character can land a critical hit, which raises the damage ceiling the autoban
+     * checks against and lets parseDamage() invert the damage so the client draws a crit.
      *
      * <p>The job list cannot cover Evan: Critical Magic 22140000 arrives at Evan7 and Job.isA()
      * keys on id/100, which puts all ten Evan jobs in one bucket - Evan1 through Evan6 included,
@@ -605,6 +605,15 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 || chr.getJob().isA(Job.WINDARCHER1) || chr.getJob() == Job.ARAN3 || chr.getJob() == Job.ARAN4
                 || chr.getJob() == Job.MARAUDER || chr.getJob() == Job.BUCCANEER
                 || chr.getSkillLevel(Evan.CRITICAL_MAGIC) > 0;
+    }
+
+    /**
+     * Critical Magic is client-rolled, but its reported hit still needs the same WZ ceiling here.
+     * Other critical-capable jobs retain the legacy 200% ceiling.
+     */
+    static double criticalDamageCeilingMultiplier(Character chr) {
+        int level = chr.getSkillLevel(Evan.CRITICAL_MAGIC);
+        return level > 0 ? SkillFactory.getSkill(Evan.CRITICAL_MAGIC).getEffect(level).getDamage() / 100.0 : 2.0;
     }
 
     protected static void skipV84AttackWords(InPacket p, int words) {
@@ -907,7 +916,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 long maxWithCrit = hitDmgMax;
                 if (canCrit) // They can crit, so up the max.
                 {
-                    maxWithCrit *= 2;
+                    maxWithCrit *= criticalDamageCeilingMultiplier(chr);
                 }
 
                 // Warn if the damage is over 1.5x what we calculated above.
