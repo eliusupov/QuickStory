@@ -899,6 +899,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 long hitDmgMax = calcDmgMax;
                 hitDmgMax *= evanPigsWeaknessDamageCeilingMultiplier(chr, monster);
                 hitDmgMax *= evanStumpsWeaknessDamageCeilingMultiplier(chr, monster);
+                hitDmgMax *= evanSlimesWeaknessDamageCeilingMultiplier(chr, monster);
                 if (ret.skill == Buccaneer.BARRAGE || ret.skill == ThunderBreaker.BARRAGE) {
                     if (j > 3) {
                         hitDmgMax *= Math.pow(2, (j - 3));
@@ -980,6 +981,11 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
     /** Stump's Weakness is client-calculated; accept its WZ damage multiplier for the matching WZ mob family. */
     static double evanStumpsWeaknessDamageCeilingMultiplier(Character chr, Monster monster) {
         return evanWeaknessDamageCeilingMultiplier(chr, monster, Evan.STUMPS_WEAKNESS);
+    }
+
+    /** Slime's Weakness is client-calculated; accept its WZ damage multiplier for the matching WZ mob family. */
+    static double evanSlimesWeaknessDamageCeilingMultiplier(Character chr, Monster monster) {
+        return evanWeaknessDamageCeilingMultiplier(chr, monster, Evan.SLIMES_WEAKNESS);
     }
 
     private static double evanWeaknessDamageCeilingMultiplier(Character chr, Monster monster, int skillId) {

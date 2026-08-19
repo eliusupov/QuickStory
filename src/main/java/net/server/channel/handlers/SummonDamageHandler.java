@@ -108,7 +108,8 @@ public final class SummonDamageHandler extends AbstractDealDamageHandler {
 
             int targetMaxDmg = (int) (maxDmg
                     * evanPigsWeaknessDamageCeilingMultiplier(player, mob)
-                    * evanStumpsWeaknessDamageCeilingMultiplier(player, mob));
+                    * evanStumpsWeaknessDamageCeilingMultiplier(player, mob)
+                    * evanSlimesWeaknessDamageCeilingMultiplier(player, mob));
             if (damage > targetMaxDmg) {
                 AutobanFactory.DAMAGE_HACK.alert(c.getPlayer(), "Possible packet editing summon damage exploit.");
                 final String mobName = MonsterInformationProvider.getInstance().getMobNameFromId(mob.getId());
