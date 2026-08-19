@@ -7900,10 +7900,12 @@ public class Character extends AbstractCharacterObject {
             }
             */
 
-            Integer blessing = getSkillLevel(getBeginnerSkillBlock() + 12);
-            if (blessing > 0) {
-                localwatk += blessing;
-                localmagic += blessing * 2;
+            Skill blessing = SkillFactory.getSkill(getBeginnerSkillBlock() + 12);
+            int blessingLevel = getSkillLevel(blessing);
+            if (blessingLevel > 0) {
+                StatEffect blessingEffect = blessing.getEffect(blessingLevel);
+                localwatk += blessingEffect.getX();
+                localmagic += blessingEffect.getY();
             }
 
             if (job.isA(Job.THIEF) || job.isA(Job.BOWMAN) || job.isA(Job.PIRATE) || job.isA(Job.NIGHTWALKER1) || job.isA(Job.WINDARCHER1)) {
