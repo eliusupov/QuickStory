@@ -3855,6 +3855,15 @@ public class MapleMap {
             chrRLock.unlock();
         }
 
+        // Timed bosses ignore the map population cap. Their spawn points are outnumbered by
+        // instant-respawn trash on the same map, which holds spawnedMonstersOnMap at or above the cap
+        // indefinitely, so getNumShouldSpawn() below would never let an expired boss timer through.
+        for (SpawnPoint spawnPoint : getMonsterSpawn()) {
+            if (spawnPoint.isTimedBoss() && spawnPoint.shouldSpawn()) {
+                spawnMonster(spawnPoint.getMonster());
+            }
+        }
+
         int numShouldSpawn = getNumShouldSpawn(numPlayers);
         if (numShouldSpawn > 0) {
             List<SpawnPoint> randomSpawn = new ArrayList<>(getMonsterSpawn());

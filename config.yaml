@@ -196,9 +196,9 @@ server:
     LOGIN_ATTEMPT_DURATION: 120         #Period in seconds the login attempt remains registered on the system.
 
     #Ip Configuration
-    HOST: 25.6.239.228                 #WAN IPv4 address (Hamachi; was 25.59.156.85, stale after reassignment)
-    LANHOST: 192.168.1.160             #LAN IPv4 address
-    LOCALHOST: 127.0.0.1               #Loopback IPv4 address
+    HOST: 127.0.0.1                 #WAN IPv4 address
+    LANHOST: 127.0.0.1              #LAN IPv4 address
+    LOCALHOST: 127.0.0.1            #Loopback IPv4 address
     GMSERVER: false
 
     #Other configuration

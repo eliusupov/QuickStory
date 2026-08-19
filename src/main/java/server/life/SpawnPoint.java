@@ -30,6 +30,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class SpawnPoint {
+    /** How long a field boss stays dead, matching the AreaBoss*.js spawners (King Clang, Mano, ...). */
+    private static final long FIELD_BOSS_RESPAWN_MILLIS = SECONDS.toMillis(30);
+
+    /**
+     * Shortest mobTime we treat as a real respawn timer. Below this the wz boss flag belongs to a
+     * PQ/event mob whose timing is encounter design, not a spawn timer - Monster Carnival's Buffy
+     * and Rombot sit at 1s, Watermelon Guard at 3-8s. Every field boss is 600s or longer.
+     */
+    private static final int FIELD_BOSS_MIN_MOB_TIME = 60;
+
     private final int monster;
     private final int mobTime;
     private final int team;
@@ -40,12 +50,14 @@ public class SpawnPoint {
     private int mobInterval = 5000;
     private final AtomicInteger spawnedMonsters = new AtomicInteger(0);
     private final boolean immobile;
+    private final boolean timedBoss;
     private boolean denySpawn = false;
 
     public SpawnPoint(final Monster monster, Point pos, boolean immobile, int mobTime, int mobInterval, int team) {
         this.monster = monster.getId();
         this.pos = new Point(pos);
         this.mobTime = mobTime;
+        this.timedBoss = monster.isBoss() && mobTime >= FIELD_BOSS_MIN_MOB_TIME;
         this.team = team;
         this.fh = monster.getFh();
         this.f = monster.getF();
@@ -89,7 +101,8 @@ public class SpawnPoint {
             public void monsterKilled(int aniTime) {
                 nextPossibleSpawn = Server.getInstance().getCurrentTime();
                 if (mobTime > 0) {
-                    nextPossibleSpawn += SECONDS.toMillis(mobTime);
+                    boolean fieldBoss = timedBoss && mob.getMap().getEventInstance() == null;
+                    nextPossibleSpawn += fieldBoss ? FIELD_BOSS_RESPAWN_MILLIS : SECONDS.toMillis(mobTime);
                 } else {
                     nextPossibleSpawn += aniTime;
                 }
@@ -126,6 +139,10 @@ public class SpawnPoint {
 
     public int getMobTime() {
         return mobTime;
+    }
+
+    public boolean isTimedBoss() {
+        return timedBoss;
     }
 
     public int getTeam() {
