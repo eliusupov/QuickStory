@@ -153,6 +153,24 @@ class TakeDamageInvincibleRealLoad extends HandlerTest {
     }
 
     @Test
+    void evanMagicResistanceTakesItsPercentageOffAMagicAttack() {
+        lenient().when(chr.getBuffedValue(BuffStat.MAGIC_RESISTANCE)).thenReturn(20);
+
+        handler.handlePacket(attack1(MAGIC_MOB, 1000), client);
+
+        verify(chr).addMPHP(-800, 0);
+    }
+
+    @Test
+    void evanMagicResistanceDoesNothingAgainstAWeaponAttack() {
+        lenient().when(chr.getBuffedValue(BuffStat.MAGIC_RESISTANCE)).thenReturn(20);
+
+        handler.handlePacket(attack1(WEAPON_MOB, 1000), client);
+
+        verify(chr).addMPHP(-1000, 0);
+    }
+
+    @Test
     void withoutEitherBuffTheFullHitLands() {
         handler.handlePacket(bump(WEAPON_MOB, 1000), client);
 

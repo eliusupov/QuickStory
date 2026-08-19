@@ -266,6 +266,13 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                     damage -= damage * magicShield / 100;
                 }
 
+                // Evan's Magic Resistance 22151003 says "Magic Attack resistance". Mob.wz marks
+                // that attack type with attackN/info/magic, which is decoded into is_magic above.
+                Integer magicResistance = chr.getBuffedValue(BuffStat.MAGIC_RESISTANCE);
+                if (magicResistance != null && is_magic) {
+                    damage -= damage * magicResistance / 100;
+                }
+
                 // Cleric's Invincible 2301003, x% at level x+10. Same story as Magic Shield, except
                 // 2301003's desc draws a line the others do not: "Temporarily decreases the weapon
                 // damage received. It has no effect, however, on the magic attack." Mob.wz marks the
@@ -276,11 +283,6 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                     damage -= damage * invincible / 100;
                 }
 
-                // BuffStat.MAGIC_RESISTANCE (22151003, -x% from elemental attacks) is written and
-                // still unread, deliberately: nothing here knows the element of an incoming hit.
-                // The packet's element byte is read and discarded at the top of this method with no
-                // mapping for its values anywhere in the tree, and Monster.getStats()
-                // .getEffectiveness() is the mob's own resistance, not its attack's element.
             }
             Integer mesoguard = chr.getBuffedValue(BuffStat.MESOGUARD);
             if (chr.getBuffedValue(BuffStat.MAGIC_GUARD) != null && mpattack == 0) {
