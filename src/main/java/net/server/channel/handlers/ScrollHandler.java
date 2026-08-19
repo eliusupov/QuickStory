@@ -23,7 +23,6 @@ package net.server.channel.handlers;
 
 import client.Character;
 import client.Client;
-import client.Skill;
 import client.SkillFactory;
 import client.inventory.Equip;
 import client.inventory.Equip.ScrollResult;
@@ -65,8 +64,7 @@ public final class ScrollHandler extends AbstractPacketHandler {
                 ItemInformationProvider ii = ItemInformationProvider.getInstance();
                 Character chr = c.getPlayer();
                 Equip toScroll = (Equip) chr.getInventory(InventoryType.EQUIPPED).getItem(equipSlot);
-                Skill LegendarySpirit = SkillFactory.getSkill(1003);
-                if (chr.getSkillLevel(LegendarySpirit) > 0 && equipSlot >= 0) {
+                if (hasLegendarySpirit(chr) && equipSlot >= 0) {
                     legendarySpirit = true;
                     toScroll = (Equip) chr.getInventory(InventoryType.EQUIP).getItem(equipSlot);
                 }
@@ -184,6 +182,10 @@ public final class ScrollHandler extends AbstractPacketHandler {
         } else {
             c.sendPacket(PacketCreator.getInventoryFull());
         }
+    }
+
+    static boolean hasLegendarySpirit(Character chr) {
+        return chr.getSkillLevel(SkillFactory.getSkill(chr.getBeginnerSkillBlock() + 1003)) > 0;
     }
 
     private static boolean canScroll(int scrollid, int itemid) {
