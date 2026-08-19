@@ -898,6 +898,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 int damage = p.readInt();
                 long hitDmgMax = calcDmgMax;
                 hitDmgMax *= evanPigsWeaknessDamageCeilingMultiplier(chr, monster);
+                hitDmgMax *= evanStumpsWeaknessDamageCeilingMultiplier(chr, monster);
                 if (ret.skill == Buccaneer.BARRAGE || ret.skill == ThunderBreaker.BARRAGE) {
                     if (j > 3) {
                         hitDmgMax *= Math.pow(2, (j - 3));
@@ -973,12 +974,21 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
     /** Pig's Weakness is client-calculated; accept its WZ damage multiplier for the matching WZ mob family. */
     static double evanPigsWeaknessDamageCeilingMultiplier(Character chr, Monster monster) {
-        int level = chr.getSkillLevel(Evan.PIGS_WEAKNESS);
+        return evanWeaknessDamageCeilingMultiplier(chr, monster, Evan.PIGS_WEAKNESS);
+    }
+
+    /** Stump's Weakness is client-calculated; accept its WZ damage multiplier for the matching WZ mob family. */
+    static double evanStumpsWeaknessDamageCeilingMultiplier(Character chr, Monster monster) {
+        return evanWeaknessDamageCeilingMultiplier(chr, monster, Evan.STUMPS_WEAKNESS);
+    }
+
+    private static double evanWeaknessDamageCeilingMultiplier(Character chr, Monster monster, int skillId) {
+        int level = chr.getSkillLevel(skillId);
         if (level == 0 || monster == null) {
             return 1.0;
         }
 
-        Skill skill = SkillFactory.getSkill(Evan.PIGS_WEAKNESS);
+        Skill skill = SkillFactory.getSkill(skillId);
         return LifeFactory.isMobCode(monster.getId(), skill.getMobCode())
                 ? skill.getEffect(level).getDamage() / 100.0 : 1.0;
     }
