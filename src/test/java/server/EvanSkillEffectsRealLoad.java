@@ -92,7 +92,11 @@ class EvanSkillEffectsRealLoad {
 
         assertAll(
                 () -> assertTrue(mist.isRecoveryMist(), "22161003 spawns a recovery mist"),
+                () -> assertEquals(34, cast.getHpCon(), "level-15 HP cost"),
+                () -> assertEquals(34, cast.getMpCon(), "level-15 MP cost"),
                 () -> assertEquals(80, mist.getSourceX(), "x at level 15"),
+                () -> assertEquals(30000, cast.getDuration(), "30-second aura lifetime"),
+                () -> assertEquals(60, cast.getCooldown(), "60-second cooldown"),
                 () -> assertThrows(IndexOutOfBoundsException.class,
                         () -> SkillFactory.getSkill(Evan.RECOVERY_AURA).getEffect(0),
                         "what a party member without the skill used to ask for")
