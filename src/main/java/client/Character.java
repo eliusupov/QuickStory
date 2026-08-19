@@ -5341,6 +5341,15 @@ public class Character extends AbstractCharacterObject {
     }
 
     public int getTotalMagic() {
+        Skill dragonFury = SkillFactory.getSkill(Evan.DRAGON_FURY);
+        int dragonFuryLevel = getSkillLevel(dragonFury);
+        if (dragonFuryLevel > 0) {
+            StatEffect effect = dragonFury.getEffect(dragonFuryLevel);
+            long mpPercent = (long) getMp() * 100;
+            if (mpPercent > (long) getMaxMp() * effect.getX() && mpPercent < (long) getMaxMp() * effect.getY()) {
+                return localmagic * effect.getDamage() / 100;
+            }
+        }
         return localmagic;
     }
 
@@ -7851,9 +7860,8 @@ public class Character extends AbstractCharacterObject {
             // level 30. No job test is needed - nobody else can hold either skill.
             //
             // Magic Mastery's other half, mastery 16, is not applied: there is no magic mastery
-            // concept in this codebase at all. Neither is Dragon Fury 22160000 (+10% damage at 10),
-            // which would want a passive damage multiplier - getAllBuffs() only walks active buffs.
-            // Both are new mechanisms rather than fixes to an existing one.
+            // concept in this codebase at all. Dragon Fury's MP-window multiplier is applied by
+            // getTotalMagic(), where every server-side magic damage validation reads it.
             Skill dragonSoul = SkillFactory.getSkill(Evan.DRAGON_SOUL);
             int soulLevel = getSkillLevel(dragonSoul);
             if (soulLevel > 0) {
