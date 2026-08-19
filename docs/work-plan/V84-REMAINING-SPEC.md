@@ -453,6 +453,26 @@ collide with a live allocator and would undo a feature the owner asked for by na
 mechanic, whose mob is placed in none of v84's 4,848 map images. And one mob's drop table, which is
 permanently unknowable because no client version ever carried drop tables.
 
+### Evan skill semantics - one established server correction
+
+The Evan skill audit distinguishes a missing server effect from a client-computed calculation. This
+matters because forcing a server implementation onto the latter creates a second, guessed combat
+model instead of parity.
+
+**Soul Stone is the one established server correction.** Its v84 skill data defines a timed, limited
+party resurrection safeguard. The existing implementation instead revives every eligible party member
+who is already dead at cast time. A cast must protect eligible living party members for its duration;
+a qualifying later death consumes one of the skill's stated uses and revives that member at the stated
+amount. The player must not receive an immediate resurrection simply because they were dead when the
+skill was cast.
+
+**Out of scope until evidence changes:** Magic Resistance needs the v84 incoming-element-byte mapping,
+which the WZ archives do not contain; Dragon Fury, Magic Mastery's mastery half, Critical Magic's
+chance/damage values, and Meteo Shower are client-computed damage mechanics with no independent
+server calculation to add; Recovery Aura's exact HP/MP formula is not expressed by its node; and the
+three invisible Weakness skills expose only their `mobCode`, not enforceable server semantics. These
+are not placeholders for guessed behaviour. Existing generic effects remain in place.
+
 ---
 
 ## Further Notes
