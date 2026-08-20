@@ -10423,10 +10423,6 @@
       <vector name="origin" x="0" y="0"/>
     </canvas>
     <imgdir name="Mob">
-      <canvas name="9400014" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
       <canvas name="3220000" width="25" height="25">
         <int name="delay" value="500"/>
         <vector name="origin" x="0" y="0"/>
@@ -10464,14 +10460,6 @@
         <vector name="origin" x="0" y="0"/>
       </canvas>
       <canvas name="5220002" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="5090000" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="6090001" width="25" height="25">
         <int name="delay" value="500"/>
         <vector name="origin" x="0" y="0"/>
       </canvas>
@@ -10542,10 +10530,6 @@
         <vector name="origin" x="0" y="0"/>
       </canvas>
       <canvas name="8220005" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="8220009" width="25" height="25">
         <int name="delay" value="500"/>
         <vector name="origin" x="0" y="0"/>
       </canvas>
@@ -10884,79 +10868,7 @@
         <int name="delay" value="500"/>
         <vector name="origin" x="0" y="0"/>
       </canvas>
-      <canvas name="9400120" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="9400121" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="9400122" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="9400112" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="9400113" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="9400300" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="9400205" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="8820002" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="8220007" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="8820003" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="8820004" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="8820005" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="8820006" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="4130103" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="6090002" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="6090004" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
       <canvas name="6090000" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="6090003" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="5090001" width="25" height="25">
         <int name="delay" value="500"/>
         <vector name="origin" x="0" y="0"/>
       </canvas>
@@ -10964,85 +10876,49 @@
         <int name="delay" value="500"/>
         <vector name="origin" x="0" y="0"/>
       </canvas>
-      <canvas name="5120100" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="7090000" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="8090000" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="9400606" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="9001000" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="9001001" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="9001002" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="9001003" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="9001008" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="9400549" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="9001004" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="7120100" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="7120101" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="7120102" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="8120100" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="8120101" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="8140510" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
-      <canvas name="9400748" width="25" height="25">
-        <int name="delay" value="500"/>
-        <vector name="origin" x="0" y="0"/>
-      </canvas>
       <canvas name="2220000" width="25" height="25">
         <int name="delay" value="500"/>
         <vector name="origin" x="0" y="0"/>
       </canvas>
-      <canvas name="9400589" width="25" height="25">
-        <int name="delay" value="500"/>
+      <canvas name="8300005" width="25" height="25">
         <vector name="origin" x="0" y="0"/>
+        <int name="delay" value="500"/>
+      </canvas>
+      <canvas name="8300006" width="25" height="25">
+        <vector name="origin" x="0" y="0"/>
+        <int name="delay" value="500"/>
+      </canvas>
+      <canvas name="8300007" width="25" height="25">
+        <vector name="origin" x="0" y="0"/>
+        <int name="delay" value="500"/>
+      </canvas>
+      <canvas name="9300390" width="25" height="25">
+        <vector name="origin" x="0" y="0"/>
+        <int name="delay" value="500"/>
+      </canvas>
+      <canvas name="9300393" width="25" height="25">
+        <vector name="origin" x="0" y="0"/>
+        <int name="delay" value="500"/>
+      </canvas>
+      <canvas name="9400288" width="25" height="25">
+        <vector name="origin" x="0" y="0"/>
+        <int name="delay" value="500"/>
+      </canvas>
+      <canvas name="9400293" width="25" height="25">
+        <vector name="origin" x="0" y="0"/>
+        <int name="delay" value="500"/>
+      </canvas>
+      <canvas name="9400659" width="25" height="25">
+        <vector name="origin" x="0" y="0"/>
+        <int name="delay" value="500"/>
+      </canvas>
+      <canvas name="9400660" width="25" height="25">
+        <vector name="origin" x="0" y="0"/>
+        <int name="delay" value="500"/>
+      </canvas>
+      <canvas name="9500382" width="25" height="25">
+        <vector name="origin" x="0" y="0"/>
+        <int name="delay" value="500"/>
       </canvas>
     </imgdir>
     <imgdir name="Gage">
