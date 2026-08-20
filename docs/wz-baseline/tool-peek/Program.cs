@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Xml.Linq;
 using MapleLib.WzLib;
 
 // ponytail: sibling of ../tool (WzDump). Same TryOpen, but a QUERY tool instead of a
@@ -13,6 +15,7 @@ using MapleLib.WzLib;
 //   WzPeek digest <Map.wz>                     (every map, one line each)
 //   WzPeek fh     <Map.wz> <mapId>...          (one line per foothold)
 //   WzPeek drift  <v83 Map.wz> <v84 Map.wz> [out.tsv]
+//   WzPeek align  <v84 Map.wz> <server Map dir> [map-id-list-or-file] [--apply]
 //
 // dump: prints every descendant of the node with its leaf value.
 // scan: walks EVERY image in the file and prints each property path whose leaf name is
@@ -309,8 +312,155 @@ static class Program
             }
     }
 
+    // The server resolves a named source portal, then sends its numeric destination slot.
+    // Keep the XML text intact: only replace the name attribute of direct portal children.
+    sealed record XmlPortal(string Slot, string Name, int NameStart, int NameLength);
+    sealed record Rename(string Old, string New, int Start, int Length);
+
+    static readonly Regex ImgdirTag = new(@"<(?<close>/)?imgdir\b(?<attrs>[^>]*?)(?<self>/?)>", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+    static readonly Regex NameAttribute = new("\\bname\\s*=\\s*(?<quote>['\\\"])(?<value>[^'\\\"]*)\\k<quote>", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+    static string? NameOf(Match tag)
+    {
+        var name = NameAttribute.Match(tag.Groups["attrs"].Value);
+        return name.Success ? name.Groups["value"].Value : null;
+    }
+
+    static List<XmlPortal>? RawPortalChildren(string xml)
+    {
+        int depth = 0, portalDepth = -1;
+        var result = new List<XmlPortal>();
+        foreach (Match tag in ImgdirTag.Matches(xml))
+        {
+            if (tag.Groups["close"].Success)
+            {
+                depth--;
+                if (portalDepth >= 0 && depth == portalDepth) portalDepth = -2; // stop at </imgdir name="portal">
+                continue;
+            }
+            string? name = NameOf(tag);
+            if (portalDepth < 0 && name == "portal") portalDepth = depth;
+            else if (portalDepth >= 0 && depth == portalDepth + 1 && name != null)
+            {
+                var attr = NameAttribute.Match(tag.Groups["attrs"].Value);
+                result.Add(new XmlPortal(name, name, tag.Groups["attrs"].Index + attr.Groups["value"].Index, attr.Groups["value"].Length));
+            }
+            if (!tag.Value.EndsWith("/>", StringComparison.Ordinal)) depth++;
+        }
+        return portalDepth == -1 ? null : result;
+    }
+
+    static HashSet<int>? MapFilter(string? value)
+    {
+        if (value == null) return null;
+        string data = File.Exists(value) ? File.ReadAllText(value) : value;
+        var ids = Regex.Matches(data, @"\b\d{1,9}\b").Select(m => int.Parse(m.Value)).ToHashSet();
+        if (ids.Count == 0) throw new ArgumentException("map filter contains no numeric map IDs: " + value);
+        return ids;
+    }
+
+    static Dictionary<string, string> UniquePortalSlots(Dictionary<string, Portal> portals, int map, TextWriter output)
+    {
+        var byName = portals.Values.Where(p => p.Name is not ("" or "-")).GroupBy(p => p.Name, StringComparer.Ordinal).ToList();
+        var dup = byName.Where(g => g.Count() != 1).ToList();
+        foreach (var d in dup) output.WriteLine($"SKIP_DUPLICATE_V84_PN\t{map}\t{d.Key}\t{string.Join(",", d.Select(p => p.Slot))}");
+        return byName.Where(g => g.Count() == 1).ToDictionary(g => g.Key, g => g.Single().Slot, StringComparer.Ordinal);
+    }
+
+    static bool AlignMap(string path, int map, Dictionary<string, string> v84, bool apply, TextWriter output, ref int renamed)
+    {
+        string xml;
+        try { xml = File.ReadAllText(path); }
+        catch (Exception ex) { output.WriteLine($"SKIP_READ\t{map}\t{path}\t{ex.Message}"); return false; }
+
+        List<XmlPortal>? raw = RawPortalChildren(xml);
+        if (raw == null) return true; // no portal section is normal
+        XElement? portal;
+        try
+        {
+            portal = XDocument.Parse(xml, LoadOptions.PreserveWhitespace).Root?.Elements("imgdir")
+                .FirstOrDefault(e => (string?)e.Attribute("name") == "portal");
+        }
+        catch (Exception ex) { output.WriteLine($"SKIP_XML\t{map}\t{path}\t{ex.Message}"); return false; }
+        if (portal == null) { output.WriteLine($"SKIP_XML_PORTAL\t{map}\t{path}"); return false; }
+
+        var nodes = portal.Elements("imgdir").Select(e => new
+        {
+            Slot = (string?)e.Attribute("name") ?? "",
+            Pn = (string?)e.Elements().FirstOrDefault(p => (string?)p.Attribute("name") == "pn")?.Attribute("value") ?? ""
+        }).ToList();
+        if (nodes.Count != raw.Count || nodes.Where((n, i) => n.Slot != raw[i].Slot).Any())
+        {
+            output.WriteLine($"SKIP_LAYOUT\t{map}\t{path}"); return false;
+        }
+        var duplicate = nodes.Where(n => n.Pn.Length > 0).GroupBy(n => n.Pn, StringComparer.Ordinal).Where(g => g.Count() != 1).ToList();
+        foreach (var d in duplicate) output.WriteLine($"SKIP_DUPLICATE_XML_PN\t{map}\t{d.Key}\t{string.Join(",", d.Select(p => p.Slot))}");
+        var ambiguousPn = duplicate.Select(d => d.Key).ToHashSet(StringComparer.Ordinal);
+
+        var changes = nodes.Select((n, i) => (n, raw: raw[i]))
+            .Where(x => x.n.Pn.Length > 0 && !ambiguousPn.Contains(x.n.Pn) && v84.TryGetValue(x.n.Pn, out var slot) && x.n.Slot != slot)
+            .Select(x => new Rename(x.n.Slot, v84[x.n.Pn], x.raw.NameStart, x.raw.NameLength)).ToList();
+        if (changes.Count == 0) return true;
+
+        // Every requested new slot must belong to this complete rename set. Otherwise it
+        // would overwrite an unrecognised XML portal, so leave this map untouched.
+        var changingOld = changes.Select(c => c.Old).ToHashSet(StringComparer.Ordinal);
+        var occupied = nodes.Select(n => n.Slot).ToHashSet(StringComparer.Ordinal);
+        var collision = changes.Where(c => occupied.Contains(c.New) && !changingOld.Contains(c.New)).ToList();
+        var duplicateTarget = changes.GroupBy(c => c.New, StringComparer.Ordinal).Where(g => g.Count() != 1).ToList();
+        if (collision.Count > 0 || duplicateTarget.Count > 0)
+        {
+            foreach (var c in collision) output.WriteLine($"SKIP_COLLISION\t{map}\t{c.Old}\t{c.New}");
+            foreach (var d in duplicateTarget) output.WriteLine($"SKIP_TARGET_COLLISION\t{map}\t{d.Key}\t{string.Join(",", d.Select(c => c.Old))}");
+            return false;
+        }
+
+        foreach (var c in changes) output.WriteLine($"{(apply ? "APPLY" : "DRY_RUN")}\t{map}\t{c.Old}\t{c.New}\t{path}");
+        if (apply)
+        {
+            foreach (var c in changes.OrderByDescending(c => c.Start))
+                xml = xml.Remove(c.Start, c.Length).Insert(c.Start, c.New);
+            File.WriteAllText(path, xml);
+        }
+        renamed += changes.Count;
+        return true;
+    }
+
+    static int Align(string v84Path, string mapDir, string? filterArg, bool apply, TextWriter output)
+    {
+        if (!Directory.Exists(mapDir)) { Console.Error.WriteLine("server Map directory not found: " + mapDir); return 1; }
+        HashSet<int>? filter;
+        try { filter = MapFilter(filterArg); }
+        catch (Exception ex) { Console.Error.WriteLine(ex.Message); return 2; }
+        var (file, err) = TryOpen(v84Path);
+        if (file == null) { Console.Error.WriteLine(err); return 1; }
+        try
+        {
+            var maps = Portals(file); int seen = 0, skipped = 0, renamed = 0;
+            foreach (var path in Directory.EnumerateFiles(mapDir, "*.img.xml", SearchOption.AllDirectories).OrderBy(p => p, StringComparer.Ordinal))
+            {
+                string stem = Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(path));
+                if (!int.TryParse(stem, out int map) || filter != null && !filter.Contains(map)) continue;
+                seen++;
+                if (!maps.TryGetValue(map, out var portalMap)) { output.WriteLine($"SKIP_MISSING_V84_MAP\t{map}\t{path}"); skipped++; continue; }
+                var v84 = UniquePortalSlots(portalMap, map, output);
+                if (!AlignMap(path, map, v84, apply, output, ref renamed)) skipped++;
+            }
+            output.WriteLine($"SUMMARY\tmode={(apply ? "apply" : "dry-run")}\tmaps={seen}\trenamed={renamed}\tskipped={skipped}");
+            return 0;
+        }
+        finally { file.Dispose(); }
+    }
+
     static int Main(string[] args)
     {
+        if (args.Length is >= 3 and <= 5 && args[0] == "align")
+        {
+            bool apply = args.Contains("--apply", StringComparer.Ordinal);
+            var extra = args.Skip(3).Where(a => a != "--apply").ToArray();
+            if (extra.Length > 1) { Console.Error.WriteLine("usage: WzPeek align <v84 Map.wz> <server Map dir> [map-id-list-or-file] [--apply]"); return 2; }
+            return Align(args[1], args[2], extra.FirstOrDefault(), apply, Console.Out);
+        }
         if ((args.Length == 3 || args.Length == 4) && args[0] == "drift")
         {
             if (args.Length == 4) Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(args[3]))!);
@@ -329,6 +479,7 @@ static class Program
         {
             Console.Error.WriteLine("usage: WzPeek dump <file.wz> <path> [maxDepth]");
             Console.Error.WriteLine("       WzPeek scan <file.wz> <leafName> <value> [pathFilter]");
+            Console.Error.WriteLine("       WzPeek align <v84 Map.wz> <server Map dir> [map-id-list-or-file] [--apply]");
             return 2;
         }
         var (file, err) = TryOpen(args[1]);
