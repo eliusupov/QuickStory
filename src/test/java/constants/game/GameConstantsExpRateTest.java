@@ -9,10 +9,10 @@ class GameConstantsExpRateTest {
 
     @ParameterizedTest
     @CsvSource({
-            "1, 1.0", "9, 1.0", "10, 1.2", "15, 2.4", "20, 3.6", "25, 4.8",
-            "30, 6.0", "35, 7.2", "40, 8.4", "50, 9.6", "100, 10.8", "120, 12.0"
+            "1, 1.0", "9, 1.0", "10, 1.275", "15, 2.55", "20, 3.825", "25, 5.1",
+            "30, 6.375", "35, 7.65", "40, 8.925", "50, 10.2", "100, 11.475", "120, 12.75"
     })
-    void expRateCurveIsReducedByTwentyPercentAndNeverBelowOne(int level, float expectedRate) {
+    void expRateCurveIsReducedByFifteenPercentAndNeverBelowOne(int level, float expectedRate) {
         assertEquals(expectedRate, GameConstants.getExpRateForLevel(level));
     }
 }
