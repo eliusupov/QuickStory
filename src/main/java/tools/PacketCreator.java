@@ -506,9 +506,7 @@ public class PacketCreator {
         p.writeShort(equip.getFlag()); //Item Flags
 
         if (isCash) {
-            for (int i = 0; i < 10; i++) {
-                p.writeByte(0x40);
-            }
+            writeCashEquipExtendedTrailer(p);
         } else {
             int itemLevel = equip.getItemLevel();
 
@@ -526,6 +524,17 @@ public class PacketCreator {
         p.writeLong(getTime(-2));
         p.writeInt(-1);
 
+    }
+
+    static void writeCashEquipExtendedTrailer(OutPacket p) {
+        for (int i = 0; i < 6; i++) {
+            p.writeByte(0x40);
+        }
+        // v84 reads nDurability between experience and nIUC for cash equips too.
+        p.writeInt(-1);
+        for (int i = 0; i < 4; i++) {
+            p.writeByte(0x40);
+        }
     }
 
     private static void addInventoryInfo(OutPacket p, Character chr) {

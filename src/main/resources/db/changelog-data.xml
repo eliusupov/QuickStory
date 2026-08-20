@@ -370,4 +370,13 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="177" author="inkwell-tulcus-shops">
+        <sqlFile path="db/data/177-inkwell-and-tulcus-shop-items.sql"/>
+        <rollback>
+            DELETE FROM shopitems WHERE shopid = 9000069 AND itemid IN
+                (1072427, 1072428, 1072429, 1072430, 1072431, 1072432, 1072239);
+            DELETE FROM shopitems WHERE shopid = 1052104 AND itemid IN (2040758, 2040759, 2040760, 2040727);
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>

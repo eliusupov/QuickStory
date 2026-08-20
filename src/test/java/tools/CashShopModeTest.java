@@ -3,6 +3,7 @@ package tools;
 import client.Character;
 import client.inventory.Item;
 import constants.net.ServerConstants;
+import net.packet.ByteBufOutPacket;
 import net.packet.Packet;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -10,6 +11,7 @@ import server.CashShop;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -48,6 +50,19 @@ class CashShopModeTest {
         assertMode(0x88, PacketCreator.refundCashItem(item(), 0), "rebate");
         assertMode(0x8C, PacketCreator.showBoughtCashPackage(List.of(), 1), "buy package");
         assertMode(0x90, PacketCreator.showBoughtQuestItem(4001126), "buy normal");
+    }
+
+    @Test
+    void cashEquipWithdrawalCarriesV84DurabilityField() {
+        ByteBufOutPacket trailer = new ByteBufOutPacket();
+        PacketCreator.writeCashEquipExtendedTrailer(trailer);
+        byte[] expectedTrailer = {
+                0x40, 0x40, 0x40, 0x40, 0x40, 0x40,
+                (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF,
+                0x40, 0x40, 0x40, 0x40
+        };
+
+        assertArrayEquals(expectedTrailer, trailer.getBytes());
     }
 
     /**
