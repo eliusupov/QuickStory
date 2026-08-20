@@ -12,6 +12,7 @@ using MapleLib.WzLib;
 //   WzPeek scan   <file.wz> <leafName> <value> [pathFilterSubstring]
 //   WzPeek digest <Map.wz>                     (every map, one line each)
 //   WzPeek fh     <Map.wz> <mapId>...          (one line per foothold)
+//   WzPeek drift  <v83 Map.wz> <v84 Map.wz> [out.tsv]
 //
 // dump: prints every descendant of the node with its leaf value.
 // scan: walks EVERY image in the file and prints each property path whose leaf name is
@@ -201,6 +202,82 @@ static class Program
     static readonly string[] LifeFields = { "type", "id", "x", "y", "fh", "cy", "rx0", "rx1", "f", "hide", "mobTime" };
     static readonly string[] PortalFields = { "pn", "pt", "x", "y", "tm", "tn", "script" };
 
+    sealed record Portal(string Slot, string Name, string X, string Y, string TargetMap, string TargetName);
+
+    static Dictionary<int, Dictionary<string, Portal>> Portals(WzFile file)
+    {
+        var maps = new Dictionary<int, Dictionary<string, Portal>>();
+        void Walk(WzDirectory dir)
+        {
+            foreach (var sub in dir.WzDirectories) Walk(sub);
+            foreach (var img in dir.WzImages)
+            {
+                string id = img.Name.EndsWith(".img", StringComparison.Ordinal) ? img.Name[..^4] : img.Name;
+                if (!int.TryParse(id, out int map) || !img.ParseImage()) continue;
+                try
+                {
+                    var section = Props(img)?.FirstOrDefault(p => p.Name == "portal");
+                    if (section == null) continue;
+                    var ports = new Dictionary<string, Portal>();
+                    foreach (var node in Props(section)!)
+                    {
+                        if (!int.TryParse(node.Name, out _)) continue;
+                        ports[node.Name] = new Portal(node.Name, G(node, "pn"), G(node, "x"), G(node, "y"),
+                            G(node, "tm"), G(node, "tn"));
+                    }
+                    maps[map] = ports;
+                }
+                finally { img.UnparseImage(); }
+            }
+        }
+        Walk(file.WzDirectory);
+        return maps;
+    }
+
+    static bool Direct(Portal p) => int.TryParse(p.TargetMap, out int id) && id != 999999999 && p.TargetName is not ("" or "-");
+
+    static string Route(Portal p) => $"{p.Name}->{p.TargetMap}/{p.TargetName}";
+
+    static Portal? Named(Dictionary<int, Dictionary<string, Portal>> maps, int map, string name) =>
+        maps.TryGetValue(map, out var ports) ? ports.Values.FirstOrDefault(p => p.Name == name) : null;
+
+    static string Distance(Portal a, Portal b) =>
+        int.TryParse(a.X, out int ax) && int.TryParse(a.Y, out int ay) && int.TryParse(b.X, out int bx) && int.TryParse(b.Y, out int by)
+            ? Math.Sqrt((long)(ax - bx) * (ax - bx) + (long)(ay - by) * (ay - by)).ToString("F1") : "-";
+
+    static void Drift(string v83Path, string v84Path, TextWriter output)
+    {
+        var (f83, e83) = TryOpen(v83Path);
+        var (f84, e84) = TryOpen(v84Path);
+        if (f83 == null || f84 == null) throw new InvalidOperationException($"open failed: v83={e83}; v84={e84}");
+        try
+        {
+            var v83 = Portals(f83);
+            var v84 = Portals(f84);
+            output.WriteLine("#kind\tmap\tportal\tv83_route\tv84_route\tv83_destination\tv84_destination\tdistance");
+            foreach (var (map, newPorts) in v84.OrderBy(x => x.Key))
+            {
+                if (!v83.TryGetValue(map, out var oldPorts)) continue; // v84-only map: no V83 route to preserve
+                foreach (var newPortal in newPorts.Values.OrderBy(p => int.Parse(p.Slot)))
+                {
+                    if (!Direct(newPortal)) continue;
+                    var oldPortal = Named(v83, map, newPortal.Name);
+                    if (oldPortal == null || !Direct(oldPortal)) continue; // no V83 direct route to compare
+                    if (Route(oldPortal) != Route(newPortal))
+                        output.WriteLine($"ROUTE_CHANGED\t{map}\t{newPortal.Name}\t{Route(oldPortal)}\t{Route(newPortal)}\t-\t-\t-");
+                    var oldLanding = Named(v83, int.Parse(oldPortal.TargetMap), oldPortal.TargetName);
+                    if (oldLanding == null || !v84.TryGetValue(int.Parse(oldPortal.TargetMap), out var destination)) continue;
+                    string oldDestination = $"{oldPortal.TargetMap}/{oldLanding.Name}[{oldLanding.Slot}]@{oldLanding.X},{oldLanding.Y}";
+                    if (!destination.TryGetValue(oldLanding.Slot, out var actual))
+                        output.WriteLine($"DESTINATION_SLOT_MISSING\t{map}\t{newPortal.Name}\t{Route(oldPortal)}\t{Route(newPortal)}\t{oldDestination}\t-\t-");
+                    else if (actual.Name != oldLanding.Name)
+                        output.WriteLine($"DESTINATION_SLOT_CHANGED\t{map}\t{newPortal.Name}\t{Route(oldPortal)}\t{Route(newPortal)}\t{oldDestination}\t{oldPortal.TargetMap}/{actual.Name}[{actual.Slot}]@{actual.X},{actual.Y}\t{Distance(oldLanding, actual)}");
+                }
+            }
+        }
+        finally { f83.Dispose(); f84.Dispose(); }
+    }
+
     static void Digest(WzFile file)
     {
         Console.WriteLine("#map\tfh\tfhgeom\tfhid\tlife\tlifekey\tlifefh\tportal\tportalkey");
@@ -234,6 +311,13 @@ static class Program
 
     static int Main(string[] args)
     {
+        if ((args.Length == 3 || args.Length == 4) && args[0] == "drift")
+        {
+            if (args.Length == 4) Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(args[3]))!);
+            using var output = args.Length == 4 ? new StreamWriter(args[3], false) : null;
+            Drift(args[1], args[2], output ?? Console.Out);
+            return 0;
+        }
         if (args.Length == 2 && args[0] == "digest")
         {
             var (f2, e2) = TryOpen(args[1]);
