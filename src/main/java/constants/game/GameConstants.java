@@ -755,30 +755,28 @@ public class GameConstants {
     // real rates
     public static float getExpRateForLevel(int level) {
         if (level >= 120) {
-            return 50.0f * 0.3f; // 15.0f
+            return 12.0f;
         } else if (level >= 100) {
-            return 45.0f * 0.3f; // 13.5f
+            return 10.8f;
         } else if (level >= 50) {
-            return 40.0f * 0.3f; // 12.0f
+            return 9.6f;
         } else if (level >= 40) {
-            return 35.0f * 0.3f; // 10.5f
+            return 8.4f;
         } else if (level >= 35) {
-            return 30.0f * 0.3f; // 9.0f
+            return 7.2f;
         } else if (level >= 30) {
-            return 25.0f * 0.3f; // 7.5f
+            return 6.0f;
         } else if (level >= 25) {
-            return 20.0f * 0.3f; // 6.0f
+            return 4.8f;
         } else if (level >= 20) {
-            return 15.0f * 0.3f; // 4.5f
+            return 3.6f;
         } else if (level >= 15) {
-            return 10.0f * 0.3f; // 3.0f
+            return 2.4f;
         } else if (level >= 10) {
-            return 5.0f * 0.3f; // 1.5f
-        }  else if (level >= 5) {
-            return 2.0f * 0.5f; // 1.0f
+            return 1.2f;
         } else {
             return 1.0f;
-        } 
+        }
     }
 
     // Quest EXP multiplier by level band: 1x for 1-9, 2x for 10-39, 3x for 40-69, 4x for 70+.
