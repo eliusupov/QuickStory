@@ -284,7 +284,18 @@ public class Pet extends Item {
     }
 
     public int getPetAttribute() {
-        return this.petAttribute;
+        // OWNER_SPEED is forced on for every pet, not just the one that finished the
+        // "Follow the Lead" quest (PetSpeedAction). A pet has no speed of its own: the
+        // client gives CPet a CMoveAbility whose walk multiplier is a flat 1.0, while a
+        // player's is clamp(speed, 10, 140) / 100. CPet::UpdateMoveAbility copies the
+        // owner's multiplier onto the pet -- but only behind `nPetAttribute & 1`, which
+        // is this bit (v84 client 0x0071FE4C; the shipped flag is PacketCreator's
+        // writeShort at the pet spawn). With it always set, a pet moves exactly as fast
+        // as its owner and can never fall behind.
+        //
+        // ponytail: forced in the getter rather than written on summon -- one line, no
+        // migration, and every existing pet in the db gets it without being touched.
+        return this.petAttribute | PetAttribute.OWNER_SPEED.getValue();
     }
 
     private void setPetAttribute(int flag) {
