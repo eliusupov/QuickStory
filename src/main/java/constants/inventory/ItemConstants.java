@@ -28,7 +28,9 @@ import constants.id.ItemId;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.NavigableMap;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.Arrays;
 
 /**
@@ -472,5 +474,44 @@ public final class ItemConstants {
 
     public static boolean isMonsterCard(int itemId) {
         return ItemId.isMonsterCard(itemId);
+    }
+
+    /**
+     * Scroll sell prices, keyed by {@code info/success}.
+     *
+     * <p>All 788 scrolls in Item.wz ship {@code info/price = 1}, so selling any of them to any NPC
+     * paid a single meso. Their odds are the only thing that tells one scroll from the next, so the
+     * odds set the price.
+     *
+     * <p>The owner set 100/70/60/30/10 himself. The rest are linear between those anchors, rounded.
+     * His curve is deliberately not monotone -- it peaks at 30% (the dark scrolls) and falls off on
+     * both sides -- so odds outside 10..100 take the nearest listed tier rather than an
+     * extrapolation that would invert it. That clamp is what prices Clean Slate 1/3/5% at the 10%
+     * tier.
+     */
+    private static final NavigableMap<Integer, Integer> SCROLL_SELL_PRICE = new TreeMap<>(Map.ofEntries(
+            Map.entry(100, 35_000),     // owner
+            Map.entry(80, 110_000),
+            Map.entry(70, 150_000),     // owner ("dark scrolls")
+            Map.entry(65, 125_000),
+            Map.entry(60, 100_000),     // owner
+            Map.entry(50, 200_000),
+            Map.entry(40, 300_000),
+            Map.entry(30, 400_000),     // owner ("dark scrolls")
+            Map.entry(20, 325_000),
+            Map.entry(15, 290_000),
+            Map.entry(10, 250_000)));   // owner
+
+    /** Nearest listed tier; ties break toward the lower odds so the answer is deterministic. */
+    public static int scrollSellPrice(int success) {
+        Map.Entry<Integer, Integer> lo = SCROLL_SELL_PRICE.floorEntry(success);
+        Map.Entry<Integer, Integer> hi = SCROLL_SELL_PRICE.ceilingEntry(success);
+        if (lo == null) {
+            return hi.getValue();
+        }
+        if (hi == null) {
+            return lo.getValue();
+        }
+        return (success - lo.getKey() <= hi.getKey() - success) ? lo.getValue() : hi.getValue();
     }
 }

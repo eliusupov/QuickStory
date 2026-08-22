@@ -470,6 +470,13 @@ public class ItemInformationProvider {
             pEntry = DataTool.getInt(pData);
         }
 
+        if (itemId / 10000 == 204) {   // every scroll, and every one of them prices at 1
+            Data succ = item.getChildByPath("info/success");
+            // The tablets, 2047xxx, table their odds in info/successRates instead of stating
+            // one -- 70% on an untouched equip. See TabletScrollRealLoad.
+            pEntry = ItemConstants.scrollSellPrice(succ != null ? DataTool.getIntConvert(succ) : 70);
+        }
+
         double fEntry = 0.0f;
         pData = item.getChildByPath("info/unitPrice");
         if (pData != null) {
