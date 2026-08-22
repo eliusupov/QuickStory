@@ -483,14 +483,16 @@ public final class ItemConstants {
      * paid a single meso. Their odds are the only thing that tells one scroll from the next, so the
      * odds set the price.
      *
-     * <p>The owner set 100/70/60/30/10 himself. The rest are linear between those anchors, rounded.
+     * <p>The owner set 100/70/60/30/10 himself; 100% is 30k rather than his first 35k because NPC
+     * shop 2041016 sells twelve 100% scrolls at 34k, and selling one back for 35k printed mesos.
+     * The rest are linear between those anchors, rounded.
      * His curve is deliberately not monotone -- it peaks at 30% (the dark scrolls) and falls off on
      * both sides -- so odds outside 10..100 take the nearest listed tier rather than an
      * extrapolation that would invert it. That clamp is what prices Clean Slate 1/3/5% at the 10%
      * tier.
      */
     private static final NavigableMap<Integer, Integer> SCROLL_SELL_PRICE = new TreeMap<>(Map.ofEntries(
-            Map.entry(100, 35_000),     // owner
+            Map.entry(100, 30_000),     // owner
             Map.entry(80, 110_000),
             Map.entry(70, 150_000),     // owner ("dark scrolls")
             Map.entry(65, 125_000),

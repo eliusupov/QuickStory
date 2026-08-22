@@ -36,7 +36,7 @@ class ScrollSellPriceTest {
 
     @Test
     void theOwnersFiveTiersArePinned() {
-        assertEquals(35_000, ItemConstants.scrollSellPrice(NOT_GM, 100));
+        assertEquals(30_000, ItemConstants.scrollSellPrice(NOT_GM, 100));
         assertEquals(150_000, ItemConstants.scrollSellPrice(NOT_GM, 70));
         assertEquals(100_000, ItemConstants.scrollSellPrice(NOT_GM, 60));
         assertEquals(400_000, ItemConstants.scrollSellPrice(NOT_GM, 30));
@@ -49,7 +49,7 @@ class ScrollSellPriceTest {
         // extrapolate. The curve peaks at 30% and falls to 10%, so extrapolating inverts it.
         assertEquals(250_000, ItemConstants.scrollSellPrice(NOT_GM, 5));
         assertEquals(250_000, ItemConstants.scrollSellPrice(NOT_GM, 1));
-        assertEquals(35_000, ItemConstants.scrollSellPrice(NOT_GM, 100_000));
+        assertEquals(30_000, ItemConstants.scrollSellPrice(NOT_GM, 100_000));
         // Ties break toward the lower odds, deterministically.
         assertEquals(200_000, ItemConstants.scrollSellPrice(NOT_GM, 55));
     }
@@ -84,8 +84,8 @@ class ScrollSellPriceTest {
                     itemId + " is a 100% with 10% stats but is not priced as a GM scroll");
         }
         // And nothing else is: the plain 100% of the same family stays at the 100% tier.
-        assertEquals(35_000, ItemConstants.scrollSellPrice(2043000, 100));
-        assertEquals(35_000, ItemConstants.scrollSellPrice(2043023, 100));
+        assertEquals(30_000, ItemConstants.scrollSellPrice(2043000, 100));
+        assertEquals(30_000, ItemConstants.scrollSellPrice(2043023, 100));
     }
 
     @Test
@@ -96,7 +96,7 @@ class ScrollSellPriceTest {
             String success = childValue(e.getValue(), "success");
             int price = ItemConstants.scrollSellPrice(e.getKey(),
                     success == null ? 70 : Integer.parseInt(success));
-            assertTrue(price >= 35_000, e.getKey() + " (success " + success + ") sells for " + price);
+            assertTrue(price >= 30_000, e.getKey() + " (success " + success + ") sells for " + price);
         }
         assertEquals(788, items.size(), "0204.img changed size; re-check the tier table covers it");
     }
