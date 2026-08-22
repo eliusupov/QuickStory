@@ -768,6 +768,9 @@ static const BYTE kWmCloseGuard[34] = {
 };
 static bool g_wmCanClose = false;
 static BYTE g_wmWarped = 0;                        // thunk <-> asm, UI thread only
+static bool g_wmClose = false;                     // config.ini WorldMapWarpClose
+static volatile LONG g_wmWarps = 0;                // read by the crash reporter
+static volatile LONG g_wmLastMap = 0;
 
 static bool g_wmWarp = true, g_wmDone = false, g_wmMismatch = false;
 static int g_wmHover = -1;                         // written by the cave, UI thread only
@@ -808,12 +811,20 @@ static void __fastcall WorldMapTryWarp(BYTE* pWorldMap) {
     int mapId = ids[0];
     if (mapId <= 0 || mapId == 999999999) return;
 
-    // Close FIRST, then send. Both orders "work", but this one lets the modal pump
-    // unwind before the server's field change comes back, instead of processing a map
-    // change inside a nested pump that is already tearing down.
-    // Same two fields CWnd::Close writes, and its same "already closing" check, but
-    // without its synchronous Destroy -- see the block comment above.
-    if (g_wmCanClose && *(DWORD*)(pWorldMap + 0x70) == 0) {
+    // OFF BY DEFAULT, and the reason is a bug we have not caught yet. Warping worked for
+    // as long as this block did not exist; it was added, and the owner started seeing the
+    // client die after a varying number of warps -- three separate reports, no pattern in
+    // which map, always after several successful warps. Twice I shipped a theory as if it
+    // were a fix. It is not, so the close is now a switch the owner can turn on, defaulted
+    // to the arrangement he confirmed working, and the crash reporter below is armed so
+    // that the next occurrence names its own instruction instead of buying a third guess.
+    //
+    // The suspicion, unproven: this asks a MODAL to close from inside its own mouse
+    // dispatch and then sends a warp, so the server's field change can land while
+    // DoModal's pump (00A3E7E8, driven from 004F61EA) is still unwinding. The real fix is
+    // probably to defer the send until the map is destroyed -- 004F61FE, the instruction
+    // after DoModal's scope-guard dtor, is one place that is provably past it.
+    if (g_wmClose && g_wmCanClose && *(DWORD*)(pWorldMap + 0x70) == 0) {
         *(DWORD*)(pWorldMap + 0x6C) = 2;        // nReason, matching ESC
         *(DWORD*)(pWorldMap + 0x70) = 1;        // pending close
     }
@@ -832,6 +843,8 @@ static void __fastcall WorldMapTryWarp(BYTE* pWorldMap) {
     ((SendChatMsg_t)0x005382D7)(nullptr, &zs, 0);   // never reads its own this
     ((ZXDtor_t)0x0040265E)(&zs);                // SendChatMsg AddRef'd its own copy
 
+    InterlockedIncrement(&g_wmWarps);           // context for the crash reporter
+    InterlockedExchange(&g_wmLastMap, mapId);
     g_wmWarped = 1;                             // consume the click, see the thunk
 }
 
@@ -851,6 +864,59 @@ static __declspec(naked) void WorldMapClickThunk() {
     consumed:
         ret                       // OnLButtonUp takes no stack args, so a bare ret matches
     }
+}
+
+// ---- crash reporter --------------------------------------------------------
+// Not a patch: it writes nothing and handles nothing. It exists because the World Map
+// warp has now crashed the client three times with no pattern the owner could see, and
+// two rounds of reasoning-from-symptoms produced two wrong fixes. A faulting address
+// ends that.
+//
+// SAFETY, matching the note at the top of this file: this shows a MessageBox and returns
+// EXCEPTION_CONTINUE_SEARCH, always. It never writes a file, never swallows an exception
+// and never alters what the process would have done -- the client still dies exactly as
+// it would have. A box the owner can read back is worth more than a log he has to find.
+//
+// Two gates keep it off the packer's back. ASProtect throws first-chance exceptions as a
+// matter of course, all of them during startup and all of them handled, so we ignore
+// everything until the owner has actually warped once, and we fire at most once per
+// launch. If it ever pops during ordinary play, that is a misfire worth reporting, not a
+// crash -- the client will keep running.
+static LONG CALLBACK HdCrashReport(EXCEPTION_POINTERS* ep) {
+    static volatile LONG fired = 0;
+    if (InterlockedCompareExchange(&g_wmWarps, 0, 0) == 0) return EXCEPTION_CONTINUE_SEARCH;
+
+    const DWORD code = ep->ExceptionRecord->ExceptionCode;
+    if (code != EXCEPTION_ACCESS_VIOLATION && code != EXCEPTION_IN_PAGE_ERROR &&
+        code != EXCEPTION_ILLEGAL_INSTRUCTION && code != EXCEPTION_PRIV_INSTRUCTION &&
+        code != EXCEPTION_STACK_OVERFLOW && code != EXCEPTION_INT_DIVIDE_BY_ZERO) {
+        return EXCEPTION_CONTINUE_SEARCH;
+    }
+    if (InterlockedExchange(&fired, 1)) return EXCEPTION_CONTINUE_SEARCH;
+
+    const CONTEXT* c = ep->ContextRecord;
+    const EXCEPTION_RECORD* r = ep->ExceptionRecord;
+    char what[96] = "";
+    if ((code == EXCEPTION_ACCESS_VIOLATION || code == EXCEPTION_IN_PAGE_ERROR) &&
+        r->NumberParameters >= 2) {
+        wsprintfA(what, "\n%s address %08X",
+                  r->ExceptionInformation[0] == 0 ? "read" :
+                  r->ExceptionInformation[0] == 1 ? "WRITE" : "execute",
+                  (DWORD)r->ExceptionInformation[1]);
+    }
+
+    char m[640];
+    wsprintfA(m, "hd-res caught the crash. Read these numbers back to Claude.\n\n"
+                 "code %08X at %08X%s\n\n"
+                 "eax %08X  ebx %08X  ecx %08X  edx %08X\n"
+                 "esi %08X  edi %08X  ebp %08X  esp %08X\n\n"
+                 "warps this launch %d, last map %d\n"
+                 "WorldMapWarpClose was %s",
+             code, (DWORD)r->ExceptionAddress, what,
+             c->Eax, c->Ebx, c->Ecx, c->Edx, c->Esi, c->Edi, c->Ebp, c->Esp,
+             (int)g_wmWarps, (int)g_wmLastMap, g_wmClose ? "ON" : "off");
+    MessageBoxA(NULL, m, "hd-res crash report", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
+    return EXCEPTION_CONTINUE_SEARCH;
 }
 
 static void ApplyWorldMapWarp() {
@@ -1068,8 +1134,10 @@ static void Report() {
                                            : "FAILED (write refused)";
     const char* wmap = !g_wmWarp     ? "off"
                      : g_wmMismatch  ? "FAILED (guard bytes differ)"
-                     : g_wmDone      ? (g_wmCanClose ? "ON" : "ON (no auto-close)")
-                                     : "FAILED (write refused)";
+                     : !g_wmDone     ? "FAILED (write refused)"
+                     : !g_wmClose    ? "ON (auto-close off)"
+                     : g_wmCanClose  ? "ON (auto-close on)"
+                                     : "ON (auto-close wanted, guard differs)";
     char clamp[64] = "";
     if (g_msgClamped) wsprintfA(clamp, " (clamped from %d)", g_msgClamped);
     wsprintfA(msg, "hd-res %dx%d: applied %d, skipped %d, byte-mismatch %d of %d"
@@ -1201,6 +1269,10 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     GetPrivateProfileStringA("optional", "WorldMapWarp", "true", buf, sizeof(buf), cfg);
     g_wmWarp = (buf[0] == 't' || buf[0] == 'T' || buf[0] == '1');
 
+    // WorldMapWarpClose: default FALSE until the crash above is understood.
+    GetPrivateProfileStringA("optional", "WorldMapWarpClose", "false", buf, sizeof(buf), cfg);
+    g_wmClose = (buf[0] == 't' || buf[0] == 'T' || buf[0] == '1');
+
     // ScrollSellPrice: draw what a scroll is really worth in the shop Sell tab.
     GetPrivateProfileStringA("optional", "ScrollSellPrice", "true", buf, sizeof(buf), cfg);
     g_scrollPrice = (buf[0] == 't' || buf[0] == 'T' || buf[0] == '1');
@@ -1229,6 +1301,7 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     ApplyPetLeashX();
     ApplyWorldMapWarp();
     ApplyScrollSellPrice();
+    AddVectoredExceptionHandler(0, HdCrashReport);   // 0 = last in the chain
 
     // diag=1 installs a read-only observer on IWzNameSpace::GetItem and writes
     // hd-res-diag.log next to this DLL. diag=0 (the default) installs no hooks at all,
