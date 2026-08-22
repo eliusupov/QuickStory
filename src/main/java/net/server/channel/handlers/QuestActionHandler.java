@@ -96,6 +96,9 @@ public final class QuestActionHandler extends AbstractPacketHandler {
             if (npcP == null) {
                 log.debug("Quest {} denied for {}: npc {} is not spawned on map {}", quest.getId(), player.getName(),
                         npcId, player.getMapId());
+                // ponytail: same nudge as the too-far case - the client lets you hit Accept from the
+                // quest list on any map, and a silent return reads as "the server doesn't have it".
+                player.dropMessage(5, "Approach the NPC to fulfill this quest operation.");
                 return false;
             }
 

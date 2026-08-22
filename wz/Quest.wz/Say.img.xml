@@ -44777,47 +44777,30 @@
     </imgdir>
   </imgdir>
   <imgdir name="8248">
+    <imgdir name="1"/>
     <imgdir name="0">
-      <string name="0" value="Hello, traveler! The Maple 7th Day Market is opening very soon. For this event, I have been assigned with the entertainment of the folks."/>
-      <string name="1" value="The situation is this: this time around, I am planning to open an #bOmok festival#k for the event, and for this I am in need to collect #bOmok pieces#k from all over the places as soon as possible."/>
-      <string name="2" value="If you join me on this endeavour, I will reward you accordingly. What do you say, will you help me? Pleeeease?"/>
+      <string name="0" value="Tomorrow is the day of the Maple 7th Day market! It&apos;s here every Sunday! "/>
+      <string name="1" value="You will find rare things at the Maple 7th Day Market. Come and see for yourself tomorrow. "/>
       <imgdir name="yes">
-        <string name="0" value="Nice! I need Omok pieces resembling these creatures: #i4030000# #bSlime#k, #i4030001# #bOrange Mushroom#k, #i4030010# #bOctopus#k, #i4030011# #bPig#k, #i4030013# #bBlocktopus#k, #i4030014# #bPink Teddy#k, #i4030015# #bPanda Teddy#k and #i4030016# #bTrixter#k."/>
-        <string name="1" value="Oh, I also need #i4030009# #b#t4030009#s#k and #i3010001# #b#t3010001#s#k as well. For the chairs, you can find #b#p1001001##k selling them at #bLith Harbor#k."/>
+        <string name="0" value="Tomorrow is the day of the Maple 7th Day market! It&apos;s here every Sunday! "/>
       </imgdir>
       <imgdir name="no">
-        <string name="0" value="Awww... Should I think on another attraction to entertain the folks?"/>
-      </imgdir>
-    </imgdir>
-    <imgdir name="1">
-      <string name="0" value="Wow... You brought all the pieces needed! Here, there is something special for you. Enjoy!"/>
-      <imgdir name="stop">
-        <imgdir name="item">
-          <string name="0" value="Please, hurry to get me the omok pieces."/>
-        </imgdir>
+        <string name="0" value="You will find rare things at the Maple 7th Day Market. Come and see for yourself tomorrow."/>
       </imgdir>
     </imgdir>
   </imgdir>
   <imgdir name="8249">
-    <imgdir name="1">
-      <string name="0" value="You brought them just right! This event will be a huge success! Really, really, THANKS! There, something special for you. Enjoy!"/>
-      <imgdir name="stop">
-        <imgdir name="item">
-          <string name="0" value="Are you sure you have all the items needed? Please, I need all those items for the card-game convention."/>
-        </imgdir>
-      </imgdir>
-    </imgdir>
+    <imgdir name="1"/>
     <imgdir name="0">
-      <string name="0" value="Hello, traveler! The Maple 7th Day Market is opening very soon. For this event, I have been assigned with the entertainment of the folks."/>
-      <string name="1" value="You see, today I am planning to increment the Maple 7th Day Market main event with a new attraction."/>
-      <string name="2" value="To entertain the public, I will promote a #bCard-Game Convention#k. Will you join me in this event?"/>
+      <string name="0" value="Hello, today is the day of the Maple 7th Day Market. You can purchase a variety of things here. "/>
+      <string name="1" value="The purchases you make at this once-a-week Maple 7th Day Market can be re-sold through a merchant intermediary. Use this opoprtunity to check your merchant ability."/>
+      <string name="2" value="If you tend the chickens for the owner of the poultry farm, you&apos;ll receive a splended reward! "/>
       <imgdir name="yes">
-        <string name="0" value="I need to gather a bunch of these: #i4000035# #b#t4000035##k, #i4000114# #b#t4000114##k, #i4030009# #b#t4030009##k, #i3010001# #b#t3010001##k and plenty of these #i4030012# #b#t4030012##k."/>
-        <string name="1" value="For the chairs, you can find #b#p1001001##k selling them at #bLith Harbor#k."/>
-        <string name="2" value="Remember that each chair #buses up one slot#k each, so check if you have enough room in your inventory. Good luck!"/>
+        <string name="0" value="The purchases you make at this once-a-week Maple 7th Day Market can be re-sold through a merchant intermediary. Use this opoprtunity to check your merchant ability."/>
+        <string name="1" value="If you tend the chickens for the owner of the poultry farm, you&apos;ll receive a splended reward! "/>
       </imgdir>
       <imgdir name="no">
-        <string name="0" value="Pleeeease? I will reward you fittingly, so if you change your mind don&apos;t fear to call me."/>
+        <string name="0" value="The Maple 7th Day Market is here today. Only the diligent can become rich!"/>
       </imgdir>
     </imgdir>
   </imgdir>
