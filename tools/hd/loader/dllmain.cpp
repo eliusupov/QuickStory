@@ -654,108 +654,119 @@ static void ApplyPetLeashX() {
 }
 
 // ---- WorldMapWarp ----------------------------------------------------------
-// config.ini [optional] WorldMapWarp, default true. Click a town dot on the World
-// Map (W) and warp there. Owner: "I want to be able to click on any button this map
-// and be teleported ... the command should also stay supported."
+// config.ini [optional] WorldMapWarp, default true. DOUBLE-click a dot on the World
+// Map (W) and warp there. Owner: "it should be a double click, not a click."
 //
-// It stays supported because this IS the command: we format "@warp <mapid>" and hand
-// it to the client's own chat-send. The server sees an ordinary GENERAL_CHAT and
-// CommandsExecutor does the rest. No new opcode, no handler, no server change at all,
-// and @warp keeps its GM gate.
+// No server change: we format "@warp <mapid>" and hand it to the client's own
+// chat-send, so the server sees an ordinary GENERAL_CHAT and CommandsExecutor does the
+// rest. @warp keeps working, GM gate included.
 //
-// Resolving the click needs no geometry of our own -- the client already hit-tests the
-// dots for the hover tooltip:
+//     CUIWorldMap vtable      0x00B93120   (ctor 0x00A31D9F writes it)
+//     spot hover hit-test     0x00A362E3   (from OnMouseMove 0x00A3682F)
+//     spot array              CUIWorldMap+0x5D0, 0x44 stride (0x00A35943), count at [-4]
+//     spot.mapNo              spot+0x2C, a ZArray<int>
 //
-//     CUIWorldMap vtable        0x00B93120   (ctor 0x00A31D9F writes it)
-//     spot hover hit-test       0x00A362E3   (called from OnMouseMove 0x00A3682F)
-//     hovered spot index        CUIWorldMap+0x5C0   (-1 = none; reset at 0x00A3594C)
-//     spot array                CUIWorldMap+0x5D0   (0x44-byte records; stride proven
-//                                                    by 0x00A35943 `add [ebp-0x28],0x44`)
-//     spot.mapNo (ZArray<int>)  spot+0x2C
+// spot+0x2C is verified by construction: 0x00A35ECE does `lea edi,[esi+0x2c]` and sizes
+// it to the wz child count, 0x00A35F49 stores each int through ZArray::operator[]
+// (0x004D248E), and 0x00A35FB9 feeds element [0] to the map-name lookup 0x00535428.
 //
-// spot+0x2C is verified by construction, not assumed: 0x00A35ECE takes `lea edi,[esi+0x2c]`,
-// sizes that array to the wz child count, then 0x00A35F49 calls ZArray::operator[]
-// (0x004D248E) and stores each int with `mov [eax],ebx`. 0x00A35FB9 then feeds element
-// [0] to the map-name lookup 0x00535428 -- so ids[0] is the spot's canonical map id.
+// FINDING THE HOVERED SPOT -- and why the obvious way is wrong.
+// CUIWorldMap+0x5C0 looks like "the hovered spot index" and is NOT. It is the PREVIEW
+// IMAGE spot index: 0x00A364BC writes it from [ebp-0x24], which 0x00A36306 inits to -1
+// and 0x00A364A3 only fills when the spot carries a preview-image string at spot+0x28 --
+// a key WorldMap*.img does not have. The first cut of this patch NOPped that gate
+// (0x00A3649E `74 06`) to force +0x5C0 to track hover. It worked, and then crashed the
+// client: the same write sets the dirty flag at [ebp-0x28], which drives the preview
+// draw at 0x00A343A0 into loading an image the spot does not own. Do not reinstate it.
 //
-//     mapId = (*(int**)((BYTE*)spots + idx*0x44 + 0x2C))[0]
+// Instead, capture the index where it is known unconditionally. [ebp-0x14] is the
+// hit-test's loop counter (init 0 at 0x00A36311, `inc` at 0x00A36393), and 0x00A364A8
+// is where BOTH exits converge -- the hit path falls in, and the loop-exhausted and
+// empty-array paths jump straight to it from 0x00A3631F and 0x00A3632B. So at
+// 0x00A364A8 it holds the hit index, or the spot count when nothing was hit. We cave
+// there, stash it, and let the count comparison tell the two apart.
 //
-// Two writes:
+//     00A364A8  8B 4D EC              mov ecx,[ebp-0x14]     ; displaced
+//     00A364AB  39 8F C0 05 00 00     cmp [edi+0x5c0],ecx    ; displaced
+//     00A364B1  8D 87 C0 05 00 00     lea eax,[edi+0x5c0]    ; return here
 //
-// 1. 0x00A3649E `74 06` -> `90 90`. In the hover hit-test, the write of the hovered
-//    index to +0x5C0 is gated on the spot having a preview-image string at spot+0x28.
-//    The repo's WorldMap*.img carries no such per-spot key, so +0x5C0 would otherwise
-//    never be set for towns and every click would read -1. NOPping is safe in both
-//    worlds: the preview-draw path at 0x00A343A0 independently guards on the string,
-//    and 0x00416179 (AddRef) is NULL-safe.
+// The cave replays both and re-issues the `cmp` LAST, because the `je` at 0x00A364B7
+// consumes its flags. 0x00A364A8 itself is a branch target, which is fine -- it is the
+// cave entry; nothing targets the interior 0xA364A9..0xA364B0 in either dump.
 //
-// 2. 0x00A36C8C, the rel32 of `call 0xA3688A`, repointed at our thunk. This is an
-//    operand edit on an existing call -- the same class of change as PetLeashX, not a
-//    Cave(). Reached only from the WM_LBUTTONUP arm of the window proc:
+// The click hook is an operand edit, not a Cave(): 0x00A36C8C is the rel32 of
+// `call 0xA3688A`, reached only from the WM_LBUTTONUP arm of the window proc, where
+// `add ecx,-4` has already made ecx the CUIWorldMap*. We ALWAYS tail-jump to
+// OnLButtonUp afterwards -- it ends `c3 ret` with no stack args (0x00A36A7C) and it
+// drives MapLink navigation off a different index (+0x5BC), so region links keep
+// working and no UI bookkeeping is skipped.
 //
-//     00A36C61  mov eax,[esp+4]
-//     00A36C65  sub eax,0x202          ; WM_LBUTTONUP
-//     00A36C6A  je 0xA36C88
-//     00A36C88  add ecx,-4             ; ecx := CUIWorldMap* (msg iface is obj+4)
-//     00A36C8B  call 0xA3688A          ; <-- repointed
-//     00A36C90  ret 0x10
-//
-//    So the thunk gets `this` in ecx. CUIWorldMap::OnLButtonUp ends `c3 ret` (verified
-//    at 0x00A36A7C) and takes no stack args, so tail-jumping to it is exact.
-//
-// Clicking a town does nothing in vanilla; the only existing click action is MapLink
-// navigation, which OnLButtonUp drives off a DIFFERENT index (+0x5BC). We run it
-// whenever we did not warp, so region links keep working byte-for-byte. When we DID
-// warp we return instead, so a click cannot both warp and navigate.
-//
-// ponytail: chat injection rather than building the packet ourselves. SendChatMsg is
-// one call and never reads its own `this` (0x005382D7 uses [ebp+8] only), whereas the
-// packet route needs COutPacket's ctor/dtor, EncodeStr taking a ZXString BY VALUE, and
-// sizeof(COutPacket) -- which nothing verifies. Same result, three times the surface.
-// Known limit of this choice: the client's own mute flags ([0xC40C60] and
-// [0xC40C68]+0x2094) make the send a silent no-op, same as typing the command.
+// ponytail: double-click is detected here rather than by hooking WM_LBUTTONDBLCLK
+// (0x203), which this window proc does not handle at all -- it only dispatches 0x202
+// and 0x205. Two WM_LBUTTONUPs on the same spot inside GetDoubleClickTime() is the
+// same thing for free, and it costs one tick compare instead of a second hook.
 typedef void (__thiscall* SendChatMsg_t)(void* pUser, void* pZXStr, int nOnlyBalloon);
 typedef void (__thiscall* ZXDtor_t)(void* pZXStr);
 
-static const DWORD kWmGateAddr = 0x00A3649A;              // guard; we NOP the je at +4
-static const BYTE kWmGateGuard[6] = { 0x83, 0x7E, 0x28, 0x00, 0x74, 0x06 };
-static const int kWmGateJeOff = 4;
+static const DWORD kWmHoverAddr = 0x00A364A8;      // cave origin, 9 bytes displaced
+static const BYTE kWmHoverGuard[15] = {
+    0x8B, 0x4D, 0xEC, 0x39, 0x8F, 0xC0, 0x05, 0x00, 0x00, 0x8D, 0x87, 0xC0, 0x05, 0x00, 0x00,
+};
+static const int kWmHoverNops = 9;
+static DWORD g_wmHoverRet = 0x00A364B1;
 
-static const DWORD kWmCallAddr = 0x00A36C88;              // guard; rel32 lives at +4
+static const DWORD kWmCallAddr = 0x00A36C88;       // guard; rel32 lives at +4
 static const BYTE kWmCallGuard[11] = {
     0x83, 0xC1, 0xFC, 0xE8, 0xFA, 0xFB, 0xFF, 0xFF, 0xC2, 0x10, 0x00,
 };
 static const int kWmCallRelOff = 4;
-static const DWORD kWmOnLButtonUp = 0x00A3688A;
+static DWORD g_wmOrig = 0x00A3688A;                // CUIWorldMap::OnLButtonUp
 
 static bool g_wmWarp = true, g_wmDone = false, g_wmMismatch = false;
-static DWORD g_wmOrig = kWmOnLButtonUp;   // jmp target, kept in memory for the thunk
-static BYTE g_wmWarped = 0;               // thunk<->asm handshake; UI thread only
+static int g_wmHover = -1;                         // written by the cave, UI thread only
+static int g_wmLastIdx = -1;
+static DWORD g_wmLastTick = 0;
 
-// Returns nonzero if we sent a warp, in which case the click is consumed.
-static BYTE __fastcall WorldMapTryWarp(BYTE* pWorldMap) {
-    if (!pWorldMap) return 0;
+static __declspec(naked) void WorldMapHoverCave() {
+    __asm {
+        mov  ecx, dword ptr [ebp - 0x14]
+        mov  g_wmHover, ecx
+        cmp  dword ptr [edi + 0x5C0], ecx   // last: the je at 0xA364B7 wants these flags
+        jmp  dword ptr [g_wmHoverRet]
+    }
+}
 
-    int idx = *(int*)(pWorldMap + 0x5C0);
-    if (idx < 0) return 0;                       // nothing hovered
+static void __fastcall WorldMapTryWarp(BYTE* pWorldMap) {
+    if (!pWorldMap) return;
+
+    int idx = g_wmHover;
+    if (idx < 0) return;
 
     BYTE* spots = *(BYTE**)(pWorldMap + 0x5D0);
-    if (!spots) return 0;
+    if (!spots) return;
+    if (idx >= *(int*)(spots - 4)) return;      // loop ran to completion: nothing hovered
+
+    DWORD now = GetTickCount();
+    if (idx != g_wmLastIdx || now - g_wmLastTick > GetDoubleClickTime()) {
+        g_wmLastIdx = idx;                      // first click of a possible double
+        g_wmLastTick = now;
+        return;
+    }
+    g_wmLastIdx = -1;                           // consumed, so a third click starts over
+    g_wmLastTick = 0;
 
     int* ids = *(int**)(spots + idx * 0x44 + 0x2C);
-    if (!ids) return 0;                          // spot with an empty mapNo
-
+    if (!ids) return;                           // spot with an empty mapNo
     int mapId = ids[0];
-    if (mapId <= 0 || mapId == 999999999) return 0;
+    if (mapId <= 0 || mapId == 999999999) return;
 
     char cmd[32];
     wsprintfA(cmd, "@warp %d", mapId);
 
-    void* zs = nullptr;                          // ZXString<char> is one char*
-    g_Assign(&zs, cmd, -1);                      // -1 => strlen
-    ((SendChatMsg_t)0x005382D7)(nullptr, &zs, 0);// never reads its own this
-    ((ZXDtor_t)0x0040265E)(&zs);
-    return 1;
+    void* zs = nullptr;                         // ZXString<char> is one char*
+    g_Assign(&zs, cmd, -1);                     // -1 => strlen
+    ((SendChatMsg_t)0x005382D7)(nullptr, &zs, 0);   // never reads its own this
+    ((ZXDtor_t)0x0040265E)(&zs);                // SendChatMsg AddRef'd its own copy
 }
 
 static __declspec(naked) void WorldMapClickThunk() {
@@ -765,28 +776,23 @@ static __declspec(naked) void WorldMapClickThunk() {
         pushfd
         mov  ecx, [esp + 0x24]    // pushfd(4) + pushad(0x20) -> the pushed ecx
         call WorldMapTryWarp      // __fastcall, arg already in ecx
-        mov  g_wmWarped, al       // stash before popad clobbers eax
         popfd
         popad
         pop  ecx
-        cmp  byte ptr g_wmWarped, 0
-        jne  consumed
-        jmp  dword ptr [g_wmOrig] // no warp: run MapLink navigation as usual
-    consumed:
-        ret                       // OnLButtonUp takes no stack args, so a bare ret matches
+        jmp  dword ptr [g_wmOrig] // always: MapLink navigation must still run
     }
 }
 
 static void ApplyWorldMapWarp() {
     if (!g_wmWarp) return;
-    if (!GuardOk(kWmGateAddr, kWmGateGuard, sizeof(kWmGateGuard)) ||
+    if (!GuardOk(kWmHoverAddr, kWmHoverGuard, sizeof(kWmHoverGuard)) ||
         !GuardOk(kWmCallAddr, kWmCallGuard, sizeof(kWmCallGuard))) {
         g_wmMismatch = true; return;
     }
 
-    // Order matters: repoint the call LAST, so the thunk can never run against a
-    // half-patched hover gate.
-    if (!PokeFill(kWmGateAddr + kWmGateJeOff, 0x90, 2)) return;
+    // Hover capture first: the click thunk is useless without it, and repointing the
+    // call last means the thunk can never run before the cave is live.
+    if (!Cave(kWmHoverAddr, kWmHoverNops, (void*)WorldMapHoverCave)) return;
 
     DWORD site = kWmCallAddr + kWmCallRelOff;
     int rel = (int)((DWORD_PTR)&WorldMapClickThunk - (site + 4));
