@@ -653,6 +653,146 @@ static void ApplyPetLeashX() {
     g_petLeashDone = Poke(kPetLeashAddr + kPetLeashRightOff, &right, 4);
 }
 
+// ---- WorldMapWarp ----------------------------------------------------------
+// config.ini [optional] WorldMapWarp, default true. Click a town dot on the World
+// Map (W) and warp there. Owner: "I want to be able to click on any button this map
+// and be teleported ... the command should also stay supported."
+//
+// It stays supported because this IS the command: we format "@warp <mapid>" and hand
+// it to the client's own chat-send. The server sees an ordinary GENERAL_CHAT and
+// CommandsExecutor does the rest. No new opcode, no handler, no server change at all,
+// and @warp keeps its GM gate.
+//
+// Resolving the click needs no geometry of our own -- the client already hit-tests the
+// dots for the hover tooltip:
+//
+//     CUIWorldMap vtable        0x00B93120   (ctor 0x00A31D9F writes it)
+//     spot hover hit-test       0x00A362E3   (called from OnMouseMove 0x00A3682F)
+//     hovered spot index        CUIWorldMap+0x5C0   (-1 = none; reset at 0x00A3594C)
+//     spot array                CUIWorldMap+0x5D0   (0x44-byte records; stride proven
+//                                                    by 0x00A35943 `add [ebp-0x28],0x44`)
+//     spot.mapNo (ZArray<int>)  spot+0x2C
+//
+// spot+0x2C is verified by construction, not assumed: 0x00A35ECE takes `lea edi,[esi+0x2c]`,
+// sizes that array to the wz child count, then 0x00A35F49 calls ZArray::operator[]
+// (0x004D248E) and stores each int with `mov [eax],ebx`. 0x00A35FB9 then feeds element
+// [0] to the map-name lookup 0x00535428 -- so ids[0] is the spot's canonical map id.
+//
+//     mapId = (*(int**)((BYTE*)spots + idx*0x44 + 0x2C))[0]
+//
+// Two writes:
+//
+// 1. 0x00A3649E `74 06` -> `90 90`. In the hover hit-test, the write of the hovered
+//    index to +0x5C0 is gated on the spot having a preview-image string at spot+0x28.
+//    The repo's WorldMap*.img carries no such per-spot key, so +0x5C0 would otherwise
+//    never be set for towns and every click would read -1. NOPping is safe in both
+//    worlds: the preview-draw path at 0x00A343A0 independently guards on the string,
+//    and 0x00416179 (AddRef) is NULL-safe.
+//
+// 2. 0x00A36C8C, the rel32 of `call 0xA3688A`, repointed at our thunk. This is an
+//    operand edit on an existing call -- the same class of change as PetLeashX, not a
+//    Cave(). Reached only from the WM_LBUTTONUP arm of the window proc:
+//
+//     00A36C61  mov eax,[esp+4]
+//     00A36C65  sub eax,0x202          ; WM_LBUTTONUP
+//     00A36C6A  je 0xA36C88
+//     00A36C88  add ecx,-4             ; ecx := CUIWorldMap* (msg iface is obj+4)
+//     00A36C8B  call 0xA3688A          ; <-- repointed
+//     00A36C90  ret 0x10
+//
+//    So the thunk gets `this` in ecx. CUIWorldMap::OnLButtonUp ends `c3 ret` (verified
+//    at 0x00A36A7C) and takes no stack args, so tail-jumping to it is exact.
+//
+// Clicking a town does nothing in vanilla; the only existing click action is MapLink
+// navigation, which OnLButtonUp drives off a DIFFERENT index (+0x5BC). We run it
+// whenever we did not warp, so region links keep working byte-for-byte. When we DID
+// warp we return instead, so a click cannot both warp and navigate.
+//
+// ponytail: chat injection rather than building the packet ourselves. SendChatMsg is
+// one call and never reads its own `this` (0x005382D7 uses [ebp+8] only), whereas the
+// packet route needs COutPacket's ctor/dtor, EncodeStr taking a ZXString BY VALUE, and
+// sizeof(COutPacket) -- which nothing verifies. Same result, three times the surface.
+// Known limit of this choice: the client's own mute flags ([0xC40C60] and
+// [0xC40C68]+0x2094) make the send a silent no-op, same as typing the command.
+typedef void (__thiscall* SendChatMsg_t)(void* pUser, void* pZXStr, int nOnlyBalloon);
+typedef void (__thiscall* ZXDtor_t)(void* pZXStr);
+
+static const DWORD kWmGateAddr = 0x00A3649A;              // guard; we NOP the je at +4
+static const BYTE kWmGateGuard[6] = { 0x83, 0x7E, 0x28, 0x00, 0x74, 0x06 };
+static const int kWmGateJeOff = 4;
+
+static const DWORD kWmCallAddr = 0x00A36C88;              // guard; rel32 lives at +4
+static const BYTE kWmCallGuard[11] = {
+    0x83, 0xC1, 0xFC, 0xE8, 0xFA, 0xFB, 0xFF, 0xFF, 0xC2, 0x10, 0x00,
+};
+static const int kWmCallRelOff = 4;
+static const DWORD kWmOnLButtonUp = 0x00A3688A;
+
+static bool g_wmWarp = true, g_wmDone = false, g_wmMismatch = false;
+static DWORD g_wmOrig = kWmOnLButtonUp;   // jmp target, kept in memory for the thunk
+static BYTE g_wmWarped = 0;               // thunk<->asm handshake; UI thread only
+
+// Returns nonzero if we sent a warp, in which case the click is consumed.
+static BYTE __fastcall WorldMapTryWarp(BYTE* pWorldMap) {
+    if (!pWorldMap) return 0;
+
+    int idx = *(int*)(pWorldMap + 0x5C0);
+    if (idx < 0) return 0;                       // nothing hovered
+
+    BYTE* spots = *(BYTE**)(pWorldMap + 0x5D0);
+    if (!spots) return 0;
+
+    int* ids = *(int**)(spots + idx * 0x44 + 0x2C);
+    if (!ids) return 0;                          // spot with an empty mapNo
+
+    int mapId = ids[0];
+    if (mapId <= 0 || mapId == 999999999) return 0;
+
+    char cmd[32];
+    wsprintfA(cmd, "@warp %d", mapId);
+
+    void* zs = nullptr;                          // ZXString<char> is one char*
+    g_Assign(&zs, cmd, -1);                      // -1 => strlen
+    ((SendChatMsg_t)0x005382D7)(nullptr, &zs, 0);// never reads its own this
+    ((ZXDtor_t)0x0040265E)(&zs);
+    return 1;
+}
+
+static __declspec(naked) void WorldMapClickThunk() {
+    __asm {
+        push ecx                  // keep CUIWorldMap* across the call
+        pushad
+        pushfd
+        mov  ecx, [esp + 0x24]    // pushfd(4) + pushad(0x20) -> the pushed ecx
+        call WorldMapTryWarp      // __fastcall, arg already in ecx
+        mov  g_wmWarped, al       // stash before popad clobbers eax
+        popfd
+        popad
+        pop  ecx
+        cmp  byte ptr g_wmWarped, 0
+        jne  consumed
+        jmp  dword ptr [g_wmOrig] // no warp: run MapLink navigation as usual
+    consumed:
+        ret                       // OnLButtonUp takes no stack args, so a bare ret matches
+    }
+}
+
+static void ApplyWorldMapWarp() {
+    if (!g_wmWarp) return;
+    if (!GuardOk(kWmGateAddr, kWmGateGuard, sizeof(kWmGateGuard)) ||
+        !GuardOk(kWmCallAddr, kWmCallGuard, sizeof(kWmCallGuard))) {
+        g_wmMismatch = true; return;
+    }
+
+    // Order matters: repoint the call LAST, so the thunk can never run against a
+    // half-patched hover gate.
+    if (!PokeFill(kWmGateAddr + kWmGateJeOff, 0x90, 2)) return;
+
+    DWORD site = kWmCallAddr + kWmCallRelOff;
+    int rel = (int)((DWORD_PTR)&WorldMapClickThunk - (site + 4));
+    g_wmDone = Poke(site, &rel, 4);
+}
+
 static void ApplyAll() {
     for (const HdPatch& p : kHdPatches) {
         if (!Expected(p)) { ++g_mismatch; continue; }
@@ -726,6 +866,10 @@ static void Report() {
                          : g_petLeashMismatch  ? "FAILED (guard bytes differ)"
                          : g_petLeashDone      ? "ON"
                                                : "FAILED (write refused)";
+    const char* wmap = !g_wmWarp     ? "off"
+                     : g_wmMismatch  ? "FAILED (guard bytes differ)"
+                     : g_wmDone      ? "ON"
+                                     : "FAILED (write refused)";
     char clamp[64] = "";
     if (g_msgClamped) wsprintfA(clamp, " (clamped from %d)", g_msgClamped);
     wsprintfA(msg, "hd-res %dx%d: applied %d, skipped %d, byte-mismatch %d of %d"
@@ -738,6 +882,7 @@ static void Report() {
                    "\nPetLootDelay %s (%d ms)"
                    "\nPetSweepHeight %s (petY -%d .. +%d)"
                    "\nPetLeashX %s (ownerX +/- %d px)"
+                   "\nWorldMapWarp %s"
                    "%s\n",
               g_w, g_h, g_applied, g_skipped, g_mismatch,
               (int)(sizeof(kHdPatches) / sizeof(kHdPatches[0])),
@@ -751,6 +896,7 @@ static void Report() {
               petheight, g_petSweepH > 128 ? 128 : g_petSweepH,
                          g_petSweepH > 127 ? 127 : g_petSweepH,
               petleash, g_petLeashX,
+              wmap,
               g_diag ? " | diag ON" : "");
     OutputDebugStringA(msg);
 #ifdef HD_SELFTEST
@@ -849,6 +995,10 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     g_petLeashX = GetPrivateProfileIntA("optional", "PetLeashX", 350, cfg);
     if (g_petLeashX < 100 || g_petLeashX > 5000) g_petLeashX = 350;
 
+    // WorldMapWarp: click a town dot on the World Map to warp there, via @warp.
+    GetPrivateProfileStringA("optional", "WorldMapWarp", "true", buf, sizeof(buf), cfg);
+    g_wmWarp = (buf[0] == 't' || buf[0] == 'T' || buf[0] == '1');
+
     // The archive is opt-in by mere presence, exactly as Ezorsia decides it. No file
     // there means the two hooks below stay inert, so a bad copy cannot break a launch:
     // the owner reverts by renaming EzorsiaV2_UI.wz.
@@ -871,6 +1021,7 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     ApplyPetLootDelay();
     ApplyPetSweepHeight();
     ApplyPetLeashX();
+    ApplyWorldMapWarp();
 
     // diag=1 installs a read-only observer on IWzNameSpace::GetItem and writes
     // hd-res-diag.log next to this DLL. diag=0 (the default) installs no hooks at all,
