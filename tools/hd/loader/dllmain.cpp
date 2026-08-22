@@ -265,6 +265,72 @@ static void ApplyNoWhack() {
     g_noWhackDone = Poke(kNoWhackAddr, kNoWhackJmp, sizeof(kNoWhackJmp));
 }
 
+// ---- PetLootRange ----------------------------------------------------------
+// config.ini [optional] PetLootRange, a multiplier on the box a pet loots from.
+// Default 2.0 (owner: "VAC items in a radius twice the size of the pet itself").
+//
+// A pet's pickup range is ONE rectangle, built around the pet's own position once
+// before the drop loop, and it is the whole range check. There is no separate
+// "walk toward that drop" targeting radius -- the pet's movement is CVecCtrlPet
+// following the owner -- so this rect IS the pet's reach:
+//
+//     CPet update 0x00720B39 -> CPet method 0x00722616 -> CDropPool 0x0050D652
+//       0x0050D652 builds petRect, then per drop calls PtInRect (0x0050D7D2) with
+//       the drop displayer's x/y; a hit stamps the drop and calls the PET_LOOT
+//       packet builder 0x00722672 (push 0xAF -- what PetLootHandler parses).
+//
+//     0050D663  8B 4D 0C        mov  ecx, [ebp+0xC]    ; POINT* petPos
+//     0050D666  8B 01           mov  eax, [ecx]        ; x
+//     0050D668  8B 49 04        mov  ecx, [ecx+4]      ; y
+//     0050D66B  8D 50 E7        lea  edx, [eax-0x19]   ; left   = x - 25
+//     0050D66E  89 55 CC        mov  [ebp-0x34], edx
+//     0050D671  8D 51 CE        lea  edx, [ecx-0x32]   ; top    = y - 50
+//     0050D674  57              push edi
+//     0050D675  8B 3D 68 0C C4 00
+//     0050D67B  83 C0 19        add  eax, 0x19         ; right  = x + 25
+//     0050D67E  83 C1 0A        add  ecx, 0x0A         ; bottom = y + 10
+//
+// Four inline imm8 operands. No .rdata constant, nothing shared, nothing to repoint,
+// and every replacement is the same instruction length.
+//
+// The guard has to be all 31 bytes: the same -0x19/-0x32/+0x19/+0x0A idiom appears a
+// second time at 0x0050D4CE, and that one is the PLAYER's own pickup box. A short
+// signature would hit both.
+//
+// Untouched upstream, and the reason a large multiplier buys less than it looks: a
+// 500 ms send throttle at 0x00722696 (cmp eax, 0x1F4) caps the loot packet rate.
+//
+// ponytail: ceiling is 2.5x -- these are disp8/imm8 fields, so |top| = 50*mul has to
+// stay under 128. Past that the three-byte lea/add would need the imm32 form, which
+// does not fit in place and would need a codecave.
+static const DWORD kPetLootAddr = 0x0050D663;
+static const BYTE kPetLootGuard[31] = {
+    0x8B, 0x4D, 0x0C, 0x8B, 0x01, 0x8B, 0x49, 0x04, 0x8D, 0x50, 0xE7, 0x89, 0x55, 0xCC, 0x8D, 0x51,
+    0xCE, 0x57, 0x8B, 0x3D, 0x68, 0x0C, 0xC4, 0x00, 0x83, 0xC0, 0x19, 0x83, 0xC1, 0x0A, 0x89,
+};
+// offsets into the guard of the four operand bytes, and their vanilla values in px
+static const int kPetLootOff[4] = { 10, 16, 26, 29 };       // left, top, right, bottom
+static const int kPetLootBase[4] = { -25, -50, 25, 10 };
+static double g_petLootMul = 2.0;
+static bool g_petLootDone = false, g_petLootMismatch = false;
+
+static void ApplyPetLootRange() {
+    if (g_petLootMul == 1.0) return;
+    MEMORY_BASIC_INFORMATION mbi{};
+    if (!VirtualQuery((LPCVOID)kPetLootAddr, &mbi, sizeof(mbi)) || mbi.State != MEM_COMMIT ||
+        memcmp((const void*)kPetLootAddr, kPetLootGuard, sizeof(kPetLootGuard)) != 0) {
+        g_petLootMismatch = true; return;
+    }
+    for (int i = 0; i < 4; ++i) {
+        int v = (int)(kPetLootBase[i] * g_petLootMul);
+        if (v > 127) v = 127;
+        if (v < -128) v = -128;
+        BYTE b = (BYTE)(v & 0xFF);
+        if (!Poke(kPetLootAddr + kPetLootOff[i], &b, 1)) return;
+    }
+    g_petLootDone = true;
+}
+
 // ---- LadderSpeed -----------------------------------------------------------
 // config.ini [optional] LadderSpeed, a multiplier on the ladder/rope climb rate.
 // Default 1.5 (owner: "all characters go up ladders fifty percent faster").
@@ -360,18 +426,24 @@ static void Report() {
                        : g_ladderMismatch   ? "FAILED (guard bytes differ)"
                        : g_ladderDone       ? "ON"
                                             : "FAILED (write refused)";
+    const char* petloot = g_petLootMul == 1.0 ? "off"
+                        : g_petLootMismatch    ? "FAILED (guard bytes differ)"
+                        : g_petLootDone        ? "ON"
+                                               : "FAILED (write refused)";
     char clamp[64] = "";
     if (g_msgClamped) wsprintfA(clamp, " (clamped from %d)", g_msgClamped);
     wsprintfA(msg, "hd-res %dx%d: applied %d, skipped %d, byte-mismatch %d of %d"
                    "\narchive: %s | hooks %d, mismatch %d"
                    "\nMsgAmount %d%s | dmgCap %d | spdCap %d | useTubi %s | NoWhack %s"
                    "\nLadderSpeed %s (%d%%)"
+                   "\nPetLootRange %s (%dx%d px box)"
                    "%s\n",
               g_w, g_h, g_applied, g_skipped, g_mismatch,
               (int)(sizeof(kHdPatches) / sizeof(kHdPatches[0])),
               arch, g_hooked, g_hookMismatch,
               g_msg, clamp, (int)g_dmgCap, g_spdCap, tubi, whack,
               ladder, (int)(g_ladderMul * 100),
+              petloot, (int)(50 * g_petLootMul), (int)(60 * g_petLootMul),
               g_diag ? " | diag ON" : "");
     OutputDebugStringA(msg);
 #ifdef HD_SELFTEST
@@ -441,6 +513,12 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     g_ladderMul = atof(buf);
     if (g_ladderMul <= 0.0 || g_ladderMul > 10.0) g_ladderMul = 1.5;
 
+    // PetLootRange: multiplier on the pet pickup box. 1.0 = vanilla (patch skipped).
+    // Capped at 2.5 -- the operands are imm8 and 50*2.5 is already 125 of 127.
+    GetPrivateProfileStringA("optional", "PetLootRange", "2.0", buf, sizeof(buf), cfg);
+    g_petLootMul = atof(buf);
+    if (g_petLootMul < 1.0 || g_petLootMul > 2.5) g_petLootMul = 2.0;
+
     // The archive is opt-in by mere presence, exactly as Ezorsia decides it. No file
     // there means the two hooks below stay inert, so a bad copy cannot break a launch:
     // the owner reverts by renaming EzorsiaV2_UI.wz.
@@ -457,6 +535,7 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     ApplyTubi();
     ApplyNoWhack();
     ApplyLadderSpeed();
+    ApplyPetLootRange();
 
     // diag=1 installs a read-only observer on IWzNameSpace::GetItem and writes
     // hd-res-diag.log next to this DLL. diag=0 (the default) installs no hooks at all,
