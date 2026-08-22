@@ -265,6 +265,52 @@ static void ApplyNoWhack() {
     g_noWhackDone = Poke(kNoWhackAddr, kNoWhackJmp, sizeof(kNoWhackJmp));
 }
 
+// ---- LadderSpeed -----------------------------------------------------------
+// config.ini [optional] LadderSpeed, a multiplier on the ladder/rope climb rate.
+// Default 1.5 (owner: "all characters go up ladders fifty percent faster").
+//
+// Climbing is NOT a physics param -- Map/Physics.img has no ladder key, and none of
+// the 19 doubles it loads is read on the ladder path. The client moves the character
+// a flat 3 px per UpdateActive tick, with no elapsed-time term:
+//
+//     CVecCtrlUser::UpdateLadderMove   v84 0x00A1429A   (v83 0x009CC627)
+//       reached only from CVecCtrlUser::UpdateActive (v84 0x00A13B6E) at 0x00A13D6C,
+//       guarded by m_pLadder != NULL. Exactly one caller.
+//
+//     00A1435B  call 0x417012            ; GetKeyY() -> -1 / 0 / +1
+//     00A14363  fild dword ptr [ebp-4]
+//     00A1436C  DC 0D 68 49 B4 00        ; fmul qword ptr [0x00B44968]  <-- 3.0, the step
+//     00A14372  fadd qword ptr [ebp-0xc] ; + Y
+//     00A1437C  call 0x5457bf            ; SetY()
+//
+// The 3.0 at 0x00B44968 is a SHARED .rdata constant -- 13 instructions across the
+// image read it, three of them the same ladder-step shape in three different vector
+// controllers (0x00A1436C user, 0x00A0C513 pet, 0x00A17F3C remote). Patching the
+// double would move all of them. So instead we repoint THIS ONE instruction's disp32
+// at a double we own, in this DLL's data. One 4-byte write, one code path, nothing
+// written into data anyone else reads.
+//
+// ponytail: the disp32 points into this DLL. Safe only because edits\ DLLs are
+// LoadLibrary'd by the ijl15 proxy and never freed; if that ever changes, this has to
+// become a copy into a client-owned constant slot instead.
+static double g_ladderStep = 4.5;                                   // 3.0 * 1.5
+static const BYTE kLadderFmul[6] = { 0xDC, 0x0D, 0x68, 0x49, 0xB4, 0x00 };
+static const DWORD kLadderAddr = 0x00A1436C;
+static double g_ladderMul = 1.5;
+static bool g_ladderDone = false, g_ladderMismatch = false;
+
+static void ApplyLadderSpeed() {
+    if (g_ladderMul == 1.0) return;
+    MEMORY_BASIC_INFORMATION mbi{};
+    if (!VirtualQuery((LPCVOID)kLadderAddr, &mbi, sizeof(mbi)) || mbi.State != MEM_COMMIT ||
+        memcmp((const void*)kLadderAddr, kLadderFmul, sizeof(kLadderFmul)) != 0) {
+        g_ladderMismatch = true; return;
+    }
+    g_ladderStep = 3.0 * g_ladderMul;
+    double* pStep = &g_ladderStep;
+    g_ladderDone = Poke(kLadderAddr + 2, &pStep, sizeof(pStep));
+}
+
 static void ApplyAll() {
     for (const HdPatch& p : kHdPatches) {
         if (!Expected(p)) { ++g_mismatch; continue; }
@@ -310,16 +356,22 @@ static void Report() {
                      : g_tubiMismatch   ? "FAILED (guard bytes differ)"
                      : g_tubiDone       ? "ON"
                                         : "FAILED (write refused)";
+    const char* ladder = g_ladderMul == 1.0 ? "off"
+                       : g_ladderMismatch   ? "FAILED (guard bytes differ)"
+                       : g_ladderDone       ? "ON"
+                                            : "FAILED (write refused)";
     char clamp[64] = "";
     if (g_msgClamped) wsprintfA(clamp, " (clamped from %d)", g_msgClamped);
     wsprintfA(msg, "hd-res %dx%d: applied %d, skipped %d, byte-mismatch %d of %d"
                    "\narchive: %s | hooks %d, mismatch %d"
                    "\nMsgAmount %d%s | dmgCap %d | spdCap %d | useTubi %s | NoWhack %s"
+                   "\nLadderSpeed %s (%d%%)"
                    "%s\n",
               g_w, g_h, g_applied, g_skipped, g_mismatch,
               (int)(sizeof(kHdPatches) / sizeof(kHdPatches[0])),
               arch, g_hooked, g_hookMismatch,
               g_msg, clamp, (int)g_dmgCap, g_spdCap, tubi, whack,
+              ladder, (int)(g_ladderMul * 100),
               g_diag ? " | diag ON" : "");
     OutputDebugStringA(msg);
 #ifdef HD_SELFTEST
@@ -384,6 +436,11 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     GetPrivateProfileStringA("optional", "NoWhack", "true", buf, sizeof(buf), cfg);
     g_noWhack = (buf[0] == 't' || buf[0] == 'T' || buf[0] == '1');
 
+    // LadderSpeed: multiplier on the 3 px/tick climb step. 1.0 = vanilla (patch skipped).
+    GetPrivateProfileStringA("optional", "LadderSpeed", "1.5", buf, sizeof(buf), cfg);
+    g_ladderMul = atof(buf);
+    if (g_ladderMul <= 0.0 || g_ladderMul > 10.0) g_ladderMul = 1.5;
+
     // The archive is opt-in by mere presence, exactly as Ezorsia decides it. No file
     // there means the two hooks below stay inert, so a bad copy cannot break a launch:
     // the owner reverts by renaming EzorsiaV2_UI.wz.
@@ -399,6 +456,7 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     ApplyAll();
     ApplyTubi();
     ApplyNoWhack();
+    ApplyLadderSpeed();
 
     // diag=1 installs a read-only observer on IWzNameSpace::GetItem and writes
     // hd-res-diag.log next to this DLL. diag=0 (the default) installs no hooks at all,
