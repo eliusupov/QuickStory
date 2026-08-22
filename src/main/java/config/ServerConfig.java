@@ -169,6 +169,7 @@ public class ServerConfig {
     //Map Monitor Configuration
     public int ITEM_EXPIRE_CHECK;
     public int ITEM_LIMIT_ON_MAP;
+    public long AUTOLOOT_DELAY_MS;
     public int MAP_VISITED_SIZE;
     public int MAP_DAMAGE_OVERTIME_INTERVAL;
     public int MAP_DAMAGE_OVERTIME_COUNT;

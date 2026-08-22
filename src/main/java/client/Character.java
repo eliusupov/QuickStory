@@ -2165,6 +2165,14 @@ public class Character extends AbstractCharacterObject {
     // than by per-drop delay arithmetic: anything too fresh is simply skipped and taken
     // on the next pass.
     //
+    // pickupItem's own 400 ms guard is NOT enough to look right: the client animates the
+    // item arcing from the monster to where it lands, and 400 ms into that arc the item is
+    // still in the air, so it reads as being sucked out of the monster. AUTOLOOT_DELAY_MS
+    // (config.yaml, default 1500) is the separate "has it landed" wait, and it applies only
+    // here -- manual pickup and pet loot keep vanilla timing. All drops from one kill share
+    // the same delay field, so one constant covers the whole stack; there is no per-item
+    // stagger to model.
+    //
     // ponytail: reuses LootCommand's ownership rule verbatim rather than inventing a
     // second one. Session-only, off by default -- nothing to migrate, and a toggle that
     // survives a relog is a support question waiting to happen.
@@ -2205,9 +2213,15 @@ public class Character extends AbstractCharacterObject {
             return;
         }
 
+        final long now = System.currentTimeMillis();
+        final long landed = YamlConfig.config.server.AUTOLOOT_DELAY_MS;
+
         for (MapObject o : map.getMapObjectsInRange(getPosition(), Double.POSITIVE_INFINITY,
                 Arrays.asList(MapObjectType.ITEM))) {
             MapItem mapItem = (MapItem) o;
+            if (now - mapItem.getDropTime() < landed) {
+                continue;   // still falling on the client; taking it now looks like a vacuum
+            }
             if (mapItem.getOwnerId() == getId() || (getPartyId() > 0 && mapItem.getOwnerId() == getPartyId())) {
                 pickupItem(mapItem);
             }
