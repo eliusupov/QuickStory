@@ -544,6 +544,55 @@ static void ApplyPetLootDelay() {
     g_petDelayDone = Poke(kPetAgeGrabAddr + kPetAgeImmOff, &g_petLootDelay, 4);
 }
 
+// ---- PetSweepHeight --------------------------------------------------------
+// config.ini [optional] PetSweepHeight, the vertical half-window the pet TARGETS
+// drops within. Vanilla is petY-50 above and only petY+10 below, and that +10 is why
+// a pet will not follow a drop down a slope: walking a slope changes the pet's Y, so
+// anything more than 10 px downhill falls straight out of the candidate set and the
+// sweep direction goes back to 0.
+//
+//     0051134E  8B 4D C8  mov ecx,[ebp-0x38]     ; petY
+//     00511351  83 C1 CE  add ecx,-0x32          ; top    = petY - 50
+//     00511354  3B C1     cmp eax,ecx
+//     00511356  7E 5E     jle 0x5113B6           ; drop above the window: reject
+//     00511363  8B 4D C8  mov ecx,[ebp-0x38]
+//     00511366  83 C1 0A  add ecx,+0x0A          ; bottom = petY + 10
+//     00511369  3B C1     cmp eax,ecx
+//     0051136B  7D 49     jge 0x5113B6           ; drop below the window: reject
+//
+// Both imm8, one instruction each, no shared constant. Default 128 pins both:
+// petY-128 .. petY+127, a 255 px tall window instead of 60.
+//
+// ponytail: symmetric, unlike vanilla. The asymmetry only made sense when the pet
+// never left flat ground -- drops fall from above, so vanilla watched upward. Slopes
+// need the downhill half, and there is no reason to spend a knob on each end.
+//
+// KNOWN COST, and the reason this is a knob and not a constant: the sweep has no
+// reachability test. A drop on a platform below is now a candidate, the pet walks at
+// it, cannot path there, and oscillates until the drop ages out or the teleport box
+// pulls it back. Lower PetSweepHeight if that shows up more than the slopes are worth.
+static const DWORD kPetSweepYAddr = 0x0051134E;
+static const BYTE kPetSweepYGuard[31] = {
+    0x8B, 0x4D, 0xC8, 0x83, 0xC1, 0xCE, 0x3B, 0xC1, 0x7E, 0x5E, 0x8B, 0x45, 0xD0, 0x8D, 0x48, 0x68,
+    0xE8, 0xCE, 0x7E, 0xF1, 0xFF, 0x8B, 0x4D, 0xC8, 0x83, 0xC1, 0x0A, 0x3B, 0xC1, 0x7D, 0x49,
+};
+static const int kPetSweepYTopOff = 5;      // imm8 of `add ecx,-0x32`
+static const int kPetSweepYBotOff = 26;     // imm8 of `add ecx,+0x0A`
+static int g_petSweepH = 128;
+static bool g_petSweepHDone = false, g_petSweepHMismatch = false;
+
+static void ApplyPetSweepHeight() {
+    if (g_petSweepH == 0) return;
+    if (!GuardOk(kPetSweepYAddr, kPetSweepYGuard, sizeof(kPetSweepYGuard))) {
+        g_petSweepHMismatch = true; return;
+    }
+    int up = g_petSweepH > 128 ? 128 : g_petSweepH;      // imm8 floor is -128
+    int dn = g_petSweepH > 127 ? 127 : g_petSweepH;      // imm8 ceiling is +127
+    BYTE t = (BYTE)((-up) & 0xFF), b = (BYTE)(dn & 0xFF);
+    if (!Poke(kPetSweepYAddr + kPetSweepYTopOff, &t, 1)) return;
+    g_petSweepHDone = Poke(kPetSweepYAddr + kPetSweepYBotOff, &b, 1);
+}
+
 static void ApplyAll() {
     for (const HdPatch& p : kHdPatches) {
         if (!Expected(p)) { ++g_mismatch; continue; }
@@ -572,7 +621,7 @@ static void ApplyAll() {
 // The counts are the whole result of a gated manual test, so make them visible without
 // requiring a debugger. Nothing is written to disk -- see the SAFETY note at the top.
 static void Report() {
-    char msg[512];
+    char msg[1024];   // 9 report lines and growing; 512 overflowed at PetSweepHeight
     // The archive line names WHICH of the three ways it can be off actually happened, so
     // one launch distinguishes "owner has no .wz" from "guard bytes differ" from
     // "mounted but the hook refused" -- without a second round trip.
@@ -609,6 +658,10 @@ static void Report() {
                          : g_petDelayMismatch      ? "FAILED (guard bytes differ)"
                          : g_petDelayDone          ? "ON"
                                                    : "FAILED (write refused)";
+    const char* petheight = !g_petSweepH        ? "off"
+                          : g_petSweepHMismatch  ? "FAILED (guard bytes differ)"
+                          : g_petSweepHDone      ? "ON"
+                                                 : "FAILED (write refused)";
     char clamp[64] = "";
     if (g_msgClamped) wsprintfA(clamp, " (clamped from %d)", g_msgClamped);
     wsprintfA(msg, "hd-res %dx%d: applied %d, skipped %d, byte-mismatch %d of %d"
@@ -619,6 +672,7 @@ static void Report() {
                    "\nPetLootWhileMoving %s"
                    "\nPetSweepRange %s (ownerX +/- %d px)"
                    "\nPetLootDelay %s (%d ms)"
+                   "\nPetSweepHeight %s (petY -%d .. +%d)"
                    "%s\n",
               g_w, g_h, g_applied, g_skipped, g_mismatch,
               (int)(sizeof(kHdPatches) / sizeof(kHdPatches[0])),
@@ -629,6 +683,8 @@ static void Report() {
               petmove,
               petrange, kPetSweepBaseHalf + g_petSweepExtra,
               petdelay, g_petLootDelay,
+              petheight, g_petSweepH > 128 ? 128 : g_petSweepH,
+                         g_petSweepH > 127 ? 127 : g_petSweepH,
               g_diag ? " | diag ON" : "");
     OutputDebugStringA(msg);
 #ifdef HD_SELFTEST
@@ -717,6 +773,11 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     g_petLootDelay = GetPrivateProfileIntA("optional", "PetLootDelay", 1000, cfg);
     if (g_petLootDelay < 0 || g_petLootDelay > 10000) g_petLootDelay = 1000;
 
+    // PetSweepHeight: vertical half-window the pet targets drops within, px.
+    // 128 pins both imm8 ends (petY-128 .. petY+127). 0 = vanilla, patch skipped.
+    g_petSweepH = GetPrivateProfileIntA("optional", "PetSweepHeight", 128, cfg);
+    if (g_petSweepH < 0 || g_petSweepH > 128) g_petSweepH = 128;
+
     // The archive is opt-in by mere presence, exactly as Ezorsia decides it. No file
     // there means the two hooks below stay inert, so a bad copy cannot break a launch:
     // the owner reverts by renaming EzorsiaV2_UI.wz.
@@ -737,6 +798,7 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     ApplyPetLootWhileMoving();
     ApplyPetSweepRange();
     ApplyPetLootDelay();
+    ApplyPetSweepHeight();
 
     // diag=1 installs a read-only observer on IWzNameSpace::GetItem and writes
     // hd-res-diag.log next to this DLL. diag=0 (the default) installs no hooks at all,
