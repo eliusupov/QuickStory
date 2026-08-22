@@ -786,6 +786,54 @@ static __declspec(naked) void WorldMapHoverCave() {
     }
 }
 
+// DEFERRING THE WARP UNTIL THE MAP IS REALLY GONE.
+//
+// Setting +0x70 does not close the window, it ASKS. The modal pump at 00A3E7E8 notices
+// on its next turn, DoModal returns, and only then does the scope-guard dtor destroy it.
+// Sending the warp before that hands the server a reason to change fields while a modal
+// is still unwinding, and that is the best explanation left for a crash that takes a
+// varying number of warps to show up. Reordering inside the click handler does not help:
+// both orders are still inside the handler.
+//
+// The owner suggested a 200-300 ms delay, which is the same idea. A timer would be a
+// guess at how long a teardown takes, and a wrong guess either fires early (the bug is
+// back, rarely) or makes every warp feel sluggish. DoModal publishes the exact moment
+// instead:
+//
+//     004F61EA  call 00A3E7E8      ; the modal pump -- returns when +0x70 is set
+//     004F61EF  mov  esi,[esi+6c]  ; nReason
+//     004F61F9  call 004F623F      ; scope-guard dtor -> Destroy, if created
+//     004F61FE  mov  ecx,[ebp-0c]  ; <- cave: pump exited AND window destroyed
+//     004F6203  mov  eax,esi       ; cave returns here
+//
+// So the warp goes out from there, with no wait at all: the field change is handled by
+// the OUTER pump, on a frame where no modal exists. 004F61FE belongs to CWnd::DoModal
+// and therefore runs for every modal in the client, so the flush is one compare against
+// a global that only the World Map ever sets.
+//
+// If the close is off, there is nothing to wait for and the send happens inline, exactly
+// as before -- otherwise the warp would sit queued until the owner pressed ESC.
+static bool g_wmModalDone = false;              // the DoModal cave is live
+static volatile LONG g_wmPendingMap = 0;
+
+static void WorldMapSendWarp(int mapId) {
+    char cmd[32];
+    wsprintfA(cmd, "@warp %d", mapId);
+
+    void* zs = nullptr;                         // ZXString<char> is one char*
+    g_Assign(&zs, cmd, -1);                     // -1 => strlen
+    ((SendChatMsg_t)0x005382D7)(nullptr, &zs, 0);   // never reads its own this
+    ((ZXDtor_t)0x0040265E)(&zs);                // SendChatMsg AddRef'd its own copy
+
+    InterlockedIncrement(&g_wmWarps);           // context for the crash reporter
+    InterlockedExchange(&g_wmLastMap, mapId);
+}
+
+static void __cdecl WorldMapFlushWarp() {
+    LONG mapId = InterlockedExchange(&g_wmPendingMap, 0);   // clear first: a modal opened
+    if (mapId) WorldMapSendWarp((int)mapId);                // by the send cannot re-enter
+}
+
 static void __fastcall WorldMapTryWarp(BYTE* pWorldMap) {
     g_wmWarped = 0;
     if (!pWorldMap) return;
@@ -811,22 +859,16 @@ static void __fastcall WorldMapTryWarp(BYTE* pWorldMap) {
     int mapId = ids[0];
     if (mapId <= 0 || mapId == 999999999) return;
 
-    // OFF BY DEFAULT, and the reason is a bug we have not caught yet. Warping worked for
-    // as long as this block did not exist; it was added, and the owner started seeing the
-    // client die after a varying number of warps -- three separate reports, no pattern in
-    // which map, always after several successful warps. Twice I shipped a theory as if it
-    // were a fix. It is not, so the close is now a switch the owner can turn on, defaulted
-    // to the arrangement he confirmed working, and the crash reporter below is armed so
-    // that the next occurrence names its own instruction instead of buying a third guess.
-    //
-    // The suspicion, unproven: this asks a MODAL to close from inside its own mouse
-    // dispatch and then sends a warp, so the server's field change can land while
-    // DoModal's pump (00A3E7E8, driven from 004F61EA) is still unwinding. The real fix is
-    // probably to defer the send until the map is destroyed -- 004F61FE, the instruction
-    // after DoModal's scope-guard dtor, is one place that is provably past it.
-    if (g_wmClose && g_wmCanClose && *(DWORD*)(pWorldMap + 0x70) == 0) {
+    // Ask the modal to close: the same two fields CWnd::Close writes and its same
+    // "already closing" check, minus the synchronous Destroy -- see the block comment
+    // above. The warp itself is handed to WorldMapFlushWarp, which the DoModal cave runs
+    // once the pump has exited and the window is gone.
+    if (g_wmClose && g_wmCanClose && g_wmModalDone && *(DWORD*)(pWorldMap + 0x70) == 0) {
         *(DWORD*)(pWorldMap + 0x6C) = 2;        // nReason, matching ESC
         *(DWORD*)(pWorldMap + 0x70) = 1;        // pending close
+        InterlockedExchange(&g_wmPendingMap, mapId);
+    } else {
+        WorldMapSendWarp(mapId);                // map stays open; nothing to wait for
     }
 
     // A fresh CUIWorldMap is a fresh stack object with a freshly built spot array, and
@@ -835,16 +877,6 @@ static void __fastcall WorldMapTryWarp(BYTE* pWorldMap) {
     // unrelated. The count check upstream stops it being unsafe, not being wrong.
     g_wmHover = -1;
 
-    char cmd[32];
-    wsprintfA(cmd, "@warp %d", mapId);
-
-    void* zs = nullptr;                         // ZXString<char> is one char*
-    g_Assign(&zs, cmd, -1);                     // -1 => strlen
-    ((SendChatMsg_t)0x005382D7)(nullptr, &zs, 0);   // never reads its own this
-    ((ZXDtor_t)0x0040265E)(&zs);                // SendChatMsg AddRef'd its own copy
-
-    InterlockedIncrement(&g_wmWarps);           // context for the crash reporter
-    InterlockedExchange(&g_wmLastMap, mapId);
     g_wmWarped = 1;                             // consume the click, see the thunk
 }
 
@@ -919,6 +951,26 @@ static LONG CALLBACK HdCrashReport(EXCEPTION_POINTERS* ep) {
     return EXCEPTION_CONTINUE_SEARCH;
 }
 
+static const DWORD kWmModalAddr = 0x004F61FE;      // cave origin, 5 bytes displaced
+static const BYTE kWmModalGuard[14] = {
+    0x8B, 0x4D, 0xF4, 0x8B, 0xC6, 0x5E, 0x64, 0x89, 0x0D, 0x00, 0x00, 0x00, 0x00, 0xC9,
+};
+static const int kWmModalNops = 5;
+static DWORD g_wmModalRet = 0x004F6203;
+
+static __declspec(naked) void WorldMapModalCave() {
+    __asm {
+        pushad
+        pushfd
+        call WorldMapFlushWarp
+        popfd
+        popad
+        mov  ecx, dword ptr [ebp - 0x0C]  // displaced
+        mov  eax, esi                     // displaced
+        jmp  dword ptr [g_wmModalRet]
+    }
+}
+
 static void ApplyWorldMapWarp() {
     if (!g_wmWarp) return;
     if (!GuardOk(kWmHoverAddr, kWmHoverGuard, sizeof(kWmHoverGuard)) ||
@@ -937,6 +989,14 @@ static void ApplyWorldMapWarp() {
     DWORD site = kWmCallAddr + kWmCallRelOff;
     int rel = (int)((DWORD_PTR)&WorldMapClickThunk - (site + 4));
     g_wmDone = Poke(site, &rel, 4);
+
+    // The deferred send needs the DoModal epilogue. If that guard differs we still warp,
+    // we just do it inline and leave the map open rather than queueing a warp nothing
+    // would ever flush.
+    if (g_wmDone && g_wmClose && g_wmCanClose &&
+        GuardOk(kWmModalAddr, kWmModalGuard, sizeof(kWmModalGuard))) {
+        g_wmModalDone = Cave(kWmModalAddr, kWmModalNops, (void*)WorldMapModalCave);
+    }
 }
 
 // ---- ScrollSellPrice -------------------------------------------------------
@@ -1136,7 +1196,7 @@ static void Report() {
                      : g_wmMismatch  ? "FAILED (guard bytes differ)"
                      : !g_wmDone     ? "FAILED (write refused)"
                      : !g_wmClose    ? "ON (auto-close off)"
-                     : g_wmCanClose  ? "ON (auto-close on)"
+                     : g_wmModalDone ? "ON (auto-close, deferred send)"
                                      : "ON (auto-close wanted, guard differs)";
     char clamp[64] = "";
     if (g_msgClamped) wsprintfA(clamp, " (clamped from %d)", g_msgClamped);
@@ -1269,8 +1329,8 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     GetPrivateProfileStringA("optional", "WorldMapWarp", "true", buf, sizeof(buf), cfg);
     g_wmWarp = (buf[0] == 't' || buf[0] == 'T' || buf[0] == '1');
 
-    // WorldMapWarpClose: default FALSE until the crash above is understood.
-    GetPrivateProfileStringA("optional", "WorldMapWarpClose", "false", buf, sizeof(buf), cfg);
+    // WorldMapWarpClose: the warp is deferred to the DoModal cave, so this is on.
+    GetPrivateProfileStringA("optional", "WorldMapWarpClose", "true", buf, sizeof(buf), cfg);
     g_wmClose = (buf[0] == 't' || buf[0] == 'T' || buf[0] == '1');
 
     // ScrollSellPrice: draw what a scroll is really worth in the shop Sell tab.
