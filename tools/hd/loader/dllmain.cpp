@@ -36,6 +36,15 @@
 //   StringPool::GetString, and both targets begin with a single self-contained 5-byte
 //   instruction, so a memcpy trampoline is the whole engine. See archive.h.
 //
+// THE CLIENT EXE CARRIES ONE EDIT THIS DLL CANNOT MAKE. MapleStory.exe has
+// IMAGE_FILE_LARGE_ADDRESS_AWARE set by hand -- byte 0x146, 0x0F -> 0x2F -- because the
+// address-space ceiling is what the World Map warp kept hitting. The wz files total
+// 1958 MB and the client maps them, so it sits at ~1561 MB of a 2 GB limit before the
+// player warps once, and each map load maps ~4.7 MB more. Fifty-six warps exhausted it:
+// SOUND_DX8 could not place a buffer and wrote to the NULL it got back. The flag is
+// evaluated at process creation, so no DLL can set it from inside; it has to be in the
+// file. Backup at MapleStory.exe.bak-pre4gb, and restoring it is the whole undo.
+//
 // SAFETY: this DLL patches the loaded image only. It never writes to the registry and
 // never calls SetCurrentDirectory -- so it cannot disturb the shared
 // HKLM\...\Wizet\MapleStory\ExecPath value that a client launch rewrites.
