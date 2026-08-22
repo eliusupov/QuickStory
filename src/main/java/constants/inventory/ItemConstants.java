@@ -502,8 +502,27 @@ public final class ItemConstants {
             Map.entry(15, 290_000),
             Map.entry(10, 250_000)));   // owner
 
+    /**
+     * The GM scrolls: 100% success carrying the stats of the 10% scroll of the same family. Every
+     * one of them is a 100% that gives what a 10% gives -- 2043003 is +5 ATT / +3 STR / +1 DEF at
+     * 100%, byte for byte the 10% 2043002, while the ordinary 100% 2043000 gives +1 ATT. Derived
+     * from Item.wz, not hand-listed: a 100% scroll whose inc-stat set is identical to a 10% scroll
+     * sharing its itemId/100 family. Cross-checks against shop 9999998, which stocks them at a
+     * meso. See ScrollSellPriceTest#theGmScrollsAreTheHundredsThatHitLikeTens.
+     */
+    private static final Set<Integer> GM_SCROLLS = Set.of(
+            2040006, 2040007, 2040303, 2040403, 2040506, 2040507, 2040603, 2040709,
+            2040710, 2040711, 2040806, 2040807, 2040903, 2041024, 2041025, 2043003,
+            2043103, 2043203, 2043303, 2043703, 2043803, 2044003, 2044103, 2044203,
+            2044303, 2044403, 2044503, 2044603, 2044703);
+
+    private static final int GM_SCROLL_PRICE = 750_000;
+
     /** Nearest listed tier; ties break toward the lower odds so the answer is deterministic. */
-    public static int scrollSellPrice(int success) {
+    public static int scrollSellPrice(int itemId, int success) {
+        if (GM_SCROLLS.contains(itemId)) {
+            return GM_SCROLL_PRICE;
+        }
         Map.Entry<Integer, Integer> lo = SCROLL_SELL_PRICE.floorEntry(success);
         Map.Entry<Integer, Integer> hi = SCROLL_SELL_PRICE.ceilingEntry(success);
         if (lo == null) {

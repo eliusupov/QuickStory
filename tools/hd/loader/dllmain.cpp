@@ -873,6 +873,122 @@ static void ApplyWorldMapWarp() {
     g_wmDone = Poke(site, &rel, 4);
 }
 
+// ---- ScrollSellPrice -------------------------------------------------------
+// config.ini [optional] ScrollSellPrice, default true. Makes the shop's Sell tab show what a
+// scroll is actually worth. Owner: "the client has to show the sell price at the shop."
+//
+// The server already pays the right amount (ItemConstants.scrollSellPrice), but the number the
+// client DRAWS is its own: CShopDlg builds each sell row from the player's inventory and asks
+// CItemInfo for the price. Every scroll in Item.wz ships info/price = 1, so every row read
+// "1 meso" no matter what the server would pay.
+//
+//     005E5E5B  CItemInfo::GetItemPrice(int nItemID, int* pnPrice, double* pdUnitPrice)
+//     007767E4  the sell-row builder's call to it, one row per sellable inventory slot
+//
+// Finding it took a detour worth recording: the string "price" appears exactly ONCE in the
+// image and not in any item code, because the client does not name wz properties with string
+// literals -- it pulls them from a numbered pool. 005E5E8D pushes 0x16b1 into 0x7C327A to get
+// L"price", and 005E5EEA pushes 0x938 for L"unitPrice". Grepping for the literal says the
+// client never reads item prices, and that is wrong.
+//
+// TWO caves, because the itemId does not survive to the place we need it:
+//
+//     005E5E68  53              push ebx                 ; cave 1, 7 bytes displaced
+//     005E5E69  ff 75 08        push [ebp+8]             ; nItemID -- last use of it
+//     005E5E6C  8d 45 08        lea  eax,[ebp+8]
+//     005E5E6F  50              push eax                 ; cave 1 returns here
+//     005E5E70  e8 ..           call 005EC4C7            ; overwrites [ebp+8] with the wz node
+//     ...
+//     005E5EBA  e8 ..           call 00415801            ; eax = info/price
+//     005E5EBF  8b 4d 0c        mov  ecx,[ebp+0x0c]      ; cave 2, 5 bytes displaced
+//     005E5EC2  89 01           mov  [ecx],eax           ; *pnPrice = price
+//     005E5EC4  8d 45 e0        lea  eax,[ebp-0x20]      ; cave 2 returns here
+//
+// Cave 1 copies nItemID to a global before 005EC4C7 clobbers the slot; cave 2 turns it into a
+// price and stores that instead. Patching GetItemPrice rather than the one call site means
+// every place the client shows a scroll's price agrees, not just the Sell tab.
+//
+// Verified in both dumps: the two windows are byte-identical, and nothing -- no rel8, no
+// rel32, no jcc32 at any decode alignment, no absolute dword -- targets their interiors.
+//
+// ponytail: g_gipItemId is a plain global, not a TLS slot. GetItemPrice is UI-thread only and
+// the calls between the two caves are wz and string helpers that cannot re-enter it. If that
+// ever stops being true the symptom is one wrong price, not a crash.
+//
+// The table is generated, not hand-written: tools/hd/loader/gen_scroll_prices.py parses the
+// tiers and the GM scroll set out of ItemConstants.java and joins them against 0204.img.xml,
+// so the client cannot drift from the server. Re-run it after changing either.
+#include "scroll_prices.h"
+
+static const DWORD kGipStashAddr = 0x005E5E68;     // cave 1 origin, 7 bytes displaced
+static const BYTE kGipStashGuard[13] = {
+    0x53, 0xFF, 0x75, 0x08, 0x8D, 0x45, 0x08, 0x50, 0xE8, 0x52, 0x66, 0x00, 0x00,
+};
+static const int kGipStashNops = 7;
+static DWORD g_gipStashRet = 0x005E5E6F;
+
+static const DWORD kGipStoreAddr = 0x005E5EBF;     // cave 2 origin, 5 bytes displaced
+static const BYTE kGipStoreGuard[12] = {
+    0x8B, 0x4D, 0x0C, 0x89, 0x01, 0x8D, 0x45, 0xE0, 0x50, 0x88, 0x5D, 0xFC,
+};
+static const int kGipStoreNops = 5;
+static DWORD g_gipStoreRet = 0x005E5EC4;
+
+static bool g_scrollPrice = true, g_scrollDone = false, g_scrollMismatch = false;
+static int g_gipItemId = 0;    // cave 1 -> cave 2, UI thread only
+static int g_gipOut = 0;       // survives the popad in cave 2
+
+// Anything that is not a scroll, or a scroll the table does not carry, keeps the wz price.
+static int __fastcall ScrollSellPrice(int itemId, int wzPrice) {
+    if (itemId / 10000 != 204) return wzPrice;
+    int lo = 0, hi = (int)(sizeof(kScrollPrices) / sizeof(kScrollPrices[0])) - 1;
+    while (lo <= hi) {
+        int mid = lo + (hi - lo) / 2;
+        if (kScrollPrices[mid].id == itemId) return kScrollPrices[mid].price;
+        if (kScrollPrices[mid].id < itemId) lo = mid + 1; else hi = mid - 1;
+    }
+    return wzPrice;
+}
+
+static __declspec(naked) void GipStashCave() {
+    __asm {
+        mov  eax, dword ptr [ebp + 8]
+        mov  g_gipItemId, eax
+        push ebx                          // displaced
+        push dword ptr [ebp + 8]          // displaced
+        lea  eax, dword ptr [ebp + 8]     // displaced
+        jmp  dword ptr [g_gipStashRet]
+    }
+}
+
+static __declspec(naked) void GipStoreCave() {
+    __asm {
+        pushad                            // eax still holds the wz price
+        pushfd
+        mov  edx, eax
+        mov  ecx, g_gipItemId
+        call ScrollSellPrice
+        mov  g_gipOut, eax
+        popfd
+        popad
+        mov  eax, g_gipOut
+        mov  ecx, dword ptr [ebp + 0x0C]  // displaced
+        mov  dword ptr [ecx], eax         // displaced
+        jmp  dword ptr [g_gipStoreRet]
+    }
+}
+
+static void ApplyScrollSellPrice() {
+    if (!g_scrollPrice) return;
+    if (!GuardOk(kGipStashAddr, kGipStashGuard, sizeof(kGipStashGuard)) ||
+        !GuardOk(kGipStoreAddr, kGipStoreGuard, sizeof(kGipStoreGuard))) {
+        g_scrollMismatch = true; return;
+    }
+    // Stash first: cave 2 without cave 1 would price every item as itemId 0.
+    if (!Cave(kGipStashAddr, kGipStashNops, (void*)GipStashCave)) return;
+    g_scrollDone = Cave(kGipStoreAddr, kGipStoreNops, (void*)GipStoreCave);
+}
+
 static void ApplyAll() {
     for (const HdPatch& p : kHdPatches) {
         if (!Expected(p)) { ++g_mismatch; continue; }
@@ -946,6 +1062,10 @@ static void Report() {
                          : g_petLeashMismatch  ? "FAILED (guard bytes differ)"
                          : g_petLeashDone      ? "ON"
                                                : "FAILED (write refused)";
+    const char* scrolls = !g_scrollPrice   ? "off"
+                        : g_scrollMismatch ? "FAILED (guard bytes differ)"
+                        : g_scrollDone     ? "ON"
+                                           : "FAILED (write refused)";
     const char* wmap = !g_wmWarp     ? "off"
                      : g_wmMismatch  ? "FAILED (guard bytes differ)"
                      : g_wmDone      ? (g_wmCanClose ? "ON" : "ON (no auto-close)")
@@ -963,6 +1083,7 @@ static void Report() {
                    "\nPetSweepHeight %s (petY -%d .. +%d)"
                    "\nPetLeashX %s (ownerX +/- %d px)"
                    "\nWorldMapWarp %s"
+                   "\nScrollSellPrice %s (%d scrolls)"
                    "%s\n",
               g_w, g_h, g_applied, g_skipped, g_mismatch,
               (int)(sizeof(kHdPatches) / sizeof(kHdPatches[0])),
@@ -977,6 +1098,7 @@ static void Report() {
                          g_petSweepH > 127 ? 127 : g_petSweepH,
               petleash, g_petLeashX,
               wmap,
+              scrolls, (int)(sizeof(kScrollPrices) / sizeof(kScrollPrices[0])),
               g_diag ? " | diag ON" : "");
     OutputDebugStringA(msg);
 #ifdef HD_SELFTEST
@@ -1079,6 +1201,10 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     GetPrivateProfileStringA("optional", "WorldMapWarp", "true", buf, sizeof(buf), cfg);
     g_wmWarp = (buf[0] == 't' || buf[0] == 'T' || buf[0] == '1');
 
+    // ScrollSellPrice: draw what a scroll is really worth in the shop Sell tab.
+    GetPrivateProfileStringA("optional", "ScrollSellPrice", "true", buf, sizeof(buf), cfg);
+    g_scrollPrice = (buf[0] == 't' || buf[0] == 'T' || buf[0] == '1');
+
     // The archive is opt-in by mere presence, exactly as Ezorsia decides it. No file
     // there means the two hooks below stay inert, so a bad copy cannot break a launch:
     // the owner reverts by renaming EzorsiaV2_UI.wz.
@@ -1102,6 +1228,7 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     ApplyPetSweepHeight();
     ApplyPetLeashX();
     ApplyWorldMapWarp();
+    ApplyScrollSellPrice();
 
     // diag=1 installs a read-only observer on IWzNameSpace::GetItem and writes
     // hd-res-diag.log next to this DLL. diag=0 (the default) installs no hooks at all,

@@ -474,7 +474,8 @@ public class ItemInformationProvider {
             Data succ = item.getChildByPath("info/success");
             // The tablets, 2047xxx, table their odds in info/successRates instead of stating
             // one -- 70% on an untouched equip. See TabletScrollRealLoad.
-            pEntry = ItemConstants.scrollSellPrice(succ != null ? DataTool.getIntConvert(succ) : 70);
+            pEntry = ItemConstants.scrollSellPrice(itemId,
+                    succ != null ? DataTool.getIntConvert(succ) : 70);
         }
 
         double fEntry = 0.0f;
