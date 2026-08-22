@@ -219,6 +219,52 @@ static void ApplyTubi() {
     g_tubiDone = PokeFill(kTubiAddr, 0x90, 2);
 }
 
+// ---- NoWhack ---------------------------------------------------------------
+// config.ini [optional] NoWhack, default TRUE (owner's call; this is a deliberate
+// deviation from v84, not a parity gap -- Big Bang is what removed the mechanic).
+//
+// Pre-Big-Bang, a ranged class whose target is inside the close-range box does NOT
+// fire: the client substitutes a melee "whack" (bow/crossbow/gun swing, claw punch).
+// Nothing in the wz data controls it and nothing on the server sees it -- the server
+// only ever enforces a MAXIMUM distance (AbstractDealDamageHandler's DISTANCE_HACK).
+// It is a branch in the client's attack dispatch:
+//
+//     009A88A2  call 0x788CF7          ; close-range predicate on [ebp-0x14]
+//     009A88A7  test eax, eax
+//     009A88AA  push esi x4            ; four zero args, shared by both paths
+//     009A88AE  0F 85 77 01 00 00      ; jne 0x9A8A2B   <-- forced unconditional
+//     009A88BC  call 0x98875D          ; the melee substitution we want skipped
+//
+// Both arms converge on 0x9A8A2B; the only difference is whether the melee call runs.
+// Forcing the jne to jmp skips it, so the ranged attack goes out at any range.
+//
+// PROVENANCE: v83 0x009698BC "No Whack", credit Rulax, from the RaGEZONE v83 client
+// address compilation archived at docs/04-v83-client-addresses.md. Resolved onto v84
+// by tools/hd/resolve.py's T1 tier: the +-32B masked context signature hits EXACTLY
+// ONCE in each of the two independent v84 memory dumps, both at 0x009A88AE, and the
+// instruction there is byte-identical to v83's (same opcode, same rel32, same target
+// offset). The guard below is that instruction, so any other client skips the write.
+//
+// The compilation lists a second op under the same heading -- Jmp(0x009516C2 ->
+// 0x0095138F). It does NOT resolve onto v84: v84 rewrote that neighbourhood and the
+// site's byte run is absent from both dumps. It is deliberately not shipped rather
+// than guessed at. If close-range still whacks somewhere after this, that is the
+// remaining lead.
+static const BYTE kNoWhackJne[6] = { 0x0F, 0x85, 0x77, 0x01, 0x00, 0x00 };
+static const BYTE kNoWhackJmp[6] = { 0xE9, 0x78, 0x01, 0x00, 0x00, 0x90 };
+static const DWORD kNoWhackAddr = 0x009A88AE;
+static bool g_noWhack = true, g_noWhackDone = false, g_noWhackMismatch = false;
+
+static void ApplyNoWhack() {
+    if (!g_noWhack) return;
+    MEMORY_BASIC_INFORMATION mbi{};
+    if (!VirtualQuery((LPCVOID)kNoWhackAddr, &mbi, sizeof(mbi)) || mbi.State != MEM_COMMIT ||
+        memcmp((const void*)kNoWhackAddr, kNoWhackJne, sizeof(kNoWhackJne)) != 0) {
+        g_noWhackMismatch = true; return;
+    }
+    g_noWhackDone = Poke(kNoWhackAddr, kNoWhackJmp, sizeof(kNoWhackJmp));
+}
+
 static void ApplyAll() {
     for (const HdPatch& p : kHdPatches) {
         if (!Expected(p)) { ++g_mismatch; continue; }
@@ -247,7 +293,7 @@ static void ApplyAll() {
 // The counts are the whole result of a gated manual test, so make them visible without
 // requiring a debugger. Nothing is written to disk -- see the SAFETY note at the top.
 static void Report() {
-    char msg[420];
+    char msg[512];
     // The archive line names WHICH of the three ways it can be off actually happened, so
     // one launch distinguishes "owner has no .wz" from "guard bytes differ" from
     // "mounted but the hook refused" -- without a second round trip.
@@ -256,6 +302,10 @@ static void Report() {
                      : !g_mounted      ? "FAILED (mount write refused)"
                      : g_hooked        ? "on"
                                        : "FAILED (mounted, GetString guard differs)";
+    const char* whack = !g_noWhack        ? "off"
+                      : g_noWhackMismatch ? "FAILED (guard bytes differ)"
+                      : g_noWhackDone     ? "ON"
+                                          : "FAILED (write refused)";
     const char* tubi = !g_tubi          ? "off"
                      : g_tubiMismatch   ? "FAILED (guard bytes differ)"
                      : g_tubiDone       ? "ON"
@@ -264,12 +314,12 @@ static void Report() {
     if (g_msgClamped) wsprintfA(clamp, " (clamped from %d)", g_msgClamped);
     wsprintfA(msg, "hd-res %dx%d: applied %d, skipped %d, byte-mismatch %d of %d"
                    "\narchive: %s | hooks %d, mismatch %d"
-                   "\nMsgAmount %d%s | dmgCap %d | spdCap %d | useTubi %s"
+                   "\nMsgAmount %d%s | dmgCap %d | spdCap %d | useTubi %s | NoWhack %s"
                    "%s\n",
               g_w, g_h, g_applied, g_skipped, g_mismatch,
               (int)(sizeof(kHdPatches) / sizeof(kHdPatches[0])),
               arch, g_hooked, g_hookMismatch,
-              g_msg, clamp, (int)g_dmgCap, g_spdCap, tubi,
+              g_msg, clamp, (int)g_dmgCap, g_spdCap, tubi, whack,
               g_diag ? " | diag ON" : "");
     OutputDebugStringA(msg);
 #ifdef HD_SELFTEST
@@ -330,6 +380,10 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     GetPrivateProfileStringA("optional", "useTubi", "false", buf, sizeof(buf), cfg);
     g_tubi = (buf[0] == 't' || buf[0] == 'T' || buf[0] == '1');
 
+    // NoWhack: default TRUE. Set NoWhack=false in config.ini for vanilla v84 behaviour.
+    GetPrivateProfileStringA("optional", "NoWhack", "true", buf, sizeof(buf), cfg);
+    g_noWhack = (buf[0] == 't' || buf[0] == 'T' || buf[0] == '1');
+
     // The archive is opt-in by mere presence, exactly as Ezorsia decides it. No file
     // there means the two hooks below stay inert, so a bad copy cannot break a launch:
     // the owner reverts by renaming EzorsiaV2_UI.wz.
@@ -344,6 +398,7 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     SetCaveParams(g_w, g_h);
     ApplyAll();
     ApplyTubi();
+    ApplyNoWhack();
 
     // diag=1 installs a read-only observer on IWzNameSpace::GetItem and writes
     // hd-res-diag.log next to this DLL. diag=0 (the default) installs no hooks at all,
