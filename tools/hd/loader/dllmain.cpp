@@ -377,6 +377,65 @@ static void ApplyLadderSpeed() {
     g_ladderDone = Poke(kLadderAddr + 2, &pStep, sizeof(pStep));
 }
 
+// ---- PetLootWhileMoving ----------------------------------------------------
+// config.ini [optional] PetLootWhileMoving, default true. Owner: "when the character
+// moves the pet stops moving ... because I'm moving in a radius around it, it just
+// stands there."
+//
+// The cause is not an owner-stance check. The pet has a sweep-to-drop direction that
+// OVERRIDES its follow direction, and the override sits behind a 100 ms
+// "follow target unchanged" cooldown. The follow target is ownerX +/- 160, so it
+// changes on every tick the owner's X changes. Walking = the cooldown never expires
+// = the sweep never fires, and the follow logic's own 80 px dead-band then leaves the
+// pet standing still.
+//
+//     CDropPool::UpdatePetSweep 0x005110A8 writes CVecCtrlPet+0x25c = +/-1 at
+//       0x00511411 for drops within ownerX +/- 125 (+/- 275 when CPet+0x14c is set).
+//     CVecCtrlPet::UpdateActive 0x00A0B8BD (vtable 0x00B92730 slot 54), tail:
+//
+//     00A0C3C0  cmp  dword [ebx+0x25c], 0   ; sweep dir set by the drop pool?
+//     00A0C3C9  je   0xA0C444
+//     00A0C3CB  call [0xB41348]             ; timeGetTime
+//     00A0C3D1  mov  ecx, [ebx+0x254]       ; t of last follow-target change
+//     00A0C3D7  add  ecx, 0x64              ; +100 ms
+//     00A0C3DA  cmp  eax, ecx
+//     00A0C3DC  76 66  jbe 0xA0C444         ; <-- owner moved recently: SKIP the sweep
+//     00A0C43E  mov  [ebx+0x26c], eax       ; direction := sweep dir
+//     00A0C44E  call 0x9FF005               ; CVecCtrl::SetKeyDir
+//
+// NOPping the jbe lets the sweep win every tick. The leash the owner asked to KEEP is
+// untouched: the 80 px follow dead-band (0x00A0C337) and the +/-300/+/-200
+// teleport-to-owner box (0x00A0BCE7) are both left alone, and the sweep's candidate
+// window is anchored to the OWNER, not the pet, so the pet cannot wander off.
+//
+// Packet rate is not a concern even though MovePetHandler validates nothing:
+// CMovePath::IsReadyToSend 0x006A1502 needs 1000 ms accumulated (500 with [path+0x40])
+// before MOVE_PET goes out -- a hard ceiling of ~2/s per pet, patched or not. PET_LOOT
+// has its own 500 ms throttle at 0x00722696.
+//
+// v83 precedent: the same construct at 0x009C4C1D, the same 0x224 delta from
+// CVecCtrlPet::EndUpdateActive (v83 0x009C4E41, v84 0x00A0C600).
+//
+// ponytail: NOP the gate rather than raise the 0x64. Raising it only widens the window
+// in which a moving owner still suppresses the sweep; it never removes it.
+static const DWORD kPetSweepAddr = 0x00A0C3CB;      // guard starts here
+static const DWORD kPetSweepJbe = 0x00A0C3DC;       // the two bytes we overwrite
+static const BYTE kPetSweepGuard[18] = {
+    0xFF, 0x15, 0x48, 0x13, 0xB4, 0x00, 0x8B, 0x8B, 0x54, 0x02, 0x00, 0x00,
+    0x83, 0xC1, 0x64, 0x3B, 0xC1, 0x76,
+};
+static bool g_petSweep = true, g_petSweepDone = false, g_petSweepMismatch = false;
+
+static void ApplyPetLootWhileMoving() {
+    if (!g_petSweep) return;
+    MEMORY_BASIC_INFORMATION mbi{};
+    if (!VirtualQuery((LPCVOID)kPetSweepAddr, &mbi, sizeof(mbi)) || mbi.State != MEM_COMMIT ||
+        memcmp((const void*)kPetSweepAddr, kPetSweepGuard, sizeof(kPetSweepGuard)) != 0) {
+        g_petSweepMismatch = true; return;
+    }
+    g_petSweepDone = PokeFill(kPetSweepJbe, 0x90, 2);
+}
+
 static void ApplyAll() {
     for (const HdPatch& p : kHdPatches) {
         if (!Expected(p)) { ++g_mismatch; continue; }
@@ -430,6 +489,10 @@ static void Report() {
                         : g_petLootMismatch    ? "FAILED (guard bytes differ)"
                         : g_petLootDone        ? "ON"
                                                : "FAILED (write refused)";
+    const char* petmove = !g_petSweep       ? "off"
+                        : g_petSweepMismatch ? "FAILED (guard bytes differ)"
+                        : g_petSweepDone     ? "ON"
+                                             : "FAILED (write refused)";
     char clamp[64] = "";
     if (g_msgClamped) wsprintfA(clamp, " (clamped from %d)", g_msgClamped);
     wsprintfA(msg, "hd-res %dx%d: applied %d, skipped %d, byte-mismatch %d of %d"
@@ -437,6 +500,7 @@ static void Report() {
                    "\nMsgAmount %d%s | dmgCap %d | spdCap %d | useTubi %s | NoWhack %s"
                    "\nLadderSpeed %s (%d%%)"
                    "\nPetLootRange %s (%dx%d px box)"
+                   "\nPetLootWhileMoving %s"
                    "%s\n",
               g_w, g_h, g_applied, g_skipped, g_mismatch,
               (int)(sizeof(kHdPatches) / sizeof(kHdPatches[0])),
@@ -444,6 +508,7 @@ static void Report() {
               g_msg, clamp, (int)g_dmgCap, g_spdCap, tubi, whack,
               ladder, (int)(g_ladderMul * 100),
               petloot, (int)(50 * g_petLootMul), (int)(60 * g_petLootMul),
+              petmove,
               g_diag ? " | diag ON" : "");
     OutputDebugStringA(msg);
 #ifdef HD_SELFTEST
@@ -519,6 +584,10 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     g_petLootMul = atof(buf);
     if (g_petLootMul < 1.0 || g_petLootMul > 2.5) g_petLootMul = 2.0;
 
+    // PetLootWhileMoving: let the pet keep sweeping to drops while the owner walks.
+    GetPrivateProfileStringA("optional", "PetLootWhileMoving", "true", buf, sizeof(buf), cfg);
+    g_petSweep = (buf[0] == 't' || buf[0] == 'T' || buf[0] == '1');
+
     // The archive is opt-in by mere presence, exactly as Ezorsia decides it. No file
     // there means the two hooks below stay inert, so a bad copy cannot break a launch:
     // the owner reverts by renaming EzorsiaV2_UI.wz.
@@ -536,6 +605,7 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     ApplyNoWhack();
     ApplyLadderSpeed();
     ApplyPetLootRange();
+    ApplyPetLootWhileMoving();
 
     // diag=1 installs a read-only observer on IWzNameSpace::GetItem and writes
     // hd-res-diag.log next to this DLL. diag=0 (the default) installs no hooks at all,
