@@ -593,6 +593,66 @@ static void ApplyPetSweepHeight() {
     g_petSweepHDone = Poke(kPetSweepYAddr + kPetSweepYBotOff, &b, 1);
 }
 
+// ---- PetLeashX -------------------------------------------------------------
+// config.ini [optional] PetLeashX, the X half-width of the box the owner must stay
+// inside or the pet teleports to him. Vanilla 300. Default 350, which buys the pet
+// 50 px of slack past the 300 px it is allowed to walk for a drop (PetSweepRange),
+// so a fetch at maximum range completes instead of being cut short by the snap.
+// Owner: "I want the pet to be able to walk in a box from me as far as possible
+// until teleport ... increase the teleport range by the width of two pets as they
+// were in 1x, to accommodate left and right" -- a vanilla 1x pet box is 50 px wide.
+//
+// The leash is a RECT built on the stack, offset by the PET's position, then tested
+// with PtInRect against the OWNER's live position:
+//
+//     00A0BBDD  C7 45 94 D4 FE FF FF  mov [ebp-0x6c],-300   ; left    <-- patched
+//     00A0BBE4  C7 45 98 38 FF FF FF  mov [ebp-0x68],-200   ; top
+//     00A0BBEB  C7 45 9C 2C 01 00 00  mov [ebp-0x64],+300   ; right   <-- patched
+//     00A0BBF2  C7 45 A0 C8 00 00 00  mov [ebp-0x60],+200   ; bottom
+//     00A0BC20  call [0xC49B54]       ; OffsetRect(&leash, petX, petY)
+//     00A0BC40  call [0xC49B84]       ; PtInRect(&leash, ownerX, ownerY)
+//     00A0BC48  jne 0xA0BD0A          ; inside -> normal follow; outside -> teleport
+//
+// The owner-ness of the tested point is proven, not assumed: [ebp-0x14] comes from
+// CPet+0x90, and CPet+0x90 is read as a CUser* at 0x00720D17 (`mov eax,[ebx+0x90]` /
+// `mov eax,[eax+0x570]`), the same +0x570 field the CUserLocal global at [0xC452E8]
+// is read through at 0x004FDF59 and 0x00720A86. The point itself comes from a live
+// GetPos virtual, not a cached spawn point or a foothold.
+//
+// Y is deliberately NOT touched. Follow has no pathfinding, and the snap is what
+// recovers a pet stranded on the wrong foothold; vertical is where widening actually
+// costs something. Only X was asked for.
+//
+// NOT the leash, all checked and left alone: the +/-50 rect2 at 0x00A0BBC1/C4 (asks
+// whether the teleport DESTINATION is reachable ground), the 50.0 at .rdata
+// 0x00B92620 (selects climb vs walk handling), the 0x1E/0xC8 pair at 0x00A0BB2C
+// (a ~7-tick ladder timeout, not distance), and the 80/70/60 follow dead-band.
+// Note the loader's old "teleport box at 0x00A0BCE7" note was wrong: that `6A 04` is
+// the teleport's move-action stamp downstream, not the test.
+//
+// ponytail: two writes, not four. The paired knob is PetSweepRange -- with the leash
+// at 350 and the sweep at 300 the sweep is the fetch limiter, which is the intended
+// order. Raise the sweep only alongside this, never past it.
+static const DWORD kPetLeashAddr = 0x00A0BBDD;
+static const BYTE kPetLeashGuard[28] = {
+    0xC7, 0x45, 0x94, 0xD4, 0xFE, 0xFF, 0xFF, 0xC7, 0x45, 0x98, 0x38, 0xFF, 0xFF, 0xFF,
+    0xC7, 0x45, 0x9C, 0x2C, 0x01, 0x00, 0x00, 0xC7, 0x45, 0xA0, 0xC8, 0x00, 0x00, 0x00,
+};
+static const int kPetLeashLeftOff = 3;      // imm32 of `mov [ebp-0x6c],-300`
+static const int kPetLeashRightOff = 17;    // imm32 of `mov [ebp-0x64],+300`
+static int g_petLeashX = 350;
+static bool g_petLeashDone = false, g_petLeashMismatch = false;
+
+static void ApplyPetLeashX() {
+    if (g_petLeashX == 300) return;
+    if (!GuardOk(kPetLeashAddr, kPetLeashGuard, sizeof(kPetLeashGuard))) {
+        g_petLeashMismatch = true; return;
+    }
+    int right = g_petLeashX, left = -g_petLeashX;
+    if (!Poke(kPetLeashAddr + kPetLeashLeftOff, &left, 4)) return;
+    g_petLeashDone = Poke(kPetLeashAddr + kPetLeashRightOff, &right, 4);
+}
+
 static void ApplyAll() {
     for (const HdPatch& p : kHdPatches) {
         if (!Expected(p)) { ++g_mismatch; continue; }
@@ -662,6 +722,10 @@ static void Report() {
                           : g_petSweepHMismatch  ? "FAILED (guard bytes differ)"
                           : g_petSweepHDone      ? "ON"
                                                  : "FAILED (write refused)";
+    const char* petleash = g_petLeashX == 300 ? "off"
+                         : g_petLeashMismatch  ? "FAILED (guard bytes differ)"
+                         : g_petLeashDone      ? "ON"
+                                               : "FAILED (write refused)";
     char clamp[64] = "";
     if (g_msgClamped) wsprintfA(clamp, " (clamped from %d)", g_msgClamped);
     wsprintfA(msg, "hd-res %dx%d: applied %d, skipped %d, byte-mismatch %d of %d"
@@ -673,6 +737,7 @@ static void Report() {
                    "\nPetSweepRange %s (ownerX +/- %d px)"
                    "\nPetLootDelay %s (%d ms)"
                    "\nPetSweepHeight %s (petY -%d .. +%d)"
+                   "\nPetLeashX %s (ownerX +/- %d px)"
                    "%s\n",
               g_w, g_h, g_applied, g_skipped, g_mismatch,
               (int)(sizeof(kHdPatches) / sizeof(kHdPatches[0])),
@@ -685,6 +750,7 @@ static void Report() {
               petdelay, g_petLootDelay,
               petheight, g_petSweepH > 128 ? 128 : g_petSweepH,
                          g_petSweepH > 127 ? 127 : g_petSweepH,
+              petleash, g_petLeashX,
               g_diag ? " | diag ON" : "");
     OutputDebugStringA(msg);
 #ifdef HD_SELFTEST
@@ -778,6 +844,11 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     g_petSweepH = GetPrivateProfileIntA("optional", "PetSweepHeight", 128, cfg);
     if (g_petSweepH < 0 || g_petSweepH > 128) g_petSweepH = 128;
 
+    // PetLeashX: X half-width the owner may stray before the pet teleports to him.
+    // Keep it above PetSweepRange+125 or a max-range fetch gets cut short.
+    g_petLeashX = GetPrivateProfileIntA("optional", "PetLeashX", 350, cfg);
+    if (g_petLeashX < 100 || g_petLeashX > 5000) g_petLeashX = 350;
+
     // The archive is opt-in by mere presence, exactly as Ezorsia decides it. No file
     // there means the two hooks below stay inert, so a bad copy cannot break a launch:
     // the owner reverts by renaming EzorsiaV2_UI.wz.
@@ -799,6 +870,7 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     ApplyPetSweepRange();
     ApplyPetLootDelay();
     ApplyPetSweepHeight();
+    ApplyPetLeashX();
 
     // diag=1 installs a read-only observer on IWzNameSpace::GetItem and writes
     // hd-res-diag.log next to this DLL. diag=0 (the default) installs no hooks at all,
