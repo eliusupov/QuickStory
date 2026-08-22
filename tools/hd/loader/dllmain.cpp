@@ -300,9 +300,19 @@ static void ApplyNoWhack() {
 // Untouched upstream, and the reason a large multiplier buys less than it looks: a
 // 500 ms send throttle at 0x00722696 (cmp eax, 0x1F4) caps the loot packet rate.
 //
-// ponytail: ceiling is 2.5x -- these are disp8/imm8 fields, so |top| = 50*mul has to
-// stay under 128. Past that the three-byte lea/add would need the imm32 form, which
-// does not fit in place and would need a codecave.
+// Each edge saturates at its own byte limit, not at one shared multiplier, so the
+// mul is allowed past the point where the first edge pins. Ceilings, from -128..127:
+//     left  25*mul <= 128  -> 5.12x      top    50*mul <= 128  -> 2.56x
+//     right 25*mul <= 127  -> 5.08x      bottom 10*mul <= 127  -> 12.70x
+// At 12.7 every edge is pinned: -128 / -128 / +127 / +127, a 255x255 px box. That is
+// the largest box reachable without rewriting the instructions.
+//
+// ponytail: clamp per edge instead of capping the mul at the first edge to pin (2.56).
+// A literal 4x would want top = -200, which needs the imm32 lea -- 33 bytes of code in
+// a 22-byte window, i.e. a detour into a cave. Saturating gets a BIGGER box than 4x in
+// both dimensions (255x255 vs 200x240); it just trades reach above the pet (128 vs 200)
+// for reach to the sides and below. Drops rest on the ground, so that trade is free.
+// If reach far ABOVE the pet ever matters, that is when the cave becomes worth writing.
 static const DWORD kPetLootAddr = 0x0050D663;
 static const BYTE kPetLootGuard[31] = {
     0x8B, 0x4D, 0x0C, 0x8B, 0x01, 0x8B, 0x49, 0x04, 0x8D, 0x50, 0xE7, 0x89, 0x55, 0xCC, 0x8D, 0x51,
@@ -314,6 +324,15 @@ static const int kPetLootBase[4] = { -25, -50, 25, 10 };
 static double g_petLootMul = 2.0;
 static bool g_petLootDone = false, g_petLootMismatch = false;
 
+// The edge value actually written, after the imm8 clamp. Reported, so the popup shows
+// the real box and not the box the multiplier asked for.
+static int PetLootEdge(int i) {
+    int v = (int)(kPetLootBase[i] * g_petLootMul);
+    if (v > 127) v = 127;
+    if (v < -128) v = -128;
+    return v;
+}
+
 static void ApplyPetLootRange() {
     if (g_petLootMul == 1.0) return;
     MEMORY_BASIC_INFORMATION mbi{};
@@ -322,10 +341,7 @@ static void ApplyPetLootRange() {
         g_petLootMismatch = true; return;
     }
     for (int i = 0; i < 4; ++i) {
-        int v = (int)(kPetLootBase[i] * g_petLootMul);
-        if (v > 127) v = 127;
-        if (v < -128) v = -128;
-        BYTE b = (BYTE)(v & 0xFF);
+        BYTE b = (BYTE)(PetLootEdge(i) & 0xFF);
         if (!Poke(kPetLootAddr + kPetLootOff[i], &b, 1)) return;
     }
     g_petLootDone = true;
@@ -507,7 +523,7 @@ static void Report() {
               arch, g_hooked, g_hookMismatch,
               g_msg, clamp, (int)g_dmgCap, g_spdCap, tubi, whack,
               ladder, (int)(g_ladderMul * 100),
-              petloot, (int)(50 * g_petLootMul), (int)(60 * g_petLootMul),
+              petloot, PetLootEdge(2) - PetLootEdge(0), PetLootEdge(3) - PetLootEdge(1),
               petmove,
               g_diag ? " | diag ON" : "");
     OutputDebugStringA(msg);
@@ -579,10 +595,10 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     if (g_ladderMul <= 0.0 || g_ladderMul > 10.0) g_ladderMul = 1.5;
 
     // PetLootRange: multiplier on the pet pickup box. 1.0 = vanilla (patch skipped).
-    // Capped at 2.5 -- the operands are imm8 and 50*2.5 is already 125 of 127.
-    GetPrivateProfileStringA("optional", "PetLootRange", "2.0", buf, sizeof(buf), cfg);
+    // Each edge clamps to its own imm8 limit, so 12.7 pins all four (255x255 px box).
+    GetPrivateProfileStringA("optional", "PetLootRange", "12.7", buf, sizeof(buf), cfg);
     g_petLootMul = atof(buf);
-    if (g_petLootMul < 1.0 || g_petLootMul > 2.5) g_petLootMul = 2.0;
+    if (g_petLootMul < 1.0 || g_petLootMul > 12.7) g_petLootMul = 12.7;
 
     // PetLootWhileMoving: let the pet keep sweeping to drops while the owner walks.
     GetPrivateProfileStringA("optional", "PetLootWhileMoving", "true", buf, sizeof(buf), cfg);
