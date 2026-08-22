@@ -899,56 +899,122 @@ static __declspec(naked) void WorldMapClickThunk() {
 }
 
 // ---- crash reporter --------------------------------------------------------
-// Not a patch: it writes nothing and handles nothing. It exists because the World Map
-// warp has now crashed the client three times with no pattern the owner could see, and
-// two rounds of reasoning-from-symptoms produced two wrong fixes. A faulting address
-// ends that.
+// Not a patch: it records, it shows a box, and it always hands the exception straight
+// back. It never writes a file, never swallows anything, and never changes what the
+// process would have done -- consistent with the SAFETY note at the top.
 //
-// SAFETY, matching the note at the top of this file: this shows a MessageBox and returns
-// EXCEPTION_CONTINUE_SEARCH, always. It never writes a file, never swallows an exception
-// and never alters what the process would have done -- the client still dies exactly as
-// it would have. A box the owner can read back is worth more than a log he has to find.
+// v1 OF THIS GOT IT WRONG AND THE OWNER PAID FOR IT. It showed a box on the first
+// matching FIRST-CHANCE exception and then disarmed itself. First-chance means nobody
+// has had a turn at handling it yet, and in a packed client most of them are handled
+// and entirely normal. So it fired on a handled access violation, the game carried on
+// exactly as it should, and when the real crash arrived a moment later the one report
+// had already been spent. Worse, the address it printed could not even be attributed:
+// working out which module 4FB21298 belonged to took a PE dump and a linker map, and
+// still came back inconclusive.
 //
-// Two gates keep it off the packer's back. ASProtect throws first-chance exceptions as a
-// matter of course, all of them during startup and all of them handled, so we ignore
-// everything until the owner has actually warped once, and we fire at most once per
-// launch. If it ever pops during ordinary play, that is a misfire worth reporting, not a
-// crash -- the client will keep running.
-static LONG CALLBACK HdCrashReport(EXCEPTION_POINTERS* ep) {
-    static volatile LONG fired = 0;
-    if (InterlockedCompareExchange(&g_wmWarps, 0, 0) == 0) return EXCEPTION_CONTINUE_SEARCH;
+// So, three changes:
+//   - first-chance exceptions are RECORDED, never shown. They are context, not news.
+//   - the box comes from SetUnhandledExceptionFilter, which by definition only runs
+//     when nothing handled it -- that is the actual crash, and only that.
+//   - every address is resolved to module + RVA at the point of capture, via
+//     GetModuleHandleExA(FROM_ADDRESS). No more guessing whose code faulted.
+//
+// The client installs its own top-level filter during startup, which would displace
+// ours. Rather than hooking SetUnhandledExceptionFilter, the VEH re-arms it whenever it
+// sees an exception (they are frequent here) and remembers whatever it displaced, so
+// the client's own handler still runs after ours.
+#define HD_TRACE 8
 
-    const DWORD code = ep->ExceptionRecord->ExceptionCode;
-    if (code != EXCEPTION_ACCESS_VIOLATION && code != EXCEPTION_IN_PAGE_ERROR &&
-        code != EXCEPTION_ILLEGAL_INSTRUCTION && code != EXCEPTION_PRIV_INSTRUCTION &&
-        code != EXCEPTION_STACK_OVERFLOW && code != EXCEPTION_INT_DIVIDE_BY_ZERO) {
-        return EXCEPTION_CONTINUE_SEARCH;
+struct HdFault {
+    DWORD code;
+    DWORD addr;
+    DWORD rva;
+    char mod[32];
+};
+static HdFault g_trace[HD_TRACE];
+static volatile LONG g_traceN = 0;
+static LPTOP_LEVEL_EXCEPTION_FILTER g_prevFilter = nullptr;
+
+static void HdWhere(DWORD addr, char* mod, DWORD modLen, DWORD* rva) {
+    HMODULE h = nullptr;
+    *rva = addr;
+    lstrcpynA(mod, "?", modLen);
+    if (!GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
+                            GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                            (LPCSTR)addr, &h) || !h) {
+        lstrcpynA(mod, "<no module>", modLen);   // heap, stack or JIT: itself a clue
+        return;
     }
-    if (InterlockedExchange(&fired, 1)) return EXCEPTION_CONTINUE_SEARCH;
+    char path[MAX_PATH];
+    if (GetModuleFileNameA(h, path, MAX_PATH)) {
+        const char* base = path;
+        for (const char* q = path; *q; ++q) if (*q == '\\' || *q == '/') base = q + 1;
+        lstrcpynA(mod, base, modLen);
+    }
+    *rva = addr - (DWORD)(DWORD_PTR)h;
+}
 
-    const CONTEXT* c = ep->ContextRecord;
+static bool HdInteresting(DWORD code) {
+    return code == EXCEPTION_ACCESS_VIOLATION || code == EXCEPTION_IN_PAGE_ERROR ||
+           code == EXCEPTION_ILLEGAL_INSTRUCTION || code == EXCEPTION_PRIV_INSTRUCTION ||
+           code == EXCEPTION_STACK_OVERFLOW || code == EXCEPTION_INT_DIVIDE_BY_ZERO;
+}
+
+static LONG WINAPI HdFatalReport(EXCEPTION_POINTERS* ep) {
     const EXCEPTION_RECORD* r = ep->ExceptionRecord;
+    const CONTEXT* c = ep->ContextRecord;
+    DWORD addr = (DWORD)(DWORD_PTR)r->ExceptionAddress, rva;
+    char mod[32];
+    HdWhere(addr, mod, sizeof(mod), &rva);
+
     char what[96] = "";
-    if ((code == EXCEPTION_ACCESS_VIOLATION || code == EXCEPTION_IN_PAGE_ERROR) &&
-        r->NumberParameters >= 2) {
-        wsprintfA(what, "\n%s address %08X",
+    if ((r->ExceptionCode == EXCEPTION_ACCESS_VIOLATION ||
+         r->ExceptionCode == EXCEPTION_IN_PAGE_ERROR) && r->NumberParameters >= 2) {
+        wsprintfA(what, "  (%s %08X)",
                   r->ExceptionInformation[0] == 0 ? "read" :
-                  r->ExceptionInformation[0] == 1 ? "WRITE" : "execute",
+                  r->ExceptionInformation[0] == 1 ? "WRITE" : "exec",
                   (DWORD)r->ExceptionInformation[1]);
     }
 
-    char m[640];
-    wsprintfA(m, "hd-res caught the crash. Read these numbers back to Claude.\n\n"
-                 "code %08X at %08X%s\n\n"
-                 "eax %08X  ebx %08X  ecx %08X  edx %08X\n"
-                 "esi %08X  edi %08X  ebp %08X  esp %08X\n\n"
-                 "warps this launch %d, last map %d\n"
-                 "WorldMapWarpClose was %s",
-             code, (DWORD)r->ExceptionAddress, what,
-             c->Eax, c->Ebx, c->Ecx, c->Edx, c->Esi, c->Edi, c->Ebp, c->Esp,
-             (int)g_wmWarps, (int)g_wmLastMap, g_wmClose ? "ON" : "off");
+    char m[2048];
+    int n = wsprintfA(m, "hd-res: the client has crashed. Read this back to Claude.\n\n"
+                         "FATAL %08X at %08X%s\n"
+                         "  in %s + %08X\n\n"
+                         "eax %08X  ebx %08X  ecx %08X  edx %08X\n"
+                         "esi %08X  edi %08X  ebp %08X  esp %08X\n\n"
+                         "warps this launch %d, last map %d, auto-close %s\n",
+                     r->ExceptionCode, addr, what, mod, rva,
+                     c->Eax, c->Ebx, c->Ecx, c->Edx, c->Esi, c->Edi, c->Ebp, c->Esp,
+                     (int)g_wmWarps, (int)g_wmLastMap, g_wmClose ? "ON" : "off");
+
+    LONG seen = InterlockedCompareExchange(&g_traceN, 0, 0);
+    if (seen > 0) {
+        n += wsprintfA(m + n, "\nhandled beforehand (newest last, %d total):\n", (int)seen);
+        LONG first = seen > HD_TRACE ? seen - HD_TRACE : 0;
+        for (LONG i = first; i < seen; ++i) {
+            const HdFault& f = g_trace[i % HD_TRACE];
+            n += wsprintfA(m + n, "  %08X at %s + %08X\n", f.code, f.mod, f.rva);
+        }
+    }
     MessageBoxA(NULL, m, "hd-res crash report", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
-    return EXCEPTION_CONTINUE_SEARCH;
+    return g_prevFilter ? g_prevFilter(ep) : EXCEPTION_CONTINUE_SEARCH;
+}
+
+static LONG CALLBACK HdTraceFault(EXCEPTION_POINTERS* ep) {
+    // Take the top-level filter back if anything displaced it. Cheap, and it is the only
+    // way to still be installed by the time the client is actually running.
+    LPTOP_LEVEL_EXCEPTION_FILTER prev = SetUnhandledExceptionFilter(HdFatalReport);
+    if (prev != HdFatalReport) g_prevFilter = prev;
+
+    const DWORD code = ep->ExceptionRecord->ExceptionCode;
+    if (HdInteresting(code)) {
+        LONG slot = InterlockedIncrement(&g_traceN) - 1;
+        HdFault& f = g_trace[slot % HD_TRACE];
+        f.code = code;
+        f.addr = (DWORD)(DWORD_PTR)ep->ExceptionRecord->ExceptionAddress;
+        HdWhere(f.addr, f.mod, sizeof(f.mod), &f.rva);
+    }
+    return EXCEPTION_CONTINUE_SEARCH;   // always: we observe, we never handle
 }
 
 static const DWORD kWmModalAddr = 0x004F61FE;      // cave origin, 5 bytes displaced
@@ -1361,7 +1427,8 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     ApplyPetLeashX();
     ApplyWorldMapWarp();
     ApplyScrollSellPrice();
-    AddVectoredExceptionHandler(0, HdCrashReport);   // 0 = last in the chain
+    g_prevFilter = SetUnhandledExceptionFilter(HdFatalReport);
+    AddVectoredExceptionHandler(0, HdTraceFault);    // 0 = last in the chain
 
     // diag=1 installs a read-only observer on IWzNameSpace::GetItem and writes
     // hd-res-diag.log next to this DLL. diag=0 (the default) installs no hooks at all,
