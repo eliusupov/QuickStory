@@ -1272,6 +1272,72 @@ static void ApplyScrollSellPrice() {
     g_scrollDone = Cave(kGipStoreAddr, kGipStoreNops, (void*)GipStoreCave);
 }
 
+// ---- ResManCache -----------------------------------------------------------
+// config.ini [optional] ResManCacheSeconds, default 30, 0 = leave the client alone.
+// This is the fix for the World Map warp crash, and it is not in the warp code.
+//
+// CWvsApp::InitializeResMan configures the resource manager once at startup:
+//
+//     00A40374  6a ff        push -1        ; tFreeResource -- NEVER free
+//     00A40376  6a ff        push -1        ; tCheckRemove  -- NEVER even look
+//     00A40378  6a 11        push 0x11      ; nParam
+//     00A4037A  ff b5 ..     push [ebp-264] ; IWzResMan*
+//     00A40388  ff 50 14     call [eax+14]  ; IWzResMan::SetResManParam
+//
+// Two sentinels, and between them they say: every canvas, sound and sprite this client
+// ever decodes stays resident for the entire session. Nothing is ever evicted.
+//
+// The per-warp log proved it, and proved it was not a leak. Committed memory PLATEAUS --
+// 1780, 1789, 1789, 1789 MB across warps 29 to 45 -- while the largest contiguous free
+// hole collapses 59792 KB -> 27008 -> 11072 -> 8116 -> 4032 -> 220 -> 176 KB. A leak
+// grows without bound; this holds a ceiling and shatters the space underneath it. Every
+// map visited adds ~4.7 MB that is never given back, the wz files map 1958 MB of the
+// address space before the player warps once, and at warp 56 SOUND_DX8 asked for a
+// buffer, got a NULL it did not check, and wrote to it.
+//
+// Real timeouts turn the cache back into a cache. Only UNREFERENCED resources are
+// eligible -- ResMan is COM and anything in use holds a reference -- so this evicts the
+// maps behind you, not the one you are standing in. The cost is that revisiting a map
+// re-reads it from the wz, which is a disk hit, not a stall.
+//
+// The two values will not fit where the sentinels are: 6a ff is two bytes and push imm32
+// is five, so the three pushes are displaced into a cave that pushes the same three
+// arguments in the same order.
+//
+// ponytail: one knob, not two. tCheckRemove is the sweep interval and tFreeResource is
+// how long a resource may sit unused, and there is no reason for the owner to tune them
+// apart -- the sweep is set to twice the idle window, which is the standard shape.
+static const DWORD kResManAddr = 0x00A40374;      // cave origin, 6 bytes displaced
+static const BYTE kResManGuard[18] = {
+    0x6A, 0xFF, 0x6A, 0xFF, 0x6A, 0x11, 0xFF, 0xB5, 0x9C,
+    0xFD, 0xFF, 0xFF, 0x8B, 0x85, 0x9C, 0xFD, 0xFF, 0xFF,
+};
+static const int kResManNops = 6;
+static DWORD g_resManRet = 0x00A4037A;
+
+static int g_resManSecs = 30;
+static bool g_resManDone = false, g_resManMismatch = false;
+static int g_resManFree = 30000, g_resManCheck = 60000;
+
+static __declspec(naked) void ResManCave() {
+    __asm {
+        push g_resManFree     // tFreeResource, pushed first = third argument
+        push g_resManCheck    // tCheckRemove
+        push 0x11             // nParam, exactly as the client had it
+        jmp  dword ptr [g_resManRet]
+    }
+}
+
+static void ApplyResManCache() {
+    if (g_resManSecs <= 0) return;               // 0 keeps the client's own -1 / -1
+    if (!GuardOk(kResManAddr, kResManGuard, sizeof(kResManGuard))) {
+        g_resManMismatch = true; return;
+    }
+    g_resManFree = g_resManSecs * 1000;
+    g_resManCheck = g_resManFree * 2;
+    g_resManDone = Cave(kResManAddr, kResManNops, (void*)ResManCave);
+}
+
 static void ApplyAll() {
     for (const HdPatch& p : kHdPatches) {
         if (!Expected(p)) { ++g_mismatch; continue; }
@@ -1345,6 +1411,10 @@ static void Report() {
                          : g_petLeashMismatch  ? "FAILED (guard bytes differ)"
                          : g_petLeashDone      ? "ON"
                                                : "FAILED (write refused)";
+    const char* resman = g_resManSecs <= 0   ? "off (client default: never free)"
+                       : g_resManMismatch    ? "FAILED (guard bytes differ)"
+                       : g_resManDone        ? "ON"
+                                             : "FAILED (write refused)";
     const char* scrolls = !g_scrollPrice   ? "off"
                         : g_scrollMismatch ? "FAILED (guard bytes differ)"
                         : g_scrollDone     ? "ON"
@@ -1369,6 +1439,7 @@ static void Report() {
                    "\nPetLeashX %s (ownerX +/- %d px)"
                    "\nWorldMapWarp %s"
                    "\nScrollSellPrice %s (%d scrolls)"
+                   "\nResManCache %s (free unused after %d s)"
                    "%s\n",
               g_w, g_h, g_applied, g_skipped, g_mismatch,
               (int)(sizeof(kHdPatches) / sizeof(kHdPatches[0])),
@@ -1384,6 +1455,7 @@ static void Report() {
               petleash, g_petLeashX,
               wmap,
               scrolls, (int)(sizeof(kScrollPrices) / sizeof(kScrollPrices[0])),
+              resman, g_resManSecs,
               g_diag ? " | diag ON" : "");
     OutputDebugStringA(msg);
 #ifdef HD_SELFTEST
@@ -1490,6 +1562,12 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     GetPrivateProfileStringA("optional", "WorldMapWarpClose", "true", buf, sizeof(buf), cfg);
     g_wmClose = (buf[0] == 't' || buf[0] == 'T' || buf[0] == '1');
 
+    // ResManCacheSeconds: how long an unused resource may sit before the client
+    // frees it. The client ships -1, meaning never, which is what exhausted the
+    // address space. 0 restores that.
+    g_resManSecs = GetPrivateProfileIntA("optional", "ResManCacheSeconds", 30, cfg);
+    if (g_resManSecs < 0 || g_resManSecs > 3600) g_resManSecs = 30;
+
     // ScrollSellPrice: draw what a scroll is really worth in the shop Sell tab.
     GetPrivateProfileStringA("optional", "ScrollSellPrice", "true", buf, sizeof(buf), cfg);
     g_scrollPrice = (buf[0] == 't' || buf[0] == 'T' || buf[0] == '1');
@@ -1518,6 +1596,7 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     ApplyPetLeashX();
     ApplyWorldMapWarp();
     ApplyScrollSellPrice();
+    ApplyResManCache();
     GetModuleFileNameA(h, g_logPath, MAX_PATH);
     if (char* q = strrchr(g_logPath, '\\')) strcpy(q + 1, "hd-res-crash.txt");
     g_cushion = VirtualAlloc(nullptr, 4 << 20, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
