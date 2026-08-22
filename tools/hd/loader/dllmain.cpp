@@ -741,6 +741,7 @@ static void ApplyPetLeashX() {
 // (0x203), which this window proc does not handle at all -- it only dispatches 0x202
 // and 0x205. Two WM_LBUTTONUPs on the same spot inside GetDoubleClickTime() is the
 // same thing for free, and it costs one tick compare instead of a second hook.
+static DWORD HdCommittedMB();                      // defined with the reporter
 typedef void (__thiscall* SendChatMsg_t)(void* pUser, void* pZXStr, int nOnlyBalloon);
 
 static const DWORD kWmHoverAddr = 0x00A364A8;      // cave origin, 9 bytes displaced
@@ -770,6 +771,8 @@ static BYTE g_wmWarped = 0;                        // thunk <-> asm, UI thread o
 static bool g_wmClose = false;                     // config.ini WorldMapWarpClose
 static volatile LONG g_wmWarps = 0;                // read by the crash reporter
 static volatile LONG g_wmLastMap = 0;
+static volatile LONG g_wmMemFirst = 0;             // committed MB at the first warp
+static volatile LONG g_wmMemLast = 0;              // and at the most recent one
 
 static bool g_wmWarp = true, g_wmDone = false, g_wmMismatch = false;
 static int g_wmHover = -1;                         // written by the cave, UI thread only
@@ -824,6 +827,12 @@ static void WorldMapSendWarp(int mapId) {
 
     InterlockedIncrement(&g_wmWarps);           // context for the crash reporter
     InterlockedExchange(&g_wmLastMap, mapId);
+
+    // Sampled per warp so the crash box can show the trend rather than one number.
+    // A client that leaks per map load says so here, in two figures.
+    LONG mb = (LONG)HdCommittedMB();
+    InterlockedCompareExchange(&g_wmMemFirst, mb, 0);
+    InterlockedExchange(&g_wmMemLast, mb);
 }
 
 static void __fastcall WorldMapTryWarp(BYTE* pWorldMap) {
@@ -930,6 +939,46 @@ static HdFault g_trace[HD_TRACE];
 static volatile LONG g_traceN = 0;
 static LPTOP_LEVEL_EXCEPTION_FILTER g_prevFilter = nullptr;
 
+// Committed bytes and the largest free hole, walked straight out of the VA space. A
+// 32-bit client has 2 GB of address space and the HD patch makes every canvas 3.5x the
+// area it was at 800x600, so "out of memory" here can mean genuinely full OR merely too
+// fragmented to place one 3.5 MB run. The two want opposite fixes, and one number each
+// tells them apart.
+static DWORD HdCommittedMB() {
+    MEMORY_BASIC_INFORMATION mbi;
+    SIZE_T commit = 0;
+    BYTE* q = nullptr;
+    while (VirtualQuery(q, &mbi, sizeof(mbi)) == sizeof(mbi)) {
+        if (mbi.State == MEM_COMMIT) commit += mbi.RegionSize;
+        BYTE* next = (BYTE*)mbi.BaseAddress + mbi.RegionSize;
+        if (next <= q) break;
+        q = next;
+    }
+    return (DWORD)(commit >> 20);
+}
+
+static void HdMemory(char* out) {
+    MEMORY_BASIC_INFORMATION mbi;
+    SIZE_T commit = 0, reserve = 0, freeSz = 0, largest = 0;
+    BYTE* q = nullptr;
+    while (VirtualQuery(q, &mbi, sizeof(mbi)) == sizeof(mbi)) {
+        if (mbi.State == MEM_FREE) {
+            freeSz += mbi.RegionSize;
+            if (mbi.RegionSize > largest) largest = mbi.RegionSize;
+        } else if (mbi.State == MEM_COMMIT) {
+            commit += mbi.RegionSize;
+        } else {
+            reserve += mbi.RegionSize;
+        }
+        BYTE* next = (BYTE*)mbi.BaseAddress + mbi.RegionSize;
+        if (next <= q) break;
+        q = next;
+    }
+    wsprintfA(out, "committed %d MB, reserved %d MB, free %d MB, largest hole %d KB",
+              (int)(commit >> 20), (int)(reserve >> 20), (int)(freeSz >> 20),
+              (int)(largest >> 10));
+}
+
 static void HdWhere(DWORD addr, char* mod, DWORD modLen, DWORD* rva) {
     HMODULE h = nullptr;
     *rva = addr;
@@ -963,6 +1012,8 @@ static LONG WINAPI HdFatalReport(EXCEPTION_POINTERS* ep) {
     HdWhere(addr, mod, sizeof(mod), &rva);
 
     char what[96] = "";
+    char mem[128];
+    HdMemory(mem);
     if ((r->ExceptionCode == EXCEPTION_ACCESS_VIOLATION ||
          r->ExceptionCode == EXCEPTION_IN_PAGE_ERROR) && r->NumberParameters >= 2) {
         wsprintfA(what, "  (%s %08X)",
@@ -977,10 +1028,13 @@ static LONG WINAPI HdFatalReport(EXCEPTION_POINTERS* ep) {
                          "  in %s + %08X\n\n"
                          "eax %08X  ebx %08X  ecx %08X  edx %08X\n"
                          "esi %08X  edi %08X  ebp %08X  esp %08X\n\n"
-                         "warps this launch %d, last map %d, auto-close %s\n",
+                         "warps this launch %d, last map %d, auto-close %s\n"
+                         "memory: %s\n"
+                         "committed at first warp %d MB, at last warp %d MB\n",
                      r->ExceptionCode, addr, what, mod, rva,
                      c->Eax, c->Ebx, c->Ecx, c->Edx, c->Esi, c->Edi, c->Ebp, c->Esp,
-                     (int)g_wmWarps, (int)g_wmLastMap, g_wmClose ? "ON" : "off");
+                     (int)g_wmWarps, (int)g_wmLastMap, g_wmClose ? "ON" : "off",
+                     mem, (int)g_wmMemFirst, (int)g_wmMemLast);
 
     LONG seen = InterlockedCompareExchange(&g_traceN, 0, 0);
     if (seen > 0) {
