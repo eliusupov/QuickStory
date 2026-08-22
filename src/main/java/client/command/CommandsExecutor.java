@@ -76,12 +76,14 @@ import client.command.commands.gm2.JobCommand;
 import client.command.commands.gm2.LevelCommand;
 import client.command.commands.gm2.LevelProCommand;
 import client.command.commands.gm2.LootCommand;
+import client.command.commands.gm2.MasteryShopCommand;
 import client.command.commands.gm2.MaxSkillCommand;
 import client.command.commands.gm2.MaxStatCommand;
 import client.command.commands.gm2.MobSkillCommand;
 import client.command.commands.gm2.ReachCommand;
 import client.command.commands.gm2.RechargeCommand;
 import client.command.commands.gm2.ResetSkillCommand;
+import client.command.commands.gm2.ScrollShopCommand;
 import client.command.commands.gm2.SearchCommand;
 import client.command.commands.gm2.SetSlotCommand;
 import client.command.commands.gm2.SetStatCommand;
@@ -389,6 +391,8 @@ public class CommandsExecutor {
         levelCommandsCursor = new Pair<>(new ArrayList<String>(), new ArrayList<String>());
 
         addCommand("recharge", 3, RechargeCommand.class);
+        addCommand("scrollshop", 2, ScrollShopCommand.class);
+        addCommand("masteryshop", 2, MasteryShopCommand.class);
         addCommand("whereami", 2, WhereaMiCommand.class);
         addCommand("hide", 2, HideCommand.class);
         addCommand("unhide", 2, UnHideCommand.class);
