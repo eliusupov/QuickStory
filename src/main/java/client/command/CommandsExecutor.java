@@ -55,6 +55,7 @@ import client.command.commands.gm1.GotoCommand;
 import client.command.commands.gm1.MobHpCommand;
 import client.command.commands.gm1.WhatDropsFromCommand;
 import client.command.commands.gm1.WhoDropsCommand;
+import client.command.commands.gm2.AutoLootCommand;
 import client.command.commands.gm2.ApCommand;
 import client.command.commands.gm2.BombCommand;
 import client.command.commands.gm2.BuffCommand;
@@ -391,6 +392,7 @@ public class CommandsExecutor {
         levelCommandsCursor = new Pair<>(new ArrayList<String>(), new ArrayList<String>());
 
         addCommand("recharge", 3, RechargeCommand.class);
+        addCommand("autoloot", 2, AutoLootCommand.class);
         addCommand("scrollshop", 2, ScrollShopCommand.class);
         addCommand("masteryshop", 2, MasteryShopCommand.class);
         addCommand("whereami", 2, WhereaMiCommand.class);

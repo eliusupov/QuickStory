@@ -313,6 +313,7 @@ public class Character extends AbstractCharacterObject {
     private ScheduledFuture<?> chairRecoveryTask = null;
     private ScheduledFuture<?> pendantOfSpirit = null; //1122017
     private ScheduledFuture<?> cpqSchedule = null;
+    private ScheduledFuture<?> autoLootTask = null;
     private final Lock chrLock = new ReentrantLock(true);
     private final Lock evtLock = new ReentrantLock(true);
     private final Lock petLock = new ReentrantLock(true);
@@ -2141,6 +2142,76 @@ public class Character extends AbstractCharacterObject {
             }
         }
         sendPacket(PacketCreator.enableActions());
+    }
+
+    // ---- autoloot -----------------------------------------------------------
+    // ONE repeating task per auto-looting player, NOT one per drop. That is the whole
+    // design decision: a boss dropping eighty items costs the same as dropping one,
+    // whereas hooking MapleMap.instantiateItemDrop would have scheduled eighty timers.
+    // Task count is O(players with it on); it does not scale with drop volume at all.
+    //
+    // Three safety properties, none of them invented here:
+    //   - TimerManager.register uses scheduleAtFixedRate, and the JDK guarantees a
+    //     periodic task never runs concurrently with itself. A slow tick delays the
+    //     next one, it does not overlap it. So no re-entrancy guard is needed.
+    //   - TimerManager wraps every task in LoggingSaveRunnable, which catches Throwable.
+    //     One bad drop logs and the loop survives; an escaping exception would otherwise
+    //     silently cancel a fixed-rate task forever.
+    //   - pickupItem already takes mapitem.lockItem() and re-checks isPickedUp() and
+    //     canBePickedBy() inside it. A pet, a manual click and this sweep racing for the
+    //     same drop resolve to exactly one winner; the losers get showItemUnavailable.
+    //
+    // The 400 ms minimum drop age in pickupItem is satisfied by the tick interval rather
+    // than by per-drop delay arithmetic: anything too fresh is simply skipped and taken
+    // on the next pass.
+    //
+    // ponytail: reuses LootCommand's ownership rule verbatim rather than inventing a
+    // second one. Session-only, off by default -- nothing to migrate, and a toggle that
+    // survives a relog is a support question waiting to happen.
+    private static final long AUTOLOOT_PERIOD_MS = 500;
+
+    public boolean isAutoLoot() {
+        return autoLootTask != null;
+    }
+
+    /**
+     * @return the new state: true if autoloot is now on.
+     */
+    public synchronized boolean toggleAutoLoot() {
+        if (autoLootTask != null) {
+            cancelAutoLoot();
+            return false;
+        }
+
+        autoLootTask = TimerManager.getInstance().register(this::autoLootSweep,
+                AUTOLOOT_PERIOD_MS, AUTOLOOT_PERIOD_MS);
+        return true;
+    }
+
+    public synchronized void cancelAutoLoot() {
+        if (autoLootTask != null) {
+            autoLootTask.cancel(false);
+            autoLootTask = null;
+        }
+    }
+
+    private void autoLootSweep() {
+        if (!isLoggedinWorld()) {
+            return;
+        }
+
+        MapleMap map = getMap();
+        if (map == null) {
+            return;
+        }
+
+        for (MapObject o : map.getMapObjectsInRange(getPosition(), Double.POSITIVE_INFINITY,
+                Arrays.asList(MapObjectType.ITEM))) {
+            MapItem mapItem = (MapItem) o;
+            if (mapItem.getOwnerId() == getId() || (getPartyId() > 0 && mapItem.getOwnerId() == getPartyId())) {
+                pickupItem(mapItem);
+            }
+        }
     }
 
     public int countItem(int itemid) {
@@ -10272,6 +10343,7 @@ public class Character extends AbstractCharacterObject {
         }
         berserkSchedule = null;
 
+        cancelAutoLoot();
         unregisterChairBuff();
         cancelBuffExpireTask();
         cancelDiseaseExpireTask();
