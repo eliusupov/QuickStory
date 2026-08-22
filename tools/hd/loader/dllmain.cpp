@@ -727,6 +727,16 @@ static void ApplyPetLeashX() {
 // instructions that encode them (`89 41 6C`, `C7 41 70 01 00 00 00`). If that
 // guard fails we still warp, we just do not close.
 //
+// WHY THE WARPING CLICK IS CONSUMED. On a click that did NOT warp we tail-jump to
+// OnLButtonUp so MapLink navigation keeps working. On one that DID, we return
+// instead. Some dots sit inside a link region, and letting OnLButtonUp run there
+// would navigate to another world-map page -- reloading the img at +0x5C8 and
+// rebuilding the spot array at +0x5D0 -- on the same click that just asked the
+// modal to close. That is a page rebuild racing a teardown, and it is the best
+// explanation for the "worked for a few warps, then crashed" report. Returning is
+// safe: OnLButtonUp does nothing at all when no link is hovered (it early-outs on
+// +0x5BC == -1 straight to its epilogue), so nothing is skipped that mattered.
+//
 // ponytail: double-click is detected here rather than by hooking WM_LBUTTONDBLCLK
 // (0x203), which this window proc does not handle at all -- it only dispatches 0x202
 // and 0x205. Two WM_LBUTTONUPs on the same spot inside GetDoubleClickTime() is the
@@ -757,6 +767,7 @@ static const BYTE kWmCloseGuard[34] = {
     0xE8, 0x06, 0xCB, 0x56, 0x00, 0xC2, 0x04, 0x00,
 };
 static bool g_wmCanClose = false;
+static BYTE g_wmWarped = 0;                        // thunk <-> asm, UI thread only
 
 static bool g_wmWarp = true, g_wmDone = false, g_wmMismatch = false;
 static int g_wmHover = -1;                         // written by the cave, UI thread only
@@ -773,6 +784,7 @@ static __declspec(naked) void WorldMapHoverCave() {
 }
 
 static void __fastcall WorldMapTryWarp(BYTE* pWorldMap) {
+    g_wmWarped = 0;
     if (!pWorldMap) return;
 
     int idx = g_wmHover;
@@ -796,6 +808,22 @@ static void __fastcall WorldMapTryWarp(BYTE* pWorldMap) {
     int mapId = ids[0];
     if (mapId <= 0 || mapId == 999999999) return;
 
+    // Close FIRST, then send. Both orders "work", but this one lets the modal pump
+    // unwind before the server's field change comes back, instead of processing a map
+    // change inside a nested pump that is already tearing down.
+    // Same two fields CWnd::Close writes, and its same "already closing" check, but
+    // without its synchronous Destroy -- see the block comment above.
+    if (g_wmCanClose && *(DWORD*)(pWorldMap + 0x70) == 0) {
+        *(DWORD*)(pWorldMap + 0x6C) = 2;        // nReason, matching ESC
+        *(DWORD*)(pWorldMap + 0x70) = 1;        // pending close
+    }
+
+    // A fresh CUIWorldMap is a fresh stack object with a freshly built spot array, and
+    // a page switch rebuilds it too. Without this, an index from the old array survives
+    // into the new one and a double-click before any mouse movement warps somewhere
+    // unrelated. The count check upstream stops it being unsafe, not being wrong.
+    g_wmHover = -1;
+
     char cmd[32];
     wsprintfA(cmd, "@warp %d", mapId);
 
@@ -804,12 +832,7 @@ static void __fastcall WorldMapTryWarp(BYTE* pWorldMap) {
     ((SendChatMsg_t)0x005382D7)(nullptr, &zs, 0);   // never reads its own this
     ((ZXDtor_t)0x0040265E)(&zs);                // SendChatMsg AddRef'd its own copy
 
-    // Ask the modal to close. Same two fields CWnd::Close writes, and the same
-    // "already closing" check, but without its synchronous Destroy.
-    if (g_wmCanClose && *(DWORD*)(pWorldMap + 0x70) == 0) {
-        *(DWORD*)(pWorldMap + 0x6C) = 2;        // nReason, matching ESC
-        *(DWORD*)(pWorldMap + 0x70) = 1;        // pending close
-    }
+    g_wmWarped = 1;                             // consume the click, see the thunk
 }
 
 static __declspec(naked) void WorldMapClickThunk() {
@@ -822,7 +845,11 @@ static __declspec(naked) void WorldMapClickThunk() {
         popfd
         popad
         pop  ecx
-        jmp  dword ptr [g_wmOrig] // always: MapLink navigation must still run
+        cmp  byte ptr g_wmWarped, 0
+        jne  consumed
+        jmp  dword ptr [g_wmOrig] // no warp: MapLink navigation must still run
+    consumed:
+        ret                       // OnLButtonUp takes no stack args, so a bare ret matches
     }
 }
 
