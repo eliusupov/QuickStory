@@ -36,10 +36,16 @@
 //   StringPool::GetString, and both targets begin with a single self-contained 5-byte
 //   instruction, so a memcpy trampoline is the whole engine. See archive.h.
 //
-// SAFETY: this DLL writes to the loaded image only. It never touches a file on disk,
-// never writes to the registry, and never calls SetCurrentDirectory -- so it cannot
-// disturb the shared HKLM\...\Wizet\MapleStory\ExecPath value that a client launch
-// rewrites.
+// SAFETY: this DLL patches the loaded image only. It never writes to the registry and
+// never calls SetCurrentDirectory -- so it cannot disturb the shared
+// HKLM\...\Wizet\MapleStory\ExecPath value that a client launch rewrites.
+//
+// It writes exactly two files, both next to this DLL and both diagnostic:
+// hd-res-diag.log when diag=1, and hd-res-crash.txt, which is append-only and holds
+// one line per World Map warp plus a record of any crash. The crash record used to
+// be a MessageBox and nothing else; that failed the one time it mattered, because
+// the crash being diagnosed is the client running out of memory and MessageBoxA
+// needs some. A file written through CreateFile/WriteFile needs no heap at all.
 
 #include <windows.h>
 #include <cstdio>
@@ -742,6 +748,8 @@ static void ApplyPetLeashX() {
 // and 0x205. Two WM_LBUTTONUPs on the same spot inside GetDoubleClickTime() is the
 // same thing for free, and it costs one tick compare instead of a second hook.
 static DWORD HdCommittedMB();                      // defined with the reporter
+static void  HdMemory(char* out);                  // committed / free / largest hole
+static void  HdLog(const char* text);              // append to hd-res-crash.txt
 typedef void (__thiscall* SendChatMsg_t)(void* pUser, void* pZXStr, int nOnlyBalloon);
 
 static const DWORD kWmHoverAddr = 0x00A364A8;      // cave origin, 9 bytes displaced
@@ -833,6 +841,14 @@ static void WorldMapSendWarp(int mapId) {
     LONG mb = (LONG)HdCommittedMB();
     InterlockedCompareExchange(&g_wmMemFirst, mb, 0);
     InterlockedExchange(&g_wmMemLast, mb);
+
+    // Logged as it happens, so the trend survives a kill that never reaches a
+    // handler at all. This is the leak question answered without anyone watching
+    // Task Manager.
+    char line[192], mem[128];
+    HdMemory(mem);
+    wsprintfA(line, "warp %d map %d  %s\r\n", (int)g_wmWarps, mapId, mem);
+    HdLog(line);
 }
 
 static void __fastcall WorldMapTryWarp(BYTE* pWorldMap) {
@@ -979,6 +995,28 @@ static void HdMemory(char* out) {
               (int)(largest >> 10));
 }
 
+static char g_logPath[MAX_PATH];
+static void* g_cushion = nullptr;   // released before the crash record is written
+
+// Append-only, no CRT, no heap. Anything that allocates is unavailable in the case this
+// is here to diagnose.
+static void HdLog(const char* text) {
+    if (!g_logPath[0]) return;
+    HANDLE f = CreateFileA(g_logPath, FILE_APPEND_DATA, FILE_SHARE_READ, nullptr,
+                           OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+    if (f == INVALID_HANDLE_VALUE) return;
+    DWORD wrote = 0;
+    WriteFile(f, text, lstrlenA(text), &wrote, nullptr);
+    CloseHandle(f);
+}
+
+static bool HdReadable(const void* q) {
+    MEMORY_BASIC_INFORMATION mbi;
+    if (VirtualQuery(q, &mbi, sizeof(mbi)) != sizeof(mbi)) return false;
+    if (mbi.State != MEM_COMMIT) return false;
+    return (mbi.Protect & (PAGE_NOACCESS | PAGE_GUARD)) == 0;
+}
+
 static void HdWhere(DWORD addr, char* mod, DWORD modLen, DWORD* rva) {
     HMODULE h = nullptr;
     *rva = addr;
@@ -1005,6 +1043,9 @@ static bool HdInteresting(DWORD code) {
 }
 
 static LONG WINAPI HdFatalReport(EXCEPTION_POINTERS* ep) {
+    // 4 MB kept back at startup purely so this handler can still function when the
+    // process cannot allocate. Released before anything else is attempted.
+    if (g_cushion) { VirtualFree(g_cushion, 0, MEM_RELEASE); g_cushion = nullptr; }
     const EXCEPTION_RECORD* r = ep->ExceptionRecord;
     const CONTEXT* c = ep->ContextRecord;
     DWORD addr = (DWORD)(DWORD_PTR)r->ExceptionAddress, rva;
@@ -1022,7 +1063,7 @@ static LONG WINAPI HdFatalReport(EXCEPTION_POINTERS* ep) {
                   (DWORD)r->ExceptionInformation[1]);
     }
 
-    char m[2048];
+    char m[4096];
     int n = wsprintfA(m, "hd-res: the client has crashed. Read this back to Claude.\n\n"
                          "FATAL %08X at %08X%s\n"
                          "  in %s + %08X\n\n"
@@ -1045,6 +1086,26 @@ static LONG WINAPI HdFatalReport(EXCEPTION_POINTERS* ep) {
             n += wsprintfA(m + n, "  %08X at %s + %08X\n", f.code, f.mod, f.rva);
         }
     }
+    // The ebp chain, which is what names the function that asked for the doomed
+    // allocation. Every frame is bounds-checked before it is read: this runs inside a
+    // process that has already proved it is not well.
+    n += wsprintfA(m + n, "\ncall stack (ebp chain):\n");
+    DWORD* fp = (DWORD*)c->Ebp;
+    for (int i = 0; i < 12 && fp && HdReadable(fp) && HdReadable(fp + 1); ++i) {
+        DWORD ret = fp[1];
+        if (!ret) break;
+        DWORD frva; char fmod[32];
+        HdWhere(ret, fmod, sizeof(fmod), &frva);
+        n += wsprintfA(m + n, "  %08X  %s + %08X\n", ret, fmod, frva);
+        DWORD* next = (DWORD*)fp[0];
+        if (next <= fp) break;              // ebp must climb, or the chain is rubbish
+        fp = next;
+    }
+
+    // File first, box second. The box is the nicety; the file is the evidence, and under
+    // the memory exhaustion this is chasing the box may never appear at all.
+    HdLog("\n==== CRASH ====\n");
+    HdLog(m);
     MessageBoxA(NULL, m, "hd-res crash report", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
     return g_prevFilter ? g_prevFilter(ep) : EXCEPTION_CONTINUE_SEARCH;
 }
@@ -1448,6 +1509,9 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     ApplyPetLeashX();
     ApplyWorldMapWarp();
     ApplyScrollSellPrice();
+    GetModuleFileNameA(h, g_logPath, MAX_PATH);
+    if (char* q = strrchr(g_logPath, '\\')) strcpy(q + 1, "hd-res-crash.txt");
+    g_cushion = VirtualAlloc(nullptr, 4 << 20, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
     g_prevFilter = SetUnhandledExceptionFilter(HdFatalReport);
     AddVectoredExceptionHandler(0, HdTraceFault);    // 0 = last in the chain
 
