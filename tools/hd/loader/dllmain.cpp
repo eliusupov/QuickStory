@@ -701,6 +701,32 @@ static void ApplyPetLeashX() {
 // drives MapLink navigation off a different index (+0x5BC), so region links keep
 // working and no UI bookkeeping is skipped.
 //
+// CLOSING THE MAP AFTER THE WARP. The World Map is a stack-allocated MODAL: all
+// five ctor sites build it in the caller's frame (`lea ecx,[ebp-0x5ec]`) and run
+// CWnd::DoModal 0x004F61C5, which hands the pump &this->+0x70 and returns +0x6c.
+// So the client already has a pending-close flag, and that is its own mechanism.
+//
+//     004BB810  CWnd::Close(int nReason), primary vtable [13]:
+//       cmp [ecx+0x70],0 / jne ret      ; already closing -> nothing
+//       mov [ecx+0x6c],eax              ; nReason  (ESC passes 2)
+//       mov [ecx+0x70],1                ; pending close
+//       cmp [ecx+0x14],0 / je ret / call 0xA28335   ; Destroy, if created
+//
+// We replicate that MINUS the Destroy, which is the entire point. Calling Close()
+// would tear the window down synchronously -- inside a live mouse dispatch, while
+// our own thunk is still about to tail-jump into OnLButtonUp, which reads +0x5BC
+// and calls 0xA2874F on the wnd. That is a read of a just-destroyed window. Two
+// stores instead, and DoModal's scope-guard dtor 0x004F623F does the Destroy after
+// the pump unwinds, outside any dispatch.
+//
+// `this` cannot dangle either way: it is a local in the opener's frame and the
+// teardown is the NON-deleting dtor 0x00A31E62, and that frame sits below us and
+// cannot unwind until the pump returns.
+//
+// The offsets are not hardcoded on faith -- kWmCloseGuard checks the very
+// instructions that encode them (`89 41 6C`, `C7 41 70 01 00 00 00`). If that
+// guard fails we still warp, we just do not close.
+//
 // ponytail: double-click is detected here rather than by hooking WM_LBUTTONDBLCLK
 // (0x203), which this window proc does not handle at all -- it only dispatches 0x202
 // and 0x205. Two WM_LBUTTONUPs on the same spot inside GetDoubleClickTime() is the
@@ -721,6 +747,16 @@ static const BYTE kWmCallGuard[11] = {
 };
 static const int kWmCallRelOff = 4;
 static DWORD g_wmOrig = 0x00A3688A;                // CUIWorldMap::OnLButtonUp
+
+// Not patched -- read only, to prove +0x6c / +0x70 are what we think they are.
+static const DWORD kWmCloseAddr = 0x004BB810;      // CWnd::Close(int)
+static const BYTE kWmCloseGuard[34] = {
+    0x83, 0x79, 0x70, 0x00, 0x75, 0x19, 0x83, 0x79, 0x14, 0x00,
+    0x8B, 0x44, 0x24, 0x04, 0x89, 0x41, 0x6C,
+    0xC7, 0x41, 0x70, 0x01, 0x00, 0x00, 0x00, 0x74, 0x05,
+    0xE8, 0x06, 0xCB, 0x56, 0x00, 0xC2, 0x04, 0x00,
+};
+static bool g_wmCanClose = false;
 
 static bool g_wmWarp = true, g_wmDone = false, g_wmMismatch = false;
 static int g_wmHover = -1;                         // written by the cave, UI thread only
@@ -767,6 +803,13 @@ static void __fastcall WorldMapTryWarp(BYTE* pWorldMap) {
     g_Assign(&zs, cmd, -1);                     // -1 => strlen
     ((SendChatMsg_t)0x005382D7)(nullptr, &zs, 0);   // never reads its own this
     ((ZXDtor_t)0x0040265E)(&zs);                // SendChatMsg AddRef'd its own copy
+
+    // Ask the modal to close. Same two fields CWnd::Close writes, and the same
+    // "already closing" check, but without its synchronous Destroy.
+    if (g_wmCanClose && *(DWORD*)(pWorldMap + 0x70) == 0) {
+        *(DWORD*)(pWorldMap + 0x6C) = 2;        // nReason, matching ESC
+        *(DWORD*)(pWorldMap + 0x70) = 1;        // pending close
+    }
 }
 
 static __declspec(naked) void WorldMapClickThunk() {
@@ -792,6 +835,10 @@ static void ApplyWorldMapWarp() {
 
     // Hover capture first: the click thunk is useless without it, and repointing the
     // call last means the thunk can never run before the cave is live.
+    // Closing is optional: if CWnd::Close does not look like we expect, keep the
+    // warp and skip the close rather than writing two offsets we cannot vouch for.
+    g_wmCanClose = GuardOk(kWmCloseAddr, kWmCloseGuard, sizeof(kWmCloseGuard));
+
     if (!Cave(kWmHoverAddr, kWmHoverNops, (void*)WorldMapHoverCave)) return;
 
     DWORD site = kWmCallAddr + kWmCallRelOff;
@@ -874,7 +921,7 @@ static void Report() {
                                                : "FAILED (write refused)";
     const char* wmap = !g_wmWarp     ? "off"
                      : g_wmMismatch  ? "FAILED (guard bytes differ)"
-                     : g_wmDone      ? "ON"
+                     : g_wmDone      ? (g_wmCanClose ? "ON" : "ON (no auto-close)")
                                      : "FAILED (write refused)";
     char clamp[64] = "";
     if (g_msgClamped) wsprintfA(clamp, " (clamped from %d)", g_msgClamped);
