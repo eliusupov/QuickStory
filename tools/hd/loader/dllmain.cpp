@@ -452,6 +452,98 @@ static void ApplyPetLootWhileMoving() {
     g_petSweepDone = PokeFill(kPetSweepJbe, 0x90, 2);
 }
 
+// ---- PetSweepRange / PetLootDelay ------------------------------------------
+// The pet has TWO windows, and widening only the grab box (PetLootRange above) is
+// what made the pet stop moving: it vacuumed every drop the instant it landed, the
+// sweep never had a target left, and the follow dead-band parked it. Owner: "he
+// should still move as if he's small". So keep the grab box modest and widen the
+// window the pet TARGETS from instead.
+//
+//     CDropPool::UpdatePetSweep 0x005110A8, called from 0x0050DF51 every drop-pool
+//     tick. Zeroes CVecCtrlPet+0x25c per pet at 0x00511136, then for each drop tests
+//     each pet and finally sets the winner's +0x25c = (dropX > petX) ? +1 : -1 at
+//     0x00511411. There is NO "close enough" stop value in the sweep -- the setle/dec
+//     idiom at 0x005113F3 can only yield +1 or -1 -- so the pet walks until the grab
+//     box takes the drop. That is exactly the behaviour asked for.
+//
+// X window, OWNER-anchored ([ebp-0x44], written once at 0x0051115B from CUserLocal):
+//     00511215  8D 48 83   lea ecx,[eax-0x7d]   ; left  = ownerX - 125
+//     00511218  83 C0 7D   add eax,0x7d         ; right = ownerX + 125
+// Both are imm8/disp8 and pin at 128, but the client already has an imm32 widener
+// sitting right there behind a two-byte je:
+//     00511231  74 0B      je 0x51123E          ; taken unless CPet+0x14c is set
+//     00511233  B8 96 00 00 00  mov eax,0x96    ; +/-150 extra
+//     00511238  29 45 A4   sub [ebp-0x5c],eax   ; left  -= eax
+//     0051123B  01 45 AC   add [ebp-0x54],eax   ; right += eax
+// NOP the je and the widener is unconditional, with the amount a free imm32. So the
+// X half-width becomes 125 + PetSweepRange, no cave, no instruction growth.
+//
+// Y window is PET-anchored and deliberately left alone (petY-50 .. petY+10, at
+// 0x00511351 / 0x00511366). Widening it is what would send the pet chasing drops on
+// other platforms, which it cannot path to.
+//
+// PetLootDelay: a drop is ignored until it is 3000 ms old. This is the "sometimes he
+// just doesn't go" the owner reported. The same imm32 appears in BOTH paths and they
+// have to move together, or the pet walks to a drop it is not yet allowed to grab:
+//     0051133E  81 F9 B8 0B 00 00  cmp ecx,0xBB8  (sweep)  -> jl reject
+//     0050D7B0  81 F9 B8 0B 00 00  cmp ecx,0xBB8  (grab)   -> jl reject
+//
+// All three guards verified unique and byte-identical in both v84 dumps, and no
+// rel8/rel32/jcc32 at any decode alignment and no absolute dword targets any byte
+// overwritten here.
+//
+// ponytail: default sweep half-width is 300 = the teleport-to-owner box at
+// 0x00A0BCE7. Past that the pet gets yanked back the moment it arrives, so a bigger
+// number buys nothing but teleport thrash. That box is the real ceiling, not the imm32.
+static const DWORD kPetSweepGateAddr = 0x00511231;   // guard + the je we NOP
+static const BYTE kPetSweepGateGuard[13] = {
+    0x74, 0x0B, 0xB8, 0x96, 0x00, 0x00, 0x00, 0x29, 0x45, 0xA4, 0x01, 0x45, 0xAC,
+};
+static const int kPetSweepImmOff = 3;                // imm32 of `mov eax,0x96`
+static const int kPetSweepBaseHalf = 125;            // the imm8 pair we leave alone
+
+static const DWORD kPetAgeSweepAddr = 0x00511336;
+static const BYTE kPetAgeSweepGuard[16] = {
+    0x00, 0x00, 0x8B, 0x4D, 0xE4, 0x2B, 0x48, 0x54,
+    0x81, 0xF9, 0xB8, 0x0B, 0x00, 0x00, 0x7C, 0x73,
+};
+static const DWORD kPetAgeGrabAddr = 0x0050D7A8;
+static const BYTE kPetAgeGrabGuard[16] = {
+    0x75, 0x5A, 0x8B, 0x4D, 0xF0, 0x2B, 0x48, 0x54,
+    0x81, 0xF9, 0xB8, 0x0B, 0x00, 0x00, 0x7C, 0x4C,
+};
+static const int kPetAgeImmOff = 10;                 // imm32 of `cmp ecx,0xBB8`
+
+static int g_petSweepExtra = 175;                    // 125 + 175 = 300
+static int g_petLootDelay = 1000;                    // vanilla 3000
+static bool g_petSweepRangeDone = false, g_petSweepRangeMismatch = false;
+static bool g_petDelayDone = false, g_petDelayMismatch = false;
+
+static bool GuardOk(DWORD addr, const BYTE* want, SIZE_T n) {
+    MEMORY_BASIC_INFORMATION mbi{};
+    return VirtualQuery((LPCVOID)addr, &mbi, sizeof(mbi)) && mbi.State == MEM_COMMIT &&
+           memcmp((const void*)addr, want, n) == 0;
+}
+
+static void ApplyPetSweepRange() {
+    if (g_petSweepExtra == 0) return;
+    if (!GuardOk(kPetSweepGateAddr, kPetSweepGateGuard, sizeof(kPetSweepGateGuard))) {
+        g_petSweepRangeMismatch = true; return;
+    }
+    if (!Poke(kPetSweepGateAddr + kPetSweepImmOff, &g_petSweepExtra, 4)) return;
+    g_petSweepRangeDone = PokeFill(kPetSweepGateAddr, 0x90, 2);   // je -> nop nop, last
+}
+
+static void ApplyPetLootDelay() {
+    if (g_petLootDelay == 3000) return;
+    if (!GuardOk(kPetAgeSweepAddr, kPetAgeSweepGuard, sizeof(kPetAgeSweepGuard)) ||
+        !GuardOk(kPetAgeGrabAddr, kPetAgeGrabGuard, sizeof(kPetAgeGrabGuard))) {
+        g_petDelayMismatch = true; return;
+    }
+    if (!Poke(kPetAgeSweepAddr + kPetAgeImmOff, &g_petLootDelay, 4)) return;
+    g_petDelayDone = Poke(kPetAgeGrabAddr + kPetAgeImmOff, &g_petLootDelay, 4);
+}
+
 static void ApplyAll() {
     for (const HdPatch& p : kHdPatches) {
         if (!Expected(p)) { ++g_mismatch; continue; }
@@ -509,6 +601,14 @@ static void Report() {
                         : g_petSweepMismatch ? "FAILED (guard bytes differ)"
                         : g_petSweepDone     ? "ON"
                                              : "FAILED (write refused)";
+    const char* petrange = !g_petSweepExtra       ? "off"
+                         : g_petSweepRangeMismatch ? "FAILED (guard bytes differ)"
+                         : g_petSweepRangeDone     ? "ON"
+                                                   : "FAILED (write refused)";
+    const char* petdelay = g_petLootDelay == 3000 ? "off"
+                         : g_petDelayMismatch      ? "FAILED (guard bytes differ)"
+                         : g_petDelayDone          ? "ON"
+                                                   : "FAILED (write refused)";
     char clamp[64] = "";
     if (g_msgClamped) wsprintfA(clamp, " (clamped from %d)", g_msgClamped);
     wsprintfA(msg, "hd-res %dx%d: applied %d, skipped %d, byte-mismatch %d of %d"
@@ -517,6 +617,8 @@ static void Report() {
                    "\nLadderSpeed %s (%d%%)"
                    "\nPetLootRange %s (%dx%d px box)"
                    "\nPetLootWhileMoving %s"
+                   "\nPetSweepRange %s (ownerX +/- %d px)"
+                   "\nPetLootDelay %s (%d ms)"
                    "%s\n",
               g_w, g_h, g_applied, g_skipped, g_mismatch,
               (int)(sizeof(kHdPatches) / sizeof(kHdPatches[0])),
@@ -525,6 +627,8 @@ static void Report() {
               ladder, (int)(g_ladderMul * 100),
               petloot, PetLootEdge(2) - PetLootEdge(0), PetLootEdge(3) - PetLootEdge(1),
               petmove,
+              petrange, kPetSweepBaseHalf + g_petSweepExtra,
+              petdelay, g_petLootDelay,
               g_diag ? " | diag ON" : "");
     OutputDebugStringA(msg);
 #ifdef HD_SELFTEST
@@ -604,6 +708,15 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     GetPrivateProfileStringA("optional", "PetLootWhileMoving", "true", buf, sizeof(buf), cfg);
     g_petSweep = (buf[0] == 't' || buf[0] == 'T' || buf[0] == '1');
 
+    // PetSweepRange: px added to the 125 half-width the pet TARGETS drops within.
+    // 0 = vanilla (patch skipped). 175 puts the window on the teleport leash, 300.
+    g_petSweepExtra = GetPrivateProfileIntA("optional", "PetSweepRange", 175, cfg);
+    if (g_petSweepExtra < 0 || g_petSweepExtra > 2000) g_petSweepExtra = 175;
+
+    // PetLootDelay: ms a drop must sit before a pet may target or grab it.
+    g_petLootDelay = GetPrivateProfileIntA("optional", "PetLootDelay", 1000, cfg);
+    if (g_petLootDelay < 0 || g_petLootDelay > 10000) g_petLootDelay = 1000;
+
     // The archive is opt-in by mere presence, exactly as Ezorsia decides it. No file
     // there means the two hooks below stay inert, so a bad copy cannot break a launch:
     // the owner reverts by renaming EzorsiaV2_UI.wz.
@@ -622,6 +735,8 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     ApplyLadderSpeed();
     ApplyPetLootRange();
     ApplyPetLootWhileMoving();
+    ApplyPetSweepRange();
+    ApplyPetLootDelay();
 
     // diag=1 installs a read-only observer on IWzNameSpace::GetItem and writes
     // hd-res-diag.log next to this DLL. diag=0 (the default) installs no hooks at all,
