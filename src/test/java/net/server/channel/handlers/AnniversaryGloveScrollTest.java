@@ -20,9 +20,12 @@ class AnniversaryGloveScrollTest {
 
     @Test
     void adjacentSpecialScrollsAndOrdinaryGloveMatchingStayUnchanged() {
-        IntStream.rangeClosed(2049100, 2049103)
+        IntStream.rangeClosed(2049100, 2049104)
                 .forEach(scrollId -> assertTrue(ItemConstants.isChaosScroll(scrollId), Integer.toString(scrollId)));
-        assertFalse(ItemConstants.isChaosScroll(2049104));
+        IntStream.rangeClosed(2049112, 2049114)
+                .forEach(scrollId -> assertTrue(ItemConstants.isChaosScroll(scrollId), Integer.toString(scrollId)));
+        assertFalse(ItemConstants.isChaosScroll(2049111));
+        assertFalse(ItemConstants.isChaosScroll(2049115));
         assertFalse(ItemConstants.isChaosScroll(2049105));
         assertFalse(ItemConstants.isV84AnniversaryGloveScroll(2049104));
         assertFalse(ItemConstants.isV84AnniversaryGloveScroll(2049111));
