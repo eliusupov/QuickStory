@@ -1,7 +1,7 @@
 # How work gets done here — permanently, for anything
 
-This is the flow for **any** work in QuickStory: a bug, a feature, a migration, a sweep. Not just
-the v84 port. Nothing gets built outside it.
+This is the default flow for **any** work in QuickStory: a bug, a feature, a migration, a sweep. Not
+just the v84 port.
 
 ---
 
@@ -13,12 +13,21 @@ idea  ->  /to-spec  ->  /to-tickets  ->  ledger  ->  /implement  ->  /code-revie
                                            +--------------------------------------------+
 ```
 
-**Nothing is implemented without a spec and tickets.** Not "small" things either — the audit that
-found sixty defects only worked because there were tickets to audit.
+Without an explicit owner waiver, **nothing is implemented without a spec and tickets.** Not
+"small" things either — the audit that found sixty defects only worked because there were tickets
+to audit.
+
+### Explicit owner waiver
+
+The owner may explicitly waive named planning steps (spec, tickets and/or ledger) and/or
+independent review for a named task. A waiver applies only to that task, does not carry forward,
+and leaves every unnamed workflow step in force. Evidence and hard safety constraints remain in
+force unless the owner explicitly and separately changes the relevant constraint. Urgency and task
+size never imply a waiver.
 
 ---
 
-## 1. Spec and tickets, always
+## 1. Spec and tickets by default
 
 - `/to-spec` — synthesises what has been discussed into `docs/work-plan/<feature>-SPEC.md`.
   Problem, solution, user stories, decisions, out of scope. **No file paths, no code** — those rot.

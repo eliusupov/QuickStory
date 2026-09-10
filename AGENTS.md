@@ -15,6 +15,11 @@ Implement agents commit their own work; review agents commit their own fixes; **
 commits only the ledger and never reviews or writes code.** Each ticket names the agent tier its
 effort deserves. Opus only.
 
+This full workflow is the default. The owner may explicitly waive named planning steps (spec,
+tickets and/or ledger) and/or independent review for a named task. A waiver is task-scoped, does
+not carry forward, and leaves every unnamed step in force. Evidence and hard safety constraints
+remain in force unless the owner explicitly and separately changes the relevant constraint.
+
 ## The rule for the v84 migration
 
 **Is it in the v84 data?** If yes, the server should support it. If no, we do not build it — however
