@@ -1864,4 +1864,12 @@
               );
         </rollback>
     </changeSet>
+    <changeSet id="184" author="tulcus-double-prices">
+        <sqlFile path="db/data/184-tulcus-double-prices.sql"/>
+        <rollback>
+            UPDATE shopitems
+            SET price = price / 2
+            WHERE shopid = 1052104;
+        </rollback>
+    </changeSet>
 </databaseChangeLog>
