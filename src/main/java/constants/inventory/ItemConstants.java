@@ -389,6 +389,10 @@ public final class ItemConstants {
         return scrollId >= 2049100 && scrollId <= 2049103;
     }
 
+    public static boolean isV84AnniversaryGloveScroll(int scrollId) {
+        return scrollId >= 2049105 && scrollId <= 2049110;
+    }
+
     public static boolean isRateCoupon(int itemId) {
         int itemType = itemId / 1000;
         return itemType == 5211 || itemType == 5360;

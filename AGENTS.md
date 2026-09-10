@@ -10,10 +10,15 @@ project will ever have, and the workflow below applies to whatever comes after i
 
 ## How work gets done — read `docs/work-plan/WORKFLOW.md`
 
-Every piece of work, however small: **spec → tickets → ledger → `/implement` → `/code-review`.**
+By default, every piece of work, however small: **spec → tickets → ledger → `/implement` → `/code-review`.**
 Implement agents commit their own work; review agents commit their own fixes; **the orchestrator
 commits only the ledger and never reviews or writes code.** Each ticket names the agent tier its
 effort deserves. Opus only.
+
+This full workflow is the default. The owner may explicitly waive named planning steps (spec,
+tickets and/or ledger) and/or independent review for a named task. A waiver is task-scoped, does
+not carry forward, and leaves every unnamed step in force. A workflow waiver never waives evidence
+rules or hard safety constraints; changing one requires an explicit, separate instruction.
 
 ## The rule for the v84 migration
 

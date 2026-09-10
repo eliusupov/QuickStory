@@ -1,7 +1,7 @@
 # How work gets done here — permanently, for anything
 
-This is the flow for **any** work in QuickStory: a bug, a feature, a migration, a sweep. Not just
-the v84 port. Nothing gets built outside it.
+This is the default flow for **any** work in QuickStory: a bug, a feature, a migration, a sweep. Not
+just the v84 port.
 
 ---
 
@@ -13,12 +13,21 @@ idea  ->  /to-spec  ->  /to-tickets  ->  ledger  ->  /implement  ->  /code-revie
                                            +--------------------------------------------+
 ```
 
-**Nothing is implemented without a spec and tickets.** Not "small" things either — the audit that
-found sixty defects only worked because there were tickets to audit.
+Without an explicit owner waiver, **nothing is implemented without a spec and tickets.** Not
+"small" things either — the audit that found sixty defects only worked because there were tickets
+to audit.
+
+### Explicit owner waiver
+
+The owner may explicitly waive named planning steps (spec, tickets and/or ledger) and/or
+independent review for a named task. A waiver applies only to that task, does not carry forward,
+and leaves every unnamed workflow step in force. A workflow waiver never waives evidence rules or
+hard safety constraints; changing one requires an explicit, separate instruction. Urgency and task
+size never imply a waiver.
 
 ---
 
-## 1. Spec and tickets, always
+## 1. Spec and tickets by default
 
 - `/to-spec` — synthesises what has been discussed into `docs/work-plan/<feature>-SPEC.md`.
   Problem, solution, user stories, decisions, out of scope. **No file paths, no code** — those rot.
@@ -64,9 +73,10 @@ The ledger carries an `agent` column. Effort decides the tier; nobody defaults t
 
 ## 3. The implement agent
 
-Dispatched with the **`/implement`** skill, pointed at one ticket file.
+Dispatched with the **`/implement`** skill, pointed at one ticket file, or at the owner's named task
+when its ticket was explicitly waived.
 
-- It reads the ticket, does the work, runs the tests.
+- It reads the ticket or waived-task brief, does the work, runs the tests.
 - **It commits its own work.** The orchestrator does not commit code.
 - It reports in **at most 15 lines**: verdict, files changed, test counts, and anything that
   contradicts the ticket.
@@ -78,8 +88,8 @@ it says so and stops rather than forcing the change. That has happened and it ma
 
 ## 4. The code-review agent
 
-After a chunk of tickets lands, the orchestrator spins up an agent with the **`/code-review`** skill
-over that chunk.
+Unless independent review was explicitly waived for the named task, after a chunk of work lands the
+orchestrator spins up an agent with the **`/code-review`** skill over that chunk.
 
 - It reviews **and fixes** what it finds.
 - **It commits its own fixes.**
@@ -92,7 +102,7 @@ how a wrong claim survives.
 
 ## 5. The orchestrator's job, and its limits
 
-It does exactly four things:
+Under the full workflow, it does exactly four things:
 
 1. Read `TICKET-LEDGER.tsv`
 2. Dispatch the agent the row names
@@ -102,6 +112,8 @@ It does exactly four things:
 It **does not**: open source files, run tests, review code, commit code, or re-derive facts that a
 document already holds. Every fact it knows arrived in a 15-line report.
 
+With a task-scoped waiver, it dispatches the named work directly and omits only the named steps.
+
 That restriction is not tidiness — it is why its context stays small enough to finish the queue
 without compacting. See `AUTONOMY.md`.
 
@@ -109,8 +121,8 @@ without compacting. See `AUTONOMY.md`.
 
 ## 6. When the work is done
 
-The ledger row closes. The ticket file stays as the record of why it was built that way. The spec
-stays as the record of what the goal was.
+When those artifacts exist, the ledger row closes, the ticket stays as the record of why the work
+was built that way, and the spec stays as the record of the goal.
 
 **Do not create a new tracker.** Four disagreeing status files were consolidated once already, and
 the consolidation had to be computed from `docs/wz-baseline/add-list/` because none of them agreed.

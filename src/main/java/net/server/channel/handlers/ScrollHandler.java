@@ -188,7 +188,10 @@ public final class ScrollHandler extends AbstractPacketHandler {
         return chr.getSkillLevel(SkillFactory.getSkill(chr.getBeginnerSkillBlock() + 1003)) > 0;
     }
 
-    private static boolean canScroll(int scrollid, int itemid) {
+    static boolean canScroll(int scrollid, int itemid) {
+        if (ItemConstants.isV84AnniversaryGloveScroll(scrollid)) {
+            return canScroll(2040800, itemid);
+        }
         int sid = scrollid / 100;
 
         switch (sid) {
