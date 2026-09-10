@@ -732,9 +732,9 @@ public class MapleMap {
 
             // equips drop rate
             if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
-                adjustedChanceMultiplier = 5.0f;
+                adjustedChanceMultiplier = 4.0f;
                 if (mob.isBoss()) {
-                    adjustedChanceMultiplier = 0.5f;
+                    adjustedChanceMultiplier = 0.4f;
                 }
             }
 
@@ -763,9 +763,9 @@ public class MapleMap {
             // scroll drop rate
             if (de.itemId > 2040000 && de.itemId < 2050000) {
                 if (de.itemId != constants.id.ItemId.CHAOS_SCROll_60) {
-                    adjustedChanceMultiplier = 13.0f;
+                    adjustedChanceMultiplier = 10.0f;
                     if (mob.isBoss()) {
-                        adjustedChanceMultiplier = 1.3f;
+                        adjustedChanceMultiplier = 1.0f;
                     }
                 }
             }
@@ -781,10 +781,10 @@ public class MapleMap {
 
             // monster card drop rate
             if (ItemConstants.isMonsterCard(de.itemId)) {
-                adjustedChanceMultiplier = 3.5f;
+                adjustedChanceMultiplier = 4.0f;
 
                 if (mob.isBoss()) {
-                    adjustedChanceMultiplier = 0.35f;
+                    adjustedChanceMultiplier = 0.4f;
                 }
             }
 

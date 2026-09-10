@@ -185,4 +185,27 @@ class QuestCheckDateAndLevelCapRealLoad {
                 "QuestRequirementType.java:108 is case \"daybyday\" - a case-sensitive switch misses dayByDay");
         assertNull(startReq(9260, QuestRequirementType.DAY_BY_DAY), "nothing reads dayByDay");
     }
+
+    /**
+     * The leaf is still inert as a <em>requirement</em>, but {@code Quest}'s constructor now reads
+     * its WZ name: a dayByDay quest with no {@code Act} rows on either side is a notice quest the
+     * client re-offers daily, so it is marked repeatable. Without that, the first accept completed
+     * 8249 "Maple 7th Day Market" forever and every later accept was denied, leaving the quest
+     * bubble stuck over the player. 8245 is the contrast - dayByDay, but it pays out, so it stays
+     * one-shot. (9260 is no use here: its own {@code interval} already made it repeatable.)
+     */
+    @Test
+    void rewardlessDayByDayNoticeQuestsAreRetakeable() {
+        assertTreeIsLoaded();
+        assertTrue(canRestart(8249), "8249 awards nothing - its accept must not be denied forever");
+        assertFalse(canRestart(8245), "8245 has Act rows - making it repeatable would be a farm");
+    }
+
+    private boolean canRestart(int questId) {
+        Character chr = charAtLevel(30);
+        QuestStatus status = mock(QuestStatus.class);
+        when(chr.getQuest(any(Quest.class))).thenReturn(status);
+        when(status.getStatus()).thenReturn(QuestStatus.Status.COMPLETED);
+        return Quest.getInstance(questId).canStartQuestByStatus(chr);
+    }
 }

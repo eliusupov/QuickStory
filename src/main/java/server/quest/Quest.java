@@ -112,6 +112,7 @@ public class Quest {
     private boolean autoStart;
     private boolean autoPreComplete, autoComplete;
     private boolean repeatable = false;
+    private boolean dayByDay = false;
     private String name = "", parent = "";
     private final static DataProvider questData = DataProviderFactory.getDataProvider(WZFiles.QUEST);
     private final static Data questInfo = questData.getData("QuestInfo.img");
@@ -150,6 +151,10 @@ public class Quest {
         Data startReqData = reqData.getChildByPath("0");
         if (startReqData != null) {
             for (Data startReq : startReqData.getChildren()) {
+                // QuestRequirementType's switch is lowercase-only, so this leaf arrives as UNDEFINED
+                // and nothing reads it - see QuestCheckDateAndLevelCapRealLoad.dayByDayMergedAsInertData.
+                dayByDay |= startReq.getName().equals("dayByDay");
+
                 QuestRequirementType type = QuestRequirementType.getByWZName(startReq.getName());
                 switch (type) {
                 case INTERVAL:
@@ -219,6 +224,15 @@ public class Quest {
                 completeActs.put(questActionType, act);
             }
         }
+
+        // ponytail: a dayByDay quest that awards nothing on either side is a pure notice quest - the
+        // client re-offers it every day and keeps the bubble over the player up until the accept is
+        // acked. Ours answered the first accept, marked it COMPLETED forever, and denied every one
+        // after it, so the bubble never cleared again (8249 "Maple 7th Day Market"). There is nothing
+        // to farm here, so let it be retaken. Reward-bearing dailies stay one-shot as before.
+        if (dayByDay && startActs.isEmpty() && completeActs.isEmpty()) {
+            repeatable = true;
+        }
     }
 
     public boolean isAutoComplete() {
@@ -253,6 +267,9 @@ public class Quest {
         }
 
         IntervalRequirement ir = (IntervalRequirement) startReqs.get(QuestRequirementType.INTERVAL);
+        if (ir == null) {   // repeatable without an interval: a notice quest, retakeable the next day
+            return true;
+        }
         return ir.getInterval() < HOURS.toMillis(YamlConfig.config.server.QUEST_POINT_REPEATABLE_INTERVAL);
     }
 
