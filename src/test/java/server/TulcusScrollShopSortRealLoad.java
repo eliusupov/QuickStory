@@ -29,6 +29,7 @@ class TulcusScrollShopSortRealLoad {
     private static final Path SQL = Path.of("src", "main", "resources", "db", "data",
             "179-tulcus-scroll-shop-sort.sql");
     private static final Path CHANGELOG = Path.of("src", "main", "resources", "db", "changelog-data.xml");
+    private static final Path SHOP = Path.of("src", "main", "java", "server", "Shop.java");
     private static final Pattern FORWARD = Pattern.compile(
             "WHEN\\s+(\\d+)\\s+THEN\\s+(\\d+)\\s+/\\*\\s*(\\d+),(\\d+),(\\d+)\\s*\\*/");
     private static final Pattern CASE = Pattern.compile("WHEN\\s+(\\d+)\\s+THEN\\s+(\\d+)");
@@ -103,9 +104,12 @@ class TulcusScrollShopSortRealLoad {
 
         assertEquals(351, actual.size());
         assertEquals(351, actual.stream().map(Row::oldPosition).distinct().count());
-        assertEquals(IntStream.range(0, 351).map(i -> 104 + 4 * i).boxed().toList(),
+        assertEquals(349, actual.stream().map(Row::itemId).distinct().count());
+        assertEquals(IntStream.range(0, 351).map(i -> 1504 - 4 * i).boxed().toList(),
                 actual.stream().map(Row::newPosition).toList());
         assertEquals(actual.stream().sorted(order).toList(), actual);
+        assertEquals(actual, actual.stream().sorted(Comparator.comparingInt(Row::newPosition).reversed()).toList());
+        assertTrue(Files.readString(SHOP, StandardCharsets.UTF_8).contains("ORDER BY position DESC"));
         assertEquals(Set.of(0), actual.stream().map(Row::pitch).collect(java.util.stream.Collectors.toSet()));
     }
 
