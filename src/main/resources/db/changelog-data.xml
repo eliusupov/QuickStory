@@ -1283,4 +1283,585 @@
               );
         </rollback>
     </changeSet>
+
+    <changeSet id="182" author="tulcus-regular-scroll-only">
+        <sqlFile path="db/data/182-tulcus-regular-scroll-only.sql"/>
+        <rollback>
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2040728, 1000000, 0, 1784
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2040728);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2049107, 600000, 0, 1692
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2049107);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2040538, 250000, 0, 1644
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2040538);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2040740, 250000, 0, 1588
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2040740);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2040731, 1000000, 0, 1572
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2040731);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2040829, 250000, 0, 1560
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2040829);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2049110, 600000, 0, 1472
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2049110);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2040334, 250000, 0, 1416
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2040334);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2040729, 1000000, 0, 1376
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2040729);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2049109, 600000, 0, 1304
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2049109);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2040730, 1000000, 0, 1228
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2040730);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2049108, 600000, 0, 1136
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2049108);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2040830, 250000, 0, 1120
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2040830);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2043023, 250000, 0, 1072
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2043023);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2043117, 250000, 0, 1048
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2043117);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2043217, 250000, 0, 1024
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2043217);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2043312, 250000, 0, 1000
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2043312);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2044025, 250000, 0, 976
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2044025);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2044117, 250000, 0, 952
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2044117);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2044217, 250000, 0, 928
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2044217);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2044317, 250000, 0, 904
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2044317);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2044417, 250000, 0, 880
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2044417);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2044512, 250000, 0, 856
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2044512);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2044612, 250000, 0, 832
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2044612);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2044712, 250000, 0, 808
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2044712);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2044815, 250000, 0, 784
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2044815);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2044908, 250000, 0, 760
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2044908);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2049105, 600000, 0, 740
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2049105);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2049106, 1000000, 0, 736
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2049106);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2043712, 250000, 0, 676
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2043712);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2043812, 250000, 0, 652
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2043812);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2040042, 250000, 0, 628
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2040042);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2040732, 1000000, 0, 568
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2040732);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2040733, 1000000, 0, 520
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2040733);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2040736, 1000000, 0, 464
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2040736);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2040737, 1000000, 0, 340
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2040737);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2040742, 250000, 0, 332
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2040742);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2040734, 1000000, 0, 320
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2040734);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2040741, 250000, 0, 296
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2040741);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2040735, 1000000, 0, 284
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2040735);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2040041, 250000, 0, 272
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2040041);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2040430, 250000, 0, 244
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2040430);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2040539, 250000, 0, 228
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2040539);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2040630, 250000, 0, 212
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2040630);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2040738, 1000000, 0, 200
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2040738);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2040936, 250000, 0, 192
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2040936);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2041066, 250000, 0, 156
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2041066);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2041067, 250000, 0, 152
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2041067);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2041200, 250000, 0, 132
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2041200);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2049101, 250000, 0, 128
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2049101);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2049102, 250000, 0, 124
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2049102);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2049103, 250000, 0, 120
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2049103);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2049104, 250000, 0, 116
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2049104);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2049112, 250000, 0, 112
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2049112);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2049113, 250000, 0, 108
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2049113);
+            INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+            SELECT 1052104, 2049114, 250000, 0, 104
+            WHERE NOT EXISTS (SELECT 1 FROM shopitems WHERE shopid = 1052104 AND itemid = 2049114);
+        </rollback>
+    </changeSet>
+
+    <changeSet id="183" author="tulcus-regular-scroll-resort">
+        <sqlFile path="db/data/183-tulcus-regular-scroll-resort.sql"/>
+        <rollback>
+            UPDATE shopitems
+            SET position = CASE position
+                WHEN 1600 THEN 1824
+                WHEN 1596 THEN 1820
+                WHEN 1592 THEN 1816
+                WHEN 1588 THEN 1812
+                WHEN 1584 THEN 1808
+                WHEN 1580 THEN 1804
+                WHEN 1576 THEN 1800
+                WHEN 1572 THEN 1796
+                WHEN 1568 THEN 1792
+                WHEN 1564 THEN 1788
+                WHEN 1560 THEN 1780
+                WHEN 1556 THEN 1776
+                WHEN 1552 THEN 1772
+                WHEN 1548 THEN 1768
+                WHEN 1544 THEN 1764
+                WHEN 1540 THEN 1760
+                WHEN 1536 THEN 1756
+                WHEN 1532 THEN 1752
+                WHEN 1528 THEN 1748
+                WHEN 1524 THEN 1744
+                WHEN 1520 THEN 1740
+                WHEN 1516 THEN 1736
+                WHEN 1512 THEN 1732
+                WHEN 1508 THEN 1728
+                WHEN 1504 THEN 1724
+                WHEN 1500 THEN 1720
+                WHEN 1496 THEN 1716
+                WHEN 1492 THEN 1712
+                WHEN 1488 THEN 1708
+                WHEN 1484 THEN 1704
+                WHEN 1480 THEN 1700
+                WHEN 1476 THEN 1696
+                WHEN 1472 THEN 1688
+                WHEN 1468 THEN 1684
+                WHEN 1464 THEN 1680
+                WHEN 1460 THEN 1676
+                WHEN 1456 THEN 1672
+                WHEN 1452 THEN 1668
+                WHEN 1448 THEN 1664
+                WHEN 1444 THEN 1660
+                WHEN 1440 THEN 1656
+                WHEN 1436 THEN 1652
+                WHEN 1432 THEN 1648
+                WHEN 1428 THEN 1640
+                WHEN 1424 THEN 1636
+                WHEN 1420 THEN 1632
+                WHEN 1416 THEN 1628
+                WHEN 1412 THEN 1624
+                WHEN 1408 THEN 1620
+                WHEN 1404 THEN 1616
+                WHEN 1400 THEN 1612
+                WHEN 1396 THEN 1608
+                WHEN 1392 THEN 1604
+                WHEN 1388 THEN 1600
+                WHEN 1384 THEN 1596
+                WHEN 1380 THEN 1592
+                WHEN 1376 THEN 1584
+                WHEN 1372 THEN 1580
+                WHEN 1368 THEN 1576
+                WHEN 1364 THEN 1568
+                WHEN 1360 THEN 1564
+                WHEN 1356 THEN 1556
+                WHEN 1352 THEN 1552
+                WHEN 1348 THEN 1548
+                WHEN 1344 THEN 1544
+                WHEN 1340 THEN 1540
+                WHEN 1336 THEN 1536
+                WHEN 1332 THEN 1532
+                WHEN 1328 THEN 1528
+                WHEN 1324 THEN 1524
+                WHEN 1320 THEN 1520
+                WHEN 1316 THEN 1516
+                WHEN 1312 THEN 1512
+                WHEN 1308 THEN 1508
+                WHEN 1304 THEN 1504
+                WHEN 1300 THEN 1500
+                WHEN 1296 THEN 1496
+                WHEN 1292 THEN 1492
+                WHEN 1288 THEN 1488
+                WHEN 1284 THEN 1484
+                WHEN 1280 THEN 1480
+                WHEN 1276 THEN 1476
+                WHEN 1272 THEN 1468
+                WHEN 1268 THEN 1464
+                WHEN 1264 THEN 1460
+                WHEN 1260 THEN 1456
+                WHEN 1256 THEN 1452
+                WHEN 1252 THEN 1448
+                WHEN 1248 THEN 1444
+                WHEN 1244 THEN 1440
+                WHEN 1240 THEN 1436
+                WHEN 1236 THEN 1432
+                WHEN 1232 THEN 1428
+                WHEN 1228 THEN 1424
+                WHEN 1224 THEN 1420
+                WHEN 1220 THEN 1412
+                WHEN 1216 THEN 1408
+                WHEN 1212 THEN 1404
+                WHEN 1208 THEN 1400
+                WHEN 1204 THEN 1396
+                WHEN 1200 THEN 1392
+                WHEN 1196 THEN 1388
+                WHEN 1192 THEN 1384
+                WHEN 1188 THEN 1380
+                WHEN 1184 THEN 1372
+                WHEN 1180 THEN 1368
+                WHEN 1176 THEN 1364
+                WHEN 1172 THEN 1360
+                WHEN 1168 THEN 1356
+                WHEN 1164 THEN 1352
+                WHEN 1160 THEN 1348
+                WHEN 1156 THEN 1344
+                WHEN 1152 THEN 1340
+                WHEN 1148 THEN 1336
+                WHEN 1144 THEN 1332
+                WHEN 1140 THEN 1328
+                WHEN 1136 THEN 1324
+                WHEN 1132 THEN 1320
+                WHEN 1128 THEN 1316
+                WHEN 1124 THEN 1312
+                WHEN 1120 THEN 1308
+                WHEN 1116 THEN 1300
+                WHEN 1112 THEN 1296
+                WHEN 1108 THEN 1292
+                WHEN 1104 THEN 1288
+                WHEN 1100 THEN 1284
+                WHEN 1096 THEN 1280
+                WHEN 1092 THEN 1276
+                WHEN 1088 THEN 1272
+                WHEN 1084 THEN 1268
+                WHEN 1080 THEN 1264
+                WHEN 1076 THEN 1260
+                WHEN 1072 THEN 1256
+                WHEN 1068 THEN 1252
+                WHEN 1064 THEN 1248
+                WHEN 1060 THEN 1244
+                WHEN 1056 THEN 1240
+                WHEN 1052 THEN 1236
+                WHEN 1048 THEN 1232
+                WHEN 1044 THEN 1224
+                WHEN 1040 THEN 1220
+                WHEN 1036 THEN 1216
+                WHEN 1032 THEN 1212
+                WHEN 1028 THEN 1208
+                WHEN 1024 THEN 1204
+                WHEN 1020 THEN 1200
+                WHEN 1016 THEN 1196
+                WHEN 1012 THEN 1192
+                WHEN 1008 THEN 1188
+                WHEN 1004 THEN 1184
+                WHEN 1000 THEN 1180
+                WHEN 996 THEN 1176
+                WHEN 992 THEN 1172
+                WHEN 988 THEN 1168
+                WHEN 984 THEN 1164
+                WHEN 980 THEN 1160
+                WHEN 976 THEN 1156
+                WHEN 972 THEN 1152
+                WHEN 968 THEN 1148
+                WHEN 964 THEN 1144
+                WHEN 960 THEN 1140
+                WHEN 956 THEN 1132
+                WHEN 952 THEN 1128
+                WHEN 948 THEN 1124
+                WHEN 944 THEN 1116
+                WHEN 940 THEN 1112
+                WHEN 936 THEN 1108
+                WHEN 932 THEN 1104
+                WHEN 928 THEN 1100
+                WHEN 924 THEN 1096
+                WHEN 920 THEN 1092
+                WHEN 916 THEN 1088
+                WHEN 912 THEN 1084
+                WHEN 908 THEN 1080
+                WHEN 904 THEN 1076
+                WHEN 900 THEN 1068
+                WHEN 896 THEN 1064
+                WHEN 892 THEN 1060
+                WHEN 888 THEN 1056
+                WHEN 884 THEN 1052
+                WHEN 880 THEN 1044
+                WHEN 876 THEN 1040
+                WHEN 872 THEN 1036
+                WHEN 868 THEN 1032
+                WHEN 864 THEN 1028
+                WHEN 860 THEN 1020
+                WHEN 856 THEN 1016
+                WHEN 852 THEN 1012
+                WHEN 848 THEN 1008
+                WHEN 844 THEN 1004
+                WHEN 840 THEN 996
+                WHEN 836 THEN 992
+                WHEN 832 THEN 988
+                WHEN 828 THEN 984
+                WHEN 824 THEN 980
+                WHEN 820 THEN 972
+                WHEN 816 THEN 968
+                WHEN 812 THEN 964
+                WHEN 808 THEN 960
+                WHEN 804 THEN 956
+                WHEN 800 THEN 948
+                WHEN 796 THEN 944
+                WHEN 792 THEN 940
+                WHEN 788 THEN 936
+                WHEN 784 THEN 932
+                WHEN 780 THEN 924
+                WHEN 776 THEN 920
+                WHEN 772 THEN 916
+                WHEN 768 THEN 912
+                WHEN 764 THEN 908
+                WHEN 760 THEN 900
+                WHEN 756 THEN 896
+                WHEN 752 THEN 892
+                WHEN 748 THEN 888
+                WHEN 744 THEN 884
+                WHEN 740 THEN 876
+                WHEN 736 THEN 872
+                WHEN 732 THEN 868
+                WHEN 728 THEN 864
+                WHEN 724 THEN 860
+                WHEN 720 THEN 852
+                WHEN 716 THEN 848
+                WHEN 712 THEN 844
+                WHEN 708 THEN 840
+                WHEN 704 THEN 836
+                WHEN 700 THEN 828
+                WHEN 696 THEN 824
+                WHEN 692 THEN 820
+                WHEN 688 THEN 816
+                WHEN 684 THEN 812
+                WHEN 680 THEN 804
+                WHEN 676 THEN 800
+                WHEN 672 THEN 796
+                WHEN 668 THEN 792
+                WHEN 664 THEN 788
+                WHEN 660 THEN 780
+                WHEN 656 THEN 776
+                WHEN 652 THEN 772
+                WHEN 648 THEN 768
+                WHEN 644 THEN 764
+                WHEN 640 THEN 756
+                WHEN 636 THEN 752
+                WHEN 632 THEN 748
+                WHEN 628 THEN 744
+                WHEN 624 THEN 732
+                WHEN 620 THEN 728
+                WHEN 616 THEN 724
+                WHEN 612 THEN 720
+                WHEN 608 THEN 716
+                WHEN 604 THEN 712
+                WHEN 600 THEN 708
+                WHEN 596 THEN 704
+                WHEN 592 THEN 700
+                WHEN 588 THEN 696
+                WHEN 584 THEN 692
+                WHEN 580 THEN 688
+                WHEN 576 THEN 684
+                WHEN 572 THEN 680
+                WHEN 568 THEN 672
+                WHEN 564 THEN 668
+                WHEN 560 THEN 664
+                WHEN 556 THEN 660
+                WHEN 552 THEN 656
+                WHEN 548 THEN 648
+                WHEN 544 THEN 644
+                WHEN 540 THEN 640
+                WHEN 536 THEN 636
+                WHEN 532 THEN 632
+                WHEN 528 THEN 624
+                WHEN 524 THEN 620
+                WHEN 520 THEN 616
+                WHEN 516 THEN 612
+                WHEN 512 THEN 608
+                WHEN 508 THEN 604
+                WHEN 504 THEN 600
+                WHEN 500 THEN 596
+                WHEN 496 THEN 592
+                WHEN 492 THEN 588
+                WHEN 488 THEN 584
+                WHEN 484 THEN 580
+                WHEN 480 THEN 576
+                WHEN 476 THEN 572
+                WHEN 472 THEN 564
+                WHEN 468 THEN 560
+                WHEN 464 THEN 556
+                WHEN 460 THEN 552
+                WHEN 456 THEN 548
+                WHEN 452 THEN 544
+                WHEN 448 THEN 540
+                WHEN 444 THEN 536
+                WHEN 440 THEN 532
+                WHEN 436 THEN 528
+                WHEN 432 THEN 524
+                WHEN 428 THEN 516
+                WHEN 424 THEN 512
+                WHEN 420 THEN 508
+                WHEN 416 THEN 504
+                WHEN 412 THEN 500
+                WHEN 408 THEN 496
+                WHEN 404 THEN 492
+                WHEN 400 THEN 488
+                WHEN 396 THEN 484
+                WHEN 392 THEN 480
+                WHEN 388 THEN 476
+                WHEN 384 THEN 472
+                WHEN 380 THEN 468
+                WHEN 376 THEN 460
+                WHEN 372 THEN 456
+                WHEN 368 THEN 452
+                WHEN 364 THEN 448
+                WHEN 360 THEN 444
+                WHEN 356 THEN 440
+                WHEN 352 THEN 436
+                WHEN 348 THEN 432
+                WHEN 344 THEN 428
+                WHEN 340 THEN 424
+                WHEN 336 THEN 420
+                WHEN 332 THEN 416
+                WHEN 328 THEN 412
+                WHEN 324 THEN 408
+                WHEN 320 THEN 404
+                WHEN 316 THEN 400
+                WHEN 312 THEN 396
+                WHEN 308 THEN 392
+                WHEN 304 THEN 388
+                WHEN 300 THEN 384
+                WHEN 296 THEN 380
+                WHEN 292 THEN 376
+                WHEN 288 THEN 372
+                WHEN 284 THEN 368
+                WHEN 280 THEN 364
+                WHEN 276 THEN 360
+                WHEN 272 THEN 356
+                WHEN 268 THEN 352
+                WHEN 264 THEN 348
+                WHEN 260 THEN 344
+                WHEN 256 THEN 336
+                WHEN 252 THEN 328
+                WHEN 248 THEN 324
+                WHEN 244 THEN 316
+                WHEN 240 THEN 312
+                WHEN 236 THEN 308
+                WHEN 232 THEN 304
+                WHEN 228 THEN 300
+                WHEN 224 THEN 292
+                WHEN 220 THEN 288
+                WHEN 216 THEN 280
+                WHEN 212 THEN 276
+                WHEN 208 THEN 268
+                WHEN 204 THEN 264
+                WHEN 200 THEN 260
+                WHEN 196 THEN 256
+                WHEN 192 THEN 252
+                WHEN 188 THEN 248
+                WHEN 184 THEN 240
+                WHEN 180 THEN 236
+                WHEN 176 THEN 232
+                WHEN 172 THEN 224
+                WHEN 168 THEN 220
+                WHEN 164 THEN 216
+                WHEN 160 THEN 208
+                WHEN 156 THEN 204
+                WHEN 152 THEN 196
+                WHEN 148 THEN 188
+                WHEN 144 THEN 184
+                WHEN 140 THEN 180
+                WHEN 136 THEN 176
+                WHEN 132 THEN 172
+                WHEN 128 THEN 168
+                WHEN 124 THEN 164
+                WHEN 120 THEN 160
+                WHEN 116 THEN 148
+                WHEN 112 THEN 144
+                WHEN 108 THEN 140
+                WHEN 104 THEN 136
+                ELSE position
+            END
+            WHERE shopid = 1052104
+              AND position IN (
+                  104, 108, 112, 116, 120, 124, 128, 132, 136, 140, 144, 148, 152, 156, 160, 164, 168, 172, 176, 180,
+                  184, 188, 192, 196, 200, 204, 208, 212, 216, 220, 224, 228, 232, 236, 240, 244, 248, 252, 256, 260,
+                  264, 268, 272, 276, 280, 284, 288, 292, 296, 300, 304, 308, 312, 316, 320, 324, 328, 332, 336, 340,
+                  344, 348, 352, 356, 360, 364, 368, 372, 376, 380, 384, 388, 392, 396, 400, 404, 408, 412, 416, 420,
+                  424, 428, 432, 436, 440, 444, 448, 452, 456, 460, 464, 468, 472, 476, 480, 484, 488, 492, 496, 500,
+                  504, 508, 512, 516, 520, 524, 528, 532, 536, 540, 544, 548, 552, 556, 560, 564, 568, 572, 576, 580,
+                  584, 588, 592, 596, 600, 604, 608, 612, 616, 620, 624, 628, 632, 636, 640, 644, 648, 652, 656, 660,
+                  664, 668, 672, 676, 680, 684, 688, 692, 696, 700, 704, 708, 712, 716, 720, 724, 728, 732, 736, 740,
+                  744, 748, 752, 756, 760, 764, 768, 772, 776, 780, 784, 788, 792, 796, 800, 804, 808, 812, 816, 820,
+                  824, 828, 832, 836, 840, 844, 848, 852, 856, 860, 864, 868, 872, 876, 880, 884, 888, 892, 896, 900,
+                  904, 908, 912, 916, 920, 924, 928, 932, 936, 940, 944, 948, 952, 956, 960, 964, 968, 972, 976, 980,
+                  984, 988, 992, 996, 1000, 1004, 1008, 1012, 1016, 1020, 1024, 1028, 1032, 1036, 1040, 1044, 1048, 1052, 1056, 1060,
+                  1064, 1068, 1072, 1076, 1080, 1084, 1088, 1092, 1096, 1100, 1104, 1108, 1112, 1116, 1120, 1124, 1128, 1132, 1136, 1140,
+                  1144, 1148, 1152, 1156, 1160, 1164, 1168, 1172, 1176, 1180, 1184, 1188, 1192, 1196, 1200, 1204, 1208, 1212, 1216, 1220,
+                  1224, 1228, 1232, 1236, 1240, 1244, 1248, 1252, 1256, 1260, 1264, 1268, 1272, 1276, 1280, 1284, 1288, 1292, 1296, 1300,
+                  1304, 1308, 1312, 1316, 1320, 1324, 1328, 1332, 1336, 1340, 1344, 1348, 1352, 1356, 1360, 1364, 1368, 1372, 1376, 1380,
+                  1384, 1388, 1392, 1396, 1400, 1404, 1408, 1412, 1416, 1420, 1424, 1428, 1432, 1436, 1440, 1444, 1448, 1452, 1456, 1460,
+                  1464, 1468, 1472, 1476, 1480, 1484, 1488, 1492, 1496, 1500, 1504, 1508, 1512, 1516, 1520, 1524, 1528, 1532, 1536, 1540,
+                  1544, 1548, 1552, 1556, 1560, 1564, 1568, 1572, 1576, 1580, 1584, 1588, 1592, 1596, 1600
+              );
+        </rollback>
+    </changeSet>
 </databaseChangeLog>
