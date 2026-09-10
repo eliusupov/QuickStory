@@ -1626,12 +1626,12 @@
                 WHEN 960 THEN 1140
                 WHEN 956 THEN 1132
                 WHEN 952 THEN 1128
-                WHEN 948 THEN 1124
-                WHEN 944 THEN 1116
-                WHEN 940 THEN 1112
-                WHEN 936 THEN 1108
-                WHEN 932 THEN 1104
-                WHEN 928 THEN 1100
+                WHEN 948 THEN 1112
+                WHEN 944 THEN 1100
+                WHEN 940 THEN 1124
+                WHEN 936 THEN 1116
+                WHEN 932 THEN 1108
+                WHEN 928 THEN 1104
                 WHEN 924 THEN 1096
                 WHEN 920 THEN 1092
                 WHEN 916 THEN 1088

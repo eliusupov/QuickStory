@@ -73,8 +73,13 @@ class TulcusRegularScrollOnlyRealLoad {
         assertEquals(375, actual.size());
         assertEquals(373, actual.stream().map(Row::itemId).distinct().count());
         assertEquals(IntStream.range(0, 375).map(i -> 1600 - 4 * i).boxed().toList(), actual.stream().map(Row::newPosition).toList());
-        assertEquals(expected.stream().map(r -> List.of(r.newPosition, r.itemId, r.price, r.pitch)).toList(),
-                actual.stream().map(r -> List.of(r.oldPosition, r.itemId, r.price, r.pitch)).toList());
+        assertEquals(expected.stream().map(r -> List.of(r.newPosition, r.itemId, r.price, r.pitch))
+                        .collect(java.util.stream.Collectors.toSet()),
+                actual.stream().map(r -> List.of(r.oldPosition, r.itemId, r.price, r.pitch))
+                        .collect(java.util.stream.Collectors.toSet()));
+        Set<Integer> shoeAndGloveAttack = Set.of(2040759, 2040760, 2040803, 2040810, 2040804, 2040811);
+        assertEquals(List.of(2040759, 2040760, 2040803, 2040810, 2040804, 2040811),
+                actual.stream().map(Row::itemId).filter(shoeAndGloveAttack::contains).toList());
         assertTrue(actual.stream().noneMatch(r -> REMOVED.contains(r.itemId) || r.itemId == 2040739));
         assertTrue(actual.stream().anyMatch(r -> r.itemId == 2040000));
         assertTrue(actual.stream().anyMatch(r -> r.itemId == 2043000));
@@ -87,11 +92,16 @@ class TulcusRegularScrollOnlyRealLoad {
         assertTrue(xml.indexOf("<changeSet id=\"183\"") > xml.indexOf("<changeSet id=\"182\""));
         Matcher c182 = Pattern.compile("<changeSet id=\"182\"[\\s\\S]*?</changeSet>").matcher(xml);
         assertTrue(c182.find());
+        Map<Integer, Row> before = new LinkedHashMap<>();
+        rows(BEFORE).forEach(r -> before.put(r.itemId, r));
         Matcher restores = RESTORE.matcher(c182.group());
         Set<Integer> restored = new HashSet<>();
         while (restores.find()) {
             int id = Integer.parseInt(restores.group(1));
             assertEquals(id, Integer.parseInt(restores.group(5)));
+            Row row = before.get(id);
+            assertEquals(List.of(row.price, row.pitch, row.newPosition), List.of(Integer.parseInt(restores.group(2)),
+                    Integer.parseInt(restores.group(3)), Integer.parseInt(restores.group(4))));
             assertTrue(restored.add(id));
         }
         assertEquals(REMOVED, restored);
