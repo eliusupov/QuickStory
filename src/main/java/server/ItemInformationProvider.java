@@ -598,6 +598,7 @@ public class ItemInformationProvider {
         ret.put("success", DataTool.getInt("success", info, 0));
         ret.put("fs", DataTool.getInt("fs", info, 0));
         ret.put("randstat", DataTool.getInt("randstat", info, 0));
+        ret.put("preventslip", DataTool.getInt("preventslip", info, 0));
         equipStatsCache.put(itemId, ret);
         return ret;
     }

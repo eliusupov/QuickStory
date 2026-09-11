@@ -40,7 +40,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 /**
  * @author Matze
@@ -81,6 +83,45 @@ public class Shop {
     public void sendShop(Client c) {
         c.getPlayer().setShop(this);
         c.sendPacket(PacketCreator.getNPCShop(c, getNpcId(), items));
+    }
+
+    /** Opens a normal shop containing the same stock rows whose v84 Item.wz stat is positive. */
+    public boolean sendShopByItemStat(Client c, String stat) {
+        List<ShopItem> matching = filterItemsByStat(items, stat,
+                ItemInformationProvider.getInstance()::getEquipStats);
+        return sendFilteredShop(c, matching);
+    }
+
+    /** Opens a normal shop containing rows for one exact Item.wz scroll target family. */
+    public boolean sendShopByItemCategory(Client c, int itemCategory) {
+        return sendFilteredShop(c, filterItemsByItemCategory(items, itemCategory));
+    }
+
+    private boolean sendFilteredShop(Client c, List<ShopItem> matching) {
+        if (matching.isEmpty()) {
+            return false;
+        }
+
+        Shop filtered = new Shop(id, npcId);
+        matching.forEach(filtered::addItem);
+        filtered.sendShop(c);
+        return true;
+    }
+
+    static List<ShopItem> filterItemsByStat(List<ShopItem> source, String stat,
+                                             Function<Integer, Map<String, Integer>> statProvider) {
+        List<ShopItem> matching = new ArrayList<>();
+        for (ShopItem item : source) {
+            Map<String, Integer> stats = statProvider.apply(item.getItemId());
+            if (stats != null && stats.getOrDefault(stat, 0) > 0) {
+                matching.add(item);
+            }
+        }
+        return matching;
+    }
+
+    static List<ShopItem> filterItemsByItemCategory(List<ShopItem> source, int itemCategory) {
+        return source.stream().filter(item -> item.getItemId() / 100 == itemCategory).toList();
     }
 
     public void buy(Client c, short slot, int itemId, short quantity) {
@@ -238,7 +279,11 @@ public class Shop {
     }
 
     private ShopItem findBySlot(short slot) {
-        return items.get(slot);
+        return itemAt(items, slot);
+    }
+
+    static ShopItem itemAt(List<ShopItem> source, short slot) {
+        return slot >= 0 && slot < source.size() ? source.get(slot) : null;
     }
 
     public static Shop createFromDB(int id, boolean isShopId) {

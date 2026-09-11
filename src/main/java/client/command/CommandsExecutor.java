@@ -208,9 +208,9 @@ import org.slf4j.LoggerFactory;
 import tools.Pair;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class CommandsExecutor {
     private static final Logger log = LoggerFactory.getLogger(CommandsExecutor.class);
@@ -265,15 +265,15 @@ public class CommandsExecutor {
             client.getPlayer().yellowMessage("You do not have permission to use commands while in jail.");
             return;
         }
-        final String splitRegex = "[ ]";
-        String[] splitedMessage = message.substring(1).split(splitRegex, 2);
+        final String splitRegex = "\\s+";
+        String[] splitedMessage = message.substring(1).stripLeading().split(splitRegex, 2);
         if (splitedMessage.length < 2) {
             splitedMessage = new String[]{splitedMessage[0], ""};
         }
 
         client.getPlayer().setLastCommandMessage(splitedMessage[1]);    // thanks Tochi & Nulliphite for noticing string messages being marshalled lowercase
-        final String commandName = splitedMessage[0].toLowerCase();
-        final String[] lowercaseParams = splitedMessage[1].toLowerCase().split(splitRegex);
+        final String commandName = splitedMessage[0].toLowerCase(Locale.ROOT);
+        final String rawParams = splitedMessage[1];
 
         final Command command = registeredCommands.get(commandName);
         if (command == null) {
@@ -284,12 +284,9 @@ public class CommandsExecutor {
             client.getPlayer().yellowMessage("You do not have permission to use this command.");
             return;
         }
-        String[] params;
-        if (lowercaseParams.length > 0 && !lowercaseParams[0].isEmpty()) {
-            params = Arrays.copyOfRange(lowercaseParams, 0, lowercaseParams.length);
-        } else {
-            params = new String[]{};
-        }
+        String[] params = rawParams.isBlank()
+                ? new String[]{}
+                : rawParams.strip().toLowerCase(Locale.ROOT).split(splitRegex);
 
         command.execute(client, params);
         log.info("Chr {} used command {}", client.getPlayer().getName(), command.getClass().getSimpleName());

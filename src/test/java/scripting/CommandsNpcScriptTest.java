@@ -160,6 +160,26 @@ class CommandsNpcScriptTest {
     }
 
     @Test
+    void scrollShopHelpShowsUsageCategoriesAndAliases() throws Exception {
+        Session session = start(2);
+        session.select(2);
+        while (!session.dialogue().contains("!scrollshop - ")) {
+            assertTrue(session.dialogue().contains("#L" + NEXT_PAGE + "#Next page#l"),
+                    "scrollshop is missing from JrGM help");
+            session.select(NEXT_PAGE);
+        }
+
+        String help = session.dialogue();
+        assertTrue(help.contains("Usage: !scrollshop [category] (blank opens all)"));
+        assertTrue(help.contains("Effects: luk, str, dex, int, weapon-attack, magic-attack"));
+        assertTrue(help.contains("weapon-defense, magic-defense, spikes"));
+        assertTrue(help.contains("Weapons: one-handed-sword, one-handed-axe, one-handed-blunt"));
+        assertTrue(help.contains("two-handed-sword, two-handed-axe, two-handed-blunt"));
+        assertTrue(help.contains("crossbow, claw, knuckle, gun"));
+        assertTrue(help.length() < 2_048, "JrGM command page must remain v84-dialog safe");
+    }
+
+    @Test
     void npcConversationManagerExposesTheCommandsScriptSurface() {
         for (String method : List.of("getPlayer", "sendSimple", "dispose")) {
             assertTrue(Stream.of(NPCConversationManager.class.getMethods()).anyMatch(m -> m.getName().equals(method)),
