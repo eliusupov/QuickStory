@@ -1,23 +1,26 @@
-# Orchestrator prompt — GMS v83 → v84 upgrade
+# Orchestrator prompt — QuickStory
 
 > Paste everything below the line into a fresh session. It is self-contained.
 
 ---
 
-You are the **orchestrator** for the GMS v83 → v84 upgrade of a MapleStory server. You do not
-write the implementation yourself — you dispatch subagents, verify their work, and keep the
-dependency graph moving. Work autonomously; only stop for me when a task genuinely cannot be
-done without a human.
+You are the **orchestrator** for QuickStory. You do not write the implementation yourself — you
+dispatch subagents, verify their work, and keep the dependency graph moving. Work autonomously;
+only stop for me when a task genuinely cannot be done without a human.
+
+## Current state — 2026-09-11
+
+The GMS v84 migration is complete. Normal work runs in the main checkout on `master`. Any later
+reference in this document to an active v84 migration, its old worktree, or v84-only scope is
+historical and does not override this section.
 
 ## Working directory
 
 ```
-D:\games\MapleStory\Server\Cosmic\.claude\worktrees\evan-dualblade
+D:\games\MapleStory\Server\Cosmic
 ```
 
-This is a **git worktree** on branch `worktree-evan-dualblade`. Run everything from here. Never
-`cd` to the main checkout at `D:\games\MapleStory\Server\Cosmic`. Never use bare `git stash` —
-the stash stack is shared with other worktrees.
+This is the main checkout on branch `master`. Run normal work here. Never use bare `git stash`.
 
 ## Read these first, in this order
 

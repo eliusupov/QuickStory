@@ -1,5 +1,8 @@
 # v84 open items
 
+> **ARCHIVED 2026-09-11. The v84 migration is complete; normal work runs on `master`.** This file is
+> retained only for its evidence and historical reasoning.
+>
 > **SECONDARY AS OF 2026-08-18. The source of truth is now `STATUS.md` + `V84-COVERAGE.md` +
 > `V84-WORK-ROWS.tsv`.** This file is kept for its *reasoning* - the derivations of the quest-record
 > writers, the cash-shop mode enum, the drop-rate methodology - which is worth having and is not
@@ -37,8 +40,8 @@
 > already fixed in code.
 
 
-Living tracker. Branch `worktree-evan-dualblade`. Acceptance bar is the owner's: **"as it was in gms
-v84"**, additive only, and **code clean and concise, conforming to what is already there**.
+Historical acceptance bar: **"as it was in gms v84"**, additive only, and **code clean and concise,
+conforming to what is already there**.
 
 ## THE GOAL IS v84 PARITY. The operational test, and it is the only one:
 

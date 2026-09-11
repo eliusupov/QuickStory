@@ -1,18 +1,17 @@
-# STATUS — v84 parity
+# STATUS — v84 parity (complete)
 
-**Last recomputed 2026-08-18.** This is the front page. Everything else in `docs/work-plan/` is
-detail hanging off it.
+**Completed 2026-09-11.** Normal work now happens on `master`. The migration details below are the
+last historical snapshot, not the current work queue; `TICKET-LEDGER.tsv` remains the queue.
 
-The standard, in the owner's words: **"we are currently only doing v84 parity."** The operational
-test is one question — **is it in the v84 data?** If yes the server should support it. If no, we do
-not build it, however broken it looks.
+The migration standard was one question — **is it in the v84 data?** If yes the server should
+support it. If no, it was not part of the port.
 
 ---
 
-## Where the project is
+## Historical snapshot — 2026-08-18
 
-The v84 cutover happened on 2026-08-16 and an Evan plays on a real GMS v84 client. Since then the
-work has been closing the gap between what v84 ships and what this server serves.
+The v84 cutover happened on 2026-08-16 and an Evan played on a real GMS v84 client. At this snapshot,
+work was still closing the gap between what v84 shipped and what this server served.
 
 | | |
 |---|---|
