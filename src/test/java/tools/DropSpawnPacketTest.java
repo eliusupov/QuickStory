@@ -61,19 +61,19 @@ class DropSpawnPacketTest {
     }
 
     @ParameterizedTest
-    @ValueSource(bytes = {0, 1, 3})
-    void onyxAppleEnablesNativeEffectForAnimatedSpawns(byte enterType) {
+    @ValueSource(bytes = {0, 1, 2, 3})
+    void onyxAppleDoesNotOverrideDropLayer(byte enterType) {
         MapItem apple = itemDrop();
         when(apple.getItemId()).thenReturn(2022179);
 
         byte[] packet = PacketCreator.dropItemFromMapObject(null, apple,
                 new Point(1, 2), new Point(3, 4), enterType, (short) 0).getBytes();
 
-        assertEquals(1, packet[packet.length - 1], "Onyx Apple enables the native spawn effect gate");
+        assertEquals(0, packet[packet.length - 1], "The trailing layer-order flag does not select a glow");
     }
 
     @Test
-    void onyxAppleUpdatesDoNotReplaySpawnEffect() {
+    void onyxAppleUpdatesDoNotOverrideDropLayer() {
         MapItem apple = itemDrop();
         when(apple.getItemId()).thenReturn(2022179);
 
@@ -83,18 +83,6 @@ class DropSpawnPacketTest {
 
         assertEquals(0, mapLoad[mapLoad.length - 1]);
         assertEquals(0, ownershipUpdate[ownershipUpdate.length - 1]);
-    }
-
-    @Test
-    void mesoAmountMatchingOnyxAppleIdDoesNotEnableEffect() {
-        MapItem mesos = itemDrop();
-        when(mesos.getItemId()).thenReturn(2022179);
-        when(mesos.getMeso()).thenReturn(2022179);
-
-        byte[] packet = PacketCreator.dropItemFromMapObject(null, mesos,
-                new Point(1, 2), new Point(3, 4), (byte) 1, (short) 0).getBytes();
-
-        assertEquals(0, packet[packet.length - 1]);
     }
 
     private static MapItem itemDrop() {

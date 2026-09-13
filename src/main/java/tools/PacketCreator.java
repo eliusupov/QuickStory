@@ -1869,7 +1869,7 @@ public class PacketCreator {
             addExpirationTime(p, drop.getItem().getExpiration());
         }
         p.writeBool(!drop.isPlayerDrop());
-        writeV84DropSpawnExtra(p, false);
+        writeV84DropSpawnExtra(p);
         return p;
     }
 
@@ -1898,7 +1898,7 @@ public class PacketCreator {
             addExpirationTime(p, drop.getItem().getExpiration());
         }
         p.writeByte(drop.isPlayerDrop() ? 0 : 1); //pet EQP pickup
-        writeV84DropSpawnExtra(p, mod != 2 && drop.getMeso() == 0 && drop.getItemId() == 2022179);
+        writeV84DropSpawnExtra(p);
         return p;
     }
 
@@ -1914,7 +1914,7 @@ public class PacketCreator {
      *                              CDropPool call. ONE trailing byte.
      * v84 @0x50F20C      call 0x4066C9 (Decode1) -> [esi+0x88]
      * v84 @0x50F21D      call 0x4066C9 (Decode1)   <- NEW, straight-line, no branch between;
-     *                              if non-zero it fires a drop effect via vtable+0xB4 (0xC0041F15).
+     *                              if non-zero it calls the drop layer's vtable+0xB4 (0xC0041F15).
      * </pre>
      * {@code CInPacket::Decode1} at v84 0x4066C9 stores {@code 0x26} (=38) as the ZException code on
      * under-run, which is the exact code in the client's own CLIENT_START_ERROR upload.
@@ -1924,12 +1924,13 @@ public class PacketCreator {
      * ones (v83/v87/v95) simply stop at the documented last field. atlas's
      * {@code drop/clientbound/spawn.go} has no version gate and is one byte short at v84 too.
      *
-     * <p>Onyx Apple (2022179) uses the native non-zero spawn effect as an owner-requested trial.
-     * This gate is not evidence of a persistent ground-item glow. Map loads and ownership updates
-     * leave it disabled so they do not replay a spawn effect.
+     * <p>This is not a glow selector. The matching branch is identified as
+     * {@code IWzGr2DLayer::Putz} (layer ordering) in the local Rebirth95 reference's
+     * {@code CPacket.DropEnterField}. The owner tested the Onyx Apple trial and observed no glow.
+     * Keep the required byte zero rather than override the item's drawing layer.
      */
-    private static void writeV84DropSpawnExtra(OutPacket p, boolean effect) {
-        p.writeBool(effect);
+    private static void writeV84DropSpawnExtra(OutPacket p) {
+        p.writeByte(0);
     }
 
     private static void writeForeignBuffs(OutPacket p, Character chr) {
