@@ -3,6 +3,8 @@ package tools;
 import client.inventory.Item;
 import net.packet.Packet;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 import server.maps.MapItem;
 import server.maps.MapObject;
@@ -56,6 +58,43 @@ class DropSpawnPacketTest {
         // mod, oid, isMeso, itemId, owner, dropType, pos, dropperId, expiration, playerDrop
         assertEquals(1 + 4 + 1 + 4 + 4 + 1 + 4 + 4 + 8 + 1 + 1,
                 body, "same client function, same missing byte");
+    }
+
+    @ParameterizedTest
+    @ValueSource(bytes = {0, 1, 3})
+    void onyxAppleEnablesNativeEffectForAnimatedSpawns(byte enterType) {
+        MapItem apple = itemDrop();
+        when(apple.getItemId()).thenReturn(2022179);
+
+        byte[] packet = PacketCreator.dropItemFromMapObject(null, apple,
+                new Point(1, 2), new Point(3, 4), enterType, (short) 0).getBytes();
+
+        assertEquals(1, packet[packet.length - 1], "Onyx Apple enables the native spawn effect gate");
+    }
+
+    @Test
+    void onyxAppleUpdatesDoNotReplaySpawnEffect() {
+        MapItem apple = itemDrop();
+        when(apple.getItemId()).thenReturn(2022179);
+
+        byte[] mapLoad = PacketCreator.dropItemFromMapObject(null, apple,
+                null, new Point(3, 4), (byte) 2, (short) 0).getBytes();
+        byte[] ownershipUpdate = PacketCreator.updateMapItemObject(apple, true).getBytes();
+
+        assertEquals(0, mapLoad[mapLoad.length - 1]);
+        assertEquals(0, ownershipUpdate[ownershipUpdate.length - 1]);
+    }
+
+    @Test
+    void mesoAmountMatchingOnyxAppleIdDoesNotEnableEffect() {
+        MapItem mesos = itemDrop();
+        when(mesos.getItemId()).thenReturn(2022179);
+        when(mesos.getMeso()).thenReturn(2022179);
+
+        byte[] packet = PacketCreator.dropItemFromMapObject(null, mesos,
+                new Point(1, 2), new Point(3, 4), (byte) 1, (short) 0).getBytes();
+
+        assertEquals(0, packet[packet.length - 1]);
     }
 
     private static MapItem itemDrop() {

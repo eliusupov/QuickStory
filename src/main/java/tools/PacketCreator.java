@@ -1869,7 +1869,7 @@ public class PacketCreator {
             addExpirationTime(p, drop.getItem().getExpiration());
         }
         p.writeBool(!drop.isPlayerDrop());
-        writeV84DropSpawnExtra(p);
+        writeV84DropSpawnExtra(p, false);
         return p;
     }
 
@@ -1898,7 +1898,7 @@ public class PacketCreator {
             addExpirationTime(p, drop.getItem().getExpiration());
         }
         p.writeByte(drop.isPlayerDrop() ? 0 : 1); //pet EQP pickup
-        writeV84DropSpawnExtra(p);
+        writeV84DropSpawnExtra(p, mod != 2 && drop.getMeso() == 0 && drop.getItemId() == 2022179);
         return p;
     }
 
@@ -1924,10 +1924,12 @@ public class PacketCreator {
      * ones (v83/v87/v95) simply stop at the documented last field. atlas's
      * {@code drop/clientbound/spawn.go} has no version gate and is one byte short at v84 too.
      *
-     * <p>ponytail: written as 0 (no effect). The byte only selects a spawn effect/sound.
+     * <p>Onyx Apple (2022179) uses the native non-zero spawn effect as an owner-requested trial.
+     * This gate is not evidence of a persistent ground-item glow. Map loads and ownership updates
+     * leave it disabled so they do not replay a spawn effect.
      */
-    private static void writeV84DropSpawnExtra(OutPacket p) {
-        p.writeByte(0);
+    private static void writeV84DropSpawnExtra(OutPacket p, boolean effect) {
+        p.writeBool(effect);
     }
 
     private static void writeForeignBuffs(OutPacket p, Character chr) {
