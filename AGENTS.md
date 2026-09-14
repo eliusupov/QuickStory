@@ -9,15 +9,15 @@ applies to every new task.
 
 ## How work gets done — read `docs/work-plan/WORKFLOW.md`
 
-By default, every piece of work, however small: **spec → tickets → ledger → `/implement` → `/code-review`.**
-Implement agents commit their own work; review agents commit their own fixes; **the orchestrator
-commits only the ledger and never reviews or writes code.** Each ticket names the agent tier its
-effort deserves. Opus only.
+By default: **owner's task → ledger → `/implement` → done.** Create a spec, tickets or independent
+`/code-review` only when the owner asks for that step. This is the standing default, not a task waiver.
+Implement agents commit their own work; requested review agents commit their own fixes;
+**the orchestrator commits only the ledger and never reviews or writes code.** Each ledger row
+names the agent tier its effort deserves. Opus only.
 
-This full workflow is the default. The owner may explicitly waive named planning steps (spec,
-tickets and/or ledger) and/or independent review for a named task. A waiver is task-scoped, does
-not carry forward, and leaves every unnamed step in force. A workflow waiver never waives evidence
-rules or hard safety constraints; changing one requires an explicit, separate instruction.
+The ledger remains required unless the owner explicitly waives it for a named task. A task waiver
+does not carry forward and leaves unnamed steps in force. Workflow preferences never waive
+evidence rules or hard safety constraints; changing one requires an explicit, separate instruction.
 
 ## The rule for v84-era behavior
 

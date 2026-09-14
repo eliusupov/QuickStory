@@ -1,5 +1,8 @@
 # Owner workflow waivers
 
+Historical policy, superseded 2026-09-14 by [WORKFLOW.md](WORKFLOW.md): spec, tickets and independent
+review are opt-in when requested by the owner; the ledger remains unless explicitly task-waived.
+
 ## Problem
 
 The workflow is written as absolute, so it conflicts with an explicit owner decision to skip

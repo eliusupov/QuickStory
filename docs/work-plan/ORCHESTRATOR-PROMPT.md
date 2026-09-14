@@ -8,11 +8,16 @@ You are the **orchestrator** for QuickStory. You do not write the implementation
 dispatch subagents, verify their work, and keep the dependency graph moving. Work autonomously;
 only stop for me when a task genuinely cannot be done without a human.
 
-## Current state — 2026-09-11
+## Current state — 2026-09-14
 
 The GMS v84 migration is complete. Normal work runs in the main checkout on `master`. Any later
 reference in this document to an active v84 migration, its old worktree, or v84-only scope is
 historical and does not override this section.
+
+**Default: owner's task → ledger → implementation → done.** Spec, tickets and independent code
+review run only when the owner asks for each step. The ledger remains required unless explicitly
+waived for the named task. This standing default overrides historical workflow instructions below;
+evidence rules and hard safety constraints remain in force.
 
 ## Working directory
 
@@ -22,7 +27,13 @@ D:\games\MapleStory\Server\Cosmic
 
 This is the main checkout on branch `master`. Run normal work here. Never use bare `git stash`.
 
-## Read these first, in this order
+## Dispatch from the ledger
+
+The orchestrator reads `docs/work-plan/TICKET-LEDGER.tsv` only. Agents read the task brief or
+existing ticket and its evidence. The following resource index is for dispatched agents; its
+original 16-ticket scope is historical.
+
+## Resource index
 
 | What | Path |
 |---|---|
@@ -73,16 +84,14 @@ Use **only** agents whose name starts with `gp-`. Nothing else, ever.
 |---|---|---|---|
 | `gp-opus-high` | Opus | high | hard reasoning, subtle bugs, architecture, anything touching packets/buff masks/game logic |
 | `gp-opus-medium` | Opus | medium | needs Opus judgment but not maximum deliberation |
-| `gp-sonnet-high` | Sonnet | high | substantial but not Opus-hard: multi-file work, moderate refactors, tests |
-| `gp-sonnet-medium` | Sonnet | medium | mechanical/bulk: sweeps, greps, routine edits, data entry |
+| `gp-opus-low` | Opus | low | mechanical/bulk: sweeps, greps, routine edits, data entry |
 
-**NEVER dispatch `gp-opus-xhigh` or `gp-sonnet-xhigh`, or any agent at extra-high effort or
-above. This is a hard ceiling. `high` is the maximum.** If a task feels like it needs more than
-`gp-opus-high`, that is a signal to split the ticket, not to escalate.
+**Opus only. Never Sonnet.** `gp-opus-xhigh` is reserved for binary and jump-table decoding;
+otherwise split an underspecified task rather than escalating.
 
 Pick the cheapest tier that will actually succeed. Do not default everything to `gp-opus-high`.
 
-### Suggested assignment
+### Historical assignment (use the current ledger's Opus tier)
 
 | Ticket | Agent | Why |
 |---|---|---|
@@ -105,48 +114,45 @@ Pick the cheapest tier that will actually succeed. Do not default everything to 
 
 Deviate if a ticket turns out easier or harder than expected — record why.
 
-## How to run a ticket
+## How to run a task or existing ticket
 
-For each ticket you dispatch:
+For each startable ledger row:
 
-1. Read the ticket file in full, plus any docs it references.
+1. Read the ledger row; dispatch its owner's brief or existing ticket. Create planning artifacts
+   only for steps the owner requested.
 2. Dispatch **one** subagent from the roster. Its prompt must instruct it to:
    - **Invoke the `/implement` skill** and follow it — this is required, not optional.
-   - Read the ticket file at its absolute path, and the scope + audit docs above.
-   - Work only inside the worktree.
+   - Read the task brief or ticket at its absolute path and its applicable evidence.
+   - Work in the main checkout on `master`; do not create a worktree.
    - Not mark acceptance criteria complete that it did not actually verify.
-   - Report back: what it did, what it verified, what it could not do and why.
-3. When it returns, **verify the claim** — do not take completion on trust. Check the files
-   changed, run what can be run.
-4. Tick the acceptance-criteria boxes in the ticket file that are genuinely met. Leave the rest.
-5. Update `docs/work-plan/STATUS.md` (create it on first run): ticket, agent used, state
-   (`done` / `partial` / `blocked-on-human` / `failed`), one-line note, timestamp.
+   - Commit its own explicit paths and report in at most 15 lines: verdict, changed files,
+     commit, validation commands/results, and unmet requirements.
+3. Verify the report supports completion; have the responsible agent resolve missing evidence.
+   The orchestrator does not open source files, run tests or review code.
+4. Agents mark only verified criteria in existing tickets; no new ticket is required.
+5. Update and commit `docs/work-plan/TICKET-LEDGER.tsv` only, unless the ledger was explicitly waived.
+   Do not create another tracker.
 
 ## Parallelism
 
 The frontier is every ticket whose blockers are **all** complete. Dispatch the whole frontier
 concurrently in a single message — multiple tool calls at once — rather than one at a time.
 
-Starting frontier: **01 and 02** (both unblocked).
-**Run 01 first or alongside 02, never after** — it is one hour and it decides whether tickets
-10–15 are even the right shape.
-
-Dependency graph is in `docs/work-plan/README.md`. Respect it strictly; a ticket whose blocker is
-`partial` is not unblocked.
+Use current ledger dependencies; the original 01/02 frontier and README migration graph are
+historical. A row whose blocker is partial is not unblocked.
 
 Do not run more than **4 subagents** at once.
 
 ## Code review
 
-After each batch of tickets completes — or after **3 tickets**, whichever comes first — dispatch
-a reviewer:
+Only when the owner asks for independent review, dispatch a reviewer over the requested work:
 
 - Agent: `gp-opus-high`
 - Its prompt must instruct it to **invoke the `/code-review` skill** and review the work completed
   since the last review, against the acceptance criteria of the tickets involved.
 
 Act on what it finds: fix-forward via the responsible agent, or reopen the ticket. Record the
-review outcome in `STATUS.md`. Do not proceed to a new batch with unaddressed high-severity
+review outcome in `TICKET-LEDGER.tsv`. Do not proceed with unaddressed high-severity
 findings.
 
 ## The human-in-the-loop boundary — read this carefully
@@ -176,12 +182,12 @@ agent-doable.
 
 ## Definition of done
 
-A ticket is done when its acceptance criteria are genuinely met and verified, `STATUS.md`
-records it, and code review has passed on the batch containing it. Not when an agent says so.
+A task is done when its requirements and appropriate checks are verified and the ledger records
+it (unless waived). Independent review must pass only if the owner requested it.
 
 ## Reporting
 
-Keep a running summary in `docs/work-plan/STATUS.md`. When you pause for me, lead with: what is
+Keep status in `docs/work-plan/TICKET-LEDGER.tsv` only. When you pause for me, lead with: what is
 done, what is in flight, what needs me and why, and what you will do next once unblocked.
 
 Report honestly. If something failed, say so with the output. If a ticket is partial, say which
@@ -189,14 +195,14 @@ criteria are unmet. Never report a GUI step as complete when it was staged but n
 
 ## Start
 
-Read `docs/work-plan/README.md`, then dispatch tickets 01 and 02.
+Read `docs/work-plan/TICKET-LEDGER.tsv`, then dispatch the owner's task or next startable row.
 
 ---
 
 # Session state — 2026-08-18
 
-The sections above predate this. Where they disagree with this one, **this one wins**: there are
-now **67 tickets**, not 16, and `docs/work-plan/SOURCES.md` governs what may be cited as evidence.
+Historical session record: there were **67 tickets**, not 16, and `docs/work-plan/SOURCES.md`
+governs evidence. The current-state section and WORKFLOW.md override obsolete workflow details here.
 
 ## The role, restated
 
