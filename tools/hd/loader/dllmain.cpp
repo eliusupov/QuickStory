@@ -280,6 +280,8 @@ static void ApplyNoWhack() {
     g_noWhackDone = Poke(kNoWhackAddr, kNoWhackJmp, sizeof(kNoWhackJmp));
 }
 
+#include "projectile_terrain.h"
+
 // ---- PetLootRange ----------------------------------------------------------
 // config.ini [optional] PetLootRange, a multiplier on the box a pet loots from.
 // Default 2.0 (owner: "VAC items in a radius twice the size of the pet itself").
@@ -1460,8 +1462,15 @@ static void Report() {
     OutputDebugStringA(msg);
 #ifdef HD_SELFTEST
     fputs(msg, stderr);   // selftest.cpp build only; the shipped DLL has no CRT output
-#endif
+#else
     if (g_report) MessageBoxA(NULL, msg, "hd-res", MB_OK | MB_ICONINFORMATION);
+#endif
+    const char* terrain = g_projectileTerrainDone ? "TargetedProjectiles through terrain: ON\n"
+                                                 : "TargetedProjectiles through terrain: guard mismatch, no writes\n";
+    OutputDebugStringA(terrain);
+#ifdef HD_SELFTEST
+    fputs(terrain, stderr);
+#endif
 }
 
 BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
@@ -1587,6 +1596,7 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     ApplyAll();
     ApplyTubi();
     ApplyNoWhack();
+    ApplyProjectileTerrain();
     ApplyLadderSpeed();
     ApplyPetLootRange();
     ApplyPetLootWhileMoving();

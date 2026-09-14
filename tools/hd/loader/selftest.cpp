@@ -23,6 +23,12 @@ int main(int argc, char** argv) {
         return 1;
     }
     fprintf(stderr, "OK: %s loaded at %p, DllMain returned\n", dll, (void*)h);
+    auto terrainTest = (int (*)())GetProcAddress(h, "ProjectileTerrainSelfTest");
+    if (!terrainTest || !terrainTest()) {
+        fputs("FAIL: targeted/free projectile thunk or stack behavior\n", stderr);
+        return 1;
+    }
+    fputs("PASS: 4 actual x86 projectile thunk checks; targeted/free and stack cleanup\n", stderr);
     FreeLibrary(h);
     return 0;
 }
