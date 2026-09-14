@@ -537,6 +537,7 @@ public class StatEffect {
                 } else if ((sourceid == Beginner.NIMBLE_FEET || sourceid == Noblesse.NIMBLE_FEET || sourceid == Evan.NIMBLE_FEET || sourceid == Legend.AGILE_BODY) && YamlConfig.config.server.USE_ULTRA_NIMBLE_FEET == true) {
                     // ret.jump = (short) (ret.speed);
                     ret.speed *= 1.5;
+                    ret.speed *= 1.5; // Owner customization: 1.5x the existing integer speed bonus.
                     ret.cooldown = 0;
                     ret.duration = 340000;
                 }
