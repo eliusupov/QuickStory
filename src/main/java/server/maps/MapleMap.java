@@ -781,7 +781,7 @@ public class MapleMap {
 
             // monster card drop rate
             if (ItemConstants.isMonsterCard(de.itemId)) {
-                adjustedChanceMultiplier = 5.0f;
+                adjustedChanceMultiplier = 6.5f;
 
                 if (mob.isBoss()) {
                     adjustedChanceMultiplier = 1.0f;
