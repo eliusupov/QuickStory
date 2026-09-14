@@ -31,10 +31,10 @@
   </imgdir>
   <imgdir name="0001002">
     <string name="name" value="Nimble Feet"/>
-    <string name="desc" value="[Master Level : 3]\nEnables the character to move around quickly for a short amount of time. \n#cTerms between skills : 1 min.#"/>
-    <string name="h1" value="MP -4; speed +10 for 4 sec."/>
-    <string name="h2" value="MP -7; speed +15 for 8 sec."/>
-    <string name="h3" value="MP -10; speed +20 for 12 sec."/>
+    <string name="desc" value="[Master Level : 3]\nIncreases movement speed for 340 sec.\n#cCooldown: None.#"/>
+    <string name="h1" value="MP -4; speed +10 for 340 sec."/>
+    <string name="h2" value="MP -7; speed +20 for 340 sec."/>
+    <string name="h3" value="MP -10; speed +30 for 340 sec."/>
   </imgdir>
   <imgdir name="0001013">
     <string name="name" value="Spaceship"/>
@@ -482,10 +482,10 @@
   </imgdir>
   <imgdir name="20011002">
     <string name="name" value="Nimble Feet"/>
-    <string name="desc" value="[Master Level: 3]\nEnables the character to move around quickly for a short amount of time. \n#cCooldown: 1 min.#"/>
-    <string name="h1" value="MP -4, Speed +10 for 4 sec."/>
-    <string name="h2" value="MP -7, Speed +15 for 8 sec."/>
-    <string name="h3" value="MP -10, Speed +20 for 12 sec."/>
+    <string name="desc" value="[Master Level : 3]\nIncreases movement speed for 340 sec.\n#cCooldown: None.#"/>
+    <string name="h1" value="MP -4; speed +10 for 340 sec."/>
+    <string name="h2" value="MP -7; speed +20 for 340 sec."/>
+    <string name="h3" value="MP -10; speed +30 for 340 sec."/>
   </imgdir>
   <imgdir name="20011003">
     <string name="name" value="Legendary Spirit "/>
@@ -12683,10 +12683,10 @@
   </imgdir>
   <imgdir name="10001002">
     <string name="name" value="Nimble Feet"/>
-    <string name="desc" value="[Master Level : 3]\nEnables the character to move around quickly for a short amount of time. \n#cTerms between skills : 1 min.#"/>
-    <string name="h1" value="MP -4; speed +10 for 4 sec."/>
-    <string name="h2" value="MP -7; speed +15 for 8 sec."/>
-    <string name="h3" value="MP -10; speed +20 for 12 sec."/>
+    <string name="desc" value="[Master Level : 3]\nIncreases movement speed for 340 sec.\n#cCooldown: None.#"/>
+    <string name="h1" value="MP -4; speed +10 for 340 sec."/>
+    <string name="h2" value="MP -7; speed +20 for 340 sec."/>
+    <string name="h3" value="MP -10; speed +30 for 340 sec."/>
   </imgdir>
   <imgdir name="10001003">
     <string name="name" value="Legendary Spirit"/>
@@ -12866,10 +12866,10 @@
   </imgdir>
   <imgdir name="20001002">
     <string name="name" value="Agile Body"/>
-    <string name="desc" value="[Master Level : 3]\nExplosive speed for an instant. \n#cTakes about 1 min. until the next call.#"/>
-    <string name="h1" value="MP -4; Speed +10 in 4 sec"/>
-    <string name="h2" value="MP -7; Speed +15 in 8 sec"/>
-    <string name="h3" value="MP -10; Speed +20 in 12 sec"/>
+    <string name="desc" value="[Master Level : 3]\nIncreases movement speed for 340 sec.\n#cCooldown: None.#"/>
+    <string name="h1" value="MP -4; speed +10 for 340 sec."/>
+    <string name="h2" value="MP -7; speed +20 for 340 sec."/>
+    <string name="h3" value="MP -10; speed +30 for 340 sec."/>
   </imgdir>
   <imgdir name="20001003">
     <string name="name" value="Legendary Spirit"/>
