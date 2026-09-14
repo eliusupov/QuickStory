@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /** Checks the actual skill loader and SPEED buff sent to the client for all beginner families. */
 class NimbleFeetSpeedRealLoad {
     @Test
-    void allBeginnerFamiliesGetThirtySpeedAtEveryLevelWithoutChangingOtherEffects() {
+    void allBeginnerFamiliesGetTenSpeedPerLevelWithoutChangingOtherEffects() {
         assertTrue(YamlConfig.config.server.USE_ULTRA_NIMBLE_FEET);
         SkillFactory.loadAllSkills();
         int[] expectedMp = {4, 7, 10};
@@ -26,7 +26,7 @@ class NimbleFeetSpeedRealLoad {
                 int speed = effect.getStatups().stream()
                         .filter(stat -> stat.getLeft() == BuffStat.SPEED)
                         .findFirst().orElseThrow().getRight();
-                assertEquals(30, speed, skillId + " level " + level);
+                assertEquals(10 * level, speed, skillId + " level " + level);
                 assertEquals(expectedMp[level - 1], effect.getMpCon());
                 assertEquals(340000, effect.getDuration());
                 assertEquals(0, effect.getCooldown());
