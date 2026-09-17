@@ -1,32 +1,42 @@
 # How work gets done here — permanently, for anything
 
-This is the default flow for **any** work in QuickStory: a bug, a feature, a migration, a sweep. Not
-just the v84 port.
+This is the default flow for QuickStory work, not just the v84 port.
 
 ---
 
 ## The shape
 
 ```
-owner's task  ->  ledger  ->  /implement  ->  done
-                    ^                        |
-                    +------------------------+
+owner's task  ->  simple?  ->  direct edit + check + commit  ->  done
+                    |
+                    +-- no --> ledger -> /implement -> done
 ```
 
-**Spec, tickets and independent code review are opt-in:** perform each only when the owner asks
-for it. This standing default applies to later work too. Existing specs and tickets remain useful
-records and briefs; they do not require new planning artifacts or review for every change.
+**Spec, tickets and independent code review are opt-in:** perform each only when the owner asks.
+Existing artifacts remain useful records; they do not require more planning or review.
+
+### Simple-task fast path
+
+A task is simple only when the owner's outcome is exact and the change is localized, mechanical,
+reversible, low-blast-radius, and needs no research or design judgment. The orchestrator handles it
+directly: no ledger row, spec, ticket, review, `/implement` or custom agent, agent tier, or
+delegation. It opens only the needed files, runs proportionate deterministic checks, and commits
+the task changes. A localized mechanical edit to these workflow docs is a simple task.
+
+The fast path never covers DB/schema/Liquibase, client/WZ/binary writes, packets/protocol/buff
+masks, auth/security, concurrency/persistence, dependency/build/architecture, destructive work,
+or human-gated work. Any uncertainty promotes the task to the normal workflow **before edits**.
+The owner may explicitly request planning or review for any task.
 
 ### Explicit owner waiver
 
-The ledger remains required unless explicitly waived by the owner for a named task. An explicit
-task waiver may also omit a previously requested step; it does not carry forward and leaves
-unnamed steps in force. Workflow preferences never waive evidence rules or hard safety constraints;
-changing one requires an explicit, separate instruction. Urgency and task size never imply a ledger waiver.
+For non-simple work, the ledger remains required unless explicitly waived by the owner for a named
+task. A waiver does not carry forward. Neither the fast path nor a waiver changes evidence rules or
+hard safety constraints. Urgency and small size alone do not make a task simple.
 
 ---
 
-## 1. Ledger by default; spec and tickets when requested
+## 1. Ledger for normal work; spec and tickets when requested
 
 - When requested, `/to-spec` synthesises what has been discussed into `docs/work-plan/<feature>-SPEC.md`.
   Problem, solution, user stories, decisions, out of scope. **No file paths, no code** — those rot.
@@ -77,7 +87,7 @@ Dispatched with the **`/implement`** skill, pointed at the owner's named task or
 requested ticket file. No ticket waiver is needed for direct tasks.
 
 - It reads the task brief or ticket, does the work, runs appropriate checks.
-- **It commits its own work.** The orchestrator does not commit code.
+- **It commits its own work.** The orchestrator does not commit normal-work implementation.
 - It reports in **at most 15 lines**: verdict, files changed, test counts, and anything that
   contradicts the ticket.
 
@@ -95,25 +105,25 @@ Only when the owner asks for independent review, the orchestrator spins up an ag
 - **It commits its own fixes.**
 - It is adversarial by construction: its job is to refute, not to confirm.
 
-The orchestrator never reviews the code itself and never commits it. Reviewing your own dispatch is
-how a wrong claim survives.
+For normal work, the orchestrator never reviews the code itself or commits it. Reviewing your own
+dispatch is how a wrong claim survives.
 
 ---
 
 ## 5. The orchestrator's job, and its limits
 
-Under the default workflow, it does exactly four things:
+For normal work, it does exactly four things:
 
 1. Read `TICKET-LEDGER.tsv`
 2. Dispatch the agent the row names
 3. Write the verdict back to the ledger, and commit **the ledger**
 4. Move to the next row
 
-It **does not**: open source files, run tests, review code, commit code, or re-derive facts that a
-document already holds. Every fact it knows arrived in a 15-line report.
+Outside the simple-task fast path, it **does not** open source files, run tests, review code, commit
+code, or re-derive facts that a document already holds. Every fact arrives in a 15-line report.
 
-For direct work it dispatches the owner's brief; add planning or review agents only for requested
-steps. With a task-scoped waiver, omit only the named steps.
+For normal direct work it dispatches the owner's brief; add planning or review agents only for
+requested steps. With a task-scoped waiver, omit only the named steps.
 
 That restriction is not tidiness — it is why its context stays small enough to finish the queue
 without compacting. See `AUTONOMY.md`.

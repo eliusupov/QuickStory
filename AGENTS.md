@@ -9,15 +9,21 @@ applies to every new task.
 
 ## How work gets done — read `docs/work-plan/WORKFLOW.md`
 
-By default: **owner's task → ledger → `/implement` → done.** Create a spec, tickets or independent
-`/code-review` only when the owner asks for that step. This is the standing default, not a task waiver.
-Implement agents commit their own work; requested review agents commit their own fixes;
-**the orchestrator commits only the ledger and never reviews or writes code.** Each ledger row
-names the agent tier its effort deserves. Opus only.
+**Simple tasks are direct:** no ledger row, spec, ticket, review, `/implement`/custom agent, tier,
+or delegation. The orchestrator edits, runs proportionate deterministic checks, and commits the
+task changes. Simple means an exact owner outcome that is localized, mechanical, reversible,
+low-blast-radius, and needs no research or design judgment.
 
-The ledger remains required unless the owner explicitly waives it for a named task. A task waiver
-does not carry forward and leaves unnamed steps in force. Workflow preferences never waive
-evidence rules or hard safety constraints; changing one requires an explicit, separate instruction.
+Everything else defaults to **owner's task → ledger → `/implement` → done.** Spec, tickets and
+independent `/code-review` remain opt-in. Implement agents commit their work; requested reviewers
+commit their fixes; the orchestrator commits only the ledger for this normal workflow. Every row
+names an Opus tier.
+
+Never classify DB/schema/Liquibase, client/WZ/binary writes, packets/protocol/buff masks,
+auth/security, concurrency/persistence, dependency/build/architecture, destructive or human-gated
+work as simple. Uncertainty promotes the task to the normal workflow before edits. The owner may
+explicitly request planning or review. No workflow shortcut waives evidence rules or hard safety
+constraints.
 
 ## The rule for v84-era behavior
 
@@ -79,9 +85,10 @@ disagreeing status files were consolidated once already.
 
 ## Working style
 
-- **Orchestrate; do not implement.** Dispatch subagents and verify their claims before relaying.
-- **The orchestrator does not open files.** It reads the ledger and dispatches. Facts arrive as
-  short structured reports. This is what keeps its context small.
+- **Orchestrate normal work; handle simple tasks directly.** Dispatch and verify normal work; for
+  simple tasks, open only what is needed, edit, check, and commit.
+- Outside simple tasks, the orchestrator reads the ledger and dispatches. Facts arrive as short
+  structured reports. This is what keeps its context small.
 - **Decide from the data.** The owner: *"None of them need my judgment."* Exhaust the v84 carve, the
   client binary, our tree, the database, `git log` and dated sources before asking anything.
 - **Agents are Opus only** — `gp-opus-low` / `-medium` / `-high`. Never Sonnet. Pick the tier; do not

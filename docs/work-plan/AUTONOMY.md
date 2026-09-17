@@ -16,8 +16,10 @@ nothing else.
 
 Two rules follow, and they are the whole design:
 
-1. **The orchestrator never opens a project file.** Not source, not WZ, not logs, not tests. It reads
-   `TICKET-LEDGER.tsv` and nothing else. Everything it knows arrives in a report.
+1. During the normal queue, **the orchestrator never opens a project file.** Not source, not WZ,
+   not logs, not tests. It reads `TICKET-LEDGER.tsv` and nothing else. Simple tasks outside the
+   queue are the exception defined in `WORKFLOW.md`: it opens only what is needed, edits, checks,
+   and commits directly.
 2. **Reports are capped.** An uncapped agent returns 3-6k tokens of prose. Capped at 15 lines it
    returns ~400. Over 16 tickets that is the difference between 100k and 7k.
 
@@ -43,8 +45,9 @@ cap costs nothing and saves everything.
 
 ## The loop
 
-Per task or existing ticket, the orchestrator does exactly this and nothing else. Spec, tickets
-and independent review are opt-in only when the owner asks; the ledger remains unless explicitly waived.
+For normal tasks or existing tickets, the orchestrator does exactly this and nothing else. Simple
+tasks never enter this loop and need no ledger, spec, ticket, review, agent, tier, or delegation.
+Spec, tickets and independent review remain opt-in for normal work.
 
 1. Read `TICKET-LEDGER.tsv`. Pick the first row that is startable and unblocked.
 2. Mark it `in-progress` in the ledger.
@@ -56,8 +59,9 @@ and independent review are opt-in only when the owner asks; the ledger remains u
    skill over the requested work. **It fixes what it finds and commits its own fixes.**
 6. Commit **the ledger only**. Next row.
 
-The orchestrator never reviews code and never commits code. It commits the ledger, nothing else.
-Reviewing your own dispatch is how a wrong claim survives — see `WORKFLOW.md`.
+In the normal queue, the orchestrator never reviews or commits implementation; it commits only the
+ledger. For a simple task it runs deterministic checks and commits that task's changes itself. See
+`WORKFLOW.md` for the narrow definition and mandatory exclusions.
 
 **One agent at a time holds `target/`.** Give Maven ownership to exactly one implement or validation
 agent; other agents must not run Maven. The orchestrator does not run the suite.
