@@ -796,7 +796,7 @@ public class AbstractPlayerInteraction {
     }
 
     public void giveCharacterExp(int amount, Character chr) {
-        chr.gainExp((amount * chr.getExpRate()), true, true);
+        chr.gainExp(Math.round(amount * chr.getExpRate()), true, true);
     }
 
     public void givePartyExp(int amount, List<Character> party) {

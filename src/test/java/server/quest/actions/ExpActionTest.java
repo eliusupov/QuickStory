@@ -25,8 +25,8 @@ import static org.mockito.Mockito.when;
  */
 class ExpActionTest {
 
-    private static final int RAW = 100;
-    private static final int EXP_RATE = 5;
+    private static final int RAW = 101;
+    private static final float EXP_RATE = 2.5f;
     private static final int QUEST_EXP_RATE = 7;
 
     /** A mock whose {@code isBeginnerJob()} is the real one, driven by a real job id. */
@@ -97,7 +97,7 @@ class ExpActionTest {
         withQuestRate(false, () -> {
             Character chr = playerOf(Job.EVAN1); // 2200
             ExpAction.runAction(chr, RAW);
-            verify(chr).gainExp(RAW * EXP_RATE, true, true);
+            verify(chr).gainExp(Math.round(RAW * EXP_RATE), true, true);
         });
     }
 

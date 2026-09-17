@@ -222,7 +222,8 @@ public class Character extends AbstractCharacterObject {
     private int mesosTraded = 0;
     private int possibleReports = 10;
     private int ariantPoints, dojoPoints, vanquisherStage, dojoStage, dojoEnergy, vanquisherKills;
-    private int expRate = 1, mesoRate = 1, dropRate = 1, expCoupon = 1, mesoCoupon = 1, dropCoupon = 1;
+    private float expRate = 1.0f;
+    private int mesoRate = 1, dropRate = 1, expCoupon = 1, mesoCoupon = 1, dropCoupon = 1;
     private int omokwins, omokties, omoklosses, matchcardwins, matchcardties, matchcardlosses;
     private int owlSearch;
     private long lastfametime, lastUsedCashItem, lastExpression = 0, lastHealed, lastDeathtime, jailExpiration = -1;
@@ -5048,7 +5049,7 @@ public class Character extends AbstractCharacterObject {
         return YamlConfig.config.server.USE_ENFORCE_NOVICE_EXPRATE && isBeginnerJob() && level < 11;
     }
 
-    public int getExpRate() {
+    public float getExpRate() {
         if (hasNoviceExpRate()) {   // base exp rate 1x for early levels idea thanks to Vcoc
             return 1;
         }
@@ -5060,7 +5061,7 @@ public class Character extends AbstractCharacterObject {
         return expCoupon;
     }
 
-    public int getRawExpRate() {
+    public float getRawExpRate() {
         return expRate / (expCoupon * getWorldServer().getExpRate());
     }
 

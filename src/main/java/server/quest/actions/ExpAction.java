@@ -60,7 +60,7 @@ public class ExpAction extends AbstractQuestAction {
             // caller of this method. Nothing outside quests routes through it.
             chr.gainExp(gain, true, true);
         } else if (!YamlConfig.config.server.USE_QUEST_RATE) {
-            chr.gainExp(gain * chr.getExpRate(), true, true);
+            chr.gainExp(Math.round(gain * chr.getExpRate()), true, true);
         } else {
             chr.gainExp(gain * chr.getQuestExpRate(), true, true);
         }

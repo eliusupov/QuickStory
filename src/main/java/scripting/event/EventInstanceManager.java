@@ -188,12 +188,12 @@ public class EventInstanceManager {
 
         if (mapId == -1) {
             for (Character mc : players) {
-                mc.gainExp(gain * mc.getExpRate(), true, true);
+                mc.gainExp(Math.round(gain * mc.getExpRate()), true, true);
             }
         } else {
             for (Character mc : players) {
                 if (mc.getMapId() == mapId) {
-                    mc.gainExp(gain * mc.getExpRate(), true, true);
+                    mc.gainExp(Math.round(gain * mc.getExpRate()), true, true);
                 }
             }
         }
