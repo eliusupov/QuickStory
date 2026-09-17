@@ -757,24 +757,28 @@ public class GameConstants {
         if (level >= 150) {
             return 10.0f;
         } else if (level >= 120) {
-            return 8.0f;
+            return interpolateRate(level, 120, 8.0f, 150, 10.0f);
         } else if (level >= 100) {
-            return 7.0f;
+            return interpolateRate(level, 100, 7.0f, 120, 8.0f);
         } else if (level >= 70) {
-            return 6.0f;
+            return interpolateRate(level, 70, 6.0f, 100, 7.0f);
         } else if (level >= 50) {
-            return 5.0f;
+            return interpolateRate(level, 50, 5.0f, 70, 6.0f);
         } else if (level >= 40) {
-            return 4.0f;
+            return interpolateRate(level, 40, 4.0f, 50, 5.0f);
         } else if (level >= 25) {
-            return 3.5f;
+            return interpolateRate(level, 25, 3.5f, 40, 4.0f);
         } else if (level >= 20) {
-            return 2.5f;
-        } else if (level >= 15) {
-            return 2.0f;
+            return interpolateRate(level, 20, 2.5f, 25, 3.5f);
+        } else if (level >= 14) {
+            return interpolateRate(level, 14, 1.0f, 20, 2.5f);
         } else {
             return 1.0f;
         }
+    }
+
+    private static float interpolateRate(int level, int startLevel, float startRate, int endLevel, float endRate) {
+        return startRate + (endRate - startRate) * (level - startLevel) / (endLevel - startLevel);
     }
 
     // Quest EXP multiplier by level band: 1x for 1-9, 2x for 10-39, 3x for 40-69, 4x for 70+.
