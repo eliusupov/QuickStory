@@ -732,9 +732,9 @@ public class MapleMap {
 
             // equips drop rate
             if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
-                adjustedChanceMultiplier = 8.0f;
+                adjustedChanceMultiplier = 7.0f;
                 if (mob.isBoss()) {
-                    adjustedChanceMultiplier = 0.8f;
+                    adjustedChanceMultiplier = 0.7f;
                 }
             }
 
