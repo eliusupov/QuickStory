@@ -1935,9 +1935,7 @@ public class PacketCreator {
 
     private static void writeForeignBuffs(OutPacket p, Character chr) {
         p.writeInt(0);
-        p.writeShort(0); //v83
-        p.writeByte(0xFC);
-        p.writeByte(1);
+        p.writeInt(0);
         if (chr.getBuffedValue(BuffStat.MORPH) != null) {
             p.writeInt(2);
         } else {
@@ -1961,7 +1959,7 @@ public class PacketCreator {
         if (chr.getBuffedValue(BuffStat.MORPH) != null) {
             buffvalue = Integer.valueOf(chr.getBuffedValue(BuffStat.MORPH));
         }
-        p.writeInt((int) ((buffmask >> 32) & 0xffffffffL));
+        p.writeInt((int) ((buffmask >> 32) & 0xffffffffL) | 0x7F);
         if (buffvalue != null) {
             if (chr.getBuffedValue(BuffStat.MORPH) != null) { //TEST
                 p.writeShort(buffvalue);
