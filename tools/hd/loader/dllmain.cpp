@@ -1490,8 +1490,8 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD reason, LPVOID) {
     // wins where it sets a key. Same file and same key names Ezorsia itself reads, so
     // there is one config to maintain, not two. (Its remaining keys -- MsgAmount,
     // setDamageCap, speedMovementCap, useTubi, useV62_ExpTable, use_custom_dll_*, and
-    // ServerIP_Address / WindowedMode / RemoveLogos which belong to the existing
-    // redirect, window-mode and skip-logo DLLs -- are not wired here; see README.)
+    // ServerIP_Address is bridged to redirect.ini by 00-config-ip.dll; WindowedMode
+    // and RemoveLogos remain handled by their existing edit DLLs.
     char root[MAX_PATH]{}, cfg[MAX_PATH]{}, wz[MAX_PATH]{};
     GetModuleFileNameA(NULL, root, MAX_PATH);
     if (char* s = strrchr(root, '\\')) s[1] = 0;
