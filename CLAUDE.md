@@ -68,6 +68,9 @@ disagreeing status files were consolidated once already.
 - **Read-only, never write:** the client files at the ROOT of `D:\games\MapleStory\` (not
   `Server\`, which is the repo), `D:\games\MSv84\client\`, `D:\games\dreamms\`, and
   `D:\games\MapleStory\Server\porting-resources\wz-data\v84\` — the pristine v84 carve.
+  Exception authorized by the owner on 2026-09-28: install the verified Ezorsia v2 `dinput8.dll`
+  at the root of `D:\games\MapleStory\` to restore `config.ini` IP handling. This exception is
+  limited to that file and task.
 - **The repo is `D:\games\MapleStory\Server\Cosmic`**, branch `master`. The completed v84 migration
   worktree is historical; do not use it for new work.
 - **Work on `master`.** Never merge, rebase, push, or reset it without the owner asking in those words.
