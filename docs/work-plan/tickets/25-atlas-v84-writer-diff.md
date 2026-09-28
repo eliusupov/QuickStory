@@ -371,3 +371,5 @@ is a live packet capture replayed through atlas's decoders, not another static d
   claim came from the incomplete export.
 - Buddy invite mode 9 was genuinely eight bytes short. Live v84 `OnFriendResult` reads id, name,
   level, job, a 39-byte buddy entry, and one flag. `requestBuddylistAdd` now writes that exact shape.
+- Full buddy-list mode 7 now counts only visible entries, matching the records it writes; pending
+  hidden requests can no longer make the declared count exceed the packet body.

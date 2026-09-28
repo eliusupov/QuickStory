@@ -4370,13 +4370,14 @@ public class PacketCreator {
     public static Packet updateBuddylist(Collection<BuddylistEntry> buddylist) {
         OutPacket p = OutPacket.create(SendOpcode.BUDDYLIST);
         p.writeByte(7);
-        p.writeByte(buddylist.size());
+        int visibleCount = (int) buddylist.stream().filter(BuddylistEntry::isVisible).count();
+        p.writeByte(visibleCount);
         for (BuddylistEntry buddy : buddylist) {
             if (buddy.isVisible()) {
                 addBuddyEntry(p, buddy);
             }
         }
-        for (int x = 0; x < buddylist.size(); x++) {
+        for (int x = 0; x < visibleCount; x++) {
             p.writeInt(0);//mapid?
         }
         return p;
