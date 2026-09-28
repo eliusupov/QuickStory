@@ -4041,6 +4041,8 @@ public class PacketCreator {
         p.writeByte(4);
         p.writeInt(from.getParty().getId());
         p.writeString(from.getName());
+        p.writeInt(from.getLevel());
+        p.writeInt(from.getJob().getId());
         p.writeByte(0);
         return p;
     }
@@ -4050,6 +4052,8 @@ public class PacketCreator {
         p.writeByte(4);
         p.writeInt(from.getParty().getId());
         p.writeString("PS: " + from.getName());
+        p.writeInt(from.getLevel());
+        p.writeInt(from.getJob().getId());
         p.writeByte(0);
         return p;
     }
