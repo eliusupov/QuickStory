@@ -198,9 +198,9 @@ Suite: **2130 passed, 0 failed.**
   door shapes match the three v84 shapes one-for-one, uniformly +3: `0x23/0x24/0x25 → 0x26/0x27/0x28`.
   **Fixed:** `PacketCreator.partyPortal` (the only live `TOWN_PORTAL` sender, from `DoorObject`) now
   writes `0x26` when `VERSION >= 84`, else `0x23`. Test `partyPortalDoorModeShiftsByThreeOnV84`.
-  Note: `updateParty`'s modes (`JOIN` 0x0F=15, `CHANGE_LEADER` 0x1B=27, etc.) sit below this cluster;
-  the v84 export did not expose where the 3 modes were inserted, so whether any of those shifted is
-  **not proven here** and was left untouched.
+  Follow-up from the live v84 memory dump: `JOIN` remains mode `0x0F`; `CHANGE_LEADER` is mode `0x1E`
+  and reads `Decode4 + Decode1` at `0xA8A7BA`. `PacketCreator.updateParty` now writes `0x1E` instead
+  of the unhandled v83 mode `0x1B`.
 - **`getShowItemGain`'s `writeShort(0)`** is mode 0 followed by a zero pad. Mode 0 is unshifted, so
   it is out of scope here, but whether the v84 mode-0 arm reads that second byte the same way was
   not checked. **UNPROVEN.**

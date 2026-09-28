@@ -24,11 +24,19 @@ package client;
 public class CharacterNameAndId {
     private final int id;
     private final String name;
+    private final int level;
+    private final int jobId;
 
     public CharacterNameAndId(int id, String name) {
+        this(id, name, 0, 0);
+    }
+
+    public CharacterNameAndId(int id, String name, int level, int jobId) {
         super();
         this.id = id;
         this.name = name;
+        this.level = level;
+        this.jobId = jobId;
     }
 
     public int getId() {
@@ -37,5 +45,13 @@ public class CharacterNameAndId {
 
     public String getName() {
         return name;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public int getJobId() {
+        return jobId;
     }
 }

@@ -58,7 +58,7 @@ public class BuddylistModifyHandler extends AbstractPacketHandler {
     private void nextPendingRequest(Client c) {
         CharacterNameAndId pendingBuddyRequest = c.getPlayer().getBuddylist().pollPendingRequest();
         if (pendingBuddyRequest != null) {
-            c.sendPacket(PacketCreator.requestBuddylistAdd(pendingBuddyRequest.getId(), c.getPlayer().getId(), pendingBuddyRequest.getName()));
+            c.sendPacket(PacketCreator.requestBuddylistAdd(pendingBuddyRequest.getId(), pendingBuddyRequest.getName(), pendingBuddyRequest.getLevel(), pendingBuddyRequest.getJobId(), c.getWorldServer().find(pendingBuddyRequest.getId())));
         }
     }
 
@@ -111,7 +111,7 @@ public class BuddylistModifyHandler extends AbstractPacketHandler {
                     if (charWithId != null) {
                         BuddyAddResult buddyAddResult = null;
                         if (channel != -1) {
-                            buddyAddResult = world.requestBuddyAdd(addName, c.getChannel(), player.getId(), player.getName());
+                            buddyAddResult = world.requestBuddyAdd(addName, c.getChannel(), player.getId(), player.getName(), player.getLevel(), player.getJob().getId());
                         } else {
                             try (Connection con = DatabaseConnection.getConnection()) {
                                 try (PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) as buddyCount FROM buddies WHERE characterid = ? AND pending = 0")) {

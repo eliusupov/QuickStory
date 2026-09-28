@@ -4193,7 +4193,7 @@ public class PacketCreator {
                 addPartyStatus(forChannel, party, p, false);
                 break;
             case CHANGE_LEADER:
-                p.writeByte(0x1B);
+                p.writeByte(0x1E);
                 p.writeInt(target.getId());
                 p.writeByte(0);
                 break;
@@ -4373,12 +4373,7 @@ public class PacketCreator {
         p.writeByte(buddylist.size());
         for (BuddylistEntry buddy : buddylist) {
             if (buddy.isVisible()) {
-                p.writeInt(buddy.getCharacterId()); // cid
-                p.writeFixedString(getRightPaddedStr(buddy.getName(), '\0', 13));
-                p.writeByte(0); // opposite status
-                p.writeInt(buddy.getChannel() - 1);
-                p.writeFixedString(getRightPaddedStr(buddy.getGroup(), '\0', 13));
-                p.writeInt(0);//mapid?
+                addBuddyEntry(p, buddy);
             }
         }
         for (int x = 0; x < buddylist.size(); x++) {
@@ -4387,26 +4382,30 @@ public class PacketCreator {
         return p;
     }
 
+    private static void addBuddyEntry(OutPacket p, BuddylistEntry buddy) {
+        p.writeInt(buddy.getCharacterId());
+        p.writeFixedString(getRightPaddedStr(buddy.getName(), '\0', 13));
+        p.writeBool(!buddy.isVisible());
+        p.writeInt(buddy.getChannel() - 1);
+        p.writeFixedString(getRightPaddedStr(buddy.getGroup(), '\0', 13));
+        p.writeInt(0);
+    }
+
     public static Packet buddylistMessage(byte message) {
         final OutPacket p = OutPacket.create(SendOpcode.BUDDYLIST);
         p.writeByte(message);
         return p;
     }
 
-    public static Packet requestBuddylistAdd(int chrIdFrom, int chrId, String nameFrom) {
+    public static Packet requestBuddylistAdd(int chrIdFrom, String nameFrom, int levelFrom, int jobFrom, int channelFrom) {
         OutPacket p = OutPacket.create(SendOpcode.BUDDYLIST);
         p.writeByte(9);
         p.writeInt(chrIdFrom);
         p.writeString(nameFrom);
-        p.writeInt(chrIdFrom);
-        p.writeFixedString(getRightPaddedStr(nameFrom, '\0', 11));
-        p.writeByte(0x09);
-        p.writeByte(0xf0);
-        p.writeByte(0x01);
-        p.writeInt(0x0f);
-        p.writeFixedString("Default Group");
+        p.writeInt(levelFrom);
+        p.writeInt(jobFrom);
+        addBuddyEntry(p, new BuddylistEntry(nameFrom, "Default Group", chrIdFrom, channelFrom, false));
         p.writeByte(0);
-        p.writeInt(chrId);
         return p;
     }
 

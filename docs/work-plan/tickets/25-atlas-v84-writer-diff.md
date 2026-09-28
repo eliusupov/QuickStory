@@ -363,3 +363,11 @@ It does **not** close the loop for **content**. Nothing here validates that Cosm
 *values* — right map id, right item id, right quest state, right WZ-backed data. The apple in §3 is
 exactly that kind of problem, and no amount of writer diffing will find it. The next tool worth building
 is a live packet capture replayed through atlas's decoders, not another static diff.
+
+## 9. 2026-09-28 live-v84 follow-up
+
+- Trade `SET_ITEMS` is settled: the live v84 sender writes `byte inventoryType, short sourceSlot,
+  short quantity, byte tradeSlot`, exactly matching `PlayerInteractionHandler`. The earlier extra-byte
+  claim came from the incomplete export.
+- Buddy invite mode 9 was genuinely eight bytes short. Live v84 `OnFriendResult` reads id, name,
+  level, job, a 39-byte buddy entry, and one flag. `requestBuddylistAdd` now writes that exact shape.

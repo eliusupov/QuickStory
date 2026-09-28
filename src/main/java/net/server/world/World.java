@@ -1276,7 +1276,7 @@ public class World {
         return getPlayerStorage().getCharacterByName(charName) != null;
     }
 
-    public BuddyAddResult requestBuddyAdd(String addName, int channelFrom, int cidFrom, String nameFrom) {
+    public BuddyAddResult requestBuddyAdd(String addName, int channelFrom, int cidFrom, String nameFrom, int levelFrom, int jobFrom) {
         Character addChar = getPlayerStorage().getCharacterByName(addName);
         if (addChar != null) {
             BuddyList buddylist = addChar.getBuddylist();
@@ -1284,7 +1284,7 @@ public class World {
                 return BuddyAddResult.BUDDYLIST_FULL;
             }
             if (!buddylist.contains(cidFrom)) {
-                buddylist.addBuddyRequest(addChar.getClient(), cidFrom, nameFrom, channelFrom);
+                buddylist.addBuddyRequest(addChar.getClient(), cidFrom, nameFrom, channelFrom, levelFrom, jobFrom);
             } else if (buddylist.containsVisible(cidFrom)) {
                 return BuddyAddResult.ALREADY_ON_LIST;
             }
