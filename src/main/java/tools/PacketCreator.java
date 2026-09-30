@@ -3332,6 +3332,7 @@ public class PacketCreator {
         p.writeByte(1);
         addCharLook(p, chr, false);
         p.writeString(chr.getName());
+        addMiniRoomJobCode(p, chr);
         return p;
     }
 
@@ -3446,10 +3447,12 @@ public class PacketCreator {
             p.writeByte(0);
             addCharLook(p, trade.getPartner().getChr(), false);
             p.writeString(trade.getPartner().getChr().getName());
+            addMiniRoomJobCode(p, trade.getPartner().getChr());
         }
         p.writeByte(number);
         addCharLook(p, c.getPlayer(), false);
         p.writeString(c.getPlayer().getName());
+        addMiniRoomJobCode(p, c.getPlayer());
         p.writeByte(0xFF);
         return p;
     }
@@ -4919,12 +4922,12 @@ public class PacketCreator {
 
     /**
      * `m_anJobCode[slot]` - a per-avatar short the v84+ client reads after each occupant's name in
-     * an Omok / Match Cards room. Absent in v83 (CMiniRoomBaseDlg::OnEnterResultBase @0x65ec3d has
+     * trade, Omok, and Match Cards rooms. Absent in v83 (CMiniRoomBaseDlg::OnEnterResultBase @0x65ec3d has
      * no such read), present from v84 (sub_674AA6 @0x674aa6) through v95. This is one of the fields
      * where v84 does NOT follow v83, so the gate is >= 84 and not the usual >= 87. Shop rooms and
-     * hired merchants keep the v83 shape - only the two game dialogs read it. See ticket 25.
+     * hired merchants keep their existing records. See ticket 25.
      */
-    private static void addMiniGameJobCode(final OutPacket p, Character chr) {
+    private static void addMiniRoomJobCode(final OutPacket p, Character chr) {
         p.writeShort(chr.getJob().getId());
     }
 
@@ -4937,13 +4940,13 @@ public class PacketCreator {
         p.writeByte(0);
         addCharLook(p, minigame.getOwner(), false);
         p.writeString(minigame.getOwner().getName());
-        addMiniGameJobCode(p, minigame.getOwner());
+        addMiniRoomJobCode(p, minigame.getOwner());
         if (minigame.getVisitor() != null) {
             Character visitor = minigame.getVisitor();
             p.writeByte(1);
             addCharLook(p, visitor, false);
             p.writeString(visitor.getName());
-            addMiniGameJobCode(p, visitor);
+            addMiniRoomJobCode(p, visitor);
         }
         p.writeByte(0xFF);
         p.writeByte(0);
@@ -5047,7 +5050,7 @@ public class PacketCreator {
         p.writeByte(slot);
         addCharLook(p, chr, false);
         p.writeString(chr.getName());
-        addMiniGameJobCode(p, chr);
+        addMiniRoomJobCode(p, chr);
         p.writeInt(1);
         p.writeInt(chr.getMiniGamePoints(MiniGameResult.WIN, true));
         p.writeInt(chr.getMiniGamePoints(MiniGameResult.TIE, true));
@@ -5139,13 +5142,13 @@ public class PacketCreator {
         p.writeByte(0);
         addCharLook(p, minigame.getOwner(), false);
         p.writeString(minigame.getOwner().getName());
-        addMiniGameJobCode(p, minigame.getOwner());
+        addMiniRoomJobCode(p, minigame.getOwner());
         if (minigame.getVisitor() != null) {
             Character visitor = minigame.getVisitor();
             p.writeByte(1);
             addCharLook(p, visitor, false);
             p.writeString(visitor.getName());
-            addMiniGameJobCode(p, visitor);
+            addMiniRoomJobCode(p, visitor);
         }
         p.writeByte(0xFF);
         p.writeByte(0);
@@ -5199,7 +5202,7 @@ public class PacketCreator {
         p.writeByte(slot);
         addCharLook(p, chr, false);
         p.writeString(chr.getName());
-        addMiniGameJobCode(p, chr);
+        addMiniRoomJobCode(p, chr);
         p.writeInt(1);
         p.writeInt(chr.getMiniGamePoints(MiniGameResult.WIN, false));
         p.writeInt(chr.getMiniGamePoints(MiniGameResult.TIE, false));
