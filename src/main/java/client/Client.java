@@ -74,6 +74,7 @@ import javax.script.ScriptEngine;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -148,6 +149,7 @@ public class Client extends ChannelInboundHandlerAdapter {
     private int visibleWorlds;
     private long lastNpcClick;
     private long lastPacket = System.currentTimeMillis();
+    private volatile int lastInboundOpcode = -1;
     private int lang = 0;
 
     public enum Type {
@@ -227,6 +229,7 @@ public class Client extends ChannelInboundHandlerAdapter {
             }
         }
 
+        lastInboundOpcode = Short.toUnsignedInt(opcode);
         updateLastPacket();
     }
 
@@ -239,7 +242,13 @@ public class Client extends ChannelInboundHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        if (player != null) {
+        if (isPeerReset(cause)) {
+            if (player != null) {
+                log.info("Connection reset by peer for {} (last inbound opcode {}, age {})",
+                        player, lastInboundOpcode < 0 ? "none" : String.format("0x%04X", lastInboundOpcode),
+                        lastInboundOpcode < 0 ? "n/a" : (System.currentTimeMillis() - lastPacket) + " ms");
+            }
+        } else if (player != null) {
             log.warn("Exception caught by {}", player, cause);
         }
 
@@ -248,6 +257,10 @@ public class Client extends ChannelInboundHandlerAdapter {
         } else if (cause instanceof IOException) {
             closeMapleSession();
         }
+    }
+
+    static boolean isPeerReset(Throwable cause) {
+        return cause instanceof SocketException && "Connection reset".equals(cause.getMessage());
     }
 
     @Override
