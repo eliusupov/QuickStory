@@ -754,6 +754,10 @@ public class GameConstants {
 
     // real rates
     public static float getExpRateForLevel(int level) {
+        return getBaseExpRateForLevel(level) * 1.30f;
+    }
+
+    private static float getBaseExpRateForLevel(int level) {
         if (level >= 150) {
             return 10.0f;
         } else if (level >= 120) {
