@@ -174,7 +174,7 @@ server:
   RESPAWN_INTERVAL: 10000 #10 seconds, 10000.
   PURGING_INTERVAL: 300000 #5 minutes, 300000.
   RANKING_INTERVAL: 3600000 #60 minutes, 3600000.
-  COUPON_INTERVAL: 3600000 #60 minutes, 3600000.
+  COUPON_INTERVAL: 1800000 #30 minutes; shortest quartered coupon window is 30 minutes.
   UPDATE_INTERVAL: 777 #Dictates the frequency on which the "centralized server time" is updated.
 
   ENABLE_PIC: false #Pick true/false to enable or disable Pic. Delete character requires PIC available.

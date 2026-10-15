@@ -569,6 +569,14 @@ public class Server {
         return Math.max(0, nextHour.getTimeInMillis() - System.currentTimeMillis());
     }
 
+    private static long getTimeLeftForNextHalfHour() {
+        Calendar nextHalfHour = Calendar.getInstance();
+        nextHalfHour.add(Calendar.MINUTE, 30 - nextHalfHour.get(Calendar.MINUTE) % 30);
+        nextHalfHour.set(Calendar.SECOND, 0);
+        nextHalfHour.set(Calendar.MILLISECOND, 0);
+        return Math.max(0, nextHalfHour.getTimeInMillis() - System.currentTimeMillis());
+    }
+
     public static long getTimeLeftForNextDay() {
         Calendar nextDay = Calendar.getInstance();
         nextDay.add(Calendar.DAY_OF_MONTH, 1);
@@ -666,11 +674,12 @@ public class Server {
             int hourDay = c.get(Calendar.HOUR_OF_DAY);
 
             int weekdayMask = (1 << weekDay);
-            PreparedStatement ps = con.prepareStatement("SELECT couponid FROM nxcoupons WHERE (activeday & ?) = ? AND starthour <= ? AND endhour > ?");
+            // One quarter of each configured daily window (including 2-hour windows -> 30 minutes).
+            PreparedStatement ps = con.prepareStatement("SELECT couponid FROM nxcoupons WHERE (activeday & ?) = ? AND starthour * 60 <= ? AND starthour * 60 + (endhour - starthour) * 15 > ?");
             ps.setInt(1, weekdayMask);
             ps.setInt(2, weekdayMask);
-            ps.setInt(3, hourDay);
-            ps.setInt(4, hourDay);
+            ps.setInt(3, hourDay * 60 + c.get(Calendar.MINUTE));
+            ps.setInt(4, hourDay * 60 + c.get(Calendar.MINUTE));
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -988,7 +997,7 @@ public class Server {
 
         long timeLeft = getTimeLeftForNextHour();
         tMan.register(new CharacterDiseaseTask(), YamlConfig.config.server.UPDATE_INTERVAL, YamlConfig.config.server.UPDATE_INTERVAL);
-        tMan.register(new CouponTask(), YamlConfig.config.server.COUPON_INTERVAL, timeLeft);
+        tMan.register(new CouponTask(), YamlConfig.config.server.COUPON_INTERVAL, getTimeLeftForNextHalfHour());
         tMan.register(new RankingCommandTask(), MINUTES.toMillis(5), MINUTES.toMillis(5));
         tMan.register(new RankingLoginTask(), YamlConfig.config.server.RANKING_INTERVAL, timeLeft);
         tMan.register(new LoginCoordinatorTask(), HOURS.toMillis(1), timeLeft);

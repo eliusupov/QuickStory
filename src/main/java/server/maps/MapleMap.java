@@ -840,14 +840,14 @@ public class MapleMap {
     }
 
     private byte dropGlobalItemsFromMonsterOnMap(List<MonsterGlobalDropEntry> globalEntry, Point pos, byte d,
-                                                 byte droptype, int mobpos, Character chr, Monster mob, short delay) {
+                                                 int chRate, byte droptype, int mobpos, Character chr, Monster mob, short delay) {
         Collections.shuffle(globalEntry);
 
         Item idrop;
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
         for (final MonsterGlobalDropEntry de : globalEntry) {
-            if (Randomizer.nextInt(999999) < de.chance) {
+            if (Randomizer.nextInt(999999) < (long) de.chance * chRate) {
                 if (droptype == 3) {
                     pos.x = mobpos + (d % 2 == 0 ? (40 * (d + 1) / 2) : -(40 * (d / 2)));
                 } else {
@@ -907,7 +907,7 @@ public class MapleMap {
         index = dropItemsFromMonsterOnMap(dropEntry, pos, index, chRate, droptype, mobpos, chr, mob, delay);
 
         // Global Drops
-        index = dropGlobalItemsFromMonsterOnMap(globalEntry, pos, index, droptype, mobpos, chr, mob, delay);
+        index = dropGlobalItemsFromMonsterOnMap(globalEntry, pos, index, chRate, droptype, mobpos, chr, mob, delay);
 
         // Quest Drops
         index = dropItemsFromMonsterOnMap(visibleQuestEntry, pos, index, chRate, droptype, mobpos, chr, mob, delay);
@@ -3534,7 +3534,7 @@ public class MapleMap {
             d = dropItemsFromMonsterOnMap(dropEntry, pos, d, chRate, droptype, mobpos, chr, mob, delay);
 
             // Global Drops
-            d = dropGlobalItemsFromMonsterOnMap(globalEntry, pos, d, droptype, mobpos, chr, mob, delay);
+            d = dropGlobalItemsFromMonsterOnMap(globalEntry, pos, d, chRate, droptype, mobpos, chr, mob, delay);
 
             // Quest Drops
             d = dropItemsFromMonsterOnMap(visibleQuestEntry, pos, d, chRate, droptype, mobpos, chr, mob, delay);
