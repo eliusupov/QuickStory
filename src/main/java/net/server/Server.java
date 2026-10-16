@@ -671,23 +671,29 @@ public class Server {
             Calendar c = Calendar.getInstance();
 
             int weekDay = c.get(Calendar.DAY_OF_WEEK);
-            int hourDay = c.get(Calendar.HOUR_OF_DAY);
+            int minuteOfDay = c.get(Calendar.HOUR_OF_DAY) * 60 + c.get(Calendar.MINUTE);
 
             int weekdayMask = (1 << weekDay);
-            // One quarter of each configured daily window (including 2-hour windows -> 30 minutes).
-            PreparedStatement ps = con.prepareStatement("SELECT couponid FROM nxcoupons WHERE (activeday & ?) = ? AND starthour * 60 <= ? AND starthour * 60 + (endhour - starthour) * 15 > ?");
+            PreparedStatement ps = con.prepareStatement("SELECT couponid, starthour, endhour FROM nxcoupons WHERE (activeday & ?) = ?");
             ps.setInt(1, weekdayMask);
             ps.setInt(2, weekdayMask);
-            ps.setInt(3, hourDay * 60 + c.get(Calendar.MINUTE));
-            ps.setInt(4, hourDay * 60 + c.get(Calendar.MINUTE));
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    activeCoupons.add(rs.getInt("couponid"));
+                    if (isCouponActiveAtMinute(rs.getInt("starthour"), rs.getInt("endhour"), minuteOfDay)) {
+                        activeCoupons.add(rs.getInt("couponid"));
+                    }
                 }
             }
 
         }
+    }
+
+    static boolean isCouponActiveAtMinute(int startHour, int endHour, int minuteOfDay) {
+        int durationHours = endHour - startHour;
+        // 0-24 is an all-day purchase coupon; scheduled windows are quartered.
+        int durationMinutes = durationHours == 24 ? 24 * 60 : durationHours * 15;
+        return minuteOfDay >= startHour * 60 && minuteOfDay < startHour * 60 + durationMinutes;
     }
 
     public void runAnnouncePlayerDiseasesSchedule() {

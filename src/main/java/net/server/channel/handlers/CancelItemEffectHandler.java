@@ -22,6 +22,7 @@
 package net.server.channel.handlers;
 
 import client.Client;
+import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.ItemInformationProvider;
@@ -31,6 +32,10 @@ public final class CancelItemEffectHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
         int itemId = -p.readInt();
+        if (ItemConstants.isRateCoupon(itemId)) {
+            c.getPlayer().updateCouponRates();
+            return;
+        }
         if (ItemInformationProvider.getInstance().noCancelMouse(itemId)) {
             return;
         }
